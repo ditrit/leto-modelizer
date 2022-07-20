@@ -38,3 +38,7 @@ test-report.xml
 
 # Esdoc
 /docs
+
+# Cypress
+/cypress/screenshots
+/cypress/videos
