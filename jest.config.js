@@ -8,7 +8,7 @@ module.exports = {
     __DEV__: true,
   },
   // Jest assumes we are testing in node environment, specify jsdom environment instead
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   // Needed in JS codebases too because of feature flags
   coveragePathIgnorePatterns: ['/node_modules/', '.d.ts$'],
   testMatch: [
