@@ -15,7 +15,7 @@
         text-color="primary"
         unelevated
         to="/"
-        :label="$t('back.home')"
+        :label="$t('actions.default.goToHome')"
         no-caps
       />
     </div>
