@@ -11,5 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Setup project (eslint, esdoc, unit test, i18n, quasar).
 - Setup e2e test solution (cypress, cocumber, Gherkin Syntax).
+- Add homepage
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
