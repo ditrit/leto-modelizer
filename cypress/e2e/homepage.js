@@ -9,7 +9,7 @@ When('I click on {string}', (selector) => {
 });
 
 Then('I expect current url is {string}', (expectedUrl) => {
-  cy.url().should('include', expectedUrl);
+  cy.url().should('match', new RegExp(expectedUrl));
 });
 
 Then('I expect localstorage field {string} is {string}', (key, expectedValue) => {

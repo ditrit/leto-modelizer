@@ -1,9 +1,14 @@
 export default {
-  project: {
+  application: {
     name: 'Leto Modelizer',
   },
-  back: {
-    home: 'Go to home',
+  actions: {
+    default: {
+      goToHome: 'Go to homepage',
+    },
+    home: {
+      createEmptyProject: 'Create empty project',
+    },
   },
   error404: {
     title: '404',

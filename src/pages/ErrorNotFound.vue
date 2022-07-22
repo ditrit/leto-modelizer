@@ -1,5 +1,5 @@
 <template>
-  <div class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
+  <div class="fullscreen bg-primary text-white text-center q-pa-md flex flex-center">
     <div>
       <div style="font-size: 30vh">
         {{ $t('error404.title') }}
@@ -12,10 +12,10 @@
       <q-btn
         class="q-mt-xl"
         color="white"
-        text-color="blue"
+        text-color="primary"
         unelevated
         to="/"
-        :label="$t('back.home')"
+        :label="$t('actions.default.goToHome')"
         no-caps
       />
     </div>
