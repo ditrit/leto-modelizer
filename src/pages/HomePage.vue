@@ -9,21 +9,29 @@
     </div>
     <div class="flex home-content">
       <q-btn
-          color="primary"
-          size="xl"
-          icon="fa-solid fa-circle-plus"
-          data-cy="createEmptyProject"
-          :label="$t('actions.home.createEmptyProject')"
-          :to="`/modelizer/${project.id}/model`"
+        color="primary"
+        size="xl"
+        icon="fa-solid fa-circle-plus"
+        data-cy="createEmptyProject"
+        :label="$t('actions.home.createEmptyProject')"
+        :to="`/modelizer/${project.id}/model`"
+        @click="updateProject(project)"
       />
+      <div class="fit row justify-center">
+        <ProjectList
+          class="col-md-8 project-list"
+          :projects="getProjects()"
+        />
+      </div>
     </div>
   </q-page>
 </template>
 
 <script setup>
-import { createProject } from 'src/composables/Project';
+import ProjectList from 'src/components/ProjectList';
+import { createProjectTemplate, getProjects, updateProject } from 'src/composables/Project';
 
-const project = createProject();
+const project = createProjectTemplate();
 </script>
 
 <style lang="scss" scoped>
