@@ -2,24 +2,24 @@
   <q-page class="flex column justify-between home-page">
     <div class="fit flex justify-center items-center home-banner">
       <q-img
-          src="icons/logo_modelizer.svg"
-          class="home-logo"
-          :ratio="1"
+        src="icons/logo_modelizer.svg"
+        class="home-logo"
+        :ratio="1"
       />
     </div>
-    <div class="flex home-content">
+    <div class="column items-center home-content">
       <q-btn
         color="primary"
         size="xl"
         icon="fa-solid fa-circle-plus"
-        data-cy="createEmptyProject"
+        data-cy="create-empty-project"
         :label="$t('actions.home.createEmptyProject')"
         :to="`/modelizer/${project.id}/model`"
-        @click="updateProject(project)"
+        @click="saveProject(project)"
       />
       <div class="fit row justify-center">
-        <ProjectList
-          class="col-md-8 project-list"
+        <ProjectGrid
+          class="col-md-8"
           :projects="getProjects()"
         />
       </div>
@@ -28,8 +28,8 @@
 </template>
 
 <script setup>
-import ProjectList from 'src/components/ProjectList';
-import { createProjectTemplate, getProjects, updateProject } from 'src/composables/Project';
+import ProjectGrid from 'src/components/grid/ProjectGrid';
+import { createProjectTemplate, getProjects, saveProject } from 'src/composables/Project';
 
 const project = createProjectTemplate();
 </script>
@@ -38,6 +38,8 @@ const project = createProjectTemplate();
 .home-page {
   .home-banner {
     background-color: $primary;
+    min-height: 30vh;
+    max-height: 50vh;
     flex: 1;
   }
   .home-logo {
@@ -45,11 +47,8 @@ const project = createProjectTemplate();
     height: 174px;
   }
   .home-content {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
     margin: 5vh;
+    flex: 2;
   }
 }
 </style>
