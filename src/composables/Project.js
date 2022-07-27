@@ -1,4 +1,4 @@
-import { randomHexString } from './Random';
+import { randomHexString } from 'src/composables/Random';
 
 /**
  * Create a project with generated id.
