@@ -48,9 +48,7 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: './reports',
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.vue',
-    '<rootDir>/src/**/*.js',
-    '<rootDir>/src/**/*.jsx',
+    '<rootDir>/src/**/*.{vue,js,jsx}',
   ],
   // Needed in JS codebases too because of feature flags
   coveragePathIgnorePatterns: ['/node_modules/', '.d.ts$'],
@@ -62,7 +60,7 @@ module.exports = {
       //  statements: 50
     },
   },
-  coverageReporters: ['lcov', 'cobertura', 'text-summary'],
+  coverageReporters: ['lcov', 'cobertura', 'text-summary', 'text'],
   transformIgnorePatterns: [`node_modules/(?!(${esModules}))`],
   snapshotSerializers: ['jest-serializer-vue'],
 };
