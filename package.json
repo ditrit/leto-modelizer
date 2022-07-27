@@ -12,8 +12,8 @@
     "lint": "eslint --ext .js,.vue .",
     "lint:fix": "eslint --fix --ext .js,.vue .",
     "lint:report": "eslint --ext .js,.vue . -f json-relative > eslint.json",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
+    "test": "jest --coverageProvider=v8",
+    "test:coverage": "jest --coverage --coverageProvider=v8",
     "test:e2e": "cypress run --spec **/*.feature"
   },
   "dependencies": {
