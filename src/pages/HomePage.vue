@@ -2,34 +2,44 @@
   <q-page class="flex column justify-between home-page">
     <div class="fit flex justify-center items-center home-banner">
       <q-img
-          src="icons/logo_modelizer.svg"
-          class="home-logo"
-          :ratio="1"
+        src="icons/logo_modelizer.svg"
+        class="home-logo"
+        :ratio="1"
       />
     </div>
-    <div class="flex home-content">
+    <div class="column items-center home-content">
       <q-btn
-          color="primary"
-          size="xl"
-          icon="fa-solid fa-circle-plus"
-          data-cy="createEmptyProject"
-          :label="$t('actions.home.createEmptyProject')"
-          :to="`/modelizer/${project.id}/model`"
+        color="primary"
+        size="xl"
+        icon="fa-solid fa-circle-plus"
+        data-cy="create-empty-project"
+        :label="$t('actions.home.createEmptyProject')"
+        :to="`/modelizer/${project.id}/model`"
+        @click="saveProject(project)"
       />
+      <div class="fit row justify-center">
+        <ProjectGrid
+          class="col-md-8"
+          :projects="getProjects()"
+        />
+      </div>
     </div>
   </q-page>
 </template>
 
 <script setup>
-import { createProject } from 'src/composables/Project';
+import ProjectGrid from 'src/components/grid/ProjectGrid';
+import { createProjectTemplate, getProjects, saveProject } from 'src/composables/Project';
 
-const project = createProject();
+const project = createProjectTemplate();
 </script>
 
 <style lang="scss" scoped>
 .home-page {
   .home-banner {
     background-color: $primary;
+    min-height: 30vh;
+    max-height: 50vh;
     flex: 1;
   }
   .home-logo {
@@ -37,11 +47,8 @@ const project = createProject();
     height: 174px;
   }
   .home-content {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
     margin: 5vh;
+    flex: 2;
   }
 }
 </style>
