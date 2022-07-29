@@ -1,9 +1,12 @@
+import ModelizerRoute from 'src/router/routes/ModelizerRoute';
+
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/HomePage.vue') },
+      ModelizerRoute,
     ],
   },
 
@@ -11,6 +14,7 @@ const routes = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
+    name: 'Error',
     component: () => import('pages/ErrorNotFound.vue'),
   },
 ];
