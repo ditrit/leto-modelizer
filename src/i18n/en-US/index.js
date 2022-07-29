@@ -18,4 +18,14 @@ export default {
     title: '404',
     content: 'Oops. Nothing here...',
   },
+  page: {
+    modelizer: {
+      header: {
+        switch: {
+          model: 'Model',
+          text: 'Text',
+        },
+      },
+    },
+  },
 };
