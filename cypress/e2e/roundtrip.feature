@@ -10,7 +10,8 @@ Scenario: Create project, switch and go back to homepage
 
   When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
   Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
-  And  I expect "[data-cy=\"modelizer-text-view\"]" is "ModelizerTextView"
+  And  I expect "[data-cy=\"modelizer-text-view\"]" exists
+  And  I expect "[data-cy=\"monaco-editor\"]" exists
   And I expect current url is "/#/modelizer/{{ projectName }}/text"
 
   When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"

@@ -6,18 +6,22 @@ Scenario: Default modelizer page should be the model
   And I visit the "/#/modelizer/project-0001/"
   Then I expect current url is "/project-0001/model"
 
-Scenario Outline: Modelizer "<page>" page should load the correct content
-  Given I clear localstorage
-  And I set in localstorage field "projects" with '{"project-0001":{"id":"project-0001"}}' as "json"
-  And I visit the "/#/modelizer/project-0001/<page>"
+  Scenario: Modelizer "model" page should load the correct content
+    Given I clear localstorage
+    And I set in localstorage field "projects" with '{"project-0001":{"id":"project-0001"}}' as "json"
+    And I visit the "/#/modelizer/project-0001/model"
 
-  Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "<switchText>"
-  And  I expect "[data-cy=\"modelizer-<page>-view\"]" is "<pageContent>"
+    Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
+    And  I expect "[data-cy=\"modelizer-model-view\"]" is "ModelizerModelView"
 
-Examples:
-  | page  | switchText | pageContent        |
-  | model | Model      | ModelizerModelView |
-  | text  | Text       | ModelizerTextView  |
+  Scenario: Modelizer "text" page should load the correct content
+    Given I clear localstorage
+    And I set in localstorage field "projects" with '{"project-0001":{"id":"project-0001"}}' as "json"
+    And I visit the "/#/modelizer/project-0001/text"
+
+    Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
+    And  I expect "[data-cy=\"modelizer-text-view\"]" exists
+    And  I expect "[data-cy=\"monaco-editor\"]" exists
 
 Scenario: Clicking on switch should change page content
   Given I clear localstorage
@@ -26,7 +30,8 @@ Scenario: Clicking on switch should change page content
 
   When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
   Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
-  And  I expect "[data-cy=\"modelizer-text-view\"]" is "ModelizerTextView"
+  And  I expect "[data-cy=\"modelizer-text-view\"]" exists
+  And  I expect "[data-cy=\"monaco-editor\"]" exists
   And I expect current url is "/project-0001/text"
 
   When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
