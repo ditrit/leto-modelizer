@@ -15,5 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add the project list on the homepage
 - Add Modelizer page
 - Add the component definitions panel on the modelizer page
+- Add monaco editor to modelizer text view
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
