@@ -26,6 +26,11 @@ export default {
           text: 'Text',
         },
       },
+      drawer: {
+        components: {
+          header: 'Components definitions',
+        },
+      },
     },
   },
 };
