@@ -1,6 +1,6 @@
 <template>
   <q-page
-    class="modelizer-page"
+    class="modelizer-page column"
     data-cy="modelizer-page"
   >
     <q-layout>
@@ -10,7 +10,7 @@
         @changeView="changeView"
       />
       <modelizer-model-view v-show="viewType === 'model'" />
-      <modelizer-text-view v-show="viewType === 'text'" />
+      <modelizer-text-view v-show="viewType === 'text'" :viewType="viewType" />
     </q-layout>
   </q-page>
 </template>
