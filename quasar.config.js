@@ -9,6 +9,7 @@
 // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js
 
 const ESLintPlugin = require('eslint-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 /* eslint func-names: 0 */
 /* eslint global-require: 0 */
@@ -76,6 +77,8 @@ module.exports = configure((ctx) => ({
     chainWebpack(chain) {
       chain.plugin('eslint-webpack-plugin')
         .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }]);
+      chain.plugin('monaco-editor-webpack-plugin')
+        .use(MonacoWebpackPlugin, [{ extensions: ['js', 'vue'] }]);
     },
 
   },
@@ -128,6 +131,8 @@ module.exports = configure((ctx) => ({
     chainWebpackWebserver(chain) {
       chain.plugin('eslint-webpack-plugin')
         .use(ESLintPlugin, [{ extensions: ['js'] }]);
+      chain.plugin('monaco-editor-webpack-plugin')
+        .use(MonacoWebpackPlugin, [{ extensions: ['js', 'vue'] }]);
     },
 
     middlewares: [
@@ -147,6 +152,8 @@ module.exports = configure((ctx) => ({
     chainWebpackCustomSW(chain) {
       chain.plugin('eslint-webpack-plugin')
         .use(ESLintPlugin, [{ extensions: ['js'] }]);
+      chain.plugin('monaco-editor-webpack-plugin')
+        .use(MonacoWebpackPlugin, [{ extensions: ['js', 'vue'] }]);
     },
 
     manifest: {
@@ -225,11 +232,15 @@ module.exports = configure((ctx) => ({
     chainWebpackMain(chain) {
       chain.plugin('eslint-webpack-plugin')
         .use(ESLintPlugin, [{ extensions: ['js'] }]);
+      chain.plugin('monaco-editor-webpack-plugin')
+        .use(MonacoWebpackPlugin, [{ extensions: ['js', 'vue'] }]);
     },
 
     chainWebpackPreload(chain) {
       chain.plugin('eslint-webpack-plugin')
         .use(ESLintPlugin, [{ extensions: ['js'] }]);
+      chain.plugin('monaco-editor-webpack-plugin')
+        .use(MonacoWebpackPlugin, [{ extensions: ['js', 'vue'] }]);
     },
 
   },
