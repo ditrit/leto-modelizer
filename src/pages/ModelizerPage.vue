@@ -2,13 +2,16 @@
   <q-page
     class="modelizer-page"
     data-cy="modelizer-page"
-    >
-    <modelizer-navigation-bar
-      :projectName="projectName"
-      :viewType="viewType"
-      @changeView="changeView"/>
-    <modelizer-model-view v-show="viewType === 'model'" />
-    <modelizer-text-view v-show="viewType === 'text'" />
+  >
+    <q-layout>
+      <modelizer-navigation-bar
+        :projectName="projectName"
+        :viewType="viewType"
+        @changeView="changeView"
+      />
+      <modelizer-model-view v-show="viewType === 'model'" />
+      <modelizer-text-view v-show="viewType === 'text'" />
+    </q-layout>
   </q-page>
 </template>
 

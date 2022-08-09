@@ -43,3 +43,10 @@ Scenario: Clicking on application logo should redirect to homepage
 
   When I click on "[data-cy=\"app-logo-link\"]"
   Then I expect current url is "/"
+
+Scenario: The modelizer page should have the components definitions panel
+  Given I set viewport size to "1536" px for width and "960" px for height
+  And I clear localstorage
+  When I set in localstorage field "projects" with '{"project-0001":{"id":"project-0001"}}' as "json"
+  And I visit the "/#/modelizer/project-0001/"
+  Then I expect '[data-cy="components-definitions-panel"]' exists
