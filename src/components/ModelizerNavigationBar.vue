@@ -1,5 +1,5 @@
 <template>
-  <q-header class="modelizer-navigation-bar row justify-between items-center" elevated>
+  <q-header class="modelizer-navigation-bar shadow-1 row justify-between items-center">
     <div class="app-homepage-link">
       <router-link
         class="app-logo-link"
@@ -82,6 +82,7 @@ watch(() => props.viewType, (newViewType) => {
   background-color: white;
   color: $primary;
   padding: 1rem;
+  position: relative;
 
   .app-logo-link {
     text-decoration: none;
