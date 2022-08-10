@@ -40,7 +40,7 @@ describe('Test page component: ModelizerPage', () => {
     });
   });
 
-  describe('Test variable initialization', () => {
+  describe('Test variables initialization', () => {
     describe('Test computed: projectName', () => {
       it('Should match "project-00000000"', () => {
         expect(wrapper.vm.projectName).toEqual('project-00000000');
