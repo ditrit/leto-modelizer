@@ -19,23 +19,26 @@
     <div class="project-info">
       <span class="project-name">{{ projectName }}</span>
     </div>
-    <div class="view-switch">
-      <q-btn-toggle
-        v-model="buttonToggleValue"
-        :options="buttonToggleOptions"
-        @update:model-value="onViewSwitchUpdate"
-        class="view-selector"
-        toggle-color="primary"
-        text-color="primary"
-        color="white"
-        no-caps
-        data-cy="modelizer-switch"
-        rounded
-      >
-        <template v-slot:content="label">
-          <span data-cy="content">{{ label }}</span>
-        </template>
-      </q-btn-toggle>
+    <div class="row justify-between items-center">
+      <div class="view-switch">
+        <q-btn-toggle
+          v-model="buttonToggleValue"
+          :options="buttonToggleOptions"
+          @update:model-value="onViewSwitchUpdate"
+          class="view-selector"
+          toggle-color="primary"
+          text-color="primary"
+          color="white"
+          no-caps
+          data-cy="modelizer-switch"
+          rounded
+        >
+          <template v-slot:content="label">
+            <span data-cy="content">{{ label }}</span>
+          </template>
+        </q-btn-toggle>
+      </div>
+      <modelizer-settings-menu/>
     </div>
   </q-header>
 </template>
@@ -44,6 +47,7 @@
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
+import ModelizerSettingsMenu from 'components/menu/ModelizerSettingsMenu.vue';
 
 const { t } = useI18n();
 const props = defineProps({
@@ -101,6 +105,9 @@ watch(() => props.viewType, (newViewType) => {
   .project-name {
     font-weight: bold;
     font-size: large;
+  }
+  .view-switch {
+    margin-right: 15px;
   }
 }
 </style>
