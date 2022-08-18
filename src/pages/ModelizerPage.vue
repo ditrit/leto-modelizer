@@ -11,6 +11,8 @@
       />
       <modelizer-model-view v-show="viewType === 'model'" />
       <modelizer-text-view v-show="viewType === 'text'" :viewType="viewType" />
+      <git-configuration-dialog :project-name="projectName"/>
+
     </q-layout>
   </q-page>
 </template>
@@ -27,6 +29,7 @@ import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar';
 import ModelizerModelView from 'src/components/ModelizerModelView';
 import ModelizerTextView from 'src/components/ModelizerTextView';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
+import GitConfigurationDialog from 'components/dialog/GitConfigurationDialog';
 
 const route = useRoute();
 const router = useRouter();
