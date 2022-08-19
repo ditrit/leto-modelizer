@@ -14,6 +14,13 @@ Given('I set in localstorage field {string} with {string} as {string}', (key, va
   }
 });
 
+Given('I add project in localstorage with {string}', (value) => {
+  const projects = JSON.parse(localStorage.getItem('projects')) || {};
+  const project = JSON.parse(value);
+  projects[project.id] = project;
+  localStorage.setItem('projects', JSON.stringify(projects));
+});
+
 Given('I clear localstorage', () => {
   localStorage.clear();
 });
