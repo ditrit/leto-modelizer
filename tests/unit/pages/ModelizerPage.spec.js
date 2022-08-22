@@ -2,6 +2,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import { useRouter, useRoute } from 'vue-router';
 import ModelizerPage from 'src/pages/ModelizerPage.vue';
+import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 
 installQuasarPlugin();
 
@@ -12,8 +13,14 @@ jest.mock('vue-router', () => ({
   })),
 }));
 
+jest.mock('src/composables/events/ViewSwitchEvent', () => ({
+  subscribe: jest.fn(),
+}));
+
 describe('Test page component: ModelizerPage', () => {
   let wrapper;
+  let subscribe;
+  let unsubscribe;
   const push = jest.fn();
 
   useRoute.mockImplementation(() => ({
@@ -27,6 +34,12 @@ describe('Test page component: ModelizerPage', () => {
   }));
 
   beforeEach(() => {
+    subscribe = jest.fn();
+    unsubscribe = jest.fn();
+    ViewSwitchEvent.subscribe.mockImplementation(() => {
+      subscribe();
+      return { unsubscribe };
+    });
     wrapper = shallowMount(ModelizerPage, {
       global: {
         stubs: [
@@ -36,6 +49,9 @@ describe('Test page component: ModelizerPage', () => {
           'modelizer-model-view',
           'modelizer-text-view',
         ],
+      },
+      mocks: {
+        ViewSwitchEvent,
       },
     });
   });
@@ -50,13 +66,6 @@ describe('Test page component: ModelizerPage', () => {
     describe('Test computed: viewType', () => {
       it('Should match "model"', () => {
         expect(wrapper.vm.viewType).toEqual('model');
-      });
-    });
-
-    describe('Test variable: viewSwitchSubscription', () => {
-      it('Should match "model"', () => {
-        expect(wrapper.vm.viewSwitchSubscription.unsubscribe)
-          .toBeInstanceOf(Function);
       });
     });
   });
@@ -76,10 +85,14 @@ describe('Test page component: ModelizerPage', () => {
     });
   });
 
+  describe('Test hook function: onMounted', () => {
+    it('should subscribe ViewSwitchEvent', () => {
+      expect(subscribe).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('Test hook function: onUnmounted', () => {
     it('should unsubscribe ViewSwitchEvent', () => {
-      const unsubscribe = jest.fn();
-      wrapper.vm.viewSwitchSubscription.unsubscribe = unsubscribe;
       expect(unsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(unsubscribe).toHaveBeenCalledTimes(1);

@@ -7,14 +7,14 @@ import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 installQuasarPlugin();
 
 jest.mock('src/composables/events/ViewSwitchEvent', () => ({
-  emit: jest.fn(),
+  next: jest.fn(),
 }));
 
 describe('Test component: ModelizerNavigationBar', () => {
   let wrapper;
   const emit = jest.fn();
 
-  ViewSwitchEvent.emit.mockImplementation(() => emit());
+  ViewSwitchEvent.next.mockImplementation(() => emit());
 
   beforeEach(() => {
     wrapper = shallowMount(ModelizerNavigationBar, {

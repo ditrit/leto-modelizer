@@ -69,7 +69,7 @@ const projectName = computed(() => props.projectName);
  */
 function onViewSwitchUpdate(newViewType) {
   if (newViewType === props.viewType) return;
-  ViewSwitchEvent.emit(newViewType);
+  ViewSwitchEvent.next(newViewType);
 }
 
 watch(() => props.viewType, (newViewType) => {
