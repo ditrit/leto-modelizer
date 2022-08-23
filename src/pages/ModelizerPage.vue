@@ -19,7 +19,6 @@
 import {
   onMounted,
   onUnmounted,
-  ref,
   computed,
 } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -33,7 +32,7 @@ const route = useRoute();
 const router = useRouter();
 const viewType = computed(() => route.params.viewType);
 const projectName = computed(() => route.params.projectName);
-const viewSwitchSubscription = ref();
+let viewSwitchSubscription;
 
 /**
  * Update the route with the new view type.
@@ -53,9 +52,9 @@ function changeView(newViewType) {
 }
 
 onMounted(() => {
-  viewSwitchSubscription.value = ViewSwitchEvent.on(changeView);
+  viewSwitchSubscription = ViewSwitchEvent.subscribe(changeView);
 });
 onUnmounted(() => {
-  ViewSwitchEvent.off(viewSwitchSubscription.value);
+  viewSwitchSubscription.unsubscribe();
 });
 </script>
