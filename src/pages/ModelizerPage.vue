@@ -1,20 +1,24 @@
 <template>
-  <q-page
+  <q-layout
     class="modelizer-page column"
     data-cy="modelizer-page"
   >
-    <q-layout>
-      <modelizer-navigation-bar
-        :projectName="projectName"
-        :viewType="viewType"
-        @changeView="changeView"
-      />
-      <modelizer-model-view v-show="viewType === 'model'" />
-      <modelizer-text-view v-show="viewType === 'text'" :viewType="viewType" />
-      <git-configuration-dialog :project-name="projectName"/>
-
-    </q-layout>
-  </q-page>
+    <modelizer-navigation-bar
+      :projectName="projectName"
+      :viewType="viewType"
+      @changeView="changeView"
+    />
+    <q-page-container>
+      <q-page
+        class="modelizer-page column"
+        data-cy="modelizer-page"
+      >
+        <modelizer-model-view v-show="viewType === 'model'" />
+        <modelizer-text-view v-show="viewType === 'text'" :viewType="viewType" />
+        <git-configuration-dialog :project-name="projectName"/>
+      </q-page>
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script setup>
@@ -61,3 +65,9 @@ onUnmounted(() => {
   viewSwitchSubscription.unsubscribe();
 });
 </script>
+
+<style scoped>
+.q-layout.modelizer-page>.q-page-container {
+  padding-top: 0 !important;
+}
+</style>
