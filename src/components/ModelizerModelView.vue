@@ -1,10 +1,16 @@
 <template>
-  <div class="modelizer-model-view"
+  <q-layout
+    view="lhh lpr lff"
+    class="modelizer-model-view"
     data-cy="modelizer-model-view"
   >
     <component-definitions-panel/>
-    ModelizerModelView
-  </div>
+    <q-page-container>
+      <q-page>
+        ModelizerModelView
+      </q-page>
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script setup>
