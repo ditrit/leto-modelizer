@@ -5,9 +5,18 @@ export default {
   actions: {
     default: {
       goToHome: 'Go to homepage',
+      save: 'Save',
     },
     home: {
       createEmptyProject: 'Create empty project',
+    },
+  },
+  errors: {
+    empty: 'Please type something',
+    invalid: {
+      gitProvider: {
+        repository: 'Invalid repository url',
+      },
     },
   },
   projects: {
@@ -29,6 +38,14 @@ export default {
       drawer: {
         components: {
           header: 'Components definitions',
+        },
+      },
+      settings: {
+        gitProvider: {
+          title: 'Git configuration',
+          repository: 'Repository url',
+          repositoryExample: 'Examples: "git{\'@\'}github.com/test.git", "http://test.com/test.git" or "https://github.com/test.git"',
+          token: 'Access token',
         },
       },
     },
