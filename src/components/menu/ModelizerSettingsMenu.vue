@@ -1,20 +1,20 @@
 <template>
   <q-btn round color="primary" icon="fa-solid fa-gear" data-cy="project-settings">
-    <q-menu>
+    <q-menu auto-close>
       <q-list>
         <q-item
-            class="settings-item"
-            clickable
-            v-close-popup
-            data-cy="git-settings-menu"
-            v-for="menuItem in menuItems"
-            :key="menuItem.key">
+          data-cy="git-settings-menu"
+          class="settings-item"
+          v-for="menuItem in menuItems"
+          :key="menuItem.key"
+          @click="onClick(menuItem.key)"
+          clickable
+        >
           <q-item-section avatar>
             <q-icon color="primary" :name="menuItem.icon" />
           </q-item-section>
-          <q-item-section
-            @click="onClick(menuItem.key)">
-            {{$t(menuItem.title)}}
+          <q-item-section no-wrap>
+            {{ $t(menuItem.title) }}
           </q-item-section>
         </q-item>
       </q-list>
