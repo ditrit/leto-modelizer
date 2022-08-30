@@ -47,5 +47,6 @@ onUnmounted(() => {
     position: absolute;
     top: 2px;
     right: 2px;
+    z-index: 10;
   }
 </style>
