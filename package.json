@@ -14,7 +14,9 @@
     "lint:report": "eslint --ext .js,.vue . -f json-relative > eslint.json",
     "test": "jest --coverageProvider=v8",
     "test:coverage": "jest --coverage --coverageProvider=v8",
-    "test:e2e": "cypress run --spec **/*.feature"
+    "test:e2e": "cypress run --spec **/*.feature",
+    "plugin:install": "node node_modules/leto-modelizer-plugin-cli install",
+    "plugin:init": "node node_modules/leto-modelizer-plugin-cli init"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -55,6 +57,7 @@
     "jest": "^28.1.2",
     "jest-environment-jsdom": "^28.1.3",
     "jest-sonar-reporter": "^2.0.0",
+    "leto-modelizer-plugin-cli": "github:ditrit/leto-modelizer-plugin-cli#0.1.2",
     "nunjucks": "^3.2.3",
     "vue-loader": "^17.0.0"
   },
