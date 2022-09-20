@@ -19,5 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update git configuration for a project
 - Update layout structure in ModelizerPage and ModelizerModelView
 - Install CLI from leto-modelizer-plugin-cli
+- Refacto ComponentDefinitionsPanel to ComponentDefinitionsDrawer
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
