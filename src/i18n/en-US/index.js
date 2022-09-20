@@ -44,7 +44,8 @@ export default {
         gitProvider: {
           title: 'Git configuration',
           repository: 'Repository url',
-          repositoryExample: 'Examples: "git{\'@\'}github.com/test.git", "http://test.com/test.git" or "https://github.com/test.git"',
+          repositoryExample: 'Examples: "http://test.com/test" or "https://github.com/test"',
+          username: 'Username',
           token: 'Access token',
         },
       },

@@ -15,8 +15,16 @@
 
     <q-input
         filled
+        v-model="username"
+        :label="$t('page.modelizer.settings.gitProvider.username')"
+        lazy-rules
+        data-cy="git-username-input"
+        :rules="[v => notEmpty($t, v)]"
+    />
+
+    <q-input
+        filled
         v-model="token"
-        class="q-mt-xl"
         :label="$t('page.modelizer.settings.gitProvider.token')"
         lazy-rules
         data-cy="git-token-input"
@@ -47,11 +55,13 @@ const props = defineProps({
 
 const project = getProjectById(props.projectName);
 const repository = ref(project.git?.repository);
+const username = ref(project.git?.username);
 const token = ref(project.git?.token);
 
 function onSubmit() {
   project.git = {
     repository: repository.value,
+    username: username.value,
     token: token.value,
   };
   saveProject(project);

@@ -57,17 +57,35 @@ describe('Test component: GitForm', () => {
         expect(wrapper.vm.token).toEqual('testToken');
       });
     });
+
+    describe('Test variable: username', () => {
+      it('should be undefined on no git configuration in project', () => {
+        expect(wrapper.vm.username).toBeUndefined();
+      });
+
+      it('should be not null on git configuration in project', () => {
+        saveProject({ id: 'test', git: { username: 'TestUsername' } });
+        wrapper = shallowMount(GitForm, {
+          props: {
+            projectName: 'test',
+          },
+        });
+        expect(wrapper.vm.username).toEqual('TestUsername');
+      });
+    });
   });
 
   describe('Test function: onSubmit', () => {
     it('should emit an event', () => {
       wrapper.vm.repository = 'https://test/test.git';
-      wrapper.vm.token = 'tokenTest';
+      wrapper.vm.token = 'testToken';
+      wrapper.vm.username = 'TestUsername';
       wrapper.vm.onSubmit();
 
       expect(getProjectById('test').git).toEqual({
         repository: 'https://test/test.git',
-        token: 'tokenTest',
+        token: 'testToken',
+        username: 'TestUsername',
       });
       expect(wrapper.emitted()['project-git:save']).toBeTruthy();
     });
