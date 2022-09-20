@@ -1,14 +1,14 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import ComponentDefinitionsPanel from 'src/components/drawer/ComponentDefinitionsPanel.vue';
+import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer.vue';
 
 installQuasarPlugin();
 
-describe('Test component: ComponentDefinitionsPanel', () => {
+describe('Test component: ComponentDefinitionsDrawer', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(ComponentDefinitionsPanel);
+    wrapper = shallowMount(ComponentDefinitionsDrawer);
   });
 
   describe('Test function: scrollAreaHeight', () => {

@@ -1,7 +1,7 @@
 <template>
   <default-drawer
-    data-cy="components-definitions-panel"
-    class="components-definitions-panel"
+    data-cy="components-definitions-drawer"
+    class="components-definitions-drawer"
   >
     <template v-slot:drawerName>
       {{ $t('page.modelizer.drawer.components.header') }}

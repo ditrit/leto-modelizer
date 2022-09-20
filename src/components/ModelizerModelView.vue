@@ -4,7 +4,7 @@
     class="modelizer-model-view"
     data-cy="modelizer-model-view"
   >
-    <component-definitions-panel/>
+    <component-definitions-drawer/>
     <q-page-container>
       <q-page>
         ModelizerModelView
@@ -14,5 +14,5 @@
 </template>
 
 <script setup>
-import ComponentDefinitionsPanel from 'src/components/drawer/ComponentDefinitionsPanel';
+import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer';
 </script>
