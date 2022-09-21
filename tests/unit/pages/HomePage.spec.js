@@ -4,6 +4,12 @@ import HomePage from 'src/pages/HomePage.vue';
 
 installQuasarPlugin();
 
+jest.mock('src/composables/Project', () => ({
+  createProjectTemplate: jest.fn(() => ({ id: 'project-00000000' })),
+  getProjects: jest.fn(),
+  createProject: jest.fn(),
+}));
+
 describe('Test component: HomePage', () => {
   let wrapper;
   window.crypto = {
