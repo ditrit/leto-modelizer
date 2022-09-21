@@ -15,6 +15,9 @@ export default {
         exists: 'We have access to your repository &#129395;!',
       },
     },
+    fileExplorer: {
+      empty: 'No files available in project.',
+    },
   },
   errors: {
     empty: 'Please type something',
