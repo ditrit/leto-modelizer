@@ -10,6 +10,11 @@ export default {
     home: {
       createEmptyProject: 'Create empty project',
     },
+    git: {
+      repository: {
+        exists: 'We have access to your repository &#129395;!',
+      },
+    },
   },
   errors: {
     empty: 'Please type something',
@@ -17,6 +22,9 @@ export default {
       gitProvider: {
         repository: 'Invalid repository url',
       },
+    },
+    git: {
+      HttpError: 'Can\'t access the repository.',
     },
   },
   projects: {
