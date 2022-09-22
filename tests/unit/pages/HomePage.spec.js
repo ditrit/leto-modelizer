@@ -7,7 +7,7 @@ installQuasarPlugin();
 jest.mock('src/composables/Project', () => ({
   createProjectTemplate: jest.fn(() => ({ id: 'project-00000000' })),
   getProjects: jest.fn(),
-  createProject: jest.fn(),
+  initProject: jest.fn(),
 }));
 
 describe('Test component: HomePage', () => {
