@@ -1,7 +1,16 @@
-import { Before, Then } from '@badeball/cypress-cucumber-preprocessor';
+import { Before, Given, Then } from '@badeball/cypress-cucumber-preprocessor';
 
 Before(() => {
   cy.context = {};
+});
+
+Given('I clear cache', () => {
+  localStorage.clear();
+
+  window.indexedDB.databases()
+    .then((databases) => {
+      databases.forEach((database) => window.indexedDB.deleteDatabase(database.name));
+    });
 });
 
 Then('I extract {string} from url in field {string} of context', (pattern, key) => cy.url().then((url) => {
