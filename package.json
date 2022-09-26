@@ -14,7 +14,7 @@
     "lint:report": "eslint --ext .js,.vue . -f json-relative > eslint.json",
     "test": "jest --coverageProvider=v8",
     "test:coverage": "jest --coverage --coverageProvider=v8",
-    "test:e2e": "cypress run --spec **/*.feature",
+    "test:e2e": "cypress run --browser chrome --spec **/*.feature",
     "plugin:install": "node node_modules/leto-modelizer-plugin-cli install",
     "plugin:init": "node node_modules/leto-modelizer-plugin-cli init"
   },
