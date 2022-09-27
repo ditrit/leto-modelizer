@@ -15,7 +15,7 @@
         data-cy="create-empty-project"
         :label="$t('actions.home.createEmptyProject')"
         :to="`/modelizer/${project.id}/model`"
-        @click="saveProject(project)"
+        @click="initProject(project)"
       />
       <div class="fit row justify-center">
         <ProjectGrid
@@ -29,7 +29,7 @@
 
 <script setup>
 import ProjectGrid from 'src/components/grid/ProjectGrid';
-import { createProjectTemplate, getProjects, saveProject } from 'src/composables/Project';
+import { createProjectTemplate, getProjects, initProject } from 'src/composables/Project';
 
 const project = createProjectTemplate();
 </script>

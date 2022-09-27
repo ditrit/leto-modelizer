@@ -10,6 +10,11 @@ export default {
     home: {
       createEmptyProject: 'Create empty project',
     },
+    git: {
+      repository: {
+        exists: 'We have access to your repository &#129395;!',
+      },
+    },
   },
   errors: {
     empty: 'Please type something',
@@ -17,6 +22,9 @@ export default {
       gitProvider: {
         repository: 'Invalid repository url',
       },
+    },
+    git: {
+      HttpError: 'Can\'t access the repository.',
     },
   },
   projects: {
@@ -44,7 +52,8 @@ export default {
         gitProvider: {
           title: 'Git configuration',
           repository: 'Repository url',
-          repositoryExample: 'Examples: "git{\'@\'}github.com/test.git", "http://test.com/test.git" or "https://github.com/test.git"',
+          repositoryExample: 'Examples: "http://test.com/test" or "https://github.com/test"',
+          username: 'Username',
           token: 'Access token',
         },
       },

@@ -16,6 +16,8 @@ module.exports = defineConfig({
     baseUrl: 'http://localhost:8080',
     specPattern: '**/*.feature',
     supportFile: false,
+    video: false,
+    screenshotOnRunFailure: false,
     setupNodeEvents,
   },
 });

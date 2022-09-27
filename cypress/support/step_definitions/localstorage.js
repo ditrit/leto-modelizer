@@ -21,10 +21,6 @@ Given('I add project in localstorage with {string}', (value) => {
   localStorage.setItem('projects', JSON.stringify(projects));
 });
 
-Given('I clear localstorage', () => {
-  localStorage.clear();
-});
-
 Then('I expect localstorage field {string} is {string}', (key, templateExpectedValue) => {
   const expectedValue = nunjucks.renderString(templateExpectedValue, cy.context);
   expect(localStorage.getItem(key)).to.eq(expectedValue);

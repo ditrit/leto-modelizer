@@ -28,3 +28,7 @@ Then('I set on {string} text {string}', (templateSelector, templateValue) => {
 
   cy.get(selector).type(value);
 });
+
+Then('I expect {string} is closed', (selector) => {
+  cy.get(selector, { timeout: 10000 }).should('not.exist');
+});

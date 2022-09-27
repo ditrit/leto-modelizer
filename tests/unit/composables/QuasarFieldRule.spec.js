@@ -26,16 +26,16 @@ describe('Test composable: InputRule', () => {
 
   describe('Test function: isGitRepositoryUrl', () => {
     it('Should return true on valid git url', () => {
-      expect(isGitRepositoryUrl(t, 'git@test.com/test.git')).toBe(true);
-      expect(isGitRepositoryUrl(t, 'http://test.com/test.git')).toBe(true);
-      expect(isGitRepositoryUrl(t, 'https://test.com/test.git')).toBe(true);
-      expect(isGitRepositoryUrl(t, 'https://github.com/ditrit/leto-modelizer.git')).toBe(true);
+      expect(isGitRepositoryUrl(t, 'http://test.com/test')).toBe(true);
+      expect(isGitRepositoryUrl(t, 'https://test.com/test')).toBe(true);
+      expect(isGitRepositoryUrl(t, 'https://github.com/ditrit/leto-modelizer')).toBe(true);
     });
 
     it('Should return error on invalid git url', () => {
       const key = 'errors.invalid.gitProvider.repository';
+      expect(isGitRepositoryUrl(t, 'git@github.com/ditrit/leto-modelizer.git')).toEqual(key);
       expect(isGitRepositoryUrl(t, 'ftp://github.com/ditrit/leto-modelizer.git')).toEqual(key);
-      expect(isGitRepositoryUrl(t, 'http://github.com/ditrit/leto-modelizer')).toEqual(key);
+      expect(isGitRepositoryUrl(t, 'http://github.com/ditrit/leto-modelizer.git')).toEqual(key);
     });
   });
 });

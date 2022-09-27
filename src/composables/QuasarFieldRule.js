@@ -17,6 +17,6 @@ export function notEmpty(t, value) {
  * the translated error message.
  */
 export function isGitRepositoryUrl(t, value) {
-  return /^(?:git@|http:\/\/|https:\/\/).+\.git$/.test(value)
+  return /^http(s)?:\/\/.+\/.*(?<!\.git)$/.test(value)
     || t('errors.invalid.gitProvider.repository');
 }

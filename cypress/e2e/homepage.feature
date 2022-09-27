@@ -1,7 +1,7 @@
 Feature: Test homepage
 
   Scenario: Create project should redirect to project page and save it in browser cache
-    Given I clear localstorage
+    Given I clear cache
     And I visit the "/"
 
     When I click on "[data-cy=\"create-empty-project\"]"
@@ -10,7 +10,7 @@ Feature: Test homepage
     And I expect localstorage field "projects" is '{"{{ projectName }}":{"id":"{{ projectName }}"}}'
 
   Scenario: Open existing project
-    Given I clear localstorage
+    Given I clear cache
     And I set in localstorage field "projects" with '{"project-0001":{"id":"project-0001"}}' as "json"
     And I visit the "/"
 

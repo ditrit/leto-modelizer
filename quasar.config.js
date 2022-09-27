@@ -94,7 +94,9 @@ module.exports = configure((ctx) => ({
 
   // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-framework
   framework: {
-    config: {},
+    config: {
+      notify: {},
+    },
 
     iconSet: 'fontawesome-v6',
     // iconSet: 'material-icons', // Quasar icon set
@@ -108,7 +110,7 @@ module.exports = configure((ctx) => ({
     // directives: [],
 
     // Quasar plugins
-    plugins: [],
+    plugins: ['Notify'],
   },
 
   // animations: 'all', // --- includes all animations

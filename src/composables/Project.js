@@ -1,4 +1,13 @@
 import { randomHexString } from 'src/composables/Random';
+import git from 'isomorphic-git';
+import http from 'isomorphic-git/http/web';
+import * as BrowserFS from 'browserfs';
+import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
+
+BrowserFS.install(window);
+BrowserFS.configure({ fs: 'IndexedDB', options: {} }, () => {});
+const fs = BrowserFS.BFSRequire('fs');
+const { Buffer } = BrowserFS.BFSRequire('buffer');
 
 export const PROJECT_STORAGE_KEY = 'projects';
 
@@ -38,16 +47,25 @@ export function getProjectById(projectId) {
   const projects = getProjects();
   return projects[projectId];
 }
-
 /**
  * Save the project state.
  *
- * @param {Project} project
+ * @param {Project} project - Project to save
  */
 export function saveProject(project) {
   const projects = getProjects();
   projects[project.id] = project;
   localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
+}
+
+/**
+ * Save project and initialize git in local storage.
+ * @param {Project} project - Project to save
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export function initProject(project) {
+  saveProject(project);
+  return git.init({ fs, dir: `/${project.id}` });
 }
 
 /**
@@ -68,4 +86,85 @@ export function deleteProjectById(projectId) {
  */
 export function deleteAllProjects() {
   localStorage.setItem(PROJECT_STORAGE_KEY, '{}');
+}
+
+/**
+ * Update remote origin, fetch and checkout the default branch.
+ * @param {Project} project - Project to update.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function updateGitProject(project) {
+  const dir = `/${project.id}`;
+
+  await git.addRemote({
+    fs,
+    dir,
+    url: project.git.repository,
+    remote: 'origin',
+    force: true,
+  });
+
+  await git.fetch({
+    fs,
+    http,
+    dir,
+    onAuth: () => ({
+      username: project.git.username,
+      password: project.git.token,
+    }),
+    corsProxy: 'https://cors.isomorphic-git.org',
+  });
+
+  const branches = await git.listBranches({
+    fs,
+    dir,
+    remote: 'origin',
+  });
+
+  const ref = branches.filter((branche) => branche !== 'HEAD')
+    .find(() => true);
+
+  return git.checkout({
+    fs,
+    dir,
+    ref,
+    force: true,
+  });
+}
+
+/**
+ * Retrieve list of project files name.
+ * @param {String} projectId - Id of project.
+ * @return {Promise<FileInformation[]>} Promise with file names array on success,
+ * otherwise error.
+ */
+export async function getProjectFiles(projectId) {
+  const project = getProjectById(projectId);
+  const files = await git.listFiles({ fs, dir: `/${project.id}` });
+
+  return files.map((file) => new FileInformation({ path: file }));
+}
+
+/**
+ * Get file content.
+ * @param {String} projectId - Id of project.
+ * @param {FileInformation} fileInformation - Object that contain file path.
+ * @return {Promise<FileInput>} Promise with file content on success otherwise error.
+ */
+export async function readProjectFile(projectId, fileInformation) {
+  const project = getProjectById(projectId);
+  const dir = `/${project.id}`;
+
+  const commitOid = await git.resolveRef({ fs, dir });
+  const { blob } = git.readBlob({
+    fs,
+    dir,
+    oid: commitOid,
+    filepath: fileInformation.path,
+  });
+
+  return new FileInput({
+    path: fileInformation.path,
+    content: Buffer.from(blob).toString('utf8'),
+  });
 }

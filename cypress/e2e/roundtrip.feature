@@ -1,7 +1,7 @@
 Feature: Test roundtrip of the application
 
   Scenario: Create project, switch and go back to homepage
-    Given I clear localstorage
+    Given I clear cache
     And I visit the "/"
 
     When I click on "[data-cy=\"create-empty-project\"]"

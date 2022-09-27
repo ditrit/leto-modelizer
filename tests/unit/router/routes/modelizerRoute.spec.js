@@ -1,5 +1,16 @@
 import ModelizerRoute from 'src/router/routes/ModelizerRoute';
 
+jest.mock('src/composables/Project', () => ({
+  getProjectById: (id) => {
+    if (id === 'badProject') {
+      return null;
+    }
+    return {
+      id: 1,
+    };
+  },
+}));
+
 describe('Test routes: ModelizerRoutes', () => {
   describe('Test route: ModelizerLongRoute', () => {
     const ModelizerLongRoute = ModelizerRoute.children[0];
@@ -12,8 +23,6 @@ describe('Test routes: ModelizerRoutes', () => {
           viewType: 'model',
         },
       };
-      const projects = { projectNameTest: { id: 1 } };
-      window.localStorage.setItem('projects', JSON.stringify(projects));
 
       ModelizerLongRoute.beforeEnter(to, null, next);
       expect(next).toHaveBeenCalledTimes(1);
@@ -24,11 +33,10 @@ describe('Test routes: ModelizerRoutes', () => {
       const next = jest.fn();
       const to = {
         params: {
-          projectName: 'projectNameTest',
+          projectName: 'badProject',
           viewType: 'model',
         },
       };
-      window.localStorage.removeItem('projects');
 
       ModelizerLongRoute.beforeEnter(to, null, next);
       expect(next).toHaveBeenCalledTimes(1);
@@ -43,8 +51,6 @@ describe('Test routes: ModelizerRoutes', () => {
           viewType: 'test',
         },
       };
-      const projects = { projectNameTest: { id: 1 } };
-      window.localStorage.setItem('projects', JSON.stringify(projects));
 
       ModelizerLongRoute.beforeEnter(to, null, next);
       expect(next).toHaveBeenCalledTimes(1);
