@@ -71,7 +71,8 @@ Feature: Test modelizer page
     And I set on "[data-cy=\"git-form\"] [data-cy=\"git-username-input\"]" text "test"
     And I set on "[data-cy=\"git-form\"] [data-cy=\"git-token-input\"]" text "test"
     And I click on "[data-cy=\"git-form\"] [data-cy=\"git-form-submit\"]"
-    Then I expect "[data-cy=\"git-form\"]" is closed
+    Then I expect "positive" toast to appear with text "We have access to your repository 🥳!"
+    And I expect "[data-cy=\"git-form\"]" is closed
     And I expect localstorage field "projects" is '{"{{ projectName }}":{"id":"{{ projectName }}","git":{"repository":"https://github.com/ditrit/leto-modelizer-project-test","username":"test","token":"test"}}}'
 
   Scenario: Set bad repository url should display an error
