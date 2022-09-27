@@ -32,3 +32,15 @@ Then('I set on {string} text {string}', (templateSelector, templateValue) => {
 Then('I expect {string} is closed', (selector) => {
   cy.get(selector, { timeout: 10000 }).should('not.exist');
 });
+
+Then('I expect {string} toast to appear with text {string}', (type, templateExpectedValue) => {
+  const expectedValue = nunjucks.renderString(templateExpectedValue, cy.context);
+
+  cy.get('.q-notification', { timeout: 10000 })
+    .should('exist')
+    .and('have.class', `bg-${type}`)
+    .within(() => {
+      cy.get('.q-notification__message.col')
+        .should('have.text', expectedValue);
+    });
+});
