@@ -22,5 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refacto ComponentDefinitionsPanel to ComponentDefinitionsDrawer
 - Initialize git on project creation
 - Update git remote on update git configuration
+- Add file explorer on text view
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
