@@ -1,10 +1,10 @@
 <template>
   <q-card flat bordered class="component-definition-card">
     <q-item clickable>
-      <q-item-section avatar v-if="definition.svgImage">
+      <q-item-section avatar v-if="definition.icon">
         <q-icon
           color="primary"
-          :name="`img:data:image/svg+xml;charset=utf8,${definition.svgImage}`"
+          :name="`img:/plugins/${pluginName}/icons/${definition.icon}.svg`"
         >
         </q-icon>
       </q-item-section>
@@ -20,6 +20,10 @@
 defineProps({
   definition: {
     type: Object,
+    required: true,
+  },
+  pluginName: {
+    type: String,
     required: true,
   },
 });

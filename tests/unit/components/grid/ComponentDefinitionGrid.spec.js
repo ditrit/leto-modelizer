@@ -14,6 +14,7 @@ describe('Test component: ComponentDefinitionGrid', () => {
           { type: 'foo1' },
           { type: 'foo2' },
         ],
+        pluginName: 'plugin',
       },
     });
   });
