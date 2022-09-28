@@ -2,10 +2,14 @@
   <router-view />
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script setup>
+import { initPlugins } from 'src/composables/PluginManager';
+import PluginEvent from 'src/composables/events/PluginEvent';
+import { onMounted } from 'vue';
 
-export default defineComponent({
-  name: 'App',
+onMounted(() => {
+  initPlugins().then(() => {
+    PluginEvent.next('ready');
+  });
 });
 </script>
