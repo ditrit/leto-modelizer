@@ -6,17 +6,13 @@ Before(() => {
 
 Given('I clear cache', () => {
   localStorage.clear();
-
-  window.indexedDB.databases()
-    .then((databases) => {
-      databases.forEach((database) => window.indexedDB.deleteDatabase(database.name));
-    });
 });
 
-Then('I extract {string} from url in field {string} of context', (pattern, key) => cy.url().then((url) => {
-  const projectName = new RegExp(pattern).exec(url)[0];
-  cy.context[key] = projectName;
-}));
+Then('I extract {string} from url in field {string} of context', (pattern, key) => {
+  cy.url().then((url) => {
+    [cy.context[key]] = new RegExp(pattern).exec(url);
+  });
+});
 
 Then('I expect context field {string} is {string}', (key, expectedValue) => {
   expect(cy.context[key]).to.eq(expectedValue);
