@@ -9,6 +9,7 @@ import {
   getProjectFiles,
   readProjectFile,
   updateGitProject,
+  getCurrentBranch,
   PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
@@ -25,6 +26,7 @@ jest.mock('isomorphic-git', () => ({
   listBranches: jest.fn(() => Promise.resolve(['HEAD', 'main'])),
   resolveRef: jest.fn(() => Promise.resolve('resolveRef')),
   readBlob: jest.fn(() => Promise.resolve({ blob: 'test' })),
+  currentBranch: jest.fn(() => Promise.resolve('main')),
 }));
 
 jest.mock('browserfs', () => ({
@@ -174,6 +176,14 @@ describe('Test composable: Project', () => {
       const result = await readProjectFile('test', new FileInformation({ path: '/test/file.txt' }));
 
       expect(result).toEqual(new FileInput({ path: '/test/file.txt', content: 'test' }));
+    });
+  });
+
+  describe('Test function: getCurrentBranch', () => {
+    it('Should return current branch name', async () => {
+      const result = await getCurrentBranch('test');
+
+      expect(result).toEqual('main');
     });
   });
 });
