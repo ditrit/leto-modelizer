@@ -2,10 +2,13 @@
   <div class="modelizer-text-view row"
     data-cy="modelizer-text-view"
   >
-    <file-explorer
-      class="q-ma-md col-2 overflow-auto"
-      :nodes="nodes"
-    />
+    <div>
+      <git-branch-card/>
+      <file-explorer
+          class="q-ma-md col-2 overflow-auto"
+          :nodes="nodes"
+      />
+    </div>
     <q-separator vertical inset />
     <monaco-editor :viewType="viewType" class="col-auto" />
   </div>
@@ -15,6 +18,7 @@
 import { getTree } from 'src/composables/FileExplorer';
 import MonacoEditor from 'components/editor/MonacoEditor.vue';
 import FileExplorer from 'components/FileExplorer.vue';
+import GitBranchCard from 'components/card/GitBranchCard';
 
 defineProps({
   viewType: String,
