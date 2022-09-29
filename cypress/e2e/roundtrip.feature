@@ -16,7 +16,7 @@ Feature: Test roundtrip of the application
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
-    And  I expect "[data-cy=\"modelizer-model-view\"]" is "ModelizerModelView"
+    And  I expect "[data-cy=\"modelizer-model-view-draw-root\"]" exists
     And I expect current url is "/#/modelizer/{{ projectName }}/model"
 
     When I click on "[data-cy=\"app-logo-link\"]"
