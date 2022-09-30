@@ -13,6 +13,7 @@ describe('Test component: ComponentDefinitionCard', () => {
         definition: {
           type: 'component one',
         },
+        pluginName: 'plugin',
       },
     });
   });

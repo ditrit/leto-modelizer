@@ -10,7 +10,7 @@
   >
     <template v-slot:item="props">
       <div class="q-pa-xs col-xs-12 col-sm-12 col-md-12 text-primary">
-        <component-definition-card :definition="props.row" />
+        <component-definition-card :definition="props.row" :pluginName="pluginName" />
       </div>
     </template>
   </q-table>
@@ -23,6 +23,10 @@ import ComponentDefinitionCard from 'src/components/card/ComponentDefinitionCard
 defineProps({
   definitions: {
     type: Array,
+    required: true,
+  },
+  pluginName: {
+    type: String,
     required: true,
   },
 });

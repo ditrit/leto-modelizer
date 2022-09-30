@@ -12,7 +12,7 @@
           expand-sperator
           group="components-definitions"
           header-class="text-bold"
-          v-for="plugin in definitions"
+          v-for="plugin in plugins"
           :key="plugin.name"
           :label="plugin.name"
         >
@@ -20,7 +20,10 @@
             :style="`height: calc(100vh - ${scrollAreaHeight(definitions)}px);`"
             class="sunken-area"
           >
-            <component-definition-grid :definitions="plugin.definitions" />
+            <component-definition-grid
+              :definitions="plugin.definitions.components"
+              :pluginName="plugin.name"
+            />
           </q-scroll-area>
         </q-expansion-item>
       </q-list>
@@ -32,6 +35,12 @@
 import { computed } from 'vue';
 import DefaultDrawer from 'src/components/drawer/DefaultDrawer';
 import ComponentDefinitionGrid from 'src/components/grid/ComponentDefinitionGrid';
+
+defineProps({
+  plugins: Array,
+  test: String,
+});
+
 /**
  * @typedef {{
  *  type: string;
