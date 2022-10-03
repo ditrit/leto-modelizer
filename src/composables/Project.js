@@ -4,8 +4,6 @@ import http from 'isomorphic-git/http/web';
 import * as BrowserFS from 'browserfs';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 
-BrowserFS.install(window);
-BrowserFS.configure({ fs: 'IndexedDB', options: {} }, () => {});
 const fs = BrowserFS.BFSRequire('fs');
 const { Buffer } = BrowserFS.BFSRequire('buffer');
 
