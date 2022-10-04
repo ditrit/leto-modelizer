@@ -24,5 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update git remote on update git configuration
 - Add file explorer on text view
 - Add plugin manager
+- Display current git branch of project in text view
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased

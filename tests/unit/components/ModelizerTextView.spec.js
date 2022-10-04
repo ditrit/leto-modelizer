@@ -4,6 +4,8 @@ import ModelizerTextView from 'src/components/ModelizerTextView.vue';
 
 installQuasarPlugin();
 
+jest.mock('components/card/GitBranchCard', () => {});
+
 describe('Test component: ModelizerTextView', () => {
   let wrapper;
 
@@ -11,6 +13,9 @@ describe('Test component: ModelizerTextView', () => {
     wrapper = shallowMount(ModelizerTextView, {
       props: {
         viewType: 'model',
+      },
+      stubs: {
+        GitBranchCard: true,
       },
     });
   });

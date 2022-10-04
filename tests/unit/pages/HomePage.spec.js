@@ -4,6 +4,12 @@ import HomePage from 'src/pages/HomePage.vue';
 
 installQuasarPlugin();
 
+jest.mock('vue-router', () => ({
+  useRouter: jest.fn(() => ({
+    push: (route) => Promise.resolve(route),
+  })),
+}));
+
 jest.mock('src/composables/Project', () => ({
   createProjectTemplate: jest.fn(() => ({ id: 'project-00000000' })),
   getProjects: jest.fn(),
@@ -23,6 +29,15 @@ describe('Test component: HomePage', () => {
     describe('Test variable: project', () => {
       it('Should match "project-00000000"', () => {
         expect(wrapper.vm.project).toEqual({ id: 'project-00000000' });
+      });
+    });
+  });
+
+  describe('Test functions', () => {
+    describe('Test function: createProject', () => {
+      it('Should redirect on success', async () => {
+        const route = await wrapper.vm.createProject();
+        expect(route).toEqual('/modelizer/project-00000000/model');
       });
     });
   });

@@ -53,6 +53,7 @@ import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
 import { notEmpty, isGitRepositoryUrl } from 'src/composables/QuasarFieldRule';
 import { getProjectById, saveProject, updateGitProject } from 'src/composables/Project';
+import UpdateRemoteEvent from 'src/composables/events/GitEvent';
 
 const emit = defineEmits(['project-git:save']);
 
@@ -78,6 +79,7 @@ function onSubmit() {
     .then(() => {
       saveProject(project);
       emit('project-git:save');
+      UpdateRemoteEvent.next();
       Notify.create({
         type: 'positive',
         message: t('actions.git.repository.exists'),

@@ -4,8 +4,6 @@ import http from 'isomorphic-git/http/web';
 import * as BrowserFS from 'browserfs';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 
-BrowserFS.install(window);
-BrowserFS.configure({ fs: 'IndexedDB', options: {} }, () => {});
 const fs = BrowserFS.BFSRequire('fs');
 const { Buffer } = BrowserFS.BFSRequire('buffer');
 
@@ -166,5 +164,18 @@ export async function readProjectFile(projectId, fileInformation) {
   return new FileInput({
     path: fileInformation.path,
     content: Buffer.from(blob).toString('utf8'),
+  });
+}
+
+/**
+ * Get current branch of git project.
+ * @param {String} projectId - Id of project.
+ * @return {Promise<String>} Promise with current branch name on success otherwise error.
+ */
+export async function getCurrentBranch(projectId) {
+  return git.currentBranch({
+    fs,
+    dir: `/${projectId}`,
+    fullname: false,
   });
 }

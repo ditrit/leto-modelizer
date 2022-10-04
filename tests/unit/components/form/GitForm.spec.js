@@ -7,6 +7,11 @@ import {
   updateGitProject,
 } from 'src/composables/Project';
 import { Notify } from 'quasar';
+import UpdateRemoteEvent from 'src/composables/events/GitEvent';
+
+jest.mock('src/composables/events/GitEvent', () => ({
+  next: jest.fn(),
+}));
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -43,6 +48,9 @@ jest.mock('src/composables/Project', () => ({
 
 describe('Test component: GitForm', () => {
   let wrapper;
+  const emit = jest.fn();
+
+  UpdateRemoteEvent.next.mockImplementation(() => emit());
 
   beforeEach(() => {
     wrapper = shallowMount(GitForm, {
@@ -120,6 +128,7 @@ describe('Test component: GitForm', () => {
       expect(updateGitProject).toBeCalled();
       expect(wrapper.vm.submitting).toEqual(false);
       expect(wrapper.emitted()['project-git:save']).toBeTruthy();
+      expect(emit).toBeCalled();
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
     });
 

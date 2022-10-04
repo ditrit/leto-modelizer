@@ -14,8 +14,7 @@
         icon="fa-solid fa-circle-plus"
         data-cy="create-empty-project"
         :label="$t('actions.home.createEmptyProject')"
-        :to="`/modelizer/${project.id}/model`"
-        @click="initProject(project)"
+        @click="createProject"
       />
       <div class="fit row justify-center">
         <ProjectGrid
@@ -30,8 +29,16 @@
 <script setup>
 import ProjectGrid from 'src/components/grid/ProjectGrid';
 import { createProjectTemplate, getProjects, initProject } from 'src/composables/Project';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const project = createProjectTemplate();
+
+async function createProject() {
+  await initProject(project);
+  return router.push(`/modelizer/${project.id}/model`);
+}
 </script>
 
 <style lang="scss" scoped>

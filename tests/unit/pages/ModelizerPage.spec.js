@@ -18,6 +18,7 @@ jest.mock('src/composables/events/ViewSwitchEvent', () => ({
 }));
 
 jest.mock('components/dialog/GitConfigurationDialog', () => {});
+jest.mock('components/card/GitBranchCard', () => {});
 
 describe('Test page component: ModelizerPage', () => {
   let wrapper;
@@ -54,6 +55,7 @@ describe('Test page component: ModelizerPage', () => {
       },
       stubs: {
         GitConfigurationDialog: true,
+        GitBranchCard: true,
       },
       mocks: {
         ViewSwitchEvent,
