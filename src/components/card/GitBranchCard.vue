@@ -20,7 +20,7 @@
 import { getCurrentBranch } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
 import { onMounted, onUnmounted, ref } from 'vue';
-import UpdateRemoteEvent from 'src/composables/events/GitEvent';
+import GitEvent from 'src/composables/events/GitEvent';
 
 let updateRemoteSubscription;
 const route = useRoute();
@@ -38,7 +38,7 @@ function updateBranch() {
 
 onMounted(() => {
   updateBranch();
-  updateRemoteSubscription = UpdateRemoteEvent.subscribe(() => {
+  updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(() => {
     updateBranch();
   });
 });

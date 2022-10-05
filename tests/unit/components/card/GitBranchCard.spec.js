@@ -2,7 +2,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import GitBranchCard from 'src/components/card/GitBranchCard.vue';
 import { useRoute } from 'vue-router';
-import UpdateRemoteEvent from 'src/composables/events/GitEvent';
+import GitEvent from 'src/composables/events/GitEvent';
 
 installQuasarPlugin();
 
@@ -15,7 +15,9 @@ jest.mock('src/composables/Project', () => ({
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
-  subscribe: jest.fn(),
+  UpdateRemoteEvent: {
+    subscribe: jest.fn(),
+  },
 }));
 
 describe('Test component: GitBranchCard', () => {
@@ -32,7 +34,7 @@ describe('Test component: GitBranchCard', () => {
   beforeEach(() => {
     subscribe = jest.fn();
     unsubscribe = jest.fn();
-    UpdateRemoteEvent.subscribe.mockImplementation(() => {
+    GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
       subscribe();
       return { unsubscribe };
     });
