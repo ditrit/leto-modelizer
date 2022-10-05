@@ -1,6 +1,8 @@
 <template>
   <q-card flat bordered class="component-definition-card">
-    <q-item clickable>
+    <q-item clickable
+      @click="onClickItem"
+    >
       <q-item-section avatar v-if="definition.icon">
         <q-icon
           color="primary"
@@ -17,7 +19,11 @@
 </template>
 
 <script setup>
-defineProps({
+import { Component } from 'leto-modelizer-plugin-core';
+import { getPluginByName } from 'src/composables/PluginManager';
+import { randomHexString } from 'src/composables/Random';
+
+const props = defineProps({
   definition: {
     type: Object,
     required: true,
@@ -27,4 +33,19 @@ defineProps({
     required: true,
   },
 });
+
+/**
+ * On definition click, add a new component to the plugin components
+ * and draw them all.
+ */
+function onClickItem() {
+  const plugin = getPluginByName(props.pluginName);
+  const id = `object_${randomHexString(8)}`;
+  plugin.components.push(new Component({
+    definition: { ...props.definition },
+    id,
+    name: id,
+  }));
+  plugin.drawer.draw(plugin.components);
+}
 </script>
