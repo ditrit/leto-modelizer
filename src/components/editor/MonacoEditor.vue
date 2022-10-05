@@ -12,13 +12,21 @@ import {
   onUpdated,
   nextTick,
   ref,
+  watch,
 } from 'vue';
 
 const monaco = require('monaco-editor');
 
 // Need to be here, otherwise OnUpdated is not called.
-defineProps({
-  viewType: String,
+const props = defineProps({
+  viewType: {
+    type: String,
+    default: 'text',
+  },
+  content: {
+    type: String,
+    default: '',
+  },
 });
 
 const container = ref(null);
@@ -29,7 +37,7 @@ let editor;
  */
 function createEditor() {
   editor = monaco.editor.create(container.value, {
-    value: '',
+    value: props.content,
     language: 'text',
   });
 }
@@ -45,6 +53,10 @@ function updateEditorLayout() {
     width: container.value.offsetWidth,
   });
 }
+
+watch(() => props.content, () => {
+  editor.setValue(props.content);
+});
 
 onMounted(() => {
   nextTick(createEditor);

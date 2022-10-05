@@ -22,12 +22,32 @@ describe('Tess component: MonacoEditor', () => {
   editor.create.mockImplementation(() => ({
     dispose,
     getValue: () => 'testValue',
+    setValue: (v) => v,
     layout,
     onDidChangeModelContent,
   }));
 
   beforeEach(() => {
-    wrapper = shallowMount(MonacoEditor);
+    wrapper = shallowMount(MonacoEditor, {
+      props: {
+        viewType: 'text',
+        content: 'Hello World',
+      },
+    });
+  });
+
+  describe('Test variables initialization', () => {
+    describe('Test props: viewType', () => {
+      it('should match "text"', () => {
+        expect(wrapper.vm.props.viewType).toEqual('text');
+      });
+    });
+
+    describe('Test props: content', () => {
+      it('should match "Hello World"', () => {
+        expect(wrapper.vm.props.content).toEqual('Hello World');
+      });
+    });
   });
 
   describe('Test function: createEditor', () => {
@@ -50,6 +70,16 @@ describe('Tess component: MonacoEditor', () => {
         height: 10,
         width: 11,
       });
+    });
+  });
+
+  describe('Test watcher: props.content', () => {
+    it('should be trigger when props.content is update with a different value', async () => {
+      await wrapper.setProps({
+        viewType: 'text',
+        content: 'new content',
+      });
+      expect(wrapper.vm.props.content).toEqual('new content');
     });
   });
 });
