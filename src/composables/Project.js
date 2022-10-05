@@ -79,12 +79,6 @@ export function deleteProjectById(projectId) {
   }
 }
 
-/**
- * Delete all saved projects.
- */
-export function deleteAllProjects() {
-  localStorage.setItem(PROJECT_STORAGE_KEY, '{}');
-}
 
 /**
  * Update remote origin, fetch and checkout the default branch.

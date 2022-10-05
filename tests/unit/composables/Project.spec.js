@@ -4,7 +4,6 @@ import {
   getProjectById,
   saveProject,
   deleteProjectById,
-  deleteAllProjects,
   initProject,
   getProjectFiles,
   readProjectFile,
@@ -125,20 +124,6 @@ describe('Test composable: Project', () => {
       const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
       expect(projects.bar).toStrictEqual({ id: 'bar' });
       expect(projects.foo).not.toBeDefined();
-    });
-  });
-
-  describe('Test function: deleteAllProjects', () => {
-    it('Should delete all projects', () => {
-      localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
-        foo: { id: 'foo' },
-        bar: { id: 'bar' },
-        qaz: { id: 'qaz' },
-        quz: { id: 'quz' },
-      }));
-      deleteAllProjects();
-      const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
-      expect(projects).toStrictEqual({});
     });
   });
 
