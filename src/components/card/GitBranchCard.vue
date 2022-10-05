@@ -3,7 +3,6 @@
     flat
     no-caps
     color="primary"
-    size="sm"
     class="full-width"
     align="left"
     icon="fa-solid fa-code-branch"
