@@ -3,6 +3,8 @@ import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/web';
 import * as BrowserFS from 'browserfs';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
+import GitEvent from 'src/composables/events/GitEvent';
+import Branch from 'src/models/git/Branch';
 
 const fs = BrowserFS.BFSRequire('fs');
 const { Buffer } = BrowserFS.BFSRequire('buffer');
@@ -69,7 +71,7 @@ export function initProject(project) {
 /**
  * Clear one project by ID.
  *
- * @param {string} projectId
+ * @param {String} projectId - Id of project.
  */
 export function deleteProjectById(projectId) {
   const projects = getProjects();
@@ -79,6 +81,28 @@ export function deleteProjectById(projectId) {
   }
 }
 
+/**
+ * Fetch project on git. Emit a FetchEvent on success.
+ * @param {String} projectId - Id of project.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function fetchGit(projectId) {
+  const project = getProjectById(projectId);
+  if (project.git && project.git.repository) {
+    await git.fetch({
+      fs,
+      http,
+      url: project.git.repository,
+      dir: `/${projectId}`,
+      onAuth: () => ({
+        username: project.git.username,
+        password: project.git.token,
+      }),
+      corsProxy: 'https://cors.isomorphic-git.org',
+    });
+  }
+  return GitEvent.FetchEvent.next();
+}
 
 /**
  * Update remote origin, fetch and checkout the default branch.
@@ -96,16 +120,7 @@ export async function updateGitProject(project) {
     force: true,
   });
 
-  await git.fetch({
-    fs,
-    http,
-    dir,
-    onAuth: () => ({
-      username: project.git.username,
-      password: project.git.token,
-    }),
-    corsProxy: 'https://cors.isomorphic-git.org',
-  });
+  await fetchGit(project.id);
 
   const branches = await git.listBranches({
     fs,
@@ -172,4 +187,54 @@ export async function getCurrentBranch(projectId) {
     dir: `/${projectId}`,
     fullname: false,
   });
+}
+
+/**
+ * Get all branches of project.
+ * @param {String} projectId - Id of project.
+ * @return {Promise<Branch[]>} Promise with array of branches on success otherwise error.
+ */
+export async function getBranches(projectId) {
+  const dir = `/${projectId}`;
+
+  const [local, remote] = await Promise.all([
+    git.listBranches({
+      fs,
+      dir,
+    }),
+    git.listBranches({
+      fs,
+      dir,
+      remote: 'origin',
+    }),
+  ]);
+
+  const branches = local.map((localBranch) => (new Branch({
+    name: localBranch,
+    onLocal: true,
+    onRemote: remote.includes(localBranch),
+    remote: 'origin',
+  })));
+
+  // TODO: remove this when https://github.com/isomorphic-git/isomorphic-git/issues/1650 is resolve.
+  if (branches.length === 0) {
+    const currentBranch = await getCurrentBranch(projectId);
+    branches.push(new Branch({
+      name: currentBranch,
+      onLocal: true,
+      onRemote: false,
+      remote: 'origin',
+    }));
+  }
+
+  return branches.concat(
+    remote
+      .filter((remoteBranch) => !local.includes(remoteBranch))
+      .map((remoteBranch) => (new Branch({
+        name: remoteBranch,
+        onLocal: false,
+        onRemote: true,
+        remote: 'origin',
+      }))),
+  ).filter(({ name }) => name !== 'HEAD');
 }
