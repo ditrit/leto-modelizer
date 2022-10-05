@@ -118,30 +118,6 @@ export async function getProjectFiles(projectId) {
 }
 
 /**
- * Get file content.
- * @param {String} projectId - Id of project.
- * @param {FileInformation} fileInformation - Object that contain file path.
- * @return {Promise<FileInput>} Promise with file content on success otherwise error.
- */
-export async function readProjectFile(projectId, fileInformation) {
-  const project = getProjectById(projectId);
-  const dir = `/${project.id}`;
-
-  const commitOid = await git.resolveRef({ fs, dir });
-  const { blob } = git.readBlob({
-    fs,
-    dir,
-    oid: commitOid,
-    filepath: fileInformation.path,
-  });
-
-  return new FileInput({
-    path: fileInformation.path,
-    content: Buffer.from(blob).toString('utf8'),
-  });
-}
-
-/**
  * Get current branch of git project.
  * @param {String} projectId - Id of project.
  * @return {Promise<String>} Promise with current branch name on success otherwise error.
@@ -154,6 +130,29 @@ export async function getCurrentBranch(projectId) {
   });
 }
 
+/**
+ * Get file content.
+ * @param {String} projectId - Id of project.
+ * @param {FileInformation} fileInformation - Object that contain file path.
+ * @return {Promise<FileInput>} Promise with file content on success otherwise error.
+ */
+export async function readProjectFile(projectId, fileInformation) {
+  const currentBranch = await getCurrentBranch(projectId);
+  const dir = `/${projectId}`;
+
+  const commitOid = await git.resolveRef({ fs, dir, ref: currentBranch });
+  const { blob } = await git.readBlob({
+    fs,
+    dir,
+    oid: commitOid,
+    filepath: fileInformation.path,
+  });
+
+  return new FileInput({
+    path: fileInformation.path,
+    content: Buffer.from(blob).toString('utf8'),
+  });
+}
 /**
  * Get all branches of project.
  * @param {String} projectId - Id of project.
