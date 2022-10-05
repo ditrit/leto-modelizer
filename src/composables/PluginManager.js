@@ -105,6 +105,7 @@ export async function instantiatePlugin(pluginName) {
   const plugin = {
     pluginModel,
     name: pluginName,
+    components: [],
   };
 
   initPluginMetadata(plugin);
@@ -136,4 +137,14 @@ export async function initPlugins() {
  */
 export function getPlugins() {
   return instanciatePlugins;
+}
+
+/**
+ * Get instantiated plugin correponding to the given name.
+ *
+ * @param {String} name - Name of the plugin to retrieve.
+ * @return {Object} Return an array of plugin.
+ */
+export function getPluginByName(name) {
+  return instanciatePlugins.find((p) => p.name === name);
 }

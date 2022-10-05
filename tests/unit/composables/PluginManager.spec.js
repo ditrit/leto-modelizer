@@ -166,6 +166,7 @@ describe('Test composable: PluginManager', () => {
       expect(plugin).toEqual({
         pluginModel: testPlugin,
         name: 'testPlugin',
+        components: [],
         definitions: {
           components: [],
           links: [],
@@ -190,6 +191,7 @@ describe('Test composable: PluginManager', () => {
       expect(PluginManager.getPlugins()).toEqual([{
         pluginModel: testPlugin,
         name: 'testPlugin',
+        components: [],
         definitions: {
           components: [],
           links: [],
@@ -199,6 +201,25 @@ describe('Test composable: PluginManager', () => {
         parser: {},
         renderer: {},
       }]);
+    });
+  });
+
+  describe('Test function: getPluginByName', () => {
+    it('should return the plugin according to the given name', () => {
+      PluginManager.getPluginByName('testPlugin');
+      expect(PluginManager.getPluginByName('testPlugin')).toEqual({
+        pluginModel: testPlugin,
+        name: 'testPlugin',
+        components: [],
+        definitions: {
+          components: [],
+          links: [],
+        },
+        drawer: {},
+        metadata: {},
+        parser: {},
+        renderer: {},
+      });
     });
   });
 });
