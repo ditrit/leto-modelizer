@@ -64,7 +64,7 @@ Plugin to manage terraform files, by default it come from with aws provider defi
 Option to use it in command `install`:
 
 - plugin name: `terrator-plugin`
-- repository url: `https://github.com/ditrit/terrator-plugin.git#0.1.0`
+- repository url: `https://github.com/ditrit/terrator-plugin.git#0.1.2`
 
 
 
