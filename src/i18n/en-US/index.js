@@ -6,6 +6,10 @@ export default {
     default: {
       goToHome: 'Go to homepage',
       save: 'Save',
+      show: {
+        more: 'Show {number} more...',
+        less: 'Show less',
+      },
     },
     home: {
       createEmptyProject: 'Create empty project',
@@ -60,6 +64,13 @@ export default {
           token: 'Access token',
         },
       },
+    },
+  },
+  menu: {
+    git: {
+      currentBranch: 'Current branch',
+      localBranchesTitle: 'Local branches',
+      remoteBranchesTitle: 'Remote branches',
     },
   },
 };
