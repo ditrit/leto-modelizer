@@ -8,6 +8,7 @@
     icon="fa-solid fa-code-branch"
     :loading="loading"
     :label="currentBranch"
+    data-cy="git-current-branch"
   >
     <template v-slot:loading>
       <q-spinner-dots/>
