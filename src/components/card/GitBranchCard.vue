@@ -13,6 +13,7 @@
     <template v-slot:loading>
       <q-spinner-dots/>
     </template>
+    <git-branch-menu :current-branch-name="currentBranch"/>
   </q-btn>
 </template>
 
@@ -21,6 +22,7 @@ import { getCurrentBranch } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
 import { onMounted, onUnmounted, ref } from 'vue';
 import GitEvent from 'src/composables/events/GitEvent';
+import GitBranchMenu from 'components/menu/GitBranchMenu';
 
 let updateRemoteSubscription;
 const route = useRoute();
