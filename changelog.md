@@ -29,5 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add search field for git branches menu
 - Add checkout action on branch menu
 - Draw component on definition click
+- Add file tabs to wrap monaco editor on text view
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
