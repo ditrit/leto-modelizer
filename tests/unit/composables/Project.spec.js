@@ -160,7 +160,7 @@ describe('Test composable: Project', () => {
         },
       });
 
-      expect(result).toEqual('checkout');
+      expect(result).toEqual('next');
     });
   });
 
