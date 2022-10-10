@@ -3,16 +3,17 @@
     flat
     no-caps
     color="primary"
-    size="sm"
     class="full-width"
     align="left"
     icon="fa-solid fa-code-branch"
     :loading="loading"
     :label="currentBranch"
+    data-cy="git-current-branch"
   >
     <template v-slot:loading>
       <q-spinner-dots/>
     </template>
+    <git-branch-menu :current-branch-name="currentBranch"/>
   </q-btn>
 </template>
 
@@ -20,7 +21,8 @@
 import { getCurrentBranch } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
 import { onMounted, onUnmounted, ref } from 'vue';
-import UpdateRemoteEvent from 'src/composables/events/GitEvent';
+import GitEvent from 'src/composables/events/GitEvent';
+import GitBranchMenu from 'components/menu/GitBranchMenu';
 
 let updateRemoteSubscription;
 const route = useRoute();
@@ -38,7 +40,7 @@ function updateBranch() {
 
 onMounted(() => {
   updateBranch();
-  updateRemoteSubscription = UpdateRemoteEvent.subscribe(() => {
+  updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(() => {
     updateBranch();
   });
 });

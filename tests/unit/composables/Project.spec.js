@@ -4,29 +4,40 @@ import {
   getProjectById,
   saveProject,
   deleteProjectById,
-  deleteAllProjects,
   initProject,
   getProjectFiles,
   readProjectFile,
   updateGitProject,
   getCurrentBranch,
-  PROJECT_STORAGE_KEY,
+  PROJECT_STORAGE_KEY, fetchGit, getBranches,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
+import Branch from 'src/models/git/Branch';
 
 jest.mock('isomorphic-git', () => ({
   init: jest.fn(() => Promise.resolve('init')),
   addRemote: jest.fn(() => Promise.resolve('addRemote')),
   fetch: jest.fn(({ onAuth }) => {
     onAuth();
-    return Promise.resolve('addRemote');
+    return Promise.resolve('fetch');
   }),
   checkout: jest.fn(() => Promise.resolve('checkout')),
   listFiles: jest.fn(() => Promise.resolve(['/test/file.txt'])),
-  listBranches: jest.fn(() => Promise.resolve(['HEAD', 'main'])),
+  listBranches: jest.fn(({ remote }) => {
+    if (!remote) {
+      return Promise.resolve(['HEAD', 'main', 'local']);
+    }
+    return Promise.resolve(['HEAD', 'main', 'remote']);
+  }),
   resolveRef: jest.fn(() => Promise.resolve('resolveRef')),
   readBlob: jest.fn(() => Promise.resolve({ blob: 'test' })),
   currentBranch: jest.fn(() => Promise.resolve('main')),
+}));
+
+jest.mock('src/composables/events/GitEvent', () => ({
+  FetchEvent: {
+    next: jest.fn(() => Promise.resolve('next')),
+  },
 }));
 
 jest.mock('browserfs', () => ({
@@ -128,22 +139,18 @@ describe('Test composable: Project', () => {
     });
   });
 
-  describe('Test function: deleteAllProjects', () => {
-    it('Should delete all projects', () => {
-      localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
-        foo: { id: 'foo' },
-        bar: { id: 'bar' },
-        qaz: { id: 'qaz' },
-        quz: { id: 'quz' },
-      }));
-      deleteAllProjects();
-      const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
-      expect(projects).toStrictEqual({});
-    });
-  });
-
   describe('Test function: updateGitProject', () => {
     it('Should call all needed git method', async () => {
+      localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
+        test: {
+          id: 'test',
+          git: {
+            repository: 'test',
+            username: 'test',
+            token: 'test',
+          },
+        },
+      }));
       const result = await updateGitProject({
         id: 'test',
         git: {
@@ -154,6 +161,23 @@ describe('Test composable: Project', () => {
       });
 
       expect(result).toEqual('checkout');
+    });
+  });
+
+  describe('Test function: fetchGit', () => {
+    it('Should emit fetch event', async () => {
+      localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
+        test: {
+          id: 'test',
+          git: {
+            repository: 'test',
+            username: 'test',
+            token: 'test',
+          },
+        },
+      }));
+      const result = await fetchGit('test');
+      expect(result).toEqual('next');
     });
   });
 
@@ -184,6 +208,33 @@ describe('Test composable: Project', () => {
       const result = await getCurrentBranch('test');
 
       expect(result).toEqual('main');
+    });
+  });
+
+  describe('Test function: getBranches', () => {
+    it('Should return valid branches', async () => {
+      const branches = await getBranches('test');
+
+      expect(branches).toEqual([
+        new Branch({
+          name: 'main',
+          onLocal: true,
+          onRemote: true,
+          remote: 'origin',
+        }),
+        new Branch({
+          name: 'local',
+          onLocal: true,
+          onRemote: false,
+          remote: 'origin',
+        }),
+        new Branch({
+          name: 'remote',
+          onLocal: false,
+          onRemote: true,
+          remote: 'origin',
+        }),
+      ]);
     });
   });
 });

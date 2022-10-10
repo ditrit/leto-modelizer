@@ -6,4 +6,13 @@ import { Subject } from 'rxjs';
  */
 const UpdateRemoteEvent = new Subject();
 
-export default UpdateRemoteEvent;
+/**
+ * Represent a rxjs Event object to emit and to receive events when a fetch is done on git.
+ * @typedef {Subject} FetchEvent
+ */
+const FetchEvent = new Subject();
+
+export default {
+  FetchEvent,
+  UpdateRemoteEvent,
+};
