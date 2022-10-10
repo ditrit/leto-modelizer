@@ -6,6 +6,11 @@ Then('I expect {string} exists', (templateSelector) => {
   cy.get(selector).should('be.visible');
 });
 
+Then('I expect {string} not exists', (templateSelector) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+  cy.get(selector).should('not.exist');
+});
+
 Then('I expect {string} is {string}', (templateSelector, templateExpectedValue) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   const expectedValue = nunjucks.renderString(templateExpectedValue, cy.context);
