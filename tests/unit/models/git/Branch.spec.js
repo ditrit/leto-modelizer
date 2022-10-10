@@ -8,6 +8,7 @@ describe('Test class: Branch', () => {
       expect(branch.name).toBeNull();
       expect(branch.onLocal).toEqual(false);
       expect(branch.onRemote).toEqual(false);
+      expect(branch.current).toEqual(false);
       expect(branch.remote).toEqual('origin');
     });
 
@@ -17,6 +18,7 @@ describe('Test class: Branch', () => {
       expect(branch.name).toBeNull();
       expect(branch.onLocal).toEqual(false);
       expect(branch.onRemote).toEqual(false);
+      expect(branch.current).toEqual(false);
       expect(branch.remote).toEqual('origin');
     });
 
@@ -25,12 +27,14 @@ describe('Test class: Branch', () => {
         name: 'name',
         onLocal: true,
         onRemote: true,
+        current: true,
         remote: 'test',
       });
 
       expect(branch.name).toEqual('name');
       expect(branch.onLocal).toEqual(true);
       expect(branch.onRemote).toEqual(true);
+      expect(branch.current).toEqual(true);
       expect(branch.remote).toEqual('test');
     });
   });
@@ -52,6 +56,26 @@ describe('Test class: Branch', () => {
           onRemote: false,
         });
         expect(branch.fullName).toEqual('');
+      });
+    });
+  });
+
+  describe('Test functions', () => {
+    describe('Test function: compare', () => {
+      it('Should display current branch before other branches', () => {
+        const currentBranch = new Branch({ current: true });
+        const otherBranch = new Branch({ current: false });
+        expect(currentBranch.compare(otherBranch)).toEqual(-1);
+        expect(otherBranch.compare(currentBranch)).toEqual(1);
+      });
+
+      it('Should compare branches in alphabetical order', () => {
+        const currentBranch = new Branch({ name: 'a' });
+        const otherBranch = new Branch({ name: 'b' });
+
+        expect(currentBranch.compare(currentBranch)).toEqual(0);
+        expect(currentBranch.compare(otherBranch)).toEqual(-1);
+        expect(otherBranch.compare(currentBranch)).toEqual(1);
       });
     });
   });
