@@ -83,17 +83,16 @@ export function deleteProjectById(projectId) {
 
 /**
  * Fetch project on git. Emit a FetchEvent on success.
- * @param {String} projectId - Id of project.
+ * @param {Project} project - Project to update.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function fetchGit(projectId) {
-  const project = getProjectById(projectId);
+export async function fetchGit(project) {
   if (project.git && project.git.repository) {
     await git.fetch({
       fs,
       http,
       url: project.git.repository,
-      dir: `/${projectId}`,
+      dir: `/${project.id}`,
       onAuth: () => ({
         username: project.git.username,
         password: project.git.token,
