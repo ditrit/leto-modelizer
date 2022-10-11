@@ -25,6 +25,7 @@ jest.mock('src/composables/Project', () => ({
   getCurrentBranch: jest.fn(() => Promise.resolve('main')),
   getBranches: jest.fn(() => Promise.resolve([])),
   fetchGit: jest.fn(() => Promise.resolve()),
+  getProjectById: jest.fn(),
 }));
 
 describe('Test component: GitBranchMenu', () => {

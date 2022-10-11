@@ -83,17 +83,16 @@ export function deleteProjectById(projectId) {
 
 /**
  * Fetch project on git. Emit a FetchEvent on success.
- * @param {String} projectId - Id of project.
+ * @param {Project} project - Project to update.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function fetchGit(projectId) {
-  const project = getProjectById(projectId);
+export async function fetchGit(project) {
   if (project.git && project.git.repository) {
     await git.fetch({
       fs,
       http,
       url: project.git.repository,
-      dir: `/${projectId}`,
+      dir: `/${project.id}`,
       onAuth: () => ({
         username: project.git.username,
         password: project.git.token,
@@ -101,42 +100,8 @@ export async function fetchGit(projectId) {
       corsProxy: 'https://cors.isomorphic-git.org',
     });
   }
+
   return GitEvent.FetchEvent.next();
-}
-
-/**
- * Update remote origin, fetch and checkout the default branch.
- * @param {Project} project - Project to update.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
- */
-export async function updateGitProject(project) {
-  const dir = `/${project.id}`;
-
-  await git.addRemote({
-    fs,
-    dir,
-    url: project.git.repository,
-    remote: 'origin',
-    force: true,
-  });
-
-  await fetchGit(project.id);
-
-  const branches = await git.listBranches({
-    fs,
-    dir,
-    remote: 'origin',
-  });
-
-  const ref = branches.filter((branche) => branche !== 'HEAD')
-    .find(() => true);
-
-  return git.checkout({
-    fs,
-    dir,
-    ref,
-    force: true,
-  });
 }
 
 /**
@@ -237,4 +202,23 @@ export async function getBranches(projectId) {
         remote: 'origin',
       }))),
   ).filter(({ name }) => name !== 'HEAD');
+}
+
+/**
+ * Update remote origin, fetch and checkout the default branch.
+ * @param {Project} project - Project to update.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function updateGitProject(project) {
+  const dir = `/${project.id}`;
+
+  await git.addRemote({
+    fs,
+    dir,
+    url: project.git.repository,
+    remote: 'origin',
+    force: true,
+  });
+
+  return fetchGit(project);
 }

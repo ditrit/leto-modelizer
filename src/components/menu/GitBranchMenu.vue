@@ -47,7 +47,7 @@ import GitBranchItemMenu from 'components/menu/GitBranchItemMenu';
 import GitBranchHeaderMenu from 'components/menu/GitBranchHeaderMenu';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { getBranches, fetchGit } from 'src/composables/Project';
+import { getBranches, fetchGit, getProjectById } from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
 import GitBranchExpandListMenu from 'components/menu/GitBranchExpandListMenu';
 
@@ -97,7 +97,7 @@ async function initBranches() {
 
 onMounted(() => {
   fetchSubscription = GitEvent.FetchEvent.subscribe(initBranches);
-  fetchGit(route.params.projectName);
+  fetchGit(getProjectById(route.params.projectName));
 });
 onUnmounted(() => {
   fetchSubscription.unsubscribe();
