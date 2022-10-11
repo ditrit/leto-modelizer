@@ -12,7 +12,14 @@ const UpdateRemoteEvent = new Subject();
  */
 const FetchEvent = new Subject();
 
+/**
+ * Represent a rxjs Event object to emit and to receive events when a checkout is done on git.
+ * @typedef {Subject} CheckoutEvent
+ */
+const CheckoutEvent = new Subject();
+
 export default {
+  CheckoutEvent,
   FetchEvent,
   UpdateRemoteEvent,
 };

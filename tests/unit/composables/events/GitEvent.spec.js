@@ -15,4 +15,11 @@ describe('Test composable: GitEvent', () => {
       expect(GitEvent.FetchEvent).toEqual(new Subject());
     });
   });
+
+  describe('Test event: CheckoutEvent', () => {
+    it('Should export a Subject', () => {
+      expect(GitEvent.CheckoutEvent).toBeDefined();
+      expect(GitEvent.CheckoutEvent).toEqual(new Subject());
+    });
+  });
 });
