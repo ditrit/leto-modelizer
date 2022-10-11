@@ -18,6 +18,7 @@ export default {
       repository: {
         exists: 'We have access to your repository &#129395;!',
       },
+      checkout: 'Checkout',
     },
     fileExplorer: {
       empty: 'No files available in project.',

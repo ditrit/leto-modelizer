@@ -19,6 +19,9 @@ jest.mock('src/composables/events/GitEvent', () => ({
   FetchEvent: {
     subscribe: jest.fn(),
   },
+  CheckoutEvent: {
+    subscribe: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -30,8 +33,10 @@ jest.mock('src/composables/Project', () => ({
 
 describe('Test component: GitBranchMenu', () => {
   let wrapper;
-  let subscribe;
-  let unsubscribe;
+  let fetchSubscribe;
+  let fetchUnsubscribe;
+  let checkoutSubscribe;
+  let checkoutUnsubscribe;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -41,11 +46,17 @@ describe('Test component: GitBranchMenu', () => {
   }));
 
   beforeEach(() => {
-    subscribe = jest.fn();
-    unsubscribe = jest.fn();
+    fetchSubscribe = jest.fn();
+    fetchUnsubscribe = jest.fn();
+    checkoutSubscribe = jest.fn();
+    checkoutUnsubscribe = jest.fn();
     GitEvent.FetchEvent.subscribe.mockImplementation(() => {
-      subscribe();
-      return { unsubscribe };
+      fetchSubscribe();
+      return { unsubscribe: fetchUnsubscribe };
+    });
+    GitEvent.CheckoutEvent.subscribe.mockImplementation(() => {
+      checkoutSubscribe();
+      return { unsubscribe: checkoutUnsubscribe };
     });
     wrapper = shallowMount(GitBranchMenu, {
       props: {
@@ -268,16 +279,26 @@ describe('Test component: GitBranchMenu', () => {
     });
 
     describe('Test hook function: onMounted', () => {
-      it('should subscribe ViewSwitchEvent', () => {
-        expect(subscribe).toHaveBeenCalledTimes(1);
+      it('should subscribe FetchEvent', () => {
+        expect(fetchSubscribe).toHaveBeenCalledTimes(1);
+      });
+
+      it('should subscribe CheckoutEvent', () => {
+        expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
       });
     });
 
     describe('Test hook function: onUnmounted', () => {
-      it('should unsubscribe ViewSwitchEvent', () => {
-        expect(unsubscribe).toHaveBeenCalledTimes(0);
+      it('should unsubscribe FetchEvent', () => {
+        expect(fetchUnsubscribe).toHaveBeenCalledTimes(0);
         wrapper.unmount();
-        expect(unsubscribe).toHaveBeenCalledTimes(1);
+        expect(fetchUnsubscribe).toHaveBeenCalledTimes(1);
+      });
+
+      it('should unsubscribe CheckoutEvent', () => {
+        expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
+        wrapper.unmount();
+        expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
       });
     });
   });

@@ -222,3 +222,18 @@ export async function updateGitProject(project) {
 
   return fetchGit(project);
 }
+
+/**
+ * Checkout branch.
+ * @param {String} projectId - Id of project.
+ * @param {String} branch - Branch name to checkout.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function checkout(projectId, branch) {
+  await git.checkout({
+    fs,
+    dir: `/${projectId}`,
+    ref: branch,
+  });
+  return GitEvent.CheckoutEvent.next();
+}

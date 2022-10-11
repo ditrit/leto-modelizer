@@ -107,6 +107,7 @@ const searchInput = ref(null);
 const hasNoBranches = computed(() => filteredBranches.value.local.length === 0
     && filteredBranches.value.remote.length === 0);
 let fetchSubscription;
+let checkoutSubscription;
 
 /**
  * On open menu, focus on the search input and close expand menu.
@@ -180,9 +181,11 @@ async function initBranches() {
 
 onMounted(() => {
   fetchSubscription = GitEvent.FetchEvent.subscribe(initBranches);
+  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(initBranches);
   fetchGit(getProjectById(route.params.projectName));
 });
 onUnmounted(() => {
   fetchSubscription.unsubscribe();
+  checkoutSubscription.unsubscribe();
 });
 </script>

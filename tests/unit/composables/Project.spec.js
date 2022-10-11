@@ -9,7 +9,10 @@ import {
   readProjectFile,
   updateGitProject,
   getCurrentBranch,
-  PROJECT_STORAGE_KEY, fetchGit, getBranches,
+  fetchGit,
+  getBranches,
+  checkout,
+  PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -36,7 +39,10 @@ jest.mock('isomorphic-git', () => ({
 
 jest.mock('src/composables/events/GitEvent', () => ({
   FetchEvent: {
-    next: jest.fn(() => Promise.resolve('next')),
+    next: jest.fn(() => Promise.resolve('FetchEventNext')),
+  },
+  CheckoutEvent: {
+    next: jest.fn(() => Promise.resolve('CheckoutEventNext')),
   },
 }));
 
@@ -160,7 +166,7 @@ describe('Test composable: Project', () => {
         },
       });
 
-      expect(result).toEqual('next');
+      expect(result).toEqual('FetchEventNext');
     });
   });
 
@@ -177,7 +183,14 @@ describe('Test composable: Project', () => {
         },
       }));
       const result = await fetchGit('test');
-      expect(result).toEqual('next');
+      expect(result).toEqual('FetchEventNext');
+    });
+  });
+
+  describe('Test function: checkout', () => {
+    it('Should emit checkout event', async () => {
+      const result = await checkout('projectId', 'test');
+      expect(result).toEqual('CheckoutEventNext');
     });
   });
 

@@ -17,10 +17,18 @@
     <q-item-section side>
       <q-icon name="fa-solid fa-angle-right"/>
     </q-item-section>
+    <git-branch-action-menu
+      anchor="top end"
+      self="top start"
+      :current="current"
+      :branch-name="name"
+    />
   </q-item>
 </template>
 
 <script setup>
+
+import GitBranchActionMenu from 'components/menu/GitBranchActionMenu';
 
 defineProps({
   name: {

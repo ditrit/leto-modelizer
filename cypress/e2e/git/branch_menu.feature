@@ -86,3 +86,21 @@ Feature: Test git branch menu
     And I click on "[data-cy=\"git-current-branch\"]"
     Then I expect "[data-cy=\"git-branch-expand-remote-menu\"] [data-cy=\"git-branch-expand-menu-text\"]" is "Show 3 more..."
 
+  Scenario: Checkout action should change current branch
+    When I click on "[data-cy=\"project-settings\"]"
+    And I click on "[data-cy=\"git-settings-menu\"]"
+    And I set on "[data-cy=\"git-form\"] [data-cy=\"git-repository-input\"]" text "https://github.com/ditrit/leto-modelizer-project-test"
+    And I set on "[data-cy=\"git-form\"] [data-cy=\"git-username-input\"]" text "test"
+    And I set on "[data-cy=\"git-form\"] [data-cy=\"git-token-input\"]" text "test"
+    And I click on "[data-cy=\"git-form\"] [data-cy=\"git-form-submit\"]"
+
+    Then I expect "positive" toast to appear with text "We have access to your repository 🥳!"
+    And I expect "[data-cy=\"git-form\"]" is closed
+
+    When I click on "[data-cy=\"git-current-branch\"]"
+    And I click on "[data-cy=\"git-menu-branch-remote-test/remote1\"]"
+    And I click on "[data-cy=\"git-menu-branch-checkout-test/remote1\"]"
+    Then I expect "[data-cy=\"git-menu-branch-checkout-loader-test/remote1\"]" not exists
+    And I expect "[data-cy=\"git-current-branch\"] " is "test/remote1"
+    And I expect "[data-cy=\"git-menu-branch-local-test/remote1\"]" exists
+
