@@ -49,3 +49,8 @@ Then('I expect {string} toast to appear with text {string}', (type, templateExpe
         .should('have.text', expectedValue);
     });
 });
+
+Then('I expect {string} appear {int} time(s) on screen', (templateSelector, count) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+  cy.get(selector).should('have.length', count);
+});
