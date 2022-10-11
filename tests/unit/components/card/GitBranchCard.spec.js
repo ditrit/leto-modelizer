@@ -18,12 +18,17 @@ jest.mock('src/composables/events/GitEvent', () => ({
   UpdateRemoteEvent: {
     subscribe: jest.fn(),
   },
+  CheckoutEvent: {
+    subscribe: jest.fn(),
+  },
 }));
 
 describe('Test component: GitBranchCard', () => {
   let wrapper;
-  let subscribe;
-  let unsubscribe;
+  let updateRemoteSubscribe;
+  let checkoutSubscribe;
+  let updateRemoteUnsubscribe;
+  let checkoutUnsubscribe;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -32,11 +37,17 @@ describe('Test component: GitBranchCard', () => {
   }));
 
   beforeEach(() => {
-    subscribe = jest.fn();
-    unsubscribe = jest.fn();
+    updateRemoteSubscribe = jest.fn();
+    checkoutSubscribe = jest.fn();
+    updateRemoteUnsubscribe = jest.fn();
+    checkoutUnsubscribe = jest.fn();
     GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
-      subscribe();
-      return { unsubscribe };
+      updateRemoteSubscribe();
+      return { unsubscribe: updateRemoteUnsubscribe };
+    });
+    GitEvent.CheckoutEvent.subscribe.mockImplementation(() => {
+      checkoutSubscribe();
+      return { unsubscribe: checkoutUnsubscribe };
     });
 
     wrapper = shallowMount(GitBranchCard, {});
@@ -57,15 +68,25 @@ describe('Test component: GitBranchCard', () => {
 
   describe('Test hook function: onMounted', () => {
     it('should subscribe to UpdateRemoteEvent', () => {
-      expect(subscribe).toHaveBeenCalledTimes(1);
+      expect(updateRemoteSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to CheckoutEvent', () => {
+      expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
     it('should unsubscribe to UpdateRemoteEvent', () => {
-      expect(unsubscribe).toHaveBeenCalledTimes(0);
+      expect(updateRemoteUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
-      expect(unsubscribe).toHaveBeenCalledTimes(1);
+      expect(updateRemoteUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to Checkout', () => {
+      expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

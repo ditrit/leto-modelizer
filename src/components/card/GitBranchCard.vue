@@ -25,6 +25,7 @@ import GitEvent from 'src/composables/events/GitEvent';
 import GitBranchMenu from 'components/menu/GitBranchMenu';
 
 let updateRemoteSubscription;
+let checkoutSubscription;
 const route = useRoute();
 const loading = ref(true);
 const currentBranch = ref('');
@@ -40,11 +41,11 @@ function updateBranch() {
 
 onMounted(() => {
   updateBranch();
-  updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(() => {
-    updateBranch();
-  });
+  updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(updateBranch);
+  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateBranch);
 });
 onUnmounted(() => {
   updateRemoteSubscription.unsubscribe();
+  checkoutSubscription.unsubscribe();
 });
 </script>
