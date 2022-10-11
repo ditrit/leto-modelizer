@@ -71,6 +71,7 @@ export default {
       currentBranch: 'Current branch',
       localBranchesTitle: 'Local branches',
       remoteBranchesTitle: 'Remote branches',
+      noBranches: 'Nothing to show.',
     },
   },
 };
