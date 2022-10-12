@@ -13,13 +13,17 @@ import {
   fetchGit,
   getBranches,
   checkout,
+  createBranchFrom,
   PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
+import git from 'isomorphic-git';
+import GitEvent from 'src/composables/events/GitEvent';
 
 jest.mock('isomorphic-git', () => ({
   init: jest.fn(() => Promise.resolve('init')),
+  branch: jest.fn(() => Promise.resolve('branch')),
   addRemote: jest.fn(() => Promise.resolve('addRemote')),
   fetch: jest.fn(({ onAuth }) => {
     onAuth();
@@ -44,6 +48,9 @@ jest.mock('src/composables/events/GitEvent', () => ({
   },
   CheckoutEvent: {
     next: jest.fn(() => Promise.resolve('CheckoutEventNext')),
+  },
+  NewBranchEvent: {
+    next: jest.fn(() => Promise.resolve('NewBranchEventNext')),
   },
 }));
 
@@ -267,6 +274,22 @@ describe('Test composable: Project', () => {
           remote: 'origin',
         }),
       ]);
+    });
+  });
+
+  describe('Test function: createBranchFrom', () => {
+    it('Should not call checkout function when haveToCheckout is false', async () => {
+      git.checkout = jest.fn();
+      await createBranchFrom('test', 'branch', 'main', false);
+      expect(git.checkout).not.toBeCalled();
+      expect(GitEvent.NewBranchEvent.next).toBeCalled();
+    });
+
+    it('Should call checkout function when haveToCheckout is true', async () => {
+      git.checkout = jest.fn();
+      await createBranchFrom('test', 'branch', 'main', true);
+      expect(git.checkout).toBeCalled();
+      expect(GitEvent.NewBranchEvent.next).toBeCalled();
     });
   });
 });
