@@ -1,6 +1,7 @@
 import {
   notEmpty,
   isGitRepositoryUrl,
+  isUniqueBranchName,
 } from 'src/composables/QuasarFieldRule';
 
 describe('Test composable: InputRule', () => {
@@ -36,6 +37,18 @@ describe('Test composable: InputRule', () => {
       expect(isGitRepositoryUrl(t, 'git@github.com/ditrit/leto-modelizer.git')).toEqual(key);
       expect(isGitRepositoryUrl(t, 'ftp://github.com/ditrit/leto-modelizer.git')).toEqual(key);
       expect(isGitRepositoryUrl(t, 'http://github.com/ditrit/leto-modelizer.git')).toEqual(key);
+    });
+  });
+
+  describe('Test function: isUniqueBranchName', () => {
+    it('Should return true without duplicated branch', () => {
+      expect(isUniqueBranchName(t, [], 'test')).toBe(true);
+      expect(isUniqueBranchName(t, [{ name: 'test2' }], 'test')).toBe(true);
+    });
+
+    it('Should return string error message with duplicated branch', () => {
+      const key = 'errors.git.branch.duplicate';
+      expect(isUniqueBranchName(t, [{ name: 'test' }], 'test')).toEqual(key);
     });
   });
 });
