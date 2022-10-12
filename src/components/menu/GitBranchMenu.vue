@@ -18,6 +18,17 @@
         </template>
       </q-input>
 
+      <q-item clickable @click="newBranch">
+        <q-item-section avatar>
+          <q-icon
+            color="primary"
+            name="fa-solid fa-plus"
+            data-cy="git-menu-new-branch"
+          />
+        </q-item-section>
+        <q-item-section>{{ $t('actions.git.newBranch') }}</q-item-section>
+      </q-item>
+
       <template v-if="filteredBranches.local.length > 0">
         <git-branch-header-menu :title="$t('menu.git.localBranchesTitle')"/>
         <template v-for="(branch, index) in filteredBranches.local">
@@ -82,6 +93,7 @@ import { useRoute } from 'vue-router';
 import { getBranches, fetchGit, getProjectById } from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
 import GitBranchExpandListMenu from 'components/menu/GitBranchExpandListMenu';
+import DialogEvent from 'src/composables/events/DialogEvent';
 
 const props = defineProps({
   currentBranchName: {
@@ -108,6 +120,7 @@ const hasNoBranches = computed(() => filteredBranches.value.local.length === 0
     && filteredBranches.value.remote.length === 0);
 let fetchSubscription;
 let checkoutSubscription;
+let newBranchSubscription;
 
 /**
  * On open menu, focus on the search input and close expand menu.
@@ -179,13 +192,26 @@ async function initBranches() {
   filter();
 }
 
+/**
+ * Send event to open the GitNewBranchDialog.
+ */
+function newBranch() {
+  DialogEvent.next({
+    type: 'open',
+    key: 'GitNewBranch',
+    branch: props.currentBranchName,
+  });
+}
+
 onMounted(() => {
   fetchSubscription = GitEvent.FetchEvent.subscribe(initBranches);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(initBranches);
+  newBranchSubscription = GitEvent.NewBranchEvent.subscribe(initBranches);
   fetchGit(getProjectById(route.params.projectName));
 });
 onUnmounted(() => {
   fetchSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
+  newBranchSubscription.unsubscribe();
 });
 </script>

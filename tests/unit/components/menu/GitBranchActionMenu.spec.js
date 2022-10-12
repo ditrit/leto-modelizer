@@ -5,6 +5,7 @@ import { checkout } from 'src/composables/Project';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
+import DialogEvent from 'src/composables/events/DialogEvent';
 
 installQuasarPlugin();
 
@@ -69,6 +70,19 @@ describe('Test component: GitBranchActionMenu', () => {
 
         expect(wrapper.vm.loading.checkout).toEqual(false);
         expect(checkout).toBeCalled();
+      });
+    });
+
+    describe('Test function: onNewBranch', () => {
+      it('Should call dialog event and hide menu', () => {
+        DialogEvent.next = jest.fn();
+        wrapper.vm.menu = {
+          hide: jest.fn(),
+        };
+
+        wrapper.vm.onNewBranch();
+        expect(DialogEvent.next).toBeCalled();
+        expect(wrapper.vm.menu.hide).toBeCalled();
       });
     });
   });

@@ -22,6 +22,9 @@ jest.mock('src/composables/events/GitEvent', () => ({
   CheckoutEvent: {
     subscribe: jest.fn(),
   },
+  NewBranchEvent: {
+    subscribe: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -35,7 +38,9 @@ describe('Test component: GitBranchMenu', () => {
   let wrapper;
   let fetchSubscribe;
   let fetchUnsubscribe;
+  let newBranchSubscribe;
   let checkoutSubscribe;
+  let newBranchUnsubscribe;
   let checkoutUnsubscribe;
 
   useRoute.mockImplementation(() => ({
@@ -50,6 +55,8 @@ describe('Test component: GitBranchMenu', () => {
     fetchUnsubscribe = jest.fn();
     checkoutSubscribe = jest.fn();
     checkoutUnsubscribe = jest.fn();
+    newBranchSubscribe = jest.fn();
+    newBranchUnsubscribe = jest.fn();
     GitEvent.FetchEvent.subscribe.mockImplementation(() => {
       fetchSubscribe();
       return { unsubscribe: fetchUnsubscribe };
@@ -57,6 +64,10 @@ describe('Test component: GitBranchMenu', () => {
     GitEvent.CheckoutEvent.subscribe.mockImplementation(() => {
       checkoutSubscribe();
       return { unsubscribe: checkoutUnsubscribe };
+    });
+    GitEvent.NewBranchEvent.subscribe.mockImplementation(() => {
+      newBranchSubscribe();
+      return { unsubscribe: newBranchUnsubscribe };
     });
     wrapper = shallowMount(GitBranchMenu, {
       props: {
@@ -103,6 +114,14 @@ describe('Test component: GitBranchMenu', () => {
   });
 
   describe('Test functions', () => {
+    describe('Test function: newBranch', () => {
+      it('Should call dialog event', () => {
+        DialogEvent.next = jest.fn();
+        wrapper.vm.newBranch();
+        expect(DialogEvent.next).toBeCalled();
+      });
+    });
+
     describe('Test function: isSearched', () => {
       it('Should return true on match', () => {
         wrapper.vm.searchBranch = '';
@@ -286,6 +305,10 @@ describe('Test component: GitBranchMenu', () => {
       it('should subscribe CheckoutEvent', () => {
         expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
       });
+
+      it('should subscribe NewBranchEvent', () => {
+        expect(newBranchSubscribe).toHaveBeenCalledTimes(1);
+      });
     });
 
     describe('Test hook function: onUnmounted', () => {
@@ -299,6 +322,12 @@ describe('Test component: GitBranchMenu', () => {
         expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
         wrapper.unmount();
         expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
+      });
+
+      it('should unsubscribe NewBranchEvent', () => {
+        expect(newBranchUnsubscribe).toHaveBeenCalledTimes(0);
+        wrapper.unmount();
+        expect(newBranchUnsubscribe).toHaveBeenCalledTimes(1);
       });
     });
   });
