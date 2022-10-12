@@ -10,6 +10,7 @@ export default {
         more: 'Show {number} more...',
         less: 'Show less',
       },
+      create: 'Create',
     },
     home: {
       createEmptyProject: 'Create empty project',
@@ -19,6 +20,11 @@ export default {
         exists: 'We have access to your repository &#129395;!',
       },
       checkout: 'Checkout',
+      newBranch: 'New branch',
+      newBranchFrom: 'New branch from "{branch}"...',
+      branch: {
+        create: 'Branch is created &#129395;!',
+      },
     },
     fileExplorer: {
       empty: 'No files available in project.',
@@ -33,6 +39,10 @@ export default {
     },
     git: {
       HttpError: 'Can\'t access the repository.',
+      branch: {
+        duplicate: 'Branch name already exists.',
+      },
+      cannotLockRef: 'Fatal: cannot lock reference.',
     },
   },
   projects: {
@@ -63,6 +73,13 @@ export default {
           repositoryExample: 'Examples: "http://test.com/test" or "https://github.com/test"',
           username: 'Username',
           token: 'Access token',
+        },
+      },
+      git: {
+        newBranch: {
+          title: 'Create new branch',
+          branch: 'New branch name',
+          checkout: 'Checkout branch',
         },
       },
     },
