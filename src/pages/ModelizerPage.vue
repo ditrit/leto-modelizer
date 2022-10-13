@@ -14,7 +14,11 @@
         data-cy="modelizer-page"
       >
         <modelizer-model-view v-show="viewType === 'model'" />
-        <modelizer-text-view v-show="viewType === 'text'" :viewType="viewType" />
+        <modelizer-text-view
+          v-show="viewType === 'text'"
+          :viewType="viewType"
+          :project-name="projectName"
+        />
         <git-configuration-dialog :project-name="projectName"/>
       </q-page>
     </q-page-container>
