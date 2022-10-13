@@ -10,7 +10,7 @@
     <template #default-header="{expanded, node}">
       <div
         :class="['tree-node-container tree-node items-center',
-          {'selected-node' : selectedFileId === node.id && !node.isFolder}]"
+          {'selected-node' : selectedFile.id === node.id && !node.isFolder}]"
         @dblclick="onNodeClicked(node)"
         :data-cy="`file-explorer-${node.label}`"
       >
@@ -21,7 +21,7 @@
           :name="`${node.icon}${expanded ? '-open' : ''}`"
         />
         <span
-          :class="['tree-node', { 'text-bold' : selectedFileId === node.id}]"
+          :class="['tree-node', { 'text-bold' : selectedFile.id === node.id}]"
         >
           {{node.label}}
         </span>
@@ -46,26 +46,26 @@ const props = defineProps({
   },
 });
 
-const selectedFileId = ref('');
+const selectedFile = ref({ isSelected: false, id: '' });
 let fileEventSubscription;
 
 /**
- * Set selectedFileId equal to fileId param.
+ * Set selectedFile equal to file param.
  */
-function setSelectedFileId(fileId) {
-  selectedFileId.value = fileId;
+function setSelectedFile(file) {
+  selectedFile.value = file;
 }
 
 /**
- * If node clicked from Tree is a file, set selectedFileId as its id,
- * read file to get its content and pass it to OpenFileEvent
+ * If node clicked from Tree is a file, set it as selectedFile value,
+ * read file to get its content and pass it to OpenFileEvent.
  *
  * @param {Object} node - Tree node
  * Example { icon: "fa-regular fa-file", id: "terraform/app.tf", isFolder: false, label: "app.tf" }
  */
 function onNodeClicked(node) {
   if (node.isFolder) return;
-  setSelectedFileId(node.id);
+  setSelectedFile({ isSelected: true, id: node.id });
   readProjectFile(props.projectName, { path: node.id })
     .then(({ content }) => {
       FileEvent.OpenFileEvent.next({ id: node.id, label: node.label, content });
@@ -73,7 +73,7 @@ function onNodeClicked(node) {
 }
 
 onMounted(() => {
-  fileEventSubscription = FileEvent.SelectFileEvent.subscribe(setSelectedFileId);
+  fileEventSubscription = FileEvent.SelectFileEvent.subscribe(setSelectedFile);
 });
 
 onUnmounted(() => {

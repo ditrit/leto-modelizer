@@ -85,10 +85,10 @@ describe('Test component: FileExplorer', () => {
     });
   });
 
-  describe('Test function: setSelectedFileId', () => {
-    it('should assign the value of selectedFileId equal to the parameter', () => {
-      wrapper.vm.setSelectedFileId('terraform/app.tf');
-      expect(wrapper.vm.selectedFileId).toEqual('terraform/app.tf');
+  describe('Test function: setSelectedFile', () => {
+    it('should assign the value of selectedFile equal to the parameter', () => {
+      wrapper.vm.setSelectedFile({ isSelected: true, id: 'terraform/app.tf' });
+      expect(wrapper.vm.selectedFile).toEqual({ isSelected: true, id: 'terraform/app.tf' });
     });
   });
 
