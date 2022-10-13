@@ -1,3 +1,5 @@
+import { getProjectName } from 'src/composables/Project';
+
 /**
  * Create and add a new folder.
  * @param {String} id - Absolute path of folder.
@@ -77,12 +79,14 @@ function sortTreeElements(elements) {
 
 /**
  * Convert fileInformation input to the Object required to display Quasar Tree Component
+ * @param {String} projectId - local project id
  * @param {FileInformation[]} fileInformationArray - Array to convert for Quasar Tree Component
- * Example: [{path: '/home/folderA/file1.tf'}, {path: '/home/folderA/file2.tf'}]
+ * Example: [{path: '/home/folderA/file1.tf'}, {path: '/home/file2.tf'}]
  * @returns {Array} - The array of nodes that designates the tree structure of Quasar Tree Component
  * @see https://quasar.dev/vue-components/tree
  */
-export function getTree(fileInformationArray) {
+export function getTree(projectId, fileInformationArray) {
+  const projectName = getProjectName(projectId);
   const tree = [];
   fileInformationArray.forEach((fileInformation) => {
     const splittedPath = fileInformation.path.split('/').filter(Boolean);
@@ -105,5 +109,13 @@ export function getTree(fileInformationArray) {
     });
   });
 
-  return sortTreeElements(tree);
+  return [
+    {
+      id: projectName,
+      icon: 'fa-solid fa-folder',
+      label: projectName,
+      isFolder: true,
+      children: sortTreeElements(tree),
+    },
+  ];
 }
