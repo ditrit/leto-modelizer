@@ -1,7 +1,7 @@
 <template>
   <div class="col" data-cy="file-tabs">
     <q-tabs
-      v-model="internalActiveFile"
+      v-model="activeFileId"
       dense
       class="text-grey bg-grey-2 tab-container"
       active-color="primary"
@@ -15,15 +15,15 @@
         no-caps
         :ripple="false"
         :class="`tab-item
-          ${internalActiveFile === file.id ? 'tab-item--active' : 'tab-item--inactive'}`"
+          ${activeFileId === file.id ? 'tab-item--active' : 'tab-item--inactive'}`"
         data-cy="file-tabs-container"
       >
         <div
           class="row items-center"
-          :data-cy="`${internalActiveFile === file.id ? 'active' : 'inactive'}-tab`"
+          :data-cy="`${activeFileId === file.id ? 'active' : 'inactive'}-tab`"
         >
           <span
-            :class="internalActiveFile === file.id ? 'text-bold' : ''"
+            :class="activeFileId === file.id ? 'text-bold' : ''"
             :data-cy="`file-tab-label-${file.label}`"
           >
             {{file.label}}
@@ -32,7 +32,7 @@
             flat
             round
             size="xs"
-            :color="internalActiveFile === file.id ? 'primary' : 'gray'"
+            :color="activeFileId === file.id ? 'primary' : 'gray'"
             icon="fa-solid fa-xmark"
             class="q-ml-sm"
             @click.stop="emit('update:close-file', file.id)"
@@ -41,7 +41,7 @@
         </div>
       </q-tab>
     </q-tabs>
-    <q-tab-panels v-model="internalActiveFile">
+    <q-tab-panels v-model="activeFileId">
       <q-tab-panel
         v-for="file in files"
         :key="file.id"
@@ -65,21 +65,21 @@ const props = defineProps({
     required: true,
   },
   modelValue: {
-    type: String,
+    type: Object,
     required: true,
   },
 });
 
-const internalActiveFile = ref('');
+const activeFileId = ref(props.modelValue.id);
 
-watch(internalActiveFile, () => {
-  if (internalActiveFile.value !== props.modelValue) {
-    emit('update:modelValue', internalActiveFile.value);
+watch(activeFileId, () => {
+  if (activeFileId.value !== props.modelValue.id) {
+    emit('update:modelValue', { isSelected: true, id: activeFileId.value });
   }
 });
 
 watch(() => props.modelValue, (newModelValue) => {
-  internalActiveFile.value = newModelValue;
+  activeFileId.value = newModelValue.id;
 });
 
 </script>
