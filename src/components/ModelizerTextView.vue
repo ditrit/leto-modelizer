@@ -16,7 +16,7 @@
 
     <file-tabs
       :files="files"
-      v-model="activeFileId"
+      v-model="activeFile"
       @update:close-file="closeFile"
     >
       <template v-slot="{ file }">
@@ -57,7 +57,7 @@ const props = defineProps({
 });
 
 const files = ref([]);
-const activeFileId = ref('');
+const activeFile = ref({ isSelected: false, id: '' });
 const nodes = ref([]);
 
 let fileEventSubscription;
@@ -65,13 +65,13 @@ let updateRemoteSubscription;
 let checkoutSubscription;
 
 /**
- * Update files array when a new file is open
+ * Update files array when a new file is open.
  *
  * @param {Object} file
- * Example: { id: 'terraform/app.tf', label: 'app.tf', content: 'Hello World' },
+ * Example: { id: 'terraform/app.tf', label: 'app.tf', content: 'Hello World' }
  */
 function onOpenFileEvent(file) {
-  activeFileId.value = file.id;
+  activeFile.value = { isSelected: true, id: file.id };
   const existingFile = files.value.find(({ id }) => id === file.id);
   if (!existingFile) {
     files.value.push(file);
@@ -79,22 +79,22 @@ function onOpenFileEvent(file) {
 }
 
 /**
- * Update active file id by setting the value equal to the last element of files,
+ * Update active file by setting its id equal to the last element of files,
  * otherwise null if files is empty.
  */
 function updateActiveFileId() {
   if (files.value.length) {
-    activeFileId.value = files.value[files.value.length - 1].id;
-    FileEvent.SelectFileEvent.next(activeFileId.value);
+    activeFile.value = { isSelected: true, id: files.value[files.value.length - 1].id };
+    FileEvent.SelectFileEvent.next(activeFile.value);
   } else {
-    activeFileId.value = '';
-    FileEvent.SelectFileEvent.next('');
+    activeFile.value = { isSelected: false, id: '' };
+    FileEvent.SelectFileEvent.next(activeFile.value);
   }
 }
 
 /**
  * Close file by removing it from files array using its id.
- * If the closed file was the current active file, update activeFileId.
+ * If the closed file was the current active file, update activeFile.
  *
  * @param {string} fileId - id of closed file
  */
@@ -103,14 +103,14 @@ function closeFile(fileId) {
   if (index !== -1) {
     files.value.splice(index, 1);
   }
-  if (fileId === activeFileId.value) {
+  if (fileId === activeFile.value.id) {
     updateActiveFileId();
   }
 }
 
 /**
  * Update project nodes and files.
- * If the previous active file is not contained in files, update activeFileId.
+ * If the previous active file's id is not contained in files, update activeFile.
  */
 function updateProjectFiles() {
   getProjectFiles(props.projectName)
@@ -124,15 +124,15 @@ function updateProjectFiles() {
             file.content = content;
           });
       });
-      const isActiveFileInFiles = files.value.find(({ id }) => id === activeFileId.value);
+      const isActiveFileInFiles = files.value.find(({ id }) => id === activeFile.value.id);
       if (!isActiveFileInFiles) {
         updateActiveFileId();
       }
     });
 }
 
-watch(activeFileId, () => {
-  FileEvent.SelectFileEvent.next(activeFileId.value);
+watch(activeFile, () => {
+  FileEvent.SelectFileEvent.next(activeFile.value);
 });
 
 onMounted(() => {

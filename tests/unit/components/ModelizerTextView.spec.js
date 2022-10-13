@@ -108,10 +108,11 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test function: onOpenFileEvent', () => {
-    it('should set activeFileId value equal to onOpenFileEvent param.id ', () => {
+    it('should set a new value to activeFile', () => {
+      wrapper.vm.activeFile = { isSelected: false, id: '' };
       wrapper.vm.onOpenFileEvent({ id: 'terraform/app.tf', label: 'app.tf', content: '' });
 
-      expect(wrapper.vm.activeFileId).toEqual('terraform/app.tf');
+      expect(wrapper.vm.activeFile).toEqual({ isSelected: true, id: 'terraform/app.tf' });
     });
 
     it('should push the new file to files Array if it is not already there', () => {
@@ -153,41 +154,41 @@ describe('Test component: ModelizerTextView', () => {
     });
 
     describe('Closing the active file, then files Array is empty', () => {
-      it('should set activeFileId to an emtpy string and emit the new value', () => {
+      it('should reset and emit activeFile initial value', () => {
         expect(emit).not.toHaveBeenCalled();
         wrapper.vm.files = [{ id: 'README.md', label: 'README.md', content: '' }];
-        wrapper.vm.activeFileId = 'README.md';
+        wrapper.vm.activeFile = { isSelected: true, id: 'README.md' };
         wrapper.vm.closeFile('README.md');
 
         expect(wrapper.vm.files).toHaveLength(0);
-        expect(wrapper.vm.activeFileId).toEqual('');
+        expect(wrapper.vm.activeFile).toEqual({ isSelected: false, id: '' });
         expect(emit).toHaveBeenCalledTimes(1);
       });
     });
 
     describe('Closing the active file, then files Array is not empty', () => {
-      it('should set a new value to activeFileId and emit the new value', () => {
+      it('should set and emit activeFile new value', () => {
         expect(emit).not.toHaveBeenCalled();
         wrapper.vm.files = [{ id: 'terraform/app.tf', label: 'app.tf', content: '' }, { id: 'README.md', label: 'README.md', content: '' }];
-        wrapper.vm.activeFileId = 'README.md';
+        wrapper.vm.activeFile = { isSelected: true, id: 'README.md' };
         wrapper.vm.closeFile('README.md');
 
         expect(wrapper.vm.files).toEqual([{ id: 'terraform/app.tf', label: 'app.tf', content: '' }]);
         expect(wrapper.vm.files).toHaveLength(1);
-        expect(wrapper.vm.activeFileId).toEqual('terraform/app.tf');
+        expect(wrapper.vm.activeFile).toEqual({ isSelected: true, id: 'terraform/app.tf' });
         expect(emit).toHaveBeenCalledTimes(1);
       });
     });
 
     describe('Closing a non active file', () => {
-      it('should not set a new value to activeFileId and not emit the new value', () => {
+      it('should not set and not emit a new value to activeFile', () => {
         wrapper.vm.files = [{ id: 'terraform/app.tf', label: 'app.tf', content: '' }, { id: 'README.md', label: 'README.md', content: '' }];
-        wrapper.vm.activeFileId = 'terraform/app.tf';
+        wrapper.vm.activeFile = { isSelected: true, id: 'terraform/app.tf' };
         wrapper.vm.closeFile('README.md');
 
         expect(wrapper.vm.files).toEqual([{ id: 'terraform/app.tf', label: 'app.tf', content: '' }]);
         expect(wrapper.vm.files).toHaveLength(1);
-        expect(wrapper.vm.activeFileId).toEqual('terraform/app.tf');
+        expect(wrapper.vm.activeFile).toEqual({ isSelected: true, id: 'terraform/app.tf' });
         expect(emit).not.toHaveBeenCalled();
       });
     });
@@ -248,31 +249,31 @@ describe('Test component: ModelizerTextView', () => {
       expect(wrapper.vm.files).toEqual([{ id: 'terraform/app.tf', content: 'new content', label: 'app.tf' }]);
     });
 
-    it('Should update active file if it is no more contained in updated files', async () => {
+    it('Should update activeFile if it is no more contained in updated files', async () => {
       wrapper.vm.files = [{ id: 'README.md', label: 'README.md', content: 'content' }, { id: 'terraform/app.tf', label: 'app.tf', content: 'content' }];
-      wrapper.vm.activeFileId = 'README.md';
+      wrapper.vm.activeFile = { isSelected: true, id: 'README.md' };
 
       wrapper.vm.updateProjectFiles();
       await flushPromises();
-      expect(wrapper.vm.activeFileId).toEqual('terraform/app.tf');
+      expect(wrapper.vm.activeFile).toEqual({ isSelected: true, id: 'terraform/app.tf' });
     });
 
-    it('Should update active file if it is no more contained in updated empty files', async () => {
+    it('Should reset activeFile if updated files is empty', async () => {
       wrapper.vm.files = [{ id: 'README.md', label: 'README.md', content: 'content' }];
-      wrapper.vm.activeFileId = 'README.md';
+      wrapper.vm.activeFile = { isSelected: true, id: 'README.md' };
 
       wrapper.vm.updateProjectFiles();
       await flushPromises();
-      expect(wrapper.vm.activeFileId).toEqual('');
+      expect(wrapper.vm.activeFile).toEqual({ isSelected: false, id: '' });
     });
 
-    it('Should not update active file if it is still contained in updated files', async () => {
+    it('Should not update activeFile if it is still contained in updated files', async () => {
       wrapper.vm.files = [{ id: 'terraform/app.tf', label: 'app.tf', content: 'other content' }, { id: 'README.md', label: 'README.md', content: 'content' }];
-      wrapper.vm.activeFileId = 'terraform/app.tf';
+      wrapper.vm.activeFile = { isSelected: true, id: 'terraform/app.tf' };
 
       wrapper.vm.updateProjectFiles();
       await flushPromises();
-      expect(wrapper.vm.activeFileId).toEqual('terraform/app.tf');
+      expect(wrapper.vm.activeFile).toEqual({ isSelected: true, id: 'terraform/app.tf' });
     });
   });
 
