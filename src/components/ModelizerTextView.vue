@@ -115,7 +115,7 @@ function closeFile(fileId) {
 function updateProjectFiles() {
   getProjectFiles(props.projectName)
     .then((fileInformations) => {
-      nodes.value = getTree(fileInformations);
+      nodes.value = getTree(props.projectName, fileInformations);
       const projectFilesIds = fileInformations.map((file) => file.path);
       files.value = files.value.filter(({ id }) => projectFilesIds.includes(id));
       files.value.forEach((file) => {

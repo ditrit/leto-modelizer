@@ -9,18 +9,25 @@ installQuasarPlugin();
 jest.mock('src/composables/Project', () => ({
   getProjectFiles: jest.fn(() => Promise.resolve([{ path: 'terraform/app.tf' }])),
   readProjectFile: jest.fn(() => Promise.resolve({ path: 'terraform/app.tf', content: 'new content' })),
+  getProjectName: jest.fn(() => 'projectName'),
 }));
 
 jest.mock('src/composables/FileExplorer', () => ({
-  getTree: jest.fn(() => ([
-    {
-      id: 'terraform',
+  getTree: jest.fn(() => (
+    [{
+      id: 'projectName',
       icon: 'fa-solid fa-folder',
-      label: 'terraform',
-      children: [{
-        id: 'terraform/app.tf', icon: 'fa-regular fa-file', label: 'app.tf', isFolder: false,
-      }],
+      label: 'projectName',
       isFolder: true,
+      children: [{
+        id: 'terraform',
+        icon: 'fa-solid fa-folder',
+        label: 'terraform',
+        children: [{
+          id: 'terraform/app.tf', icon: 'fa-regular fa-file', label: 'app.tf', isFolder: false,
+        }],
+        isFolder: true,
+      }],
     }]
   )),
 }));
@@ -190,16 +197,24 @@ describe('Test component: ModelizerTextView', () => {
     it('Should update nodes', async () => {
       wrapper.vm.nodes = [
         {
-          id: 'terraform',
+          id: 'projectName',
           icon: 'fa-solid fa-folder',
-          label: 'terraform',
-          children: [{
-            id: 'terraform/app.tf', icon: 'fa-regular fa-file', label: 'app.tf', isFolder: false,
-          }],
+          label: 'projectName',
           isFolder: true,
-        },
-        {
-          id: 'branch.txt', icon: 'fa-regular fa-file', label: 'branch.txt', isFolder: false,
+          children: [
+            {
+              id: 'terraform',
+              icon: 'fa-solid fa-folder',
+              label: 'terraform',
+              children: [{
+                id: 'terraform/app.tf', icon: 'fa-regular fa-file', label: 'app.tf', isFolder: false,
+              }],
+              isFolder: true,
+            },
+            {
+              id: 'branch.txt', icon: 'fa-regular fa-file', label: 'branch.txt', isFolder: false,
+            },
+          ],
         },
       ];
 
@@ -207,13 +222,21 @@ describe('Test component: ModelizerTextView', () => {
       await flushPromises();
       expect(wrapper.vm.nodes).toEqual([
         {
-          id: 'terraform',
+          id: 'projectName',
           icon: 'fa-solid fa-folder',
-          label: 'terraform',
-          children: [{
-            id: 'terraform/app.tf', icon: 'fa-regular fa-file', label: 'app.tf', isFolder: false,
-          }],
+          label: 'projectName',
           isFolder: true,
+          children: [
+            {
+              id: 'terraform',
+              icon: 'fa-solid fa-folder',
+              label: 'terraform',
+              children: [{
+                id: 'terraform/app.tf', icon: 'fa-regular fa-file', label: 'app.tf', isFolder: false,
+              }],
+              isFolder: true,
+            },
+          ],
         },
       ]);
     });
