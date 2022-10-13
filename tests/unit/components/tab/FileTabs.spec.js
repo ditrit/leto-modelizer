@@ -12,7 +12,7 @@ describe('Test component: FileTabs', () => {
     wrapper = shallowMount(FileTabs, {
       props: {
         files: [{ id: 'terraform/app.tf', label: 'app.tf', content: 'Hello World' }],
-        modelValue: 'terraform/app.tf',
+        modelValue: { isSelected: true, id: 'terraform/app.tf' },
       },
       mocks: {
         $emit,
@@ -31,7 +31,7 @@ describe('Test component: FileTabs', () => {
 
     describe('Test props: modelValue', () => {
       it('should match modelValue', () => {
-        const modelValue = 'terraform/app.tf';
+        const modelValue = { isSelected: true, id: 'terraform/app.tf' };
 
         expect(wrapper.vm.props.modelValue).toEqual(modelValue);
       });
@@ -42,41 +42,41 @@ describe('Test component: FileTabs', () => {
     it('should be triggered when props.modelValue is updated with a different value', async () => {
       await wrapper.setProps({
         files: [{ id: 'terraform/app.tf', label: 'app.tf', content: 'Hello World' }],
-        modelValue: 'README.md',
+        modelValue: { isSelected: true, id: 'README.md' },
       });
 
-      expect(wrapper.vm.internalActiveFile).toEqual('README.md');
+      expect(wrapper.vm.activeFileId).toEqual('README.md');
     });
   });
 
-  describe('Test watcher: internalActiveFile', () => {
-    it('should be triggered when internalActiveFile value is updated and not equal to props.modelValue', async () => {
+  describe('Test watcher: activeFileId', () => {
+    it('should be triggered when activeFileId value is updated and not equal to props.modelValue.id', async () => {
       await wrapper.setProps({
         files: [{ id: 'terraform/app.tf', label: 'app.tf', content: 'Hello World' }],
-        modelValue: 'README.md',
+        modelValue: { isSelected: true, id: 'README.md' },
       });
 
-      wrapper.vm.internalActiveFile = 'terraform/app.tf';
+      wrapper.vm.activeFileId = 'terraform/app.tf';
 
-      expect(wrapper.vm.props.modelValue).not.toEqual(wrapper.vm.internalActiveFile);
+      expect(wrapper.vm.props.modelValue.id).not.toEqual(wrapper.vm.activeFileId);
 
-      wrapper.vm.$emit('update:modelValue', 'terraform/app.tf');
+      wrapper.vm.$emit('update:modelValue', { isSelected: true, id: 'terraform/app.tf' });
 
       await wrapper.vm.$nextTick();
 
       expect(wrapper.emitted()['update:modelValue']).toBeTruthy();
-      expect(wrapper.emitted()['update:modelValue'][0]).toEqual(['terraform/app.tf']);
+      expect(wrapper.emitted()['update:modelValue'][0]).toEqual([{ isSelected: true, id: 'terraform/app.tf' }]);
     });
 
-    it('should not be triggered when internalActiveFile value is updated and equal to props.modelValue', async () => {
+    it('should not be triggered when activeFileId value is updated and equal to props.modelValue.id', async () => {
       await wrapper.setProps({
         files: [{ id: 'terraform/app.tf', label: 'app.tf', content: 'Hello World' }],
-        modelValue: 'README.md',
+        modelValue: { isSelected: true, id: 'README.md' },
       });
 
-      wrapper.vm.internalActiveFile = 'README.md';
+      wrapper.vm.activeFileId = 'README.md';
 
-      expect(wrapper.vm.props.modelValue).toEqual(wrapper.vm.internalActiveFile);
+      expect(wrapper.vm.props.modelValue.id).toEqual(wrapper.vm.activeFileId);
       expect(wrapper.emitted()['update:modelValue']).toBeFalsy();
     });
   });
