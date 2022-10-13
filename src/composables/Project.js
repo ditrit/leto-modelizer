@@ -47,6 +47,22 @@ export function getProjectById(projectId) {
   const projects = getProjects();
   return projects[projectId];
 }
+
+/**
+ * Get name of remote repository or local project if it is not based upon a remote repository.
+ *
+ * @param {string} projectId - local project id
+ * @returns {String} - project Name
+ */
+export function getProjectName(projectId) {
+  const projects = getProjects();
+  if (projects[projectId]?.git) {
+    const { repository } = projects[projectId].git;
+    return repository.split('/').at(-1);
+  }
+  return projectId;
+}
+
 /**
  * Save the project state.
  *

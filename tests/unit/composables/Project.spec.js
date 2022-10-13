@@ -2,6 +2,7 @@ import {
   createProjectTemplate,
   getProjects,
   getProjectById,
+  getProjectName,
   saveProject,
   deleteProjectById,
   initProject,
@@ -101,6 +102,24 @@ describe('Test composable: Project', () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
       const project = getProjectById('foo');
       expect(project).toStrictEqual({ id: 'foo' });
+    });
+  });
+
+  describe('Test function: getProjectName', () => {
+    it('Should return local project Name', () => {
+      const projects = { foo: { id: 'foo' } };
+      localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
+      const projectName = getProjectName('foo');
+      expect(projects.foo.git).not.toBeDefined();
+      expect(projectName).toEqual('foo');
+    });
+
+    it('Should return remote repository name', () => {
+      const projects = { foo: { id: 'foo', git: { repository: 'https://github.com/my-project', username: 'test', token: 'test' } } };
+      localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
+      const projectName = getProjectName('foo');
+      expect(projects.foo.git).toBeDefined();
+      expect(projectName).toEqual('my-project');
     });
   });
 
