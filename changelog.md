@@ -31,5 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Draw component on definition click
 - Add file tabs to wrap monaco editor on text view
 - Add root folder in file explorer with project name as label
+- Update PluginEvent for action menu
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
