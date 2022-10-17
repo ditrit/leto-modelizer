@@ -8,7 +8,7 @@ describe('Test class: Branch', () => {
       expect(branch.name).toBeNull();
       expect(branch.onLocal).toEqual(false);
       expect(branch.onRemote).toEqual(false);
-      expect(branch.current).toEqual(false);
+      expect(branch.isCurrentBranch).toEqual(false);
       expect(branch.remote).toEqual('origin');
     });
 
@@ -18,7 +18,7 @@ describe('Test class: Branch', () => {
       expect(branch.name).toBeNull();
       expect(branch.onLocal).toEqual(false);
       expect(branch.onRemote).toEqual(false);
-      expect(branch.current).toEqual(false);
+      expect(branch.isCurrentBranch).toEqual(false);
       expect(branch.remote).toEqual('origin');
     });
 
@@ -27,14 +27,14 @@ describe('Test class: Branch', () => {
         name: 'name',
         onLocal: true,
         onRemote: true,
-        current: true,
+        isCurrentBranch: true,
         remote: 'test',
       });
 
       expect(branch.name).toEqual('name');
       expect(branch.onLocal).toEqual(true);
       expect(branch.onRemote).toEqual(true);
-      expect(branch.current).toEqual(true);
+      expect(branch.isCurrentBranch).toEqual(true);
       expect(branch.remote).toEqual('test');
     });
   });
@@ -63,8 +63,8 @@ describe('Test class: Branch', () => {
   describe('Test functions', () => {
     describe('Test function: compare', () => {
       it('Should display current branch before other branches', () => {
-        const currentBranch = new Branch({ current: true });
-        const otherBranch = new Branch({ current: false });
+        const currentBranch = new Branch({ isCurrentBranch: true });
+        const otherBranch = new Branch({ isCurrentBranch: false });
         expect(currentBranch.compare(otherBranch)).toEqual(-1);
         expect(otherBranch.compare(currentBranch)).toEqual(1);
       });

@@ -166,7 +166,7 @@ async function initBranches() {
   const local = [];
   const remote = [];
   allBranches.forEach((branch) => {
-    branch.current = props.currentBranchName === branch.name;
+    branch.isCurrentBranch = props.currentBranchName === branch.name;
     if (branch.onLocal) {
       local.push(branch);
     }

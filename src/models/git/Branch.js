@@ -8,14 +8,14 @@ class Branch {
    * @param {Boolean} [props.onLocal=false] - Indicate if branch is on local.
    * @param {Boolean} [props.onRemote=false] - Indicate if branch is on remote.
    * @param {String} [props.remote='origin'] - Remote value.
-   * @param {Boolean} [props.current=false] - Indicates if this branch is the current.
+   * @param {Boolean} [props.isCurrentBranch=false] - Indicates if this branch is the current.
    */
   constructor(props = {
     name: null,
     onLocal: false,
     onRemote: false,
     remote: 'origin',
-    current: false,
+    isCurrentBranch: false,
   }) {
     /**
      * Branch name.
@@ -41,7 +41,7 @@ class Branch {
      * Indicate if this branch is the current.
      * @type {Boolean}
      */
-    this.current = props.current || false;
+    this.isCurrentBranch = props.isCurrentBranch || false;
   }
 
   /**
@@ -59,10 +59,10 @@ class Branch {
    * this branch occurs after compared branch; 0 if they are equivalent.
    */
   compare(branch) {
-    if (this.current) {
+    if (this.isCurrentBranch) {
       return -1;
     }
-    if (branch.current) {
+    if (branch.isCurrentBranch) {
       return 1;
     }
     return this.name.localeCompare(branch.name);
