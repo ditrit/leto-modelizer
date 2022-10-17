@@ -22,4 +22,11 @@ describe('Test composable: GitEvent', () => {
       expect(GitEvent.CheckoutEvent).toEqual(new Subject());
     });
   });
+
+  describe('Test event: NewBranchEvent', () => {
+    it('Should export a Subject', () => {
+      expect(GitEvent.NewBranchEvent).toBeDefined();
+      expect(GitEvent.NewBranchEvent).toEqual(new Subject());
+    });
+  });
 });

@@ -18,8 +18,15 @@ const FetchEvent = new Subject();
  */
 const CheckoutEvent = new Subject();
 
+/**
+ * Represent a rxjs Event object to emit and to receive events when a new branch is created.
+ * @typedef {Subject} NewBranchEvent
+ */
+const NewBranchEvent = new Subject();
+
 export default {
   CheckoutEvent,
   FetchEvent,
   UpdateRemoteEvent,
+  NewBranchEvent,
 };
