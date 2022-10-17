@@ -25,21 +25,25 @@ import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitio
 import { getPlugins } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 
-let pluginSubscription;
+let pluginInitSubscription;
 const data = reactive({
   plugins: [],
 });
 
-onMounted(() => {
+/**
+ * Update plugins array
+ */
+function updatePlugins() {
   data.plugins = getPlugins();
-  pluginSubscription = PluginEvent.subscribe((event) => {
-    if (event === 'ready') {
-      data.plugins = getPlugins();
-    }
-  });
+}
+
+onMounted(() => {
+  updatePlugins();
+  pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePlugins);
 });
+
 onUnmounted(() => {
-  pluginSubscription.unsubscribe();
+  pluginInitSubscription.unsubscribe();
 });
 </script>
 

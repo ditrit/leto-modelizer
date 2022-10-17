@@ -2,8 +2,10 @@ import PluginEvent from 'src/composables/events/PluginEvent';
 import { Subject } from 'rxjs';
 
 describe('Test composable: PluginEvent', () => {
-  it('Should export a Subject', () => {
-    expect(PluginEvent).toBeDefined();
-    expect(PluginEvent).toEqual(new Subject());
+  describe('Test event: InitEvent', () => {
+    it('Should export a Subject', () => {
+      expect(PluginEvent.InitEvent).toBeDefined();
+      expect(PluginEvent.InitEvent).toEqual(new Subject());
+    });
   });
 });

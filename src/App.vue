@@ -9,7 +9,7 @@ import { onMounted } from 'vue';
 
 onMounted(() => {
   initPlugins().then(() => {
-    PluginEvent.next('ready');
+    PluginEvent.InitEvent.next();
   });
 });
 </script>
