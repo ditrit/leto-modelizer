@@ -1,5 +1,6 @@
 import { readTextFile } from 'src/composables/Files';
 import plugins from 'src/plugins';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 let instanciatePlugins = [];
 
@@ -72,7 +73,12 @@ export async function createPluginResources(plugin) {
 export async function initPluginDrawer(plugin) {
   return createPluginResources(plugin)
     .then((resources) => {
-      plugin.drawer = new plugin.pluginModel.PluginDrawer(resources);
+      const events = {
+        SelectEvent: PluginEvent.SelectEvent,
+        EditEvent: PluginEvent.EditEvent,
+        DeleteEvent: PluginEvent.DeleteEvent,
+      };
+      plugin.drawer = new plugin.pluginModel.PluginDrawer(resources, 'root', events);
     });
 }
 
