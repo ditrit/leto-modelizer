@@ -222,4 +222,32 @@ describe('Test composable: PluginManager', () => {
       });
     });
   });
+
+  describe('Test function: deleteComponent', () => {
+    it('should return false on enpty tree', () => {
+      expect(PluginManager.deleteComponent('testID', [])).toBeFalsy();
+    });
+
+    it('should return false on enpty tree', () => {
+      expect(PluginManager.deleteComponent('testID', [])).toBeFalsy();
+    });
+
+    it('should return true and remove a root component', () => {
+      const tree = [{ id: 'toRemoveID' }];
+      expect(PluginManager.deleteComponent('toRemoveID', tree)).toBeTruthy();
+      expect(tree).toEqual([]);
+    });
+
+    it('should return true and remove a children component', () => {
+      const tree = [{
+        id: 'toKeepID',
+        children: [{ id: 'toRemoveID' }],
+      }];
+      expect(PluginManager.deleteComponent('toRemoveID', tree)).toBeTruthy();
+      expect(tree).toEqual([{
+        id: 'toKeepID',
+        children: [],
+      }]);
+    });
+  });
 });

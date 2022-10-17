@@ -154,3 +154,23 @@ export function getPlugins() {
 export function getPluginByName(name) {
   return instanciatePlugins.find((p) => p.name === name);
 }
+
+/**
+ * Delete a component from a tree of components.
+ *
+ * @param {String} componentId - Id of the component to remove
+ * @param {Array} components - Tree of components.
+ * @return {Boolean} true if component was found and delete otherwise false.
+ */
+export function deleteComponent(componentId, components) {
+  const index = components.findIndex(({ id }) => id === componentId);
+
+  if (index === -1) {
+    return components
+      .filter(({ children }) => children && children.length > 0)
+      .some((component) => deleteComponent(componentId, component.children));
+  }
+
+  components.splice(index, 1);
+  return true;
+}
