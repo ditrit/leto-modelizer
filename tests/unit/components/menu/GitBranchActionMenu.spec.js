@@ -5,6 +5,7 @@ import { checkout } from 'src/composables/Project';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
+import DialogEvent from 'src/composables/events/DialogEvent';
 
 installQuasarPlugin();
 
@@ -41,7 +42,7 @@ describe('Test component: GitBranchActionMenu', () => {
 
   describe('Test variables initialization', () => {
     describe('Test variable: loading', () => {
-      it('Should be false', () => {
+      it('should be false', () => {
         expect(wrapper.vm.loading).toEqual({ checkout: false });
       });
     });
@@ -49,13 +50,13 @@ describe('Test component: GitBranchActionMenu', () => {
 
   describe('Test props initialization', () => {
     describe('Test prop: branchName', () => {
-      it('Should match "main"', () => {
+      it('should match "main"', () => {
         expect(wrapper.vm.branchName).toStrictEqual('main');
       });
     });
 
     describe('Test prop: current', () => {
-      it('Should be false', () => {
+      it('should be false', () => {
         expect(wrapper.vm.current).toBeFalsy();
       });
     });
@@ -63,12 +64,25 @@ describe('Test component: GitBranchActionMenu', () => {
 
   describe('Test functions', () => {
     describe('Test function: onCheckout', () => {
-      it('Should call checkout action', async () => {
+      it('should call checkout action', async () => {
         wrapper.vm.loading.checkout = true;
         await wrapper.vm.onCheckout();
 
         expect(wrapper.vm.loading.checkout).toEqual(false);
         expect(checkout).toBeCalled();
+      });
+    });
+
+    describe('Test function: onNewBranch', () => {
+      it('should call dialog event and hide menu', () => {
+        DialogEvent.next = jest.fn();
+        wrapper.vm.menu = {
+          hide: jest.fn(),
+        };
+
+        wrapper.vm.onNewBranch();
+        expect(DialogEvent.next).toBeCalled();
+        expect(wrapper.vm.menu.hide).toBeCalled();
       });
     });
   });

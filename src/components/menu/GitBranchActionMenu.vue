@@ -1,20 +1,29 @@
 <template>
-  <q-menu>
+  <q-menu ref="menu">
     <q-list>
       <q-item
+        v-if="!isCurrentBranch"
         :data-cy="`git-menu-branch-checkout-${branchName}`"
         clickable
-        v-if="!current"
         @click="onCheckout"
       >
         <q-item-section>{{ $t('actions.git.checkout') }}</q-item-section>
       </q-item>
       <q-linear-progress
+        v-if="!isCurrentBranch && loading.checkout"
         :data-cy="`git-menu-branch-checkout-loader-${branchName}`"
         color="primary"
         indeterminate
-        v-if="loading.checkout"
       />
+      <q-item
+        :data-cy="`git-menu-branch-new-branch-${branchName}`"
+        clickable
+        @click="onNewBranch"
+      >
+        <q-item-section>
+          {{ $t('actions.git.newBranchFrom', { branch: branchName }) }}
+        </q-item-section>
+      </q-item>
     </q-list>
   </q-menu>
 </template>
@@ -23,8 +32,10 @@
 import { ref } from 'vue';
 import { checkout } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
+import DialogEvent from 'src/composables/events/DialogEvent';
 
 const route = useRoute();
+const menu = ref(null);
 const loading = ref({
   checkout: false,
 });
@@ -33,7 +44,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  current: {
+  isCurrentBranch: {
     type: Boolean,
     default: false,
   },
@@ -49,5 +60,13 @@ async function onCheckout() {
     .finally(() => {
       loading.value.checkout = false;
     });
+}
+
+/**
+ * Send event to open the GitNewBranchDialog and close the menu.
+ */
+function onNewBranch() {
+  DialogEvent.next({ type: 'open', key: 'GitNewBranch', branch: props.branchName });
+  menu.value.hide();
 }
 </script>

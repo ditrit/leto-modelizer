@@ -21,7 +21,7 @@ describe('Test component: ComponentDefinitionGrid', () => {
 
   describe('Test props initialization', () => {
     describe('Test prop: definitions', () => {
-      it('Should match array of component definitions', () => {
+      it('should match array of component definitions', () => {
         expect(wrapper.vm.definitions).toStrictEqual([
           { type: 'foo1' },
           { type: 'foo2' },

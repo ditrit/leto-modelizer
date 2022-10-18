@@ -13,7 +13,7 @@ describe('Test component: DefaultDrawer', () => {
 
   describe('Test drawer state', () => {
     describe('Test function: openDrawer', () => {
-      it('Should open the drawer', () => {
+      it('should open the drawer', () => {
         wrapper.vm.drawerMiniState = true;
         wrapper.vm.openDrawer({ stopPropagation: jest.fn() });
         expect(wrapper.vm.drawerMiniState).toBe(false);

@@ -26,7 +26,7 @@ describe('Test component: App', () => {
   });
 
   describe('Test function: onMounted', () => {
-    it('Should call PluginManger.initPlugins', () => {
+    it('should call PluginManger.initPlugins', () => {
       expect(PluginEvent.InitEvent.next).toHaveBeenCalled();
     });
   });

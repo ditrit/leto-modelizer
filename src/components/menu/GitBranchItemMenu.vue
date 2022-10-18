@@ -20,7 +20,7 @@
     <git-branch-action-menu
       anchor="top end"
       self="top start"
-      :current="current"
+      :isCurrentBranch="current"
       :branch-name="name"
     />
   </q-item>

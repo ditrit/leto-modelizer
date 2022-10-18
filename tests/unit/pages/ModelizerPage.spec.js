@@ -65,13 +65,13 @@ describe('Test page component: ModelizerPage', () => {
 
   describe('Test variables initialization', () => {
     describe('Test computed: projectName', () => {
-      it('Should match "project-00000000"', () => {
+      it('should match "project-00000000"', () => {
         expect(wrapper.vm.projectName).toEqual('project-00000000');
       });
     });
 
     describe('Test computed: viewType', () => {
-      it('Should match "model"', () => {
+      it('should match "model"', () => {
         expect(wrapper.vm.viewType).toEqual('model');
       });
     });

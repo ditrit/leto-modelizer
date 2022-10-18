@@ -2,7 +2,7 @@ import { getTree } from 'src/composables/FileExplorer';
 
 describe('Test composable: FileExplorer', () => {
   describe('Test function: getTree', () => {
-    it('Should manage one root file', () => {
+    it('should manage one root file', () => {
       const input = [{ path: '/file.tf' }];
       const tree = getTree('my-project', input);
       const output = [
@@ -24,7 +24,7 @@ describe('Test composable: FileExplorer', () => {
       expect(tree).toStrictEqual(output);
     });
 
-    it('Should manage two root files', () => {
+    it('should manage two root files', () => {
       const input = [{ path: '/file1.tf' }, { path: '/file2.tf' }];
       const tree = getTree('my-project', input);
       const output = [
@@ -52,7 +52,7 @@ describe('Test composable: FileExplorer', () => {
       expect(tree).toStrictEqual(output);
     });
 
-    it('Should manage one file in one folder', () => {
+    it('should manage one file in one folder', () => {
       const input = [{ path: '/home/file.tf' }];
       const tree = getTree('my-project', input);
       const output = [
@@ -82,7 +82,7 @@ describe('Test composable: FileExplorer', () => {
       expect(tree).toStrictEqual(output);
     });
 
-    it('Should manage two files in one folder', () => {
+    it('should manage two files in one folder', () => {
       const input = [{ path: '/home/file1.tf' }, { path: '/home/file2.tf' }];
       const tree = getTree('my-project', input);
       const output = [
@@ -118,7 +118,7 @@ describe('Test composable: FileExplorer', () => {
       expect(tree).toStrictEqual(output);
     });
 
-    it('Should manage multiple files in multiple folders', () => {
+    it('should manage multiple files in multiple folders', () => {
       const input = [
         { path: '/user/plugin/file3.tf' },
         { path: '/home/folderA/file2.tf' },
@@ -196,7 +196,7 @@ describe('Test composable: FileExplorer', () => {
       expect(tree).toStrictEqual(output);
     });
 
-    it('Should manage empty tree', () => {
+    it('should manage empty tree', () => {
       expect(getTree('my-project', [])).toStrictEqual([{
         id: 'my-project',
         icon: 'fa-solid fa-folder',

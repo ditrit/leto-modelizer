@@ -252,3 +252,31 @@ export async function checkout(projectId, branch) {
   });
   return GitEvent.CheckoutEvent.next();
 }
+
+/**
+ * Create branch from another branch.
+ * @param {String} projectId - Id of project.
+ * @param {String} newBranchName - New branch name.
+ * @param {String} branchName - Branch name.
+ * @param {Boolean} haveToCheckout - Indicate if checkout on new branch has to be done.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function createBranchFrom(projectId, newBranchName, branchName, haveToCheckout) {
+  await git.branch({
+    fs,
+    dir: `/${projectId}`,
+    ref: newBranchName,
+    object: branchName,
+  }).catch(({ name, message }) => {
+    if (message.indexOf('ENOTDIR: File is not a directory.') >= 0) {
+      return Promise.reject({ name: 'cannotLockRef', message });
+    }
+    return Promise.reject({ name, message });
+  });
+
+  GitEvent.NewBranchEvent.next();
+
+  if (haveToCheckout) {
+    checkout(projectId, newBranchName);
+  }
+}

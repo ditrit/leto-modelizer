@@ -103,4 +103,3 @@ Feature: Test git branch menu
     Then I expect "[data-cy=\"git-menu-branch-checkout-loader-test/remote1\"]" not exists
     And I expect "[data-cy=\"git-current-branch\"] " is "test/remote1"
     And I expect "[data-cy=\"git-menu-branch-local-test/remote1\"]" exists
-
