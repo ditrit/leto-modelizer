@@ -1,5 +1,6 @@
 import { readTextFile } from 'src/composables/Files';
 import plugins from 'src/plugins';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 let instanciatePlugins = [];
 
@@ -72,7 +73,12 @@ export async function createPluginResources(plugin) {
 export async function initPluginDrawer(plugin) {
   return createPluginResources(plugin)
     .then((resources) => {
-      plugin.drawer = new plugin.pluginModel.PluginDrawer(resources);
+      const events = {
+        SelectEvent: PluginEvent.SelectEvent,
+        EditEvent: PluginEvent.EditEvent,
+        DeleteEvent: PluginEvent.DeleteEvent,
+      };
+      plugin.drawer = new plugin.pluginModel.PluginDrawer(resources, 'root', events);
     });
 }
 
@@ -147,4 +153,24 @@ export function getPlugins() {
  */
 export function getPluginByName(name) {
   return instanciatePlugins.find((p) => p.name === name);
+}
+
+/**
+ * Delete a component from a tree of components.
+ *
+ * @param {String} componentId - Id of the component to remove
+ * @param {Array} components - Tree of components.
+ * @return {Boolean} true if component was found and delete otherwise false.
+ */
+export function deleteComponent(componentId, components) {
+  const index = components.findIndex(({ id }) => id === componentId);
+
+  if (index === -1) {
+    return components
+      .filter(({ children }) => children && children.length > 0)
+      .some((component) => deleteComponent(componentId, component.children));
+  }
+
+  components.splice(index, 1);
+  return true;
 }

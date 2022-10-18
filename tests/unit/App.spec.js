@@ -9,7 +9,9 @@ jest.mock('src/composables/PluginManager', () => ({
   initPlugins: () => Promise.resolve(),
 }));
 jest.mock('src/composables/events/PluginEvent', () => ({
-  next: jest.fn(),
+  InitEvent: {
+    next: jest.fn(),
+  },
 }));
 
 describe('Test component: App', () => {
@@ -25,7 +27,7 @@ describe('Test component: App', () => {
 
   describe('Test function: onMounted', () => {
     it('Should call PluginManger.initPlugins', () => {
-      expect(PluginEvent.next).toHaveBeenCalled();
+      expect(PluginEvent.InitEvent.next).toHaveBeenCalled();
     });
   });
 });
