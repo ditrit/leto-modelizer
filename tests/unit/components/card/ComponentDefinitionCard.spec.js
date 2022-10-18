@@ -36,7 +36,7 @@ describe('Test component: ComponentDefinitionCard', () => {
 
   describe('Test props initialization', () => {
     describe('Test prop: component', () => {
-      it('Should match "component one"', () => {
+      it('should match "component one"', () => {
         expect(wrapper.vm.definition).toStrictEqual({
           type: 'component one',
         });

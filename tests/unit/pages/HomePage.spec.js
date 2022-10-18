@@ -27,7 +27,7 @@ describe('Test component: HomePage', () => {
   });
   describe('Test variable initialization', () => {
     describe('Test variable: project', () => {
-      it('Should match "project-00000000"', () => {
+      it('should match "project-00000000"', () => {
         expect(wrapper.vm.project).toEqual({ id: 'project-00000000' });
       });
     });
@@ -35,7 +35,7 @@ describe('Test component: HomePage', () => {
 
   describe('Test functions', () => {
     describe('Test function: createProject', () => {
-      it('Should redirect on success', async () => {
+      it('should redirect on success', async () => {
         const route = await wrapper.vm.createProject();
         expect(route).toEqual('/modelizer/project-00000000/model');
       });

@@ -86,25 +86,25 @@ describe('Test component: GitBranchMenu', () => {
 
   describe('Test computed', () => {
     describe('Test computed: hasNoBranches', () => {
-      it('Should be true without local and remote branches', () => {
+      it('should be true without local and remote branches', () => {
         wrapper.vm.filteredBranches.local = [];
         wrapper.vm.filteredBranches.remote = [];
 
         expect(wrapper.vm.hasNoBranches).toEqual(true);
       });
-      it('Should be false with local branches', () => {
+      it('should be false with local branches', () => {
         wrapper.vm.filteredBranches.local = [1];
         wrapper.vm.filteredBranches.remote = [];
 
         expect(wrapper.vm.hasNoBranches).toEqual(false);
       });
-      it('Should be false with remote branches', () => {
+      it('should be false with remote branches', () => {
         wrapper.vm.filteredBranches.local = [];
         wrapper.vm.filteredBranches.remote = [1];
 
         expect(wrapper.vm.hasNoBranches).toEqual(false);
       });
-      it('Should be false with local and remote branches', () => {
+      it('should be false with local and remote branches', () => {
         wrapper.vm.filteredBranches.local = [1];
         wrapper.vm.filteredBranches.remote = [1];
 
@@ -115,7 +115,7 @@ describe('Test component: GitBranchMenu', () => {
 
   describe('Test functions', () => {
     describe('Test function: newBranch', () => {
-      it('Should call dialog event', () => {
+      it('should call dialog event', () => {
         DialogEvent.next = jest.fn();
         wrapper.vm.newBranch();
         expect(DialogEvent.next).toBeCalled();
@@ -123,7 +123,7 @@ describe('Test component: GitBranchMenu', () => {
     });
 
     describe('Test function: isSearched', () => {
-      it('Should return true on match', () => {
+      it('should return true on match', () => {
         wrapper.vm.searchBranch = '';
         expect(wrapper.vm.isSearched('test')).toEqual(true);
 
@@ -136,7 +136,7 @@ describe('Test component: GitBranchMenu', () => {
     });
 
     describe('Test function: filter', () => {
-      it('Should set branches correctly', () => {
+      it('should set branches correctly', () => {
         wrapper.vm.searchBranch = '';
         expect(wrapper.vm.isSearched('test')).toEqual(true);
 
@@ -165,7 +165,7 @@ describe('Test component: GitBranchMenu', () => {
         onRemote: true,
       });
 
-      it('Should invert local value', () => {
+      it('should invert local value', () => {
         expect(wrapper.vm.showLocal).toEqual(false);
         expect(wrapper.vm.showRemote).toEqual(false);
 
@@ -178,7 +178,7 @@ describe('Test component: GitBranchMenu', () => {
         expect(wrapper.vm.showRemote).toEqual(false);
       });
 
-      it('Should return all sorted branches without filter', async () => {
+      it('should return all sorted branches without filter', async () => {
         getBranches.mockImplementation(() => Promise.resolve([
           local,
           remote,
@@ -193,7 +193,7 @@ describe('Test component: GitBranchMenu', () => {
           });
       });
 
-      it('Should return filtered branches', async () => {
+      it('should return filtered branches', async () => {
         wrapper.vm.searchedBranch = 'both';
         getBranches.mockImplementation(() => Promise.resolve([
           local,
@@ -211,7 +211,7 @@ describe('Test component: GitBranchMenu', () => {
     });
 
     describe('Test function: onOpenMenu', () => {
-      it('Should call focus and close expand menu', () => {
+      it('should call focus and close expand menu', () => {
         const focus = jest.fn();
         wrapper.vm.searchInput = { focus };
         wrapper.vm.showLocal = true;
@@ -224,7 +224,7 @@ describe('Test component: GitBranchMenu', () => {
     });
 
     describe('Test function: openCloseExpandMenu', () => {
-      it('Should invert local value', () => {
+      it('should invert local value', () => {
         expect(wrapper.vm.showLocal).toEqual(false);
         expect(wrapper.vm.showRemote).toEqual(false);
 
@@ -237,7 +237,7 @@ describe('Test component: GitBranchMenu', () => {
         expect(wrapper.vm.showRemote).toEqual(false);
       });
 
-      it('Should invert remote value', () => {
+      it('should invert remote value', () => {
         expect(wrapper.vm.showLocal).toEqual(false);
         expect(wrapper.vm.showRemote).toEqual(false);
 
@@ -252,13 +252,13 @@ describe('Test component: GitBranchMenu', () => {
     });
 
     describe('Test function: initBranches', () => {
-      it('Should be empty without any branches', async () => {
+      it('should be empty without any branches', async () => {
         getBranches.mockImplementation(() => Promise.resolve([]));
         await wrapper.vm.initBranches();
         expect(wrapper.vm.branches).toEqual({ local: [], remote: [] });
       });
 
-      it('Should fill local branch array with all local branches', async () => {
+      it('should fill local branch array with all local branches', async () => {
         getBranches.mockImplementation(() => Promise.resolve([
           new Branch({
             name: 'Local',
@@ -277,7 +277,7 @@ describe('Test component: GitBranchMenu', () => {
         });
       });
 
-      it('Should fill remote branch array with all remote branches', async () => {
+      it('should fill remote branch array with all remote branches', async () => {
         getBranches.mockImplementation(() => Promise.resolve([
           new Branch({
             name: 'remote',

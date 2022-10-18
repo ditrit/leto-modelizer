@@ -72,7 +72,7 @@ describe('Test composable: Project', () => {
   beforeEach(() => localStorage.clear());
 
   describe('Test function: createProjectTemplate', () => {
-    it('Should return project with generated ID', () => {
+    it('should return project with generated ID', () => {
       const project = createProjectTemplate();
       expect(project).toBeDefined();
       expect(project.id).toEqual('project-00000000');
@@ -80,13 +80,13 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: getProjects', () => {
-    it('Should return empty set', () => {
+    it('should return empty set', () => {
       const projects = getProjects();
       expect(projects).toBeDefined();
       expect(projects).toStrictEqual({});
     });
 
-    it('Should return saved projects', () => {
+    it('should return saved projects', () => {
       const projects = {
         foo: { id: 'foo' },
         bar: { id: 'bar' },
@@ -99,12 +99,12 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: getProjectById', () => {
-    it('Should not find a project', () => {
+    it('should not find a project', () => {
       const project = getProjectById('foo');
       expect(project).not.toBeDefined();
     });
 
-    it('Should return saved project', () => {
+    it('should return saved project', () => {
       const projects = { foo: { id: 'foo' } };
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
       const project = getProjectById('foo');
@@ -113,7 +113,7 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: getProjectName', () => {
-    it('Should return local project Name', () => {
+    it('should return local project Name', () => {
       const projects = { foo: { id: 'foo' } };
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
       const projectName = getProjectName('foo');
@@ -121,7 +121,7 @@ describe('Test composable: Project', () => {
       expect(projectName).toEqual('foo');
     });
 
-    it('Should return remote repository name', () => {
+    it('should return remote repository name', () => {
       const projects = { foo: { id: 'foo', git: { repository: 'https://github.com/my-project', username: 'test', token: 'test' } } };
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
       const projectName = getProjectName('foo');
@@ -131,7 +131,7 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: saveProject', () => {
-    it('Should save projects', () => {
+    it('should save projects', () => {
       saveProject({ id: 'foo' });
       saveProject({ id: 'bar' });
       const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
@@ -141,7 +141,7 @@ describe('Test composable: Project', () => {
       });
     });
 
-    it('Should update project', () => {
+    it('should update project', () => {
       saveProject({ id: 'foo', text: 'qaz' });
       let projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
       expect(projects.foo).toStrictEqual({ id: 'foo', text: 'qaz' });
@@ -152,14 +152,14 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: initProject', () => {
-    it('Should call git init', async () => {
+    it('should call git init', async () => {
       const result = await initProject({ id: 'foo' });
       expect(result).toEqual('init');
     });
   });
 
   describe('Test function: deleteProject', () => {
-    it('Should delete one project', () => {
+    it('should delete one project', () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         foo: { id: 'foo' },
         bar: { id: 'bar' },
@@ -172,7 +172,7 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: updateGitProject', () => {
-    it('Should call all needed git method', async () => {
+    it('should call all needed git method', async () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         test: {
           id: 'test',
@@ -197,7 +197,7 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: fetchGit', () => {
-    it('Should emit fetch event', async () => {
+    it('should emit fetch event', async () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         test: {
           id: 'test',
@@ -214,14 +214,14 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: checkout', () => {
-    it('Should emit checkout event', async () => {
+    it('should emit checkout event', async () => {
       const result = await checkout('projectId', 'test');
       expect(result).toEqual('CheckoutEventNext');
     });
   });
 
   describe('Test function: getProjectFiles', () => {
-    it('Should return file information array', async () => {
+    it('should return file information array', async () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         test: { id: 'test', git: {} },
       }));
@@ -232,7 +232,7 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: readProjectFile', () => {
-    it('Should return file input', async () => {
+    it('should return file input', async () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         test: { id: 'test', git: {} },
       }));
@@ -243,7 +243,7 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: getCurrentBranch', () => {
-    it('Should return current branch name', async () => {
+    it('should return current branch name', async () => {
       const result = await getCurrentBranch('test');
 
       expect(result).toEqual('main');
@@ -251,7 +251,7 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: getBranches', () => {
-    it('Should return valid branches', async () => {
+    it('should return valid branches', async () => {
       const branches = await getBranches('test');
 
       expect(branches).toEqual([
@@ -278,14 +278,14 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: createBranchFrom', () => {
-    it('Should not call checkout function when haveToCheckout is false', async () => {
+    it('should not call checkout function when haveToCheckout is false', async () => {
       git.checkout = jest.fn();
       await createBranchFrom('test', 'branch', 'main', false);
       expect(git.checkout).not.toBeCalled();
       expect(GitEvent.NewBranchEvent.next).toBeCalled();
     });
 
-    it('Should call checkout function when haveToCheckout is true', async () => {
+    it('should call checkout function when haveToCheckout is true', async () => {
       git.checkout = jest.fn();
       await createBranchFrom('test', 'branch', 'main', true);
       expect(git.checkout).toBeCalled();

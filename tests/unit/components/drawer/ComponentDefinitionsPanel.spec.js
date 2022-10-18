@@ -12,7 +12,7 @@ describe('Test component: ComponentDefinitionsDrawer', () => {
   });
 
   describe('Test function: scrollAreaHeight', () => {
-    it('Should should be a linear function ((Nkeys * 48) + 130)', () => {
+    it('should should be a linear function ((Nkeys * 48) + 130)', () => {
       const keys = [];
       for (let i = 0; i < 10; i += 1) {
         const result = wrapper.vm.scrollAreaHeight(keys);

@@ -56,7 +56,7 @@ describe('Test component: GitNewBranchForm', () => {
   });
 
   describe('Test function: onSubmit', () => {
-    it('Should emit an event on success and a notification', async () => {
+    it('should emit an event on success and a notification', async () => {
       Notify.create = jest.fn();
 
       await wrapper.vm.onSubmit();

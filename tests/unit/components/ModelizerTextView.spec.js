@@ -195,7 +195,7 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test function: updateProjectFiles', () => {
-    it('Should update nodes', async () => {
+    it('should update nodes', async () => {
       wrapper.vm.nodes = [
         {
           id: 'projectName',
@@ -242,14 +242,14 @@ describe('Test component: ModelizerTextView', () => {
       ]);
     });
 
-    it('Should update files', async () => {
+    it('should update files', async () => {
       wrapper.vm.files = [{ id: 'terraform/app.tf', label: 'app.tf', content: 'content' }];
       wrapper.vm.updateProjectFiles();
       await flushPromises();
       expect(wrapper.vm.files).toEqual([{ id: 'terraform/app.tf', content: 'new content', label: 'app.tf' }]);
     });
 
-    it('Should update activeFile if it is no more contained in updated files', async () => {
+    it('should update activeFile if it is no more contained in updated files', async () => {
       wrapper.vm.files = [{ id: 'README.md', label: 'README.md', content: 'content' }, { id: 'terraform/app.tf', label: 'app.tf', content: 'content' }];
       wrapper.vm.activeFile = { isSelected: true, id: 'README.md' };
 
@@ -258,7 +258,7 @@ describe('Test component: ModelizerTextView', () => {
       expect(wrapper.vm.activeFile).toEqual({ isSelected: true, id: 'terraform/app.tf' });
     });
 
-    it('Should reset activeFile if updated files is empty', async () => {
+    it('should reset activeFile if updated files is empty', async () => {
       wrapper.vm.files = [{ id: 'README.md', label: 'README.md', content: 'content' }];
       wrapper.vm.activeFile = { isSelected: true, id: 'README.md' };
 
@@ -267,7 +267,7 @@ describe('Test component: ModelizerTextView', () => {
       expect(wrapper.vm.activeFile).toEqual({ isSelected: false, id: '' });
     });
 
-    it('Should not update activeFile if it is still contained in updated files', async () => {
+    it('should not update activeFile if it is still contained in updated files', async () => {
       wrapper.vm.files = [{ id: 'terraform/app.tf', label: 'app.tf', content: 'other content' }, { id: 'README.md', label: 'README.md', content: 'content' }];
       wrapper.vm.activeFile = { isSelected: true, id: 'terraform/app.tf' };
 

@@ -42,7 +42,7 @@ describe('Test component: GitBranchActionMenu', () => {
 
   describe('Test variables initialization', () => {
     describe('Test variable: loading', () => {
-      it('Should be false', () => {
+      it('should be false', () => {
         expect(wrapper.vm.loading).toEqual({ checkout: false });
       });
     });
@@ -50,13 +50,13 @@ describe('Test component: GitBranchActionMenu', () => {
 
   describe('Test props initialization', () => {
     describe('Test prop: branchName', () => {
-      it('Should match "main"', () => {
+      it('should match "main"', () => {
         expect(wrapper.vm.branchName).toStrictEqual('main');
       });
     });
 
     describe('Test prop: current', () => {
-      it('Should be false', () => {
+      it('should be false', () => {
         expect(wrapper.vm.current).toBeFalsy();
       });
     });
@@ -64,7 +64,7 @@ describe('Test component: GitBranchActionMenu', () => {
 
   describe('Test functions', () => {
     describe('Test function: onCheckout', () => {
-      it('Should call checkout action', async () => {
+      it('should call checkout action', async () => {
         wrapper.vm.loading.checkout = true;
         await wrapper.vm.onCheckout();
 
@@ -74,7 +74,7 @@ describe('Test component: GitBranchActionMenu', () => {
     });
 
     describe('Test function: onNewBranch', () => {
-      it('Should call dialog event and hide menu', () => {
+      it('should call dialog event and hide menu', () => {
         DialogEvent.next = jest.fn();
         wrapper.vm.menu = {
           hide: jest.fn(),

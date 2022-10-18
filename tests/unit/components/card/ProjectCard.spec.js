@@ -20,7 +20,7 @@ describe('Test component: ProjectCard', () => {
 
   describe('Test props initialization', () => {
     describe('Test prop: project', () => {
-      it('Should match "project-0000"', () => {
+      it('should match "project-0000"', () => {
         expect(wrapper.vm.project).toStrictEqual({ id: 'project-0000' });
       });
     });

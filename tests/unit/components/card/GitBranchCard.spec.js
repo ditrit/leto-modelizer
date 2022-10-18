@@ -55,12 +55,12 @@ describe('Test component: GitBranchCard', () => {
 
   describe('Test props initialization', () => {
     describe('Test prop: currentBranch', () => {
-      it('Should match "main"', () => {
+      it('should match "main"', () => {
         expect(wrapper.vm.currentBranch).toStrictEqual('main');
       });
     });
     describe('Test prop: loading', () => {
-      it('Should be false', () => {
+      it('should be false', () => {
         expect(wrapper.vm.loading).toBeFalsy();
       });
     });

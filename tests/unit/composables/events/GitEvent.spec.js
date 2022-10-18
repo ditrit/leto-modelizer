@@ -3,28 +3,28 @@ import { Subject } from 'rxjs';
 
 describe('Test composable: GitEvent', () => {
   describe('Test event: UpdateRemoteEvent', () => {
-    it('Should export a Subject', () => {
+    it('should export a Subject', () => {
       expect(GitEvent.UpdateRemoteEvent).toBeDefined();
       expect(GitEvent.UpdateRemoteEvent).toEqual(new Subject());
     });
   });
 
   describe('Test event: FetchEvent', () => {
-    it('Should export a Subject', () => {
+    it('should export a Subject', () => {
       expect(GitEvent.FetchEvent).toBeDefined();
       expect(GitEvent.FetchEvent).toEqual(new Subject());
     });
   });
 
   describe('Test event: CheckoutEvent', () => {
-    it('Should export a Subject', () => {
+    it('should export a Subject', () => {
       expect(GitEvent.CheckoutEvent).toBeDefined();
       expect(GitEvent.CheckoutEvent).toEqual(new Subject());
     });
   });
 
   describe('Test event: NewBranchEvent', () => {
-    it('Should export a Subject', () => {
+    it('should export a Subject', () => {
       expect(GitEvent.NewBranchEvent).toBeDefined();
       expect(GitEvent.NewBranchEvent).toEqual(new Subject());
     });
