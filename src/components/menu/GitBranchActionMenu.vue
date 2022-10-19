@@ -24,6 +24,20 @@
           {{ $t('actions.git.newBranchFrom', { branch: branchName }) }}
         </q-item-section>
       </q-item>
+
+      <template v-if="onLocal && onRemote">
+        <q-separator/>
+
+        <q-item
+          :data-cy="`git-menu-branch-update-${branchName}`"
+          clickable
+          @click="onUpdate"
+        >
+          <q-item-section>
+            {{ $t('actions.git.update') }}
+          </q-item-section>
+        </q-item>
+      </template>
     </q-list>
   </q-menu>
 </template>
@@ -48,6 +62,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  onLocal: {
+    type: Boolean,
+    default: false,
+  },
+  onRemote: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 /**
@@ -67,6 +89,14 @@ async function onCheckout() {
  */
 function onNewBranch() {
   DialogEvent.next({ type: 'open', key: 'GitNewBranch', branch: props.branchName });
+  menu.value.hide();
+}
+
+/**
+ * Send event to open the GitUpdateDialog and close the menu.
+ */
+function onUpdate() {
+  DialogEvent.next({ type: 'open', key: 'GitUpdate', branch: props.branchName });
   menu.value.hide();
 }
 </script>

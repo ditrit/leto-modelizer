@@ -21,6 +21,8 @@
       anchor="top end"
       self="top start"
       :isCurrentBranch="current"
+      :on-local="onLocal"
+      :on-remote="onRemote"
       :branch-name="name"
     />
   </q-item>
@@ -36,6 +38,14 @@ defineProps({
     required: true,
   },
   current: {
+    type: Boolean,
+    default: false,
+  },
+  onLocal: {
+    type: Boolean,
+    default: false,
+  },
+  onRemote: {
     type: Boolean,
     default: false,
   },
