@@ -14,6 +14,7 @@ import {
   getBranches,
   checkout,
   createBranchFrom,
+  gitUpdate,
   PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
@@ -40,6 +41,10 @@ jest.mock('isomorphic-git', () => ({
   resolveRef: jest.fn(() => Promise.resolve('resolveRef')),
   readBlob: jest.fn(() => Promise.resolve({ blob: 'test' })),
   currentBranch: jest.fn(() => Promise.resolve('main')),
+  pull: jest.fn(({ onAuth }) => {
+    onAuth();
+    return Promise.resolve('pull');
+  }),
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
@@ -290,6 +295,23 @@ describe('Test composable: Project', () => {
       await createBranchFrom('test', 'branch', 'main', true);
       expect(git.checkout).toBeCalled();
       expect(GitEvent.NewBranchEvent.next).toBeCalled();
+    });
+  });
+
+  describe('Test function: gitUpdate', () => {
+    it('should call git pull', async () => {
+      const result = await gitUpdate(
+        {
+          id: 'test',
+          git: {
+            username: 'username',
+            token: 'token',
+          },
+        },
+        'branch',
+        true,
+      );
+      expect(result).toEqual('pull');
     });
   });
 });

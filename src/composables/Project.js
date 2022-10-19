@@ -280,3 +280,31 @@ export async function createBranchFrom(projectId, newBranchName, branchName, hav
     checkout(projectId, newBranchName);
   }
 }
+
+/**
+ * Update selected branch with git pull.
+ * @param {Project} project - Project to update.
+ * @param {String} branchName - Branch name.
+ * @param {Boolean} fastForward - State of fast forward option.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function gitUpdate(project, branchName, fastForward) {
+  return git.pull({
+    fs,
+    http,
+    dir: `/${project.id}`,
+    ref: branchName,
+    fastForward,
+    singleBranch: true,
+    onAuth: () => ({
+      username: project.git.username,
+      password: project.git.token,
+    }),
+    // TODO: Change when we have user information.
+    author: {
+      name: 'LetoModelizer',
+      email: 'LetoModelizer@no-reply.com',
+    },
+    corsProxy: 'https://cors.isomorphic-git.org',
+  });
+}
