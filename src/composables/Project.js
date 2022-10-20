@@ -393,7 +393,7 @@ export async function createBranchFrom(projectId, newBranchName, branchName, hav
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function gitUpdate(project, branchName, fastForward) {
-  return git.pull({
+  await git.pull({
     fs,
     http,
     dir: `/${project.id}`,
@@ -411,6 +411,7 @@ export async function gitUpdate(project, branchName, fastForward) {
     },
     corsProxy: 'https://cors.isomorphic-git.org',
   });
+  return GitEvent.PullEvent.next();
 }
 
 /**

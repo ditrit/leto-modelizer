@@ -64,6 +64,9 @@ jest.mock('src/composables/events/GitEvent', () => ({
   NewBranchEvent: {
     next: jest.fn(() => Promise.resolve('NewBranchEventNext')),
   },
+  PullEvent: {
+    next: jest.fn(() => Promise.resolve('PullEventNext')),
+  },
 }));
 
 jest.mock('browserfs', () => ({
@@ -365,7 +368,7 @@ describe('Test composable: Project', () => {
 
   describe('Test function: gitUpdate', () => {
     it('should call git pull', async () => {
-      const result = await gitUpdate(
+      await gitUpdate(
         {
           id: 'test',
           git: {
@@ -376,7 +379,7 @@ describe('Test composable: Project', () => {
         'branch',
         true,
       );
-      expect(result).toEqual('pull');
+      expect(GitEvent.PullEvent.next).toBeCalled();
     });
   });
 

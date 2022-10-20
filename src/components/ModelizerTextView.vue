@@ -67,6 +67,7 @@ let deleteFileSubscription;
 let updateRemoteSubscription;
 let checkoutSubscription;
 let pluginRenderSubscription;
+let pullSubscription;
 
 /**
  * Update fileTabArray array when a new file is open.
@@ -212,6 +213,7 @@ onMounted(() => {
   updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(updateProjectFiles);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
   pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(renderPlugins);
+  pullSubscription = GitEvent.PullEvent.subscribe(updateProjectFiles);
 });
 
 onUnmounted(() => {
@@ -222,6 +224,7 @@ onUnmounted(() => {
   updateRemoteSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
   pluginRenderSubscription.unsubscribe();
+  pullSubscription.unsubscribe();
 });
 </script>
 
