@@ -28,6 +28,7 @@ export default {
         update: 'Branch is updated &#129395;!',
       },
       update: 'Update',
+      prune: 'Prune',
     },
     fileExplorer: {
       empty: 'No files available in project.',
