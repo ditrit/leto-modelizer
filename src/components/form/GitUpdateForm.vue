@@ -54,7 +54,7 @@ const fastForward = ref(true);
 const submitting = ref(false);
 
 /**
- * Create new branch and manage toast and loader.
+ * Update branch and manage toast and loader.
  */
 async function onSubmit() {
   submitting.value = true;
