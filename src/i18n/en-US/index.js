@@ -11,6 +11,7 @@ export default {
         less: 'Show less',
       },
       create: 'Create',
+      update: 'Update',
     },
     home: {
       createEmptyProject: 'Create empty project',
@@ -24,7 +25,9 @@ export default {
       newBranchFrom: 'New branch from "{branch}"...',
       branch: {
         create: 'Branch is created &#129395;!',
+        update: 'Branch is updated &#129395;!',
       },
+      update: 'Update',
     },
     fileExplorer: {
       empty: 'No files available in project.',
@@ -43,6 +46,7 @@ export default {
         duplicate: 'Branch name already exists.',
       },
       cannotLockRef: 'Fatal: cannot lock reference.',
+      MergeNotSupportedError: 'The remote history has been force rewritten, we haven\'t implemented yet the rebase option(<code>git pull -r</code>).<br/>Please delete and checkout once again your branch.',
     },
   },
   projects: {
@@ -80,6 +84,11 @@ export default {
           title: 'Create new branch',
           branch: 'New branch name',
           checkout: 'Checkout branch',
+        },
+        update: {
+          title: 'Update',
+          description: 'Do you want to update your branch <b>{branch}</b> ?',
+          fastForward: 'Fast forward option (<code>git pull --ff</code>)',
         },
       },
     },

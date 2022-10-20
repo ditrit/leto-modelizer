@@ -60,6 +60,18 @@ describe('Test component: GitBranchActionMenu', () => {
         expect(wrapper.vm.current).toBeFalsy();
       });
     });
+
+    describe('Test prop: onLocal', () => {
+      it('should be false', () => {
+        expect(wrapper.vm.onLocal).toBeFalsy();
+      });
+    });
+
+    describe('Test prop: onRemote', () => {
+      it('should be false', () => {
+        expect(wrapper.vm.onRemote).toBeFalsy();
+      });
+    });
   });
 
   describe('Test functions', () => {
@@ -81,6 +93,19 @@ describe('Test component: GitBranchActionMenu', () => {
         };
 
         wrapper.vm.onNewBranch();
+        expect(DialogEvent.next).toBeCalled();
+        expect(wrapper.vm.menu.hide).toBeCalled();
+      });
+    });
+
+    describe('Test function: update', () => {
+      it('should call dialog event and hide menu', () => {
+        DialogEvent.next = jest.fn();
+        wrapper.vm.menu = {
+          hide: jest.fn(),
+        };
+
+        wrapper.vm.onUpdate();
         expect(DialogEvent.next).toBeCalled();
         expect(wrapper.vm.menu.hide).toBeCalled();
       });

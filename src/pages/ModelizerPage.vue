@@ -21,6 +21,7 @@
         />
         <git-configuration-dialog :project-name="projectName"/>
         <git-new-branch-dialog :project-name="projectName"/>
+        <git-update-dialog :project-name="projectName"/>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -40,6 +41,7 @@ import ModelizerTextView from 'src/components/ModelizerTextView';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import GitConfigurationDialog from 'components/dialog/GitConfigurationDialog';
 import GitNewBranchDialog from 'components/dialog/GitNewBranchDialog';
+import GitUpdateDialog from 'components/dialog/GitUpdateDialog';
 
 const route = useRoute();
 const router = useRouter();

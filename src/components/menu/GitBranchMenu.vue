@@ -37,6 +37,8 @@
             :name="branch.name"
             :full-name="branch.fullName"
             :current="branch.name === currentBranchName"
+            :on-local="branch.onLocal"
+            :on-remote="branch.onRemote"
             v-if="showLocal || index < maxItem"
             :data-cy="`git-menu-branch-local-${branch.name}`"
           />
@@ -58,6 +60,8 @@
             :name="branch.name"
             :full-name="branch.fullName"
             :current="branch.name === currentBranchName"
+            :on-local="branch.onLocal"
+            :on-remote="branch.onRemote"
             v-if="showRemote || index < maxItem"
             :data-cy="`git-menu-branch-remote-${branch.name}`"
           />
