@@ -25,19 +25,29 @@
         </q-item-section>
       </q-item>
 
-      <template v-if="onLocal && onRemote">
-        <q-separator/>
+      <q-separator v-if="onLocal"/>
 
-        <q-item
-          :data-cy="`git-menu-branch-update-${branchName}`"
-          clickable
-          @click="onUpdate"
-        >
-          <q-item-section>
-            {{ $t('actions.git.update') }}
-          </q-item-section>
-        </q-item>
-      </template>
+      <q-item
+        v-if="onLocal && onRemote"
+        :data-cy="`git-menu-branch-update-${branchName}`"
+        clickable
+        @click="onUpdate"
+      >
+        <q-item-section>
+          {{ $t('actions.git.update') }}
+        </q-item-section>
+      </q-item>
+
+      <q-item
+        v-if="onLocal"
+        :data-cy="`git-menu-branch-push-${branchName}`"
+        clickable
+        @click="onPush"
+      >
+        <q-item-section>
+          {{ $t('actions.git.push') }}
+        </q-item-section>
+      </q-item>
     </q-list>
   </q-menu>
 </template>
@@ -97,6 +107,18 @@ function onNewBranch() {
  */
 function onUpdate() {
   DialogEvent.next({ type: 'open', key: 'GitUpdate', branch: props.branchName });
+  menu.value.hide();
+}
+
+/**
+ * Send event to open the GitPushDialog and close the menu.
+ */
+function onPush() {
+  DialogEvent.next({
+    type: 'open',
+    key: 'GitPush',
+    branch: props.branchName,
+  });
   menu.value.hide();
 }
 </script>
