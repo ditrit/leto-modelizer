@@ -528,3 +528,26 @@ export async function getStatus(projectId) {
     }))
     .filter((file) => !file.isUnmodified));
 }
+/**
+ * Push selected branch on server.
+ * @param {Project} project - Project.
+ * @param {String} branchName - Branch name.
+ * @param {Boolean} force - State of force option.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function gitPush(project, branchName, force) {
+  await git.push({
+    fs,
+    http,
+    dir: `/${project.id}`,
+    remote: 'origin',
+    ref: branchName,
+    force,
+    onAuth: () => ({
+      username: project.git.username,
+      password: project.git.token,
+    }),
+    corsProxy: 'https://cors.isomorphic-git.org',
+  });
+  return GitEvent.PushEvent.next();
+}
