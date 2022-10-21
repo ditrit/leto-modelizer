@@ -2,12 +2,14 @@ import { randomHexString } from 'src/composables/Random';
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/web';
 import * as BrowserFS from 'browserfs';
-import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
+import {
+  FileInformation,
+  FileInput,
+} from 'leto-modelizer-plugin-core';
 import GitEvent from 'src/composables/events/GitEvent';
 import Branch from 'src/models/git/Branch';
 
 const fs = BrowserFS.BFSRequire('fs');
-const { Buffer } = BrowserFS.BFSRequire('buffer');
 
 export const PROJECT_STORAGE_KEY = 'projects';
 
@@ -121,16 +123,65 @@ export async function fetchGit(project) {
 }
 
 /**
+ * Check if path is directory or not.
+ * @param {String} path - Path to check.
+ * @return {Promise<Boolean>} Promise with boolean on success otherwise an error.
+ */
+async function isDirectory(path) {
+  const stat = await new Promise((resolve) => {
+    fs.stat(
+      path,
+      (e, rv) => resolve(rv),
+    );
+  });
+  return stat.isDirectory();
+}
+
+/**
+ * Get the list file/directory found in path location.
+ * @param {String} path - Path to check.
+ * @return {Promise<String[]>} Promise with array of strings on success otherwise an error.
+ */
+async function readDir(path) {
+  return new Promise((resolve) => {
+    fs.readdir(
+      path,
+      (e, rv) => resolve(rv),
+    );
+  });
+}
+
+/**
+ * Get the list file/directory found in path location.
+ * @param {String[]} files - Array of file to fill.
+ * @param {String} projectId - ID of the project.
+ * @param {String} filename - Path of file or directory. Null for root location.
+ */
+async function setFiles(files, projectId, filename) {
+  const path = filename ? `${projectId}/${filename}` : projectId;
+  const isDir = await isDirectory(path);
+  if (isDir) {
+    const dirFiles = await readDir(path);
+    await Promise.allSettled(dirFiles.filter((file) => file !== '.git').map((file) => setFiles(
+      files,
+      projectId,
+      filename ? `${filename}/${file}` : file,
+    )));
+  } else {
+    files.push(new FileInformation({ path: filename }));
+  }
+}
+
+/**
  * Retrieve list of project files name.
  * @param {String} projectId - Id of project.
  * @return {Promise<FileInformation[]>} Promise with file names array on success,
  * otherwise error.
  */
 export async function getProjectFiles(projectId) {
-  const project = getProjectById(projectId);
-  const files = await git.listFiles({ fs, dir: `/${project.id}` });
-
-  return files.map((file) => new FileInformation({ path: file }));
+  const files = [];
+  await setFiles(files, projectId);
+  return files;
 }
 
 /**
@@ -153,20 +204,17 @@ export async function getCurrentBranch(projectId) {
  * @return {Promise<FileInput>} Promise with file content on success otherwise error.
  */
 export async function readProjectFile(projectId, fileInformation) {
-  const currentBranch = await getCurrentBranch(projectId);
-  const dir = `/${projectId}`;
-
-  const commitOid = await git.resolveRef({ fs, dir, ref: currentBranch });
-  const { blob } = await git.readBlob({
-    fs,
-    dir,
-    oid: commitOid,
-    filepath: fileInformation.path,
+  const content = await new Promise((resolve) => {
+    fs.readFile(
+      `/${projectId}/${fileInformation.path}`,
+      'utf8',
+      (e, rv) => resolve(rv),
+    );
   });
 
   return new FileInput({
     path: fileInformation.path,
-    content: Buffer.from(blob).toString('utf8'),
+    content,
   });
 }
 /**
