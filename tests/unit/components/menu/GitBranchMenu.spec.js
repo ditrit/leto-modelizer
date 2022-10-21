@@ -2,7 +2,7 @@ import DialogEvent from 'src/composables/events/DialogEvent';
 import { shallowMount } from '@vue/test-utils';
 import GitBranchMenu from 'components/menu/GitBranchMenu';
 import { useRoute } from 'vue-router';
-import { getBranches } from 'src/composables/Project';
+import { getBranches, gitPrune } from 'src/composables/Project';
 import Branch from 'src/models/git/Branch';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
@@ -32,6 +32,7 @@ jest.mock('src/composables/Project', () => ({
   getBranches: jest.fn(() => Promise.resolve([])),
   fetchGit: jest.fn(() => Promise.resolve()),
   getProjectById: jest.fn(),
+  gitPrune: jest.fn(() => Promise.resolve()),
 }));
 
 describe('Test component: GitBranchMenu', () => {
@@ -220,6 +221,15 @@ describe('Test component: GitBranchMenu', () => {
         expect(focus).toBeCalled();
         expect(wrapper.vm.showLocal).toEqual(false);
         expect(wrapper.vm.showRemote).toEqual(false);
+      });
+    });
+
+    describe('Test function: onPrune', () => {
+      it('should call gitPrune', async () => {
+        expect(wrapper.vm.pruneLoader).toEqual(false);
+        await wrapper.vm.onPrune();
+        expect(gitPrune).toBeCalled();
+        expect(wrapper.vm.pruneLoader).toEqual(false);
       });
     });
 

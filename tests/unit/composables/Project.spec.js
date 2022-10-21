@@ -15,6 +15,7 @@ import {
   checkout,
   createBranchFrom,
   gitUpdate,
+  gitPrune,
   PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
@@ -332,6 +333,34 @@ describe('Test composable: Project', () => {
         true,
       );
       expect(result).toEqual('pull');
+    });
+  });
+
+  describe('Test function: gitPrune', () => {
+    it('should call git fetch with repository', async () => {
+      git.fetch = jest.fn();
+      await gitPrune(
+        {
+          id: 'test',
+          git: {
+            repository: 'test',
+            username: 'username',
+            token: 'token',
+          },
+        },
+      );
+      expect(git.fetch).toBeCalled();
+      expect(GitEvent.FetchEvent.next).toBeCalled();
+    });
+    it('should not call git fetch without repository', async () => {
+      git.fetch = jest.fn();
+      await gitPrune(
+        {
+          id: 'test',
+        },
+      );
+      expect(git.fetch).not.toBeCalled();
+      expect(GitEvent.FetchEvent.next).toBeCalled();
     });
   });
 });

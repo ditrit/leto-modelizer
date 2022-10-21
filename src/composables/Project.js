@@ -356,3 +356,28 @@ export async function gitUpdate(project, branchName, fastForward) {
     corsProxy: 'https://cors.isomorphic-git.org',
   });
 }
+
+/**
+ * Fetch with prune option project on git. Emit a FetchEvent on success.
+ * @param {Project} project - Project to update.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function gitPrune(project) {
+  if (project.git && project.git.repository) {
+    await git.fetch({
+      fs,
+      http,
+      url: project.git.repository,
+      dir: `/${project.id}`,
+      prune: true,
+      pruneTags: true,
+      onAuth: () => ({
+        username: project.git.username,
+        password: project.git.token,
+      }),
+      corsProxy: 'https://cors.isomorphic-git.org',
+    });
+  }
+
+  return GitEvent.FetchEvent.next();
+}

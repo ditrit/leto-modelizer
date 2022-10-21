@@ -29,6 +29,18 @@
         <q-item-section>{{ $t('actions.git.newBranch') }}</q-item-section>
       </q-item>
 
+      <q-item clickable @click="onPrune">
+        <q-item-section avatar>
+          <q-icon
+            color="primary"
+            name="fa-solid fa-rotate"
+            data-cy="git-menu-prune"
+          />
+        </q-item-section>
+        <q-item-section>{{ $t('actions.git.prune') }}</q-item-section>
+      </q-item>
+      <q-linear-progress indeterminate v-if="pruneLoader"/>
+
       <template v-if="filteredBranches.local.length > 0">
         <git-branch-header-menu :title="$t('menu.git.localBranchesTitle')"/>
         <template v-for="(branch, index) in filteredBranches.local">
@@ -94,7 +106,12 @@ import {
   ref,
 } from 'vue';
 import { useRoute } from 'vue-router';
-import { getBranches, fetchGit, getProjectById } from 'src/composables/Project';
+import {
+  getBranches,
+  fetchGit,
+  getProjectById,
+  gitPrune,
+} from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
 import GitBranchExpandListMenu from 'components/menu/GitBranchExpandListMenu';
 import DialogEvent from 'src/composables/events/DialogEvent';
@@ -120,6 +137,7 @@ const searchedBranch = ref('');
 const showLocal = ref(false);
 const showRemote = ref(false);
 const searchInput = ref(null);
+const pruneLoader = ref(false);
 const hasNoBranches = computed(() => filteredBranches.value.local.length === 0
     && filteredBranches.value.remote.length === 0);
 let fetchSubscription;
@@ -204,6 +222,16 @@ function newBranch() {
     type: 'open',
     key: 'GitNewBranch',
     branch: props.currentBranchName,
+  });
+}
+
+/**
+ * Execute prune action.
+ */
+function onPrune() {
+  pruneLoader.value = true;
+  gitPrune(getProjectById(route.params.projectName)).finally(() => {
+    pruneLoader.value = false;
   });
 }
 
