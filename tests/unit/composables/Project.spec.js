@@ -66,6 +66,22 @@ jest.mock('browserfs', () => ({
     Buffer: {
       from: jest.fn(() => 'test'),
     },
+    stat: jest.fn((path, cb) => {
+      if (path === 'test' || path === 'test/parent') {
+        return cb(null, { isDirectory: () => true });
+      }
+      return cb(null, { isDirectory: () => false });
+    }),
+    readdir: jest.fn((path, cb) => {
+      const files = ['file.txt'];
+      if (path === 'test') {
+        files.push('parent');
+      } else if (path === 'test/parent') {
+        files.push('file.txt');
+      }
+      return cb(null, files);
+    }),
+    readFile: jest.fn((path, format, cb) => cb(null, 'test')),
   })),
 }));
 
@@ -232,7 +248,11 @@ describe('Test composable: Project', () => {
       }));
       const result = await getProjectFiles('test');
 
-      expect(result).toEqual([new FileInformation({ path: '/test/file.txt' })]);
+      expect(result).toEqual([
+        new FileInformation({ path: 'file.txt' }),
+        new FileInformation({ path: 'parent/file.txt' }),
+        new FileInformation({ path: 'parent/file.txt' }),
+      ]);
     });
   });
 
