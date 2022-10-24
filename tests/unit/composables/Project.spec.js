@@ -16,6 +16,8 @@ import {
   createBranchFrom,
   gitUpdate,
   PROJECT_STORAGE_KEY,
+  createProjectFolder,
+  writeProjectFile,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -82,6 +84,8 @@ jest.mock('browserfs', () => ({
       return cb(null, files);
     }),
     readFile: jest.fn((path, format, cb) => cb(null, 'test')),
+    mkdir: jest.fn((path, cb) => cb(path !== 'projectId/goodPath' ? 'error' : undefined)),
+    writeFile: jest.fn((path, content, cb) => cb(path !== 'projectId/goodPath' ? 'error' : undefined)),
   })),
 }));
 
@@ -189,6 +193,30 @@ describe('Test composable: Project', () => {
       const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
       expect(projects.bar).toStrictEqual({ id: 'bar' });
       expect(projects.foo).not.toBeDefined();
+    });
+  });
+
+  describe('Test function: createProjectFolder', () => {
+    it('should return undefined when dir is created', async () => {
+      const result = await createProjectFolder('projectId', 'goodPath');
+      expect(result).toBeUndefined();
+    });
+
+    it('should return an error when dir is not created', async () => {
+      const error = await createProjectFolder('projectId', 'badPath').catch((e) => e);
+      expect(error).toBeDefined();
+    });
+  });
+
+  describe('Test function: writeProjectFile', () => {
+    it('should succed and return undefined', async () => {
+      const result = await writeProjectFile('projectId', { path: 'goodPath', content: 'content' });
+      expect(result).toBeUndefined();
+    });
+
+    it('should fail and return error', async () => {
+      const error = await writeProjectFile('projectId', { path: 'badPath', content: 'content' }).catch((e) => e);
+      expect(error).toBeDefined();
     });
   });
 
