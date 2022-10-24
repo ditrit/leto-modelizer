@@ -268,6 +268,43 @@ export async function getBranches(projectId) {
 }
 
 /**
+ * Create a new directory.
+ * @param {String} projectId - Id of project.
+ * @param {String} path - Path of the folder to create.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function createProjectFolder(projectId, path) {
+  return new Promise((resolve, reject) => {
+    fs.mkdir(`${projectId}/${path}`, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+/**
+ * Write new content inside given file.
+ * Create the file if not existing.
+ * @param {String} projectId - Id of project.
+ * @param {FileInput} file - File input.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function writeProjectFile(projectId, file) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(`${projectId}/${file.path}`, file.content, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+/**
  * Update remote origin, fetch and checkout the default branch.
  * @param {Project} project - Project to update.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
