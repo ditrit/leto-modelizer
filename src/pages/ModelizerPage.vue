@@ -22,6 +22,8 @@
         <git-configuration-dialog :project-name="projectName"/>
         <git-new-branch-dialog :project-name="projectName"/>
         <git-update-dialog :project-name="projectName"/>
+        <create-file-dialog :project-name="projectName"/>
+        <delete-file-dialog :project-name="projectName"/>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -34,7 +36,6 @@ import {
   computed,
 } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-
 import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar';
 import ModelizerModelView from 'src/components/ModelizerModelView';
 import ModelizerTextView from 'src/components/ModelizerTextView';
@@ -42,6 +43,8 @@ import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import GitConfigurationDialog from 'components/dialog/GitConfigurationDialog';
 import GitNewBranchDialog from 'components/dialog/GitNewBranchDialog';
 import GitUpdateDialog from 'components/dialog/GitUpdateDialog';
+import CreateFileDialog from 'components/dialog/CreateFileDialog';
+import DeleteFileDialog from 'components/dialog/DeleteFileDialog';
 
 const route = useRoute();
 const router = useRouter();
