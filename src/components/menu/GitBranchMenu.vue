@@ -3,6 +3,7 @@
     class="git-branch-menu"
     data-cy="git-branch-menu"
     @show="onOpenMenu"
+    ref="menu"
   >
     <q-list style="min-width: 500px">
       <q-input
@@ -17,7 +18,16 @@
           <q-icon name="fa-solid fa-magnifying-glass" />
         </template>
       </q-input>
-
+      <q-item clickable @click="openGitStatusDialog">
+        <q-item-section avatar>
+          <q-icon
+            color="primary"
+            name="fa-solid fa-question"
+            data-cy="git-menu-status"
+          />
+        </q-item-section>
+        <q-item-section>{{ $t('actions.git.status') }}</q-item-section>
+      </q-item>
       <q-item clickable @click="newBranch">
         <q-item-section avatar>
           <q-icon
@@ -94,7 +104,11 @@ import {
   ref,
 } from 'vue';
 import { useRoute } from 'vue-router';
-import { getBranches, fetchGit, getProjectById } from 'src/composables/Project';
+import {
+  getBranches,
+  fetchGit,
+  getProjectById,
+} from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
 import GitBranchExpandListMenu from 'components/menu/GitBranchExpandListMenu';
 import DialogEvent from 'src/composables/events/DialogEvent';
@@ -116,6 +130,7 @@ const branches = ref({
   local: [],
   remote: [],
 });
+const menu = ref(null);
 const searchedBranch = ref('');
 const showLocal = ref(false);
 const showRemote = ref(false);
@@ -204,6 +219,17 @@ function newBranch() {
     type: 'open',
     key: 'GitNewBranch',
     branch: props.currentBranchName,
+  });
+}
+
+/**
+ * Send event to open the GitStatusDialog.
+ */
+function openGitStatusDialog() {
+  menu.value.hide();
+  DialogEvent.next({
+    type: 'open',
+    key: 'GitStatus',
   });
 }
 
