@@ -8,6 +8,7 @@ import {
 } from 'leto-modelizer-plugin-core';
 import GitEvent from 'src/composables/events/GitEvent';
 import Branch from 'src/models/git/Branch';
+import FileEvent from 'src/composables/events/FileEvent';
 
 const fs = BrowserFS.BFSRequire('fs');
 
@@ -134,7 +135,7 @@ async function isDirectory(path) {
       (e, rv) => resolve(rv),
     );
   });
-  return stat.isDirectory();
+  return stat ? stat.isDirectory() : false;
 }
 
 /**
@@ -162,6 +163,13 @@ async function setFiles(files, projectId, filename) {
   const isDir = await isDirectory(path);
   if (isDir) {
     const dirFiles = await readDir(path);
+
+    if (dirFiles.length === 0) {
+      // Make empty folder visible by the FileExplorer.
+      // TODO: Refacto when FileInformation have isFolder property.
+      files.push(new FileInformation({ path: `${filename}/__empty__` }));
+    }
+
     await Promise.allSettled(dirFiles.filter((file) => file !== '.git').map((file) => setFiles(
       files,
       projectId,
@@ -277,8 +285,12 @@ export async function createProjectFolder(projectId, path) {
   return new Promise((resolve, reject) => {
     fs.mkdir(`${projectId}/${path}`, (error) => {
       if (error) {
-        reject(error);
+        reject({ name: error.code, message: error.message });
       } else {
+        FileEvent.CreateFileEvent.next({
+          name: path,
+          isFolder: true,
+        });
         resolve();
       }
     });
@@ -294,13 +306,22 @@ export async function createProjectFolder(projectId, path) {
  */
 export async function writeProjectFile(projectId, file) {
   return new Promise((resolve, reject) => {
-    fs.writeFile(`${projectId}/${file.path}`, file.content, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
+    fs.writeFile(
+      `${projectId}/${file.path}`,
+      file.content,
+      'utf8',
+      (error) => {
+        if (error) {
+          reject({ name: error.code, message: error.message });
+        } else {
+          FileEvent.CreateFileEvent.next({
+            name: file.path.substring(file.path.lastIndexOf('/') + 1),
+            isFolder: false,
+          });
+          resolve();
+        }
+      },
+    );
   });
 }
 
@@ -392,4 +413,100 @@ export async function gitUpdate(project, branchName, fastForward) {
     },
     corsProxy: 'https://cors.isomorphic-git.org',
   });
+}
+
+/**
+ * Delete folder on fs.
+ * @param {String} path - Path of folder to delete.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function rmDir(path) {
+  return new Promise((resolve, reject) => {
+    fs.rmdir(
+      path,
+      (e) => (e ? reject(e) : resolve()),
+    );
+  });
+}
+
+/**
+ * Delete file or link on fs.
+ * @param {String} path - Path of file/link to delete.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function rm(path) {
+  return new Promise((resolve, reject) => {
+    fs.unlink(
+      path,
+      (e) => (e ? reject(e) : resolve()),
+    );
+  });
+}
+
+/**
+ * Delete project file or folder.
+ * @param {String} projectId - Id of project.
+ * @param {String} file - File path to delete.
+ * @param {Boolean} isFolder - Indicates if it is a folder.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function deleteProjectFile(projectId, file, isFolder) {
+  /* eslint-disable no-await-in-loop */
+  /* eslint-disable no-restricted-syntax */
+  // TODO: to remove when BrowserFs permit to force remove folder not empty.
+  const foldersToDelete = [];
+
+  if (isFolder) {
+    foldersToDelete.push(file);
+  }
+
+  const files = (await getProjectFiles(projectId))
+    .filter(({ path }) => {
+      if (isFolder) {
+        return path.indexOf(`${file}/`) === 0;
+      }
+      return path === file;
+    })
+    .map(({ path }) => {
+      if (path.indexOf('__empty__') > 0) {
+        return path.replace('/__empty__', '');
+      }
+      const folderPath = path.substring(0, path.lastIndexOf('/'));
+
+      if (isFolder && path.lastIndexOf('/') > 0 && !foldersToDelete.includes(folderPath)) {
+        const folders = folderPath.replace(`${file}/`, '').split(('/'));
+        while (folders.length > 0) {
+          const folder = `${file}/${folders.join('/')}`;
+
+          if (!foldersToDelete.includes(folder)) {
+            foldersToDelete.push(folder);
+          }
+          folders.pop();
+        }
+      }
+      return path;
+    });
+
+  foldersToDelete
+    .filter((folder) => !files.includes(folder))
+    .forEach((folder) => {
+      files.push(folder);
+    });
+
+  const filesToDelete = files
+    .map((array) => array.split('/'))
+    .sort((a, b) => (a.length < b.length ? 1 : -1));
+
+  for (const fileToDelete of filesToDelete) {
+    const absolutePath = `${projectId}/${fileToDelete.join('/')}`;
+    const isDir = await isDirectory(absolutePath);
+
+    if (isDir) {
+      await rmDir(absolutePath);
+    } else {
+      await rm(absolutePath);
+    }
+  }
+
+  return FileEvent.DeleteFileEvent.next();
 }
