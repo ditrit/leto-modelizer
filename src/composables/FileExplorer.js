@@ -1,12 +1,10 @@
-import { getProjectName } from 'src/composables/Project';
-
 /**
  * Create and add a new folder.
  * @param {String} id - Absolute path of folder.
- * @param {Array} folder - Folder that will receive an empty folder Object
+ * @param {Array} folder - Folder that will receive an new empty folder.
  * @param {String} name - Name of the new folder.
  */
-function createFolder(id, folder, name) {
+export function createFolder(id, folder, name) {
   folder.push({
     id,
     icon: 'fa-solid fa-folder',
@@ -19,15 +17,20 @@ function createFolder(id, folder, name) {
 /**
  * Create and add a new file.
  * @param {String} id - Absolute path of file.
- * @param {Array} folder - Folder that will receive an empty file Object
- * @param {String} name - Name of the new folder.
+ * @param {Array} folder - Folder that will receive a new empty file.
+ * @param {String} name - Name of the new file.
+ * @param {Boolean} [isNewLocalFile=true] - True when the file is locally created otherwise false.
  */
-function createFile(id, folder, name) {
+export function createFile(id, folder, name, isNewLocalFile = true) {
+  if (name === '__empty__') {
+    return;
+  }
   folder.push({
     id,
     icon: 'fa-regular fa-file',
     label: name,
     isFolder: false,
+    isNewLocalFile,
   });
 }
 
@@ -54,7 +57,7 @@ function getTreeFolderChildrenFromPath(folders, paths) {
  * @returns {Array} - Sorted Tree
  */
 function sortElementsInFolder(elements) {
-  elements.sort((x, y) => {
+  return elements.sort((x, y) => {
     if (x.isFolder && !y.isFolder) {
       return -1;
     }
@@ -70,7 +73,7 @@ function sortElementsInFolder(elements) {
  * @param {Array} elements - Tree folders
  * @returns {Array} - Sorted Tree
  */
-function sortTreeElements(elements) {
+export function sortTreeElements(elements) {
   sortElementsInFolder(elements);
   elements.filter((element) => element.children && element.children.length > 0)
     .forEach((element) => sortTreeElements(element.children));
@@ -86,7 +89,6 @@ function sortTreeElements(elements) {
  * @see https://quasar.dev/vue-components/tree
  */
 export function getTree(projectId, fileInformationArray) {
-  const projectName = getProjectName(projectId);
   const tree = [];
   fileInformationArray.forEach((fileInformation) => {
     const splittedPath = fileInformation.path.split('/').filter(Boolean);
@@ -96,11 +98,11 @@ export function getTree(projectId, fileInformationArray) {
       if (!parentFolderChildren.length
         || parentFolderChildren.every((child) => child.label !== pathName)) {
         if (index === splittedPath.length - 1) {
-          createFile(fileInformation.path, parentFolderChildren, pathName);
+          createFile(fileInformation.path, parentFolderChildren, pathName, false);
         } else {
           createFolder(
             fileInformation.path
-              .substr(0, fileInformation.path.indexOf(pathName) + pathName.length),
+              .substring(0, fileInformation.path.indexOf(pathName) + pathName.length),
             parentFolderChildren,
             pathName,
           );
@@ -111,10 +113,11 @@ export function getTree(projectId, fileInformationArray) {
 
   return [
     {
-      id: projectName,
+      id: projectId,
       icon: 'fa-solid fa-folder',
-      label: projectName,
+      label: projectId,
       isFolder: true,
+      isRootFolder: true,
       children: sortTreeElements(tree),
     },
   ];

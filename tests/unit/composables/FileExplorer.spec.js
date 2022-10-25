@@ -11,12 +11,14 @@ describe('Test composable: FileExplorer', () => {
           icon: 'fa-solid fa-folder',
           label: 'my-project',
           isFolder: true,
+          isRootFolder: true,
           children: [
             {
               id: '/file.tf',
               label: 'file.tf',
               icon: 'fa-regular fa-file',
               isFolder: false,
+              isNewLocalFile: false,
             },
           ],
         }];
@@ -33,18 +35,21 @@ describe('Test composable: FileExplorer', () => {
           icon: 'fa-solid fa-folder',
           label: 'my-project',
           isFolder: true,
+          isRootFolder: true,
           children: [
             {
               id: '/file1.tf',
               label: 'file1.tf',
               icon: 'fa-regular fa-file',
               isFolder: false,
+              isNewLocalFile: false,
             },
             {
               id: '/file2.tf',
               label: 'file2.tf',
               icon: 'fa-regular fa-file',
               isFolder: false,
+              isNewLocalFile: false,
             },
           ],
         }];
@@ -61,6 +66,7 @@ describe('Test composable: FileExplorer', () => {
           icon: 'fa-solid fa-folder',
           label: 'my-project',
           isFolder: true,
+          isRootFolder: true,
           children: [
             {
               id: '/home',
@@ -73,6 +79,7 @@ describe('Test composable: FileExplorer', () => {
                   label: 'file.tf',
                   icon: 'fa-regular fa-file',
                   isFolder: false,
+                  isNewLocalFile: false,
                 },
               ],
             },
@@ -91,6 +98,7 @@ describe('Test composable: FileExplorer', () => {
           icon: 'fa-solid fa-folder',
           label: 'my-project',
           isFolder: true,
+          isRootFolder: true,
           children: [
             {
               id: '/home',
@@ -103,12 +111,14 @@ describe('Test composable: FileExplorer', () => {
                   label: 'file1.tf',
                   icon: 'fa-regular fa-file',
                   isFolder: false,
+                  isNewLocalFile: false,
                 },
                 {
                   id: '/home/file2.tf',
                   label: 'file2.tf',
                   icon: 'fa-regular fa-file',
                   isFolder: false,
+                  isNewLocalFile: false,
                 },
               ],
             },
@@ -131,6 +141,7 @@ describe('Test composable: FileExplorer', () => {
           icon: 'fa-solid fa-folder',
           label: 'my-project',
           isFolder: true,
+          isRootFolder: true,
           children: [
             {
               id: '/home',
@@ -155,6 +166,7 @@ describe('Test composable: FileExplorer', () => {
                           label: 'file1.tf',
                           icon: 'fa-regular fa-file',
                           isFolder: false,
+                          isNewLocalFile: false,
                         },
                       ],
                     },
@@ -163,6 +175,7 @@ describe('Test composable: FileExplorer', () => {
                       label: 'file2.tf',
                       icon: 'fa-regular fa-file',
                       isFolder: false,
+                      isNewLocalFile: false,
                     },
                   ],
                 },
@@ -185,6 +198,7 @@ describe('Test composable: FileExplorer', () => {
                       label: 'file3.tf',
                       icon: 'fa-regular fa-file',
                       isFolder: false,
+                      isNewLocalFile: false,
                     },
                   ],
                 },
@@ -202,6 +216,7 @@ describe('Test composable: FileExplorer', () => {
         icon: 'fa-solid fa-folder',
         label: 'my-project',
         isFolder: true,
+        isRootFolder: true,
         children: [],
       }]);
     });
