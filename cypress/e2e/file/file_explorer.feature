@@ -26,8 +26,7 @@ Feature: Test file explorer and file tabs
     And  I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
     And  I click on body to close popup
     Then I expect "[data-cy=\"file-explorer\"]" exists
-    And  I expect "[data-cy=\"file-explorer-leto-modelizer-project-test\"]" exists
-    And  I click on "[data-cy=\"file-explorer-leto-modelizer-project-test\"]"
+    And  I click on "[data-cy=\"file-explorer\"]"
 
   Scenario: Double click on a file should open a tab
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
