@@ -1,30 +1,41 @@
 <template>
   <q-tree
+    ref="fileExplorerRef"
     :nodes="nodes"
-    node-key="label"
+    node-key="id"
     :no-nodes-label="$t('actions.fileExplorer.empty')"
     dense
     icon="fa-solid fa-chevron-right"
+    no-transition
+    no-selection-unset
+    class="file-explorer"
     data-cy="file-explorer"
   >
     <template #default-header="{expanded, node}">
       <div
         :class="['tree-node-container tree-node items-center',
-          {'selected-node' : selectedFile.id === node.id && !node.isFolder}]"
+          {'text-bold' : selectedFile.id === node.id && !node.isFolder}]"
         @dblclick="onNodeClicked(node)"
         :data-cy="`file-explorer-${node.label}`"
       >
-        <q-icon
-          class="q-mx-sm"
-          color="primary"
-          size="xs"
-          :name="`${node.icon}${expanded ? '-open' : ''}`"
-        />
-        <span
-          :class="['tree-node', { 'text-bold' : selectedFile.id === node.id}]"
-        >
-          {{node.label}}
-        </span>
+        <div>
+          <q-icon
+            class="q-mx-sm"
+            color="primary"
+            size="xs"
+            :name="`${node.icon}${expanded ? '-open' : ''}`"
+          />
+          <span class="tree-node">
+            {{node.label}}
+          </span>
+        </div>
+        <span class="col-grow"></span>
+        <div class="row no-wrap">
+          <file-explorer-action-card
+            class="file-explorer-buttons"
+            :file="node"
+          />
+        </div>
       </div>
     </template>
   </q-tree>
@@ -34,6 +45,7 @@
 import FileEvent from 'src/composables/events/FileEvent';
 import { ref, onMounted, onUnmounted } from 'vue';
 import { readProjectFile } from 'src/composables/Project';
+import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
 
 const props = defineProps({
   nodes: {
@@ -46,40 +58,60 @@ const props = defineProps({
   },
 });
 
+const fileExplorerRef = ref(null);
 const selectedFile = ref({ isSelected: false, id: '' });
-let fileEventSubscription;
+
+let selectFileSubscription;
+let expandNodeSubscription;
+
+/**
+ * Expand a node by its id.
+ * @param {String} nodeIdToExpand - Id of the node to expand.
+ */
+function setExpandedNode(nodeIdToExpand) {
+  fileExplorerRef.value.setExpanded(nodeIdToExpand, true);
+}
 
 /**
  * Set selectedFile equal to file param.
+ * @param {Object} file - Tree file object.
  */
 function setSelectedFile(file) {
   selectedFile.value = file;
 }
 
 /**
- * If node clicked from Tree is a file, set it as selectedFile value,
+ * If node clicked is a file, set it as selectedFile value,
  * read file to get its content and pass it to OpenFileEvent.
- *
- * @param {Object} node - Tree node
+ * @param {Object} node - Tree node.
  * Example { icon: "fa-regular fa-file", id: "terraform/app.tf", isFolder: false, label: "app.tf" }
  */
 function onNodeClicked(node) {
-  if (node.isFolder) return;
+  if (node.isFolder) {
+    return;
+  }
+
   setSelectedFile({ isSelected: true, id: node.id });
-  readProjectFile(props.projectName, { path: node.id })
-    .then(({ content }) => {
-      FileEvent.OpenFileEvent.next({ id: node.id, label: node.label, content });
-    });
+
+  if (node.isNewLocalFile) {
+    FileEvent.OpenFileEvent.next({ id: node.id, label: node.label, content: '' });
+  } else {
+    readProjectFile(props.projectName, { path: node.id })
+      .then(({ content }) => {
+        FileEvent.OpenFileEvent.next({ id: node.id, label: node.label, content });
+      });
+  }
 }
 
 onMounted(() => {
-  fileEventSubscription = FileEvent.SelectFileEvent.subscribe(setSelectedFile);
+  selectFileSubscription = FileEvent.SelectFileEvent.subscribe(setSelectedFile);
+  expandNodeSubscription = FileEvent.ExpandFolderEvent.subscribe(setExpandedNode);
 });
 
 onUnmounted(() => {
-  fileEventSubscription.unsubscribe();
+  selectFileSubscription.unsubscribe();
+  expandNodeSubscription.unsubscribe();
 });
-
 </script>
 
 <style lang="scss" scoped>
@@ -96,10 +128,29 @@ onUnmounted(() => {
 }
 .tree-node-container {
   width: 100%;
-  display: inline-flex
+  display: inline-flex;
+  padding: 1px 0px;
+
+  &:hover {
+    background: rgba($primary, 0.1);
+    border-radius: 4px;
+
+    .file-explorer-buttons {
+      display: inline-block
+    }
+  }
 }
-.selected-node {
-  background: rgba($primary, 0.2);
-  border-radius: 4px
+.file-explorer-buttons {
+  display: none
+}
+</style>
+
+<style lang="scss">
+/*
+ * Target tree to override quasar `.q-focus-helper` default background style.
+ * This style is not applied if used within scoped style
+ */
+.file-explorer .q-focus-helper {
+  background: transparent !important;
 }
 </style>

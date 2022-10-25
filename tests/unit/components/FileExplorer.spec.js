@@ -18,25 +18,36 @@ jest.mock('src/composables/events/FileEvent', () => ({
   SelectFileEvent: {
     subscribe: jest.fn(),
   },
+  ExpandFolderEvent: {
+    subscribe: jest.fn(),
+  },
 }));
 
 describe('Test component: FileExplorer', () => {
   let wrapper;
-  let subscribe;
-  let unsubscribe;
+  let selectFileSubscribe;
+  let selectFileUnsubscribe;
+  let expandNodeSubscribe;
+  let expandNodeUnsubscribe;
 
   const emit = jest.fn();
 
   FileEvent.OpenFileEvent.next.mockImplementation(() => emit());
 
   FileEvent.SelectFileEvent.subscribe.mockImplementation(() => {
-    subscribe();
-    return { unsubscribe };
+    selectFileSubscribe();
+    return { unsubscribe: selectFileUnsubscribe };
+  });
+  FileEvent.ExpandFolderEvent.subscribe.mockImplementation(() => {
+    expandNodeSubscribe();
+    return { unsubscribe: expandNodeUnsubscribe };
   });
 
   beforeEach(() => {
-    subscribe = jest.fn();
-    unsubscribe = jest.fn();
+    selectFileSubscribe = jest.fn();
+    selectFileUnsubscribe = jest.fn();
+    expandNodeSubscribe = jest.fn();
+    expandNodeUnsubscribe = jest.fn();
 
     wrapper = shallowMount(FileExplorer, {
       global: {
@@ -118,17 +129,37 @@ describe('Test component: FileExplorer', () => {
     });
   });
 
+  describe('Test function: setExpandedNode', () => {
+    it('should call setExpanded', () => {
+      wrapper.vm.fileExplorerRef = {
+        setExpanded: jest.fn(),
+      };
+      wrapper.vm.setExpandedNode();
+      expect(wrapper.vm.fileExplorerRef.setExpanded).toBeCalled();
+    });
+  });
+
   describe('Test hook function: onMounted', () => {
     it('should subscribe to SelectFileEvent', () => {
-      expect(subscribe).toHaveBeenCalledTimes(1);
+      expect(selectFileSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to ExpandFolderEvent', () => {
+      expect(expandNodeSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
     it('should unsubscribe to SelectFileEvent', () => {
-      expect(unsubscribe).toHaveBeenCalledTimes(0);
+      expect(selectFileUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
-      expect(unsubscribe).toHaveBeenCalledTimes(1);
+      expect(selectFileUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to ExpandFolderEvent', () => {
+      expect(expandNodeUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(expandNodeUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });
