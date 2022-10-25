@@ -23,6 +23,7 @@ export default {
       },
       checkout: 'Checkout',
       newBranch: 'New branch',
+      status: 'Status',
       newBranchFrom: 'New branch from "{branch}"...',
       branch: {
         create: 'Branch is created &#129395;!',
@@ -121,6 +122,13 @@ export default {
           title: 'Update',
           description: 'Do you want to update your branch <b>{branch}</b> ?',
           fastForward: 'Fast forward option (<code>git pull --ff</code>)',
+        },
+        status: {
+          title: 'Git status',
+          nothing: 'Nothing to validate, the working copy is clean!',
+          staged: 'Staged files:',
+          unstaged: 'Unstaged files:',
+          untracked: 'Untracked files:',
         },
       },
       fileExplorer: {
