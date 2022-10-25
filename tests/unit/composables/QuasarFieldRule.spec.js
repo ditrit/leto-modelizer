@@ -2,6 +2,8 @@ import {
   notEmpty,
   isGitRepositoryUrl,
   isUniqueBranchName,
+  isValidFileLabel,
+  isUniqueFileLabel,
 } from 'src/composables/QuasarFieldRule';
 
 describe('Test composable: InputRule', () => {
@@ -49,6 +51,34 @@ describe('Test composable: InputRule', () => {
     it('should return string error message with duplicated branch', () => {
       const key = 'errors.git.branch.duplicate';
       expect(isUniqueBranchName(t, [{ name: 'test' }], 'test')).toEqual(key);
+    });
+  });
+
+  describe('Test function: isValidFileLabel', () => {
+    it('should return true on valid tree node label', () => {
+      expect(isValidFileLabel(t, 'folderName')).toBe(true);
+      expect(isValidFileLabel(t, 'app.tf')).toBe(true);
+      expect(isValidFileLabel(t, 'my-file.tf')).toBe(true);
+    });
+
+    it('should return string error message on invalid tree node label', () => {
+      const key = 'errors.invalid.fileExplorer.label';
+      expect(isValidFileLabel(t, '/folderName')).toEqual(key);
+      expect(isValidFileLabel(t, 'app/file.tf')).toEqual(key);
+      expect(isValidFileLabel(t, 'folder/app.tf')).toEqual(key);
+    });
+  });
+
+  describe('Test function: isUniqueFileLabel', () => {
+    it('should return true without duplicated node label', () => {
+      expect(isUniqueFileLabel(t, [], 'fileName')).toBe(true);
+      expect(isUniqueFileLabel(t, [{ label: 'app.tf' }], 'fileName')).toBe(true);
+      expect(isUniqueFileLabel(t, [{ label: 'folderA' }], 'folderB')).toBe(true);
+    });
+
+    it('should return string error message with duplicated node label', () => {
+      const key = 'errors.fileExplorer.label.duplicate';
+      expect(isUniqueFileLabel(t, [{ label: 'test' }], 'test')).toEqual(key);
     });
   });
 });

@@ -6,6 +6,7 @@ export default {
     default: {
       goToHome: 'Go to homepage',
       save: 'Save',
+      delete: 'Delete',
       show: {
         more: 'Show {number} more...',
         less: 'Show less',
@@ -31,6 +32,16 @@ export default {
     },
     fileExplorer: {
       empty: 'No files available in project.',
+      newFile: 'New file',
+      newFolder: 'New folder',
+      file: {
+        create: 'File is created &#129395;!',
+        delete: 'File is deleted.',
+      },
+      folder: {
+        create: 'Folder is created &#129395;!',
+        delete: 'Folder is deleted.',
+      },
     },
   },
   errors: {
@@ -38,6 +49,9 @@ export default {
     invalid: {
       gitProvider: {
         repository: 'Invalid repository url',
+      },
+      fileExplorer: {
+        label: 'The name must not contain any \'/ \' characters',
       },
     },
     git: {
@@ -47,6 +61,24 @@ export default {
       },
       cannotLockRef: 'Fatal: cannot lock reference.',
       MergeNotSupportedError: 'The remote history has been force rewritten, we haven\'t implemented yet the rebase option(<code>git pull -r</code>).<br/>Please delete and checkout once again your branch.',
+    },
+    fileExplorer: {
+      folder: {
+        delete: 'You must confirm the deletion of the file and its content.',
+      },
+      label: {
+        duplicate: 'This name already exists.',
+      },
+      default: {
+        folder: {
+          create: 'An error occured while creating folder.',
+          delete: 'An error occured while deleting folder.',
+        },
+        file: {
+          create: 'An error occured while creating file.',
+          delete: 'An error occured while deleting file.',
+        },
+      },
     },
   },
   projects: {
@@ -89,6 +121,29 @@ export default {
           title: 'Update',
           description: 'Do you want to update your branch <b>{branch}</b> ?',
           fastForward: 'Fast forward option (<code>git pull --ff</code>)',
+        },
+      },
+      fileExplorer: {
+        create: {
+          file: {
+            title: 'Create a new file',
+            input: 'New file name',
+          },
+          folder: {
+            title: 'Create a new folder',
+            input: 'New folder name',
+          },
+        },
+        delete: {
+          file: {
+            title: 'Delete file',
+            description: 'Are you sure you want to delete <b>{name}</b> file ?',
+          },
+          folder: {
+            title: 'Delete folder',
+            description: 'Are you sure you want to delete <b>{name}</b> folder ?',
+            confirmDelete: 'Confirm deletion of folder and all its content',
+          },
         },
       },
     },

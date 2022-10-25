@@ -15,4 +15,32 @@ describe('Test composable: FileEvent', () => {
       expect(FileEvent.SelectFileEvent).toEqual(new Subject());
     });
   });
+
+  describe('Test event: SelectNodeEvent', () => {
+    it('should export a Subject', () => {
+      expect(FileEvent.SelectNodeEvent).toBeDefined();
+      expect(FileEvent.SelectNodeEvent).toEqual(new Subject());
+    });
+  });
+
+  describe('Test event: CreateFileEvent', () => {
+    it('should export a Subject', () => {
+      expect(FileEvent.CreateFileEvent).toBeDefined();
+      expect(FileEvent.CreateFileEvent).toEqual(new Subject());
+    });
+  });
+
+  describe('Test event: DeleteFileEvent', () => {
+    it('should export a Subject', () => {
+      expect(FileEvent.DeleteFileEvent).toBeDefined();
+      expect(FileEvent.DeleteFileEvent).toEqual(new Subject());
+    });
+  });
+
+  describe('Test event: ExpandFolderEvent', () => {
+    it('should export a Subject', () => {
+      expect(FileEvent.ExpandFolderEvent).toBeDefined();
+      expect(FileEvent.ExpandFolderEvent).toEqual(new Subject());
+    });
+  });
 });

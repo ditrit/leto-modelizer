@@ -3,7 +3,7 @@
     class="modelizer-text-view row"
     data-cy="modelizer-text-view"
   >
-    <div class="col-2 bg-grey-2 file-explorer-container">
+    <div class="col-md-2 bg-grey-2 file-explorer-container">
       <git-branch-card/>
       <file-explorer
         class="q-pa-md overflow-auto"
@@ -15,9 +15,9 @@
     <q-separator vertical />
 
     <file-tabs
-      :files="files"
-      v-model="activeFile"
-      @update:close-file="closeFile"
+      :files="fileTabArray"
+      v-model="activeFileTab"
+      @update:close-file="deleteFileTab"
     >
       <template v-slot="{ file }">
         <monaco-editor
@@ -56,98 +56,147 @@ const props = defineProps({
   },
 });
 
-const files = ref([]);
-const activeFile = ref({ isSelected: false, id: '' });
+const fileTabArray = ref([]);
+const activeFileTab = ref({ isSelected: false, id: '' });
 const nodes = ref([]);
+const selectedNode = ref({});
 
-let fileEventSubscription;
+let openFileSubscription;
+let selectNodeSubscription;
+let createFileSubscription;
+let deleteFileSubscription;
 let updateRemoteSubscription;
 let checkoutSubscription;
 
 /**
- * Update files array when a new file is open.
- *
+ * Update fileTabArray array when a new file is open.
  * @param {Object} file
  * Example: { id: 'terraform/app.tf', label: 'app.tf', content: 'Hello World' }
  */
 function onOpenFileEvent(file) {
-  activeFile.value = { isSelected: true, id: file.id };
-  const existingFile = files.value.find(({ id }) => id === file.id);
-  if (!existingFile) {
-    files.value.push(file);
+  activeFileTab.value = { isSelected: true, id: file.id };
+
+  if (!fileTabArray.value.some(({ id }) => id === file.id)) {
+    fileTabArray.value.push(file);
   }
 }
 
 /**
- * Update active file by setting its id equal to the last element of files,
- * otherwise null if files is empty.
+ * Update active file tab by setting its id equal to the last element of fileTabArray,
+ * otherwise null if fileTabArray is empty.
  */
-function updateActiveFileId() {
-  if (files.value.length) {
-    activeFile.value = { isSelected: true, id: files.value[files.value.length - 1].id };
-    FileEvent.SelectFileEvent.next(activeFile.value);
+function setLastFileActive() {
+  if (fileTabArray.value.length) {
+    activeFileTab.value = {
+      isSelected: true,
+      id: fileTabArray.value[fileTabArray.value.length - 1].id,
+    };
   } else {
-    activeFile.value = { isSelected: false, id: '' };
-    FileEvent.SelectFileEvent.next(activeFile.value);
+    activeFileTab.value = { isSelected: false, id: '' };
   }
+
+  FileEvent.SelectFileEvent.next(activeFileTab.value);
 }
 
 /**
- * Close file by removing it from files array using its id.
- * If the closed file was the current active file, update activeFile.
- *
- * @param {string} fileId - id of closed file
+ * Close file by removing it from fileTabArray array using its id.
+ * If the closed file was the current active file tab, update activeFileTab.
+ * @param {String} fileId - Id of closed file.
  */
-function closeFile(fileId) {
-  const index = files.value.findIndex((file) => file.id === fileId);
-  if (index !== -1) {
-    files.value.splice(index, 1);
-  }
-  if (fileId === activeFile.value.id) {
-    updateActiveFileId();
+function deleteFileTab(fileId) {
+  fileTabArray.value = fileTabArray.value.filter(({ id }) => id !== fileId);
+
+  if (fileId === activeFileTab.value.id) {
+    setLastFileActive();
   }
 }
 
 /**
- * Update project nodes and files.
- * If the previous active file's id is not contained in files, update activeFile.
+ * Update project nodes and fileTabArray.
+ * If the previous active file's id is not contained in fileTabArray, update activeFileTab.
  */
 function updateProjectFiles() {
-  getProjectFiles(props.projectName)
+  return getProjectFiles(props.projectName)
     .then((fileInformations) => {
-      nodes.value = getTree(props.projectName, fileInformations);
       const projectFilesIds = fileInformations.map((file) => file.path);
-      files.value = files.value.filter(({ id }) => projectFilesIds.includes(id));
-      files.value.forEach((file) => {
+      nodes.value = getTree(props.projectName, fileInformations);
+      fileTabArray.value = fileTabArray.value.filter(({ id }) => projectFilesIds.includes(id));
+
+      fileTabArray.value.forEach((file) => {
         readProjectFile(props.projectName, { path: file.id })
           .then(({ content }) => {
             file.content = content;
           });
       });
-      const isActiveFileInFiles = files.value.find(({ id }) => id === activeFile.value.id);
+
+      const isActiveFileInFiles = fileTabArray.value
+        .find(({ id }) => id === activeFileTab.value.id);
+
       if (!isActiveFileInFiles) {
-        updateActiveFileId();
+        setLastFileActive();
       }
     });
 }
 
-watch(activeFile, () => {
-  FileEvent.SelectFileEvent.next(activeFile.value);
+/**
+ * Set selectedNode to the node param.
+ * @param {Object} node - Node tree Object.
+ */
+function updateSelectedNode(node) {
+  selectedNode.value = node;
+}
+
+/**
+ * Create and add a new file tree, update value of activeFileTab,
+ * send ExpandFolder and OpenFile events.
+ * @param {String} fileName - Name of the file to create.
+ */
+function onCreateFileEvent({ name, isFolder }) {
+  return updateProjectFiles().then(() => {
+    if (!isFolder) {
+      const parentNode = selectedNode.value.id === props.projectName ? '' : `${selectedNode.value.id}/`;
+      const newFileId = `${parentNode}${name}`;
+      activeFileTab.value = { isSelected: false, id: newFileId };
+
+      FileEvent.OpenFileEvent.next({
+        id: newFileId,
+        label: name.substring(name.lastIndexOf('/') + 1),
+        content: ' ',
+      });
+    }
+
+    let folder = `${selectedNode.value.id}/${name}`;
+
+    if (folder.indexOf('/') > 0) {
+      folder = folder.substring(0, folder.lastIndexOf('/'));
+    }
+
+    FileEvent.ExpandFolderEvent.next(folder);
+  });
+}
+
+watch(activeFileTab, () => {
+  FileEvent.SelectFileEvent.next(activeFileTab.value);
 });
 
 onMounted(() => {
   updateProjectFiles();
-  fileEventSubscription = FileEvent.OpenFileEvent.subscribe(onOpenFileEvent);
+  openFileSubscription = FileEvent.OpenFileEvent.subscribe(onOpenFileEvent);
+  selectNodeSubscription = FileEvent.SelectNodeEvent.subscribe(updateSelectedNode);
+  createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFileEvent);
+  deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(updateProjectFiles);
   updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(updateProjectFiles);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
 });
 
 onUnmounted(() => {
-  fileEventSubscription.unsubscribe();
+  openFileSubscription.unsubscribe();
+  selectNodeSubscription.unsubscribe();
+  createFileSubscription.unsubscribe();
+  deleteFileSubscription.unsubscribe();
   updateRemoteSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
 });
-
 </script>
 
 <style lang="scss" scoped>

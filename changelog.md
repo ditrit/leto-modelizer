@@ -35,5 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add root folder in file explorer with project name as label
 - Update PluginEvent for action menu
 - Add fs writeProjectFile & createProjectFolder in Project composable
+- Add create and delete file or folder action
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased

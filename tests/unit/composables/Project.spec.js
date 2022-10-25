@@ -15,9 +15,11 @@ import {
   checkout,
   createBranchFrom,
   gitUpdate,
-  PROJECT_STORAGE_KEY,
   createProjectFolder,
   writeProjectFile,
+  rmDir,
+  rm,
+  PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -85,7 +87,19 @@ jest.mock('browserfs', () => ({
     }),
     readFile: jest.fn((path, format, cb) => cb(null, 'test')),
     mkdir: jest.fn((path, cb) => cb(path !== 'projectId/goodPath' ? 'error' : undefined)),
-    writeFile: jest.fn((path, content, cb) => cb(path !== 'projectId/goodPath' ? 'error' : undefined)),
+    writeFile: jest.fn((path, content, _, cb) => cb(path !== 'projectId/goodPath' ? 'error' : undefined)),
+    rmdir: jest.fn((path, cb) => {
+      if (path === 'error') {
+        return cb(true);
+      }
+      return cb(false);
+    }),
+    unlink: jest.fn((path, cb) => {
+      if (path === 'error') {
+        return cb(true);
+      }
+      return cb(false);
+    }),
   })),
 }));
 
@@ -360,6 +374,26 @@ describe('Test composable: Project', () => {
         true,
       );
       expect(result).toEqual('pull');
+    });
+  });
+
+  describe('Test function: rmDir', () => {
+    it('should be a success on good path', async () => {
+      expect(await rmDir('ok')).toBeUndefined();
+    });
+
+    it('should be an error on bad path', async () => {
+      expect(await rmDir('error').catch((e) => e)).toBeDefined();
+    });
+  });
+
+  describe('Test function: rm', () => {
+    it('should be a success on good path', async () => {
+      expect(await rm('ok')).toBeUndefined();
+    });
+
+    it('should be an error on bad path', async () => {
+      expect(await rm('error').catch((e) => e)).toBeDefined();
     });
   });
 });
