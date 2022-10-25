@@ -19,12 +19,14 @@ import {
   writeProjectFile,
   rmDir,
   rm,
+  getStatus,
   PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
 import git from 'isomorphic-git';
 import GitEvent from 'src/composables/events/GitEvent';
+import FileStatus from 'src/models/git/FileStatus';
 
 jest.mock('isomorphic-git', () => ({
   init: jest.fn(() => Promise.resolve('init')),
@@ -49,6 +51,7 @@ jest.mock('isomorphic-git', () => ({
     onAuth();
     return Promise.resolve('pull');
   }),
+  statusMatrix: jest.fn(() => Promise.resolve([['test', 0, 1, 2]])),
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
@@ -394,6 +397,17 @@ describe('Test composable: Project', () => {
 
     it('should be an error on bad path', async () => {
       expect(await rm('error').catch((e) => e)).toBeDefined();
+    });
+  });
+
+  describe('Test function: getStatus', () => {
+    it('should be a success and return an array with one valid FileStatus', async () => {
+      expect(await getStatus()).toEqual([new FileStatus({
+        path: 'test',
+        headStatus: 0,
+        workdirStatus: 1,
+        stageStatus: 2,
+      })]);
     });
   });
 });
