@@ -3,6 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import { createI18n } from 'vue-i18n';
 import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar.vue';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 installQuasarPlugin();
 
@@ -10,11 +11,24 @@ jest.mock('src/composables/events/ViewSwitchEvent', () => ({
   next: jest.fn(),
 }));
 
+jest.mock('src/composables/events/PluginEvent', () => ({
+  RenderEvent: {
+    next: jest.fn(),
+  },
+  ParseEvent: {
+    next: jest.fn(),
+  },
+}));
+
 describe('Test component: ModelizerNavigationBar', () => {
   let wrapper;
   const emit = jest.fn();
+  const renderEvent = jest.fn();
+  const parseEvent = jest.fn();
 
   ViewSwitchEvent.next.mockImplementation(() => emit());
+  PluginEvent.RenderEvent.next.mockImplementation(renderEvent);
+  PluginEvent.ParseEvent.next.mockImplementation(parseEvent);
 
   beforeEach(() => {
     wrapper = shallowMount(ModelizerNavigationBar, {
@@ -73,16 +87,32 @@ describe('Test component: ModelizerNavigationBar', () => {
   });
 
   describe('Test functions: onViewSwitchUpdate', () => {
-    it('should not emit when newViewType is equal to props.viewType', () => {
+    it('should not emit ViewSwitch event when newViewType is equal to props.viewType', () => {
       expect(emit).not.toHaveBeenCalled();
       wrapper.vm.onViewSwitchUpdate('model');
       expect(emit).not.toHaveBeenCalled();
     });
 
-    it('should emit when newViewType is not equal to props.viewType', () => {
+    it('should emit ViewSwitch and RenderEvent events'
+      + 'when newViewType is not equal to props.viewType and is "text"', () => {
       expect(emit).not.toHaveBeenCalled();
+      expect(renderEvent).not.toHaveBeenCalled();
       wrapper.vm.onViewSwitchUpdate('text');
       expect(emit).toHaveBeenCalledTimes(1);
+      expect(renderEvent).toHaveBeenCalledTimes(1);
+    });
+
+    it('should emit ViewSwitch and ParseEvent events'
+      + 'when newViewType is not equal to props.viewType and is "model"', async () => {
+      await wrapper.setProps({
+        viewType: 'text',
+        projectName: 'projectTest',
+      });
+      expect(emit).toHaveBeenCalledTimes(1);
+      expect(parseEvent).not.toHaveBeenCalled();
+      wrapper.vm.onViewSwitchUpdate('model');
+      expect(emit).toHaveBeenCalledTimes(2);
+      expect(parseEvent).toHaveBeenCalledTimes(1);
     });
   });
 
