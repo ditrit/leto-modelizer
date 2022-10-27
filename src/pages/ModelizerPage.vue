@@ -26,6 +26,7 @@
         <git-update-dialog :project-name="projectName"/>
         <create-file-dialog :project-name="projectName"/>
         <delete-file-dialog :project-name="projectName"/>
+        <git-status-dialog :project-name="projectName"/>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -47,6 +48,7 @@ import GitNewBranchDialog from 'components/dialog/GitNewBranchDialog';
 import GitUpdateDialog from 'components/dialog/GitUpdateDialog';
 import CreateFileDialog from 'components/dialog/CreateFileDialog';
 import DeleteFileDialog from 'components/dialog/DeleteFileDialog';
+import GitStatusDialog from 'components/dialog/GitStatusDialog';
 
 const route = useRoute();
 const router = useRouter();
@@ -74,6 +76,7 @@ function changeView(newViewType) {
 onMounted(() => {
   viewSwitchSubscription = ViewSwitchEvent.subscribe(changeView);
 });
+
 onUnmounted(() => {
   viewSwitchSubscription.unsubscribe();
 });

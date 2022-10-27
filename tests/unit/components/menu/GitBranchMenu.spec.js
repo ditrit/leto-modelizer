@@ -69,6 +69,7 @@ describe('Test component: GitBranchMenu', () => {
       newBranchSubscribe();
       return { unsubscribe: newBranchUnsubscribe };
     });
+
     wrapper = shallowMount(GitBranchMenu, {
       props: {
         currentBranchName: 'main',
@@ -82,6 +83,9 @@ describe('Test component: GitBranchMenu', () => {
         ],
       },
     });
+    wrapper.vm.menu = {
+      hide: jest.fn(),
+    };
   });
 
   describe('Test computed', () => {
@@ -118,6 +122,14 @@ describe('Test component: GitBranchMenu', () => {
       it('should call dialog event', () => {
         DialogEvent.next = jest.fn();
         wrapper.vm.newBranch();
+        expect(DialogEvent.next).toBeCalled();
+      });
+    });
+
+    describe('Test function: openGitStatusDialog', () => {
+      it('should call dialog event', () => {
+        DialogEvent.next = jest.fn();
+        wrapper.vm.openGitStatusDialog();
         expect(DialogEvent.next).toBeCalled();
       });
     });

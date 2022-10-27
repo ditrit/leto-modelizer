@@ -8,3 +8,19 @@ code {
   margin-right: 3px;
   border-radius: 3px;
 }
+
+.file-status-staged {
+  color: #21BA45;
+}
+
+.file-status-unstaged {
+  color: #C10015;
+}
+
+.file-status-untracked {
+  color: #C10015;
+}
+
+.file-status-modified {
+  color: #31CCEC;
+}

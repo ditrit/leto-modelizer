@@ -9,6 +9,7 @@ import {
 import GitEvent from 'src/composables/events/GitEvent';
 import Branch from 'src/models/git/Branch';
 import FileEvent from 'src/composables/events/FileEvent';
+import FileStatus from 'src/models/git/FileStatus';
 
 const fs = BrowserFS.BFSRequire('fs');
 
@@ -506,4 +507,23 @@ export async function deleteProjectFile(projectId, file, isFolder) {
   }
 
   return FileEvent.DeleteFileEvent.next();
+}
+
+/**
+ * Get status of all files, except the unmodified files.
+ * @param {String} projectId - Id of project.
+ * @return {Promise<FileStatus[]>} All files status.
+ */
+export async function getStatus(projectId) {
+  return git.statusMatrix({
+    fs,
+    dir: `/${projectId}`,
+  }).then((files) => files
+    .map((file) => new FileStatus({
+      path: file[0],
+      headStatus: file[1],
+      workdirStatus: file[2],
+      stageStatus: file[3],
+    }))
+    .filter((file) => !file.isUnmodified));
 }
