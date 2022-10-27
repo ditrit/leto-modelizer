@@ -225,6 +225,7 @@ export async function readProjectFile(projectId, fileInformation) {
     content,
   });
 }
+
 /**
  * Get all branches of project.
  * @param {String} projectId - Id of project.
@@ -314,10 +315,6 @@ export async function writeProjectFile(projectId, file) {
         if (error) {
           reject({ name: error.code, message: error.message });
         } else {
-          FileEvent.CreateFileEvent.next({
-            name: file.path.substring(file.path.lastIndexOf('/') + 1),
-            isFolder: false,
-          });
           resolve();
         }
       },
