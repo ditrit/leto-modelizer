@@ -2,20 +2,20 @@
   <q-form
     ref="form"
     @submit="onSubmit"
-    data-cy="git-update-form"
-    class="q-gutter-md git-update-form"
+    data-cy="git-push-form"
+    class="q-gutter-md git-push-form"
   >
-    <div v-html="$t('page.modelizer.git.update.description', { branch: branchName })"></div>
+    <div v-html="$t('page.modelizer.git.push.description', { branch: branchName })"></div>
     <q-checkbox
-      v-model="fastForward"
-      data-cy="git-fastForward-checkbox"
+      v-model="force"
+      data-cy="git-force-checkbox"
     >
-      <span v-html="$t('page.modelizer.git.update.fastForward')"></span>
+      <span v-html="$t('page.modelizer.git.push.force', { branch: branchName })"></span>
     </q-checkbox>
     <div class="flex row items-center justify-center">
       <q-btn
-        icon="fa-solid fa-cloud-arrow-down"
-        :label="$t('actions.default.update')"
+        icon="fa-solid fa-cloud-arrow-up"
+        :label="$t('actions.git.push')"
         type="submit"
         :loading="submitting"
         data-cy="git-form-submit"
@@ -31,11 +31,11 @@
 
 <script setup>
 import { ref } from 'vue';
-import { getProjectById, gitUpdate } from 'src/composables/Project';
+import { getProjectById, gitPush } from 'src/composables/Project';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 
-const emit = defineEmits(['git-branch:update']);
+const emit = defineEmits(['git-branch:push']);
 
 const props = defineProps({
   projectName: {
@@ -50,23 +50,23 @@ const props = defineProps({
 
 const { t } = useI18n();
 const form = ref(null);
-const fastForward = ref(true);
+const force = ref(false);
 const submitting = ref(false);
 
 /**
- * Update branch and manage toast and loader.
+ * Push branch and manage toast and loader.
  */
 async function onSubmit() {
   submitting.value = true;
-  return gitUpdate(
+  return gitPush(
     getProjectById(props.projectName),
     props.branchName,
-    fastForward.value,
+    force.value,
   ).then(() => {
-    emit('git-branch:update');
+    emit('git-branch:push');
     Notify.create({
       type: 'positive',
-      message: t('actions.git.branch.update'),
+      message: t('actions.git.branch.push'),
       html: true,
     });
   }).catch(({ name }) => {

@@ -98,7 +98,7 @@ describe('Test component: GitBranchActionMenu', () => {
       });
     });
 
-    describe('Test function: update', () => {
+    describe('Test function: onUpdate', () => {
       it('should call dialog event and hide menu', () => {
         DialogEvent.next = jest.fn();
         wrapper.vm.menu = {
@@ -106,6 +106,19 @@ describe('Test component: GitBranchActionMenu', () => {
         };
 
         wrapper.vm.onUpdate();
+        expect(DialogEvent.next).toBeCalled();
+        expect(wrapper.vm.menu.hide).toBeCalled();
+      });
+    });
+
+    describe('Test function: onPush', () => {
+      it('should call dialog event and hide menu', () => {
+        DialogEvent.next = jest.fn();
+        wrapper.vm.menu = {
+          hide: jest.fn(),
+        };
+
+        wrapper.vm.onPush();
         expect(DialogEvent.next).toBeCalled();
         expect(wrapper.vm.menu.hide).toBeCalled();
       });

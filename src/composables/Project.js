@@ -393,7 +393,7 @@ export async function createBranchFrom(projectId, newBranchName, branchName, hav
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function gitUpdate(project, branchName, fastForward) {
-  return git.pull({
+  await git.pull({
     fs,
     http,
     dir: `/${project.id}`,
@@ -411,6 +411,7 @@ export async function gitUpdate(project, branchName, fastForward) {
     },
     corsProxy: 'https://cors.isomorphic-git.org',
   });
+  return GitEvent.PullEvent.next();
 }
 
 /**
@@ -526,4 +527,27 @@ export async function getStatus(projectId) {
       stageStatus: file[3],
     }))
     .filter((file) => !file.isUnmodified));
+}
+/**
+ * Push selected branch on server.
+ * @param {Project} project - Project.
+ * @param {String} branchName - Branch name.
+ * @param {Boolean} force - State of force option.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function gitPush(project, branchName, force) {
+  await git.push({
+    fs,
+    http,
+    dir: `/${project.id}`,
+    remote: 'origin',
+    ref: branchName,
+    force,
+    onAuth: () => ({
+      username: project.git.username,
+      password: project.git.token,
+    }),
+    corsProxy: 'https://cors.isomorphic-git.org',
+  });
+  return GitEvent.PushEvent.next();
 }

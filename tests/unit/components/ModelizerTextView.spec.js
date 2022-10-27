@@ -71,6 +71,9 @@ jest.mock('src/composables/events/GitEvent', () => ({
   CheckoutEvent: {
     subscribe: jest.fn(),
   },
+  PullEvent: {
+    subscribe: jest.fn(),
+  },
 }));
 
 describe('Test component: ModelizerTextView', () => {
@@ -87,6 +90,8 @@ describe('Test component: ModelizerTextView', () => {
   let updateRemoteUnsubscribe;
   let checkoutSubscribe;
   let checkoutUnsubscribe;
+  let pullSubscribe;
+  let pullUnsubscribe;
   let emit;
   let writeProjectFileMock;
 
@@ -104,6 +109,8 @@ describe('Test component: ModelizerTextView', () => {
     checkoutSubscribe = jest.fn();
     checkoutUnsubscribe = jest.fn();
     writeProjectFileMock = jest.fn();
+    pullSubscribe = jest.fn();
+    pullUnsubscribe = jest.fn();
 
     GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
       updateRemoteSubscribe();
@@ -135,6 +142,10 @@ describe('Test component: ModelizerTextView', () => {
         render: () => [{ path: 'path' }],
       },
     }]);
+    GitEvent.PullEvent.subscribe.mockImplementation(() => {
+      pullSubscribe();
+      return { unsubscribe: pullUnsubscribe };
+    });
 
     wrapper = shallowMount(ModelizerTextView, {
       props: {
@@ -388,6 +399,10 @@ describe('Test component: ModelizerTextView', () => {
     it('should subscribe to DeleteFileEvent', () => {
       expect(deleteFileSubscribe).toHaveBeenCalledTimes(1);
     });
+
+    it('should subscribe to PullEvent', () => {
+      expect(pullSubscribe).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('Test hook function: onUnmounted', () => {
@@ -425,6 +440,12 @@ describe('Test component: ModelizerTextView', () => {
       expect(deleteFileUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(deleteFileUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to PullEvent', () => {
+      expect(pullUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(pullUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -28,8 +28,10 @@ export default {
       branch: {
         create: 'Branch is created &#129395;!',
         update: 'Branch is updated &#129395;!',
+        push: 'Branch is pushed &#129395;!',
       },
       update: 'Update',
+      push: 'Push',
     },
     fileExplorer: {
       empty: 'No files available in project.',
@@ -129,6 +131,11 @@ export default {
           staged: 'Staged files:',
           unstaged: 'Unstaged files:',
           untracked: 'Untracked files:',
+        },
+        push: {
+          title: 'Push',
+          description: 'Do you want to push your branch <b>{branch}</b> ?',
+          force: 'Force option (<code>git push -f origin {branch}</code>)',
         },
       },
       fileExplorer: {

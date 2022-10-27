@@ -20,6 +20,7 @@ import {
   rmDir,
   rm,
   getStatus,
+  gitPush,
   PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
@@ -52,6 +53,10 @@ jest.mock('isomorphic-git', () => ({
     return Promise.resolve('pull');
   }),
   statusMatrix: jest.fn(() => Promise.resolve([['test', 0, 1, 2]])),
+  push: jest.fn(({ onAuth }) => {
+    onAuth();
+    return Promise.resolve('pull');
+  }),
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
@@ -63,6 +68,12 @@ jest.mock('src/composables/events/GitEvent', () => ({
   },
   NewBranchEvent: {
     next: jest.fn(() => Promise.resolve('NewBranchEventNext')),
+  },
+  PullEvent: {
+    next: jest.fn(() => Promise.resolve('PullEventNext')),
+  },
+  PushEvent: {
+    next: jest.fn(() => Promise.resolve('PushEventNext')),
   },
 }));
 
@@ -365,7 +376,7 @@ describe('Test composable: Project', () => {
 
   describe('Test function: gitUpdate', () => {
     it('should call git pull', async () => {
-      const result = await gitUpdate(
+      await gitUpdate(
         {
           id: 'test',
           git: {
@@ -376,7 +387,7 @@ describe('Test composable: Project', () => {
         'branch',
         true,
       );
-      expect(result).toEqual('pull');
+      expect(GitEvent.PullEvent.next).toBeCalled();
     });
   });
 
@@ -408,6 +419,23 @@ describe('Test composable: Project', () => {
         workdirStatus: 1,
         stageStatus: 2,
       })]);
+    });
+  });
+
+  describe('Test function: gitPush', () => {
+    it('should call git push and emit event', async () => {
+      await gitPush(
+        {
+          id: 'test',
+          git: {
+            username: 'username',
+            token: 'token',
+          },
+        },
+        'branch',
+        true,
+      );
+      expect(GitEvent.PushEvent.next).toBeCalled();
     });
   });
 });

@@ -25,6 +25,9 @@ jest.mock('src/composables/events/GitEvent', () => ({
   NewBranchEvent: {
     subscribe: jest.fn(),
   },
+  PushEvent: {
+    subscribe: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -42,6 +45,8 @@ describe('Test component: GitBranchMenu', () => {
   let checkoutSubscribe;
   let newBranchUnsubscribe;
   let checkoutUnsubscribe;
+  let pushSubscribe;
+  let pushUnsubscribe;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -57,6 +62,8 @@ describe('Test component: GitBranchMenu', () => {
     checkoutUnsubscribe = jest.fn();
     newBranchSubscribe = jest.fn();
     newBranchUnsubscribe = jest.fn();
+    pushSubscribe = jest.fn();
+    pushUnsubscribe = jest.fn();
     GitEvent.FetchEvent.subscribe.mockImplementation(() => {
       fetchSubscribe();
       return { unsubscribe: fetchUnsubscribe };
@@ -68,6 +75,10 @@ describe('Test component: GitBranchMenu', () => {
     GitEvent.NewBranchEvent.subscribe.mockImplementation(() => {
       newBranchSubscribe();
       return { unsubscribe: newBranchUnsubscribe };
+    });
+    GitEvent.PushEvent.subscribe.mockImplementation(() => {
+      pushSubscribe();
+      return { unsubscribe: pushUnsubscribe };
     });
 
     wrapper = shallowMount(GitBranchMenu, {
@@ -321,6 +332,10 @@ describe('Test component: GitBranchMenu', () => {
       it('should subscribe NewBranchEvent', () => {
         expect(newBranchSubscribe).toHaveBeenCalledTimes(1);
       });
+
+      it('should subscribe PushEvent', () => {
+        expect(pushSubscribe).toHaveBeenCalledTimes(1);
+      });
     });
 
     describe('Test hook function: onUnmounted', () => {
@@ -340,6 +355,12 @@ describe('Test component: GitBranchMenu', () => {
         expect(newBranchUnsubscribe).toHaveBeenCalledTimes(0);
         wrapper.unmount();
         expect(newBranchUnsubscribe).toHaveBeenCalledTimes(1);
+      });
+
+      it('should unsubscribe PushEvent', () => {
+        expect(pushUnsubscribe).toHaveBeenCalledTimes(0);
+        wrapper.unmount();
+        expect(pushUnsubscribe).toHaveBeenCalledTimes(1);
       });
     });
   });
