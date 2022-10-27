@@ -40,6 +40,7 @@ import { ref } from 'vue';
 import { notEmpty, isValidFileLabel, isUniqueFileLabel } from 'src/composables/QuasarFieldRule';
 import { createProjectFolder, writeProjectFile } from 'src/composables/Project';
 import { FileInput } from 'leto-modelizer-plugin-core';
+import FileEvent from 'src/composables/events/FileEvent';
 
 const props = defineProps({
   projectName: {
@@ -79,6 +80,11 @@ function onSubmit() {
       type: 'positive',
       message: t('actions.fileExplorer.file.create'),
       html: true,
+    });
+
+    FileEvent.CreateFileEvent.next({
+      name: fileName.value.substring(fileName.value.lastIndexOf('/') + 1),
+      isFolder: false,
     });
   }).catch(() => {
     Notify.create({
