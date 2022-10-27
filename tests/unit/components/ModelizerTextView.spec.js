@@ -122,7 +122,6 @@ describe('Test component: ModelizerTextView', () => {
 
     wrapper = shallowMount(ModelizerTextView, {
       props: {
-        viewType: 'text',
         projectName: 'project-00000000',
       },
       mocks: {
@@ -133,12 +132,6 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test variables initialization', () => {
-    describe('Test props: viewType', () => {
-      it('should match "text"', () => {
-        expect(wrapper.vm.viewType).toEqual('text');
-      });
-    });
-
     describe('Test props: projectName', () => {
       it('should match "project-00000000"', () => {
         expect(wrapper.vm.projectName).toEqual('project-00000000');

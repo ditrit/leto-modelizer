@@ -21,8 +21,8 @@
     >
       <template v-slot="{ file }">
         <monaco-editor
-          :content="file.content"
-          :viewType="viewType"
+          :fileInput="file"
+          :project-name="projectName"
         />
       </template>
     </file-tabs>
@@ -41,15 +41,14 @@ import {
   ref,
   watch,
 } from 'vue';
-import { getProjectFiles, readProjectFile } from 'src/composables/Project';
+import { getProjectFiles, readProjectFile, writeProjectFile } from 'src/composables/Project';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
+import PluginEvent from 'src/composables/events/PluginEvent';
+import { getPlugins } from 'src/composables/PluginManager';
+import { FileInformation } from 'leto-modelizer-plugin-core';
 
 const props = defineProps({
-  viewType: {
-    type: String,
-    default: 'model',
-  },
   projectName: {
     type: String,
     required: true,
