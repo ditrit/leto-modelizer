@@ -66,6 +66,7 @@ let createFileSubscription;
 let deleteFileSubscription;
 let updateRemoteSubscription;
 let checkoutSubscription;
+let pluginRenderSubscription;
 
 /**
  * Update fileTabArray array when a new file is open.
@@ -151,26 +152,50 @@ function updateSelectedNode(node) {
  * @param {String} fileName - Name of the file to create.
  */
 function onCreateFileEvent({ name, isFolder }) {
-  return updateProjectFiles().then(() => {
-    if (!isFolder) {
-      const parentNode = selectedNode.value.id === props.projectName ? '' : `${selectedNode.value.id}/`;
-      const newFileId = `${parentNode}${name}`;
-      activeFileTab.value = { isSelected: false, id: newFileId };
+  return updateProjectFiles()
+    .then(() => {
+      if (isFolder) {
+        return Promise.resolve();
+      }
+      return readProjectFile(props.projectName, new FileInformation({ path: name }));
+    })
+    .then((fileInput) => {
+      if (!isFolder) {
+        activeFileTab.value = { isSelected: true, id: fileInput.path };
 
-      FileEvent.OpenFileEvent.next({
-        id: newFileId,
-        label: name.substring(name.lastIndexOf('/') + 1),
-        content: ' ',
+        FileEvent.OpenFileEvent.next({
+          id: fileInput.path,
+          label: name.substring(name.lastIndexOf('/') + 1),
+          content: fileInput.content,
+        });
+      }
+
+      let folder = `${selectedNode.value.id || props.projectName}/${name}`;
+
+      if (folder.indexOf('/') > 0) {
+        folder = folder.substring(0, folder.lastIndexOf('/'));
+      }
+
+      FileEvent.ExpandFolderEvent.next(folder);
+    });
+}
+
+/**
+ * Render components and update files accordingly.
+ */
+function renderPlugins() {
+  const plugins = getPlugins();
+  plugins.forEach((plugin) => {
+    const render = plugin.renderer.render(plugin.components, [], 'new_file.tf');
+
+    render.forEach((file) => {
+      writeProjectFile(props.projectName, file).then(() => {
+        FileEvent.CreateFileEvent.next({
+          name: file.path.substring(file.path.lastIndexOf('/') + 1),
+          isFolder: false,
+        });
       });
-    }
-
-    let folder = `${selectedNode.value.id}/${name}`;
-
-    if (folder.indexOf('/') > 0) {
-      folder = folder.substring(0, folder.lastIndexOf('/'));
-    }
-
-    FileEvent.ExpandFolderEvent.next(folder);
+    });
   });
 }
 
@@ -186,6 +211,7 @@ onMounted(() => {
   deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(updateProjectFiles);
   updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(updateProjectFiles);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
+  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(renderPlugins);
 });
 
 onUnmounted(() => {
@@ -195,6 +221,7 @@ onUnmounted(() => {
   deleteFileSubscription.unsubscribe();
   updateRemoteSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
+  pluginRenderSubscription.unsubscribe();
 });
 </script>
 
