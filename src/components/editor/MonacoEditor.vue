@@ -7,6 +7,7 @@
 </template>
 
 <script setup>
+import { writeProjectFile } from 'src/composables/Project';
 import {
   onMounted,
   onUpdated,
@@ -17,15 +18,14 @@ import {
 
 const monaco = require('monaco-editor');
 
-// Need to be here, otherwise OnUpdated is not called.
 const props = defineProps({
-  viewType: {
+  projectName: {
     type: String,
-    default: 'text',
+    required: true,
   },
-  content: {
-    type: String,
-    default: '',
+  fileInput: {
+    type: Object,
+    require: true,
   },
 });
 
@@ -33,13 +33,23 @@ const container = ref(null);
 let editor;
 
 /**
+ * Update file content on fs and emit an event.
+ */
+function updateFile() {
+  const file = { ...props.fileInput, content: editor.getValue() };
+  file.path = file.label;
+  writeProjectFile(props.projectName, file);
+}
+
+/**
  * Setup monaco editor.
  */
 function createEditor() {
   editor = monaco.editor.create(container.value, {
-    value: props.content,
+    value: props.fileInput.content,
     language: 'text',
   });
+  editor.onDidChangeModelContent(updateFile);
 }
 
 /**
@@ -54,8 +64,8 @@ function updateEditorLayout() {
   });
 }
 
-watch(() => props.content, () => {
-  editor.setValue(props.content);
+watch(() => props.fileInput.content, () => {
+  editor.setValue(props.fileInput.content);
 });
 
 onMounted(() => {

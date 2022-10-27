@@ -3,12 +3,19 @@ import { shallowMount, flushPromises } from '@vue/test-utils';
 import ModelizerTextView from 'src/components/ModelizerTextView.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
+import Project from 'src/composables/Project';
+import PluginManager from 'src/composables/PluginManager';
 
 installQuasarPlugin();
 
 jest.mock('src/composables/Project', () => ({
   getProjectFiles: jest.fn(() => Promise.resolve([{ path: 'terraform/app.tf' }])),
   readProjectFile: jest.fn(() => Promise.resolve({ path: 'terraform/app.tf', content: 'new content' })),
+  writeProjectFile: jest.fn(),
+}));
+
+jest.mock('src/composables/PluginManager', () => ({
+  getPlugins: jest.fn([]),
 }));
 
 jest.mock('src/composables/FileExplorer', () => ({
@@ -43,6 +50,7 @@ jest.mock('src/composables/events/FileEvent', () => ({
     subscribe: jest.fn(),
   },
   CreateFileEvent: {
+    next: jest.fn(),
     subscribe: jest.fn(),
   },
   DeleteFileEvent: {
@@ -80,6 +88,7 @@ describe('Test component: ModelizerTextView', () => {
   let checkoutSubscribe;
   let checkoutUnsubscribe;
   let emit;
+  let writeProjectFileMock;
 
   beforeEach(() => {
     openFileSubscribe = jest.fn();
@@ -94,6 +103,7 @@ describe('Test component: ModelizerTextView', () => {
     updateRemoteUnsubscribe = jest.fn();
     checkoutSubscribe = jest.fn();
     checkoutUnsubscribe = jest.fn();
+    writeProjectFileMock = jest.fn();
 
     GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
       updateRemoteSubscribe();
@@ -119,10 +129,15 @@ describe('Test component: ModelizerTextView', () => {
       checkoutSubscribe();
       return { unsubscribe: checkoutUnsubscribe };
     });
+    Project.writeProjectFile.mockImplementation(() => Promise.resolve(writeProjectFileMock()));
+    PluginManager.getPlugins.mockImplementation(() => [{
+      renderer: {
+        render: () => [{ path: 'path' }],
+      },
+    }]);
 
     wrapper = shallowMount(ModelizerTextView, {
       props: {
-        viewType: 'text',
         projectName: 'project-00000000',
       },
       mocks: {
@@ -133,12 +148,6 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test variables initialization', () => {
-    describe('Test props: viewType', () => {
-      it('should match "text"', () => {
-        expect(wrapper.vm.viewType).toEqual('text');
-      });
-    });
-
     describe('Test props: projectName', () => {
       it('should match "project-00000000"', () => {
         expect(wrapper.vm.projectName).toEqual('project-00000000');
@@ -331,7 +340,7 @@ describe('Test component: ModelizerTextView', () => {
 
       await wrapper.vm.onCreateFileEvent({ name: 'newFileName', isFolder: false });
 
-      expect(wrapper.vm.activeFileTab).toEqual({ isSelected: false, id: 'nodeName/newFileName' });
+      expect(wrapper.vm.activeFileTab).toEqual({ isSelected: true, id: 'terraform/app.tf' });
       expect(FileEvent.ExpandFolderEvent.next).toBeCalled();
       expect(FileEvent.OpenFileEvent.next).toBeCalled();
     });
@@ -345,6 +354,13 @@ describe('Test component: ModelizerTextView', () => {
 
       expect(FileEvent.ExpandFolderEvent.next).toBeCalled();
       expect(FileEvent.OpenFileEvent.next).not.toBeCalled();
+    });
+  });
+
+  describe('Test function: renderPlugins', () => {
+    it('should call writeProjectFile once', () => {
+      wrapper.vm.renderPlugins();
+      expect(writeProjectFileMock).toHaveBeenCalledTimes(1);
     });
   });
 

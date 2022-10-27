@@ -13,10 +13,12 @@
         class="modelizer-page column"
         data-cy="modelizer-page"
       >
-        <modelizer-model-view v-show="viewType === 'model'" />
+        <modelizer-model-view
+          v-show="viewType === 'model'"
+          :project-name="projectName"
+        />
         <modelizer-text-view
           v-show="viewType === 'text'"
-          :viewType="viewType"
           :project-name="projectName"
         />
         <git-configuration-dialog :project-name="projectName"/>

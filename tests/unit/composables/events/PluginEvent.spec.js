@@ -29,4 +29,18 @@ describe('Test composable: PluginEvent', () => {
       expect(PluginEvent.DeleteEvent).toEqual(new Subject());
     });
   });
+
+  describe('Test event: RenderEvent', () => {
+    it('should export a Subject', () => {
+      expect(PluginEvent.RenderEvent).toBeDefined();
+      expect(PluginEvent.RenderEvent).toEqual(new Subject());
+    });
+  });
+
+  describe('Test event: ParseEvent', () => {
+    it('should export a Subject', () => {
+      expect(PluginEvent.ParseEvent).toBeDefined();
+      expect(PluginEvent.ParseEvent).toEqual(new Subject());
+    });
+  });
 });

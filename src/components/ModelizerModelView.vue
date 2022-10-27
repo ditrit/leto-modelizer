@@ -29,12 +29,49 @@ import {
   getPlugins,
 } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import { getProjectFiles, readProjectFile } from 'src/composables/Project';
 
 let pluginInitSubscription;
 let pluginDeleteSubscription;
+let pluginParseSubscription;
+
+const props = defineProps({
+  projectName: {
+    type: String,
+    required: true,
+  },
+});
+
 const data = reactive({
   plugins: [],
 });
+
+/**
+ * Get array of FileInput from array of FileInformation if parsable by plugin.
+ * @param {Object} plugin - Used to parse if possible.
+ * @param {FileInformation[]} fileInformations - Array to parse.
+ */
+async function getFileInputs(plugin, fileInformations) {
+  return Promise.allSettled(
+    fileInformations
+      .filter((fileInfo) => plugin.parser.isParsable(fileInfo))
+      .map((fileInfo) => readProjectFile(props.projectName, fileInfo)),
+  ).then((allResults) => allResults
+    .filter((result) => result.status === 'fulfilled')
+    .map((result) => result.value));
+}
+
+/**
+ * Update and draw new components.
+ * @param {Object} plugin - Contens components to update and draw.
+ */
+async function drawComponents(plugin) {
+  const fileInformations = await getProjectFiles(props.projectName);
+  const fileInputs = await getFileInputs(plugin, fileInformations);
+  plugin.components = plugin.parser.parse(fileInputs).components;
+
+  plugin.drawer.draw(plugin.components);
+}
 
 /**
  * Search a component to delete among all the components of all the plugins.
@@ -54,17 +91,20 @@ function deletePluginComponentAndRedraw(event) {
  */
 function updatePlugins() {
   data.plugins = getPlugins();
+  data.plugins.forEach((plugin) => drawComponents(plugin));
 }
 
 onMounted(() => {
   updatePlugins();
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePlugins);
   pluginDeleteSubscription = PluginEvent.DeleteEvent.subscribe(deletePluginComponentAndRedraw);
+  pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePlugins);
 });
 
 onUnmounted(() => {
   pluginInitSubscription.unsubscribe();
   pluginDeleteSubscription.unsubscribe();
+  pluginParseSubscription.unsubscribe();
 });
 </script>
 

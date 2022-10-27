@@ -2,6 +2,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import { editor } from 'app/__mocks__/monaco-editor';
 import MonacoEditor from 'components/editor/MonacoEditor.vue';
+import Project from 'src/composables/Project';
 
 installQuasarPlugin();
 
@@ -12,12 +13,17 @@ jest.mock('monaco-editor', () => ({
   },
 }));
 
+jest.mock('src/composables/Project', () => ({
+  writeProjectFile: jest.fn(),
+}));
+
 describe('Tess component: MonacoEditor', () => {
   let wrapper;
 
   const dispose = jest.fn();
   const layout = jest.fn();
   const onDidChangeModelContent = jest.fn();
+  const writeProjectFileMock = jest.fn();
 
   editor.create.mockImplementation(() => ({
     dispose,
@@ -27,26 +33,37 @@ describe('Tess component: MonacoEditor', () => {
     onDidChangeModelContent,
   }));
 
+  Project.writeProjectFile.mockImplementation(writeProjectFileMock);
+
   beforeEach(() => {
     wrapper = shallowMount(MonacoEditor, {
       props: {
-        viewType: 'text',
-        content: 'Hello World',
+        projectName: 'project-00000000',
+        fileInput: {
+          content: 'Hello World',
+        },
       },
     });
   });
 
   describe('Test variables initialization', () => {
-    describe('Test props: viewType', () => {
-      it('should match "text"', () => {
-        expect(wrapper.vm.props.viewType).toEqual('text');
+    describe('Test props: projectName', () => {
+      it('should match "project-00000000"', () => {
+        expect(wrapper.vm.props.projectName).toEqual('project-00000000');
       });
     });
 
-    describe('Test props: content', () => {
-      it('should match "Hello World"', () => {
-        expect(wrapper.vm.props.content).toEqual('Hello World');
+    describe('Test props: fileInput', () => {
+      it('should have content matching "Hello World"', () => {
+        expect(wrapper.vm.props.fileInput.content).toEqual('Hello World');
       });
+    });
+  });
+
+  describe('Test function: updateFile', () => {
+    it('should call writeProjectFile and emit event', () => {
+      wrapper.vm.updateFile();
+      expect(writeProjectFileMock).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -54,6 +71,7 @@ describe('Tess component: MonacoEditor', () => {
     it('should init editor', () => {
       wrapper.vm.createEditor();
       expect(wrapper.vm.editor).not.toBeNull();
+      expect(onDidChangeModelContent).toHaveBeenCalled();
     });
   });
 
@@ -73,13 +91,15 @@ describe('Tess component: MonacoEditor', () => {
     });
   });
 
-  describe('Test watcher: props.content', () => {
-    it('should be trigger when props.content is update with a different value', async () => {
+  describe('Test watcher: props.fileInput', () => {
+    it('should be trigger when props.fileInput is update', async () => {
       await wrapper.setProps({
-        viewType: 'text',
-        content: 'new content',
+        projectName: 'project-00000000',
+        fileInput: {
+          content: 'new content',
+        },
       });
-      expect(wrapper.vm.props.content).toEqual('new content');
+      expect(wrapper.vm.props.fileInput.content).toEqual('new content');
     });
   });
 });

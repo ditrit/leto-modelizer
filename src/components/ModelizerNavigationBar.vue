@@ -48,6 +48,7 @@ import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import ModelizerSettingsMenu from 'components/menu/ModelizerSettingsMenu.vue';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 const { t } = useI18n();
 const props = defineProps({
@@ -74,6 +75,11 @@ const projectName = computed(() => props.projectName);
 function onViewSwitchUpdate(newViewType) {
   if (newViewType === props.viewType) return;
   ViewSwitchEvent.next(newViewType);
+  if (newViewType === 'text') {
+    PluginEvent.RenderEvent.next();
+  } else {
+    PluginEvent.ParseEvent.next();
+  }
 }
 
 watch(() => props.viewType, (newViewType) => {
