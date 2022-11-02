@@ -2,8 +2,8 @@ import { Subject } from 'rxjs';
 
 /**
  * Represent a rxjs Event object to emit and to receive events about file opening.
- * The event should be an Object that contains the `id` (path), the `label`
- * and the `content` of the file.
+ * The event should be an Object that contains the `id` (path), the `label`, the `content`
+ * and the `information` of the file.
  * @typedef {Subject} OpenFileEvent
  */
 const OpenFileEvent = new Subject();
@@ -45,6 +45,13 @@ const DeleteFileEvent = new Subject();
  */
 const ExpandFolderEvent = new Subject();
 
+/**
+ * Represent a rxjs Event object to emit and to receive events about file updating.
+ * The event should contain the id (path) of the file to update.
+ * @typedef {Subject} UpdateFileEvent
+ */
+const UpdateFileEvent = new Subject();
+
 export default {
   OpenFileEvent,
   SelectFileEvent,
@@ -52,4 +59,5 @@ export default {
   CreateFileEvent,
   DeleteFileEvent,
   ExpandFolderEvent,
+  UpdateFileEvent,
 };
