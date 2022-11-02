@@ -41,12 +41,18 @@ import {
   ref,
   watch,
 } from 'vue';
-import { getProjectFiles, readProjectFile, writeProjectFile } from 'src/composables/Project';
+import {
+  getProjectFiles,
+  readProjectFile,
+  writeProjectFile,
+  getStatus,
+} from 'src/composables/Project';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getPlugins } from 'src/composables/PluginManager';
 import { FileInformation } from 'leto-modelizer-plugin-core';
+import FileStatus from 'src/models/git/FileStatus';
 
 const props = defineProps({
   projectName: {
@@ -115,28 +121,51 @@ function deleteFileTab(fileId) {
 /**
  * Update project nodes and fileTabArray.
  * If the previous active file's id is not contained in fileTabArray, update activeFileTab.
+ * @param {FileInformation[]} fileInformations - Array of files.
+ */
+function updateFileExplorer(fileInformations) {
+  const projectFilesIds = fileInformations.map((file) => file.path);
+  nodes.value = getTree(props.projectName, fileInformations);
+  fileTabArray.value = fileTabArray.value.filter(({ id }) => projectFilesIds.includes(id));
+
+  fileTabArray.value.forEach((file) => {
+    readProjectFile(props.projectName, { path: file.id })
+      .then(({ content }) => {
+        file.content = content;
+      });
+  });
+
+  const isActiveFileInFiles = fileTabArray.value
+    .find(({ id }) => id === activeFileTab.value.id);
+
+  if (!isActiveFileInFiles) {
+    setLastFileActive();
+  }
+}
+
+/**
+ * Get projects files and their status, then call function to make the update.
  */
 function updateProjectFiles() {
-  return getProjectFiles(props.projectName)
-    .then((fileInformations) => {
-      const projectFilesIds = fileInformations.map((file) => file.path);
-      nodes.value = getTree(props.projectName, fileInformations);
-      fileTabArray.value = fileTabArray.value.filter(({ id }) => projectFilesIds.includes(id));
+  return Promise.allSettled([
+    getProjectFiles(props.projectName).then((fileInformations) => {
+      updateFileExplorer(fileInformations);
+      return fileInformations;
+    }),
+    getStatus(props.projectName),
+  ]).then((allResults) => {
+    const filesStatus = allResults[1].value;
+    const fileInformations = allResults[0].value.map((file) => {
+      const statusResult = filesStatus.find(({ path }) => file.path === path);
 
-      fileTabArray.value.forEach((file) => {
-        readProjectFile(props.projectName, { path: file.id })
-          .then(({ content }) => {
-            file.content = content;
-          });
-      });
-
-      const isActiveFileInFiles = fileTabArray.value
-        .find(({ id }) => id === activeFileTab.value.id);
-
-      if (!isActiveFileInFiles) {
-        setLastFileActive();
+      if (statusResult) {
+        return statusResult;
       }
+      return new FileStatus({ path: file.path });
     });
+
+    updateFileExplorer(fileInformations);
+  });
 }
 
 /**
@@ -160,14 +189,20 @@ function onCreateFileEvent({ name, isFolder }) {
       }
       return readProjectFile(props.projectName, new FileInformation({ path: name }));
     })
-    .then((fileInput) => {
+    .then(async (fileInput) => {
       if (!isFolder) {
         activeFileTab.value = { isSelected: true, id: fileInput.path };
+        const [filesStatus] = await getStatus(
+          props.projectName,
+          [fileInput.path],
+          (fileName) => fileName === fileInput.path,
+        );
 
         FileEvent.OpenFileEvent.next({
           id: fileInput.path,
           label: name.substring(name.lastIndexOf('/') + 1),
           content: fileInput.content,
+          information: filesStatus,
         });
       }
 
