@@ -25,9 +25,13 @@
             size="xs"
             :name="`${node.icon}${expanded ? '-open' : ''}`"
           />
-          <span class="tree-node">
-            {{node.label}}
-          </span>
+          <file-name
+            class="tree-node"
+            :path="node.id"
+            :isActive="selectedFile.id  === node.id"
+            :label="node.label"
+            :status="node.information?.status"
+          />
         </div>
         <span class="col-grow"></span>
         <div class="row no-wrap">
@@ -46,6 +50,7 @@ import FileEvent from 'src/composables/events/FileEvent';
 import { ref, onMounted, onUnmounted } from 'vue';
 import { readProjectFile } from 'src/composables/Project';
 import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
+import FileName from 'src/components/FileName.vue';
 
 const props = defineProps({
   nodes: {
@@ -94,11 +99,21 @@ function onNodeClicked(node) {
   setSelectedFile({ isSelected: true, id: node.id });
 
   if (node.isNewLocalFile) {
-    FileEvent.OpenFileEvent.next({ id: node.id, label: node.label, content: '' });
+    FileEvent.OpenFileEvent.next({
+      id: node.id,
+      label: node.label,
+      content: '',
+      information: node.information,
+    });
   } else {
     readProjectFile(props.projectName, { path: node.id })
       .then(({ content }) => {
-        FileEvent.OpenFileEvent.next({ id: node.id, label: node.label, content });
+        FileEvent.OpenFileEvent.next({
+          id: node.id,
+          label: node.label,
+          content,
+          information: node.information,
+        });
       });
   }
 }
