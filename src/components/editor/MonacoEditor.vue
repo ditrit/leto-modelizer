@@ -15,6 +15,7 @@ import {
   ref,
   watch,
 } from 'vue';
+import FileEvent from 'src/composables/events/FileEvent';
 
 const monaco = require('monaco-editor');
 
@@ -35,10 +36,11 @@ let editor;
 /**
  * Update file content on fs and emit an event.
  */
-function updateFile() {
+async function updateFile() {
   const file = { ...props.fileInput, content: editor.getValue() };
-  file.path = file.label;
-  writeProjectFile(props.projectName, file);
+  file.path = file.id;
+  await writeProjectFile(props.projectName, file);
+  FileEvent.UpdateFileEvent.next(props.fileInput.id);
 }
 
 /**
