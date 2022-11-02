@@ -171,4 +171,13 @@ export default {
       noBranches: 'Nothing to show.',
     },
   },
+  plugin: {
+    component: {
+      attribute: {
+        name: 'name',
+        save: 'save',
+        reset: 'reset',
+      },
+    },
+  },
 };

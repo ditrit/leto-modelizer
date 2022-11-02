@@ -17,6 +17,9 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   ParseEvent: {
     subscribe: jest.fn(),
   },
+  DrawEvent: {
+    subscribe: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -31,28 +34,55 @@ jest.mock('src/composables/PluginManager', () => ({
 
 describe('Test component: ModelizerModelView', () => {
   let wrapper;
-  const initUnsubscribe = jest.fn();
-  const deleteUnsubscribe = jest.fn();
-  const parseUnsubscribe = jest.fn();
-
-  PluginEvent.InitEvent.subscribe.mockImplementation(() => ({ unsubscribe: initUnsubscribe }));
-  PluginEvent.DeleteEvent.subscribe.mockImplementation(() => ({ unsubscribe: deleteUnsubscribe }));
-  PluginEvent.ParseEvent.subscribe.mockImplementation(() => ({ unsubscribe: parseUnsubscribe }));
-
-  Project.getProjectFiles.mockImplementation(() => Promise.resolve([{}]));
-  Project.readProjectFile.mockImplementation(() => Promise.resolve({ id: 'TEST' }));
-
-  PluginManager.deleteComponent.mockImplementation((componentId, components) => {
-    const index = components.findIndex(({ id }) => id === componentId);
-    if (index === -1) {
-      return false;
-    }
-    components.splice(index, 1);
-    return true;
-  });
-  PluginManager.getPlugins.mockImplementation(() => []);
+  let initSubscribe;
+  let initUnsubscribe;
+  let deleteSubscribe;
+  let deleteUnsubscribe;
+  let parseSubscribe;
+  let parseUnsubscribe;
+  let drawSubscribe;
+  let drawUnsubscribe;
 
   beforeEach(() => {
+    initSubscribe = jest.fn();
+    initUnsubscribe = jest.fn();
+    deleteSubscribe = jest.fn();
+    deleteUnsubscribe = jest.fn();
+    parseSubscribe = jest.fn();
+    parseUnsubscribe = jest.fn();
+    drawSubscribe = jest.fn();
+    drawUnsubscribe = jest.fn();
+
+    PluginEvent.InitEvent.subscribe.mockImplementation(() => {
+      initSubscribe();
+      return { unsubscribe: initUnsubscribe };
+    });
+    PluginEvent.DeleteEvent.subscribe.mockImplementation(() => {
+      deleteSubscribe();
+      return { unsubscribe: deleteUnsubscribe };
+    });
+    PluginEvent.ParseEvent.subscribe.mockImplementation(() => {
+      parseSubscribe();
+      return { unsubscribe: parseUnsubscribe };
+    });
+    PluginEvent.DrawEvent.subscribe.mockImplementation(() => {
+      drawSubscribe();
+      return { unsubscribe: drawUnsubscribe };
+    });
+
+    Project.getProjectFiles.mockImplementation(() => Promise.resolve([{}]));
+    Project.readProjectFile.mockImplementation(() => Promise.resolve({ id: 'TEST' }));
+
+    PluginManager.deleteComponent.mockImplementation((componentId, components) => {
+      const index = components.findIndex(({ id }) => id === componentId);
+      if (index === -1) {
+        return false;
+      }
+      components.splice(index, 1);
+      return true;
+    });
+    PluginManager.getPlugins.mockImplementation(() => []);
+
     wrapper = shallowMount(ModelizerModelView, {
       props: {
         projectName: 'project-00000000',
@@ -121,12 +151,26 @@ describe('Test component: ModelizerModelView', () => {
     });
   });
 
+  describe('Test hook function: onMounted', () => {
+    it('should subscribe to InitEvent', () => {
+      expect(initSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to DeleteEvent', () => {
+      expect(deleteSubscribe).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to InitEvent and DeleteEvent', () => {
+    it('should unsubscribe to InitEvent', () => {
       expect(initUnsubscribe).toHaveBeenCalledTimes(0);
-      expect(deleteUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(initUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to DeleteEvent', () => {
+      expect(deleteUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
       expect(deleteUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });

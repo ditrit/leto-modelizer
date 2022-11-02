@@ -39,5 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add fs writeProjectFile & createProjectFolder in Project composable
 - Add create and delete file or folder action
 - Add ParseEvent & RenderEvent management
+- Add ComponentDetailPanel
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased

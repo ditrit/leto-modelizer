@@ -43,4 +43,11 @@ describe('Test composable: PluginEvent', () => {
       expect(PluginEvent.ParseEvent).toEqual(new Subject());
     });
   });
+
+  describe('Test event: DrawEvent', () => {
+    it('should export a Subject', () => {
+      expect(PluginEvent.DrawEvent).toBeDefined();
+      expect(PluginEvent.DrawEvent).toEqual(new Subject());
+    });
+  });
 });
