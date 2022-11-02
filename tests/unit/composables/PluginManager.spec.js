@@ -250,4 +250,21 @@ describe('Test composable: PluginManager', () => {
       }]);
     });
   });
+
+  describe('Test function: getComponent', () => {
+    it('should return null if component is not found', () => {
+      const component = PluginManager.getComponent(0, []);
+      expect(component).toBeNull();
+    });
+
+    it('should return the component corresponding to the id', () => {
+      const components = [{
+        id: 0,
+        children: [{ id: 1 }],
+      }];
+      const component = PluginManager.getComponent(1, components);
+      expect(component).toBeDefined();
+      expect(component.id).toEqual(1);
+    });
+  });
 });

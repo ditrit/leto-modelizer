@@ -174,3 +174,32 @@ export function deleteComponent(componentId, components) {
   components.splice(index, 1);
   return true;
 }
+
+/**
+ * Get the component corresponding to the given id from the tree of components.
+ * @param {Number} componentId - Id of the wanted component.
+ * @param {Array} components - Tree of components.
+ * @returns {Object|null} the wanted component otherwise null.
+ */
+export function getComponent(componentId, components) {
+  const index = components.findIndex(({ id }) => id === componentId);
+
+  if (index === -1) {
+    const found = components
+      .filter(({ children }) => children && children.length > 0)
+      .reduce((acc, component) => {
+        if (!acc) {
+          const foundComponent = getComponent(componentId, component.children);
+          if (foundComponent) {
+            acc = foundComponent;
+          }
+        }
+
+        return acc;
+      }, null);
+
+    return found;
+  }
+
+  return components[index];
+}
