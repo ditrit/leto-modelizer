@@ -109,7 +109,7 @@ function setFilesStatus({ key }) {
   if (key === 'GitStatus') {
     loading.value = true;
     getStatus(props.projectName).then((files) => {
-      filesStatus.value = files;
+      filesStatus.value = files.filter((file) => !file.isUnmodified);
       loading.value = false;
     });
   }
