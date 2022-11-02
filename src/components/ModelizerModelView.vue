@@ -14,6 +14,7 @@
         </div>
       </q-page>
     </q-page-container>
+    <component-detail-panel />
   </q-layout>
 </template>
 
@@ -24,6 +25,7 @@ import {
   reactive,
 } from 'vue';
 import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer';
+import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
 import {
   deleteComponent,
   getPlugins,
@@ -34,6 +36,7 @@ import { getProjectFiles, readProjectFile } from 'src/composables/Project';
 let pluginInitSubscription;
 let pluginDeleteSubscription;
 let pluginParseSubscription;
+let pluginDrawSubscription;
 
 const props = defineProps({
   projectName: {
@@ -50,6 +53,7 @@ const data = reactive({
  * Get array of FileInput from array of FileInformation if parsable by plugin.
  * @param {Object} plugin - Used to parse if possible.
  * @param {FileInformation[]} fileInformations - Array to parse.
+ * @return {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 async function getFileInputs(plugin, fileInformations) {
   return Promise.allSettled(
@@ -99,12 +103,14 @@ onMounted(() => {
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePlugins);
   pluginDeleteSubscription = PluginEvent.DeleteEvent.subscribe(deletePluginComponentAndRedraw);
   pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePlugins);
+  pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePlugins);
 });
 
 onUnmounted(() => {
   pluginInitSubscription.unsubscribe();
   pluginDeleteSubscription.unsubscribe();
   pluginParseSubscription.unsubscribe();
+  pluginDrawSubscription.unsubscribe();
 });
 </script>
 
