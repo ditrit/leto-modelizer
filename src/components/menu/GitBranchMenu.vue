@@ -28,6 +28,16 @@
         </q-item-section>
         <q-item-section>{{ $t('actions.git.status') }}</q-item-section>
       </q-item>
+      <q-item clickable @click="openGitCommitDialog">
+        <q-item-section avatar>
+          <q-icon
+            color="primary"
+            name="fa-solid fa-floppy-disk"
+            data-cy="git-menu-commit"
+          />
+        </q-item-section>
+        <q-item-section>{{ $t('actions.git.commit') }}</q-item-section>
+      </q-item>
       <q-item clickable @click="newBranch">
         <q-item-section avatar>
           <q-icon
@@ -231,6 +241,17 @@ function openGitStatusDialog() {
   DialogEvent.next({
     type: 'open',
     key: 'GitStatus',
+  });
+}
+
+/**
+ * Send event to open the GitCommitDialog.
+ */
+function openGitCommitDialog() {
+  menu.value.hide();
+  DialogEvent.next({
+    type: 'open',
+    key: 'GitCommit',
   });
 }
 
