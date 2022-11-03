@@ -34,6 +34,7 @@ export default {
       push: 'Push',
       commit: 'Commit',
       committed: 'Your files are committed &#129395;!',
+      log: 'Log',
     },
     fileExplorer: {
       empty: 'No files available in project.',
@@ -158,6 +159,9 @@ export default {
           title: 'Push',
           description: 'Do you want to push your branch <b>{branch}</b> ?',
           force: 'Force option (<code>git push -f origin {branch}</code>)',
+        },
+        log: {
+          title: 'Log',
         },
       },
       fileExplorer: {
