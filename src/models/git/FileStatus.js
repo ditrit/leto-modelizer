@@ -26,7 +26,7 @@ class FileStatus extends FileInformation {
     this.isNew = ['020'].includes(this.matrix);
     this.isAdded = ['022', '023'].includes(this.matrix);
     this.isStaged = ['022', '023', '100', '122', '123'].includes(this.matrix);
-    this.hasUnstagedChanged = ['023', '103', '113', '121', '122', '123'].includes(this.matrix);
+    this.hasUnstagedChanged = ['023', '103', '113', '121', '123'].includes(this.matrix);
     this.isDeleted = ['100', '101'].includes(this.matrix);
     this.isUnstaged = ['101', '110', '120', '121'].includes(this.matrix);
     this.isUnmodified = ['111'].includes(this.matrix);
