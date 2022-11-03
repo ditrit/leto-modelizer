@@ -38,6 +38,7 @@
           <file-explorer-action-card
             class="file-explorer-buttons"
             :file="node"
+            :project-name="projectName"
           />
         </div>
       </div>

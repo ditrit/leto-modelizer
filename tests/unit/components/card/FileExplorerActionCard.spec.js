@@ -18,6 +18,7 @@ describe('Test component: FileExplorerActionCard', () => {
     wrapper = shallowMount(FileExplorerActionCard, {
       props: {
         file: { id: 'test' },
+        projectName: 'projectName',
       },
     });
   });
@@ -26,6 +27,12 @@ describe('Test component: FileExplorerActionCard', () => {
     describe('Test prop: file', () => {
       it('should match file', () => {
         expect(wrapper.vm.file).toStrictEqual({ id: 'test' });
+      });
+    });
+
+    describe('Test prop: projectName', () => {
+      it('should match "projectName"', () => {
+        expect(wrapper.vm.projectName).toStrictEqual('projectName');
       });
     });
   });
