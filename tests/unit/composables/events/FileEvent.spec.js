@@ -43,4 +43,11 @@ describe('Test composable: FileEvent', () => {
       expect(FileEvent.ExpandFolderEvent).toEqual(new Subject());
     });
   });
+
+  describe('Test event: UpdateFileEvent', () => {
+    it('should export a Subject', () => {
+      expect(FileEvent.UpdateFileEvent).toBeDefined();
+      expect(FileEvent.UpdateFileEvent).toEqual(new Subject());
+    });
+  });
 });

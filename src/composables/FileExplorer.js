@@ -16,21 +16,22 @@ export function createFolder(id, folder, name) {
 
 /**
  * Create and add a new file.
- * @param {String} id - Absolute path of file.
+ * @param {FileInformation} fileInformation - Absolute path of a file.
  * @param {Array} folder - Folder that will receive a new empty file.
  * @param {String} name - Name of the new file.
  * @param {Boolean} [isNewLocalFile=true] - True when the file is locally created otherwise false.
  */
-export function createFile(id, folder, name, isNewLocalFile = true) {
+export function createFile(fileInformation, folder, name, isNewLocalFile = true) {
   if (name === '__empty__') {
     return;
   }
   folder.push({
-    id,
+    id: fileInformation.path,
     icon: 'fa-regular fa-file',
     label: name,
     isFolder: false,
     isNewLocalFile,
+    information: fileInformation,
   });
 }
 
@@ -98,7 +99,12 @@ export function getTree(projectId, fileInformationArray) {
       if (!parentFolderChildren.length
         || parentFolderChildren.every((child) => child.label !== pathName)) {
         if (index === splittedPath.length - 1) {
-          createFile(fileInformation.path, parentFolderChildren, pathName, false);
+          createFile(
+            fileInformation,
+            parentFolderChildren,
+            pathName,
+            false,
+          );
         } else {
           createFolder(
             fileInformation.path

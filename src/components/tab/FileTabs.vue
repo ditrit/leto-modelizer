@@ -22,12 +22,12 @@
           class="row items-center"
           :data-cy="`${activeFileId === file.id ? 'active' : 'inactive'}-tab`"
         >
-          <span
-            :class="activeFileId === file.id ? 'text-bold' : ''"
-            :data-cy="`file-tab-label-${file.label}`"
-          >
-            {{file.label}}
-          </span>
+          <file-name
+            :path="file.id"
+            :isActive="activeFileId === file.id"
+            :label="file.label"
+            :status="file.information?.status"
+          />
           <q-btn
             flat
             round
@@ -56,6 +56,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import FileName from 'src/components/FileName.vue';
 
 const emit = defineEmits(['update:modelValue', 'update:close-file']);
 

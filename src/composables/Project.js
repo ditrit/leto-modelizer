@@ -511,22 +511,26 @@ export async function deleteProjectFile(projectId, file, isFolder) {
 }
 
 /**
- * Get status of all files, except the unmodified files.
+ * Get the status of all files. If filePaths is defined, get the status of the files
+ * that strictly or partially match the given filePaths.
  * @param {String} projectId - Id of project.
+ * @param {String[]} filepaths - Limit the query to the given files and directories.
+ * @param {Function} filter - Filter to only return results whose filepath matches a given function.
  * @return {Promise<FileStatus[]>} All files status.
  */
-export async function getStatus(projectId) {
+export async function getStatus(projectId, filepaths, filter) {
   return git.statusMatrix({
     fs,
     dir: `/${projectId}`,
+    filepaths,
+    filter,
   }).then((files) => files
     .map((file) => new FileStatus({
       path: file[0],
       headStatus: file[1],
       workdirStatus: file[2],
       stageStatus: file[3],
-    }))
-    .filter((file) => !file.isUnmodified));
+    })));
 }
 /**
  * Push selected branch on server.

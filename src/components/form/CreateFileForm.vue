@@ -84,7 +84,7 @@ function onSubmit() {
 
     FileEvent.CreateFileEvent.next({
       name: fileName.value.substring(fileName.value.lastIndexOf('/') + 1),
-      isFolder: false,
+      isFolder: props.isFolder,
     });
   }).catch(() => {
     Notify.create({

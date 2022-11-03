@@ -3,6 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import { editor } from 'app/__mocks__/monaco-editor';
 import MonacoEditor from 'components/editor/MonacoEditor.vue';
 import Project from 'src/composables/Project';
+import FileEvent from 'src/composables/events/FileEvent';
 
 installQuasarPlugin();
 
@@ -17,13 +18,19 @@ jest.mock('src/composables/Project', () => ({
   writeProjectFile: jest.fn(),
 }));
 
+jest.mock('src/composables/events/FileEvent', () => ({
+  UpdateFileEvent: {
+    next: jest.fn(),
+  },
+}));
+
 describe('Tess component: MonacoEditor', () => {
   let wrapper;
 
   const dispose = jest.fn();
   const layout = jest.fn();
   const onDidChangeModelContent = jest.fn();
-  const writeProjectFileMock = jest.fn();
+  const writeProjectFileMock = jest.fn(() => Promise.resolve());
 
   editor.create.mockImplementation(() => ({
     dispose,
@@ -61,9 +68,10 @@ describe('Tess component: MonacoEditor', () => {
   });
 
   describe('Test function: updateFile', () => {
-    it('should call writeProjectFile and emit event', () => {
-      wrapper.vm.updateFile();
+    it('should call writeProjectFile and emit event', async () => {
+      await wrapper.vm.updateFile();
       expect(writeProjectFileMock).toHaveBeenCalledTimes(1);
+      expect(FileEvent.UpdateFileEvent.next).toHaveBeenCalled();
     });
   });
 

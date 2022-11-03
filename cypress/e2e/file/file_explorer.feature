@@ -81,8 +81,7 @@ Feature: Test file explorer and file tabs
     When I click on "[data-cy=\"active-tab\"] [data-cy=\"close-file-tab\"]"
     And  I expect "[data-cy=\"file-tabs-container\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
-    And  I expect "[data-cy=\"file-tab-label-README.md\"]" is "README.md"
-    Then I expect "[data-cy=\"file-tab-label-branch.txt\"]" not exists
+    And  I expect "[data-cy=\"file-tab-content-README.md\"]" exists
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" not exists
 
   Scenario: Open a file and checkout branch, the file should reload if its content has changed

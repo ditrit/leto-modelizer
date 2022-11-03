@@ -18,7 +18,10 @@ class FileStatus extends FileInformation {
     stageStatus: -1,
   }) {
     super(props);
-    this.matrix = `${props.headStatus}${props.workdirStatus}${props.stageStatus}`;
+    const head = props.headStatus === undefined ? -1 : props.headStatus;
+    const workdir = props.workdirStatus === undefined ? -1 : props.workdirStatus;
+    const stage = props.stageStatus === undefined ? -1 : props.stageStatus;
+    this.matrix = `${head}${workdir}${stage}`;
     this.isUntracked = ['000', '003', '020'].includes(this.matrix);
     this.isNew = ['020'].includes(this.matrix);
     this.isAdded = ['022', '023'].includes(this.matrix);
@@ -27,6 +30,7 @@ class FileStatus extends FileInformation {
     this.isDeleted = ['100', '101'].includes(this.matrix);
     this.isUnstaged = ['101', '110', '120', '121'].includes(this.matrix);
     this.isUnmodified = ['111'].includes(this.matrix);
+    this.isIgnored = ['-1-1-1'].includes(this.matrix);
   }
 
   /**

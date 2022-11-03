@@ -14,6 +14,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(true);
     });
   });
 
@@ -30,6 +31,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('003 should be untracked', () => {
@@ -44,6 +46,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('020 should be new and untracked', () => {
@@ -58,6 +61,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('022 should be added and staged', () => {
@@ -72,6 +76,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('023 should be added, staged and hasUnstagedChanged', () => {
@@ -86,6 +91,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('100 should be deleted and staged', () => {
@@ -100,6 +106,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(true);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('101 should be deleted and unstaged', () => {
@@ -114,6 +121,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(true);
       expect(fileStatus.isUnstaged).toEqual(true);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('103 should be hasUnstagedChanged', () => {
@@ -128,6 +136,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('110 should be unstaged', () => {
@@ -142,6 +151,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(true);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('111 should be unmodified', () => {
@@ -156,6 +166,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(true);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('113 should be hasUnstagedChanged', () => {
@@ -170,6 +181,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('120 should be unstaged', () => {
@@ -184,6 +196,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(true);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('121 should be unstaged and hasUnstagedChanged', () => {
@@ -198,6 +211,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(true);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('122 should be staged and hasUnstagedChanged', () => {
@@ -212,6 +226,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
 
     it('123 should be staged and hasUnstagedChanged', () => {
@@ -226,6 +241,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);
+      expect(fileStatus.isIgnored).toEqual(false);
     });
   });
 

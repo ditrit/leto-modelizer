@@ -4,13 +4,19 @@ import ModelizerTextView from 'src/components/ModelizerTextView.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import Project from 'src/composables/Project';
+import FileExplorer from 'src/composables/FileExplorer';
 import PluginManager from 'src/composables/PluginManager';
+import FileStatus from 'src/models/git/FileStatus';
 
 installQuasarPlugin();
+const mockFileStatus = new FileStatus({
+  path: 'terraform/app.tf', headStatus: 0, workdirStatus: 0, stageStatus: 0,
+});
 
 jest.mock('src/composables/Project', () => ({
   getProjectFiles: jest.fn(() => Promise.resolve([{ path: 'terraform/app.tf' }])),
   readProjectFile: jest.fn(() => Promise.resolve({ path: 'terraform/app.tf', content: 'new content' })),
+  getStatus: jest.fn(() => Promise.resolve([mockFileStatus])),
   writeProjectFile: jest.fn(),
 }));
 
@@ -254,29 +260,8 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test function: updateProjectFiles', () => {
-    it('should update nodes', async () => {
-      wrapper.vm.nodes = [
-        {
-          id: 'projectName',
-          icon: 'fa-solid fa-folder',
-          label: 'projectName',
-          isFolder: true,
-          children: [
-            {
-              id: 'terraform',
-              icon: 'fa-solid fa-folder',
-              label: 'terraform',
-              children: [{
-                id: 'terraform/app.tf', icon: 'fa-regular fa-file', label: 'app.tf', isFolder: false,
-              }],
-              isFolder: true,
-            },
-            {
-              id: 'branch.txt', icon: 'fa-regular fa-file', label: 'branch.txt', isFolder: false,
-            },
-          ],
-        },
-      ];
+    it('should update nodes when statusResult is truthy', async () => {
+      wrapper.vm.nodes = [];
 
       wrapper.vm.updateProjectFiles();
       await flushPromises();
@@ -295,6 +280,62 @@ describe('Test component: ModelizerTextView', () => {
                 id: 'terraform/app.tf', icon: 'fa-regular fa-file', label: 'app.tf', isFolder: false,
               }],
               isFolder: true,
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should updates nodes when statusResult is falsy', async () => {
+      Project.getStatus.mockReturnValueOnce([new FileStatus({
+        path: 'README.md', headStatus: 0, workdirStatus: 2, stageStatus: 0,
+      })]);
+      Project.getProjectFiles.mockReturnValueOnce(Promise.resolve([{ path: 'terraform/app.tf' }]));
+      FileExplorer.getTree.mockImplementation(jest.fn(() => (
+        [{
+          id: 'projectName',
+          icon: 'fa-solid fa-folder',
+          label: 'projectName',
+          isFolder: true,
+          children: [
+            {
+              id: 'terraform',
+              icon: 'fa-solid fa-folder',
+              label: 'terraform',
+              children: [{
+                id: 'terraform/app.tf', icon: 'fa-regular fa-file', label: 'app.tf', isFolder: false,
+              }],
+              isFolder: true,
+            },
+            {
+              id: 'README.md', icon: 'fa-regular fa-file', label: 'README.md', isFolder: false,
+            },
+          ],
+        }]
+      )));
+
+      wrapper.vm.nodes = [];
+
+      await wrapper.vm.updateProjectFiles();
+      await flushPromises();
+      expect(wrapper.vm.nodes).toEqual([
+        {
+          id: 'projectName',
+          icon: 'fa-solid fa-folder',
+          label: 'projectName',
+          isFolder: true,
+          children: [
+            {
+              id: 'terraform',
+              icon: 'fa-solid fa-folder',
+              label: 'terraform',
+              children: [{
+                id: 'terraform/app.tf', icon: 'fa-regular fa-file', label: 'app.tf', isFolder: false,
+              }],
+              isFolder: true,
+            },
+            {
+              id: 'README.md', icon: 'fa-regular fa-file', label: 'README.md', isFolder: false,
             },
           ],
         },
@@ -359,7 +400,7 @@ describe('Test component: ModelizerTextView', () => {
     it('should update activeFileTab, send ExpandFolder events on Folder', async () => {
       FileEvent.OpenFileEvent.next = jest.fn();
       wrapper.vm.activeFileTab = { isSelected: false, id: 'fileName' };
-      wrapper.vm.selectedNode = { id: 'nodeName' };
+      wrapper.vm.selectedNode = { id: '' };
 
       await wrapper.vm.onCreateFileEvent({ name: 'nodeName', isFolder: true });
 
