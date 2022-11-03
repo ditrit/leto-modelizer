@@ -21,6 +21,7 @@ import {
   rm,
   getStatus,
   gitPush,
+  gitAdd,
   PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
@@ -57,6 +58,7 @@ jest.mock('isomorphic-git', () => ({
     onAuth();
     return Promise.resolve('pull');
   }),
+  add: jest.fn(() => Promise.resolve('add')),
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
@@ -121,8 +123,14 @@ describe('Test composable: Project', () => {
   window.crypto = {
     getRandomValues: () => 0x16,
   };
+  let gitAddMock;
 
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    localStorage.clear();
+    gitAddMock = jest.fn();
+
+    git.add.mockImplementation(gitAddMock);
+  });
 
   describe('Test function: createProjectTemplate', () => {
     it('should return project with generated ID', () => {
@@ -436,6 +444,14 @@ describe('Test composable: Project', () => {
         true,
       );
       expect(GitEvent.PushEvent.next).toBeCalled();
+    });
+  });
+
+  describe('Test function: gitAdd', () => {
+    it('should call git add', async () => {
+      await gitAdd('projectId', 'filepath');
+
+      expect(gitAddMock).toBeCalled();
     });
   });
 });
