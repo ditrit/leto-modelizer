@@ -22,6 +22,7 @@ import {
   getStatus,
   gitPush,
   gitAdd,
+  gitCommit,
   PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
@@ -59,6 +60,7 @@ jest.mock('isomorphic-git', () => ({
     return Promise.resolve('pull');
   }),
   add: jest.fn(() => Promise.resolve('add')),
+  commit: jest.fn(() => Promise.resolve('SHA-1')),
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
@@ -452,6 +454,13 @@ describe('Test composable: Project', () => {
       await gitAdd('projectId', 'filepath');
 
       expect(gitAddMock).toBeCalled();
+    });
+  });
+
+  describe('Test function: gitCommit', () => {
+    it('should call git commit and return SHA-1', async () => {
+      const result = await gitCommit('test', 'wip');
+      expect(result).toEqual('SHA-1');
     });
   });
 });

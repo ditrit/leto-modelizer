@@ -569,3 +569,23 @@ export async function gitPush(project, branchName, force) {
   });
   return GitEvent.PushEvent.next();
 }
+
+/**
+ * Commit all staged files.
+ * @param {String} projectId - Id of project.
+ * @param {String} message - Commit message.
+ * @return {Promise<void>} Promise with the SHA-1 object id of the newly created commit on success
+ * otherwise an error.
+ */
+export async function gitCommit(projectId, message) {
+  return git.commit({
+    fs,
+    dir: `/${projectId}`,
+    // TODO: Change when we have user information.
+    author: {
+      name: 'LetoModelizer',
+      email: 'LetoModelizer@no-reply.com',
+    },
+    message,
+  });
+}
