@@ -628,3 +628,20 @@ export async function gitGlobalSave(project) {
 
   return FileEvent.GlobalSaveFilesEvent.next();
 }
+
+/**
+ * Get all logs from git log.
+ * @param {String} projectId - Id of project.
+ * @param {String} ref - The commit to begin walking backwards through the history from.
+ * @param {Number} [depth=25] - Number of log to retrieve.
+ * @return {Promise<ReadCommitResult[]>} Promise with logs on success otherwise an error.
+ * @see https://isomorphic-git.org/docs/en/log
+ */
+export async function gitLog(projectId, ref, depth = 25) {
+  return git.log({
+    fs,
+    dir: `/${projectId}`,
+    depth,
+    ref,
+  });
+}
