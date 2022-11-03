@@ -32,6 +32,8 @@ export default {
       },
       update: 'Update',
       push: 'Push',
+      commit: 'Commit',
+      committed: 'Your files are committed &#129395;!',
     },
     fileExplorer: {
       empty: 'No files available in project.',
@@ -134,6 +136,10 @@ export default {
           staged: 'Staged files:',
           unstaged: 'Unstaged files:',
           untracked: 'Untracked files:',
+        },
+        commit: {
+          title: 'Git commit',
+          message: 'Commit message',
         },
         push: {
           title: 'Push',
