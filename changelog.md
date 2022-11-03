@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add update action on branch menu
 - Add status action on branch menu
 - Add push action on branch menu
+- Add commit action on branch menu
 - Draw component on definition click
 - Add file tabs to wrap monaco editor on text view
 - Add root folder in file explorer with project name as label
