@@ -2,7 +2,7 @@
   <q-form
     @submit="onSubmit"
     data-cy="delete-file-form"
-    class="q-gutter-md git-form"
+    class="q-gutter-md delete-file-form"
   >
     <q-checkbox
       v-if="isFolderWithChildren"

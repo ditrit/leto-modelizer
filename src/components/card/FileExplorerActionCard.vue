@@ -12,6 +12,7 @@
   >
     <file-explorer-action-menu
       :file="file"
+      :project-name="projectName"
       @hide:menu="isActionMenuOpen = false"
     />
   </q-btn>
@@ -27,6 +28,10 @@ const isActionMenuOpen = ref(false);
 const props = defineProps({
   file: {
     type: Object,
+    required: true,
+  },
+  projectName: {
+    type: String,
     required: true,
   },
 });

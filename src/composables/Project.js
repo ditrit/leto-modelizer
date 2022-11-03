@@ -386,6 +386,20 @@ export async function createBranchFrom(projectId, newBranchName, branchName, hav
 }
 
 /**
+ * Add untracked, unstaged or modified files.
+ * @param {String} projectId - Id of project.
+ * @param {String} filepath - Path of the file to add.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function gitAdd(projectId, filepath) {
+  return git.add({
+    fs,
+    dir: `/${projectId}`,
+    filepath,
+  });
+}
+
+/**
  * Update selected branch with git pull.
  * @param {Project} project - Project to update.
  * @param {String} branchName - Branch name.

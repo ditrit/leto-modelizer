@@ -222,7 +222,7 @@ describe('Test class: FileStatus', () => {
       expect(fileStatus.isUntracked).toEqual(false);
       expect(fileStatus.isAdded).toEqual(false);
       expect(fileStatus.isStaged).toEqual(true);
-      expect(fileStatus.hasUnstagedChanged).toEqual(true);
+      expect(fileStatus.hasUnstagedChanged).toEqual(false);
       expect(fileStatus.isDeleted).toEqual(false);
       expect(fileStatus.isUnstaged).toEqual(false);
       expect(fileStatus.isUnmodified).toEqual(false);

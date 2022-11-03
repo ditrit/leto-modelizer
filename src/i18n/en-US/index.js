@@ -37,9 +37,11 @@ export default {
       empty: 'No files available in project.',
       newFile: 'New file',
       newFolder: 'New folder',
+      addFile: 'Add',
       file: {
         create: 'File is created &#129395;!',
         delete: 'File is deleted.',
+        add: 'File is added &#129395;!',
       },
       folder: {
         create: 'Folder is created &#129395;!',
@@ -80,6 +82,7 @@ export default {
         file: {
           create: 'An error occured while creating file.',
           delete: 'An error occured while deleting file.',
+          add: 'An error occured while adding file.',
         },
       },
     },
