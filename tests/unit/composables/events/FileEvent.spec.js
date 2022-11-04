@@ -50,4 +50,11 @@ describe('Test composable: FileEvent', () => {
       expect(FileEvent.UpdateFileEvent).toEqual(new Subject());
     });
   });
+
+  describe('Test event: GlobalSaveFilesEvent', () => {
+    it('should export a Subject', () => {
+      expect(FileEvent.GlobalSaveFilesEvent).toBeDefined();
+      expect(FileEvent.GlobalSaveFilesEvent).toEqual(new Subject());
+    });
+  });
 });
