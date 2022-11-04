@@ -66,6 +66,7 @@ const activeFileTab = ref({ isSelected: false, id: '' });
 const nodes = ref([]);
 const selectedNode = ref({});
 
+let globalSaveFilesEventSubscription;
 let openFileSubscription;
 let selectNodeSubscription;
 let createFileSubscription;
@@ -241,6 +242,7 @@ watch(activeFileTab, () => {
 
 onMounted(() => {
   updateProjectFiles();
+  globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateProjectFiles);
   openFileSubscription = FileEvent.OpenFileEvent.subscribe(onOpenFileEvent);
   selectNodeSubscription = FileEvent.SelectNodeEvent.subscribe(updateSelectedNode);
   createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFileEvent);
@@ -252,6 +254,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  globalSaveFilesEventSubscription.unsubscribe();
   openFileSubscription.unsubscribe();
   selectNodeSubscription.unsubscribe();
   createFileSubscription.unsubscribe();
