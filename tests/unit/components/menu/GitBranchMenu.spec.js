@@ -158,6 +158,19 @@ describe('Test component: GitBranchMenu', () => {
       });
     });
 
+    describe('Test function: openLog', () => {
+      it('should call dialog event and hide menu', () => {
+        DialogEvent.next = jest.fn();
+        wrapper.vm.menu = {
+          hide: jest.fn(),
+        };
+
+        wrapper.vm.openLog();
+        expect(DialogEvent.next).toBeCalled();
+        expect(wrapper.vm.menu.hide).toBeCalled();
+      });
+    });
+
     describe('Test function: isSearched', () => {
       it('should return true on match', () => {
         wrapper.vm.searchBranch = '';

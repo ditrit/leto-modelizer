@@ -2,8 +2,8 @@
   <q-menu
     class="git-branch-menu"
     data-cy="git-branch-menu"
-    @show="onOpenMenu"
     ref="menu"
+    @show="onOpenMenu"
   >
     <q-list style="min-width: 500px">
       <q-input
@@ -47,6 +47,17 @@
           />
         </q-item-section>
         <q-item-section>{{ $t('actions.git.newBranch') }}</q-item-section>
+      </q-item>
+
+      <q-item clickable @click="openLog">
+        <q-item-section avatar>
+          <q-icon
+            color="primary"
+            name="fa-solid fa-list"
+            data-cy="git-menu-log"
+          />
+        </q-item-section>
+        <q-item-section>{{ $t('actions.git.log') }}</q-item-section>
       </q-item>
 
       <template v-if="filteredBranches.local.length > 0">
@@ -132,6 +143,7 @@ const props = defineProps({
 
 const route = useRoute();
 const maxItem = ref(5);
+const menu = ref(null);
 const filteredBranches = ref({
   local: [],
   remote: [],
@@ -140,7 +152,6 @@ const branches = ref({
   local: [],
   remote: [],
 });
-const menu = ref(null);
 const searchedBranch = ref('');
 const showLocal = ref(false);
 const showRemote = ref(false);
@@ -242,6 +253,17 @@ function openGitStatusDialog() {
     type: 'open',
     key: 'GitStatus',
   });
+}
+/**
+ * Send event to open the GitNewBranchDialog and close the menu.
+ */
+function openLog() {
+  DialogEvent.next({
+    type: 'open',
+    key: 'GitLog',
+    branch: props.currentBranchName,
+  });
+  menu.value.hide();
 }
 
 /**
