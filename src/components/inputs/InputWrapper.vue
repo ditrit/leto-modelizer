@@ -16,7 +16,7 @@ defineProps({
   },
 });
 
-defineEmits(['update:attribute']);
+const emit = defineEmits(['update:attribute']);
 
 const inputList = {
   Boolean: defineAsyncComponent(() => import('./BooleanInput')),

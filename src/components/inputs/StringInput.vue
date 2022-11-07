@@ -17,7 +17,7 @@ const props = defineProps({
   },
 });
 
-defineEmits(['update:model-value']);
+const emit = defineEmits(['update:model-value']);
 
 const localValue = ref(props.attribute.value);
 </script>
