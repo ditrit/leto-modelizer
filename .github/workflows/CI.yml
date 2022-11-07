@@ -8,6 +8,17 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
+  branch-naming-rules:
+    name: Check branch name
+    runs-on: ubuntu-latest
+    steps:
+      - uses: deepakputhraya/action-branch-name@master
+        with:
+          regex: '^(feature|bugfix|improvement|library|prerelease|release|hotfix)\/[a-z0-9_.-]+$'
+          allowed_prefixes: 'feature,bugfix,improvement,library,prerelease,release,hotfix'
+          ignore: main,dev
+          min_length: 5
+          max_length: 50
   check-style:
     name: Code style
     runs-on: ubuntu-latest
