@@ -19,6 +19,7 @@ jobs:
           ignore: main,dev
           min_length: 5
           max_length: 50
+
   check-style:
     name: Code style
     runs-on: ubuntu-latest
@@ -51,6 +52,26 @@ jobs:
         with:
           name: reports-lcov-${{ github.sha }}
           path: reports/
+
+  check-dependencies:
+    name: Check dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: npm install npm-check-updates
+      - name: Run check dependencies
+        run: echo '```bash' > dependencies.txt && npx ncu -x "leto-modelizer*" >> dependencies.txt && echo '```' >> dependencies.txt
+      - name: Post comment
+        uses: machine-learning-apps/pr-comment@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: dependencies.txt
 
   e2e-tests:
     name: E2E tests
