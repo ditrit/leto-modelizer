@@ -52,6 +52,13 @@ run this command: `npm run plugin:install`
 
 ![](docs/plugin-install.png)
 
+Options `repository-name` and `repository-url` can be added with the `npm run plugin:install` command to bypass cli prompts.
+
+```bash
+# Example with terraform plugin
+npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.1.3"
+```
+
 Now your plugin is installed, you can continue to install other plugin with the same command if you want.
 
 When you install all your wanted plugins, please run this commands `npm run plugin:init` to finalise all plugins' installation.
