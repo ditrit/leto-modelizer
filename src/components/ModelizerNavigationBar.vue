@@ -32,11 +32,7 @@
           no-caps
           data-cy="modelizer-switch"
           rounded
-        >
-          <template v-slot:content="label">
-            <span data-cy="content">{{ label }}</span>
-          </template>
-        </q-btn-toggle>
+        />
       </div>
       <modelizer-settings-menu/>
     </div>
