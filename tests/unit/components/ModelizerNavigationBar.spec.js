@@ -3,8 +3,18 @@ import { shallowMount } from '@vue/test-utils';
 import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar.vue';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import { Notify } from 'quasar';
+import { gitGlobalSave } from 'src/composables/Project';
 
-installQuasarPlugin();
+installQuasarPlugin({
+  plugins: [Notify],
+});
+
+jest.mock('vue-i18n', () => ({
+  useI18n: () => ({
+    t: (t) => t,
+  }),
+}));
 
 jest.mock('vue-i18n', () => ({
   useI18n: () => ({
@@ -25,6 +35,16 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   },
 }));
 
+jest.mock('src/composables/Project', () => ({
+  gitGlobalSave: jest.fn(),
+  getProjectById: jest.fn((projectName) => {
+    if (projectName === 'projectTest') {
+      return { git: { repository: {} } };
+    }
+    return {};
+  }),
+}));
+
 describe('Test component: ModelizerNavigationBar', () => {
   let wrapper;
   const emit = jest.fn();
@@ -34,6 +54,9 @@ describe('Test component: ModelizerNavigationBar', () => {
   ViewSwitchEvent.next.mockImplementation(() => emit());
   PluginEvent.RenderEvent.next.mockImplementation(renderEvent);
   PluginEvent.ParseEvent.next.mockImplementation(parseEvent);
+  gitGlobalSave.mockImplementation(
+    (project) => (project.git ? Promise.resolve() : Promise.reject()),
+  );
 
   beforeEach(() => {
     wrapper = shallowMount(ModelizerNavigationBar, {
@@ -69,6 +92,59 @@ describe('Test component: ModelizerNavigationBar', () => {
       it('should match "model"', () => {
         expect(wrapper.vm.props.viewType).toEqual('model');
       });
+    });
+  });
+
+  describe('Test computed: isSaveButtonDisable', () => {
+    it('should return false if project git repository is defined', () => {
+      expect(wrapper.vm.isSaveButtonDisable).toEqual(false);
+    });
+
+    it('should return true if project git repository is not defined', async () => {
+      await wrapper.setProps({
+        viewType: 'model',
+        projectName: 'WrongProjectTest',
+      });
+
+      expect(wrapper.vm.isSaveButtonDisable).toEqual(true);
+    });
+  });
+
+  describe('Test computed: savebuttonTitle', () => {
+    it('should return enable title if project git repository is defined', () => {
+      expect(wrapper.vm.savebuttonTitle).toEqual('page.modelizer.header.button.save.enable.title');
+    });
+
+    it('should return disable title if project git repository is not defined', async () => {
+      await wrapper.setProps({
+        viewType: 'model',
+        projectName: 'WrongProjectTest',
+      });
+
+      expect(wrapper.vm.savebuttonTitle).toEqual('page.modelizer.header.button.save.disable.title');
+    });
+  });
+
+  describe('Test functions: save', () => {
+    it('should emit a positive notification on success', async () => {
+      Notify.create = jest.fn();
+
+      await wrapper.vm.save();
+
+      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
+    });
+
+    it('should emit a negative notification on error', async () => {
+      await wrapper.setProps({
+        viewType: 'model',
+        projectName: 'WrongProjectTest',
+      });
+
+      Notify.create = jest.fn();
+
+      await wrapper.vm.save();
+
+      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
     });
   });
 

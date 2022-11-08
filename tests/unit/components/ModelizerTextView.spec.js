@@ -68,6 +68,10 @@ jest.mock('src/composables/events/FileEvent', () => ({
   ExpandFolderEvent: {
     next: jest.fn(),
   },
+  GlobalSaveFilesEvent: {
+    next: jest.fn(),
+    subscribe: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
@@ -100,6 +104,8 @@ describe('Test component: ModelizerTextView', () => {
   let pullUnsubscribe;
   let emit;
   let writeProjectFileMock;
+  let globalSaveFilesEventSubscribe;
+  let globalSaveFilesEventUnsubscribe;
 
   beforeEach(() => {
     openFileSubscribe = jest.fn();
@@ -117,6 +123,8 @@ describe('Test component: ModelizerTextView', () => {
     writeProjectFileMock = jest.fn();
     pullSubscribe = jest.fn();
     pullUnsubscribe = jest.fn();
+    globalSaveFilesEventSubscribe = jest.fn();
+    globalSaveFilesEventUnsubscribe = jest.fn();
 
     GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
       updateRemoteSubscribe();
@@ -137,6 +145,10 @@ describe('Test component: ModelizerTextView', () => {
     FileEvent.DeleteFileEvent.subscribe.mockImplementation(() => {
       deleteFileSubscribe();
       return { unsubscribe: deleteFileUnsubscribe };
+    });
+    FileEvent.GlobalSaveFilesEvent.subscribe.mockImplementation(() => {
+      globalSaveFilesEventSubscribe();
+      return { unsubscribe: globalSaveFilesEventUnsubscribe };
     });
     GitEvent.CheckoutEvent.subscribe.mockImplementation(() => {
       checkoutSubscribe();

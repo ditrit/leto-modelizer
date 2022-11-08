@@ -381,7 +381,7 @@ export async function createBranchFrom(projectId, newBranchName, branchName, hav
   GitEvent.NewBranchEvent.next();
 
   if (haveToCheckout) {
-    checkout(projectId, newBranchName);
+    await checkout(projectId, newBranchName);
   }
 }
 
@@ -588,4 +588,43 @@ export async function gitCommit(projectId, message) {
     },
     message,
   });
+}
+
+/**
+ * Save all modifications on the new branch and push it.
+ * @param {Object} project - Object containing all information about the project.
+ */
+export async function gitGlobalSave(project) {
+  const nowDate = new Date();
+  const currentBranch = await getCurrentBranch(project.id);
+  const newBranch = `leto-modelizer_${nowDate.getTime()}`;
+
+  await createBranchFrom(
+    project.id,
+    newBranch,
+    currentBranch,
+    true,
+  );
+
+  const files = (await getStatus(project.id))
+    .filter((file) => file.hasUnstagedChanged
+      || file.isUntracked
+      || file.isUnstaged
+      || file.isStaged)
+    .map((file) => file.path);
+
+  await gitAdd(project.id, files);
+
+  await gitCommit(
+    project.id,
+    `leto-modelizer ${nowDate.toDateString()}`,
+  );
+
+  await gitPush(
+    project,
+    newBranch,
+    true,
+  );
+
+  return FileEvent.GlobalSaveFilesEvent.next();
 }

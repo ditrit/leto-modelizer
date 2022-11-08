@@ -24,12 +24,14 @@ import {
   gitAdd,
   gitCommit,
   PROJECT_STORAGE_KEY,
+  gitGlobalSave,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
 import git from 'isomorphic-git';
 import GitEvent from 'src/composables/events/GitEvent';
 import FileStatus from 'src/models/git/FileStatus';
+import { GlobalSaveFilesEvent } from 'src/composables/events/FileEvent';
 
 jest.mock('isomorphic-git', () => ({
   init: jest.fn(() => Promise.resolve('init')),
@@ -125,14 +127,26 @@ jest.mock('browserfs', () => ({
   })),
 }));
 
+jest.mock('src/composables/events/FileEvent', () => ({
+  CreateFileEvent: {
+    next: jest.fn(),
+  },
+  GlobalSaveFilesEvent: {
+    next: jest.fn(),
+  },
+}));
+
 describe('Test composable: Project', () => {
   let gitAddMock;
+  let globalSaveFilesEvent;
 
   beforeEach(() => {
     localStorage.clear();
     gitAddMock = jest.fn();
+    globalSaveFilesEvent = jest.fn();
 
     git.add.mockImplementation(gitAddMock);
+    GlobalSaveFilesEvent.next.mockImplementation(globalSaveFilesEvent);
   });
 
   describe('Test function: createProjectTemplate', () => {
@@ -462,6 +476,18 @@ describe('Test composable: Project', () => {
     it('should call git commit and return SHA-1', async () => {
       const result = await gitCommit('test', 'wip');
       expect(result).toEqual('SHA-1');
+    });
+  });
+
+  describe('Test function: gitGlobalSave', () => {
+    it('should emit GlobalSaveFilesEvent event', async () => {
+      await gitGlobalSave({
+        git: {
+          username: 'username',
+          token: 'token',
+        },
+      });
+      expect(globalSaveFilesEvent).toBeCalled();
     });
   });
 });

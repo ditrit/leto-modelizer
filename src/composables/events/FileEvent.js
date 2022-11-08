@@ -52,6 +52,12 @@ const ExpandFolderEvent = new Subject();
  */
 const UpdateFileEvent = new Subject();
 
+/**
+ * Represent a rxjs Event object to emit and to receive events about file global saving.
+ * @typedef {Subject} GlobalSaveFilesEvent
+ */
+const GlobalSaveFilesEvent = new Subject();
+
 export default {
   OpenFileEvent,
   SelectFileEvent,
@@ -60,4 +66,5 @@ export default {
   DeleteFileEvent,
   ExpandFolderEvent,
   UpdateFileEvent,
+  GlobalSaveFilesEvent,
 };

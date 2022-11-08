@@ -104,6 +104,19 @@ export default {
           model: 'Model',
           text: 'Text',
         },
+        button: {
+          save: {
+            label: 'Save',
+            disable: {
+              title: 'Please set git configuration to enable saving.',
+            },
+            enable: {
+              title: 'Click to save you work.',
+            },
+            success: 'Saved successfully ! 😉',
+            error: 'An error occured while saving.',
+          },
+        },
       },
       drawer: {
         components: {
