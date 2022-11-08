@@ -56,7 +56,7 @@ const props = defineProps({
   projectName: String,
 });
 const buttonToggleValue = ref(props.viewType);
-const buttonToggleOptions = ref([{
+const buttonToggleOptions = computed(() => [{
   label: t('page.modelizer.header.switch.model'),
   value: 'model',
   slot: 'content',
