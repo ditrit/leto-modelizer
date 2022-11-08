@@ -20,4 +20,5 @@ module.exports = defineConfig({
     screenshotOnRunFailure: false,
     setupNodeEvents,
   },
+  retries: 3,
 });

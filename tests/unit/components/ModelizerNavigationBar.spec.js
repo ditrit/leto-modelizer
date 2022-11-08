@@ -1,11 +1,16 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import { createI18n } from 'vue-i18n';
 import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar.vue';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
 
 installQuasarPlugin();
+
+jest.mock('vue-i18n', () => ({
+  useI18n: () => ({
+    t: (t) => t,
+  }),
+}));
 
 jest.mock('src/composables/events/ViewSwitchEvent', () => ({
   next: jest.fn(),
@@ -43,25 +48,6 @@ describe('Test component: ModelizerNavigationBar', () => {
         components: {
           'router-link': 'a',
         },
-        plugins: [
-          createI18n({
-            locale: 'en-US',
-            messages: {
-              'en-US': {
-                page: {
-                  modelizer: {
-                    header: {
-                      switch: {
-                        model: 'Model',
-                        text: 'Text',
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          }),
-        ],
       },
     });
   });

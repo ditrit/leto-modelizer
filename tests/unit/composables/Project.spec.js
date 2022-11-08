@@ -81,6 +81,10 @@ jest.mock('src/composables/events/GitEvent', () => ({
   },
 }));
 
+jest.mock('src/composables/Random', () => ({
+  randomHexString: () => '00000000',
+}));
+
 jest.mock('browserfs', () => ({
   install: jest.fn(),
   configure: jest.fn(),
@@ -122,9 +126,6 @@ jest.mock('browserfs', () => ({
 }));
 
 describe('Test composable: Project', () => {
-  window.crypto = {
-    getRandomValues: () => 0x16,
-  };
   let gitAddMock;
 
   beforeEach(() => {
