@@ -43,5 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add ComponentDetailPanel
 - Add files status and color file's label regarding to its status
 - Add git add action
+- Update dependencies
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
