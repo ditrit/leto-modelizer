@@ -23,6 +23,7 @@ import {
   gitPush,
   gitAdd,
   gitCommit,
+  gitLog,
   PROJECT_STORAGE_KEY,
   gitGlobalSave,
 } from 'src/composables/Project';
@@ -63,6 +64,7 @@ jest.mock('isomorphic-git', () => ({
   }),
   add: jest.fn(() => Promise.resolve('add')),
   commit: jest.fn(() => Promise.resolve('SHA-1')),
+  log: jest.fn(() => Promise.resolve(['log'])),
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
@@ -488,6 +490,23 @@ describe('Test composable: Project', () => {
         },
       });
       expect(globalSaveFilesEvent).toBeCalled();
+    });
+  });
+
+  describe('Test function: gitLog', () => {
+    it('should return valid log', async () => {
+      const result = await gitLog('test', 'main');
+      expect(result).toEqual(['log']);
+    });
+
+    it('should call git log with default depth', async () => {
+      await gitLog('test', 'main');
+      expect(git.log).toBeCalledWith(expect.objectContaining({ depth: 25 }));
+    });
+
+    it('should call git log with specified depth', async () => {
+      await gitLog('test', 'main', 1);
+      expect(git.log).toBeCalledWith(expect.objectContaining({ depth: 1 }));
     });
   });
 });

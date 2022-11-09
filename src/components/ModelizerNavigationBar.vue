@@ -27,26 +27,24 @@
         :title="$t(savebuttonTitle)"
         @click="save()"
         color="positive"
-        class="q-mr-xl"
+        class="q-mr-md"
       >
         <template v-slot:loading>
           <q-spinner-dots/>
         </template>
       </q-btn>
-      <div class="view-switch">
-        <q-btn-toggle
-          v-model="buttonToggleValue"
-          :options="buttonToggleOptions"
-          @update:model-value="onViewSwitchUpdate"
-          class="view-selector"
-          toggle-color="primary"
-          text-color="primary"
-          color="white"
-          no-caps
-          data-cy="modelizer-switch"
-          rounded
-        />
-      </div>
+      <q-btn-toggle
+        v-model="buttonToggleValue"
+        :options="buttonToggleOptions"
+        @update:model-value="onViewSwitchUpdate"
+        class="view-selector q-mr-md"
+        toggle-color="primary"
+        text-color="primary"
+        color="white"
+        no-caps
+        data-cy="modelizer-switch"
+        rounded
+      />
       <modelizer-settings-menu/>
     </div>
   </q-header>

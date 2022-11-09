@@ -29,6 +29,7 @@
         <git-status-dialog :project-name="projectName"/>
         <git-push-dialog :project-name="projectName"/>
         <git-commit-dialog :project-name="projectName"/>
+        <git-log-dialog :project-name="projectName"/>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -53,6 +54,7 @@ import DeleteFileDialog from 'components/dialog/DeleteFileDialog';
 import GitStatusDialog from 'components/dialog/GitStatusDialog';
 import GitPushDialog from 'components/dialog/GitPushDialog';
 import GitCommitDialog from 'components/dialog/GitCommitDialog';
+import GitLogDialog from 'components/dialog/GitLogDialog';
 
 const route = useRoute();
 const router = useRouter();
