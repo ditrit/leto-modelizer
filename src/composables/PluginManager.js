@@ -203,3 +203,20 @@ export function getComponent(componentId, components) {
 
   return components[index];
 }
+
+/**
+ * Get the components corresponding to the given type from the tree of components.
+ * @param {String} componentType - Type of the wanted component.
+ * @param {Array} components - Tree of components.
+ * @returns {Array} array of the corresponding components.
+ */
+export function getComponentsByType(componentType, components) {
+  const foundComponents = components.filter(({ definition }) => definition.type === componentType);
+
+  const childrensComponents = components
+    .filter(({ children }) => children && children.length > 0)
+    .map(({ children }) => getComponentsByType(componentType, children))
+    .flat();
+
+  return foundComponents.concat(childrensComponents);
+}
