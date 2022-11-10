@@ -65,6 +65,7 @@ const fileTabArray = ref([]);
 const activeFileTab = ref({ isSelected: false, id: '' });
 const nodes = ref([]);
 const selectedNode = ref({});
+const localFileInformations = ref([]);
 
 let globalSaveFilesEventSubscription;
 let openFileSubscription;
@@ -75,6 +76,7 @@ let updateRemoteSubscription;
 let checkoutSubscription;
 let pluginRenderSubscription;
 let pullSubscription;
+let updateFileSubscription;
 
 /**
  * Update fileTabArray array when a new file is open.
@@ -125,6 +127,7 @@ function deleteFileTab(fileId) {
  * @param {FileInformation[]} fileInformations - Array of files.
  */
 function updateFileExplorer(fileInformations) {
+  localFileInformations.value = fileInformations;
   const projectFilesIds = fileInformations.map((file) => file.path);
   nodes.value = getTree(props.projectName, fileInformations);
   fileTabArray.value = fileTabArray.value.filter(({ id }) => projectFilesIds.includes(id));
@@ -167,6 +170,31 @@ function updateProjectFiles() {
 
     updateFileExplorer(fileInformations);
   });
+}
+
+/**
+ * Update nodes and fileTabArray when file content is updated.
+ * @param {String} filePath - Path (id) of the updated file.
+ */
+async function onUpdateFile(filePath) {
+  const filePathIndex = localFileInformations.value.findIndex(({ path }) => path === filePath);
+
+  if (filePathIndex !== -1) {
+    const [fileStatus] = await getStatus(
+      props.projectName,
+      [filePath],
+      (f) => f === filePath,
+    );
+
+    localFileInformations.value[filePathIndex] = fileStatus;
+    nodes.value = getTree(props.projectName, localFileInformations.value);
+
+    const fileTabIndex = fileTabArray.value.findIndex(({ id }) => id === filePath);
+
+    if (fileTabIndex !== -1) {
+      fileTabArray.value[fileTabIndex].information = fileStatus;
+    }
+  }
 }
 
 /**
@@ -251,6 +279,7 @@ onMounted(() => {
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
   pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(renderPlugins);
   pullSubscription = GitEvent.PullEvent.subscribe(updateProjectFiles);
+  updateFileSubscription = FileEvent.UpdateFileEvent.subscribe(onUpdateFile);
 });
 
 onUnmounted(() => {
@@ -263,6 +292,7 @@ onUnmounted(() => {
   checkoutSubscription.unsubscribe();
   pluginRenderSubscription.unsubscribe();
   pullSubscription.unsubscribe();
+  updateFileSubscription.unsubscribe();
 });
 </script>
 

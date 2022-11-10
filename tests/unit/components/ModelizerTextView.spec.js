@@ -72,6 +72,10 @@ jest.mock('src/composables/events/FileEvent', () => ({
     next: jest.fn(),
     subscribe: jest.fn(),
   },
+  UpdateFileEvent: {
+    next: jest.fn(),
+    subscribe: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
@@ -106,6 +110,8 @@ describe('Test component: ModelizerTextView', () => {
   let writeProjectFileMock;
   let globalSaveFilesEventSubscribe;
   let globalSaveFilesEventUnsubscribe;
+  let updateFileSubscribe;
+  let updateFileUnsubscribe;
 
   beforeEach(() => {
     openFileSubscribe = jest.fn();
@@ -125,6 +131,8 @@ describe('Test component: ModelizerTextView', () => {
     pullUnsubscribe = jest.fn();
     globalSaveFilesEventSubscribe = jest.fn();
     globalSaveFilesEventUnsubscribe = jest.fn();
+    updateFileSubscribe = jest.fn();
+    updateFileUnsubscribe = jest.fn();
 
     GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
       updateRemoteSubscribe();
@@ -163,6 +171,10 @@ describe('Test component: ModelizerTextView', () => {
     GitEvent.PullEvent.subscribe.mockImplementation(() => {
       pullSubscribe();
       return { unsubscribe: pullUnsubscribe };
+    });
+    FileEvent.UpdateFileEvent.subscribe.mockImplementation(() => {
+      updateFileSubscribe();
+      return { unsubscribe: updateFileUnsubscribe };
     });
 
     wrapper = shallowMount(ModelizerTextView, {
@@ -421,6 +433,64 @@ describe('Test component: ModelizerTextView', () => {
     });
   });
 
+  describe('Test function: onUpdateFile', () => {
+    it('should update nodes and fileTabArray if a file content is updated', async () => {
+      const mockUpdatedFileStatus = new FileStatus({
+        path: 'path', headStatus: 0, workdirStatus: 2, stageStatus: 0,
+      });
+      const mockUpdatedNodes = [{
+        id: 'path',
+        icon: 'fa-regular fa-file',
+        label: 'path',
+        information: mockUpdatedFileStatus,
+        isFolder: false,
+      }];
+
+      Project.getStatus.mockReturnValueOnce([mockUpdatedFileStatus]);
+      FileExplorer.getTree.mockImplementation(jest.fn(() => mockUpdatedNodes));
+
+      wrapper.vm.localFileInformations = [mockUpdatedFileStatus];
+      wrapper.vm.fileTabArray = [
+        {
+          id: 'path',
+          label: 'path',
+          content: '',
+          information: {},
+        },
+      ];
+      wrapper.vm.nodes = [{
+        id: 'path',
+        icon: 'fa-regular fa-file',
+        label: 'path',
+        information: {},
+        isFolder: false,
+      }];
+
+      await wrapper.vm.onUpdateFile('path');
+
+      expect(wrapper.vm.fileTabArray).toEqual([
+        {
+          id: 'path',
+          label: 'path',
+          content: '',
+          information: mockUpdatedFileStatus,
+        },
+      ]);
+      expect(wrapper.vm.nodes).toEqual(mockUpdatedNodes);
+    });
+
+    it('should not update nodes nor fileTabArray if updated file is not found', async () => {
+      wrapper.vm.fileTabArray = [{ id: 'terraform' }];
+      wrapper.vm.nodes = [{ id: 'terraform' }];
+      wrapper.vm.localFileInformations = [{ path: 'terraform' }];
+
+      await wrapper.vm.onUpdateFile('otherPath');
+
+      expect(wrapper.vm.fileTabArray).toEqual([{ id: 'terraform' }]);
+      expect(wrapper.vm.nodes).toEqual([{ id: 'terraform' }]);
+    });
+  });
+
   describe('Test function: renderPlugins', () => {
     it('should call writeProjectFile once', () => {
       wrapper.vm.renderPlugins();
@@ -455,6 +525,10 @@ describe('Test component: ModelizerTextView', () => {
 
     it('should subscribe to PullEvent', () => {
       expect(pullSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to UpdateFileEvent', () => {
+      expect(updateFileSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -499,6 +573,12 @@ describe('Test component: ModelizerTextView', () => {
       expect(pullUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(pullUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to UpdateFileEvent', () => {
+      expect(updateFileUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(updateFileUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

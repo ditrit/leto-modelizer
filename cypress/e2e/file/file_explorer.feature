@@ -32,7 +32,7 @@ Feature: Test file explorer and file tabs
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
     Then I expect "[data-cy=\"file-tabs\"]" exists
     And  I expect "[data-cy=\"monaco-editor\"]" exists
-    And  I expect "[data-cy=\"file-tabs-container\"]" appear 1 time on screen
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tab-label-README.md\"]" is "README.md"
 
@@ -40,22 +40,22 @@ Feature: Test file explorer and file tabs
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
     Then I expect "[data-cy=\"file-tabs\"]" exists
     And  I expect "[data-cy=\"monaco-editor\"]" exists
-    And  I expect "[data-cy=\"file-tabs-container\"]" appear 1 time on screen
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
 
     When I click on "[data-cy=\"active-tab\"] [data-cy=\"close-file-tab\"]"
-    And  I expect "[data-cy=\"file-tabs-container\"]" appear 0 time on screen
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 0 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" not exists
     And  I expect "[data-cy=\"monaco-editor\"]" not exists
 
   Scenario: Open two files then click on the inactive file and tab should switch the active tab
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
-    Then I expect "[data-cy=\"file-tabs-container\"]" appear 1 time on screen
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" exists
 
     When I double click on "[data-cy=\"file-explorer-branch.txt\"]"
-    And  I expect "[data-cy=\"file-tabs-container\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tab-label-branch.txt\"]" is "branch.txt"
@@ -65,13 +65,13 @@ Feature: Test file explorer and file tabs
     When I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "branch.txt"
-    And  I expect "[data-cy=\"file-tabs-container\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" not exists
 
   Scenario: Open two files and click to close the active tab, the other opened tab becomes the active tab
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
     And  I double click on "[data-cy=\"file-explorer-branch.txt\"]"
-    Then I expect "[data-cy=\"file-tabs-container\"]" appear 2 times on screen
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tab-label-branch.txt\"]" is "branch.txt"
@@ -79,14 +79,14 @@ Feature: Test file explorer and file tabs
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
 
     When I click on "[data-cy=\"active-tab\"] [data-cy=\"close-file-tab\"]"
-    And  I expect "[data-cy=\"file-tabs-container\"]" appear 1 time on screen
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" exists
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" not exists
 
   Scenario: Open a file and checkout branch, the file should reload if its content has changed
     When I double click on "[data-cy=\"file-explorer-branch.txt\"]"
-    Then I expect "[data-cy=\"file-tabs-container\"]" appear 1 time on screen
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
 
@@ -95,14 +95,14 @@ Feature: Test file explorer and file tabs
     And  I click on "[data-cy=\"git-menu-branch-checkout-main\"]"
     And  I expect "[data-cy=\"git-current-branch\"]" is "main"
     And  I click on body to close popup
-    Then I expect "[data-cy=\"file-tabs-container\"]" appear 1 time on screen
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
 
   Scenario: Open two files, checkout branch and if an opened file no longer exists, its corresponding tab should be closed
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
     And  I double click on "[data-cy=\"file-explorer-branch.txt\"]"
-    Then I expect "[data-cy=\"file-tabs-container\"]" appear 2 times on screen
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
 
@@ -111,7 +111,7 @@ Feature: Test file explorer and file tabs
     And  I click on "[data-cy=\"git-menu-branch-checkout-main\"]"
     And  I expect "[data-cy=\"git-current-branch\"]" is "main"
     And  I click on body to close popup
-    Then I expect "[data-cy=\"file-tabs-container\"]" appear 1 time on screen
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
@@ -120,7 +120,7 @@ Feature: Test file explorer and file tabs
     When I double click on "[data-cy=\"file-explorer-branch.txt\"]"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
     Then I double click on "[data-cy=\"file-explorer-README.md\"]"
-    And  I expect "[data-cy=\"file-tabs-container\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" exists
@@ -130,7 +130,7 @@ Feature: Test file explorer and file tabs
     And  I click on "[data-cy=\"git-menu-branch-checkout-main\"]"
     And  I expect "[data-cy=\"git-current-branch\"]" is "main"
     And  I click on body to close popup
-    Then I expect "[data-cy=\"file-tabs-container\"]" appear 1 time on screen
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"

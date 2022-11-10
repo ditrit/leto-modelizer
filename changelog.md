@@ -46,5 +46,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add git add action
 - Update dependencies
 - Add Save button in ModelizerNavigationBar
+- Add onUpdateFile function in ModelizerTextView and create FileTabHeader component
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased

@@ -7,39 +7,15 @@
       active-color="primary"
       indicator-color="transparent"
       align="left"
+      data-cy="file-tabs-container"
     >
-      <q-tab
+      <file-tab-header
         v-for="file in files"
         :key="file.id"
-        :name="file.id"
-        no-caps
-        :ripple="false"
-        :class="`tab-item
-          ${activeFileId === file.id ? 'tab-item--active' : 'tab-item--inactive'}`"
-        data-cy="file-tabs-container"
-      >
-        <div
-          class="row items-center"
-          :data-cy="`${activeFileId === file.id ? 'active' : 'inactive'}-tab`"
-        >
-          <file-name
-            :path="file.id"
-            :isActive="activeFileId === file.id"
-            :label="file.label"
-            :status="file.information?.status"
-          />
-          <q-btn
-            flat
-            round
-            size="xs"
-            :color="activeFileId === file.id ? 'primary' : 'gray'"
-            icon="fa-solid fa-xmark"
-            class="q-ml-sm"
-            @click.stop="emit('update:close-file', file.id)"
-            data-cy="close-file-tab"
-          />
-        </div>
-      </q-tab>
+        :file="file"
+        :isActive="file.id === activeFileId"
+        @update:close-file="$event => emit('update:close-file', $event)"
+      />
     </q-tabs>
     <q-tab-panels v-model="activeFileId">
       <q-tab-panel
@@ -56,7 +32,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import FileName from 'src/components/FileName.vue';
+import FileTabHeader from 'src/components/tab/FileTabHeader.vue';
 
 const emit = defineEmits(['update:modelValue', 'update:close-file']);
 
@@ -88,15 +64,5 @@ watch(() => props.modelValue, (newModelValue) => {
 <style lang="scss" scoped>
   .tab-container {
     box-shadow: inset 0 -1px 0 #eee
-  }
-  .tab-item {
-    border-right: solid 1px #eee
-  }
-  .tab-item--active {
-    background: white;
-    box-shadow: inset 0 -1px 0 white;
-  }
-  .tab-item--inactive {
-    background: #eee
   }
 </style>
