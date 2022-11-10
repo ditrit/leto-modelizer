@@ -13,10 +13,14 @@ describe('Test component: InputWrapper', () => {
             attribute: {
               type: 'String',
               name: 'stringTest',
+              definition: {
+                type: 'String',
+              },
             },
+            plugin: {},
           },
         });
-        expect(wrapper.vm.attribute.type).toBe('String');
+        expect(wrapper.vm.attribute.definition.type).toBe('String');
       });
 
       it('should has type "Number"', async () => {
@@ -25,10 +29,14 @@ describe('Test component: InputWrapper', () => {
             attribute: {
               type: 'Number',
               name: 'NumberTest',
+              definition: {
+                type: 'Number',
+              },
             },
+            plugin: {},
           },
         });
-        expect(wrapper.vm.attribute.type).toBe('Number');
+        expect(wrapper.vm.attribute.definition.type).toBe('Number');
       });
 
       it('should has type "Boolean"', async () => {
@@ -36,11 +44,31 @@ describe('Test component: InputWrapper', () => {
           props: {
             attribute: {
               type: 'Boolean',
-              name: 'stringTest',
+              name: 'booleanTest',
+              definition: {
+                type: 'Boolean',
+              },
             },
+            plugin: {},
           },
         });
-        expect(wrapper.vm.attribute.type).toBe('Boolean');
+        expect(wrapper.vm.attribute.definition.type).toBe('Boolean');
+      });
+
+      it('should has type "Reference"', async () => {
+        const wrapper = await shallowMount(InputWrapper, {
+          props: {
+            attribute: {
+              type: 'String',
+              name: 'referenceTest',
+              definition: {
+                type: 'Reference',
+              },
+            },
+            plugin: {},
+          },
+        });
+        expect(wrapper.vm.attribute.definition.type).toBe('Reference');
       });
     });
   });
