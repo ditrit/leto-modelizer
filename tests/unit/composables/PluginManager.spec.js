@@ -267,4 +267,24 @@ describe('Test composable: PluginManager', () => {
       expect(component.id).toEqual(1);
     });
   });
+
+  describe('Test function: getComponentsByType', () => {
+    it('should return an empty array', () => {
+      const components = PluginManager.getComponentsByType('type', []);
+      expect(components.length).toEqual(0);
+    });
+
+    it('should return an array with the component corresponding to the type', () => {
+      const component = {
+        id: 0,
+        definition: {},
+        children: [{
+          id: 1,
+          definition: { type: 'good' },
+        }],
+      };
+      const components = PluginManager.getComponentsByType('good', [component]);
+      expect(components).toEqual([component.children[0]]);
+    });
+  });
 });

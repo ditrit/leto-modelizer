@@ -28,6 +28,7 @@
               v-for="attribute in selectedComponentAttributes"
               :key="`${attribute.name}-${Math.random()}`"
               :attribute="attribute"
+              :plugin="localPlugin"
               @update:attribute="(value) => attribute.value = value"
             />
           </q-form>
@@ -64,6 +65,7 @@ import PluginEvent from 'src/composables/events/PluginEvent';
 import { getPlugins, getComponent } from 'src/composables/PluginManager';
 import { ComponentAttribute } from 'leto-modelizer-plugin-core';
 
+const localPlugin = ref(null);
 const selectedComponent = ref({});
 const selectedComponentName = ref('');
 const selectedComponentAttributes = ref([]);
@@ -131,6 +133,7 @@ function onEdit({ id }) {
       const foundComponent = getComponent(id, plugin.components);
 
       if (foundComponent) {
+        localPlugin.value = plugin;
         acc = foundComponent;
       }
     }
