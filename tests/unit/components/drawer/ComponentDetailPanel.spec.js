@@ -3,6 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getPlugins, getComponent } from 'src/composables/PluginManager';
 import ComponentDetailPanel from 'src/components/drawer/ComponentDetailPanel.vue';
+import { ComponentAttribute, ComponentAttributeDefinition } from 'leto-modelizer-plugin-core';
 
 installQuasarPlugin();
 
@@ -31,9 +32,8 @@ describe('test component: Plugin Component Detail Panel', () => {
   getPlugins.mockImplementation(() => [{ components: [] }]);
   getComponent.mockImplementation(() => ({
     name: 'componentName',
-    definition: {
-      definedAttributes: [],
-    },
+    attributes: [],
+    definition: new ComponentAttributeDefinition(),
   }));
 
   beforeEach(() => {
@@ -58,6 +58,7 @@ describe('test component: Plugin Component Detail Panel', () => {
       expect(wrapper.vm.selectedComponent.name).toEqual(wrapper.vm.selectedComponentName);
       expect(wrapper.vm.selectedComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
+      expect(wrapper.vm.isVisible).toEqual(false);
     });
 
     it('should emit DrawEvent & RenderEvent events', () => {
@@ -88,7 +89,7 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
-  describe('Test function: getAttributes', () => {
+  describe('Test function: getReferencedAttributes', () => {
     it('should return an existing attribute', () => {
       const definition = { name: 'attribute' };
       const component = {
@@ -98,7 +99,7 @@ describe('test component: Plugin Component Detail Panel', () => {
         },
       };
 
-      expect(wrapper.vm.getAttributes(component)).toEqual([{
+      expect(wrapper.vm.getReferencedAttributes(component)).toEqual([{
         name: 'attribute',
         type: null,
         value: null,
@@ -107,14 +108,49 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
+  describe('Test function: getUnreferencedAttributes', () => {
+    it('should return an existing attribute without definition', () => {
+      const attributes = new ComponentAttribute({ name: 'attribute', definition: null });
+      const component = {
+        attributes: [attributes],
+      };
+
+      expect(wrapper.vm.getUnreferencedAttributes(component)).toEqual([{
+        name: 'attribute',
+        definition: null,
+        type: null,
+        value: null,
+      }]);
+    });
+  });
+
+  describe('Test function: getSelectedComponentAttributes', () => {
+    const refAttribute = new ComponentAttribute({ name: 'refAttribute', definition: new ComponentAttributeDefinition() });
+    const unrefAttribute = new ComponentAttribute({ name: 'unrefAttribute', definition: null });
+
+    beforeEach(() => {
+      wrapper.vm.selectedComponentAttributes = [refAttribute, unrefAttribute];
+    });
+
+    it('should return referenced attributes', () => {
+      expect(wrapper.vm.getSelectedComponentAttributes('referenced')).toEqual([refAttribute]);
+    });
+
+    it('should return unreferenced attributes', () => {
+      expect(wrapper.vm.getSelectedComponentAttributes('unreferenced')).toEqual([unrefAttribute]);
+    });
+
+    it('should return empty array', () => {
+      expect(wrapper.vm.getSelectedComponentAttributes('unvalidKey')).toEqual([]);
+    });
+  });
+
   describe('Test function: reset', () => {
     it('should reset selectedComponentName & selectedComponentAttributes base on selectedComponent', () => {
       wrapper.vm.selectedComponent = {
         name: 'newName',
         attributes: [],
-        definition: {
-          definedAttributes: [],
-        },
+        definition: new ComponentAttributeDefinition(),
       };
       wrapper.vm.selectedComponentName = 'oldName';
       wrapper.vm.selectedComponentAttributes = [{}];
@@ -135,9 +171,8 @@ describe('test component: Plugin Component Detail Panel', () => {
       expect(wrapper.vm.isVisible).toBeTruthy();
       expect(wrapper.vm.selectedComponent).toEqual({
         name: 'componentName',
-        definition: {
-          definedAttributes: [],
-        },
+        attributes: [],
+        definition: new ComponentAttributeDefinition(),
       });
       expect(wrapper.vm.selectedComponentName).toEqual('componentName');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);

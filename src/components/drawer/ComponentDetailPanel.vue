@@ -6,50 +6,90 @@
     v-model="isVisible"
     side="right"
   >
+    <q-list>
+      <q-item>
+        <q-item-section>
+          <q-item-label overline header>
+            {{ $t('plugin.component.attribute.title') }}
+          </q-item-label>
+        </q-item-section>
+        <q-item-section avatar>
+          <q-btn
+            round
+            flat
+            icon="fa-solid fa-xmark"
+            data-cy="object-details-panel-close-button"
+            @click="isVisible = false"
+          />
+        </q-item-section>
+      </q-item>
+    </q-list>
     <div class="col"
       v-if="selectedComponent && isVisible"
     >
-      <q-card flat>
-        <q-card-actions align="right">
-          <q-btn
-            flat
-            data-cy="object-details-panel-close-button"
-            @click="isVisible = false"
-            icon="fa-solid fa-xmark"
-          />
-        </q-card-actions>
-        <q-card-section>
-          <q-form>
-            <q-input
-              :label="$t('plugin.component.attribute.name')"
-              v-model="selectedComponentName"
-            />
-            <input-wrapper
-              v-for="attribute in selectedComponentAttributes"
-              :key="`${attribute.name}-${Math.random()}`"
-              :attribute="attribute"
-              :plugin="localPlugin"
-              @update:attribute="(value) => attribute.value = value"
-            />
-          </q-form>
-        </q-card-section>
-        <q-card-actions align="evenly">
+      <q-form
+        @submit="save"
+        @reset="reset"
+      >
+        <q-input
+          class="q-px-md q-pb-sm"
+          :label="$t('plugin.component.attribute.name')"
+          v-model="selectedComponentName"
+        />
+          <template
+            v-for="localAttribute in localAttributes"
+            :key="`${localAttribute.title}-${Math.random()}`"
+          >
+
+            <q-separator/>
+
+            <q-expansion-item
+              v-if="getSelectedComponentAttributes(localAttribute.attributeKey).length !== 0"
+              :expand-separator="false"
+              :default-opened="localAttribute.expanded"
+              :label="$t(localAttribute.title)"
+              class="text-bold"
+            >
+
+              <q-separator/>
+
+              <q-item-section>
+                <input-wrapper
+                  v-for="attribute in getSelectedComponentAttributes(localAttribute.attributeKey)"
+                  :key="`${attribute.name}-${Math.random()}`"
+                  :attribute="attribute"
+                  :plugin="localPlugin"
+                  class="q-px-md q-pb-sm"
+                  @update:attribute="(value) => attribute.value = value"
+                />
+              </q-item-section>
+            </q-expansion-item>
+
+            <q-separator/>
+
+          </template>
+        <div class="row justify-center q-mt-sm">
           <q-btn
             flat
             icon="fa-solid fa-floppy-disk"
-            @click="save"
-            data-cy="object-details-panel-save-button"
             :label="$t('plugin.component.attribute.save')"
-          />
+            type="submit"
+            :loading="submitting"
+            data-cy="object-details-panel-save-button"
+          >
+            <template v-slot:loading>
+              <q-spinner-dots/>
+            </template>
+          </q-btn>
           <q-btn
             flat
-            @click="reset"
-            data-cy="object-details-panel-reset-button"
-            :label="$t('plugin.component.attribute.reset')"
             icon="fa-solid fa-arrow-rotate-left"
+            :label="$t('plugin.component.attribute.reset')"
+            type="reset"
+            data-cy="object-details-panel-reset-button"
           />
-        </q-card-actions>
-      </q-card>
+        </div>
+      </q-form>
     </div>
   </q-drawer>
 </template>
@@ -69,7 +109,20 @@ const localPlugin = ref(null);
 const selectedComponent = ref({});
 const selectedComponentName = ref('');
 const selectedComponentAttributes = ref([]);
+const localAttributes = ref([
+  {
+    title: 'plugin.component.attribute.referenced',
+    attributeKey: 'referenced',
+    expanded: true,
+  },
+  {
+    title: 'plugin.component.attribute.unreferenced',
+    attributeKey: 'unreferenced',
+    expanded: true,
+  },
+]);
 const isVisible = ref(false);
+const submitting = ref(false);
 
 let pluginEditSubscription;
 
@@ -77,12 +130,16 @@ let pluginEditSubscription;
  * Update local component data and emit DrawEvent & RenderEvent events.
  */
 function save() {
+  submitting.value = true;
   selectedComponent.value.name = selectedComponentName.value;
   selectedComponent.value.attributes = selectedComponentAttributes.value
     .filter(({ value }) => value !== null && value !== '');
 
   PluginEvent.DrawEvent.next();
   PluginEvent.RenderEvent.next();
+
+  submitting.value = false;
+  isVisible.value = false;
 }
 
 /**
@@ -102,12 +159,38 @@ function getAttribute(component, definition) {
 }
 
 /**
- * Get an array of attributes corresponding the definedAttributes array.
- * @param {Object} component - Component containing the available attribute and all definitions.
+ * Get an array of attributes corresponding to the definedAttributes array.
+ * @param {Object} component - Component containing the available attributes and all definitions.
+ * @return {Array} an array of referenced attributes.
+ */
+function getReferencedAttributes(component) {
+  return component.definition.definedAttributes.map((defAttr) => getAttribute(component, defAttr));
+}
+
+/**
+ * Get an array of attributes corresponding to the attributes without definition.
+ * @param {Object} component - Component containing the available attributes.
+ * @return {Array} an array of unreferenced attributes.
+ */
+function getUnreferencedAttributes(component) {
+  return component.attributes
+    .filter((attr) => attr.definition === null);
+}
+
+/**
+ * Get an array of attributes corresponding to the attribute key.
+ * @param {String} key - Attribute key.
  * @return {Array} an array of attributes.
  */
-function getAttributes(component) {
-  return component.definition.definedAttributes.map((defAttr) => getAttribute(component, defAttr));
+function getSelectedComponentAttributes(key) {
+  switch (key) {
+    case 'referenced':
+      return selectedComponentAttributes.value.filter(({ definition }) => !!definition);
+    case 'unreferenced':
+      return selectedComponentAttributes.value.filter(({ definition }) => !definition);
+    default:
+      return [];
+  }
 }
 
 /**
@@ -115,9 +198,10 @@ function getAttributes(component) {
  */
 function reset() {
   selectedComponentName.value = selectedComponent.value.name;
-  selectedComponentAttributes.value = JSON.parse(
-    JSON.stringify(getAttributes(selectedComponent.value)),
-  );
+  selectedComponentAttributes.value = JSON.parse(JSON.stringify(
+    getReferencedAttributes(selectedComponent.value)
+      .concat(getUnreferencedAttributes(selectedComponent.value)),
+  ));
 }
 
 /**
@@ -143,7 +227,10 @@ function onEdit({ id }) {
 
   selectedComponent.value = component;
   selectedComponentName.value = component.name;
-  selectedComponentAttributes.value = JSON.parse(JSON.stringify(getAttributes(component)));
+  selectedComponentAttributes.value = JSON.parse(JSON.stringify(
+    getReferencedAttributes(component)
+      .concat(getUnreferencedAttributes(component)),
+  ));
 }
 
 onMounted(() => {

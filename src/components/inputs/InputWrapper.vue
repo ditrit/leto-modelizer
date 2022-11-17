@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="inputList[attribute.definition.type]"
+    :is="inputList[attributeType]"
     :attribute="attribute"
     :plugin="plugin"
     @update:model-value="(event) => emit('update:attribute', event)"
@@ -8,9 +8,9 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue';
+import { ref, defineAsyncComponent } from 'vue';
 
-defineProps({
+const props = defineProps({
   attribute: {
     type: Object,
     required: true,
@@ -20,6 +20,8 @@ defineProps({
     required: true,
   },
 });
+
+const attributeType = ref(props.attribute.definition?.type || props.attribute.type);
 
 const emit = defineEmits(['update:attribute']);
 

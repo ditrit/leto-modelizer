@@ -71,5 +71,37 @@ describe('Test component: InputWrapper', () => {
         expect(wrapper.vm.attribute.definition.type).toBe('Reference');
       });
     });
+
+    describe('Test variables: attributeType', () => {
+      it('should match attribute.definition.type', async () => {
+        const wrapper = await shallowMount(InputWrapper, {
+          props: {
+            attribute: {
+              type: 'String',
+              name: 'referenceTest',
+              definition: {
+                type: 'Reference',
+              },
+            },
+            plugin: {},
+          },
+        });
+        expect(wrapper.vm.attributeType).toEqual('Reference');
+      });
+
+      it('should match attribute.type if attribute.definition is null', async () => {
+        const wrapper = await shallowMount(InputWrapper, {
+          props: {
+            attribute: {
+              type: 'String',
+              name: 'referenceTest',
+              definition: null,
+            },
+            plugin: {},
+          },
+        });
+        expect(wrapper.vm.attributeType).toEqual('String');
+      });
+    });
   });
 });
