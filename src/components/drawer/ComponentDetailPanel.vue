@@ -27,7 +27,10 @@
     <div class="col"
       v-if="selectedComponent && isVisible"
     >
-      <q-form>
+      <q-form
+        @submit="save"
+        @reset="reset"
+      >
         <q-input
           class="q-px-md q-pb-sm"
           :label="$t('plugin.component.attribute.name')"
@@ -69,16 +72,21 @@
           <q-btn
             flat
             icon="fa-solid fa-floppy-disk"
-            @click="save"
-            data-cy="object-details-panel-save-button"
             :label="$t('plugin.component.attribute.save')"
-          />
+            type="submit"
+            :loading="submitting"
+            data-cy="object-details-panel-save-button"
+          >
+            <template v-slot:loading>
+              <q-spinner-dots/>
+            </template>
+          </q-btn>
           <q-btn
             flat
-            @click="reset"
-            data-cy="object-details-panel-reset-button"
-            :label="$t('plugin.component.attribute.reset')"
             icon="fa-solid fa-arrow-rotate-left"
+            :label="$t('plugin.component.attribute.reset')"
+            type="reset"
+            data-cy="object-details-panel-reset-button"
           />
         </div>
       </q-form>
@@ -114,6 +122,7 @@ const localAttributes = ref([
   },
 ]);
 const isVisible = ref(false);
+const submitting = ref(false);
 
 let pluginEditSubscription;
 
@@ -121,13 +130,16 @@ let pluginEditSubscription;
  * Update local component data and emit DrawEvent & RenderEvent events.
  */
 function save() {
+  submitting.value = true;
   selectedComponent.value.name = selectedComponentName.value;
   selectedComponent.value.attributes = selectedComponentAttributes.value
     .filter(({ value }) => value !== null && value !== '');
-  isVisible.value = false;
 
   PluginEvent.DrawEvent.next();
   PluginEvent.RenderEvent.next();
+
+  submitting.value = false;
+  isVisible.value = false;
 }
 
 /**
