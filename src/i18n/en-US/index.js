@@ -201,6 +201,7 @@ export default {
     component: {
       attribute: {
         name: 'name',
+        value: 'value',
         save: 'save',
         reset: 'reset',
         title: 'Component details',
