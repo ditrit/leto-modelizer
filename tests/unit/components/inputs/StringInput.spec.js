@@ -13,6 +13,7 @@ describe('Test component: StringInput', () => {
         attribute: {
           value: 'test',
           name: 'attributeName',
+          definition: {},
         },
       },
     });

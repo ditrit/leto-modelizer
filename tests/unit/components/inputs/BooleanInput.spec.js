@@ -13,6 +13,7 @@ describe('Test component: BooleanInput', () => {
         attribute: {
           name: 'attributeName',
           value: true,
+          definition: {},
         },
       },
     });
@@ -26,7 +27,7 @@ describe('Test component: BooleanInput', () => {
       });
     });
 
-    describe('Test variables: localValue', () => {
+    describe('Test variable: localValue', () => {
       it('Should match attribute.value', () => {
         expect(wrapper.vm.localValue).toEqual(true);
       });

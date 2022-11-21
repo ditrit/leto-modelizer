@@ -2,7 +2,6 @@
   <q-select
     clearable
     v-model="localValue"
-    :label="attribute.name"
     :options="options"
     @update:model-value="(event) => emit('update:model-value', event)"
   >

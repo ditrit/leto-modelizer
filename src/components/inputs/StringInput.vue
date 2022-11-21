@@ -1,8 +1,6 @@
 <template>
   <q-input
-    autogrow
     v-model="localValue"
-    :label="attribute.name"
     @update:model-value="(event) => emit('update:model-value', event)"
   />
 </template>

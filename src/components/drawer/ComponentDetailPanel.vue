@@ -56,16 +56,16 @@
               <q-item-section>
                 <input-wrapper
                   v-for="attribute in getSelectedComponentAttributes(localAttribute.attributeKey)"
-                  :key="`${attribute.name}-${Math.random()}`"
+                  :key="`${attribute.type}-${Math.random()}`"
                   :attribute="attribute"
                   :plugin="localPlugin"
-                  class="q-px-md q-pb-sm"
-                  @update:attribute="(value) => attribute.value = value"
+                  @update:attribute-name="(name) => attribute.name = name"
+                  @update:attribute-value="(value) => attribute.value = value"
                 />
               </q-item-section>
             </q-expansion-item>
 
-            <q-separator/>
+            <q-separator v-if="getSelectedComponentAttributes('unreferenced').length !== 0"/>
 
           </template>
         <div class="row justify-center q-mt-sm">
@@ -102,8 +102,10 @@ import {
 } from 'vue';
 import InputWrapper from 'components/inputs/InputWrapper';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import { getPlugins, getComponent } from 'src/composables/PluginManager';
 import { ComponentAttribute } from 'leto-modelizer-plugin-core';
+import { useRoute } from 'vue-router';
 
 const localPlugin = ref(null);
 const selectedComponent = ref({});
@@ -123,8 +125,10 @@ const localAttributes = ref([
 ]);
 const isVisible = ref(false);
 const submitting = ref(false);
+const route = useRoute();
 
 let pluginEditSubscription;
+let viewSwitchSubscription;
 
 /**
  * Update local component data and emit DrawEvent & RenderEvent events.
@@ -233,11 +237,24 @@ function onEdit({ id }) {
   ));
 }
 
+/**
+ * Close component detail panel if route is updated with a new view type.
+ *
+ * @param {string} newViewType - Updated view type.
+ */
+function onViewSwitchUpdate(newViewType) {
+  if (newViewType !== route.params.viewType) {
+    isVisible.value = false;
+  }
+}
+
 onMounted(() => {
   pluginEditSubscription = PluginEvent.EditEvent.subscribe(onEdit);
+  viewSwitchSubscription = ViewSwitchEvent.subscribe(onViewSwitchUpdate);
 });
 
 onUnmounted(() => {
   pluginEditSubscription.unsubscribe();
+  viewSwitchSubscription.unsubscribe();
 });
 </script>

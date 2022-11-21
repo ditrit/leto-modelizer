@@ -1,11 +1,17 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import { getPlugins, getComponent } from 'src/composables/PluginManager';
 import ComponentDetailPanel from 'src/components/drawer/ComponentDetailPanel.vue';
 import { ComponentAttribute, ComponentAttributeDefinition } from 'leto-modelizer-plugin-core';
+import { useRoute } from 'vue-router';
 
 installQuasarPlugin();
+
+jest.mock('vue-router', () => ({
+  useRoute: jest.fn(),
+}));
 
 jest.mock('src/composables/events/PluginEvent', () => ({
   EditEvent: {
@@ -19,6 +25,10 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   },
 }));
 
+jest.mock('src/composables/events/ViewSwitchEvent', () => ({
+  subscribe: jest.fn(),
+}));
+
 jest.mock('src/composables/PluginManager', () => ({
   getPlugins: jest.fn(),
   getComponent: jest.fn(),
@@ -28,6 +38,15 @@ describe('test component: Plugin Component Detail Panel', () => {
   let wrapper;
   let pluginEditSubscription;
   let pluginEditUnsubscription;
+  let viewSwitchSubscription;
+  let viewSwitchUnsubscription;
+
+  useRoute.mockImplementation(() => ({
+    params: {
+      projectName: 'project-00000000',
+      viewType: 'model',
+    },
+  }));
 
   getPlugins.mockImplementation(() => [{ components: [] }]);
   getComponent.mockImplementation(() => ({
@@ -39,10 +58,17 @@ describe('test component: Plugin Component Detail Panel', () => {
   beforeEach(() => {
     pluginEditSubscription = jest.fn();
     pluginEditUnsubscription = jest.fn();
+    viewSwitchSubscription = jest.fn();
+    viewSwitchUnsubscription = jest.fn();
 
     PluginEvent.EditEvent.subscribe.mockImplementation(() => {
       pluginEditSubscription();
       return { unsubscribe: pluginEditUnsubscription };
+    });
+
+    ViewSwitchEvent.subscribe.mockImplementation(() => {
+      viewSwitchSubscription();
+      return { unsubscribe: viewSwitchUnsubscription };
     });
 
     wrapper = shallowMount(ComponentDetailPanel);
@@ -179,9 +205,31 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
+  describe('Test function: onViewSwitchUpdate', () => {
+    beforeEach(() => {
+      wrapper.vm.isVisible = true;
+    });
+
+    it('should not set isVisible to false when newViewType is equal to route.params.viewType', () => {
+      wrapper.vm.onViewSwitchUpdate('model');
+
+      expect(wrapper.vm.isVisible).toEqual(true);
+    });
+
+    it('should set isVisible to false when newViewType is equal to route.params.viewType', () => {
+      wrapper.vm.onViewSwitchUpdate('text');
+
+      expect(wrapper.vm.isVisible).toEqual(false);
+    });
+  });
+
   describe('Test hook function: onMounted', () => {
     it('should subscribe to EditEvent', () => {
       expect(pluginEditSubscription).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to ViewSwitchEvent', () => {
+      expect(viewSwitchSubscription).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -190,6 +238,12 @@ describe('test component: Plugin Component Detail Panel', () => {
       expect(pluginEditUnsubscription).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(pluginEditUnsubscription).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to ViewSwitchEvent', () => {
+      expect(viewSwitchUnsubscription).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(viewSwitchUnsubscription).toHaveBeenCalledTimes(1);
     });
   });
 });

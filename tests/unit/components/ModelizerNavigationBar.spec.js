@@ -16,12 +16,6 @@ jest.mock('vue-i18n', () => ({
   }),
 }));
 
-jest.mock('vue-i18n', () => ({
-  useI18n: () => ({
-    t: (t) => t,
-  }),
-}));
-
 jest.mock('src/composables/events/ViewSwitchEvent', () => ({
   next: jest.fn(),
 }));
