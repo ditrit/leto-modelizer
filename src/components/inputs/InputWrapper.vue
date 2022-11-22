@@ -1,10 +1,10 @@
 <template>
   <div class="row items-center">
-    <template v-if="!attribute.definition && !!inputList[attributeType]">
+    <template v-if="!attribute.definition">
       <q-input
         v-model="name"
         :label="$t('plugin.component.attribute.name')"
-        class="col-4 q-px-md q-pb-sm"
+        class="col-4 q-px-md"
         @update:model-value="(event) => emit('update:attribute-name', event)"
       />
       <span>:</span>
@@ -14,7 +14,7 @@
       :attribute="attribute"
       :plugin="plugin"
       :label="label"
-      class="col q-px-md q-pb-sm"
+      class="col q-px-md"
       @update:model-value="(event) => emit('update:attribute-value', event)"
     />
   </div>
