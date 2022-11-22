@@ -205,6 +205,36 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
+  describe('Test function: deleteAttribute', () => {
+    it('should remove selected attribute from selectedComponentAttributes', () => {
+      wrapper.vm.selectedComponentAttributes = [{
+        name: 'attributeName',
+        value: '',
+        definition: null,
+        type: 'String',
+      }];
+
+      wrapper.vm.deleteAttribute('attributeName');
+
+      expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
+    });
+  });
+
+  describe('Test function: addAttribute', () => {
+    it('should add new attribute to selectedComponentAttributes', () => {
+      wrapper.vm.selectedComponentAttributes = [];
+
+      wrapper.vm.addAttribute();
+
+      expect(wrapper.vm.selectedComponentAttributes).toEqual([{
+        name: 'attribut_1',
+        value: '',
+        definition: null,
+        type: 'String',
+      }]);
+    });
+  });
+
   describe('Test function: onViewSwitchUpdate', () => {
     beforeEach(() => {
       wrapper.vm.isVisible = true;

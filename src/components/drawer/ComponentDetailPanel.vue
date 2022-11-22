@@ -1,10 +1,11 @@
 <template>
   <q-drawer
+    v-model="isVisible"
     no-swipe-close
     bordered
     data-cy="object-details-panel"
-    v-model="isVisible"
     side="right"
+    :width="350"
   >
     <q-list>
       <q-item>
@@ -32,9 +33,9 @@
         @reset="reset"
       >
         <q-input
+          v-model="selectedComponentName"
           class="q-px-md q-pb-sm"
           :label="$t('plugin.component.attribute.name')"
-          v-model="selectedComponentName"
         />
           <template
             v-for="localAttribute in localAttributes"
@@ -44,8 +45,6 @@
             <q-separator/>
 
             <q-expansion-item
-              v-if="getSelectedComponentAttributes(localAttribute.attributeKey).length !== 0"
-              :expand-separator="false"
               :default-opened="localAttribute.expanded"
               :label="$t(localAttribute.title)"
               class="text-bold"
@@ -54,26 +53,63 @@
               <q-separator/>
 
               <q-item-section>
-                <input-wrapper
-                  v-for="attribute in getSelectedComponentAttributes(localAttribute.attributeKey)"
+                <div
+                  v-for="attribute in
+                    getSelectedComponentAttributes(localAttribute.attributeKey)"
                   :key="`${attribute.type}-${Math.random()}`"
-                  :attribute="attribute"
-                  :plugin="localPlugin"
-                  @update:attribute-name="(name) => attribute.name = name"
-                  @update:attribute-value="(value) => attribute.value = value"
+                  class="row items-center q-mb-sm"
+                >
+                  <input-wrapper
+                    :attribute="attribute"
+                    :plugin="localPlugin"
+                    class="col"
+                    @update:attribute-name="(name) => attribute.name = name"
+                    @update:attribute-value="(value) => attribute.value = value"
+                  />
+                  <q-btn
+                    v-if="localAttribute.attributeKey == 'unreferenced'"
+                    class="q-mr-md"
+                    size="xs"
+                    round
+                    flat
+                    color="negative"
+                    icon="fa-solid fa-trash"
+                    data-cy="object-details-panel-attribute-delete-button"
+                    @click="deleteAttribute(attribute.name)"
+                  >
+                    <q-tooltip anchor="center left" self="center right">
+                      {{$t('plugin.component.attribute.delete')}}
+                    </q-tooltip>
+                  </q-btn>
+                </div>
+                <div
+                  v-if="getSelectedComponentAttributes(localAttribute.attributeKey).length === 0"
+                  class="text-grey text-weight-regular q-py-sm q-px-md"
+                >
+                  {{ $t('plugin.component.attribute.noAttributes') }}
+                </div>
+                <q-btn
+                  v-if="localAttribute.attributeKey == 'unreferenced'"
+                  no-caps
+                  class="q-my-md self-center"
+                  :label="$t('plugin.component.attribute.add')"
+                  color="positive"
+                  icon="fa-solid fa-plus"
+                  data-cy="object-details-panel-attribute-add-button"
+                  @click="addAttribute"
                 />
               </q-item-section>
             </q-expansion-item>
 
-            <q-separator v-if="getSelectedComponentAttributes('unreferenced').length !== 0"/>
+            <q-separator/>
 
           </template>
-        <div class="row justify-center q-mt-sm">
+        <div class="row justify-evenly q-mt-md">
           <q-btn
-            flat
             icon="fa-solid fa-floppy-disk"
             :label="$t('plugin.component.attribute.save')"
             type="submit"
+            color="positive"
             :loading="submitting"
             data-cy="object-details-panel-save-button"
           >
@@ -82,10 +118,10 @@
             </template>
           </q-btn>
           <q-btn
-            flat
             icon="fa-solid fa-arrow-rotate-left"
             :label="$t('plugin.component.attribute.reset')"
             type="reset"
+            color="info"
             data-cy="object-details-panel-reset-button"
           />
         </div>
@@ -238,9 +274,33 @@ function onEdit({ id }) {
 }
 
 /**
+ * Delete selected attribute by its name.
+ * @param {String} attributeName - Name of attribute to delete.
+ */
+function deleteAttribute(attributeName) {
+  const attributeIndex = selectedComponentAttributes.value
+    .findIndex(({ name }) => name === attributeName);
+
+  if (attributeIndex !== -1) {
+    selectedComponentAttributes.value.splice(attributeIndex, 1);
+  }
+}
+
+/**
+ * Add a new attribute without definition.
+ */
+function addAttribute() {
+  selectedComponentAttributes.value.push({
+    name: `attribut_${selectedComponentAttributes.value.length + 1}`,
+    value: '',
+    definition: null,
+    type: 'String',
+  });
+}
+
+/**
  * Close component detail panel if route is updated with a new view type.
- *
- * @param {string} newViewType - Updated view type.
+ * @param {String} newViewType - Updated view type.
  */
 function onViewSwitchUpdate(newViewType) {
   if (newViewType !== route.params.viewType) {
