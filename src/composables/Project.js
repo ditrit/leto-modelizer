@@ -117,7 +117,7 @@ export async function fetchGit(project) {
         username: project.git.username,
         password: project.git.token,
       }),
-      corsProxy: 'https://cors.isomorphic-git.org',
+      corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
     });
   }
 
@@ -423,7 +423,7 @@ export async function gitUpdate(project, branchName, fastForward) {
       name: 'LetoModelizer',
       email: 'LetoModelizer@no-reply.com',
     },
-    corsProxy: 'https://cors.isomorphic-git.org',
+    corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
   });
   return GitEvent.PullEvent.next();
 }
@@ -565,7 +565,7 @@ export async function gitPush(project, branchName, force) {
       username: project.git.username,
       password: project.git.token,
     }),
-    corsProxy: 'https://cors.isomorphic-git.org',
+    corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
   });
   return GitEvent.PushEvent.next();
 }

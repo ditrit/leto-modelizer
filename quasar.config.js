@@ -71,6 +71,9 @@ module.exports = configure((ctx) => ({
     // analyze: true,
 
     // Options below are automatically set depending on the env, set them if you want to override
+    env: {
+      CORS_ISOMORPHIC_BASE_URL: process.env.CORS_ISOMORPHIC_BASE_URL || 'https://cors.isomorphic-git.org',
+    },
     // extractCSS: false,
 
     // https://v2.quasar.dev/quasar-cli-webpack/handling-webpack
