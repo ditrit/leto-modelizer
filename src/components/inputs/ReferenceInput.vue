@@ -10,7 +10,7 @@
     <template v-slot:prepend>
       <q-icon
         color="primary"
-        :name="`img:/plugins/${plugin.name}/icons/${iconName}.svg`"
+        :name="`img:/plugins/${plugin.data.name}/icons/${iconName}.svg`"
       />
     </template>
   </q-select>
@@ -19,7 +19,6 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { isRequired } from 'src/composables/QuasarFieldRule';
-import { getComponentsByType } from 'src/composables/PluginManager';
 
 const props = defineProps({
   attribute: {
@@ -33,18 +32,17 @@ const props = defineProps({
 });
 
 const localValue = ref(props.attribute.value);
-const options = ref(getComponentsByType(
+const options = ref(props.plugin.data.getComponentsByType(
   props.attribute.definition.containerRef,
-  props.plugin.components,
+  props.plugin.data.components,
 ).map(({ name }) => name));
-const iconName = ref(props.plugin.definitions.components.find(
+const iconName = ref(props.plugin.data.definitions.components.find(
   ({ type }) => type === props.attribute.definition.containerRef,
 ).icon);
 
-watch(() => props.plugin.components, () => {
-  options.value = getComponentsByType(
+watch(() => props.plugin.data.components, () => {
+  options.value = props.plugin.data.getComponentsByType(
     props.attribute.definition.containerRef,
-    props.plugin.components,
   ).map(({ name }) => name);
 });
 </script>

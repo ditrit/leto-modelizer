@@ -164,9 +164,7 @@ describe('Test component: ModelizerTextView', () => {
     });
     Project.writeProjectFile.mockImplementation(() => Promise.resolve(writeProjectFileMock()));
     PluginManager.getPlugins.mockImplementation(() => [{
-      renderer: {
-        render: () => [{ path: 'path' }],
-      },
+      render: () => [{ path: 'path' }],
     }]);
     GitEvent.PullEvent.subscribe.mockImplementation(() => {
       pullSubscribe();

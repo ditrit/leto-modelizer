@@ -1,16 +1,14 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import ComponentDefinitionCard from 'src/components/card/ComponentDefinitionCard.vue';
-import { Component } from 'leto-modelizer-plugin-core';
 
 installQuasarPlugin();
 
 const testPlugin = {
-  metadata: {},
-  parser: {},
-  renderer: {},
-  drawer: {},
-  components: [],
+  draw: null,
+  data: {
+    addComponent: null,
+  },
 };
 
 jest.mock('src/composables/PluginManager', () => ({
@@ -50,15 +48,17 @@ describe('Test component: ComponentDefinitionCard', () => {
         window.crypto = {
           getRandomValues: () => 0x16,
         };
+
+        const id = `${0x16}`;
+        const definition = { type: 'component one' };
         const draw = jest.fn();
-        testPlugin.drawer = { draw };
+        const addComponent = jest.fn();
+        testPlugin.draw = draw;
+        testPlugin.data.addComponent = addComponent;
 
         wrapper.vm.onClickItem();
-        expect(draw).toBeCalledWith([new Component({
-          definition: { type: 'component one' },
-          id: `object_${0x16}`,
-          name: `object_${0x16}`,
-        })]);
+        expect(addComponent).toBeCalledWith(`${definition.type}_${id}`, definition);
+        expect(draw).toBeCalledWith('root');
       });
     });
   });

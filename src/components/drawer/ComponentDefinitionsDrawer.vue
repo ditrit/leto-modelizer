@@ -13,16 +13,16 @@
           group="components-definitions"
           header-class="text-bold"
           v-for="plugin in plugins"
-          :key="plugin.name"
-          :label="plugin.name"
+          :key="plugin.data.name"
+          :label="plugin.data.name"
         >
           <q-scroll-area
             :style="`height: calc(100vh - ${scrollAreaHeight(definitions)}px);`"
             class="sunken-area"
           >
             <component-definition-grid
-              :definitions="plugin.definitions.components"
-              :pluginName="plugin.name"
+              :definitions="plugin.data.definitions.components"
+              :pluginName="plugin.data.name"
             />
           </q-scroll-area>
         </q-expansion-item>
