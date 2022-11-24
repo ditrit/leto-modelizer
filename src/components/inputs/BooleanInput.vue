@@ -1,12 +1,15 @@
 <template>
   <q-toggle
     v-model="localValue"
-    @update:model-value="(event) => emit('update:model-value', event)"
+    :rules="[
+      (value) => isRequired($t, value, attribute.definition?.required),
+    ]"
   />
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { isRequired } from 'src/composables/QuasarFieldRule';
 
 const props = defineProps({
   attribute: {
@@ -14,8 +17,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-const emit = defineEmits(['update:model-value']);
 
 const localValue = ref(props.attribute.value);
 </script>
