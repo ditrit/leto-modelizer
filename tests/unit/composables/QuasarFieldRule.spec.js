@@ -4,6 +4,12 @@ import {
   isUniqueBranchName,
   isValidFileLabel,
   isUniqueFileLabel,
+  isRequired,
+  isStringTooShort,
+  isStringTooLong,
+  isStringMatchingRegExp,
+  isNumberTooSmall,
+  isNumberTooBig,
 } from 'src/composables/QuasarFieldRule';
 
 describe('Test composable: InputRule', () => {
@@ -79,6 +85,79 @@ describe('Test composable: InputRule', () => {
     it('should return string error message with duplicated node label', () => {
       const key = 'errors.fileExplorer.label.duplicate';
       expect(isUniqueFileLabel(t, [{ label: 'test' }], 'test')).toEqual(key);
+    });
+  });
+
+  describe('Test function: isRequired', () => {
+    it('should return true', () => {
+      expect(isRequired(null, null, undefined)).toBe(true);
+      expect(isRequired(null, true, true)).toBe(true);
+    });
+
+    it('should return string error message', () => {
+      const key = 'errors.rules.required';
+      expect(isRequired(t, null, true)).toEqual(key);
+      expect(isRequired(t, undefined, true)).toEqual(key);
+    });
+  });
+
+  describe('Test function: isStringTooShort', () => {
+    it('should return true', () => {
+      expect(isStringTooShort(null, null, undefined)).toBe(true);
+      expect(isStringTooShort(null, 'yes', 3)).toBe(true);
+    });
+
+    it('should return string error message', () => {
+      const key = 'errors.rules.string.min';
+      expect(isStringTooShort(t, 'no', 3)).toEqual(key);
+    });
+  });
+
+  describe('Test function: isStringTooLong', () => {
+    it('should return true', () => {
+      expect(isStringTooLong(null, null, undefined)).toBe(true);
+      expect(isStringTooLong(null, 'yes', 3)).toBe(true);
+    });
+
+    it('should return string error message', () => {
+      const key = 'errors.rules.string.max';
+      expect(isStringTooLong(t, 'nono', 3)).toEqual(key);
+    });
+  });
+
+  describe('Test function: isStringMatchingRegExp', () => {
+    it('should return true', () => {
+      expect(isStringMatchingRegExp(null, null, undefined)).toBe(true);
+      expect(isStringMatchingRegExp(null, 'abcd', '^[a-z]{3,}$')).toBe(true);
+    });
+
+    it('should return string error message', () => {
+      const key = 'errors.rules.string.regexp';
+      expect(isStringMatchingRegExp(t, 'a', '^[a-z]{3,}$')).toEqual(key);
+    });
+  });
+
+  describe('Test function: isNumberTooSmall', () => {
+    it('should return true', () => {
+      expect(isNumberTooSmall(null, null, undefined)).toBe(true);
+      expect(isNumberTooSmall(null, 3, 3)).toBe(true);
+    });
+
+    it('should return string error message', () => {
+      const key = 'errors.rules.number.min';
+      expect(isNumberTooSmall(t, 2, 3)).toEqual(key);
+    });
+  });
+
+  describe('Test function: isNumberTooBig', () => {
+    it('should return true', () => {
+      expect(isNumberTooBig(null, null, undefined)).toBe(true);
+      expect(isNumberTooBig(null, 3, 3)).toBe(true);
+    });
+
+    it('should return string error message', () => {
+      const key = 'errors.rules.number.max';
+      expect(isNumberTooBig(t, 4, 3)).toEqual(key);
     });
   });
 });

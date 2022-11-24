@@ -1,12 +1,24 @@
 <template>
   <q-input
+    clearable
     v-model="localValue"
-    @update:model-value="(event) => emit('update:model-value', event)"
+    :rules="[
+      (value) => isRequired($t, value, attribute.definition?.required),
+      (value) => isStringTooShort($t, value, attribute.definition?.rules.min),
+      (value) => isStringTooLong($t, value, attribute.definition?.rules.max),
+      (value) => isStringMatchingRegExp($t, value, attribute.definition?.rules.regex),
+    ]"
   />
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import {
+  isRequired,
+  isStringTooShort,
+  isStringTooLong,
+  isStringMatchingRegExp,
+} from 'src/composables/QuasarFieldRule';
 
 const props = defineProps({
   attribute: {
@@ -14,8 +26,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-const emit = defineEmits(['update:model-value']);
 
 const localValue = ref(props.attribute.value);
 </script>

@@ -3,7 +3,9 @@
     clearable
     v-model="localValue"
     :options="options"
-    @update:model-value="(event) => emit('update:model-value', event)"
+    :rules="[
+      (value) => isRequired($t, value, attribute.definition?.required),
+    ]"
   >
     <template v-slot:prepend>
       <q-icon
@@ -16,6 +18,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { isRequired } from 'src/composables/QuasarFieldRule';
 import { getComponentsByType } from 'src/composables/PluginManager';
 
 const props = defineProps({
@@ -28,8 +31,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-const emit = defineEmits(['update:model-value']);
 
 const localValue = ref(props.attribute.value);
 const options = ref(getComponentsByType(

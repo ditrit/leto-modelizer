@@ -1,8 +1,10 @@
 <template>
-  <q-toggle
+  <q-select
+    clearable
     v-model="localValue"
+    :options="options"
     :rules="[
-      (value) => isRequired($t, value, attribute.definition?.required),
+      (value) => isRequired($t, value, attribute.definition.required),
     ]"
   />
 </template>
@@ -19,4 +21,5 @@ const props = defineProps({
 });
 
 const localValue = ref(props.attribute.value);
+const options = ref(props.attribute.definition.rules.values);
 </script>

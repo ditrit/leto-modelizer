@@ -2,12 +2,21 @@
   <q-input
     type="number"
     v-model="localValue"
-    @update:model-value="(event) => emit('update:model-value', event)"
+    :rules="[
+      (value) => isRequired($t, value, attribute.definition?.required),
+      (value) => isNumberTooSmall($t, value, attribute.definition?.rules.min),
+      (value) => isNumberTooBig($t, value, attribute.definition?.rules.max),
+    ]"
   />
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import {
+  isRequired,
+  isNumberTooSmall,
+  isNumberTooBig,
+} from 'src/composables/QuasarFieldRule';
 
 const props = defineProps({
   attribute: {
@@ -15,8 +24,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-const emit = defineEmits(['update:model-value']);
 
 const localValue = ref(props.attribute.value);
 </script>

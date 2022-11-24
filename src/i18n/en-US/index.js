@@ -89,6 +89,18 @@ export default {
         },
       },
     },
+    rules: {
+      required: 'Value is required.',
+      string: {
+        min: 'It should contain at least {min} character(s).',
+        max: 'It should not contain more than {max} characters.',
+        regexp: 'It should match the RegExp "{regexp}".',
+      },
+      number: {
+        min: 'It should be greater than or equal to {min}',
+        max: 'It should be less than or equal to {max}',
+      },
+    },
   },
   projects: {
     list: 'Projects list:',
