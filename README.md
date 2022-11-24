@@ -75,6 +75,18 @@ npm run build
 
 It will generate the built application in the `dist` folder.
 
+
+### Environment variable
+
+`CORS_ISOMORPHIC_BASE_URL` is used to define the url of isomorphic-git cors proxy to allow cloning and pushing repos in the browser.
+By default, the url is `https://cors.isomorphic-git.org`.
+
+To override it :
+
+```bash
+CORS_ISOMORPHIC_BASE_URL="Something else" npm run build
+```
+
 ## Official plugins
 
 For now, we don't have much plugin to propose to you, but follow us and in the next (few) months you will see new plugins (like Jenkins or Kubernetes).
