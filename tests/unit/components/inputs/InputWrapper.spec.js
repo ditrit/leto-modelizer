@@ -1,5 +1,5 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
-import { shallowMount, mount } from '@vue/test-utils';
+import { mount, shallowMount } from '@vue/test-utils';
 import InputWrapper from 'src/components/inputs/InputWrapper.vue';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
@@ -17,119 +17,56 @@ const i18nPlugin = {
 };
 
 describe('Test component: InputWrapper', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallowMount(InputWrapper, {
+      props: {
+        attribute: {
+          type: 'String',
+          name: 'referenceTest',
+          definition: {
+            type: 'Reference',
+            rules: {},
+          },
+        },
+        plugin: {},
+      },
+      global: i18nPlugin,
+    });
+  });
+
   describe('Test variables initialization', () => {
     describe('Test prop: attribute', () => {
-      it('should has type "String"', async () => {
-        const wrapper = await shallowMount(InputWrapper, {
-          props: {
-            attribute: {
-              type: 'String',
-              name: 'stringTest',
-              definition: {
-                type: 'String',
-              },
-            },
-            plugin: {},
+      it('should be equal to the given attribute', () => {
+        expect(wrapper.vm.attribute).toEqual({
+          type: 'String',
+          name: 'referenceTest',
+          definition: {
+            type: 'Reference',
+            rules: {},
           },
-          global: i18nPlugin,
         });
-        expect(wrapper.vm.attribute.definition.type).toBe('String');
-      });
-
-      it('should has type "Number"', async () => {
-        const wrapper = await shallowMount(InputWrapper, {
-          props: {
-            attribute: {
-              type: 'Number',
-              name: 'NumberTest',
-              definition: {
-                type: 'Number',
-              },
-            },
-            plugin: {},
-          },
-          global: i18nPlugin,
-        });
-        expect(wrapper.vm.attribute.definition.type).toBe('Number');
-      });
-
-      it('should has type "Boolean"', async () => {
-        const wrapper = await shallowMount(InputWrapper, {
-          props: {
-            attribute: {
-              type: 'Boolean',
-              name: 'booleanTest',
-              definition: {
-                type: 'Boolean',
-              },
-            },
-            plugin: {},
-          },
-          global: i18nPlugin,
-        });
-        expect(wrapper.vm.attribute.definition.type).toBe('Boolean');
-      });
-
-      it('should has type "Reference"', async () => {
-        const wrapper = await shallowMount(InputWrapper, {
-          props: {
-            attribute: {
-              type: 'String',
-              name: 'referenceTest',
-              definition: {
-                type: 'Reference',
-              },
-            },
-            plugin: {},
-          },
-          global: i18nPlugin,
-        });
-        expect(wrapper.vm.attribute.definition.type).toBe('Reference');
       });
     });
 
-    describe('Test variables: attributeType', () => {
-      it('should match attribute.definition.type', async () => {
-        const wrapper = await shallowMount(InputWrapper, {
-          props: {
-            attribute: {
-              type: 'String',
-              name: 'referenceTest',
-              definition: {
-                type: 'Reference',
-              },
-            },
-            plugin: {},
-          },
-          global: i18nPlugin,
-        });
-        expect(wrapper.vm.attributeType).toEqual('Reference');
-      });
-
-      it('should match attribute.type if attribute.definition is null', async () => {
-        const wrapper = await mount(InputWrapper, {
-          props: {
-            attribute: {
-              type: 'String',
-              name: 'referenceTest',
-              definition: null,
-            },
-            plugin: {},
-          },
-          global: i18nPlugin,
-        });
-        expect(wrapper.vm.attributeType).toEqual('String');
+    describe('Test prop: plugin', () => {
+      it('should be equal to the given plugin', () => {
+        expect(wrapper.vm.plugin).toEqual({});
       });
     });
 
     describe('Test variables: name', () => {
       it('should match attribute.name if attribute.definition is null', async () => {
-        const wrapper = await mount(InputWrapper, {
+        expect(wrapper.vm.name).toEqual('');
+      });
+
+      it('should be an empty string if attribute.definition is defined', async () => {
+        wrapper = await mount(InputWrapper, {
           props: {
             attribute: {
               type: 'String',
               name: 'referenceTest',
-              definition: null,
             },
             plugin: {},
           },
@@ -137,72 +74,62 @@ describe('Test component: InputWrapper', () => {
         });
         expect(wrapper.vm.name).toEqual('referenceTest');
       });
+    });
+  });
 
-      it('should be an empty string if attribute.definition is defined', async () => {
-        const wrapper = await shallowMount(InputWrapper, {
-          props: {
-            attribute: {
-              type: 'String',
-              name: 'referenceTest',
-              definition: {
-                type: 'Reference',
-              },
-            },
-            plugin: {},
+  describe('Test function: getAttributeType', () => {
+    it('should return "Select" if definition.rules.values is defined', () => {
+      const attribute = {
+        definition: {
+          rules: {
+            values: [],
           },
-          global: i18nPlugin,
-        });
-        expect(wrapper.vm.name).toEqual('');
-      });
+        },
+      };
+      expect(wrapper.vm.getAttributeType(attribute)).toEqual('Select');
     });
 
-    describe('Test computed: label', () => {
-      it('should match attribute.name if attribute.definition is defined', async () => {
-        const wrapper = await shallowMount(InputWrapper, {
-          props: {
-            attribute: {
-              type: 'String',
-              name: 'attributeName',
-              definition: {
-                type: 'Reference',
-              },
-            },
-            plugin: {},
-          },
-          global: i18nPlugin,
-        });
-        expect(wrapper.vm.label).toEqual('attributeName');
-      });
+    it('should return definition.type if defined', () => {
+      const attribute = {
+        definition: {
+          type: 'typeInDefinition',
+          rules: {},
+        },
+      };
+      expect(wrapper.vm.getAttributeType(attribute)).toEqual('typeInDefinition');
+    });
 
-      it('should be an empty string if attribute.definition is null and attribute.type is "Boolean"', async () => {
-        const wrapper = await mount(InputWrapper, {
-          props: {
-            attribute: {
-              type: 'Boolean',
-              name: 'attributeName',
-              definition: null,
-            },
-            plugin: {},
-          },
-          global: i18nPlugin,
-        });
-        expect(wrapper.vm.label).toEqual('');
-      });
+    it('should return attribute.type if definition.type is undefined', () => {
+      const attribute = {
+        type: 'typeInAttribute',
+      };
+      expect(wrapper.vm.getAttributeType(attribute)).toEqual('typeInAttribute');
+    });
+  });
 
-      it('should return attribute.value translation if attribute.definition is null and attribute.type is not "Boolean"', async () => {
-        const wrapper = await mount(InputWrapper, {
-          props: {
-            attribute: {
-              type: 'String',
-              name: 'attributeName',
-              definition: null,
-            },
-            plugin: {},
-          },
-          global: i18nPlugin,
-        });
-        expect(wrapper.vm.label).toEqual('value');
-      });
+  describe('Test function: getAttributeLabel', () => {
+    it('should return attribute name if attribute has a definition', () => {
+      const attribute = {
+        definition: {},
+        name: 'nameTest',
+      };
+      expect(wrapper.vm.getAttributeLabel(attribute)).toEqual('nameTest');
+    });
+
+    it('should return empty string if attribute is a boolean', () => {
+      const attribute = {
+        type: 'Boolean',
+        name: 'nameTest',
+      };
+      expect(wrapper.vm.getAttributeLabel(attribute)).toEqual('');
+    });
+
+    it('should return translation otherwise', () => {
+      const attribute = {
+        type: 'String',
+      };
+      expect(wrapper.vm.getAttributeLabel(attribute))
+        .toEqual(wrapper.vm.$t('plugin.component.attribute.value'));
     });
   });
 });
