@@ -23,7 +23,7 @@
     "browserfs": "^1.4.3",
     "core-js": "^3.26.1",
     "isomorphic-git": "^1.21.0",
-    "leto-modelizer-plugin-core": "github:ditrit/leto-modelizer-plugin-core#0.6.0",
+    "leto-modelizer-plugin-core": "github:ditrit/leto-modelizer-plugin-core#0.9.1",
     "monaco-editor": "^0.34.1",
     "monaco-editor-webpack-plugin": "^7.0.1",
     "pinia": "^2.0.26",
@@ -61,7 +61,7 @@
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
     "jest-sonar-reporter": "^2.0.0",
-    "leto-modelizer-plugin-cli": "github:ditrit/leto-modelizer-plugin-cli#0.2.0",
+    "leto-modelizer-plugin-cli": "github:ditrit/leto-modelizer-plugin-cli#0.2.1",
     "nunjucks": "^3.2.3",
     "vue-loader": "^17.0.1"
   },
