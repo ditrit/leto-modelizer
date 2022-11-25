@@ -96,9 +96,7 @@ describe('Test component: ModelizerModelView', () => {
   describe('Test function: getFileInputs', () => {
     it('should return an array with 1 element', async () => {
       const plugin = {
-        parser: {
-          isParsable: () => true,
-        },
+        isParsable: () => true,
       };
       const result = await wrapper.vm.getFileInputs(plugin, [{}]);
 
@@ -110,43 +108,35 @@ describe('Test component: ModelizerModelView', () => {
   describe('Test function: drawComponents', () => {
     it('should update plugin.components and call draw() function', async () => {
       const plugin = {
-        components: [],
-        drawer: {
-          draw: jest.fn(),
+        data: {
+          components: [],
         },
-        parser: {
-          isParsable: () => true,
-          parse: (fileInputs) => ({ components: fileInputs }),
-        },
+        draw: jest.fn(),
+        isParsable: () => true,
+        parse: jest.fn(),
       };
 
       await wrapper.vm.drawComponents(plugin);
 
-      expect(plugin.components.length).toEqual(1);
-      expect(plugin.drawer.draw).toHaveBeenCalledTimes(1);
+      expect(plugin.parse).toHaveBeenCalledTimes(1);
+      expect(plugin.draw).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test function: deletePluginComponentAndRedraw', () => {
-    it('should not call plugin draw function when component is not found', () => {
+    it('should call plugin removeComponentById and draw functions', () => {
       const draw = jest.fn();
+      const removeComponentById = jest.fn();
       wrapper.vm.data.plugins = [{
-        components: [{ id: 'toKeepID' }],
-        drawer: { draw },
+        data: {
+          removeComponentById,
+        },
+        draw,
       }];
-      expect(draw).toHaveBeenCalledTimes(0);
-      wrapper.vm.deletePluginComponentAndRedraw({ id: 'toRemoveID' });
-      expect(draw).toHaveBeenCalledTimes(0);
-    });
 
-    it('should call plugin draw function when component is found and deleted', () => {
-      const draw = jest.fn();
-      wrapper.vm.data.plugins = [{
-        components: [{ id: 'toRemoveID' }],
-        drawer: { draw },
-      }];
       expect(draw).toHaveBeenCalledTimes(0);
       wrapper.vm.deletePluginComponentAndRedraw({ id: 'toRemoveID' });
+      expect(removeComponentById).toHaveBeenCalledTimes(1);
       expect(draw).toHaveBeenCalledTimes(1);
     });
   });

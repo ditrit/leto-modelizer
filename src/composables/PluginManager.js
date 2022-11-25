@@ -5,29 +5,19 @@ import PluginEvent from 'src/composables/events/PluginEvent';
 let instanciatePlugins = [];
 
 /**
- * Initialize plugin metadata and definitions.
+ * Retrieve files' information.
  *
  * @param {Object} plugin - instantiate plugin.
- */
-export function initPluginMetadata(plugin) {
-  plugin.metadata = new plugin.pluginModel.PluginMetadata();
-  plugin.definitions = plugin.metadata.getDefinitions();
-}
-
-/**
- * Retreive files' informations.
- *
- * @param {Object} plugin - instantiate plugin.
- * @param {String} defType - Type of file to retreive.
+ * @param {String} defType - Type of file to retrieve.
  * @return {Array<Object>} Promise with files' information on success otherwise an error.
  */
 export function getFilesInfo(plugin, defType) {
-  return [...new Set(plugin.definitions[defType].reduce((acc, def) => {
+  return [...new Set(plugin.data.definitions[defType].reduce((acc, def) => {
     if (def.model) {
       acc.push({
         name: def.model,
         type: 'models',
-        path: `/plugins/${plugin.name}/models/${def.model}.svg`,
+        path: `/plugins/${plugin.data.name}/models/${def.model}.svg`,
       });
     }
 
@@ -35,7 +25,7 @@ export function getFilesInfo(plugin, defType) {
       acc.push({
         name: def.icon,
         type: 'icons',
-        path: `/plugins/${plugin.name}/icons/${def.icon}.svg`,
+        path: `/plugins/${plugin.data.name}/icons/${def.icon}.svg`,
       });
     }
 
@@ -43,7 +33,7 @@ export function getFilesInfo(plugin, defType) {
   }, []))];
 }
 
-// Remove if svg import is possible
+// TODO: Remove if svg import is possible
 /**
  * Create plugin resources.
  *
@@ -65,59 +55,23 @@ export async function createPluginResources(plugin) {
 }
 
 /**
- * Initialize plugin drawer.
- *
- * @param {Object} plugin - instantiate plugin
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
- */
-export async function initPluginDrawer(plugin) {
-  return createPluginResources(plugin)
-    .then((resources) => {
-      const events = {
-        SelectEvent: PluginEvent.SelectEvent,
-        EditEvent: PluginEvent.EditEvent,
-        DeleteEvent: PluginEvent.DeleteEvent,
-      };
-      plugin.drawer = new plugin.pluginModel.PluginDrawer(resources, 'root', events);
-    });
-}
-
-/**
- * Initialize plugin parser.
- *
- * @param {Object} plugin - instantiate plugin
- */
-export function initPluginParser(plugin) {
-  plugin.parser = new plugin.pluginModel.PluginParser(plugin.definitions);
-}
-
-/**
- * Initialize plugin renderer.
- *
- * @param {Object} plugin - instantiate plugin
- */
-export function initPluginRenderer(plugin) {
-  plugin.renderer = new plugin.pluginModel.PluginRenderer();
-}
-
-/**
  * Instantiate a plugin.
  *
  * @param {String} pluginName - Plugin name
  * @return {Promise<Plugin>} Promise with instanciated plugin on success otherwise an error.
  */
 export async function instantiatePlugin(pluginName) {
-  const pluginModel = plugins[pluginName];
-  const plugin = {
-    pluginModel,
-    name: pluginName,
-    components: [],
-  };
+  const plugin = new plugins[pluginName]();
 
-  initPluginMetadata(plugin);
-  initPluginParser(plugin);
-  initPluginRenderer(plugin);
-  await initPluginDrawer(plugin);
+  plugin.init({
+    SelectEvent: PluginEvent.SelectEvent,
+    EditEvent: PluginEvent.EditEvent,
+    DeleteEvent: PluginEvent.DeleteEvent,
+  });
+
+  await createPluginResources(plugin).then((resources) => {
+    plugin.initResources(resources);
+  });
 
   return plugin;
 }
@@ -146,77 +100,11 @@ export function getPlugins() {
 }
 
 /**
- * Get instantiated plugin correponding to the given name.
+ * Get instantiated plugin corresponding to the given name.
  *
  * @param {String} name - Name of the plugin to retrieve.
  * @return {Object} Return an array of plugin.
  */
 export function getPluginByName(name) {
-  return instanciatePlugins.find((p) => p.name === name);
-}
-
-/**
- * Delete a component from a tree of components.
- *
- * @param {String} componentId - Id of the component to remove
- * @param {Array} components - Tree of components.
- * @return {Boolean} true if component was found and delete otherwise false.
- */
-export function deleteComponent(componentId, components) {
-  const index = components.findIndex(({ id }) => id === componentId);
-
-  if (index === -1) {
-    return components
-      .filter(({ children }) => children && children.length > 0)
-      .some((component) => deleteComponent(componentId, component.children));
-  }
-
-  components.splice(index, 1);
-  return true;
-}
-
-/**
- * Get the component corresponding to the given id from the tree of components.
- * @param {Number} componentId - Id of the wanted component.
- * @param {Array} components - Tree of components.
- * @returns {Object|null} the wanted component otherwise null.
- */
-export function getComponent(componentId, components) {
-  const index = components.findIndex(({ id }) => id === componentId);
-
-  if (index === -1) {
-    const found = components
-      .filter(({ children }) => children && children.length > 0)
-      .reduce((acc, component) => {
-        if (!acc) {
-          const foundComponent = getComponent(componentId, component.children);
-          if (foundComponent) {
-            acc = foundComponent;
-          }
-        }
-
-        return acc;
-      }, null);
-
-    return found;
-  }
-
-  return components[index];
-}
-
-/**
- * Get the components corresponding to the given type from the tree of components.
- * @param {String} componentType - Type of the wanted component.
- * @param {Array} components - Tree of components.
- * @returns {Array} array of the corresponding components.
- */
-export function getComponentsByType(componentType, components) {
-  const foundComponents = components.filter(({ definition }) => definition.type === componentType);
-
-  const childrensComponents = components
-    .filter(({ children }) => children && children.length > 0)
-    .map(({ children }) => getComponentsByType(componentType, children))
-    .flat();
-
-  return foundComponents.concat(childrensComponents);
+  return instanciatePlugins.find((plugin) => plugin.data.name === name);
 }

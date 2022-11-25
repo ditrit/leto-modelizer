@@ -19,7 +19,6 @@
 </template>
 
 <script setup>
-import { Component } from 'leto-modelizer-plugin-core';
 import { getPluginByName } from 'src/composables/PluginManager';
 import { randomHexString } from 'src/composables/Random';
 
@@ -40,12 +39,9 @@ const props = defineProps({
  */
 function onClickItem() {
   const plugin = getPluginByName(props.pluginName);
-  const id = `object_${randomHexString(8)}`;
-  plugin.components.push(new Component({
-    definition: { ...props.definition },
-    id,
-    name: id,
-  }));
-  plugin.drawer.draw(plugin.components);
+  const id = `${props.definition.type}_${randomHexString(8)}`;
+
+  plugin.data.addComponent(id, props.definition);
+  plugin.draw('root');
 }
 </script>

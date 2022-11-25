@@ -9,9 +9,7 @@
     />
     <q-page-container>
       <q-page>
-        <div id="viewport">
-          <svg id='root' data-cy="modelizer-model-view-draw-root"></svg>
-        </div>
+        <div id='root' data-cy="modelizer-model-view-draw-root"></div>
       </q-page>
     </q-page-container>
     <component-detail-panel />
@@ -27,7 +25,6 @@ import {
 import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer';
 import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
 import {
-  deleteComponent,
   getPlugins,
 } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
@@ -58,7 +55,7 @@ const data = reactive({
 async function getFileInputs(plugin, fileInformations) {
   return Promise.allSettled(
     fileInformations
-      .filter((fileInfo) => plugin.parser.isParsable(fileInfo))
+      .filter((fileInfo) => plugin.isParsable(fileInfo))
       .map((fileInfo) => readProjectFile(props.projectName, fileInfo)),
   ).then((allResults) => allResults
     .filter((result) => result.status === 'fulfilled')
@@ -72,9 +69,8 @@ async function getFileInputs(plugin, fileInformations) {
 async function drawComponents(plugin) {
   const fileInformations = await getProjectFiles(props.projectName);
   const fileInputs = await getFileInputs(plugin, fileInformations);
-  plugin.components = plugin.parser.parse(fileInputs).components;
-
-  plugin.drawer.draw(plugin.components);
+  plugin.parse(fileInputs);
+  plugin.draw('root');
 }
 
 /**
@@ -83,11 +79,10 @@ async function drawComponents(plugin) {
  * @param {String} event.id - Id of the component to remove
  */
 function deletePluginComponentAndRedraw(event) {
-  const plugin = data.plugins.find(({ components }) => deleteComponent(event.id, components));
-
-  if (plugin) {
-    plugin.drawer.draw(plugin.components);
-  }
+  data.plugins.forEach((plugin) => {
+    plugin.data.removeComponentById(event.id);
+    plugin.draw('root');
+  });
 }
 
 /**

@@ -2,9 +2,14 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
-import { getPlugins, getComponent } from 'src/composables/PluginManager';
+import { getPlugins } from 'src/composables/PluginManager';
 import ComponentDetailPanel from 'src/components/drawer/ComponentDetailPanel.vue';
-import { ComponentAttribute, ComponentAttributeDefinition } from 'leto-modelizer-plugin-core';
+import {
+  Component,
+  ComponentAttribute,
+  ComponentAttributeDefinition,
+  ComponentDefinition,
+} from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
 
 installQuasarPlugin();
@@ -31,7 +36,6 @@ jest.mock('src/composables/events/ViewSwitchEvent', () => ({
 
 jest.mock('src/composables/PluginManager', () => ({
   getPlugins: jest.fn(),
-  getComponent: jest.fn(),
 }));
 
 describe('test component: Plugin Component Detail Panel', () => {
@@ -48,12 +52,17 @@ describe('test component: Plugin Component Detail Panel', () => {
     },
   }));
 
-  getPlugins.mockImplementation(() => [{ components: [] }]);
-  getComponent.mockImplementation(() => ({
-    name: 'componentName',
-    attributes: [],
-    definition: new ComponentAttributeDefinition(),
-  }));
+  getPlugins.mockImplementation(() => [{
+    data: {
+      getComponentById: () => null,
+      components: [],
+    },
+  }, {
+    data: {
+      getComponentById: () => new Component({ name: 'componentName', definition: new ComponentDefinition() }),
+      components: [],
+    },
+  }]);
 
   beforeEach(() => {
     pluginEditSubscription = jest.fn();
@@ -87,8 +96,7 @@ describe('test component: Plugin Component Detail Panel', () => {
       expect(wrapper.vm.isVisible).toEqual(false);
     });
 
-    it('should emit DrawEvent & RenderEvent events', () => {
-      expect(PluginEvent.DrawEvent.next).toHaveBeenCalledTimes(1);
+    it('should emit RenderEvent event', () => {
       expect(PluginEvent.RenderEvent.next).toHaveBeenCalledTimes(1);
     });
   });
@@ -176,7 +184,7 @@ describe('test component: Plugin Component Detail Panel', () => {
       wrapper.vm.selectedComponent = {
         name: 'newName',
         attributes: [],
-        definition: new ComponentAttributeDefinition(),
+        definition: new ComponentDefinition(),
       };
       wrapper.vm.selectedComponentName = 'oldName';
       wrapper.vm.selectedComponentAttributes = [{}];
@@ -195,11 +203,11 @@ describe('test component: Plugin Component Detail Panel', () => {
       wrapper.vm.onEdit({ id: 0 });
 
       expect(wrapper.vm.isVisible).toBeTruthy();
-      expect(wrapper.vm.selectedComponent).toEqual({
+      expect(wrapper.vm.selectedComponent).toEqual(new Component({
         name: 'componentName',
         attributes: [],
-        definition: new ComponentAttributeDefinition(),
-      });
+        definition: new ComponentDefinition(),
+      }));
       expect(wrapper.vm.selectedComponentName).toEqual('componentName');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
     });

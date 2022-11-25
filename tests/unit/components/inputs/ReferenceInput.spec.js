@@ -18,13 +18,16 @@ describe('Test component: StringInput', () => {
           },
         },
         plugin: {
-          name: 'pluginName',
-          components: [],
-          definitions: {
-            components: [{
-              type: 'reference',
-              icon: 'referenceIconName',
-            }],
+          data: {
+            name: 'pluginName',
+            components: [],
+            definitions: {
+              components: [{
+                type: 'reference',
+                icon: 'referenceIconName',
+              }],
+            },
+            getComponentsByType: jest.fn(() => [{ name: 'ref' }]),
           },
         },
       },
@@ -41,7 +44,7 @@ describe('Test component: StringInput', () => {
 
     describe('Test prop: plugin', () => {
       it('Should be an object containing a name mathing "pluginName"', () => {
-        expect(wrapper.vm.plugin.name).toEqual('pluginName');
+        expect(wrapper.vm.plugin.data.name).toEqual('pluginName');
       });
     });
 
@@ -52,8 +55,8 @@ describe('Test component: StringInput', () => {
     });
 
     describe('Test variables: options', () => {
-      it('Should be an empty array', () => {
-        expect(wrapper.vm.options).toEqual([]);
+      it('Should be an array', () => {
+        expect(wrapper.vm.options).toEqual(['ref']);
       });
     });
 
@@ -75,18 +78,21 @@ describe('Test component: StringInput', () => {
           },
         },
         plugin: {
-          name: 'pluginName',
-          components: [{
-            name: 'ref',
-            definition: {
-              type: 'reference',
-            },
-          }],
-          definitions: {
+          data: {
+            getComponentsByType: jest.fn(() => [{ name: 'ref' }]),
+            name: 'pluginName',
             components: [{
-              type: 'reference',
-              icon: 'referenceIconName',
+              name: 'ref',
+              definition: {
+                type: 'reference',
+              },
             }],
+            definitions: {
+              components: [{
+                type: 'reference',
+                icon: 'referenceIconName',
+              }],
+            },
           },
         },
       });

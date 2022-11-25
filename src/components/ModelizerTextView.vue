@@ -248,20 +248,22 @@ function onCreateFileEvent({ name, isFolder }) {
 /**
  * Render components and update files accordingly.
  */
-function renderPlugins() {
+async function renderPlugins() {
   const plugins = getPlugins();
-  plugins.forEach((plugin) => {
-    const render = plugin.renderer.render(plugin.components, [], 'new_file.tf');
+  const requests = [];
 
-    render.forEach((file) => {
+  plugins.forEach((plugin) => {
+    plugin.render().forEach((file) => requests.push(
       writeProjectFile(props.projectName, file).then(() => {
         FileEvent.CreateFileEvent.next({
           name: file.path.substring(file.path.lastIndexOf('/') + 1),
           isFolder: false,
         });
-      });
-    });
+      }),
+    ));
   });
+
+  Promise.allSettled(requests).then(() => PluginEvent.DrawEvent.next());
 }
 
 watch(activeFileTab, () => {

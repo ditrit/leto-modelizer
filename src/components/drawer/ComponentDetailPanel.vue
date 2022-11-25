@@ -139,7 +139,7 @@ import {
 import InputWrapper from 'components/inputs/InputWrapper';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
-import { getPlugins, getComponent } from 'src/composables/PluginManager';
+import { getPlugins } from 'src/composables/PluginManager';
 import { ComponentAttribute } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
 
@@ -175,7 +175,6 @@ function save() {
   selectedComponent.value.attributes = selectedComponentAttributes.value
     .filter(({ value }) => value !== null && value !== '');
 
-  PluginEvent.DrawEvent.next();
   PluginEvent.RenderEvent.next();
 
   submitting.value = false;
@@ -254,7 +253,7 @@ function onEdit({ id }) {
   const plugins = getPlugins();
   const component = plugins.reduce((acc, plugin) => {
     if (!acc) {
-      const foundComponent = getComponent(id, plugin.components);
+      const foundComponent = plugin.data.getComponentById(id);
 
       if (foundComponent) {
         localPlugin.value = plugin;
