@@ -4,7 +4,7 @@ import ReferenceInput from 'src/components/inputs/ReferenceInput';
 
 installQuasarPlugin();
 
-describe('Test component: StringInput', () => {
+describe('Test component: ReferenceInput', () => {
   let wrapper;
 
   beforeEach(() => {
