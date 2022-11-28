@@ -51,7 +51,7 @@ import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getPlugins } from 'src/composables/PluginManager';
-import { FileInformation } from 'leto-modelizer-plugin-core';
+import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
 
 const props = defineProps({
@@ -251,9 +251,13 @@ function onCreateFileEvent({ name, isFolder }) {
 async function renderPlugins() {
   const plugins = getPlugins();
   const requests = [];
+  const config = new FileInput({
+    path: 'leto-modelizer.config.json',
+    content: '{}',
+  });
 
   plugins.forEach((plugin) => {
-    plugin.render().forEach((file) => requests.push(
+    plugin.render(config).forEach((file) => requests.push(
       writeProjectFile(props.projectName, file).then(() => {
         FileEvent.CreateFileEvent.next({
           name: file.path.substring(file.path.lastIndexOf('/') + 1),
@@ -263,7 +267,10 @@ async function renderPlugins() {
     ));
   });
 
-  Promise.allSettled(requests).then(() => PluginEvent.DrawEvent.next());
+  Promise.allSettled([
+    ...requests,
+    writeProjectFile(props.projectName, config),
+  ]).then(() => PluginEvent.DrawEvent.next());
 }
 
 watch(activeFileTab, () => {

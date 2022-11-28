@@ -29,6 +29,7 @@ import {
 } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getProjectFiles, readProjectFile } from 'src/composables/Project';
+import { FileInformation } from 'leto-modelizer-plugin-core';
 
 let pluginInitSubscription;
 let pluginDeleteSubscription;
@@ -69,7 +70,14 @@ async function getFileInputs(plugin, fileInformations) {
 async function drawComponents(plugin) {
   const fileInformations = await getProjectFiles(props.projectName);
   const fileInputs = await getFileInputs(plugin, fileInformations);
-  plugin.parse(fileInputs);
+  const config = await readProjectFile(
+    props.projectName,
+    new FileInformation({ path: 'leto-modelizer.config.json' }),
+  );
+  // TODO: Remove this when plugin-core manage null as content.
+  config.content = (!config.content || config.content === '') ? '{}' : config.content;
+
+  plugin.parse(config, fileInputs);
   plugin.draw('root');
 }
 
