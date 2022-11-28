@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Setup project (eslint, esdoc, unit test, i18n, quasar).
-- Setup e2e test solution (cypress, cocumber, Gherkin Syntax).
+- Setup e2e test solution (cypress, cucumber, Gherkin Syntax).
 - Add homepage
 - Add the project list on the homepage
 - Add Modelizer page
@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add create and delete file or folder action
 - Add ParseEvent & RenderEvent management
 - Add ComponentDetailPanel
-- Add files status and color file's label regarding to its status
+- Add files status and color file's label regarding its status
 - Add git add action
 - Update dependencies
 - Add Save button in ModelizerNavigationBar
@@ -51,8 +51,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add Unreferenced attributes management in ComponentDetailPanel
 - Add an input in InputWrapper to allow updating the key (name) of the unreferenced attribute
 - Add create and delete action for unreferenced attribute
-- Add process.env variable for icomorphic-git cors proxy url
+- Add process.env variable for isomorphic-git cors proxy url
 - Add required and rules management
 - Create LinkInput
+- Save and retrieve position of components in configuration file
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
