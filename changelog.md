@@ -53,5 +53,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add create and delete action for unreferenced attribute
 - Add process.env variable for icomorphic-git cors proxy url
 - Add required and rules management
+- Create LinkInput
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
