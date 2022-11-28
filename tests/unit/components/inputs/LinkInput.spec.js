@@ -1,20 +1,20 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { mount } from '@vue/test-utils';
-import ReferenceInput from 'src/components/inputs/ReferenceInput';
+import LinkInput from 'src/components/inputs/LinkInput';
 
 installQuasarPlugin();
 
-describe('Test component: ReferenceInput', () => {
+describe('Test component: LinkInput', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(ReferenceInput, {
+    wrapper = mount(LinkInput, {
       props: {
         attribute: {
-          value: 'test',
+          value: ['test'],
           name: 'attributeName',
           definition: {
-            containerRef: 'reference',
+            linkRef: 'linkable',
           },
         },
         plugin: {
@@ -23,11 +23,11 @@ describe('Test component: ReferenceInput', () => {
             components: [],
             definitions: {
               components: [{
-                type: 'reference',
-                icon: 'referenceIconName',
+                type: 'linkable',
+                icon: 'iconName',
               }],
             },
-            getComponentsByType: jest.fn(() => [{ name: 'ref' }]),
+            getComponentsByType: jest.fn(() => [{ name: 'componentName' }]),
           },
         },
       },
@@ -38,7 +38,7 @@ describe('Test component: ReferenceInput', () => {
     describe('Test prop: attribute', () => {
       it('should be an object containing name & value', () => {
         expect(wrapper.vm.attribute.name).toEqual('attributeName');
-        expect(wrapper.vm.attribute.value).toEqual('test');
+        expect(wrapper.vm.attribute.value).toEqual(['test']);
       });
     });
 
@@ -48,21 +48,21 @@ describe('Test component: ReferenceInput', () => {
       });
     });
 
-    describe('Test variables: localValue', () => {
+    describe('Test variable: localValue', () => {
       it('should match attribute.value', () => {
-        expect(wrapper.vm.localValue).toEqual('test');
+        expect(wrapper.vm.localValue).toEqual(['test']);
       });
     });
 
-    describe('Test variables: options', () => {
+    describe('Test variable: options', () => {
       it('should be an array', () => {
-        expect(wrapper.vm.options).toEqual(['ref']);
+        expect(wrapper.vm.options).toEqual(['componentName']);
       });
     });
 
-    describe('Test variables: iconName', () => {
-      it('should match "referenceIconName"', () => {
-        expect(wrapper.vm.iconName).toEqual('referenceIconName');
+    describe('Test variable: iconName', () => {
+      it('should match "linkIconName"', () => {
+        expect(wrapper.vm.iconName).toEqual('iconName');
       });
     });
   });
@@ -71,32 +71,32 @@ describe('Test component: ReferenceInput', () => {
     it('should update options', async () => {
       await wrapper.setProps({
         attribute: {
-          value: 'test',
+          value: ['test'],
           name: 'attributeName',
           definition: {
-            containerRef: 'reference',
+            linkRef: 'linkable',
           },
         },
         plugin: {
           data: {
-            getComponentsByType: jest.fn(() => [{ name: 'ref' }]),
+            getComponentsByType: jest.fn(() => [{ name: 'componentName' }]),
             name: 'pluginName',
             components: [{
-              name: 'ref',
+              name: 'componentName',
               definition: {
-                type: 'reference',
+                type: 'linkable',
               },
             }],
             definitions: {
               components: [{
-                type: 'reference',
-                icon: 'referenceIconName',
+                type: 'linkable',
+                icon: 'iconName',
               }],
             },
           },
         },
       });
-      expect(wrapper.vm.options).toEqual(['ref']);
+      expect(wrapper.vm.options).toEqual(['componentName']);
     });
   });
 });

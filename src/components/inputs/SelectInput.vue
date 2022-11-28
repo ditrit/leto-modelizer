@@ -1,5 +1,6 @@
 <template>
   <q-select
+    ref="selectInput"
     clearable
     v-model="localValue"
     :options="options"
@@ -10,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { isRequired } from 'src/composables/QuasarFieldRule';
 
 const props = defineProps({
@@ -20,6 +21,13 @@ const props = defineProps({
   },
 });
 
+const selectInput = ref(null);
 const localValue = ref(props.attribute.value);
 const options = ref(props.attribute.definition.rules.values);
+
+watch(() => selectInput.value, () => {
+  if (selectInput.value) {
+    selectInput.value.validate();
+  }
+});
 </script>

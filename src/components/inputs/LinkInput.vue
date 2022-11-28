@@ -1,6 +1,7 @@
 <template>
   <q-select
-    ref="referenceInput"
+    ref="linkInput"
+    multiple
     clearable
     v-model="localValue"
     :options="options"
@@ -32,25 +33,24 @@ const props = defineProps({
   },
 });
 
-const referenceInput = ref(null);
+const linkInput = ref(null);
 const localValue = ref(props.attribute.value);
 const options = ref(props.plugin.data.getComponentsByType(
-  props.attribute.definition.containerRef,
-  props.plugin.data.components,
+  props.attribute.definition.linkRef,
 ).map(({ name }) => name));
 const iconName = ref(props.plugin.data.definitions.components.find(
-  ({ type }) => type === props.attribute.definition.containerRef,
+  ({ type }) => type === props.attribute.definition.linkRef,
 ).icon);
 
 watch(() => props.plugin.data.components, () => {
   options.value = props.plugin.data.getComponentsByType(
-    props.attribute.definition.containerRef,
+    props.attribute.definition.linkRef,
   ).map(({ name }) => name);
 });
 
-watch(() => referenceInput.value, () => {
-  if (referenceInput.value) {
-    referenceInput.value.validate();
+watch(() => linkInput.value, () => {
+  if (linkInput.value) {
+    linkInput.value.validate();
   }
 });
 </script>
