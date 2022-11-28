@@ -1,5 +1,6 @@
 <template>
   <q-select
+    ref="linkInput"
     multiple
     clearable
     v-model="localValue"
@@ -32,6 +33,7 @@ const props = defineProps({
   },
 });
 
+const linkInput = ref(null);
 const localValue = ref(props.attribute.value);
 const options = ref(props.plugin.data.getComponentsByType(
   props.attribute.definition.linkRef,
@@ -44,5 +46,11 @@ watch(() => props.plugin.data.components, () => {
   options.value = props.plugin.data.getComponentsByType(
     props.attribute.definition.linkRef,
   ).map(({ name }) => name);
+});
+
+watch(() => linkInput.value, () => {
+  if (linkInput.value) {
+    linkInput.value.validate();
+  }
 });
 </script>

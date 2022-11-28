@@ -1,6 +1,7 @@
 <template>
   <q-input
     type="number"
+    ref="numberInput"
     v-model="localValue"
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
@@ -11,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import {
   isRequired,
   isNumberTooSmall,
@@ -25,5 +26,12 @@ const props = defineProps({
   },
 });
 
+const numberInput = ref(null);
 const localValue = ref(props.attribute.value);
+
+watch(() => numberInput.value, () => {
+  if (numberInput.value) {
+    numberInput.value.validate();
+  }
+});
 </script>

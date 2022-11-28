@@ -1,5 +1,6 @@
 <template>
   <q-select
+    ref="referenceInput"
     clearable
     v-model="localValue"
     :options="options"
@@ -31,6 +32,7 @@ const props = defineProps({
   },
 });
 
+const referenceInput = ref(null);
 const localValue = ref(props.attribute.value);
 const options = ref(props.plugin.data.getComponentsByType(
   props.attribute.definition.containerRef,
@@ -44,5 +46,11 @@ watch(() => props.plugin.data.components, () => {
   options.value = props.plugin.data.getComponentsByType(
     props.attribute.definition.containerRef,
   ).map(({ name }) => name);
+});
+
+watch(() => referenceInput.value, () => {
+  if (referenceInput.value) {
+    referenceInput.value.validate();
+  }
 });
 </script>

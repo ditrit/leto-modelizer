@@ -1,5 +1,6 @@
 <template>
   <q-input
+    ref="stringInput"
     clearable
     v-model="localValue"
     :rules="[
@@ -12,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import {
   isRequired,
   isStringTooShort,
@@ -27,5 +28,12 @@ const props = defineProps({
   },
 });
 
+const stringInput = ref(null);
 const localValue = ref(props.attribute.value);
+
+watch(() => stringInput.value, () => {
+  if (stringInput.value) {
+    stringInput.value.validate();
+  }
+});
 </script>

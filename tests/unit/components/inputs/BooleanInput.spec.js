@@ -13,7 +13,6 @@ describe('Test component: BooleanInput', () => {
         attribute: {
           name: 'attributeName',
           value: true,
-          definition: {},
         },
       },
     });
