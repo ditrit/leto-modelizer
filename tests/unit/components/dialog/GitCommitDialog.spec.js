@@ -47,14 +47,14 @@ describe('Test component: GitCommitDialog', () => {
 
   describe('Test functions', () => {
     describe('Test function: setFilesStatus', () => {
-      it('Should set files status on valid event type', async () => {
+      it('should set files status on valid event type', async () => {
         expect(wrapper.vm.stagedFiles).toEqual([]);
 
         await wrapper.vm.setFilesStatus({ key: 'GitCommit' });
         expect(wrapper.vm.stagedFiles).toEqual([mockStagedFileStatus]);
       });
 
-      it('Should not set files status on invalid event type', async () => {
+      it('should not set files status on invalid event type', async () => {
         expect(wrapper.vm.stagedFiles).toEqual([]);
 
         await wrapper.vm.setFilesStatus({ key: 'InvalidEvent' });
@@ -64,7 +64,7 @@ describe('Test component: GitCommitDialog', () => {
   });
 
   describe('Test function: onSave', () => {
-    it('Should emit event for update file and close dialog', async () => {
+    it('should emit event for update file and close dialog', async () => {
       FileEvent.UpdateFileEvent.next = jest.fn();
       DialogEvent.next = jest.fn();
 
@@ -77,13 +77,13 @@ describe('Test component: GitCommitDialog', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('Should subscribe DialogEvent', () => {
+    it('should subscribe DialogEvent', () => {
       expect(subscribe).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('Should unsubscribe DialogEvent', () => {
+    it('should unsubscribe DialogEvent', () => {
       expect(unsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(unsubscribe).toHaveBeenCalledTimes(1);

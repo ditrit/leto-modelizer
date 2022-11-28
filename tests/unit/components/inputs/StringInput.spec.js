@@ -20,14 +20,14 @@ describe('Test component: StringInput', () => {
 
   describe('Test variables initialization', () => {
     describe('Test prop: attribute', () => {
-      it('Should be an object containing name & value', () => {
+      it('should be an object containing name & value', () => {
         expect(wrapper.vm.attribute.name).toEqual('attributeName');
         expect(wrapper.vm.attribute.value).toEqual('test');
       });
     });
 
     describe('Test variables: localValue', () => {
-      it('Should match attribute.value', () => {
+      it('should match attribute.value', () => {
         expect(wrapper.vm.localValue).toEqual('test');
       });
     });

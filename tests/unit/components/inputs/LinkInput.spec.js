@@ -36,32 +36,32 @@ describe('Test component: LinkInput', () => {
 
   describe('Test variables initialization', () => {
     describe('Test prop: attribute', () => {
-      it('Should be an object containing name & value', () => {
+      it('should be an object containing name & value', () => {
         expect(wrapper.vm.attribute.name).toEqual('attributeName');
         expect(wrapper.vm.attribute.value).toEqual(['test']);
       });
     });
 
     describe('Test prop: plugin', () => {
-      it('Should be an object containing a name mathing "pluginName"', () => {
+      it('should be an object containing a name mathing "pluginName"', () => {
         expect(wrapper.vm.plugin.data.name).toEqual('pluginName');
       });
     });
 
     describe('Test variable: localValue', () => {
-      it('Should match attribute.value', () => {
+      it('should match attribute.value', () => {
         expect(wrapper.vm.localValue).toEqual(['test']);
       });
     });
 
     describe('Test variable: options', () => {
-      it('Should be an array', () => {
+      it('should be an array', () => {
         expect(wrapper.vm.options).toEqual(['componentName']);
       });
     });
 
     describe('Test variable: iconName', () => {
-      it('Should match "linkIconName"', () => {
+      it('should match "linkIconName"', () => {
         expect(wrapper.vm.iconName).toEqual('iconName');
       });
     });

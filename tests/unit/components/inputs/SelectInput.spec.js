@@ -28,20 +28,20 @@ describe('Test component: SelectInput', () => {
 
   describe('Test variables initialization', () => {
     describe('Test prop: attribute', () => {
-      it('Should be an object containing name & value', () => {
+      it('should be an object containing name & value', () => {
         expect(wrapper.vm.attribute.name).toEqual('attributeName');
         expect(wrapper.vm.attribute.value).toEqual('value1');
       });
     });
 
     describe('Test variable: localValue', () => {
-      it('Should match attribute.value', () => {
+      it('should match attribute.value', () => {
         expect(wrapper.vm.localValue).toEqual('value1');
       });
     });
 
     describe('Test variable: option', () => {
-      it('Should match attribute.definition.rules.values', () => {
+      it('should match attribute.definition.rules.values', () => {
         expect(wrapper.vm.options).toEqual([
           'value1',
           'value2',

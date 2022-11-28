@@ -20,32 +20,32 @@ describe('Test component: FileName', () => {
 
   describe('Test variables initialization', () => {
     describe('Test props: path', () => {
-      it('Should match "path"', () => {
+      it('should match "path"', () => {
         expect(wrapper.vm.props.path).toEqual('path');
       });
     });
 
     describe('Test props: isActive', () => {
-      it('Should be false', () => {
+      it('should be false', () => {
         expect(wrapper.vm.props.isActive).toEqual(false);
       });
     });
 
     describe('Test props: status', () => {
-      it('Should match "status"', () => {
+      it('should match "status"', () => {
         expect(wrapper.vm.props.status).toEqual('status');
       });
     });
 
     describe('Test props: label', () => {
-      it('Should match "label"', () => {
+      it('should match "label"', () => {
         expect(wrapper.vm.props.label).toEqual('label');
       });
     });
   });
 
   describe('Test watcher: props.status', () => {
-    it('Should be triggered when props.status is updated', async () => {
+    it('should be triggered when props.status is updated', async () => {
       await wrapper.setProps({
         path: 'path',
         isActive: false,

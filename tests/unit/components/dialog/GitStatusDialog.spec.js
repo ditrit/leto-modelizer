@@ -45,14 +45,14 @@ describe('Test component: GitStatusDialog', () => {
 
   describe('Test computed', () => {
     describe('Test computed: stagedFiles', () => {
-      it('Should be empty without staged file', () => {
+      it('should be empty without staged file', () => {
         wrapper.vm.filesStatus = [
           new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 0 }),
         ];
         expect(wrapper.vm.stagedFiles).toEqual([]);
       });
 
-      it('Should have one staged file', () => {
+      it('should have one staged file', () => {
         wrapper.vm.filesStatus = [
           new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 2 }),
         ];
@@ -63,14 +63,14 @@ describe('Test component: GitStatusDialog', () => {
     });
 
     describe('Test computed: unstagedFiles', () => {
-      it('Should be empty without unstaged file', () => {
+      it('should be empty without unstaged file', () => {
         wrapper.vm.filesStatus = [
           new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 0 }),
         ];
         expect(wrapper.vm.unstagedFiles).toEqual([]);
       });
 
-      it('Should have one unstaged file', () => {
+      it('should have one unstaged file', () => {
         wrapper.vm.filesStatus = [
           new FileStatus({ headStatus: 1, workdirStatus: 0, stageStatus: 1 }),
         ];
@@ -81,14 +81,14 @@ describe('Test component: GitStatusDialog', () => {
     });
 
     describe('Test computed: untrackedFiles', () => {
-      it('Should be empty without untracked file', () => {
+      it('should be empty without untracked file', () => {
         wrapper.vm.filesStatus = [
           new FileStatus({ headStatus: 1, workdirStatus: 0, stageStatus: 1 }),
         ];
         expect(wrapper.vm.untrackedFiles).toEqual([]);
       });
 
-      it('Should have one untracked file', () => {
+      it('should have one untracked file', () => {
         wrapper.vm.filesStatus = [
           new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 0 }),
         ];
@@ -99,12 +99,12 @@ describe('Test component: GitStatusDialog', () => {
     });
 
     describe('Test computed: noFiles', () => {
-      it('Should be true without files', () => {
+      it('should be true without files', () => {
         wrapper.vm.filesStatus = [];
         expect(wrapper.vm.noFiles).toEqual(true);
       });
 
-      it('Should be false with files', () => {
+      it('should be false with files', () => {
         wrapper.vm.filesStatus = [
           new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 0 }),
         ];
@@ -115,14 +115,14 @@ describe('Test component: GitStatusDialog', () => {
 
   describe('Test functions', () => {
     describe('Test function: setBranchName', () => {
-      it('Should set files status on valid event type', async () => {
+      it('should set files status on valid event type', async () => {
         expect(wrapper.vm.filesStatus).toEqual([]);
 
         await wrapper.vm.setFilesStatus({ key: 'GitStatus' });
         expect(wrapper.vm.filesStatus).toEqual([mockFileStatus]);
       });
 
-      it('Should not set files status on invalid event type', async () => {
+      it('should not set files status on invalid event type', async () => {
         expect(wrapper.vm.filesStatus).toEqual([]);
 
         await wrapper.vm.setFilesStatus({ key: 'InvalidEvent' });
@@ -132,13 +132,13 @@ describe('Test component: GitStatusDialog', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('Should subscribe DialogEvent', () => {
+    it('should subscribe DialogEvent', () => {
       expect(subscribe).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('Should unsubscribe DialogEvent', () => {
+    it('should unsubscribe DialogEvent', () => {
       expect(unsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(unsubscribe).toHaveBeenCalledTimes(1);
