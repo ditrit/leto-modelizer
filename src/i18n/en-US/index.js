@@ -15,7 +15,9 @@ export default {
       update: 'Update',
     },
     home: {
-      createEmptyProject: 'Create empty project',
+      newProject: 'New project',
+      importProject: 'Import project',
+      importedProject: 'Project has been imported &#129395;!',
     },
     git: {
       repository: {
@@ -111,6 +113,11 @@ export default {
     content: 'Oops. Nothing here...',
   },
   page: {
+    home: {
+      chooseProject: 'Choose your project',
+      recentProjects: 'Recent projects',
+      importProject: 'Import project',
+    },
     modelizer: {
       header: {
         switch: {
