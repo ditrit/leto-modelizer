@@ -25,7 +25,7 @@ describe('Test component: ImportProjectDialog', () => {
     wrapper = shallowMount(ImportProjectDialog, {
       global: {
         plugins: [
-          createI18n(i18nConfiguration),
+          createI18n({ locale: 'en-US', messages: i18nConfiguration }),
         ],
       },
     });
