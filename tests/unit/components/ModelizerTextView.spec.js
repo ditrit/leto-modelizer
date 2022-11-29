@@ -490,9 +490,9 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test function: renderPlugins', () => {
-    it('should call writeProjectFile once', () => {
+    it('should call writeProjectFile once for components file and once more for config file', () => {
       wrapper.vm.renderPlugins();
-      expect(writeProjectFileMock).toHaveBeenCalledTimes(1);
+      expect(writeProjectFileMock).toHaveBeenCalledTimes(2);
     });
   });
 
