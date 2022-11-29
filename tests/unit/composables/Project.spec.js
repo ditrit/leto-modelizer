@@ -24,8 +24,9 @@ import {
   gitAdd,
   gitCommit,
   gitLog,
-  PROJECT_STORAGE_KEY,
   gitGlobalSave,
+  importProject,
+  PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -36,6 +37,10 @@ import { GlobalSaveFilesEvent } from 'src/composables/events/FileEvent';
 
 jest.mock('isomorphic-git', () => ({
   init: jest.fn(() => Promise.resolve('init')),
+  clone: jest.fn(({ onAuth }) => {
+    onAuth();
+    return Promise.resolve('clone');
+  }),
   branch: jest.fn(() => Promise.resolve('branch')),
   addRemote: jest.fn(() => Promise.resolve('addRemote')),
   fetch: jest.fn(({ onAuth }) => {
@@ -235,6 +240,20 @@ describe('Test composable: Project', () => {
     it('should call git init', async () => {
       const result = await initProject({ id: 'foo' });
       expect(result).toEqual('init');
+    });
+  });
+
+  describe('Test function: importProject', () => {
+    it('should call git clone', async () => {
+      await importProject({
+        id: 'foo',
+        git: {
+          repository: 'test',
+          username: 'test',
+          token: 'test',
+        },
+      });
+      expect(git.clone).toBeCalled();
     });
   });
 

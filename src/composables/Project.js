@@ -17,15 +17,13 @@ export const PROJECT_STORAGE_KEY = 'projects';
 
 /**
  * Represent a project object.
- *
  * @typedef {Object} Project
- * @property {string} id project id
+ * @property {String} id - project id.
  */
 
 /**
  * Create a project with generated id.
- *
- * @returns {Project} Project object with generated id.
+ * @return {Project} Project object with generated id.
  */
 export function createProjectTemplate() {
   return { id: `project-${randomHexString(8)}` };
@@ -33,8 +31,7 @@ export function createProjectTemplate() {
 
 /**
  * Get a map of all projects.
- *
- * @return {Object} Object that contains all project id as key and associated project as value
+ * @return {Object} Object that contains all project ids as keys and associated projects as values.
  */
 export function getProjects() {
   const lsProjects = localStorage.getItem(PROJECT_STORAGE_KEY);
@@ -43,9 +40,8 @@ export function getProjects() {
 
 /**
  * Get one project by its ID.
- *
- * @param {string} projectId
- * @returns {?Project}
+ * @param {String} projectId - Id of project.
+ * @return {Project} Wanted project.
  */
 export function getProjectById(projectId) {
   const projects = getProjects();
@@ -54,9 +50,8 @@ export function getProjectById(projectId) {
 
 /**
  * Get name of remote repository or local project if it is not based upon a remote repository.
- *
- * @param {string} projectId - local project id
- * @returns {String} - project Name
+ * @param {String} projectId - Id of project.
+ * @return {String} Project Name.
  */
 export function getProjectName(projectId) {
   const projects = getProjects();
@@ -69,8 +64,7 @@ export function getProjectName(projectId) {
 
 /**
  * Save the project state.
- *
- * @param {Project} project - Project to save
+ * @param {Project} project - Project to save.
  */
 export function saveProject(project) {
   const projects = getProjects();
@@ -80,7 +74,7 @@ export function saveProject(project) {
 
 /**
  * Save project and initialize git in local storage.
- * @param {Project} project - Project to save
+ * @param {Project} project - Project to save.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export function initProject(project) {
@@ -89,8 +83,28 @@ export function initProject(project) {
 }
 
 /**
+ * Clone and save project from git in local storage.
+ * @param {Project} project - Project to save.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export function importProject(project) {
+  return git.clone({
+    fs,
+    http,
+    url: project.git.repository,
+    dir: `/${project.id}`,
+    onAuth: () => ({
+      username: project.git.username,
+      password: project.git.token,
+    }),
+    corsProxy: 'https://cors.isomorphic-git.org',
+    singleBranch: true,
+    depth: 1,
+  }).then(() => saveProject(project));
+}
+
+/**
  * Clear one project by ID.
- *
  * @param {String} projectId - Id of project.
  */
 export function deleteProjectById(projectId) {
