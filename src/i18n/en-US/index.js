@@ -206,6 +206,7 @@ export default {
             confirmDelete: 'Confirm deletion of folder and all its content',
           },
         },
+        filterParsableFiles: 'Show parsable files',
       },
     },
   },
