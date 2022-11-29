@@ -6,16 +6,11 @@
         class="home-logo"
         :ratio="1"
       />
+      <h2 class="text-white">
+        {{ $t('application.name') }}
+      </h2>
     </div>
     <div class="column items-center home-content">
-      <q-btn
-        color="primary"
-        size="xl"
-        icon="fa-solid fa-circle-plus"
-        data-cy="create-empty-project"
-        :label="$t('actions.home.createEmptyProject')"
-        @click="createProject"
-      />
       <div class="fit row justify-center">
         <ProjectGrid
           class="col-md-8"
@@ -23,22 +18,14 @@
         />
       </div>
     </div>
+    <import-project-dialog/>
   </q-page>
 </template>
 
 <script setup>
 import ProjectGrid from 'src/components/grid/ProjectGrid';
-import { createProjectTemplate, getProjects, initProject } from 'src/composables/Project';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const project = createProjectTemplate();
-
-async function createProject() {
-  await initProject(project);
-  return router.push(`/modelizer/${project.id}/model`);
-}
+import { getProjects } from 'src/composables/Project';
+import ImportProjectDialog from 'components/dialog/ImportProjectDialog';
 </script>
 
 <style lang="scss" scoped>
