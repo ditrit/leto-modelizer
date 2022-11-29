@@ -1,5 +1,7 @@
 <template>
-  <q-header class="modelizer-navigation-bar shadow-1 row justify-between items-center">
+  <q-header
+    class="bg-primary text-white shadow-1 row justify-between items-center q-px-lg"
+  >
     <div class="app-homepage-link">
       <router-link
         class="app-logo-link"
@@ -7,7 +9,8 @@
         to="/"
       >
         <q-icon
-          class="app-logo"
+          color="primary"
+          size="4rem"
           name="img:icons/logo_modelizer.svg"
           :left="true"
         />
@@ -38,8 +41,8 @@
         :options="buttonToggleOptions"
         @update:model-value="onViewSwitchUpdate"
         class="view-selector q-mr-md"
-        toggle-color="primary"
-        text-color="primary"
+        toggle-color="accent"
+        text-color="accent"
         color="white"
         no-caps
         data-cy="modelizer-switch"
@@ -135,29 +138,20 @@ watch(() => props.viewType, (newViewType) => {
 </script>
 
 <style lang="scss" scoped>
-.modelizer-navigation-bar {
-  background-color: white;
-  color: $primary;
-  padding: 1rem;
+.q-header {
   position: relative;
+}
+.app-logo-link {
+  text-decoration: none;
 
-  .app-logo-link {
-    text-decoration: none;
-
-    .app-logo {
-      background-color: $primary;
-      font-size: 2rem;
-    }
-    .app-logo-label{
-      cursor: pointer;
-      color: $primary;
-      font-weight: bold;
-      font-size: large;
-    }
+  .app-logo-label{
+    cursor: pointer;
+    color: white;
+    font-size: medium;
   }
-  .project-name {
-    font-weight: bold;
-    font-size: large;
-  }
+}
+.project-name {
+  font-weight: bold;
+  font-size: large;
 }
 </style>

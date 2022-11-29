@@ -1,5 +1,11 @@
 <template>
-  <q-btn round color="primary" icon="fa-solid fa-gear" data-cy="project-settings">
+  <q-btn
+    round
+    color="white"
+    text-color="primary"
+    icon="fa-solid fa-gear"
+    data-cy="project-settings"
+  >
     <q-menu auto-close>
       <q-list>
         <q-item
