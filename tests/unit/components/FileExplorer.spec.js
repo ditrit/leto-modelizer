@@ -69,6 +69,7 @@ describe('Test component: FileExplorer', () => {
           isFolder: true,
         }],
         projectName: 'project-00000000',
+        showParsableFiles: false,
       },
     });
   });
@@ -93,6 +94,106 @@ describe('Test component: FileExplorer', () => {
       it('should match "project-00000000"', () => {
         expect(wrapper.vm.props.projectName).toEqual('project-00000000');
       });
+    });
+
+    describe('Test props: showParsableFiles', () => {
+      it('should be false', () => {
+        expect(wrapper.vm.props.showParsableFiles).toEqual(false);
+      });
+    });
+
+    describe('Test variable: filterTrigger', () => {
+      it('should match "false"', () => {
+        expect(wrapper.vm.filterTrigger).toEqual('false');
+      });
+    });
+  });
+
+  describe('Test function: filterParsableFiles', () => {
+    it('should return true if props.showParsableFiles is false', () => {
+      const result = wrapper.vm.filterParsableFiles({ isFolder: false, isParsable: false });
+
+      expect(result).toEqual(true);
+    });
+
+    it('should return true if isParsable is true', async () => {
+      await wrapper.setProps({
+        showParsableFiles: true,
+      });
+
+      const result = wrapper.vm.filterParsableFiles({ isFolder: false, isParsable: true });
+
+      expect(result).toEqual(true);
+    });
+
+    it('should return true if isFolder is true', async () => {
+      await wrapper.setProps({
+        showParsableFiles: true,
+      });
+
+      const result = wrapper.vm.filterParsableFiles({ isFolder: true, isParsable: false });
+
+      expect(result).toEqual(true);
+    });
+
+    it('should return false if isFolder and isParsable are false', async () => {
+      await wrapper.setProps({
+        showParsableFiles: true,
+      });
+
+      const result = wrapper.vm.filterParsableFiles({ isFolder: false, isParsable: false });
+
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('Test function: isFolderWithoutParsableFiles', () => {
+    it('should return false if isFolder is false', () => {
+      const result = wrapper.vm.isFolderWithoutParsableFiles(
+        {
+          isFolder: false,
+          isRootFolder: false,
+          hasParsableFiles: false,
+        },
+      );
+
+      expect(result).toEqual(false);
+    });
+
+    it('should return false if isRootFolder is true', () => {
+      const result = wrapper.vm.isFolderWithoutParsableFiles(
+        {
+          isFolder: true,
+          isRootFolder: true,
+          hasParsableFiles: false,
+        },
+      );
+
+      expect(result).toEqual(false);
+    });
+
+    it('should return false if hasParsableFiles is true', () => {
+      const result = wrapper.vm.isFolderWithoutParsableFiles(
+        {
+          isFolder: true,
+          isRootFolder: false,
+          hasParsableFiles: true,
+        },
+      );
+
+      expect(result).toEqual(false);
+    });
+
+    it('should return true if isFolder is true, isRootFolder and hasParsableFiles are false', () => {
+      const result = wrapper.vm.isFolderWithoutParsableFiles(
+        {
+          isFolder: true,
+          isRootFolder: false,
+          hasParsableFiles: false,
+        },
+      );
+
+      expect(result).toEqual(true);
     });
   });
 
