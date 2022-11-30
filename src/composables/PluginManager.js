@@ -108,3 +108,13 @@ export function getPlugins() {
 export function getPluginByName(name) {
   return instanciatePlugins.find((plugin) => plugin.data.name === name);
 }
+
+/**
+ * Check if a file is parsable by plugin.
+ *
+ * @param {FileInformation} file - File to check.
+ * @return {Boolean} Return true if file is parsable, otherwise false.
+ */
+export function isParsableFile(file) {
+  return instanciatePlugins.some((plugin) => plugin.isParsable(file));
+}

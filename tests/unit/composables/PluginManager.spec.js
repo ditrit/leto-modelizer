@@ -18,6 +18,11 @@ jest.mock('src/plugins', () => ({
 
     // eslint-disable-next-line class-methods-use-this
     initResources() {}
+
+    // eslint-disable-next-line class-methods-use-this
+    isParsable(file) {
+      return file !== 'notParsable';
+    }
   },
 }));
 
@@ -122,6 +127,16 @@ describe('Test composable: PluginManager', () => {
           components: [],
         },
       });
+    });
+  });
+
+  describe('Test function: isParsableFile', () => {
+    it('should return false is file is not parsable', () => {
+      expect(PluginManager.isParsableFile('notParsable')).toEqual(false);
+    });
+
+    it('should return true if file is parsable', () => {
+      expect(PluginManager.isParsableFile('parsable')).toEqual(true);
     });
   });
 });

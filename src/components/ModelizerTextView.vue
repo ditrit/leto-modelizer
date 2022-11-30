@@ -5,10 +5,17 @@
   >
     <div class="col-md-2 bg-grey-2 file-explorer-container">
       <git-branch-card/>
+      <q-checkbox
+        v-model="showParsableFiles"
+        class="q-ml-lg"
+        left-label
+        :label="$t('page.modelizer.fileExplorer.filterParsableFiles')"
+      />
       <file-explorer
-        class="q-pa-md overflow-auto"
+        class="q-px-md q-py-sm overflow-auto"
         :nodes="nodes"
         :project-name="projectName"
+        :show-parsable-files="showParsableFiles"
       />
     </div>
 
@@ -66,6 +73,7 @@ const activeFileTab = ref({ isSelected: false, id: '' });
 const nodes = ref([]);
 const selectedNode = ref({});
 const localFileInformations = ref([]);
+const showParsableFiles = ref(false);
 
 let globalSaveFilesEventSubscription;
 let openFileSubscription;
@@ -227,8 +235,10 @@ function onCreateFileEvent({ name, isFolder }) {
           (fileName) => fileName === fileInput.path,
         );
 
+        const newFileParentId = selectedNode.value.id === props.projectName ? '' : `${selectedNode.value.id}/`;
+
         FileEvent.OpenFileEvent.next({
-          id: fileInput.path,
+          id: `${newFileParentId}${fileInput.path}`,
           label: name.substring(name.lastIndexOf('/') + 1),
           content: fileInput.content,
           information: filesStatus,

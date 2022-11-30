@@ -19,7 +19,7 @@ const SelectFileEvent = new Subject();
 /**
  * Represent a rxjs Event object to emit and to receive events about node selection.
  * The event should be an Object that contains the `id` (path), `label`, `icon` and `isFolder`.
- * The Object should also contain `isNewLocalFile` for a file, or `children` for a folder.
+ * The Object should also contain `children` for a folder.
  * @typedef {Subject} SelectFileEvent
  */
 const SelectNodeEvent = new Subject();

@@ -10,11 +10,16 @@
     no-selection-unset
     class="file-explorer"
     data-cy="file-explorer"
+    :filter="filterTrigger"
+    :filter-method="filterParsableFiles"
   >
     <template #default-header="{expanded, node}">
       <div
-        :class="['tree-node-container tree-node items-center',
-          {'text-bold' : selectedFile.id === node.id && !node.isFolder}]"
+        :class="[
+          'tree-node-container tree-node items-center',
+          {'text-bold' : selectedFile.id === node.id && !node.isFolder},
+          {'text-grey text-italic' : showParsableFiles && isFolderWithoutParsableFiles(node)},
+        ]"
         @dblclick="onNodeClicked(node)"
         :data-cy="`file-explorer-${node.label}`"
       >
@@ -62,13 +67,43 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  showParsableFiles: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const fileExplorerRef = ref(null);
 const selectedFile = ref({ isSelected: false, id: '' });
+const filterTrigger = ref(props.showParsableFiles.toString()); // must be a String according to https://quasar.dev/vue-components/tree
 
 let selectFileSubscription;
 let expandNodeSubscription;
+
+/**
+ * Filter tree nodes to only display parsable files and folders if showParsableFiles is true.
+ * @param {Object} node - Node currently being filtered.
+ * @returns {Boolean} Result of tested conditions, otherwise true.
+ * @see https://quasar.dev/vue-components/tree
+ */
+function filterParsableFiles(node) {
+  let filterResult = true;
+
+  if (props.showParsableFiles) {
+    filterResult = node.isParsable || node.isFolder;
+  }
+
+  return filterResult;
+}
+
+/**
+ * Check if node is a sub folder containing no parsable files.
+ * @param {Object} node - Current node.
+ * @returns {Boolean} Result of tested conditions.
+ */
+function isFolderWithoutParsableFiles(node) {
+  return node.isFolder && !node.isRootFolder && !node.hasParsableFiles;
+}
 
 /**
  * Expand a node by its id.
@@ -99,24 +134,15 @@ function onNodeClicked(node) {
 
   setSelectedFile({ isSelected: true, id: node.id });
 
-  if (node.isNewLocalFile) {
-    FileEvent.OpenFileEvent.next({
-      id: node.id,
-      label: node.label,
-      content: '',
-      information: node.information,
-    });
-  } else {
-    readProjectFile(props.projectName, { path: node.id })
-      .then(({ content }) => {
-        FileEvent.OpenFileEvent.next({
-          id: node.id,
-          label: node.label,
-          content,
-          information: node.information,
-        });
+  readProjectFile(props.projectName, { path: node.id })
+    .then(({ content }) => {
+      FileEvent.OpenFileEvent.next({
+        id: node.id,
+        label: node.label,
+        content,
+        information: node.information,
       });
-  }
+    });
 }
 
 onMounted(() => {

@@ -7,6 +7,8 @@ import Project from 'src/composables/Project';
 import FileExplorer from 'src/composables/FileExplorer';
 import PluginManager from 'src/composables/PluginManager';
 import FileStatus from 'src/models/git/FileStatus';
+import { createI18n } from 'vue-i18n';
+import i18nConfiguration from 'src/i18n';
 
 installQuasarPlugin();
 const mockFileStatus = new FileStatus({
@@ -183,6 +185,14 @@ describe('Test component: ModelizerTextView', () => {
         FileEvent,
         GitEvent,
       },
+      global: {
+        plugins: [
+          createI18n({
+            locale: 'en-US',
+            messages: i18nConfiguration,
+          }),
+        ],
+      },
     });
   });
 
@@ -190,6 +200,12 @@ describe('Test component: ModelizerTextView', () => {
     describe('Test props: projectName', () => {
       it('should match "project-00000000"', () => {
         expect(wrapper.vm.projectName).toEqual('project-00000000');
+      });
+    });
+
+    describe('Test variable: showParsableFiles', () => {
+      it('should be false', () => {
+        expect(wrapper.vm.showParsableFiles).toEqual(false);
       });
     });
   });
