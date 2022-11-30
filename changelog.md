@@ -56,5 +56,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create LinkInput
 - Save and retrieve position of components in configuration file
 - Import project on homepage
+- Add component definition filter in definitions drawer
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
