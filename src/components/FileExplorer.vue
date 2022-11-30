@@ -134,24 +134,15 @@ function onNodeClicked(node) {
 
   setSelectedFile({ isSelected: true, id: node.id });
 
-  if (node.isNewLocalFile) {
-    FileEvent.OpenFileEvent.next({
-      id: node.id,
-      label: node.label,
-      content: '',
-      information: node.information,
-    });
-  } else {
-    readProjectFile(props.projectName, { path: node.id })
-      .then(({ content }) => {
-        FileEvent.OpenFileEvent.next({
-          id: node.id,
-          label: node.label,
-          content,
-          information: node.information,
-        });
+  readProjectFile(props.projectName, { path: node.id })
+    .then(({ content }) => {
+      FileEvent.OpenFileEvent.next({
+        id: node.id,
+        label: node.label,
+        content,
+        information: node.information,
       });
-  }
+    });
 }
 
 onMounted(() => {
