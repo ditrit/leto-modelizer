@@ -141,6 +141,7 @@ export default {
       drawer: {
         components: {
           header: 'Components definitions',
+          filterLabel: 'Component filter',
         },
       },
       settings: {

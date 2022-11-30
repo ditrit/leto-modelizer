@@ -7,6 +7,15 @@
       {{ $t('page.modelizer.drawer.components.header') }}
     </template>
     <template v-slot:content>
+      <q-input
+        clearable
+        v-model="definitionFilter"
+        :label="$t('page.modelizer.drawer.components.filterLabel')"
+      >
+        <template v-slot:prepend>
+          <q-icon name="fa-solid fa-magnifying-glass" />
+        </template>
+      </q-input>
       <q-list text-white>
         <q-expansion-item
           expand-sperator
@@ -21,7 +30,7 @@
             class="sunken-area"
           >
             <component-definition-grid
-              :definitions="plugin.data.definitions.components"
+              :definitions="componentDefinitions[plugin.data.name]"
               :pluginName="plugin.data.name"
             />
           </q-scroll-area>
@@ -32,14 +41,35 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import DefaultDrawer from 'src/components/drawer/DefaultDrawer';
 import ComponentDefinitionGrid from 'src/components/grid/ComponentDefinitionGrid';
 
-defineProps({
+const props = defineProps({
   plugins: Array,
   test: String,
 });
+
+const definitionFilter = ref('');
+
+/**
+ * Indicate if searched text is found.
+ * @param {String} filter - Searched text.
+ * @param {String} value - Value to match with.
+ * @return {Boolean} true if it is matching otherwise false.
+ */
+function isMatching(filter, value) {
+  return !filter || !filter.trim() || filter.toLowerCase().split(' ')
+    .filter((searchedText) => searchedText)
+    .some((searchedText) => value.toLowerCase().includes(searchedText));
+}
+
+const componentDefinitions = computed(() => props.plugins.reduce((acc, { data }) => {
+  acc[data.name] = data.definitions.components
+    .filter((def) => isMatching(definitionFilter.value, def.type));
+
+  return acc;
+}, {}));
 
 /**
  * @typedef {{
@@ -54,7 +84,7 @@ defineProps({
  * The `definitions` should be an object with
  * ComponentsGroup as values and their id as key
  */
-const definitions = computed(() => ({
+const definitions = ref({
   'plugin-1': {
     name: 'Plugin 1',
     definitions: Array.from({ length: 20 }, (_, i) => ({
@@ -67,7 +97,7 @@ const definitions = computed(() => ({
       type: `Definition ${i}`,
     })),
   },
-}));
+});
 
 /**
  * Returns the negative height an expansion-item should fill.

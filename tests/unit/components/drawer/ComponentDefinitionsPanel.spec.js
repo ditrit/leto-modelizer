@@ -8,7 +8,46 @@ describe('Test component: ComponentDefinitionsDrawer', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(ComponentDefinitionsDrawer);
+    wrapper = shallowMount(ComponentDefinitionsDrawer, {
+      props: {
+        plugins: [{
+          data: {
+            name: 'pluginName',
+            definitions: {
+              components: [{
+                type: 'componentType',
+              }],
+            },
+          },
+        }],
+      },
+    });
+  });
+
+  describe('Test variables initialization', () => {
+    describe('Test computed: componentDefinitions', () => {
+      it('should be an Object with plugin names as keys and corresponding definitions as value', () => {
+        expect(wrapper.vm.componentDefinitions).toEqual({
+          pluginName: [{
+            type: 'componentType',
+          }],
+        });
+      });
+    });
+  });
+
+  describe('Test function: isMatching', () => {
+    it('should return true when filter is null or empty', () => {
+      expect(wrapper.vm.isMatching(null, 'test')).toBeTruthy();
+      expect(wrapper.vm.isMatching('', 'test')).toBeTruthy();
+    });
+    it('should return true when filter is contained in value', () => {
+      expect(wrapper.vm.isMatching('t', 'test')).toBeTruthy();
+      expect(wrapper.vm.isMatching('t      est', 'test')).toBeTruthy();
+    });
+    it('should return false when filter is not contained in value', () => {
+      expect(wrapper.vm.isMatching('a', 'test')).toBeFalsy();
+    });
   });
 
   describe('Test function: scrollAreaHeight', () => {
