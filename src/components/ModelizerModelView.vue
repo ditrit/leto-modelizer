@@ -141,3 +141,11 @@ onUnmounted(() => {
     width: 100%;
   }
 </style>
+
+<style lang="scss">
+// Quasar sets overflow to 'hidden' on all svg.
+// In our case, it needs to be set to 'visible' to manage position with % in plugin models.
+div#root svg {
+  overflow: visible !important;
+}
+</style>
