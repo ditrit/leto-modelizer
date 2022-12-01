@@ -10,15 +10,15 @@ code {
 }
 
 .file-status-staged {
-  color: #21BA45;
+  color: #26A69A;
 }
 
 .file-status-untracked {
-  color: #C10015;
+  color: #C6361B;
 }
 
 .file-status-modified {
-  color: #31CCEC;
+  color: #22A4EE;
 }
 
 .logo  {
@@ -27,4 +27,12 @@ code {
   margin: 10px;
   background-color: white;
   mask: url(../assets/logo.svg) no-repeat center;
+}
+
+body {
+  background: #F5F5F6;
+}
+
+.q-btn--outline {
+  background: white !important;
 }

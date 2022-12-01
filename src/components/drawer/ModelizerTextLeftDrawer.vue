@@ -7,7 +7,7 @@
     class="bg-grey-2"
     data-cy="modelizer-text-left-drawer"
   >
-    <div class="col-md-2 bg-grey-2 file-explorer-container">
+    <div class="col-md-2 bg-white-2 file-explorer-container">
       <div class="row justify-center q-my-sm">
         <q-btn
           :label="$t('page.modelizer.button.back.label')"

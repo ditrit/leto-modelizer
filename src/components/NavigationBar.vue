@@ -172,6 +172,9 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.bg-primary {
+  background: #15314D !important;
+}
 .home-page-link {
   text-decoration: none;
 

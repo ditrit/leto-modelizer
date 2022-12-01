@@ -16,3 +16,9 @@
     </div>
   </q-header>
 </template>
+
+<style lang="scss" scoped>
+.bg-primary {
+  background: #15314D !important;
+}
+</style>

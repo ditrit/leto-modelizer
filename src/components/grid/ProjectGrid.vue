@@ -46,7 +46,7 @@
         <q-btn
           outline
           no-caps
-          color="primary"
+          color="accent"
           class="create-project-button"
           data-cy="create-project-button"
           @click="DialogEvent.next({ type: 'open', key: 'CreateProject' })"
@@ -55,7 +55,7 @@
             <div class="column items-center">
               <q-icon
                 name="fa-solid fa-plus"
-                color="primary"
+                color="accent"
                 size="4rem"
               />
               <label>
