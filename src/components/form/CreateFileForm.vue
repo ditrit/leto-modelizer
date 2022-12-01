@@ -67,29 +67,32 @@ const submitting = ref(false);
  */
 function onSubmit() {
   const parent = props.file.id === props.projectName ? '' : `${props.file.id}/`;
-  const promise = props.isFolder ? createProjectFolder : writeProjectFile;
-  const path = props.isFolder ? `${parent}${fileName.value}` : new FileInput({
-    path: `${parent}${fileName.value}`,
-    content: ' ',
-  });
+  const createFile = props.isFolder
+    ? createProjectFolder(props.projectName, `${parent}${fileName.value}`)
+    : writeProjectFile(props.projectName, new FileInput({
+      path: `${parent}${fileName.value}`,
+      content: ' ',
+    }));
   submitting.value = true;
+  const type = props.isFolder ? 'folder' : 'file';
 
-  return promise(props.projectName, path).then(() => {
+  return createFile.then(() => {
     emit('file:create', fileName.value);
     Notify.create({
       type: 'positive',
-      message: t('actions.fileExplorer.file.create'),
+      message: t(`actions.fileExplorer.${type}.create`),
       html: true,
     });
 
     FileEvent.CreateFileEvent.next({
       name: fileName.value.substring(fileName.value.lastIndexOf('/') + 1),
       isFolder: props.isFolder,
+      path: `${parent}${fileName.value}`,
     });
   }).catch(() => {
     Notify.create({
       type: 'negative',
-      message: t(`errors.fileExplorer.default.${props.isFolder ? 'folder' : 'file'}.create`),
+      message: t(`errors.fileExplorer.default.${type}.create`),
       html: true,
     });
   }).finally(() => {
