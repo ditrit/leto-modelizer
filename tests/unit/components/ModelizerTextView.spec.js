@@ -428,16 +428,15 @@ describe('Test component: ModelizerTextView', () => {
       wrapper.vm.activeFileTab = { isSelected: false, id: 'fileName' };
       wrapper.vm.selectedNode = { id: 'nodeName' };
 
-      await wrapper.vm.onCreateFileEvent({ name: 'newFileName', isFolder: false });
+      await wrapper.vm.onCreateFileEvent({ name: 'newFileName', isFolder: false, path: 'path/newFileName' });
 
       expect(wrapper.vm.activeFileTab).toEqual({ isSelected: true, id: 'terraform/app.tf' });
       expect(FileEvent.ExpandFolderEvent.next).toBeCalled();
       expect(FileEvent.OpenFileEvent.next).toBeCalled();
     });
 
-    it('should update activeFileTab, send ExpandFolder events on Folder', async () => {
+    it('should only send ExpandFolder event on Folder', async () => {
       FileEvent.OpenFileEvent.next = jest.fn();
-      wrapper.vm.activeFileTab = { isSelected: false, id: 'fileName' };
       wrapper.vm.selectedNode = { id: '' };
 
       await wrapper.vm.onCreateFileEvent({ name: 'nodeName', isFolder: true });
