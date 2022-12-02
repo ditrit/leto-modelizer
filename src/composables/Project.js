@@ -304,8 +304,9 @@ export async function createProjectFolder(projectId, path) {
         reject({ name: error.code, message: error.message });
       } else {
         FileEvent.CreateFileEvent.next({
-          name: path,
+          name: path.substring(path.lastIndexOf('/') + 1),
           isFolder: true,
+          path,
         });
         resolve();
       }

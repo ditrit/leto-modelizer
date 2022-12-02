@@ -58,7 +58,7 @@ import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getPlugins } from 'src/composables/PluginManager';
-import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
+import { FileInput, FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
 
 const props = defineProps({
@@ -216,15 +216,17 @@ function updateSelectedNode(node) {
 /**
  * Create and add a new file tree, update value of activeFileTab,
  * send ExpandFolder and OpenFile events.
- * @param {String} fileName - Name of the file to create.
+ * @param {String} name - Name of the file to create.
+ * @param {Boolean} isFolder - True if file is a folder, otherwise false.
+ * @param {String} path - Path of the file to create.
  */
-function onCreateFileEvent({ name, isFolder }) {
+function onCreateFileEvent({ name, isFolder, path }) {
   return updateProjectFiles()
     .then(() => {
       if (isFolder) {
         return Promise.resolve();
       }
-      return readProjectFile(props.projectName, new FileInformation({ path: name }));
+      return readProjectFile(props.projectName, new FileInformation({ path }));
     })
     .then(async (fileInput) => {
       if (!isFolder) {
@@ -235,10 +237,8 @@ function onCreateFileEvent({ name, isFolder }) {
           (fileName) => fileName === fileInput.path,
         );
 
-        const newFileParentId = selectedNode.value.id === props.projectName ? '' : `${selectedNode.value.id}/`;
-
         FileEvent.OpenFileEvent.next({
-          id: `${newFileParentId}${fileInput.path}`,
+          id: fileInput.path,
           label: name.substring(name.lastIndexOf('/') + 1),
           content: fileInput.content,
           information: filesStatus,
@@ -272,6 +272,7 @@ async function renderPlugins() {
         FileEvent.CreateFileEvent.next({
           name: file.path.substring(file.path.lastIndexOf('/') + 1),
           isFolder: false,
+          path: file.path,
         });
       }),
     ));

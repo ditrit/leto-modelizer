@@ -26,7 +26,7 @@ const SelectNodeEvent = new Subject();
 
 /**
  * Represent a rxjs Event object to emit and to receive events about file creation.
- * The event should be an Object that contains the `name` (path) of the file and `isFolder`.
+ * The event should be an Object that contains the `name`, `path` and `isFolder`.
  * @typedef {Subject} SelectFileEvent
  */
 const CreateFileEvent = new Subject();
