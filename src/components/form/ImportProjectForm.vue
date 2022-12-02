@@ -40,6 +40,7 @@
     />
     <q-input
       v-model="token"
+      type="password"
       :label="$t('page.modelizer.settings.gitAuthentication.token')"
       filled
       lazy-rules

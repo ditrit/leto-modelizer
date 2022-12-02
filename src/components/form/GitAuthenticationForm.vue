@@ -12,6 +12,7 @@
     />
     <q-input
       v-model="token"
+      type="password"
       filled
       :label="$t('page.modelizer.settings.gitAuthentication.token')"
       data-cy="token-input"
