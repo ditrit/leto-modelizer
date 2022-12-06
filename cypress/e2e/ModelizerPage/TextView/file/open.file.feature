@@ -1,32 +1,23 @@
-Feature: Test file explorer and file tabs
+Feature: Test modelizer text view: open file
 
   Background:
     Given I clear cache
-    And I set viewport size to "1536" px for width and "960" px for height
+    And I set context field "repository_url" with "https://github.com/ditrit/leto-modelizer-project-test"
+    And I set context field "projectName" with "leto-modelizer-project-test"
     And I visit the "/"
 
-    When I click on "[data-cy=\"create-empty-project\"]"
-    Then I expect current url is "/modelizer/project-[a-f0-9]{8}/model"
-    And  I extract "project-[a-f0-9]{8}" from url in field "projectName" of context
-    And  I visit the "/#/modelizer/{{projectName}}/text"
-
-    When I click on "[data-cy=\"project-settings\"]"
-    And  I click on "[data-cy=\"git-settings-menu\"]"
-    And  I set on "[data-cy=\"git-form\"] [data-cy=\"git-repository-input\"]" text "https://github.com/ditrit/leto-modelizer-project-test"
-    And  I set on "[data-cy=\"git-form\"] [data-cy=\"git-username-input\"]" text "test"
-    And  I set on "[data-cy=\"git-form\"] [data-cy=\"git-token-input\"]" text "test"
-    And  I click on "[data-cy=\"git-form\"] [data-cy=\"git-form-submit\"]"
-    Then I expect "positive" toast to appear with text "We have access to your repository 🥳!"
-    And  I expect "[data-cy=\"git-form\"]" is closed
-    And  I expect "[data-cy=\"git-current-branch\"] " is "master"
-
-    When I click on "[data-cy=\"git-current-branch\"]"
-    And  I click on "[data-cy=\"git-menu-branch-remote-test/remote\"]"
-    And  I click on "[data-cy=\"git-menu-branch-checkout-test/remote\"]"
-    And  I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
-    And  I click on body to close popup
-    Then I expect "[data-cy=\"file-explorer\"]" exists
-    And  I click on "[data-cy=\"file-explorer\"]"
+    When I click on "[data-cy=\"import-project\"]"
+    And I set on "[data-cy=\"import-project-form\"] [data-cy=\"git-repository-input\"]" text "{{ repository_url }}"
+    And I set on "[data-cy=\"import-project-form\"] [data-cy=\"git-username-input\"]" text "test"
+    And I set on "[data-cy=\"import-project-form\"] [data-cy=\"git-token-input\"]" text "test"
+    And I click on "[data-cy=\"import-project-form\"] [data-cy=\"import-project-form-submit\"]"
+    Then I expect "positive" toast to appear with text "Project has been imported 🥳!"
+    And I expect "[data-cy=\"import-project-form\"]" is closed
+    And I expect current url is "modelizer/{{ projectName }}/model"
+    And I expect "[data-cy=\"project-name\"]" is "{{ projectName }}"
+    And I visit the "/#/modelizer/{{projectName}}/text"
+    And I expect "[data-cy=\"file-explorer\"] [data-cy=\"file-tab-label-{{ projectName }}\"]" exists
+    And I click on "[data-cy=\"file-explorer\"] [data-cy=\"file-tab-label-{{ projectName }}\"]"
 
   Scenario: Double click on a file should open a tab
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
@@ -59,7 +50,7 @@ Feature: Test file explorer and file tabs
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tab-label-branch.txt\"]" is "branch.txt"
-    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
+    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
 
     When I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]"
@@ -75,7 +66,7 @@ Feature: Test file explorer and file tabs
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tab-label-branch.txt\"]" is "branch.txt"
-    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
+    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
 
     When I click on "[data-cy=\"active-tab\"] [data-cy=\"close-file-tab\"]"
@@ -88,37 +79,37 @@ Feature: Test file explorer and file tabs
     When I double click on "[data-cy=\"file-explorer-branch.txt\"]"
     Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
-    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
+    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
 
     When I click on "[data-cy=\"git-current-branch\"]"
-    And  I click on "[data-cy=\"git-menu-branch-remote-main\"]"
-    And  I click on "[data-cy=\"git-menu-branch-checkout-main\"]"
-    And  I expect "[data-cy=\"git-current-branch\"]" is "main"
+    And  I click on "[data-cy=\"git-menu-branch-remote-test/remote\"]"
+    And  I click on "[data-cy=\"git-menu-branch-checkout-test/remote\"]"
+    And  I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
     And  I click on body to close popup
     Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
-    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
+    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
 
   Scenario: Open two files, checkout branch and if an opened file no longer exists, its corresponding tab should be closed
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
     And  I double click on "[data-cy=\"file-explorer-branch.txt\"]"
     Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
-    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
+    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
 
     When I click on "[data-cy=\"git-current-branch\"]"
-    And  I click on "[data-cy=\"git-menu-branch-remote-main\"]"
-    And  I click on "[data-cy=\"git-menu-branch-checkout-main\"]"
-    And  I expect "[data-cy=\"git-current-branch\"]" is "main"
+    And  I click on "[data-cy=\"git-menu-branch-remote-test/remote\"]"
+    And  I click on "[data-cy=\"git-menu-branch-checkout-test/remote\"]"
+    And  I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
     And  I click on body to close popup
     Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
-    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
+    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
 
   Scenario: Open two files and checkout branch, then the active tab is closed, the other opened tab becomes the active tab
     When I double click on "[data-cy=\"file-explorer-branch.txt\"]"
-    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
+    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
     Then I double click on "[data-cy=\"file-explorer-README.md\"]"
     And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
@@ -126,12 +117,12 @@ Feature: Test file explorer and file tabs
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" exists
 
     When I click on "[data-cy=\"git-current-branch\"]"
-    And  I click on "[data-cy=\"git-menu-branch-remote-main\"]"
-    And  I click on "[data-cy=\"git-menu-branch-checkout-main\"]"
-    And  I expect "[data-cy=\"git-current-branch\"]" is "main"
+    And  I click on "[data-cy=\"git-menu-branch-remote-test/remote\"]"
+    And  I click on "[data-cy=\"git-menu-branch-checkout-test/remote\"]"
+    And  I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
     And  I click on body to close popup
     Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
-    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
+    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
 
