@@ -33,7 +33,7 @@
         :loading="submitting"
         icon="fa-solid fa-save"
         type="submit"
-        data-cy="git-form-submit"
+        data-cy="import-project-form-submit"
         color="positive">
         <template v-slot:loading>
           <q-spinner-dots/>
