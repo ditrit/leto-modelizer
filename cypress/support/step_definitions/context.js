@@ -6,6 +6,7 @@ Before(() => {
 
 Given('I clear cache', () => {
   localStorage.clear();
+  indexedDB.deleteDatabase('browserfs');
 });
 
 Then('I extract {string} from url in field {string} of context', (pattern, key) => {
@@ -34,4 +35,8 @@ Then('I set localstorage field {string} to context field {string} as {string}', 
   } else {
     throw new Error('Unknown type');
   }
+});
+
+Then('I set context field {string} with {string}', (key, value) => {
+  cy.context[key] = value;
 });

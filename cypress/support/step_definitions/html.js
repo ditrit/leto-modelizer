@@ -41,7 +41,7 @@ Then('I set on {string} text {string}', (templateSelector, templateValue) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   const value = nunjucks.renderString(templateValue, cy.context);
 
-  cy.get(selector).type(value);
+  cy.get(selector).clear().type(value);
 });
 
 Then('I expect {string} is closed', (selector) => {
@@ -56,7 +56,7 @@ Then('I expect {string} toast to appear with text {string}', (type, templateExpe
     .and('have.class', `bg-${type}`)
     .within(() => {
       cy.get('.q-notification__message.col')
-        .should('have.text', expectedValue);
+        .should('include.text', expectedValue);
     });
 });
 
