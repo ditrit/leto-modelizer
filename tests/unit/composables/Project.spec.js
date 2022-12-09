@@ -118,7 +118,7 @@ jest.mock('browserfs', () => ({
     }),
     readFile: jest.fn((path, format, cb) => cb(null, 'test')),
     mkdir: jest.fn((path, cb) => cb(path !== 'projectId/goodPath' ? 'error' : undefined)),
-    writeFile: jest.fn((path, content, _, cb) => cb(path !== 'projectId/goodPath' ? 'error' : undefined)),
+    writeFile: jest.fn((path, content, _, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
     rmdir: jest.fn((path, cb) => {
       if (path === 'error') {
         return cb(true);
@@ -237,9 +237,11 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: initProject', () => {
-    it('should call git init', async () => {
-      const result = await initProject({ id: 'foo' });
-      expect(result).toEqual('init');
+    it('should init and create commit with default file', async () => {
+      await initProject({ id: 'foo' });
+      expect(git.init).toBeCalled();
+      expect(git.add).toBeCalled();
+      expect(git.commit).toBeCalled();
     });
   });
 
@@ -289,7 +291,7 @@ describe('Test composable: Project', () => {
     });
 
     it('should fail and return error', async () => {
-      const error = await writeProjectFile('projectId', { path: 'badPath', content: 'content' }).catch((e) => e);
+      const error = await writeProjectFile('projectId', { path: 'error', content: 'content' }).catch((e) => e);
       expect(error).toBeDefined();
     });
   });
