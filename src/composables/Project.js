@@ -87,7 +87,7 @@ export function importProject(project) {
       username: project.git.username,
       password: project.git.token,
     }),
-    corsProxy: 'https://cors.isomorphic-git.org',
+    corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
     singleBranch: true,
     depth: 1,
   }).then(() => saveProject(project));
