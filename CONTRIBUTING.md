@@ -16,6 +16,23 @@ Usage explanation of scripts in `package.json`.
 
 Run the application in dev mode.
 
+If the global proxy is unavailable on https://cors.isomorphic-git.org, you can use a local proxy.
+
+### Setup local proxy and use it in dev
+
+Run these commands
+
+```bash
+git submodule update --init --recursive
+cd cors-proxy
+sed -i "s/80/9999/g" Dockerfile
+docker build . -t cors-proxy
+docker run -p 9999:9999 --rm -ti cors-proxy
+
+# To run it in another terminal on the root of your project
+CORS_ISOMORPHIC_BASE_URL="http://localhost:9999" npm run dev
+```
+
 ### build
 
 Build the application in `dist` folder.
@@ -47,6 +64,35 @@ Run all the unit tests and generate coverage report of the unit tests for sonar.
 ### test:e2e
 
 Run all the e2e tests and generate videos accordingly, here: ./cypress/videos.
+
+
+### Run the e2e tests locally with specific proxy
+
+1. install the proxy
+
+```bash
+npm install @isomorphic-git/cors-proxy
+```
+
+2. build the proxy
+
+```bash
+git submodule update --init --recursive
+cd cors-proxy
+docker build . -t cors-proxy
+```
+
+3. Run the application with the proxy
+
+```bash
+docker-compose up -d
+```
+
+4. Run the e2e tests
+
+```bash
+npm run test:e2e
+```
 
 ## Development
 
