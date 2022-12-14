@@ -11,6 +11,7 @@ import { writeProjectFile } from 'src/composables/Project';
 import {
   onMounted,
   onUpdated,
+  onUnmounted,
   nextTick,
   ref,
   watch,
@@ -32,6 +33,7 @@ const props = defineProps({
 
 const container = ref(null);
 let editor;
+let updateFileContentSubsciption;
 
 /**
  * Update file content on fs and emit an event.
@@ -71,11 +73,17 @@ watch(() => props.fileInput.content, () => {
 });
 
 onMounted(() => {
+  updateFileContentSubsciption = FileEvent.UpdateFileContentEvent.subscribe(updateEditorContent);
+
   nextTick(createEditor);
 });
 
 onUpdated(() => {
   nextTick(updateEditorLayout);
+});
+
+onUnmounted(() => {
+  updateFileContentSubsciption.unsubscribe();
 });
 </script>
 

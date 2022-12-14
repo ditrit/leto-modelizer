@@ -1,33 +1,9 @@
 import { Subject } from 'rxjs';
 
 /**
- * Represent a rxjs Event object to emit and to receive events about file opening.
- * The event should be an Object that contains the `id` (path), the `label`, the `content`
- * and the `information` of the file.
- * @typedef {Subject} OpenFileEvent
- */
-const OpenFileEvent = new Subject();
-
-/**
- * Represent a rxjs Event object to emit and to receive events about file selecting.
- * The event should be an Object that contains the `id` (path) of the file and `isSelected`.
- * Example: { isSelected: true, id: 'terraform/app.tf' }
- * @typedef {Subject} SelectFileEvent
- */
-const SelectFileEvent = new Subject();
-
-/**
- * Represent a rxjs Event object to emit and to receive events about node selection.
- * The event should be an Object that contains the `id` (path), `label`, `icon` and `isFolder`.
- * The Object should also contain `children` for a folder.
- * @typedef {Subject} SelectFileEvent
- */
-const SelectNodeEvent = new Subject();
-
-/**
  * Represent a rxjs Event object to emit and to receive events about file creation.
  * The event should be an Object that contains the `name`, `path` and `isFolder`.
- * @typedef {Subject} SelectFileEvent
+ * @typedef {Subject} CreateFileEvent
  */
 const CreateFileEvent = new Subject();
 
@@ -35,22 +11,9 @@ const CreateFileEvent = new Subject();
  * Represent a rxjs Event object to emit and to receive events about node deletion.
  * The event should be an Object that contains `deletedNode` for the node Object to delete
  * and `parentNode` for the deleted node's parent Object.
- * @typedef {Subject} SelectFileEvent
+ * @typedef {Subject} DeleteFileEvent
  */
 const DeleteFileEvent = new Subject();
-
-/**
- * Represent a rxjs Event object to emit and to receive events about node expansion.
- * @typedef {Subject} SelectFileEvent
- */
-const ExpandFolderEvent = new Subject();
-
-/**
- * Represent a rxjs Event object to emit and to receive events about file updating.
- * The event should contain the id (path) of the file to update.
- * @typedef {Subject} UpdateFileEvent
- */
-const UpdateFileEvent = new Subject();
 
 /**
  * Represent a rxjs Event object to emit and to receive events about file global saving.
@@ -58,13 +21,48 @@ const UpdateFileEvent = new Subject();
  */
 const GlobalSaveFilesEvent = new Subject();
 
+/**
+ * Represent a rxjs Event object to emit and to receive events about file selection.
+ * The event should be an Object that contains the `id` (path) of the file and `isSelected`.
+ * @typedef {Subject} SelectFileTabEvent
+ */
+const SelectFileTabEvent = new Subject();
+
+/**
+ * Represent a rxjs Event object to emit and to receive events about file node selection.
+ * The event should be a node from the tree.
+ * @typedef {Subject} SelectFileNodeEvent
+ */
+const SelectFileNodeEvent = new Subject();
+
+/**
+ * Represent a rxjs Event object to emit and to receive events about file node creation.
+ * The event should contain the id of the created file node.
+ * @typedef {Subject} CreateFileNodeEvent
+ */
+const CreateFileNodeEvent = new Subject();
+
+/**
+ * Represent a rxjs Event object to emit and to receive events about file node creation. // TODO
+ * The event should contain the id of the created file node.
+ * @typedef {Subject} UpdateEditorContentEvent
+ */
+const UpdateEditorContentEvent = new Subject();
+
+/**
+ * Represent a rxjs Event object to emit and to receive events about file node creation. // TODO
+ * The event should contain the id of the created file node.
+ * @typedef {Subject} UpdateFileContentEvent
+ */
+const UpdateFileContentEvent = new Subject();
+
 export default {
-  OpenFileEvent,
-  SelectFileEvent,
-  SelectNodeEvent,
   CreateFileEvent,
   DeleteFileEvent,
-  ExpandFolderEvent,
-  UpdateFileEvent,
   GlobalSaveFilesEvent,
+  SelectFileTabEvent,
+  SelectFileNodeEvent,
+  CreateFileNodeEvent,
+  UpdateEditorContentEvent,
+  UpdateFileContentEvent,
 };

@@ -76,15 +76,13 @@ const localFileInformations = ref([]);
 const showParsableFiles = ref(false);
 
 let globalSaveFilesEventSubscription;
-let openFileSubscription;
-let selectNodeSubscription;
+let updateEditorContentSubscription;
 let createFileSubscription;
 let deleteFileSubscription;
 let updateRemoteSubscription;
 let checkoutSubscription;
 let pluginRenderSubscription;
 let pullSubscription;
-let updateFileSubscription;
 
 /**
  * Update fileTabArray array when a new file is open.
@@ -291,28 +289,25 @@ watch(activeFileTab, () => {
 onMounted(() => {
   updateProjectFiles();
   globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateProjectFiles);
-  openFileSubscription = FileEvent.OpenFileEvent.subscribe(onOpenFileEvent);
-  selectNodeSubscription = FileEvent.SelectNodeEvent.subscribe(updateSelectedNode);
-  createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFileEvent);
-  deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(updateProjectFiles);
   updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(updateProjectFiles);
+  createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFile);
+  deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(onDeleteFile);
+  updateEditorContentSubscription = FileEvent.UpdateEditorContentEvent
+    .subscribe(onUpdateEditorContent);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
   pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(renderPlugins);
   pullSubscription = GitEvent.PullEvent.subscribe(updateProjectFiles);
-  updateFileSubscription = FileEvent.UpdateFileEvent.subscribe(onUpdateFile);
 });
 
 onUnmounted(() => {
   globalSaveFilesEventSubscription.unsubscribe();
-  openFileSubscription.unsubscribe();
-  selectNodeSubscription.unsubscribe();
   createFileSubscription.unsubscribe();
   deleteFileSubscription.unsubscribe();
   updateRemoteSubscription.unsubscribe();
+  updateEditorContentSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
   pluginRenderSubscription.unsubscribe();
   pullSubscription.unsubscribe();
-  updateFileSubscription.unsubscribe();
 });
 </script>
 

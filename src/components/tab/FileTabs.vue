@@ -31,10 +31,16 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import {
+  ref,
+  watch,
+  onMounted,
+  onUnmounted,
+} from 'vue';
 import FileTabHeader from 'src/components/tab/FileTabHeader.vue';
 
 const emit = defineEmits(['update:modelValue', 'update:close-file']);
+import FileEvent from 'src/composables/events/FileEvent';
 
 const props = defineProps({
   files: {
@@ -48,6 +54,7 @@ const props = defineProps({
 });
 
 const activeFileId = ref(props.modelValue.id);
+let selectFileNodeSubscription;
 
 watch(activeFileId, () => {
   if (activeFileId.value !== props.modelValue.id) {
@@ -57,8 +64,13 @@ watch(activeFileId, () => {
 
 watch(() => props.modelValue, (newModelValue) => {
   activeFileId.value = newModelValue.id;
+onMounted(() => {
+  selectFileNodeSubscription = FileEvent.SelectFileNodeEvent.subscribe(onSelectFileNode);
 });
 
+onUnmounted(() => {
+  selectFileNodeSubscription.unsubscribe();
+});
 </script>
 
 <style lang="scss" scoped>

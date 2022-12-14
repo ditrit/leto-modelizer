@@ -77,8 +77,8 @@ const fileExplorerRef = ref(null);
 const selectedFile = ref({ isSelected: false, id: '' });
 const filterTrigger = ref(props.showParsableFiles.toString()); // must be a String according to https://quasar.dev/vue-components/tree
 
-let selectFileSubscription;
-let expandNodeSubscription;
+let selectFileTabSubscription;
+let createFileNodeSubscription;
 
 /**
  * Filter tree nodes to only display parsable files and folders if showParsableFiles is true.
@@ -146,13 +146,13 @@ function onNodeClicked(node) {
 }
 
 onMounted(() => {
-  selectFileSubscription = FileEvent.SelectFileEvent.subscribe(setSelectedFile);
-  expandNodeSubscription = FileEvent.ExpandFolderEvent.subscribe(setExpandedNode);
+  selectFileTabSubscription = FileEvent.SelectFileTabEvent.subscribe(setActiveFileId);
+  createFileNodeSubscription = FileEvent.CreateFileNodeEvent.subscribe(onCreateFileNode);
 });
 
 onUnmounted(() => {
-  selectFileSubscription.unsubscribe();
-  expandNodeSubscription.unsubscribe();
+  selectFileTabSubscription.unsubscribe();
+  createFileNodeSubscription.unsubscribe();
 });
 </script>
 
