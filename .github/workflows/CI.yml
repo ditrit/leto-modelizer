@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: Install dependencies
         run: npm ci
       - name: Check style
@@ -42,7 +42,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: Install dependencies
         run: npm ci
       - name: Run unit tests
@@ -61,7 +61,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: Install dependencies
         run: npm install npm-check-updates
       - name: Run check dependencies
@@ -81,13 +81,16 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
+      - run: git submodule update --init --recursive
       - name: Install dependencies
-        run: npm install && npm install http-server
-      - name: Run build
-        run: npm run build
-      - name: Run application for functional tests
-        run: npx http-server dist/spa &
+        run: npm install
+      - name: Build proxy
+        run: cd cors-proxy && sed -i "s/80/9999/g" Dockerfile && docker build . -t cors-proxy
+      - name: Build application
+        run: docker build . --build-arg proxy_url=http://localhost:9999 -t leto-modelizer
+      - name: Run application
+        run: docker-compose up -d
       - name: Run functional tests
         run: npm run test:e2e
 

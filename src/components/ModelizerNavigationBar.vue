@@ -20,7 +20,12 @@
       </router-link>
     </div>
     <div class="project-info">
-      <span class="project-name">{{ props.projectName }}</span>
+      <span
+        class="project-name"
+        data-cy="project-name"
+      >
+        {{ props.projectName }}
+      </span>
     </div>
     <div class="row justify-between items-center">
       <q-btn

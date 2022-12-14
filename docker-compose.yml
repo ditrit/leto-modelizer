@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  proxy:
+    image: cors-proxy
+    ports:
+      - 9999:9999
+  front:
+    image: leto-modelizer
+    ports:
+      - 8080:80
+    depends_on:
+      - proxy

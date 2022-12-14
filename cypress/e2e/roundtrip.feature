@@ -4,7 +4,7 @@ Feature: Test roundtrip of the application
     Given I clear cache
     And I visit the "/"
 
-    When I click on "[data-cy=\"create-empty-project\"]"
+    When I click on "[data-cy=\"new-project\"]"
     Then I expect current url is "/#/modelizer/project-[a-f0-9]{8}/model"
     And  I extract "project-[a-f0-9]{8}" from url in field "projectName" of context
 

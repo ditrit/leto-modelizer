@@ -67,6 +67,8 @@ When you install all your wanted plugins, please run this commands `npm run plug
 
 ## How to build this app
 
+### Native build
+
 Once you have installed and initialized all yours plugins, run this commands to build the app:
 
 ```
@@ -75,6 +77,14 @@ npm run build
 
 It will generate the built application in the `dist` folder.
 
+### Docker build
+
+To build this app with docker please use this command:
+```bash
+docker build . --build-arg proxy_url=http://localhost:9999 -t leto-modelizer
+```
+
+The argument `proxy_url` refers to `CORS_ISOMORPHIC_BASE_URL` to specify the proxy's address you want to use.
 
 ### Environment variable
 

@@ -10,7 +10,10 @@
       class="cursor-pointer project-card"
     >
       <q-img :src="getProjectImage()" height="100%">
-        <div class="absolute-bottom text-subtitle2 text-center">
+        <div
+          class="absolute-bottom text-subtitle2 text-center"
+          data-cy="project-card-title"
+        >
           {{ project.id }}
         </div>
       </q-img>

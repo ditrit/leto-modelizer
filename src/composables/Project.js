@@ -73,16 +73,6 @@ export function saveProject(project) {
 }
 
 /**
- * Save project and initialize git in local storage.
- * @param {Project} project - Project to save.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
- */
-export function initProject(project) {
-  saveProject(project);
-  return git.init({ fs, dir: `/${project.id}` });
-}
-
-/**
  * Clone and save project from git in local storage.
  * @param {Project} project - Project to save.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
@@ -97,7 +87,7 @@ export function importProject(project) {
       username: project.git.username,
       password: project.git.token,
     }),
-    corsProxy: 'https://cors.isomorphic-git.org',
+    corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
     singleBranch: true,
     depth: 1,
   }).then(() => saveProject(project));
@@ -659,4 +649,20 @@ export async function gitLog(projectId, ref, depth = 25) {
     depth,
     ref,
   });
+}
+
+/**
+ * Save project and initialize git in local storage.
+ * @param {Project} project - Project to save.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function initProject(project) {
+  saveProject(project);
+  await git.init({ fs, dir: `/${project.id}` });
+  await writeProjectFile(project.id, new FileInput({
+    path: 'README.md',
+    content: `# ${project.id}\n`,
+  }));
+  await gitAdd(project.id, 'README.md');
+  return gitCommit(project.id, 'Initial commit.');
 }
