@@ -1,0 +1,3 @@
+[submodule "cors-proxy"]
+	path = cors-proxy
+	url = https://github.com/isomorphic-git/cors-proxy
