@@ -232,6 +232,7 @@ export default {
       drawer: {
         components: {
           header: 'Components definitions',
+          title: 'Components',
           filterLabel: 'Component filter',
           button: {
             label: 'Back to models',

@@ -39,7 +39,7 @@
         >
           <template v-slot:header>
             <q-item-section data-cy="plugin-definitions-title">
-              {{ plugin.data.name }}
+              {{ $t('page.modelizer.drawer.components.title') }}
             </q-item-section>
           </template>
           <q-scroll-area
