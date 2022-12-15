@@ -15,7 +15,7 @@ jest.mock('src/composables/Project', () => ({
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
-  UpdateRemoteEvent: {
+  AddRemoteEvent: {
     subscribe: jest.fn(),
   },
   CheckoutEvent: {
@@ -41,7 +41,7 @@ describe('Test component: GitBranchCard', () => {
     checkoutSubscribe = jest.fn();
     updateRemoteUnsubscribe = jest.fn();
     checkoutUnsubscribe = jest.fn();
-    GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
+    GitEvent.AddRemoteEvent.subscribe.mockImplementation(() => {
       updateRemoteSubscribe();
       return { unsubscribe: updateRemoteUnsubscribe };
     });
@@ -67,7 +67,7 @@ describe('Test component: GitBranchCard', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe to UpdateRemoteEvent', () => {
+    it('should subscribe to AddRemoteEvent', () => {
       expect(updateRemoteSubscribe).toHaveBeenCalledTimes(1);
     });
 
@@ -77,7 +77,7 @@ describe('Test component: GitBranchCard', () => {
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to UpdateRemoteEvent', () => {
+    it('should unsubscribe to AddRemoteEvent', () => {
       expect(updateRemoteUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(updateRemoteUnsubscribe).toHaveBeenCalledTimes(1);

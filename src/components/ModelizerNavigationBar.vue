@@ -125,9 +125,7 @@ async function save() {
 function onViewSwitchUpdate(newViewType) {
   if (newViewType === props.viewType) return;
   ViewSwitchEvent.next(newViewType);
-  if (newViewType === 'text') {
-    PluginEvent.RenderEvent.next();
-  } else {
+  if (newViewType === 'model') {
     PluginEvent.ParseEvent.next();
   }
 }

@@ -13,22 +13,19 @@
       />
       <file-explorer
         class="q-px-md q-py-sm overflow-auto"
-        :nodes="nodes"
+        :fileInformations="localFileInformations"
         :project-name="projectName"
         :show-parsable-files="showParsableFiles"
       />
     </div>
 
     <q-separator vertical />
-
     <file-tabs
-      :files="fileTabArray"
-      v-model="activeFileTab"
-      @update:close-file="deleteFileTab"
+      :fileInformations="localFileInformations"
     >
       <template v-slot="{ file }">
         <monaco-editor
-          :fileInput="file"
+          :file="file"
           :project-name="projectName"
         />
       </template>
@@ -37,7 +34,6 @@
 </template>
 
 <script setup>
-import { getTree } from 'src/composables/FileExplorer';
 import MonacoEditor from 'components/editor/MonacoEditor.vue';
 import FileExplorer from 'components/FileExplorer.vue';
 import GitBranchCard from 'components/card/GitBranchCard';
@@ -46,17 +42,15 @@ import {
   onMounted,
   onUnmounted,
   ref,
-  watch,
 } from 'vue';
 import {
   getProjectFiles,
-  readProjectFile,
   writeProjectFile,
   getStatus,
 } from 'src/composables/Project';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
-import PluginEvent from 'src/composables/events/PluginEvent';
+import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import { getPlugins } from 'src/composables/PluginManager';
 import { FileInput, FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
@@ -68,10 +62,6 @@ const props = defineProps({
   },
 });
 
-const fileTabArray = ref([]);
-const activeFileTab = ref({ isSelected: false, id: '' });
-const nodes = ref([]);
-const selectedNode = ref({});
 const localFileInformations = ref([]);
 const showParsableFiles = ref(false);
 
@@ -79,79 +69,13 @@ let globalSaveFilesEventSubscription;
 let updateEditorContentSubscription;
 let createFileSubscription;
 let deleteFileSubscription;
-let updateRemoteSubscription;
+let addRemoteSubscription;
 let checkoutSubscription;
-let pluginRenderSubscription;
 let pullSubscription;
-
-/**
- * Update fileTabArray array when a new file is open.
- * @param {Object} file
- * Example: { id: 'terraform/app.tf', label: 'app.tf', content: 'Hello World' }
- */
-function onOpenFileEvent(file) {
-  activeFileTab.value = { isSelected: true, id: file.id };
-
-  if (!fileTabArray.value.some(({ id }) => id === file.id)) {
-    fileTabArray.value.push(file);
-  }
-}
-
-/**
- * Update active file tab by setting its id equal to the last element of fileTabArray,
- * otherwise null if fileTabArray is empty.
- */
-function setLastFileActive() {
-  if (fileTabArray.value.length) {
-    activeFileTab.value = {
-      isSelected: true,
-      id: fileTabArray.value[fileTabArray.value.length - 1].id,
-    };
-  } else {
-    activeFileTab.value = { isSelected: false, id: '' };
-  }
-
-  FileEvent.SelectFileEvent.next(activeFileTab.value);
-}
-
-/**
- * Close file by removing it from fileTabArray array using its id.
- * If the closed file was the current active file tab, update activeFileTab.
- * @param {String} fileId - Id of closed file.
- */
-function deleteFileTab(fileId) {
-  fileTabArray.value = fileTabArray.value.filter(({ id }) => id !== fileId);
-
-  if (fileId === activeFileTab.value.id) {
-    setLastFileActive();
-  }
-}
-
-/**
- * Update project nodes and fileTabArray.
- * If the previous active file's id is not contained in fileTabArray, update activeFileTab.
- * @param {FileInformation[]} fileInformations - Array of files.
- */
-function updateFileExplorer(fileInformations) {
-  localFileInformations.value = fileInformations;
-  const projectFilesIds = fileInformations.map((file) => file.path);
-  nodes.value = getTree(props.projectName, fileInformations);
-  fileTabArray.value = fileTabArray.value.filter(({ id }) => projectFilesIds.includes(id));
-
-  fileTabArray.value.forEach((file) => {
-    readProjectFile(props.projectName, { path: file.id })
-      .then(({ content }) => {
-        file.content = content;
-      });
-  });
-
-  const isActiveFileInFiles = fileTabArray.value
-    .find(({ id }) => id === activeFileTab.value.id);
-
-  if (!isActiveFileInFiles) {
-    setLastFileActive();
-  }
-}
+let pushSubscription;
+let addFileSubscription;
+let commitFilesSubscription;
+let viewSwitchSubscription;
 
 /**
  * Get projects files and their status, then call function to make the update.
@@ -159,103 +83,105 @@ function updateFileExplorer(fileInformations) {
 function updateProjectFiles() {
   return Promise.allSettled([
     getProjectFiles(props.projectName).then((fileInformations) => {
-      updateFileExplorer(fileInformations);
+      localFileInformations.value = fileInformations;
       return fileInformations;
     }),
     getStatus(props.projectName),
   ]).then((allResults) => {
     const filesStatus = allResults[1].value;
-    const fileInformations = allResults[0].value.map((file) => {
-      const statusResult = filesStatus.find(({ path }) => file.path === path);
-
-      if (statusResult) {
-        return statusResult;
-      }
-      return new FileStatus({ path: file.path });
-    });
-
-    updateFileExplorer(fileInformations);
+    localFileInformations.value = allResults[0].value.map(
+      (file) => filesStatus.find(({ path }) => file.path === path)
+        || new FileStatus({ path: file.path }),
+    );
   });
+}
+
+function onUpdateEditorContent(filePath) {
+  getStatus(props.projectName, [filePath], (path) => path === filePath)
+    .then(([fileStatus]) => {
+      const index = localFileInformations.value
+        .findIndex((fileInformation) => fileInformation.path === filePath);
+
+      localFileInformations.value[index] = fileStatus;
+    });
+}
+
+function onPush() {
+  getStatus(props.projectName)
+    .then((allStatus) => {
+      localFileInformations.value = localFileInformations.value.map(
+        (file) => allStatus.find(({ path }) => file.path === path)
+          || new FileStatus({ path: file.path }),
+      );
+    });
 }
 
 /**
  * Update nodes and fileTabArray when file content is updated.
  * @param {String} filePath - Path (id) of the updated file.
  */
-async function onUpdateFile(filePath) {
+async function onAddFile(filePath) {
   const filePathIndex = localFileInformations.value.findIndex(({ path }) => path === filePath);
 
-  if (filePathIndex !== -1) {
-    const [fileStatus] = await getStatus(
-      props.projectName,
-      [filePath],
-      (f) => f === filePath,
-    );
+  const [fileStatus] = await getStatus(
+    props.projectName,
+    [filePath],
+    (f) => f === filePath,
+  );
 
-    localFileInformations.value[filePathIndex] = fileStatus;
-    nodes.value = getTree(props.projectName, localFileInformations.value);
+  localFileInformations.value[filePathIndex] = fileStatus;
+}
 
-    const fileTabIndex = fileTabArray.value.findIndex(({ id }) => id === filePath);
+async function onCommitFiles(stagedFiles) {
+  const filePaths = stagedFiles.map(({ path }) => path);
 
-    if (fileTabIndex !== -1) {
-      fileTabArray.value[fileTabIndex].information = fileStatus;
-    }
+  const fileStatus = await getStatus(
+    props.projectName,
+    filePaths,
+    (f) => filePaths.includes(f),
+  );
+
+  localFileInformations.value = localFileInformations.value.map((fileInformation) => fileStatus
+    .find(({ path }) => path === fileInformation.path) || fileInformation);
+}
+
+function onCreateFile({ name, isFolder, path }) {
+  const parentNodeId = path.substring(0, path.lastIndexOf('/')) || props.projectName;
+
+  if (isFolder) {
+    localFileInformations.value.push(new FileInformation({ path: `${path}/__empty__` }));
+    FileEvent.CreateFileNodeEvent.next({ parentNodeId, node: null, isFolder });
+  } else {
+    getStatus(props.projectName, [path], (filePath) => filePath === path)
+      .then(([fileStatus]) => {
+        localFileInformations.value.push(fileStatus);
+
+        FileEvent.CreateFileNodeEvent.next({
+          parentNodeId,
+          node: { id: path, label: name },
+          isFolder,
+        });
+      });
   }
 }
 
-/**
- * Set selectedNode to the node param.
- * @param {Object} node - Node tree Object.
- */
-function updateSelectedNode(node) {
-  selectedNode.value = node;
-}
+function onDeleteFile(file) {
+  const temp = localFileInformations.value
+    .filter(({ path }) => (file.isFolder ? !path.startsWith(`${file.id}/`) : path !== file.id));
 
-/**
- * Create and add a new file tree, update value of activeFileTab,
- * send ExpandFolder and OpenFile events.
- * @param {String} name - Name of the file to create.
- * @param {Boolean} isFolder - True if file is a folder, otherwise false.
- * @param {String} path - Path of the file to create.
- */
-function onCreateFileEvent({ name, isFolder, path }) {
-  return updateProjectFiles()
-    .then(() => {
-      if (isFolder) {
-        return Promise.resolve();
-      }
-      return readProjectFile(props.projectName, new FileInformation({ path }));
-    })
-    .then(async (fileInput) => {
-      if (!isFolder) {
-        activeFileTab.value = { isSelected: true, id: fileInput.path };
-        const [filesStatus] = await getStatus(
-          props.projectName,
-          [fileInput.path],
-          (fileName) => fileName === fileInput.path,
-        );
+  const parentPath = file.id.slice(0, file.id.lastIndexOf('/') + 1);
 
-        FileEvent.OpenFileEvent.next({
-          id: fileInput.path,
-          label: name.substring(name.lastIndexOf('/') + 1),
-          content: fileInput.content,
-          information: filesStatus,
-        });
-      }
+  if (!temp.some(({ path }) => path.startsWith(parentPath))) {
+    temp.push(new FileInformation({ path: `${file.id}/__empty__` }));
+  }
 
-      let folder = `${selectedNode.value.id || props.projectName}/${name}`;
-
-      if (folder.indexOf('/') > 0) {
-        folder = folder.substring(0, folder.lastIndexOf('/'));
-      }
-
-      FileEvent.ExpandFolderEvent.next(folder);
-    });
+  localFileInformations.value = temp;
 }
 
 /**
  * Render components and update files accordingly.
  */
+// TODO replace/update
 async function renderPlugins() {
   const plugins = getPlugins();
   const requests = [];
@@ -266,48 +192,80 @@ async function renderPlugins() {
 
   plugins.forEach((plugin) => {
     plugin.render(config).forEach((file) => requests.push(
-      writeProjectFile(props.projectName, file).then(() => {
-        FileEvent.CreateFileEvent.next({
-          name: file.path.substring(file.path.lastIndexOf('/') + 1),
-          isFolder: false,
-          path: file.path,
-        });
-      }),
+      writeProjectFile(props.projectName, file).then(() => file),
     ));
   });
 
-  Promise.allSettled([
-    ...requests,
-    writeProjectFile(props.projectName, config),
-  ]).then(() => PluginEvent.DrawEvent.next());
+  requests.push(writeProjectFile(props.projectName, config).then(() => config));
+
+  return Promise.allSettled(requests)
+    .then((allResults) => allResults
+      .map((result) => result.value)
+      .reduce((acc, file) => {
+        if (localFileInformations.value.find(({ path }) => file.path === path)) {
+          acc.updatedFiles.push(file);
+        } else {
+          acc.createdFiles.push(file);
+        }
+        return acc;
+      }, { createdFiles: [], updatedFiles: [] }));
 }
 
-watch(activeFileTab, () => {
-  FileEvent.SelectFileEvent.next(activeFileTab.value);
-});
+async function onSwitchView(newViewType) {
+  if (newViewType !== 'text') {
+    return;
+  }
+
+  const { createdFiles, updatedFiles } = await renderPlugins();
+  await updateProjectFiles();
+
+  createdFiles.forEach((file) => {
+    const parentNodeId = file.path.substring(0, file.path.lastIndexOf('/')) || props.projectName;
+
+    FileEvent.CreateFileNodeEvent.next({
+      parentNodeId,
+      node: { id: file.path, label: file.path.split('/').at(-1) },
+      isFolder: false,
+    });
+  });
+
+  if (updatedFiles.length >= 1) {
+    FileEvent.UpdateFileContentEvent.next();
+  }
+}
 
 onMounted(() => {
   updateProjectFiles();
   globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateProjectFiles);
-  updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(updateProjectFiles);
   createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFile);
   deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(onDeleteFile);
   updateEditorContentSubscription = FileEvent.UpdateEditorContentEvent
     .subscribe(onUpdateEditorContent);
+
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateProjectFiles);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
-  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(renderPlugins);
   pullSubscription = GitEvent.PullEvent.subscribe(updateProjectFiles);
+  pushSubscription = GitEvent.PushEvent.subscribe(onPush);
+  addFileSubscription = GitEvent.AddEvent.subscribe(onAddFile);
+  commitFilesSubscription = GitEvent.CommitEvent.subscribe(onCommitFiles);
+
+  viewSwitchSubscription = ViewSwitchEvent.subscribe(onSwitchView);
 });
 
 onUnmounted(() => {
   globalSaveFilesEventSubscription.unsubscribe();
   createFileSubscription.unsubscribe();
   deleteFileSubscription.unsubscribe();
-  updateRemoteSubscription.unsubscribe();
   updateEditorContentSubscription.unsubscribe();
+
+  addRemoteSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
-  pluginRenderSubscription.unsubscribe();
   pullSubscription.unsubscribe();
+  pushSubscription.unsubscribe();
+  addFileSubscription.unsubscribe();
+  commitFilesSubscription.unsubscribe();
+
+  viewSwitchSubscription.unsubscribe();
 });
 </script>
 

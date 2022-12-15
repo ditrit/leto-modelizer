@@ -33,7 +33,7 @@ jest.mock('src/composables/events/GitEvent', () => ({
 jest.mock('src/composables/Project', () => ({
   getCurrentBranch: jest.fn(() => Promise.resolve('main')),
   getBranches: jest.fn(() => Promise.resolve([])),
-  fetchGit: jest.fn(() => Promise.resolve()),
+  gitFetch: jest.fn(() => Promise.resolve()),
   getProjectById: jest.fn(),
 }));
 
@@ -184,7 +184,7 @@ describe('Test component: GitBranchMenu', () => {
       });
     });
 
-    describe('Test function: filter', () => {
+    describe('Test function: filterBranches', () => {
       it('should set branches correctly', () => {
         wrapper.vm.searchBranch = '';
         expect(wrapper.vm.isSearched('test')).toEqual(true);
@@ -234,7 +234,7 @@ describe('Test component: GitBranchMenu', () => {
           both,
         ]));
         await wrapper.vm.initBranches();
-        wrapper.vm.filter();
+        wrapper.vm.filterBranches();
         expect(wrapper.vm.filteredBranches)
           .toEqual({
             local: [both, local],
@@ -250,7 +250,7 @@ describe('Test component: GitBranchMenu', () => {
           both,
         ]));
         await wrapper.vm.initBranches();
-        wrapper.vm.filter();
+        wrapper.vm.filterBranches();
         expect(wrapper.vm.filteredBranches)
           .toEqual({
             local: [both],

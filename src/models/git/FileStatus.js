@@ -44,9 +44,6 @@ class FileStatus extends FileInformation {
     if (this.hasUnstagedChanged) {
       return 'file-status-modified';
     }
-    if (this.isUnstaged) {
-      return 'file-status-unstaged';
-    }
     if (this.isUntracked) {
       return 'file-status-untracked';
     }

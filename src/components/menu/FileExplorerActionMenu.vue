@@ -81,7 +81,7 @@ import { gitAdd } from 'src/composables/Project';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import FileEvent from 'src/composables/events/FileEvent';
+import GitEvent from 'src/composables/events/GitEvent';
 
 const emit = defineEmits(['hide:menu']);
 
@@ -143,7 +143,7 @@ function addFile(file) {
         message: t('actions.fileExplorer.file.add'),
         html: true,
       });
-      FileEvent.UpdateFileEvent.next(file.id);
+      GitEvent.AddEvent.next(file.id);
     })
     .catch(() => {
       Notify.create({

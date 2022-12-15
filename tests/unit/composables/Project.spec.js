@@ -10,9 +10,9 @@ import {
   readProjectFile,
   updateGitProject,
   getCurrentBranch,
-  fetchGit,
+  gitFetch,
   getBranches,
-  checkout,
+  gitCheckout,
   createBranchFrom,
   gitUpdate,
   createProjectFolder,
@@ -319,7 +319,7 @@ describe('Test composable: Project', () => {
     });
   });
 
-  describe('Test function: fetchGit', () => {
+  describe('Test function: gitFetch', () => {
     it('should emit fetch event', async () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         test: {
@@ -331,14 +331,14 @@ describe('Test composable: Project', () => {
           },
         },
       }));
-      const result = await fetchGit('test');
+      const result = await gitFetch('test');
       expect(result).toEqual('FetchEventNext');
     });
   });
 
-  describe('Test function: checkout', () => {
+  describe('Test function: gitCheckout', () => {
     it('should emit checkout event', async () => {
-      const result = await checkout('projectId', 'test');
+      const result = await gitCheckout('projectId', 'test');
       expect(result).toEqual('CheckoutEventNext');
     });
   });

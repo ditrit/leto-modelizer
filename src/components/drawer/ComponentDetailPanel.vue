@@ -175,8 +175,6 @@ function save() {
   selectedComponent.value.attributes = selectedComponentAttributes.value
     .filter(({ value }) => value !== null && value !== '');
 
-  PluginEvent.RenderEvent.next();
-
   submitting.value = false;
   isVisible.value = false;
 }

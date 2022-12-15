@@ -10,16 +10,16 @@
       data-cy="file-tabs-container"
     >
       <file-tab-header
-        v-for="file in files"
+        v-for="file in fileTabArray"
         :key="file.id"
         :file="file"
-        :isActive="file.id === activeFileId"
-        @update:close-file="$event => emit('update:close-file', $event)"
+        :isActive="(file.id === activeFileId)"
+        @update:close-file="deleteFileTab"
       />
     </q-tabs>
     <q-tab-panels v-model="activeFileId">
       <q-tab-panel
-        v-for="file in files"
+        v-for="file in fileTabArray"
         :key="file.id"
         :name="file.id"
         :data-cy="`file-tab-content-${file.label}`"
@@ -38,32 +38,92 @@ import {
   onUnmounted,
 } from 'vue';
 import FileTabHeader from 'src/components/tab/FileTabHeader.vue';
-
-const emit = defineEmits(['update:modelValue', 'update:close-file']);
 import FileEvent from 'src/composables/events/FileEvent';
 
 const props = defineProps({
-  files: {
-    type: Array,
-    required: true,
-  },
-  modelValue: {
+  fileInformations: {
     type: Object,
     required: true,
   },
 });
 
-const activeFileId = ref(props.modelValue.id);
+const fileTabArray = ref([]);
+const activeFileId = ref(null);
+
 let selectFileNodeSubscription;
 
-watch(activeFileId, () => {
-  if (activeFileId.value !== props.modelValue.id) {
-    emit('update:modelValue', { isSelected: true, id: activeFileId.value });
+function setActiveFileId(id) {
+  activeFileId.value = id;
+}
+
+/**
+ * Update active file tab by setting its id equal to the last element of fileTabArray,
+ * otherwise null if fileTabArray is empty.
+ */
+function setLastFileActive() {
+  if (fileTabArray.value.length) {
+    activeFileId.value = fileTabArray.value[fileTabArray.value.length - 1].id;
+  } else {
+    activeFileId.value = null;
   }
+
+  FileEvent.SelectFileTabEvent.next(activeFileId.value);
+}
+
+/**
+ * Close file by removing it from fileTabArray array using its id.
+ * If the closed file was the current active file tab, update activeFileId.
+ * @param {String} fileId - Id of closed file.
+ */
+function deleteFileTab(fileId) {
+  fileTabArray.value = fileTabArray.value.filter(({ id }) => id !== fileId);
+
+  if (fileId === activeFileId.value) {
+    setLastFileActive();
+  }
+}
+
+/**
+ * Update fileTabArray array when a new file is open.
+ * @param {Object} node
+ */
+function onSelectFileNode(node) {
+  if (!fileTabArray.value.some(({ id }) => id === node.id)) {
+    fileTabArray.value.push({
+      id: node.id,
+      label: node.label,
+      information: props.fileInformations.find((info) => info.path === node.id),
+    });
+  }
+
+  setActiveFileId(node.id);
+}
+
+function updateFileTabs() {
+  const projectFilesIds = props.fileInformations.map((file) => file.path);
+  fileTabArray.value = fileTabArray.value
+    .filter(({ id }) => projectFilesIds.includes(id))
+    .map((fileTab) => ({
+      ...fileTab,
+      information: props.fileInformations.find((info) => info.path === fileTab.id),
+    }));
+
+  const isActiveFileInFiles = fileTabArray.value
+    .find(({ id }) => id === activeFileId.value);
+
+  if (!isActiveFileInFiles) {
+    setLastFileActive();
+  }
+}
+
+watch(() => props.fileInformations, () => {
+  updateFileTabs();
+}, { deep: true });
+
+watch(activeFileId, () => {
+  FileEvent.SelectFileTabEvent.next(activeFileId.value);
 });
 
-watch(() => props.modelValue, (newModelValue) => {
-  activeFileId.value = newModelValue.id;
 onMounted(() => {
   selectFileNodeSubscription = FileEvent.SelectFileNodeEvent.subscribe(onSelectFileNode);
 });

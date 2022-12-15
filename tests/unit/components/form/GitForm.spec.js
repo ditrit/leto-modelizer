@@ -10,7 +10,7 @@ import { Notify } from 'quasar';
 import GitEvent from 'src/composables/events/GitEvent';
 
 jest.mock('src/composables/events/GitEvent', () => ({
-  UpdateRemoteEvent: {
+  AddRemoteEvent: {
     next: jest.fn(),
   },
 }));
@@ -52,7 +52,7 @@ describe('Test component: GitForm', () => {
   let wrapper;
   const emit = jest.fn();
 
-  GitEvent.UpdateRemoteEvent.next.mockImplementation(() => emit());
+  GitEvent.AddRemoteEvent.next.mockImplementation(() => emit());
 
   beforeEach(() => {
     wrapper = shallowMount(GitForm, {

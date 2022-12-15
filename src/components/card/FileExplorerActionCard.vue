@@ -8,7 +8,7 @@
     :class="['tree-action-button', { 'inline-block' : isActionMenuOpen }]"
     color="primary"
     icon="fa-solid fa-ellipsis-vertical"
-    @click.stop="updateSelectedNode"
+    @click.stop="isActionMenuOpen = true"
   >
     <file-explorer-action-menu
       :file="file"
@@ -20,12 +20,11 @@
 
 <script setup>
 import { ref } from 'vue';
-import FileEvent from 'src/composables/events/FileEvent';
 import FileExplorerActionMenu from 'components/menu/FileExplorerActionMenu';
 
 const isActionMenuOpen = ref(false);
 
-const props = defineProps({
+defineProps({
   file: {
     type: Object,
     required: true,
@@ -35,14 +34,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-/**
- * Emit SelectNodeEvent and set isActionMenuOpen to true.
- */
-function updateSelectedNode() {
-  FileEvent.SelectNodeEvent.next(props.file);
-  isActionMenuOpen.value = true;
-}
 </script>
 
 <style lang="scss" scoped>

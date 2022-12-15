@@ -25,12 +25,6 @@ const EditEvent = new Subject();
 const DeleteEvent = new Subject();
 
 /**
- * Represent a rxjs Event object to emit and to receive events about plugins component rendering.
- * @typedef {Subject} RenderEvent
- */
-const RenderEvent = new Subject();
-
-/**
  * Represent a rxjs Event object to emit and to receive events about plugins component parsing.
  * @typedef {Subject} ParseEvent
  */
@@ -47,7 +41,6 @@ export default {
   SelectEvent,
   EditEvent,
   DeleteEvent,
-  RenderEvent,
   ParseEvent,
   DrawEvent,
 };

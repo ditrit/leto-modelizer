@@ -6,7 +6,6 @@ import {
   FileInformation,
   FileInput,
 } from 'leto-modelizer-plugin-core';
-import GitEvent from 'src/composables/events/GitEvent';
 import Branch from 'src/models/git/Branch';
 import FileEvent from 'src/composables/events/FileEvent';
 import FileStatus from 'src/models/git/FileStatus';
@@ -97,7 +96,7 @@ export function importProject(project) {
       username: project.git.username,
       password: project.git.token,
     }),
-    corsProxy: 'https://cors.isomorphic-git.org',
+    corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
     singleBranch: true,
     depth: 1,
   }).then(() => saveProject(project));
@@ -120,7 +119,7 @@ export function deleteProjectById(projectId) {
  * @param {Project} project - Project to update.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function fetchGit(project) {
+export async function gitFetch(project) {
   if (project.git && project.git.repository) {
     await git.fetch({
       fs,
@@ -132,10 +131,8 @@ export async function fetchGit(project) {
         password: project.git.token,
       }),
       corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
-    });
+    }).catch(() => Promise.resolve());
   }
-
-  return GitEvent.FetchEvent.next();
 }
 
 /**
@@ -343,18 +340,14 @@ export async function writeProjectFile(projectId, file) {
  * @param {Project} project - Project to update.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function updateGitProject(project) {
-  const dir = `/${project.id}`;
-
+export async function gitAddRemote(project) {
   await git.addRemote({
     fs,
-    dir,
+    dir: `/${project.id}`,
     url: project.git.repository,
     remote: 'origin',
     force: true,
   });
-
-  return fetchGit(project);
 }
 
 /**
@@ -363,13 +356,12 @@ export async function updateGitProject(project) {
  * @param {String} branch - Branch name to checkout.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function checkout(projectId, branch) {
+export async function gitCheckout(projectId, branch) {
   await git.checkout({
     fs,
     dir: `/${projectId}`,
     ref: branch,
-  });
-  return GitEvent.CheckoutEvent.next();
+  }).catch(({ name }) => Promise.reject({ name }));
 }
 
 /**
@@ -380,7 +372,7 @@ export async function checkout(projectId, branch) {
  * @param {Boolean} haveToCheckout - Indicate if checkout on new branch has to be done.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function createBranchFrom(projectId, newBranchName, branchName, haveToCheckout) {
+export async function createBranchFrom(projectId, newBranchName, branchName) {
   await git.branch({
     fs,
     dir: `/${projectId}`,
@@ -392,12 +384,6 @@ export async function createBranchFrom(projectId, newBranchName, branchName, hav
     }
     return Promise.reject({ name, message });
   });
-
-  GitEvent.NewBranchEvent.next();
-
-  if (haveToCheckout) {
-    await checkout(projectId, newBranchName);
-  }
 }
 
 /**
@@ -440,7 +426,6 @@ export async function gitUpdate(project, branchName, fastForward) {
     },
     corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
   });
-  return GitEvent.PullEvent.next();
 }
 
 /**
@@ -478,65 +463,30 @@ export async function rm(path) {
  * @param {Boolean} isFolder - Indicates if it is a folder.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function deleteProjectFile(projectId, file, isFolder) {
-  /* eslint-disable no-await-in-loop */
-  /* eslint-disable no-restricted-syntax */
-  // TODO: to remove when BrowserFs permit to force remove folder not empty.
-  const foldersToDelete = [];
+export async function deleteProjectFile(projectId, filePath, deleteFolder) {
+  const isFolder = await isDirectory(`${projectId}/${filePath}`);
 
   if (isFolder) {
-    foldersToDelete.push(file);
+    const dirFiles = await readDir(`${projectId}/${filePath}`);
+
+    if (dirFiles.length > 0) {
+      await Promise.allSettled(dirFiles.map((fileName) => deleteProjectFile(projectId, `${filePath}/${fileName}`, true)));
+    }
+    await rmDir(`${projectId}/${filePath}`);
+  } else {
+    await rm(`${projectId}/${filePath}`);
   }
 
-  const files = (await getProjectFiles(projectId))
-    .filter(({ path }) => {
-      if (isFolder) {
-        return path.indexOf(`${file}/`) === 0;
-      }
-      return path === file;
-    })
-    .map(({ path }) => {
-      if (path.indexOf('__empty__') > 0) {
-        return path.replace('/__empty__', '');
-      }
-      const folderPath = path.substring(0, path.lastIndexOf('/'));
+  const index = filePath.lastIndexOf('/');
 
-      if (isFolder && path.lastIndexOf('/') > 0 && !foldersToDelete.includes(folderPath)) {
-        const folders = folderPath.replace(`${file}/`, '').split(('/'));
-        while (folders.length > 0) {
-          const folder = `${file}/${folders.join('/')}`;
+  if (index !== -1 && !deleteFolder) {
+    const parentPath = filePath.slice(0, index);
+    const dirFiles = await readDir(`${projectId}/${parentPath}`);
 
-          if (!foldersToDelete.includes(folder)) {
-            foldersToDelete.push(folder);
-          }
-          folders.pop();
-        }
-      }
-      return path;
-    });
-
-  foldersToDelete
-    .filter((folder) => !files.includes(folder))
-    .forEach((folder) => {
-      files.push(folder);
-    });
-
-  const filesToDelete = files
-    .map((array) => array.split('/'))
-    .sort((a, b) => (a.length < b.length ? 1 : -1));
-
-  for (const fileToDelete of filesToDelete) {
-    const absolutePath = `${projectId}/${fileToDelete.join('/')}`;
-    const isDir = await isDirectory(absolutePath);
-
-    if (isDir) {
-      await rmDir(absolutePath);
-    } else {
-      await rm(absolutePath);
+    if (dirFiles.length > 0) {
+      await writeProjectFile(projectId, { path: `${parentPath}/__empty__`, content: '' });
     }
   }
-
-  return FileEvent.DeleteFileEvent.next();
 }
 
 /**
@@ -582,7 +532,6 @@ export async function gitPush(project, branchName, force) {
     }),
     corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
   });
-  return GitEvent.PushEvent.next();
 }
 
 /**
@@ -618,8 +567,9 @@ export async function gitGlobalSave(project) {
     project.id,
     newBranch,
     currentBranch,
-    true,
   );
+
+  await gitCheckout(project.id, newBranch);
 
   const files = (await getStatus(project.id))
     .filter((file) => file.hasUnstagedChanged

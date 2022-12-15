@@ -25,7 +25,7 @@ import GitEvent from 'src/composables/events/GitEvent';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitBranchMenu from 'components/menu/GitBranchMenu';
 
-let updateRemoteSubscription;
+let addRemoteSubscription;
 let checkoutSubscription;
 let globalSaveFilesEventSubscription;
 const route = useRoute();
@@ -41,14 +41,18 @@ function updateBranch() {
   });
 }
 
+function setCurrentBranch(branch) {
+  currentBranch.value = branch;
+}
+
 onMounted(() => {
   updateBranch();
-  updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(updateBranch);
-  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateBranch);
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateBranch);
+  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(setCurrentBranch);
   globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateBranch);
 });
 onUnmounted(() => {
-  updateRemoteSubscription.unsubscribe();
+  addRemoteSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
   globalSaveFilesEventSubscription.unsubscribe();
 });
