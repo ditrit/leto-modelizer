@@ -76,7 +76,6 @@ const localFileInformations = ref([]);
 const showParsableFiles = ref(false);
 
 let globalSaveFilesEventSubscription;
-let openFileSubscription;
 let selectNodeSubscription;
 let createFileSubscription;
 let deleteFileSubscription;
@@ -85,19 +84,6 @@ let checkoutSubscription;
 let pluginRenderSubscription;
 let pullSubscription;
 let updateFileSubscription;
-
-/**
- * Update fileTabArray array when a new file is open.
- * @param {Object} file
- * Example: { id: 'terraform/app.tf', label: 'app.tf', content: 'Hello World' }
- */
-function onOpenFileEvent(file) {
-  activeFileTab.value = { isSelected: true, id: file.id };
-
-  if (!fileTabArray.value.some(({ id }) => id === file.id)) {
-    fileTabArray.value.push(file);
-  }
-}
 
 /**
  * Update active file tab by setting its id equal to the last element of fileTabArray,
@@ -291,7 +277,6 @@ watch(activeFileTab, () => {
 onMounted(() => {
   updateProjectFiles();
   globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateProjectFiles);
-  openFileSubscription = FileEvent.OpenFileEvent.subscribe(onOpenFileEvent);
   selectNodeSubscription = FileEvent.SelectNodeEvent.subscribe(updateSelectedNode);
   createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFileEvent);
   deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(updateProjectFiles);
@@ -304,7 +289,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   globalSaveFilesEventSubscription.unsubscribe();
-  openFileSubscription.unsubscribe();
   selectNodeSubscription.unsubscribe();
   createFileSubscription.unsubscribe();
   deleteFileSubscription.unsubscribe();
