@@ -80,7 +80,6 @@ let updateRemoteSubscription;
 let checkoutSubscription;
 let pluginRenderSubscription;
 let pullSubscription;
-let updateFileSubscription;
 
 /**
  * Update active file tab by setting its id equal to the last element of fileTabArray,
@@ -164,31 +163,6 @@ function updateProjectFiles() {
 }
 
 /**
- * Update nodes and fileTabArray when file content is updated.
- * @param {String} filePath - Path (id) of the updated file.
- */
-async function onUpdateFile(filePath) {
-  const filePathIndex = localFileInformations.value.findIndex(({ path }) => path === filePath);
-
-  if (filePathIndex !== -1) {
-    const [fileStatus] = await getStatus(
-      props.projectName,
-      [filePath],
-      (f) => f === filePath,
-    );
-
-    localFileInformations.value[filePathIndex] = fileStatus;
-    nodes.value = getTree(props.projectName, localFileInformations.value);
-
-    const fileTabIndex = fileTabArray.value.findIndex(({ id }) => id === filePath);
-
-    if (fileTabIndex !== -1) {
-      fileTabArray.value[fileTabIndex].information = fileStatus;
-    }
-  }
-}
-
-/**
  * Render components and update files accordingly.
  */
 async function renderPlugins() {
@@ -228,7 +202,6 @@ onMounted(() => {
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
   pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(renderPlugins);
   pullSubscription = GitEvent.PullEvent.subscribe(updateProjectFiles);
-  updateFileSubscription = FileEvent.UpdateFileEvent.subscribe(onUpdateFile);
 });
 
 onUnmounted(() => {
@@ -237,7 +210,6 @@ onUnmounted(() => {
   checkoutSubscription.unsubscribe();
   pluginRenderSubscription.unsubscribe();
   pullSubscription.unsubscribe();
-  updateFileSubscription.unsubscribe();
 });
 </script>
 
