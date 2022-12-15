@@ -50,9 +50,6 @@ jest.mock('src/composables/FileExplorer', () => ({
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
-  SelectNodeEvent: {
-    subscribe: jest.fn(),
-  },
   CreateFileEvent: {
     next: jest.fn(),
     subscribe: jest.fn(),
@@ -90,8 +87,6 @@ jest.mock('src/composables/events/GitEvent', () => ({
 
 describe('Test component: ModelizerTextView', () => {
   let wrapper;
-  let selectNodeSubscribe;
-  let selectNodeUnsubscribe;
   let createFileSubscribe;
   let createFileUnsubscribe;
   let deleteFileSubscribe;
@@ -110,8 +105,6 @@ describe('Test component: ModelizerTextView', () => {
   let updateFileUnsubscribe;
 
   beforeEach(() => {
-    selectNodeSubscribe = jest.fn();
-    selectNodeUnsubscribe = jest.fn();
     createFileSubscribe = jest.fn();
     createFileUnsubscribe = jest.fn();
     deleteFileSubscribe = jest.fn();
@@ -131,10 +124,6 @@ describe('Test component: ModelizerTextView', () => {
     GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
       updateRemoteSubscribe();
       return { unsubscribe: updateRemoteUnsubscribe };
-    });
-    FileEvent.SelectNodeEvent.subscribe.mockImplementation(() => {
-      selectNodeSubscribe();
-      return { unsubscribe: selectNodeUnsubscribe };
     });
     FileEvent.CreateFileEvent.subscribe.mockImplementation(() => {
       createFileSubscribe();
@@ -380,14 +369,6 @@ describe('Test component: ModelizerTextView', () => {
     });
   });
 
-  describe('Test function: updateSelectedNode', () => {
-    it('should set selectedNode', () => {
-      wrapper.vm.selectedNode = { id: 'test' };
-      wrapper.vm.updateSelectedNode({ id: 'test2' });
-      wrapper.vm.selectedNode = { id: 'test2' };
-    });
-  });
-
   describe('Test function: onCreateFileEvent', () => {
     it('should update activeFileTab, send ExpandFolder and OpenFile events on File', async () => {
       wrapper.vm.activeFileTab = { isSelected: false, id: 'fileName' };
@@ -482,10 +463,6 @@ describe('Test component: ModelizerTextView', () => {
       expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
     });
 
-    it('should subscribe to SelectNodeEvent', () => {
-      expect(selectNodeSubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should subscribe to CreateFileEvent', () => {
       expect(createFileSubscribe).toHaveBeenCalledTimes(1);
     });
@@ -514,12 +491,6 @@ describe('Test component: ModelizerTextView', () => {
       expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to SelectNodeEvent', () => {
-      expect(selectNodeUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(selectNodeUnsubscribe).toHaveBeenCalledTimes(1);
     });
 
     it('should unsubscribe to CreateFileEvent', () => {
