@@ -50,10 +50,6 @@ jest.mock('src/composables/FileExplorer', () => ({
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
-  OpenFileEvent: {
-    subscribe: jest.fn(),
-    next: jest.fn(),
-  },
   SelectNodeEvent: {
     subscribe: jest.fn(),
   },
@@ -94,8 +90,6 @@ jest.mock('src/composables/events/GitEvent', () => ({
 
 describe('Test component: ModelizerTextView', () => {
   let wrapper;
-  let openFileSubscribe;
-  let openFileUnsubscribe;
   let selectNodeSubscribe;
   let selectNodeUnsubscribe;
   let createFileSubscribe;
@@ -116,8 +110,6 @@ describe('Test component: ModelizerTextView', () => {
   let updateFileUnsubscribe;
 
   beforeEach(() => {
-    openFileSubscribe = jest.fn();
-    openFileUnsubscribe = jest.fn();
     selectNodeSubscribe = jest.fn();
     selectNodeUnsubscribe = jest.fn();
     createFileSubscribe = jest.fn();
@@ -139,10 +131,6 @@ describe('Test component: ModelizerTextView', () => {
     GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
       updateRemoteSubscribe();
       return { unsubscribe: updateRemoteUnsubscribe };
-    });
-    FileEvent.OpenFileEvent.subscribe.mockImplementation(() => {
-      openFileSubscribe();
-      return { unsubscribe: openFileUnsubscribe };
     });
     FileEvent.SelectNodeEvent.subscribe.mockImplementation(() => {
       selectNodeSubscribe();
@@ -207,29 +195,6 @@ describe('Test component: ModelizerTextView', () => {
       it('should be false', () => {
         expect(wrapper.vm.showParsableFiles).toEqual(false);
       });
-    });
-  });
-
-  describe('Test function: onOpenFileEvent', () => {
-    it('should set a new value to activeFileTab', () => {
-      wrapper.vm.activeFileTab = { isSelected: false, id: '' };
-      wrapper.vm.onOpenFileEvent({ id: 'terraform/app.tf', label: 'app.tf', content: '' });
-
-      expect(wrapper.vm.activeFileTab).toEqual({ isSelected: true, id: 'terraform/app.tf' });
-    });
-
-    it('should push the new file to fileTabArray if it is not already there', () => {
-      wrapper.vm.fileTabArray = [{ id: 'terraform/app.tf', label: 'app.tf', content: '' }];
-      wrapper.vm.onOpenFileEvent({ id: 'README.md', label: 'README.md', content: '' });
-
-      expect(wrapper.vm.fileTabArray).toEqual([{ id: 'terraform/app.tf', label: 'app.tf', content: '' }, { id: 'README.md', label: 'README.md', content: '' }]);
-    });
-
-    it('should not push the new file to fileTabArray if it is already there', () => {
-      wrapper.vm.fileTabArray = [{ id: 'terraform/app.tf', label: 'app.tf', content: '' }];
-      wrapper.vm.onOpenFileEvent({ id: 'terraform/app.tf', label: 'app.tf', content: '' });
-
-      expect(wrapper.vm.fileTabArray).toEqual([{ id: 'terraform/app.tf', label: 'app.tf', content: '' }]);
     });
   });
 
@@ -432,17 +397,14 @@ describe('Test component: ModelizerTextView', () => {
 
       expect(wrapper.vm.activeFileTab).toEqual({ isSelected: true, id: 'terraform/app.tf' });
       expect(FileEvent.ExpandFolderEvent.next).toBeCalled();
-      expect(FileEvent.OpenFileEvent.next).toBeCalled();
     });
 
     it('should only send ExpandFolder event on Folder', async () => {
-      FileEvent.OpenFileEvent.next = jest.fn();
       wrapper.vm.selectedNode = { id: '' };
 
       await wrapper.vm.onCreateFileEvent({ name: 'nodeName', isFolder: true });
 
       expect(FileEvent.ExpandFolderEvent.next).toBeCalled();
-      expect(FileEvent.OpenFileEvent.next).not.toBeCalled();
     });
   });
 
@@ -512,10 +474,6 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe to OpenFileEvent', () => {
-      expect(openFileSubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should subscribe to UpdateRemoteEvent', () => {
       expect(updateRemoteSubscribe).toHaveBeenCalledTimes(1);
     });
@@ -546,12 +504,6 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to OpenFileEvent', () => {
-      expect(openFileUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(openFileUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should unsubscribe to UpdateRemoteEvent', () => {
       expect(updateRemoteUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
