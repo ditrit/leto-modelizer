@@ -76,7 +76,6 @@ const localFileInformations = ref([]);
 const showParsableFiles = ref(false);
 
 let globalSaveFilesEventSubscription;
-let selectNodeSubscription;
 let createFileSubscription;
 let deleteFileSubscription;
 let updateRemoteSubscription;
@@ -192,14 +191,6 @@ async function onUpdateFile(filePath) {
 }
 
 /**
- * Set selectedNode to the node param.
- * @param {Object} node - Node tree Object.
- */
-function updateSelectedNode(node) {
-  selectedNode.value = node;
-}
-
-/**
  * Create and add a new file tree, update value of activeFileTab,
  * send ExpandFolder and OpenFile events.
  * @param {String} name - Name of the file to create.
@@ -277,7 +268,6 @@ watch(activeFileTab, () => {
 onMounted(() => {
   updateProjectFiles();
   globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateProjectFiles);
-  selectNodeSubscription = FileEvent.SelectNodeEvent.subscribe(updateSelectedNode);
   createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFileEvent);
   deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(updateProjectFiles);
   updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(updateProjectFiles);
@@ -289,7 +279,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   globalSaveFilesEventSubscription.unsubscribe();
-  selectNodeSubscription.unsubscribe();
   createFileSubscription.unsubscribe();
   deleteFileSubscription.unsubscribe();
   updateRemoteSubscription.unsubscribe();
