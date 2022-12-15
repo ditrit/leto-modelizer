@@ -15,9 +15,6 @@ jest.mock('src/composables/events/FileEvent', () => ({
   OpenFileEvent: {
     next: jest.fn(),
   },
-  SelectFileEvent: {
-    subscribe: jest.fn(),
-  },
   ExpandFolderEvent: {
     subscribe: jest.fn(),
   },
@@ -25,8 +22,6 @@ jest.mock('src/composables/events/FileEvent', () => ({
 
 describe('Test component: FileExplorer', () => {
   let wrapper;
-  let selectFileSubscribe;
-  let selectFileUnsubscribe;
   let expandNodeSubscribe;
   let expandNodeUnsubscribe;
 
@@ -34,18 +29,12 @@ describe('Test component: FileExplorer', () => {
 
   FileEvent.OpenFileEvent.next.mockImplementation(() => emit());
 
-  FileEvent.SelectFileEvent.subscribe.mockImplementation(() => {
-    selectFileSubscribe();
-    return { unsubscribe: selectFileUnsubscribe };
-  });
   FileEvent.ExpandFolderEvent.subscribe.mockImplementation(() => {
     expandNodeSubscribe();
     return { unsubscribe: expandNodeUnsubscribe };
   });
 
   beforeEach(() => {
-    selectFileSubscribe = jest.fn();
-    selectFileUnsubscribe = jest.fn();
     expandNodeSubscribe = jest.fn();
     expandNodeUnsubscribe = jest.fn();
 
@@ -241,9 +230,6 @@ describe('Test component: FileExplorer', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe to SelectFileEvent', () => {
-      expect(selectFileSubscribe).toHaveBeenCalledTimes(1);
-    });
 
     it('should subscribe to ExpandFolderEvent', () => {
       expect(expandNodeSubscribe).toHaveBeenCalledTimes(1);
@@ -251,12 +237,6 @@ describe('Test component: FileExplorer', () => {
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to SelectFileEvent', () => {
-      expect(selectFileUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(selectFileUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should unsubscribe to ExpandFolderEvent', () => {
       expect(expandNodeUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
