@@ -76,7 +76,6 @@ const localFileInformations = ref([]);
 const showParsableFiles = ref(false);
 
 let globalSaveFilesEventSubscription;
-let deleteFileSubscription;
 let updateRemoteSubscription;
 let checkoutSubscription;
 let pluginRenderSubscription;
@@ -225,7 +224,6 @@ watch(activeFileTab, () => {
 onMounted(() => {
   updateProjectFiles();
   globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateProjectFiles);
-  deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(updateProjectFiles);
   updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(updateProjectFiles);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
   pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(renderPlugins);
@@ -235,7 +233,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   globalSaveFilesEventSubscription.unsubscribe();
-  deleteFileSubscription.unsubscribe();
   updateRemoteSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
   pluginRenderSubscription.unsubscribe();
