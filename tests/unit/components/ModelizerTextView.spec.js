@@ -50,10 +50,6 @@ jest.mock('src/composables/FileExplorer', () => ({
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
-  CreateFileEvent: {
-    next: jest.fn(),
-    subscribe: jest.fn(),
-  },
   DeleteFileEvent: {
     subscribe: jest.fn(),
   },
@@ -87,8 +83,6 @@ jest.mock('src/composables/events/GitEvent', () => ({
 
 describe('Test component: ModelizerTextView', () => {
   let wrapper;
-  let createFileSubscribe;
-  let createFileUnsubscribe;
   let deleteFileSubscribe;
   let deleteFileUnsubscribe;
   let updateRemoteSubscribe;
@@ -105,8 +99,6 @@ describe('Test component: ModelizerTextView', () => {
   let updateFileUnsubscribe;
 
   beforeEach(() => {
-    createFileSubscribe = jest.fn();
-    createFileUnsubscribe = jest.fn();
     deleteFileSubscribe = jest.fn();
     deleteFileUnsubscribe = jest.fn();
     updateRemoteSubscribe = jest.fn();
@@ -124,10 +116,6 @@ describe('Test component: ModelizerTextView', () => {
     GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
       updateRemoteSubscribe();
       return { unsubscribe: updateRemoteUnsubscribe };
-    });
-    FileEvent.CreateFileEvent.subscribe.mockImplementation(() => {
-      createFileSubscribe();
-      return { unsubscribe: createFileUnsubscribe };
     });
     FileEvent.DeleteFileEvent.subscribe.mockImplementation(() => {
       deleteFileSubscribe();
@@ -463,10 +451,6 @@ describe('Test component: ModelizerTextView', () => {
       expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
     });
 
-    it('should subscribe to CreateFileEvent', () => {
-      expect(createFileSubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should subscribe to DeleteFileEvent', () => {
       expect(deleteFileSubscribe).toHaveBeenCalledTimes(1);
     });
@@ -491,12 +475,6 @@ describe('Test component: ModelizerTextView', () => {
       expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to CreateFileEvent', () => {
-      expect(createFileUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(createFileUnsubscribe).toHaveBeenCalledTimes(1);
     });
 
     it('should unsubscribe to DeleteNodeEvent', () => {

@@ -76,7 +76,6 @@ const localFileInformations = ref([]);
 const showParsableFiles = ref(false);
 
 let globalSaveFilesEventSubscription;
-let createFileSubscription;
 let deleteFileSubscription;
 let updateRemoteSubscription;
 let checkoutSubscription;
@@ -191,48 +190,6 @@ async function onUpdateFile(filePath) {
 }
 
 /**
- * Create and add a new file tree, update value of activeFileTab,
- * send ExpandFolder and OpenFile events.
- * @param {String} name - Name of the file to create.
- * @param {Boolean} isFolder - True if file is a folder, otherwise false.
- * @param {String} path - Path of the file to create.
- */
-function onCreateFileEvent({ name, isFolder, path }) {
-  return updateProjectFiles()
-    .then(() => {
-      if (isFolder) {
-        return Promise.resolve();
-      }
-      return readProjectFile(props.projectName, new FileInformation({ path }));
-    })
-    .then(async (fileInput) => {
-      if (!isFolder) {
-        activeFileTab.value = { isSelected: true, id: fileInput.path };
-        const [filesStatus] = await getStatus(
-          props.projectName,
-          [fileInput.path],
-          (fileName) => fileName === fileInput.path,
-        );
-
-        FileEvent.OpenFileEvent.next({
-          id: fileInput.path,
-          label: name.substring(name.lastIndexOf('/') + 1),
-          content: fileInput.content,
-          information: filesStatus,
-        });
-      }
-
-      let folder = `${selectedNode.value.id || props.projectName}/${name}`;
-
-      if (folder.indexOf('/') > 0) {
-        folder = folder.substring(0, folder.lastIndexOf('/'));
-      }
-
-      FileEvent.ExpandFolderEvent.next(folder);
-    });
-}
-
-/**
  * Render components and update files accordingly.
  */
 async function renderPlugins() {
@@ -268,7 +225,6 @@ watch(activeFileTab, () => {
 onMounted(() => {
   updateProjectFiles();
   globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateProjectFiles);
-  createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFileEvent);
   deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(updateProjectFiles);
   updateRemoteSubscription = GitEvent.UpdateRemoteEvent.subscribe(updateProjectFiles);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
@@ -279,7 +235,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   globalSaveFilesEventSubscription.unsubscribe();
-  createFileSubscription.unsubscribe();
   deleteFileSubscription.unsubscribe();
   updateRemoteSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
