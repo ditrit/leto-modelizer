@@ -77,8 +77,6 @@ const fileExplorerRef = ref(null);
 const selectedFile = ref({ isSelected: false, id: '' });
 const filterTrigger = ref(props.showParsableFiles.toString()); // must be a String according to https://quasar.dev/vue-components/tree
 
-let expandNodeSubscription;
-
 /**
  * Filter tree nodes to only display parsable files and folders if showParsableFiles is true.
  * @param {Object} node - Node currently being filtered.
@@ -102,14 +100,6 @@ function filterParsableFiles(node) {
  */
 function isFolderWithoutParsableFiles(node) {
   return node.isFolder && !node.isRootFolder && !node.hasParsableFiles;
-}
-
-/**
- * Expand a node by its id.
- * @param {String} nodeIdToExpand - Id of the node to expand.
- */
-function setExpandedNode(nodeIdToExpand) {
-  fileExplorerRef.value.setExpanded(nodeIdToExpand, true);
 }
 
 /**
@@ -145,11 +135,9 @@ function onNodeClicked(node) {
 }
 
 onMounted(() => {
-  expandNodeSubscription = FileEvent.ExpandFolderEvent.subscribe(setExpandedNode);
 });
 
 onUnmounted(() => {
-  expandNodeSubscription.unsubscribe();
 });
 </script>
 
