@@ -54,7 +54,7 @@ Then('I expect {string} toast to appear with text {string}', (type, templateExpe
   cy.get('.q-notification', { timeout: 60000 })
     .should('exist')
     .and('have.class', `bg-${type}`)
-    .within(() => {
+    .last(() => {
       cy.get('.q-notification__message.col')
         .should('include.text', expectedValue);
     });
