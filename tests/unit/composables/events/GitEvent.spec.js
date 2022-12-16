@@ -2,6 +2,13 @@ import GitEvent from 'src/composables/events/GitEvent';
 import { Subject } from 'rxjs';
 
 describe('Test composable: GitEvent', () => {
+  describe('Test event: AddRemoteEvent', () => {
+    it('should export a Subject', () => {
+      expect(GitEvent.AddRemoteEvent).toBeDefined();
+      expect(GitEvent.AddRemoteEvent).toEqual(new Subject());
+    });
+  });
+
   describe('Test event: CheckoutEvent', () => {
     it('should export a Subject', () => {
       expect(GitEvent.CheckoutEvent).toBeDefined();
@@ -27,6 +34,20 @@ describe('Test composable: GitEvent', () => {
     it('should export a Subject', () => {
       expect(GitEvent.PushEvent).toBeDefined();
       expect(GitEvent.PushEvent).toEqual(new Subject());
+    });
+  });
+
+  describe('Test event: AddEvent', () => {
+    it('should export a Subject', () => {
+      expect(GitEvent.AddEvent).toBeDefined();
+      expect(GitEvent.AddEvent).toEqual(new Subject());
+    });
+  });
+
+  describe('Test event: CommitEvent', () => {
+    it('should export a Subject', () => {
+      expect(GitEvent.CommitEvent).toBeDefined();
+      expect(GitEvent.CommitEvent).toEqual(new Subject());
     });
   });
 });
