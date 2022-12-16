@@ -2,12 +2,10 @@ import DialogEvent from 'src/composables/events/DialogEvent';
 import { shallowMount } from '@vue/test-utils';
 import GitBranchMenu from 'components/menu/GitBranchMenu';
 import { useRoute } from 'vue-router';
-import { getBranches } from 'src/composables/Project';
-import Branch from 'src/models/git/Branch';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
-import GitEvent from 'src/composables/events/GitEvent';
+import Project from 'src/composables/Project';
 
 installQuasarPlugin();
 
@@ -15,18 +13,16 @@ jest.mock('vue-router', () => ({
   useRoute: jest.fn(),
 }));
 
-jest.mock('src/composables/events/GitEvent', () => ({
-}));
-
 jest.mock('src/composables/Project', () => ({
-  getCurrentBranch: jest.fn(() => Promise.resolve('main')),
   getBranches: jest.fn(() => Promise.resolve([])),
-  fetchGit: jest.fn(() => Promise.resolve()),
+  gitFetch: jest.fn(() => Promise.resolve()),
   getProjectById: jest.fn(),
 }));
 
 describe('Test component: GitBranchMenu', () => {
   let wrapper;
+  let gitFetchMock;
+  let setBranchesMock;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -36,6 +32,10 @@ describe('Test component: GitBranchMenu', () => {
   }));
 
   beforeEach(() => {
+    gitFetchMock = jest.fn();
+
+    Project.gitFetch.mockImplementation(() => Promise.resolve(gitFetchMock()));
+
     wrapper = shallowMount(GitBranchMenu, {
       props: {
         currentBranchName: 'main',
@@ -46,6 +46,7 @@ describe('Test component: GitBranchMenu', () => {
         ],
       },
     });
+
     wrapper.vm.menu = {
       hide: jest.fn(),
     };
@@ -53,27 +54,13 @@ describe('Test component: GitBranchMenu', () => {
 
   describe('Test computed', () => {
     describe('Test computed: hasNoBranches', () => {
-      it('should be true without local and remote branches', () => {
-        wrapper.vm.filteredBranches.local = [];
-        wrapper.vm.filteredBranches.remote = [];
+      it('should be true when allBranches is an empty array', () => {
+        wrapper.vm.allBranches = [];
 
         expect(wrapper.vm.hasNoBranches).toEqual(true);
       });
-      it('should be false with local branches', () => {
-        wrapper.vm.filteredBranches.local = [1];
-        wrapper.vm.filteredBranches.remote = [];
-
-        expect(wrapper.vm.hasNoBranches).toEqual(false);
-      });
-      it('should be false with remote branches', () => {
-        wrapper.vm.filteredBranches.local = [];
-        wrapper.vm.filteredBranches.remote = [1];
-
-        expect(wrapper.vm.hasNoBranches).toEqual(false);
-      });
-      it('should be false with local and remote branches', () => {
-        wrapper.vm.filteredBranches.local = [1];
-        wrapper.vm.filteredBranches.remote = [1];
+      it('should be false when allbranches has at least one element', () => {
+        wrapper.vm.allBranches = [1];
 
         expect(wrapper.vm.hasNoBranches).toEqual(false);
       });
@@ -96,115 +83,160 @@ describe('Test component: GitBranchMenu', () => {
 
     describe('Test function: isSearched', () => {
       it('should return true on match', () => {
-        wrapper.vm.searchBranch = '';
+        wrapper.vm.searchedBranch = '';
         expect(wrapper.vm.isSearched('test')).toEqual(true);
 
-        wrapper.vm.searchBranch = 's';
+        wrapper.vm.searchedBranch = 's';
         expect(wrapper.vm.isSearched('test')).toEqual(true);
 
-        wrapper.vm.searchBranch = 'a test';
+        wrapper.vm.searchedBranch = 'a test';
         expect(wrapper.vm.isSearched('test')).toEqual(true);
+      });
+
+      it('should return false if no match', () => {
+        wrapper.vm.searchedBranch = 'main';
+        expect(wrapper.vm.isSearched('test')).toEqual(false);
+
+        wrapper.vm.searchedBranch = 'Main';
+        expect(wrapper.vm.isSearched('test')).toEqual(false);
       });
     });
 
-    describe('Test function: filter', () => {
-      it('should set branches correctly', () => {
-        wrapper.vm.searchBranch = '';
-        expect(wrapper.vm.isSearched('test')).toEqual(true);
+    describe('Test function: filterAndSort', () => {
+      beforeEach(() => {
+        wrapper.vm.allBranches = [
+          {
+            onLocal: true,
+            onRemote: false,
+            name: 'test',
+          },
+          {
+            onLocal: true,
+            onRemote: true,
+            name: 'master',
+          },
+          {
+            onLocal: true,
+            onRemote: true,
+            name: 'feature',
+          },
+          {
+            onLocal: false,
+            onRemote: true,
+            name: 'improvement',
+          },
+        ];
 
-        wrapper.vm.searchBranch = 's';
-        expect(wrapper.vm.isSearched('test')).toEqual(true);
+        wrapper.vm.isSearched = jest.fn(() => true);
+      });
 
-        wrapper.vm.searchBranch = 'a test';
-        expect(wrapper.vm.isSearched('test')).toEqual(true);
+      it('should filter and sort localBranches correctly', () => {
+        wrapper.vm.filterAndSort(wrapper.vm.allBranches, 'onLocal');
+
+        expect(wrapper.vm.localBranches).toEqual([
+          {
+            onLocal: true,
+            onRemote: true,
+            name: 'feature',
+          },
+          {
+            onLocal: true,
+            onRemote: true,
+            name: 'master',
+          },
+          {
+            onLocal: true,
+            onRemote: false,
+            name: 'test',
+          },
+        ]);
+      });
+
+      it('should filter and sort remoteBranches correctly', () => {
+        wrapper.vm.filterAndSort(wrapper.vm.allBranches, 'onRemote');
+
+        expect(wrapper.vm.remoteBranches).toEqual([
+          {
+            onLocal: true,
+            onRemote: true,
+            name: 'feature',
+          },
+          {
+            onLocal: false,
+            onRemote: true,
+            name: 'improvement',
+          },
+          {
+            onLocal: true,
+            onRemote: true,
+            name: 'master',
+          },
+        ]);
+      });
+
+      it('should display currentBranch at the top of localBranches list', async () => {
+        await wrapper.setProps({
+          currentBranchName: 'test',
+        });
+
+        wrapper.vm.filterAndSort(wrapper.vm.allBranches, 'onLocal');
+
+        expect(wrapper.vm.localBranches).toEqual([
+          {
+            onLocal: true,
+            onRemote: false,
+            name: 'test',
+          },
+          {
+            onLocal: true,
+            onRemote: true,
+            name: 'feature',
+          },
+          {
+            onLocal: true,
+            onRemote: true,
+            name: 'master',
+          },
+        ]);
+      });
+
+      it('should display currentBranch at the top of remoteBranches list', async () => {
+        await wrapper.setProps({
+          currentBranchName: 'improvement',
+        });
+
+        wrapper.vm.filterAndSort(wrapper.vm.allBranches, 'onRemote');
+
+        expect(wrapper.vm.remoteBranches).toEqual([
+          {
+            onLocal: false,
+            onRemote: true,
+            name: 'improvement',
+          },
+          {
+            onLocal: true,
+            onRemote: true,
+            name: 'feature',
+          },
+          {
+            onLocal: true,
+            onRemote: true,
+            name: 'master',
+          },
+        ]);
       });
     });
 
-    describe('Test function: openCloseExpandMenu', () => {
-      const local = new Branch({
-        name: 'Local',
-        onLocal: true,
-        onRemote: false,
-      });
-      const remote = new Branch({
-        name: 'remote',
-        onLocal: false,
-        onRemote: true,
-      });
-      const both = new Branch({
-        name: 'both',
-        onLocal: true,
-        onRemote: true,
-      });
-
+    describe('Test function: manageExpandMenu', () => {
       it('should invert local value', () => {
         expect(wrapper.vm.showLocal).toEqual(false);
         expect(wrapper.vm.showRemote).toEqual(false);
 
-        wrapper.vm.openCloseExpandMenu(true);
+        wrapper.vm.manageExpandMenu(true);
         expect(wrapper.vm.showLocal).toEqual(true);
         expect(wrapper.vm.showRemote).toEqual(false);
 
-        wrapper.vm.openCloseExpandMenu(true);
-        expect(wrapper.vm.showLocal).toEqual(false);
-        expect(wrapper.vm.showRemote).toEqual(false);
-      });
-
-      it('should return all sorted branches without filter', async () => {
-        getBranches.mockImplementation(() => Promise.resolve([
-          local,
-          remote,
-          both,
-        ]));
-        await wrapper.vm.initBranches();
-        wrapper.vm.filter();
-        expect(wrapper.vm.filteredBranches)
-          .toEqual({
-            local: [both, local],
-            remote: [both, remote],
-          });
-      });
-
-      it('should return filtered branches', async () => {
-        wrapper.vm.searchedBranch = 'both';
-        getBranches.mockImplementation(() => Promise.resolve([
-          local,
-          remote,
-          both,
-        ]));
-        await wrapper.vm.initBranches();
-        wrapper.vm.filter();
-        expect(wrapper.vm.filteredBranches)
-          .toEqual({
-            local: [both],
-            remote: [both],
-          });
-      });
-    });
-
-    describe('Test function: onOpenMenu', () => {
-      it('should call focus and close expand menu', () => {
-        const focus = jest.fn();
-        wrapper.vm.searchInput = { focus };
-        wrapper.vm.showLocal = true;
-        wrapper.vm.showRemote = true;
-        wrapper.vm.onOpenMenu();
-        expect(focus).toBeCalled();
-        expect(wrapper.vm.showLocal).toEqual(false);
-        expect(wrapper.vm.showRemote).toEqual(false);
-      });
-    });
-
-    describe('Test function: openCloseExpandMenu', () => {
-      it('should invert local value', () => {
-        expect(wrapper.vm.showLocal).toEqual(false);
-        expect(wrapper.vm.showRemote).toEqual(false);
-
-        wrapper.vm.openCloseExpandMenu(true);
-        expect(wrapper.vm.showLocal).toEqual(true);
-        expect(wrapper.vm.showRemote).toEqual(false);
-
-        wrapper.vm.openCloseExpandMenu(true);
+        wrapper.vm.manageExpandMenu(true);
         expect(wrapper.vm.showLocal).toEqual(false);
         expect(wrapper.vm.showRemote).toEqual(false);
       });
@@ -213,20 +245,48 @@ describe('Test component: GitBranchMenu', () => {
         expect(wrapper.vm.showLocal).toEqual(false);
         expect(wrapper.vm.showRemote).toEqual(false);
 
-        wrapper.vm.openCloseExpandMenu();
+        wrapper.vm.manageExpandMenu();
         expect(wrapper.vm.showLocal).toEqual(false);
         expect(wrapper.vm.showRemote).toEqual(true);
 
-        wrapper.vm.openCloseExpandMenu();
+        wrapper.vm.manageExpandMenu();
         expect(wrapper.vm.showLocal).toEqual(false);
         expect(wrapper.vm.showRemote).toEqual(false);
       });
     });
 
-    describe('Test hook function: onMounted', () => {
+    describe('Test function: setBranches', () => {
+      it('should call gitFetch and getBranches to set allBranches value', async () => {
+        wrapper.vm.loading = true;
+
+        await wrapper.vm.setBranches();
+
+        expect(gitFetchMock).toHaveBeenCalled();
+        expect(wrapper.vm.allBranches).toEqual([]);
+        expect(wrapper.vm.loading).toBeFalsy();
+      });
     });
 
-    describe('Test hook function: onUnmounted', () => {
+    describe('Test function: onShow', () => {
+      it('should call searchInput focus', () => {
+        const focus = jest.fn();
+        wrapper.vm.searchInput = { focus };
+        wrapper.vm.onShow();
+        expect(focus).toBeCalled();
+      });
+    });
+
+    describe('Test function: onOpen', () => {
+      it('should call setBranches and close expand menus', () => {
+        setBranchesMock = jest.fn();
+        wrapper.vm.setBranches = setBranchesMock();
+        wrapper.vm.showLocal = true;
+        wrapper.vm.showRemote = true;
+        wrapper.vm.onOpen();
+        expect(setBranchesMock).toBeCalled();
+        expect(wrapper.vm.showLocal).toEqual(false);
+        expect(wrapper.vm.showRemote).toEqual(false);
+      });
     });
   });
 });

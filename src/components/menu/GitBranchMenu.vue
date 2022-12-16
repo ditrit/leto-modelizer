@@ -3,7 +3,8 @@
     class="git-branch-menu"
     data-cy="git-branch-menu"
     ref="menu"
-    @show="onOpenMenu"
+    @before-show="onOpen"
+    @show="onShow"
   >
     <q-list style="min-width: 500px">
       <q-input
@@ -12,7 +13,6 @@
         v-model="searchedBranch"
         dense
         clearable
-        @update:model-value="filter"
       >
         <template v-slot:prepend>
           <q-icon name="fa-solid fa-magnifying-glass" />
@@ -60,53 +60,60 @@
         <q-item-section>{{ $t('actions.git.log') }}</q-item-section>
       </q-item>
 
-      <template v-if="filteredBranches.local.length > 0">
+      <template v-if="localBranches.length > 0">
         <git-branch-header-menu :title="$t('menu.git.localBranchesTitle')"/>
-        <template v-for="(branch, index) in filteredBranches.local">
+        <template v-for="(branch, index) in localBranches">
           <git-branch-item-menu
             :key="`local_${branch.name}`"
             :name="branch.name"
             :full-name="branch.fullName"
-            :current="branch.name === currentBranchName"
+            :isCurrentBranch="branch.name === currentBranchName"
             :on-local="branch.onLocal"
             :on-remote="branch.onRemote"
             v-if="showLocal || index < maxItem"
+            @action:done="menu.hide()"
             :data-cy="`git-menu-branch-local-${branch.name}`"
           />
         </template>
         <git-branch-expand-list-menu
           data-cy="git-branch-expand-local-menu"
           :open="showLocal"
-          :number="filteredBranches.local.length - maxItem"
-          v-if="filteredBranches.local.length > maxItem"
-          @click="openCloseExpandMenu(true)"
+          :number="localBranches.length - maxItem"
+          v-if="localBranches.length > maxItem"
+          @click="manageExpandMenu(true)"
         />
       </template>
 
-      <template v-if="filteredBranches.remote.length > 0">
+      <template v-if="remoteBranches.length > 0">
         <git-branch-header-menu :title="$t('menu.git.remoteBranchesTitle')"/>
-        <template v-for="(branch, index) in filteredBranches.remote">
+        <template v-for="(branch, index) in remoteBranches">
           <git-branch-item-menu
             :key="`remote_${branch.name}`"
             :name="branch.name"
             :full-name="branch.fullName"
-            :current="branch.name === currentBranchName"
+            :isCurrentBranch="branch.name === currentBranchName"
             :on-local="branch.onLocal"
             :on-remote="branch.onRemote"
             v-if="showRemote || index < maxItem"
+            @action:done="menu.hide()"
             :data-cy="`git-menu-branch-remote-${branch.name}`"
           />
         </template>
         <git-branch-expand-list-menu
           data-cy="git-branch-expand-remote-menu"
           :open="showRemote"
-          :number="filteredBranches.remote.length - maxItem"
-          v-if="filteredBranches.remote.length > maxItem"
-          @click="openCloseExpandMenu(false)"
+          :number="remoteBranches.length - maxItem"
+          v-if="remoteBranches.length > maxItem"
+          @click="manageExpandMenu(false)"
         />
       </template>
 
-      <template v-if="hasNoBranches">
+      <template v-if="loading">
+        <span class="q-mr-xs">{{ $t('menu.git.loading')}}</span>
+        <q-spinner-dots thickness="2"/>
+      </template>
+
+      <template v-if="hasNoBranches && !loading">
         <q-item>
           <q-item-section>{{ $t('menu.git.noBranches')}}</q-item-section>
         </q-item>
@@ -120,17 +127,14 @@ import GitBranchItemMenu from 'components/menu/GitBranchItemMenu';
 import GitBranchHeaderMenu from 'components/menu/GitBranchHeaderMenu';
 import {
   computed,
-  onMounted,
-  onUnmounted,
   ref,
 } from 'vue';
 import { useRoute } from 'vue-router';
 import {
   getBranches,
-  fetchGit,
+  gitFetch,
   getProjectById,
 } from 'src/composables/Project';
-import GitEvent from 'src/composables/events/GitEvent';
 import GitBranchExpandListMenu from 'components/menu/GitBranchExpandListMenu';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
@@ -144,29 +148,13 @@ const props = defineProps({
 const route = useRoute();
 const maxItem = ref(5);
 const menu = ref(null);
-const filteredBranches = ref({
-  local: [],
-  remote: [],
-});
-const branches = ref({
-  local: [],
-  remote: [],
-});
+const allBranches = ref([]);
 const searchedBranch = ref('');
 const showLocal = ref(false);
 const showRemote = ref(false);
 const searchInput = ref(null);
-const hasNoBranches = computed(() => filteredBranches.value.local.length === 0
-    && filteredBranches.value.remote.length === 0);
-
-/**
- * On open menu, focus on the search input and close expand menu.
- */
-function onOpenMenu() {
-  searchInput.value.focus();
-  showLocal.value = false;
-  showRemote.value = false;
-}
+const hasNoBranches = computed(() => allBranches.value.length === 0);
+const loading = ref(false);
 
 /**
  * Indicate if branch name contains searched text.
@@ -184,28 +172,67 @@ function isSearched(branch) {
 }
 
 /**
- * Filter all branches with searched text.
+ * Filter all branches with searched text, then display current branch at the top
+ * and sort the remaining branches alphabetically.
+ * @param {Array} branches - Array of branches.
+ * @param {String} branchType - Branch type.
+ * @return {Array} Return array of filtered and sorted branches.
  */
-function filter() {
-  filteredBranches.value.local = branches.value.local
+function filterAndSort(branches, branchType) {
+  return branches
+    .filter((branch) => branch[branchType])
     .filter((branch) => isSearched(branch.name) || isSearched(branch.fullName))
-    .sort((a, b) => a.compare(b));
-
-  filteredBranches.value.remote = branches.value.remote
-    .filter((branch) => isSearched(branch.name) || isSearched(branch.fullName))
-    .sort((a, b) => a.compare(b));
+    .sort((a, b) => {
+      if (a.name === props.currentBranchName) {
+        return -1;
+      }
+      if (b.name === props.currentBranchName) {
+        return 1;
+      }
+      return a.name.localeCompare(b.name);
+    });
 }
 
+const localBranches = computed(() => filterAndSort(allBranches.value, 'onLocal'));
+const remoteBranches = computed(() => filterAndSort(allBranches.value, 'onRemote'));
+
 /**
- * Change state value of expand menu.
- * @param {Boolean} local - Choose menu you want to modify.
+ * Manage opening and closing of expand menu by toggling the state value.
+ * @param {Boolean} local - True to manage local branches menu, false for remote branches menu.
  */
-function openCloseExpandMenu(local) {
+function manageExpandMenu(local) {
   if (local) {
     showLocal.value = !showLocal.value;
   } else {
     showRemote.value = !showRemote.value;
   }
+}
+
+/**
+ * Initialize all branches (locals and remotes) from git.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function setBranches() {
+  loading.value = true;
+  await gitFetch(getProjectById(route.params.projectName));
+  allBranches.value = await getBranches(route.params.projectName, true);
+  loading.value = false;
+}
+
+/**
+ * On open menu, call setBranches and close expand menu for both local and remote.
+ */
+function onOpen() {
+  showLocal.value = false;
+  showRemote.value = false;
+  setBranches();
+}
+
+/**
+ * On show menu, focus on the search input.
+ */
+function onShow() {
+  searchInput.value.focus();
 }
 
 /**
@@ -220,10 +247,4 @@ function openDialog(key) {
   });
   menu.value.hide();
 }
-
-onMounted(() => {
-  fetchGit(getProjectById(route.params.projectName));
-});
-onUnmounted(() => {
-});
 </script>
