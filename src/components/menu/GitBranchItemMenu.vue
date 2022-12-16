@@ -4,7 +4,7 @@
       <q-icon
         color="primary"
         name="fa-solid fa-tag"
-        v-if="current"
+        v-if="isCurrentBranch"
         data-cy="git-menu-current-branch"
       >
         <q-tooltip>
@@ -20,10 +20,11 @@
     <git-branch-action-menu
       anchor="top end"
       self="top start"
-      :isCurrentBranch="current"
+      :isCurrentBranch="isCurrentBranch"
       :on-local="onLocal"
       :on-remote="onRemote"
       :branch-name="name"
+      @action:done="emit('action:done')"
     />
   </q-item>
 </template>
@@ -32,12 +33,14 @@
 
 import GitBranchActionMenu from 'components/menu/GitBranchActionMenu';
 
+const emit = defineEmits(['action:done']);
+
 defineProps({
   name: {
     type: String,
     required: true,
   },
-  current: {
+  isCurrentBranch: {
     type: Boolean,
     default: false,
   },
@@ -49,6 +52,9 @@ defineProps({
     type: Boolean,
     default: false,
   },
-  fullName: String,
+  fullName: {
+    type: String,
+    required: true,
+  },
 });
 </script>
