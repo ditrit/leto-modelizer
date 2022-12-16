@@ -18,7 +18,7 @@
       <q-item
         :data-cy="`git-menu-branch-new-branch-${branchName}`"
         clickable
-        @click="onNewBranch"
+        @click="openDialog('GitNewBranch')"
       >
         <q-item-section>
           {{ $t('actions.git.newBranchFrom', { branch: branchName }) }}
@@ -31,7 +31,7 @@
         v-if="onLocal && onRemote"
         :data-cy="`git-menu-branch-update-${branchName}`"
         clickable
-        @click="onUpdate"
+        @click="openDialog('GitUpdate')"
       >
         <q-item-section>
           {{ $t('actions.git.update') }}
@@ -42,7 +42,7 @@
         v-if="onLocal"
         :data-cy="`git-menu-branch-push-${branchName}`"
         clickable
-        @click="onPush"
+        @click="openDialog('GitPush')"
       >
         <q-item-section>
           {{ $t('actions.git.push') }}
@@ -54,15 +54,22 @@
 
 <script setup>
 import { ref } from 'vue';
-import { checkout } from 'src/composables/Project';
+import { gitCheckout } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
+import GitEvent from 'src/composables/events/GitEvent';
+import { useI18n } from 'vue-i18n';
+import { Notify } from 'quasar';
+
+const emit = defineEmits(['action:done']);
 
 const route = useRoute();
 const menu = ref(null);
 const loading = ref({
   checkout: false,
 });
+const { t } = useI18n();
+
 const props = defineProps({
   branchName: {
     type: String,
@@ -83,42 +90,34 @@ const props = defineProps({
 });
 
 /**
- * Execute checkout action.
+ * Execute checkout action, manage toast and loader.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function onCheckout() {
   loading.value.checkout = true;
-  return checkout(route.params.projectName, props.branchName)
+  return gitCheckout(route.params.projectName, props.branchName)
+    .then(() => {
+      GitEvent.CheckoutEvent.next(props.branchName);
+      emit('action:done');
+    })
+    .catch(({ name }) => {
+      Notify.create({
+        type: 'negative',
+        message: t(`errors.git.${name}`),
+        html: true,
+      });
+    })
     .finally(() => {
       loading.value.checkout = false;
     });
 }
 
 /**
- * Send event to open the GitNewBranchDialog and close the menu.
+ * Send event to open the dialog corresponding to the key and emit event.
+ * @param {String} key - Event key.
  */
-function onNewBranch() {
-  DialogEvent.next({ type: 'open', key: 'GitNewBranch', branch: props.branchName });
-  menu.value.hide();
-}
-
-/**
- * Send event to open the GitUpdateDialog and close the menu.
- */
-function onUpdate() {
-  DialogEvent.next({ type: 'open', key: 'GitUpdate', branch: props.branchName });
-  menu.value.hide();
-}
-
-/**
- * Send event to open the GitPushDialog and close the menu.
- */
-function onPush() {
-  DialogEvent.next({
-    type: 'open',
-    key: 'GitPush',
-    branch: props.branchName,
-  });
-  menu.value.hide();
+function openDialog(key) {
+  DialogEvent.next({ type: 'open', key, branch: props.branchName });
+  emit('action:done');
 }
 </script>

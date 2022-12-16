@@ -1,24 +1,43 @@
 import { shallowMount } from '@vue/test-utils';
 import GitBranchActionMenu from 'components/menu/GitBranchActionMenu';
 import { useRoute } from 'vue-router';
-import { checkout } from 'src/composables/Project';
-import { createI18n } from 'vue-i18n';
-import i18nConfiguration from 'src/i18n';
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import DialogEvent from 'src/composables/events/DialogEvent';
+import { Notify } from 'quasar';
+import GitEvent from 'src/composables/events/GitEvent';
 
-installQuasarPlugin();
+installQuasarPlugin({
+  plugins: [Notify],
+});
+
+jest.mock('vue-i18n', () => ({
+  useI18n: () => ({
+    t: (t) => t,
+  }),
+}));
 
 jest.mock('vue-router', () => ({
   useRoute: jest.fn(),
 }));
 
 jest.mock('src/composables/Project', () => ({
-  checkout: jest.fn(() => Promise.resolve('checkout')),
+  gitCheckout: jest.fn((_, id) => {
+    if (id === 'error') {
+      return Promise.reject(() => 'error');
+    }
+    return Promise.resolve();
+  }),
+}));
+
+jest.mock('src/composables/events/GitEvent', () => ({
+  CheckoutEvent: {
+    next: jest.fn(),
+  },
 }));
 
 describe('Test component: GitBranchActionMenu', () => {
   let wrapper;
+  let checkoutNext;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -28,14 +47,13 @@ describe('Test component: GitBranchActionMenu', () => {
   }));
 
   beforeEach(() => {
+    checkoutNext = jest.fn();
+
+    GitEvent.CheckoutEvent.next.mockImplementation(checkoutNext);
+
     wrapper = shallowMount(GitBranchActionMenu, {
       props: {
         branchName: 'main',
-      },
-      global: {
-        plugins: [
-          createI18n({ locale: 'en-US', messages: i18nConfiguration }),
-        ],
       },
     });
   });
@@ -76,51 +94,35 @@ describe('Test component: GitBranchActionMenu', () => {
 
   describe('Test functions', () => {
     describe('Test function: onCheckout', () => {
-      it('should call checkout action', async () => {
+      it('should emit "action:done" and emit CheckoutEvent on success', async () => {
         wrapper.vm.loading.checkout = true;
         await wrapper.vm.onCheckout();
 
+        expect(wrapper.emitted()['action:done']).toBeTruthy();
+        expect(checkoutNext).toHaveBeenCalledTimes(1);
         expect(wrapper.vm.loading.checkout).toEqual(false);
-        expect(checkout).toBeCalled();
+      });
+
+      it('should emit a negative notification on error', async () => {
+        wrapper.vm.loading.checkout = true;
+
+        await wrapper.setProps({ branchName: 'error' });
+        Notify.create = jest.fn();
+
+        await wrapper.vm.onCheckout();
+
+        expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
+        expect(wrapper.vm.loading.checkout).toEqual(false);
       });
     });
 
-    describe('Test function: onNewBranch', () => {
-      it('should call dialog event and hide menu', () => {
+    describe('Test function: openDialog', () => {
+      it('should emit "action:done" event and call DialogEvent with "GitNewBranch"', () => {
         DialogEvent.next = jest.fn();
-        wrapper.vm.menu = {
-          hide: jest.fn(),
-        };
 
-        wrapper.vm.onNewBranch();
-        expect(DialogEvent.next).toBeCalled();
-        expect(wrapper.vm.menu.hide).toBeCalled();
-      });
-    });
-
-    describe('Test function: onUpdate', () => {
-      it('should call dialog event and hide menu', () => {
-        DialogEvent.next = jest.fn();
-        wrapper.vm.menu = {
-          hide: jest.fn(),
-        };
-
-        wrapper.vm.onUpdate();
-        expect(DialogEvent.next).toBeCalled();
-        expect(wrapper.vm.menu.hide).toBeCalled();
-      });
-    });
-
-    describe('Test function: onPush', () => {
-      it('should call dialog event and hide menu', () => {
-        DialogEvent.next = jest.fn();
-        wrapper.vm.menu = {
-          hide: jest.fn(),
-        };
-
-        wrapper.vm.onPush();
-        expect(DialogEvent.next).toBeCalled();
-        expect(wrapper.vm.menu.hide).toBeCalled();
+        wrapper.vm.openDialog('GitNewBranch');
+        expect(wrapper.emitted()['action:done']).toBeTruthy();
+        expect(DialogEvent.next).toHaveBeenCalledWith(expect.objectContaining({ key: 'GitNewBranch' }));
       });
     });
   });
