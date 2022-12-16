@@ -24,7 +24,6 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import GitEvent from 'src/composables/events/GitEvent';
 import GitBranchMenu from 'components/menu/GitBranchMenu';
 
-let checkoutSubscription;
 const route = useRoute();
 const loading = ref(true);
 const currentBranch = ref('');
@@ -40,9 +39,7 @@ function updateBranch() {
 
 onMounted(() => {
   updateBranch();
-  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateBranch);
 });
 onUnmounted(() => {
-  checkoutSubscription.unsubscribe();
 });
 </script>
