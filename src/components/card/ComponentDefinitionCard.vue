@@ -1,18 +1,31 @@
 <template>
-  <q-card flat bordered class="component-definition-card">
-    <q-item clickable
+  <q-card
+    flat
+    bordered
+    class="component-definition-card"
+  >
+    <q-item
+      clickable
       @click="onClickItem"
+      class="column q-pl-xs q-pr-xs items-center"
     >
-      <q-item-section avatar v-if="definition.icon">
+      <q-item-section
+        v-if="definition.icon"
+        avatar
+        class="items-center q-pr-none"
+      >
         <q-icon
           color="primary"
+          size="xl"
           :name="`img:/plugins/${pluginName}/icons/${definition.icon}.svg`"
         >
         </q-icon>
       </q-item-section>
 
       <q-item-section>
-        <q-item-label>{{ definition.type }}</q-item-label>
+        <q-item-label class="component-definition-type">
+          {{ definition.type }}
+        </q-item-label>
       </q-item-section>
     </q-item>
   </q-card>
@@ -45,3 +58,9 @@ function onClickItem() {
   plugin.draw('root');
 }
 </script>
+
+<style scoped>
+  .component-definition-type {
+    word-break: break-all;
+  }
+</style>

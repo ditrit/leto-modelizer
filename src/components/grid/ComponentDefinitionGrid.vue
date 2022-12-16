@@ -9,7 +9,7 @@
     class="component-definition-grid"
   >
     <template v-slot:item="props">
-      <div class="q-pa-xs col-xs-12 col-sm-12 col-md-12 text-primary">
+      <div class="q-pa-xs col-4 text-primary">
         <component-definition-card :definition="props.row" :pluginName="pluginName" />
       </div>
     </template>
