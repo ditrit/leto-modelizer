@@ -63,9 +63,6 @@ jest.mock('src/composables/events/FileEvent', () => ({
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
-  UpdateRemoteEvent: {
-    subscribe: jest.fn(),
-  },
   CheckoutEvent: {
     subscribe: jest.fn(),
   },
@@ -76,8 +73,6 @@ jest.mock('src/composables/events/GitEvent', () => ({
 
 describe('Test component: ModelizerTextView', () => {
   let wrapper;
-  let updateRemoteSubscribe;
-  let updateRemoteUnsubscribe;
   let checkoutSubscribe;
   let checkoutUnsubscribe;
   let pullSubscribe;
@@ -88,8 +83,6 @@ describe('Test component: ModelizerTextView', () => {
   let globalSaveFilesEventUnsubscribe;
 
   beforeEach(() => {
-    updateRemoteSubscribe = jest.fn();
-    updateRemoteUnsubscribe = jest.fn();
     checkoutSubscribe = jest.fn();
     checkoutUnsubscribe = jest.fn();
     writeProjectFileMock = jest.fn();
@@ -98,10 +91,6 @@ describe('Test component: ModelizerTextView', () => {
     globalSaveFilesEventSubscribe = jest.fn();
     globalSaveFilesEventUnsubscribe = jest.fn();
 
-    GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
-      updateRemoteSubscribe();
-      return { unsubscribe: updateRemoteUnsubscribe };
-    });
     FileEvent.GlobalSaveFilesEvent.subscribe.mockImplementation(() => {
       globalSaveFilesEventSubscribe();
       return { unsubscribe: globalSaveFilesEventUnsubscribe };
@@ -362,10 +351,6 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe to UpdateRemoteEvent', () => {
-      expect(updateRemoteSubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should subscribe to CheckoutEvent', () => {
       expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
     });
@@ -376,12 +361,6 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to UpdateRemoteEvent', () => {
-      expect(updateRemoteUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(updateRemoteUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should unsubscribe to Checkout', () => {
       expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
