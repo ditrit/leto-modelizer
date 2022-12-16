@@ -1,14 +1,20 @@
 import { Subject } from 'rxjs';
 
 /**
+ * Represent a rxjs Event object to emit and to receive events about updated remote on git.
+ * @typedef {Subject} AddRemoteEvent
+ */
+const AddRemoteEvent = new Subject();
+
+/**
  * Represent a rxjs Event object to emit and to receive events when a pull is done on git.
- * @typedef {Subject} FetchEvent
+ * @typedef {Subject} PullEvent
  */
 const PullEvent = new Subject();
 
 /**
  * Represent a rxjs Event object to emit and to receive events when a push is done on git.
- * @typedef {Subject} FetchEvent
+ * @typedef {Subject} PushEvent
  */
 const PushEvent = new Subject();
 
@@ -24,9 +30,26 @@ const CheckoutEvent = new Subject();
  */
 const NewBranchEvent = new Subject();
 
+/**
+ * Represent a rxjs Event object to emit and to receive events about file node creation. // TODO
+ * The event should contain the id of the created file node.
+ * @typedef {Subject} AddEvent
+ */
+const AddEvent = new Subject();
+
+/**
+  * Represent a rxjs Event object to emit and to receive events about file node creation. // TODO
+  * The event should contain the id of the created file node.
+  * @typedef {Subject} CommitEvent
+  */
+const CommitEvent = new Subject();
+
 export default {
   CheckoutEvent,
+  AddRemoteEvent,
   NewBranchEvent,
   PullEvent,
   PushEvent,
+  AddEvent,
+  CommitEvent,
 };
