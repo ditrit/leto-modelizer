@@ -56,7 +56,6 @@ import {
 } from 'src/composables/Project';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
-import PluginEvent from 'src/composables/events/PluginEvent';
 import { getPlugins } from 'src/composables/PluginManager';
 import { FileInput, FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
@@ -77,7 +76,6 @@ const showParsableFiles = ref(false);
 
 let globalSaveFilesEventSubscription;
 let checkoutSubscription;
-let pluginRenderSubscription;
 let pullSubscription;
 
 /**
@@ -198,14 +196,12 @@ onMounted(() => {
   updateProjectFiles();
   globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateProjectFiles);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
-  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(renderPlugins);
   pullSubscription = GitEvent.PullEvent.subscribe(updateProjectFiles);
 });
 
 onUnmounted(() => {
   globalSaveFilesEventSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
-  pluginRenderSubscription.unsubscribe();
   pullSubscription.unsubscribe();
 });
 </script>
