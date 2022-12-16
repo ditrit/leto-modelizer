@@ -56,7 +56,7 @@ import {
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { getStatus } from 'src/composables/Project';
 import GitCommitForm from 'components/form/GitCommitForm';
-import FileEvent from 'src/composables/events/FileEvent';
+import GitEvent from 'src/composables/events/GitEvent';
 
 const props = defineProps({
   projectName: {
@@ -71,7 +71,7 @@ let dialogEventSubscription;
 
 /**
  * Set files status on valid event.
- * @param {String} key - Event type.
+ * @param {String} key - Event key.
  */
 function setFilesStatus({ key }) {
   if (key === 'GitCommit') {
@@ -85,12 +85,10 @@ function setFilesStatus({ key }) {
 }
 
 /**
- * Send event on all staged files and close dialog.
+ * Send Commit event with staged files and close GitCommit dialog.
  */
 function onSave() {
-  stagedFiles.value.forEach((file) => {
-    FileEvent.UpdateFileEvent.next(file.path);
-  });
+  GitEvent.CommitEvent.next(stagedFiles.value);
   DialogEvent.next({ type: 'close', key: 'GitCommit' });
 }
 
