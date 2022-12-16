@@ -15,15 +15,10 @@ jest.mock('src/composables/Project', () => ({
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
-  CheckoutEvent: {
-    subscribe: jest.fn(),
-  },
 }));
 
 describe('Test component: GitBranchCard', () => {
   let wrapper;
-  let checkoutSubscribe;
-  let checkoutUnsubscribe;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -32,12 +27,6 @@ describe('Test component: GitBranchCard', () => {
   }));
 
   beforeEach(() => {
-    checkoutSubscribe = jest.fn();
-    checkoutUnsubscribe = jest.fn();
-    GitEvent.CheckoutEvent.subscribe.mockImplementation(() => {
-      checkoutSubscribe();
-      return { unsubscribe: checkoutUnsubscribe };
-    });
     wrapper = shallowMount(GitBranchCard, {});
   });
 
@@ -55,16 +44,8 @@ describe('Test component: GitBranchCard', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe to CheckoutEvent', () => {
-      expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
-    });
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to Checkout', () => {
-      expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
-    });
   });
 });
