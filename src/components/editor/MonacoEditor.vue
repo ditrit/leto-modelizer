@@ -7,15 +7,19 @@
 </template>
 
 <script setup>
-import { writeProjectFile } from 'src/composables/Project';
+import {
+  writeProjectFile,
+  readProjectFile,
+} from 'src/composables/Project';
 import {
   onMounted,
   onUpdated,
+  onUnmounted,
   nextTick,
   ref,
-  watch,
 } from 'vue';
 import FileEvent from 'src/composables/events/FileEvent';
+import GitEvent from 'src/composables/events/GitEvent';
 
 const monaco = require('monaco-editor');
 
@@ -24,7 +28,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  fileInput: {
+  file: {
     type: Object,
     require: true,
   },
@@ -32,28 +36,43 @@ const props = defineProps({
 
 const container = ref(null);
 let editor;
+let checkoutSubscription;
+let addRemoteSubscription;
+let pullSubscription;
+let updateFileContentSubsciption;
 
 /**
  * Update file content on fs and emit an event.
  */
 async function updateFile() {
-  const file = { ...props.fileInput, content: editor.getValue() };
-  file.path = file.id;
+  const file = {
+    ...props.file,
+    path: props.file.id,
+    content: editor.getValue(),
+  };
+
   await writeProjectFile(props.projectName, file);
-  FileEvent.UpdateFileEvent.next(props.fileInput.id);
+  FileEvent.UpdateEditorContentEvent.next(file.id);
+}
+
+function getFileContent() {
+  return readProjectFile(props.projectName, { path: props.file.id })
+    .then((fileInput) => fileInput.content);
 }
 
 /**
  * Setup monaco editor.
  */
-function createEditor() {
+async function createEditor() {
+  // TODO : add loader
+  const value = await getFileContent();
   editor = monaco.editor.create(container.value, {
-    value: props.fileInput.content,
+    value,
     language: 'text',
   });
+
   editor.onDidChangeModelContent(updateFile);
 }
-
 /**
  * Update default editor layout size.
  * Needed when viewType is firstly set to 'model' and ModelizerTextView is hidden,
@@ -66,16 +85,30 @@ function updateEditorLayout() {
   });
 }
 
-watch(() => props.fileInput.content, () => {
-  editor.setValue(props.fileInput.content);
-});
+async function updateEditorContent() {
+  const value = await getFileContent();
+
+  editor.setValue(value);
+}
 
 onMounted(() => {
+  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateEditorContent);
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateEditorContent);
+  pullSubscription = GitEvent.PullEvent.subscribe(updateEditorContent);
+  updateFileContentSubsciption = FileEvent.UpdateFileContentEvent.subscribe(updateEditorContent);
+
   nextTick(createEditor);
 });
 
 onUpdated(() => {
   nextTick(updateEditorLayout);
+});
+
+onUnmounted(() => {
+  checkoutSubscription.unsubscribe();
+  addRemoteSubscription.unsubscribe();
+  pullSubscription.unsubscribe();
+  updateFileContentSubsciption.unsubscribe();
 });
 </script>
 
