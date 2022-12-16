@@ -2,6 +2,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import DeleteFileForm from 'src/components/form/DeleteFileForm';
 import { Notify } from 'quasar';
+import FileEvent from 'src/composables/events/FileEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -11,6 +12,12 @@ jest.mock('vue-i18n', () => ({
   useI18n: () => ({
     t: (t) => t,
   }),
+}));
+
+jest.mock('src/composables/events/FileEvent', () => ({
+  DeleteFileEvent: {
+    next: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -57,7 +64,7 @@ describe('Test component: DeleteFileForm', () => {
   });
 
   describe('Test function: onSubmit', () => {
-    it('should emit an event and a positive notification on success', async () => {
+    it('should emit "file:delete" event, emit RenderEvent and a positive notification on success', async () => {
       Notify.create = jest.fn();
       wrapper.vm.confirmDelete = true;
 
@@ -65,6 +72,7 @@ describe('Test component: DeleteFileForm', () => {
 
       expect(wrapper.vm.confirmDelete).toEqual(true);
       expect(wrapper.emitted()['file:delete']).toBeTruthy();
+      expect(FileEvent.DeleteFileEvent.next).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
     });
 
