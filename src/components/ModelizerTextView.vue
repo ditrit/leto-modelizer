@@ -13,22 +13,19 @@
       />
       <file-explorer
         class="q-px-md q-py-sm overflow-auto"
-        :nodes="nodes"
+        :fileInformations="localFileInformations"
         :project-name="projectName"
         :show-parsable-files="showParsableFiles"
       />
     </div>
 
     <q-separator vertical />
-
     <file-tabs
-      :files="fileTabArray"
-      v-model="activeFileTab"
-      @update:close-file="deleteFileTab"
+      :fileInformations="localFileInformations"
     >
       <template v-slot="{ file }">
         <monaco-editor
-          :fileInput="file"
+          :file="file"
           :project-name="projectName"
         />
       </template>
@@ -37,7 +34,6 @@
 </template>
 
 <script setup>
-import { getTree } from 'src/composables/FileExplorer';
 import MonacoEditor from 'components/editor/MonacoEditor.vue';
 import FileExplorer from 'components/FileExplorer.vue';
 import GitBranchCard from 'components/card/GitBranchCard';
@@ -46,16 +42,15 @@ import {
   onMounted,
   onUnmounted,
   ref,
-  watch,
 } from 'vue';
 import {
   getProjectFiles,
-  readProjectFile,
   writeProjectFile,
   getStatus,
 } from 'src/composables/Project';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
+import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import { getPlugins } from 'src/composables/PluginManager';
 import { FileInput, FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
@@ -67,101 +62,131 @@ const props = defineProps({
   },
 });
 
-const fileTabArray = ref([]);
-const activeFileTab = ref({ isSelected: false, id: '' });
-const nodes = ref([]);
-const selectedNode = ref({});
 const localFileInformations = ref([]);
 const showParsableFiles = ref(false);
 
 let globalSaveFilesEventSubscription;
+let updateEditorContentSubscription;
+let createFileSubscription;
+let deleteFileSubscription;
+let addRemoteSubscription;
 let checkoutSubscription;
 let pullSubscription;
+let pushSubscription;
+let addFileSubscription;
+let commitFilesSubscription;
+let viewSwitchSubscription;
 
 /**
- * Update active file tab by setting its id equal to the last element of fileTabArray,
- * otherwise null if fileTabArray is empty.
+ * Get the new status of the updated file, then update localFileInformations accordingly.
+ * @param {String} filePath - Path (id) of the updated file.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-function setLastFileActive() {
-  if (fileTabArray.value.length) {
-    activeFileTab.value = {
-      isSelected: true,
-      id: fileTabArray.value[fileTabArray.value.length - 1].id,
-    };
-  } else {
-    activeFileTab.value = { isSelected: false, id: '' };
-  }
-
-  FileEvent.SelectFileEvent.next(activeFileTab.value);
+async function updateFileStatus(filePath) {
+  const [fileStatus] = await getStatus(props.projectName, [filePath], (path) => path === filePath);
+  const index = localFileInformations.value
+    .findIndex((fileInformation) => fileInformation.path === filePath);
+  localFileInformations.value[index] = fileStatus;
 }
 
 /**
- * Close file by removing it from fileTabArray array using its id.
- * If the closed file was the current active file tab, update activeFileTab.
- * @param {String} fileId - Id of closed file.
+ * Get the status of all files, then update localFileInformations accordingly.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-function deleteFileTab(fileId) {
-  fileTabArray.value = fileTabArray.value.filter(({ id }) => id !== fileId);
-
-  if (fileId === activeFileTab.value.id) {
-    setLastFileActive();
-  }
+async function updateAllFilesStatus() {
+  const allStatus = await getStatus(props.projectName);
+  localFileInformations.value = localFileInformations.value.map(
+    (file) => allStatus.find(({ path }) => file.path === path)
+      || new FileStatus({ path: file.path }),
+  );
 }
 
 /**
- * Update project nodes and fileTabArray.
- * If the previous active file's id is not contained in fileTabArray, update activeFileTab.
- * @param {FileInformation[]} fileInformations - Array of files.
+ * Get FileInformation of all files, then update localFileInformations accordingly.
+ * Then get the status of all files, then update localFileInformations accordingly.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-function updateFileExplorer(fileInformations) {
+async function updateProjectFiles() {
+  const fileInformations = await getProjectFiles(props.projectName);
   localFileInformations.value = fileInformations;
-  const projectFilesIds = fileInformations.map((file) => file.path);
-  nodes.value = getTree(props.projectName, fileInformations);
-  fileTabArray.value = fileTabArray.value.filter(({ id }) => projectFilesIds.includes(id));
 
-  fileTabArray.value.forEach((file) => {
-    readProjectFile(props.projectName, { path: file.id })
-      .then(({ content }) => {
-        file.content = content;
-      });
-  });
+  await updateAllFilesStatus();
+}
 
-  const isActiveFileInFiles = fileTabArray.value
-    .find(({ id }) => id === activeFileTab.value.id);
+/**
+ * Get the new status of the committed files, then update localFileInformations accordingly.
+ * @param {Array} committedFiles - Array of path (id) of the committed files.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function onCommitFiles(committedFiles) {
+  const filePaths = committedFiles.map(({ path }) => path);
 
-  if (!isActiveFileInFiles) {
-    setLastFileActive();
+  const fileStatus = await getStatus(
+    props.projectName,
+    filePaths,
+    (path) => filePaths.includes(path),
+  );
+
+  localFileInformations.value = localFileInformations.value
+    .map((fileInformation) => fileStatus.find(({ path }) => path === fileInformation.path)
+      || fileInformation);
+}
+
+/**
+ * Add created file to localFileInformations and send CreateFileNode event.
+ * @param {String} name - Name of the created file.
+ * @param {Boolean} isFolder - True if the created file is a folder, otherwise false.
+ * @param {String} path - Path (id) of the created file.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function onCreateFile({ name, isFolder, path }) {
+  const parentNodePath = path.substring(0, path.lastIndexOf('/')) || props.projectName;
+
+  if (isFolder) {
+    // Make empty folder visible by the FileExplorer.
+    // TODO: Refacto when FileInformation have isFolder property.
+    localFileInformations.value.push(new FileInformation({ path: `${path}/__empty__` }));
+    FileEvent.CreateFileNodeEvent.next({ parentNodePath, node: null, isFolder });
+  } else {
+    const [fileStatus] = await getStatus(
+      props.projectName,
+      [path],
+      (filePath) => filePath === path,
+    );
+
+    localFileInformations.value.push(fileStatus);
+    FileEvent.CreateFileNodeEvent.next({
+      parentNodePath,
+      node: { id: path, label: name },
+      isFolder,
+    });
   }
 }
 
 /**
- * Get projects files and their status, then call function to make the update.
+ * Remove deleted file from localFileInformations.
+ * @param {Object} file - The deleted file.
  */
-function updateProjectFiles() {
-  return Promise.allSettled([
-    getProjectFiles(props.projectName).then((fileInformations) => {
-      updateFileExplorer(fileInformations);
-      return fileInformations;
-    }),
-    getStatus(props.projectName),
-  ]).then((allResults) => {
-    const filesStatus = allResults[1].value;
-    const fileInformations = allResults[0].value.map((file) => {
-      const statusResult = filesStatus.find(({ path }) => file.path === path);
+function onDeleteFile(file) {
+  const fileInformations = localFileInformations.value
+    .filter(({ path }) => (file.isFolder ? !path.startsWith(`${file.id}/`) : path !== file.id));
+  const parentPath = file.id.slice(0, file.id.lastIndexOf('/') + 1);
 
-      if (statusResult) {
-        return statusResult;
-      }
-      return new FileStatus({ path: file.path });
-    });
+  if (!fileInformations.some(({ path }) => path.startsWith(parentPath))) {
+    // Make empty folder visible by the FileExplorer.
+    // TODO: Refacto when FileInformation have isFolder property.
+    fileInformations.push(new FileInformation({ path: `${parentPath}__empty__` }));
+  }
 
-    updateFileExplorer(fileInformations);
-  });
+  localFileInformations.value = fileInformations;
 }
 
 /**
  * Render components and update files accordingly.
+ * @return {Promise<void>} Promise with an object containing the created files list
+ * and the updated files list on success otherwise an error.
  */
+// TODO: Remove when ModelView refacto will be done.
 async function renderPlugins() {
   const plugins = getPlugins();
   const requests = [];
@@ -172,37 +197,88 @@ async function renderPlugins() {
 
   plugins.forEach((plugin) => {
     plugin.render(config).forEach((file) => requests.push(
-      writeProjectFile(props.projectName, file).then(() => {
-        FileEvent.CreateFileEvent.next({
-          name: file.path.substring(file.path.lastIndexOf('/') + 1),
-          isFolder: false,
-          path: file.path,
-        });
-      }),
+      writeProjectFile(props.projectName, file).then(() => file),
     ));
   });
 
-  Promise.allSettled([
-    ...requests,
-    writeProjectFile(props.projectName, config),
-  ]).then(() => PluginEvent.DrawEvent.next());
+  requests.push(writeProjectFile(props.projectName, config).then(() => config));
+
+  return Promise.allSettled(requests)
+    .then((allResults) => allResults
+      .map((result) => result.value)
+      .reduce((acc, file) => {
+        if (localFileInformations.value.find(({ path }) => file.path === path)) {
+          acc.updatedFiles.push(file);
+        } else {
+          acc.createdFiles.push(file);
+        }
+
+        return acc;
+      }, { createdFiles: [], updatedFiles: [] }));
 }
 
-watch(activeFileTab, () => {
-  FileEvent.SelectFileEvent.next(activeFileTab.value);
-});
+/**
+ * On switch to 'text' view, update project files and send CreateFileNode event for each
+ * files created after calling renderPlugins. Also send UpdateFileContent event if renderPlugins
+ * returns any updated files.
+ * @param {String} newViewType - Updated view type.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function onSwitchView(newViewType) {
+  if (newViewType !== 'text') {
+    return;
+  }
+
+  const { createdFiles, updatedFiles } = await renderPlugins();
+  await updateProjectFiles();
+
+  createdFiles.forEach((file) => {
+    const parentNodePath = file.path.substring(0, file.path.lastIndexOf('/')) || props.projectName;
+
+    FileEvent.CreateFileNodeEvent.next({
+      parentNodePath,
+      node: { id: file.path, label: file.path.split('/').at(-1) },
+      isFolder: false,
+    });
+  });
+
+  if (updatedFiles.length >= 1) {
+    FileEvent.UpdateFileContentEvent.next();
+  }
+}
 
 onMounted(() => {
   updateProjectFiles();
   globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateProjectFiles);
+  createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFile);
+  deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(onDeleteFile);
+  updateEditorContentSubscription = FileEvent.UpdateEditorContentEvent
+    .subscribe(updateFileStatus);
+
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateProjectFiles);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateProjectFiles);
   pullSubscription = GitEvent.PullEvent.subscribe(updateProjectFiles);
+  pushSubscription = GitEvent.PushEvent.subscribe(updateAllFilesStatus);
+  addFileSubscription = GitEvent.AddEvent.subscribe(updateFileStatus);
+  commitFilesSubscription = GitEvent.CommitEvent.subscribe(onCommitFiles);
+
+  viewSwitchSubscription = ViewSwitchEvent.subscribe(onSwitchView);
 });
 
 onUnmounted(() => {
   globalSaveFilesEventSubscription.unsubscribe();
+  createFileSubscription.unsubscribe();
+  deleteFileSubscription.unsubscribe();
+  updateEditorContentSubscription.unsubscribe();
+
+  addRemoteSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
   pullSubscription.unsubscribe();
+  pushSubscription.unsubscribe();
+  addFileSubscription.unsubscribe();
+  commitFilesSubscription.unsubscribe();
+
+  viewSwitchSubscription.unsubscribe();
 });
 </script>
 
