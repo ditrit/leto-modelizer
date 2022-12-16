@@ -16,9 +16,6 @@ jest.mock('vue-router', () => ({
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
-  PushEvent: {
-    subscribe: jest.fn(),
-  },
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -30,8 +27,6 @@ jest.mock('src/composables/Project', () => ({
 
 describe('Test component: GitBranchMenu', () => {
   let wrapper;
-  let pushSubscribe;
-  let pushUnsubscribe;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -41,13 +36,6 @@ describe('Test component: GitBranchMenu', () => {
   }));
 
   beforeEach(() => {
-    pushSubscribe = jest.fn();
-    pushUnsubscribe = jest.fn();
-    GitEvent.PushEvent.subscribe.mockImplementation(() => {
-      pushSubscribe();
-      return { unsubscribe: pushUnsubscribe };
-    });
-
     wrapper = shallowMount(GitBranchMenu, {
       props: {
         currentBranchName: 'main',
@@ -235,64 +223,10 @@ describe('Test component: GitBranchMenu', () => {
       });
     });
 
-    describe('Test function: initBranches', () => {
-      it('should be empty without any branches', async () => {
-        getBranches.mockImplementation(() => Promise.resolve([]));
-        await wrapper.vm.initBranches();
-        expect(wrapper.vm.branches).toEqual({ local: [], remote: [] });
-      });
-
-      it('should fill local branch array with all local branches', async () => {
-        getBranches.mockImplementation(() => Promise.resolve([
-          new Branch({
-            name: 'Local',
-            onLocal: true,
-          }),
-        ]));
-        await wrapper.vm.initBranches();
-        expect(wrapper.vm.branches).toEqual({
-          local: [
-            new Branch({
-              name: 'Local',
-              onLocal: true,
-            }),
-          ],
-          remote: [],
-        });
-      });
-
-      it('should fill remote branch array with all remote branches', async () => {
-        getBranches.mockImplementation(() => Promise.resolve([
-          new Branch({
-            name: 'remote',
-            onRemote: true,
-          }),
-        ]));
-        await wrapper.vm.initBranches();
-        expect(wrapper.vm.branches).toEqual({
-          local: [],
-          remote: [
-            new Branch({
-              name: 'remote',
-              onRemote: true,
-            }),
-          ],
-        });
-      });
-    });
-
     describe('Test hook function: onMounted', () => {
-      it('should subscribe PushEvent', () => {
-        expect(pushSubscribe).toHaveBeenCalledTimes(1);
-      });
     });
 
     describe('Test hook function: onUnmounted', () => {
-      it('should unsubscribe PushEvent', () => {
-        expect(pushUnsubscribe).toHaveBeenCalledTimes(0);
-        wrapper.unmount();
-        expect(pushUnsubscribe).toHaveBeenCalledTimes(1);
-      });
     });
   });
 });

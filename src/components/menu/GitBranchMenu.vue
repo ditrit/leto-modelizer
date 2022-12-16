@@ -158,7 +158,6 @@ const showRemote = ref(false);
 const searchInput = ref(null);
 const hasNoBranches = computed(() => filteredBranches.value.local.length === 0
     && filteredBranches.value.remote.length === 0);
-let pushSubscription;
 
 /**
  * On open menu, focus on the search input and close expand menu.
@@ -208,27 +207,6 @@ function openCloseExpandMenu(local) {
     showRemote.value = !showRemote.value;
   }
 }
-/**
- * Initialize all branches (local and remote) from git.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
- */
-async function initBranches() {
-  const allBranches = await getBranches(route.params.projectName, true);
-  const local = [];
-  const remote = [];
-  allBranches.forEach((branch) => {
-    branch.isCurrentBranch = props.currentBranchName === branch.name;
-    if (branch.onLocal) {
-      local.push(branch);
-    }
-    if (branch.onRemote) {
-      remote.push(branch);
-    }
-  });
-  branches.value.local = local;
-  branches.value.remote = remote;
-  filter();
-}
 
 /**
  * Send event to open the dialog corresponding to the key and close the menu.
@@ -244,10 +222,8 @@ function openDialog(key) {
 }
 
 onMounted(() => {
-  pushSubscription = GitEvent.PushEvent.subscribe(initBranches);
   fetchGit(getProjectById(route.params.projectName));
 });
 onUnmounted(() => {
-  pushSubscription.unsubscribe();
 });
 </script>
