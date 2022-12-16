@@ -5,7 +5,6 @@ import i18nConfiguration from 'src/i18n';
 import GitCommitDialog from 'src/components/dialog/GitCommitDialog.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import FileStatus from 'src/models/git/FileStatus';
-import FileEvent from 'src/composables/events/FileEvent';
 
 installQuasarPlugin();
 const mockStagedFileStatus = new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 2 });
@@ -65,13 +64,11 @@ describe('Test component: GitCommitDialog', () => {
 
   describe('Test function: onSave', () => {
     it('should emit event for update file and close dialog', async () => {
-      FileEvent.UpdateFileEvent.next = jest.fn();
       DialogEvent.next = jest.fn();
 
       await wrapper.vm.setFilesStatus({ key: 'GitCommit' });
       await wrapper.vm.onSave();
 
-      expect(FileEvent.UpdateFileEvent.next).toBeCalledWith(mockStagedFileStatus.path);
       expect(DialogEvent.next).toBeCalledWith({ key: 'GitCommit', type: 'close' });
     });
   });

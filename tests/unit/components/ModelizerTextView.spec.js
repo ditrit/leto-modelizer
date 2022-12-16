@@ -50,13 +50,6 @@ jest.mock('src/composables/FileExplorer', () => ({
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
-  OpenFileEvent: {
-    subscribe: jest.fn(),
-    next: jest.fn(),
-  },
-  SelectNodeEvent: {
-    subscribe: jest.fn(),
-  },
   CreateFileEvent: {
     next: jest.fn(),
     subscribe: jest.fn(),
@@ -67,21 +60,14 @@ jest.mock('src/composables/events/FileEvent', () => ({
   SelectFileEvent: {
     next: jest.fn(),
   },
-  ExpandFolderEvent: {
-    next: jest.fn(),
-  },
   GlobalSaveFilesEvent: {
-    next: jest.fn(),
-    subscribe: jest.fn(),
-  },
-  UpdateFileEvent: {
     next: jest.fn(),
     subscribe: jest.fn(),
   },
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
-  UpdateRemoteEvent: {
+  AddRemoteEvent: {
     subscribe: jest.fn(),
   },
   CheckoutEvent: {
@@ -94,10 +80,6 @@ jest.mock('src/composables/events/GitEvent', () => ({
 
 describe('Test component: ModelizerTextView', () => {
   let wrapper;
-  let openFileSubscribe;
-  let openFileUnsubscribe;
-  let selectNodeSubscribe;
-  let selectNodeUnsubscribe;
   let createFileSubscribe;
   let createFileUnsubscribe;
   let deleteFileSubscribe;
@@ -112,14 +94,8 @@ describe('Test component: ModelizerTextView', () => {
   let writeProjectFileMock;
   let globalSaveFilesEventSubscribe;
   let globalSaveFilesEventUnsubscribe;
-  let updateFileSubscribe;
-  let updateFileUnsubscribe;
 
   beforeEach(() => {
-    openFileSubscribe = jest.fn();
-    openFileUnsubscribe = jest.fn();
-    selectNodeSubscribe = jest.fn();
-    selectNodeUnsubscribe = jest.fn();
     createFileSubscribe = jest.fn();
     createFileUnsubscribe = jest.fn();
     deleteFileSubscribe = jest.fn();
@@ -133,20 +109,10 @@ describe('Test component: ModelizerTextView', () => {
     pullUnsubscribe = jest.fn();
     globalSaveFilesEventSubscribe = jest.fn();
     globalSaveFilesEventUnsubscribe = jest.fn();
-    updateFileSubscribe = jest.fn();
-    updateFileUnsubscribe = jest.fn();
 
-    GitEvent.UpdateRemoteEvent.subscribe.mockImplementation(() => {
+    GitEvent.AddRemoteEvent.subscribe.mockImplementation(() => {
       updateRemoteSubscribe();
       return { unsubscribe: updateRemoteUnsubscribe };
-    });
-    FileEvent.OpenFileEvent.subscribe.mockImplementation(() => {
-      openFileSubscribe();
-      return { unsubscribe: openFileUnsubscribe };
-    });
-    FileEvent.SelectNodeEvent.subscribe.mockImplementation(() => {
-      selectNodeSubscribe();
-      return { unsubscribe: selectNodeUnsubscribe };
     });
     FileEvent.CreateFileEvent.subscribe.mockImplementation(() => {
       createFileSubscribe();
@@ -171,10 +137,6 @@ describe('Test component: ModelizerTextView', () => {
     GitEvent.PullEvent.subscribe.mockImplementation(() => {
       pullSubscribe();
       return { unsubscribe: pullUnsubscribe };
-    });
-    FileEvent.UpdateFileEvent.subscribe.mockImplementation(() => {
-      updateFileSubscribe();
-      return { unsubscribe: updateFileUnsubscribe };
     });
 
     wrapper = shallowMount(ModelizerTextView, {
@@ -207,29 +169,6 @@ describe('Test component: ModelizerTextView', () => {
       it('should be false', () => {
         expect(wrapper.vm.showParsableFiles).toEqual(false);
       });
-    });
-  });
-
-  describe('Test function: onOpenFileEvent', () => {
-    it('should set a new value to activeFileTab', () => {
-      wrapper.vm.activeFileTab = { isSelected: false, id: '' };
-      wrapper.vm.onOpenFileEvent({ id: 'terraform/app.tf', label: 'app.tf', content: '' });
-
-      expect(wrapper.vm.activeFileTab).toEqual({ isSelected: true, id: 'terraform/app.tf' });
-    });
-
-    it('should push the new file to fileTabArray if it is not already there', () => {
-      wrapper.vm.fileTabArray = [{ id: 'terraform/app.tf', label: 'app.tf', content: '' }];
-      wrapper.vm.onOpenFileEvent({ id: 'README.md', label: 'README.md', content: '' });
-
-      expect(wrapper.vm.fileTabArray).toEqual([{ id: 'terraform/app.tf', label: 'app.tf', content: '' }, { id: 'README.md', label: 'README.md', content: '' }]);
-    });
-
-    it('should not push the new file to fileTabArray if it is already there', () => {
-      wrapper.vm.fileTabArray = [{ id: 'terraform/app.tf', label: 'app.tf', content: '' }];
-      wrapper.vm.onOpenFileEvent({ id: 'terraform/app.tf', label: 'app.tf', content: '' });
-
-      expect(wrapper.vm.fileTabArray).toEqual([{ id: 'terraform/app.tf', label: 'app.tf', content: '' }]);
     });
   });
 
@@ -424,25 +363,19 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test function: onCreateFileEvent', () => {
-    it('should update activeFileTab, send ExpandFolder and OpenFile events on File', async () => {
+    it('should update activeFileTab', async () => {
       wrapper.vm.activeFileTab = { isSelected: false, id: 'fileName' };
       wrapper.vm.selectedNode = { id: 'nodeName' };
 
       await wrapper.vm.onCreateFileEvent({ name: 'newFileName', isFolder: false, path: 'path/newFileName' });
 
       expect(wrapper.vm.activeFileTab).toEqual({ isSelected: true, id: 'terraform/app.tf' });
-      expect(FileEvent.ExpandFolderEvent.next).toBeCalled();
-      expect(FileEvent.OpenFileEvent.next).toBeCalled();
     });
 
     it('should only send ExpandFolder event on Folder', async () => {
-      FileEvent.OpenFileEvent.next = jest.fn();
       wrapper.vm.selectedNode = { id: '' };
 
       await wrapper.vm.onCreateFileEvent({ name: 'nodeName', isFolder: true });
-
-      expect(FileEvent.ExpandFolderEvent.next).toBeCalled();
-      expect(FileEvent.OpenFileEvent.next).not.toBeCalled();
     });
   });
 
@@ -512,20 +445,12 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe to OpenFileEvent', () => {
-      expect(openFileSubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should subscribe to UpdateRemoteEvent', () => {
+    it('should subscribe to AddRemoteEvent', () => {
       expect(updateRemoteSubscribe).toHaveBeenCalledTimes(1);
     });
 
     it('should subscribe to CheckoutEvent', () => {
       expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should subscribe to SelectNodeEvent', () => {
-      expect(selectNodeSubscribe).toHaveBeenCalledTimes(1);
     });
 
     it('should subscribe to CreateFileEvent', () => {
@@ -539,20 +464,10 @@ describe('Test component: ModelizerTextView', () => {
     it('should subscribe to PullEvent', () => {
       expect(pullSubscribe).toHaveBeenCalledTimes(1);
     });
-
-    it('should subscribe to UpdateFileEvent', () => {
-      expect(updateFileSubscribe).toHaveBeenCalledTimes(1);
-    });
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to OpenFileEvent', () => {
-      expect(openFileUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(openFileUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to UpdateRemoteEvent', () => {
+    it('should unsubscribe to AddRemoteEvent', () => {
       expect(updateRemoteUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(updateRemoteUnsubscribe).toHaveBeenCalledTimes(1);
@@ -562,12 +477,6 @@ describe('Test component: ModelizerTextView', () => {
       expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to SelectNodeEvent', () => {
-      expect(selectNodeUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(selectNodeUnsubscribe).toHaveBeenCalledTimes(1);
     });
 
     it('should unsubscribe to CreateFileEvent', () => {
@@ -586,12 +495,6 @@ describe('Test component: ModelizerTextView', () => {
       expect(pullUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(pullUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to UpdateFileEvent', () => {
-      expect(updateFileUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(updateFileUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });
