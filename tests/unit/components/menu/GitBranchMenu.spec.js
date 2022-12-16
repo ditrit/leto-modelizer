@@ -16,9 +16,6 @@ jest.mock('vue-router', () => ({
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
-  CheckoutEvent: {
-    subscribe: jest.fn(),
-  },
   NewBranchEvent: {
     subscribe: jest.fn(),
   },
@@ -37,9 +34,7 @@ jest.mock('src/composables/Project', () => ({
 describe('Test component: GitBranchMenu', () => {
   let wrapper;
   let newBranchSubscribe;
-  let checkoutSubscribe;
   let newBranchUnsubscribe;
-  let checkoutUnsubscribe;
   let pushSubscribe;
   let pushUnsubscribe;
 
@@ -51,16 +46,10 @@ describe('Test component: GitBranchMenu', () => {
   }));
 
   beforeEach(() => {
-    checkoutSubscribe = jest.fn();
-    checkoutUnsubscribe = jest.fn();
     newBranchSubscribe = jest.fn();
     newBranchUnsubscribe = jest.fn();
     pushSubscribe = jest.fn();
     pushUnsubscribe = jest.fn();
-    GitEvent.CheckoutEvent.subscribe.mockImplementation(() => {
-      checkoutSubscribe();
-      return { unsubscribe: checkoutUnsubscribe };
-    });
     GitEvent.NewBranchEvent.subscribe.mockImplementation(() => {
       newBranchSubscribe();
       return { unsubscribe: newBranchUnsubscribe };
@@ -304,10 +293,6 @@ describe('Test component: GitBranchMenu', () => {
     });
 
     describe('Test hook function: onMounted', () => {
-      it('should subscribe CheckoutEvent', () => {
-        expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
-      });
-
       it('should subscribe NewBranchEvent', () => {
         expect(newBranchSubscribe).toHaveBeenCalledTimes(1);
       });
@@ -318,12 +303,6 @@ describe('Test component: GitBranchMenu', () => {
     });
 
     describe('Test hook function: onUnmounted', () => {
-      it('should unsubscribe CheckoutEvent', () => {
-        expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
-        wrapper.unmount();
-        expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
-      });
-
       it('should unsubscribe NewBranchEvent', () => {
         expect(newBranchUnsubscribe).toHaveBeenCalledTimes(0);
         wrapper.unmount();
