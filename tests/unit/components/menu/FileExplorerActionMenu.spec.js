@@ -3,6 +3,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import DialogEvent from 'src/composables/events/DialogEvent';
 import FileExplorerActionMenu from 'components/menu/FileExplorerActionMenu';
 import { Notify } from 'quasar';
+import GitEvent from 'src/composables/events/GitEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -12,6 +13,12 @@ jest.mock('vue-i18n', () => ({
   useI18n: () => ({
     t: (t) => t,
   }),
+}));
+
+jest.mock('src/composables/events/GitEvent', () => ({
+  AddEvent: {
+    next: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -214,7 +221,7 @@ describe('Test component: FileExplorerActionMenu', () => {
     });
 
     describe('Test function: addFile', () => {
-      it('should emit an event on success and a notification', async () => {
+      it('should emit AddEvent on success and a notification', async () => {
         wrapper.vm.loading.add = true;
         wrapper.vm.menu = {
           hide: jest.fn(),
@@ -224,6 +231,7 @@ describe('Test component: FileExplorerActionMenu', () => {
         await wrapper.vm.addFile({ id: 'filePath' });
 
         expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
+        expect(GitEvent.AddEvent.next).toBeCalled();
         expect(wrapper.vm.loading.add).toEqual(false);
         expect(wrapper.vm.menu.hide).toBeCalled();
       });
