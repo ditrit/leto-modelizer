@@ -158,7 +158,6 @@ const showRemote = ref(false);
 const searchInput = ref(null);
 const hasNoBranches = computed(() => filteredBranches.value.local.length === 0
     && filteredBranches.value.remote.length === 0);
-let newBranchSubscription;
 let pushSubscription;
 
 /**
@@ -245,12 +244,10 @@ function openDialog(key) {
 }
 
 onMounted(() => {
-  newBranchSubscription = GitEvent.NewBranchEvent.subscribe(initBranches);
   pushSubscription = GitEvent.PushEvent.subscribe(initBranches);
   fetchGit(getProjectById(route.params.projectName));
 });
 onUnmounted(() => {
-  newBranchSubscription.unsubscribe();
   pushSubscription.unsubscribe();
 });
 </script>
