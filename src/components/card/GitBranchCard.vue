@@ -22,12 +22,19 @@ import { getCurrentBranch } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
 import { onMounted, onUnmounted, ref } from 'vue';
 import GitEvent from 'src/composables/events/GitEvent';
+import FileEvent from 'src/composables/events/FileEvent';
 import GitBranchMenu from 'components/menu/GitBranchMenu';
 
+let addRemoteSubscription;
+let checkoutSubscription;
+let globalSaveFilesEventSubscription;
 const route = useRoute();
 const loading = ref(true);
 const currentBranch = ref('');
 
+/**
+ * Update currentBranch and handle loading.
+ */
 function updateBranch() {
   loading.value = true;
   getCurrentBranch(route.params.projectName).then((branch) => {
@@ -37,9 +44,22 @@ function updateBranch() {
   });
 }
 
+/**
+ * Set currentBranch.
+ */
+function setCurrentBranch(branch) {
+  currentBranch.value = branch;
+}
+
 onMounted(() => {
   updateBranch();
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateBranch);
+  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(setCurrentBranch);
+  globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateBranch);
 });
 onUnmounted(() => {
+  addRemoteSubscription.unsubscribe();
+  checkoutSubscription.unsubscribe();
+  globalSaveFilesEventSubscription.unsubscribe();
 });
 </script>
