@@ -6,9 +6,7 @@ import {
   FileInformation,
   FileInput,
 } from 'leto-modelizer-plugin-core';
-import GitEvent from 'src/composables/events/GitEvent';
 import Branch from 'src/models/git/Branch';
-import FileEvent from 'src/composables/events/FileEvent';
 import FileStatus from 'src/models/git/FileStatus';
 
 const fs = BrowserFS.BFSRequire('fs');
@@ -77,7 +75,7 @@ export function saveProject(project) {
  * @param {Project} project - Project to save.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export function importProject(project) {
+export async function importProject(project) {
   return git.clone({
     fs,
     http,
@@ -106,13 +104,14 @@ export function deleteProjectById(projectId) {
 }
 
 /**
- * Fetch project on git. Emit a FetchEvent on success.
+ * Fetch project on git.
+ * Warning: It seems that `git.fetch` can throw unexpected error.
  * @param {Project} project - Project to update.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function fetchGit(project) {
-  if (project.git && project.git.repository) {
-    await git.fetch({
+export async function gitFetch(project) {
+  if (project.git?.repository) {
+    return git.fetch({
       fs,
       http,
       url: project.git.repository,
@@ -124,8 +123,7 @@ export async function fetchGit(project) {
       corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
     });
   }
-
-  return GitEvent.FetchEvent.next();
+  return Promise.resolve();
 }
 
 /**
@@ -162,10 +160,12 @@ async function readDir(path) {
  * @param {String[]} files - Array of file to fill.
  * @param {String} projectId - ID of the project.
  * @param {String} filename - Path of file or directory. Null for root location.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function setFiles(files, projectId, filename) {
   const path = filename ? `${projectId}/${filename}` : projectId;
   const isDir = await isDirectory(path);
+
   if (isDir) {
     const dirFiles = await readDir(path);
 
@@ -293,11 +293,6 @@ export async function createProjectFolder(projectId, path) {
       if (error) {
         reject({ name: error.code, message: error.message });
       } else {
-        FileEvent.CreateFileEvent.next({
-          name: path.substring(path.lastIndexOf('/') + 1),
-          isFolder: true,
-          path,
-        });
         resolve();
       }
     });
@@ -333,18 +328,14 @@ export async function writeProjectFile(projectId, file) {
  * @param {Project} project - Project to update.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function updateGitProject(project) {
-  const dir = `/${project.id}`;
-
+export async function gitAddRemote(project) {
   await git.addRemote({
     fs,
-    dir,
+    dir: `/${project.id}`,
     url: project.git.repository,
     remote: 'origin',
     force: true,
   });
-
-  return fetchGit(project);
 }
 
 /**
@@ -353,13 +344,12 @@ export async function updateGitProject(project) {
  * @param {String} branch - Branch name to checkout.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function checkout(projectId, branch) {
+export async function gitCheckout(projectId, branch) {
   await git.checkout({
     fs,
     dir: `/${projectId}`,
     ref: branch,
-  });
-  return GitEvent.CheckoutEvent.next();
+  }).catch(({ name }) => Promise.reject({ name }));
 }
 
 /**
@@ -367,10 +357,9 @@ export async function checkout(projectId, branch) {
  * @param {String} projectId - Id of project.
  * @param {String} newBranchName - New branch name.
  * @param {String} branchName - Branch name.
- * @param {Boolean} haveToCheckout - Indicate if checkout on new branch has to be done.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function createBranchFrom(projectId, newBranchName, branchName, haveToCheckout) {
+export async function createBranchFrom(projectId, newBranchName, branchName) {
   await git.branch({
     fs,
     dir: `/${projectId}`,
@@ -382,12 +371,6 @@ export async function createBranchFrom(projectId, newBranchName, branchName, hav
     }
     return Promise.reject({ name, message });
   });
-
-  GitEvent.NewBranchEvent.next();
-
-  if (haveToCheckout) {
-    await checkout(projectId, newBranchName);
-  }
 }
 
 /**
@@ -430,7 +413,6 @@ export async function gitUpdate(project, branchName, fastForward) {
     },
     corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
   });
-  return GitEvent.PullEvent.next();
 }
 
 /**
@@ -464,69 +446,35 @@ export async function rm(path) {
 /**
  * Delete project file or folder.
  * @param {String} projectId - Id of project.
- * @param {String} file - File path to delete.
- * @param {Boolean} isFolder - Indicates if it is a folder.
+ * @param {String} filePath - File path to delete.
+ * @param {Boolean} deleteParentFolder - Indicates if the parent folder should be deleted.
+ * Otherwise create a fake file so that the file explorer will continue to display it.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function deleteProjectFile(projectId, file, isFolder) {
-  /* eslint-disable no-await-in-loop */
-  /* eslint-disable no-restricted-syntax */
-  // TODO: to remove when BrowserFs permit to force remove folder not empty.
-  const foldersToDelete = [];
+export async function deleteProjectFile(projectId, filePath, deleteParentFolder) {
+  const isFolder = await isDirectory(`${projectId}/${filePath}`);
 
   if (isFolder) {
-    foldersToDelete.push(file);
+    const dirFiles = await readDir(`${projectId}/${filePath}`);
+
+    if (dirFiles.length > 0) {
+      await Promise.allSettled(dirFiles.map((fileName) => deleteProjectFile(projectId, `${filePath}/${fileName}`, true)));
+    }
+    await rmDir(`${projectId}/${filePath}`);
+  } else {
+    await rm(`${projectId}/${filePath}`);
   }
 
-  const files = (await getProjectFiles(projectId))
-    .filter(({ path }) => {
-      if (isFolder) {
-        return path.indexOf(`${file}/`) === 0;
-      }
-      return path === file;
-    })
-    .map(({ path }) => {
-      if (path.indexOf('__empty__') > 0) {
-        return path.replace('/__empty__', '');
-      }
-      const folderPath = path.substring(0, path.lastIndexOf('/'));
+  const index = filePath.lastIndexOf('/');
 
-      if (isFolder && path.lastIndexOf('/') > 0 && !foldersToDelete.includes(folderPath)) {
-        const folders = folderPath.replace(`${file}/`, '').split(('/'));
-        while (folders.length > 0) {
-          const folder = `${file}/${folders.join('/')}`;
+  if (index !== -1 && !deleteParentFolder) {
+    const parentPath = filePath.slice(0, index);
+    const dirFiles = await readDir(`${projectId}/${parentPath}`);
 
-          if (!foldersToDelete.includes(folder)) {
-            foldersToDelete.push(folder);
-          }
-          folders.pop();
-        }
-      }
-      return path;
-    });
-
-  foldersToDelete
-    .filter((folder) => !files.includes(folder))
-    .forEach((folder) => {
-      files.push(folder);
-    });
-
-  const filesToDelete = files
-    .map((array) => array.split('/'))
-    .sort((a, b) => (a.length < b.length ? 1 : -1));
-
-  for (const fileToDelete of filesToDelete) {
-    const absolutePath = `${projectId}/${fileToDelete.join('/')}`;
-    const isDir = await isDirectory(absolutePath);
-
-    if (isDir) {
-      await rmDir(absolutePath);
-    } else {
-      await rm(absolutePath);
+    if (dirFiles.length > 0) {
+      await writeProjectFile(projectId, { path: `${parentPath}/__empty__`, content: '' });
     }
   }
-
-  return FileEvent.DeleteFileEvent.next();
 }
 
 /**
@@ -572,7 +520,6 @@ export async function gitPush(project, branchName, force) {
     }),
     corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
   });
-  return GitEvent.PushEvent.next();
 }
 
 /**
@@ -608,8 +555,9 @@ export async function gitGlobalSave(project) {
     project.id,
     newBranch,
     currentBranch,
-    true,
   );
+
+  await gitCheckout(project.id, newBranch);
 
   const files = (await getStatus(project.id))
     .filter((file) => file.hasUnstagedChanged
@@ -630,8 +578,6 @@ export async function gitGlobalSave(project) {
     newBranch,
     true,
   );
-
-  return FileEvent.GlobalSaveFilesEvent.next();
 }
 
 /**

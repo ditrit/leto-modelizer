@@ -8,17 +8,18 @@ import {
   initProject,
   getProjectFiles,
   readProjectFile,
-  updateGitProject,
+  gitAddRemote,
   getCurrentBranch,
-  fetchGit,
+  gitFetch,
   getBranches,
-  checkout,
+  gitCheckout,
   createBranchFrom,
   gitUpdate,
   createProjectFolder,
   writeProjectFile,
   rmDir,
   rm,
+  deleteProjectFile,
   getStatus,
   gitPush,
   gitAdd,
@@ -31,9 +32,7 @@ import {
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
 import git from 'isomorphic-git';
-import GitEvent from 'src/composables/events/GitEvent';
 import FileStatus from 'src/models/git/FileStatus';
-import { GlobalSaveFilesEvent } from 'src/composables/events/FileEvent';
 
 jest.mock('isomorphic-git', () => ({
   init: jest.fn(() => Promise.resolve('init')),
@@ -41,12 +40,19 @@ jest.mock('isomorphic-git', () => ({
     onAuth();
     return Promise.resolve('clone');
   }),
-  branch: jest.fn(() => Promise.resolve('branch')),
-  addRemote: jest.fn(() => Promise.resolve('addRemote')),
-  fetch: jest.fn(({ onAuth }) => {
-    onAuth();
-    return Promise.resolve('fetch');
+  branch: jest.fn(({ ref }) => {
+    if (ref === 'error') {
+      return Promise.reject({ message: 'ERROR' });
+    }
+
+    if (ref === 'enotdir') {
+      return Promise.reject({ message: 'ENOTDIR: File is not a directory.' });
+    }
+
+    return Promise.resolve('branch');
   }),
+  addRemote: jest.fn(() => Promise.resolve('addRemote')),
+  fetch: jest.fn(),
   checkout: jest.fn(() => Promise.resolve('checkout')),
   listFiles: jest.fn(() => Promise.resolve(['/test/file.txt'])),
   listBranches: jest.fn(({ remote }) => {
@@ -72,24 +78,6 @@ jest.mock('isomorphic-git', () => ({
   log: jest.fn(() => Promise.resolve(['log'])),
 }));
 
-jest.mock('src/composables/events/GitEvent', () => ({
-  FetchEvent: {
-    next: jest.fn(() => Promise.resolve('FetchEventNext')),
-  },
-  CheckoutEvent: {
-    next: jest.fn(() => Promise.resolve('CheckoutEventNext')),
-  },
-  NewBranchEvent: {
-    next: jest.fn(() => Promise.resolve('NewBranchEventNext')),
-  },
-  PullEvent: {
-    next: jest.fn(() => Promise.resolve('PullEventNext')),
-  },
-  PushEvent: {
-    next: jest.fn(() => Promise.resolve('PushEventNext')),
-  },
-}));
-
 jest.mock('src/composables/Random', () => ({
   randomHexString: () => '00000000',
 }));
@@ -102,16 +90,26 @@ jest.mock('browserfs', () => ({
       from: jest.fn(() => 'test'),
     },
     stat: jest.fn((path, cb) => {
-      if (path === 'test' || path === 'test/parent') {
+      if (path === 'test'
+        || path === 'test/parent'
+        || path === 'test/emptyParent'
+        || path === 'test/container'
+        || path === 'test/container/parent'
+        || path === 'test/container/emptyParent') {
         return cb(null, { isDirectory: () => true });
       }
       return cb(null, { isDirectory: () => false });
     }),
     readdir: jest.fn((path, cb) => {
-      const files = ['file.txt'];
-      if (path === 'test') {
+      const files = [];
+      if (path === 'test'
+        || path === 'test/container') {
         files.push('parent');
-      } else if (path === 'test/parent') {
+        files.push('emptyParent');
+      }
+      if (path === 'test'
+        || path === 'test/parent'
+        || path === 'test/container/parent') {
         files.push('file.txt');
       }
       return cb(null, files);
@@ -134,26 +132,23 @@ jest.mock('browserfs', () => ({
   })),
 }));
 
-jest.mock('src/composables/events/FileEvent', () => ({
-  CreateFileEvent: {
-    next: jest.fn(),
-  },
-  GlobalSaveFilesEvent: {
-    next: jest.fn(),
-  },
-}));
-
 describe('Test composable: Project', () => {
   let gitAddMock;
-  let globalSaveFilesEvent;
+  let gitAddRemoteMock;
+  let gitFetchMock;
 
   beforeEach(() => {
     localStorage.clear();
     gitAddMock = jest.fn();
-    globalSaveFilesEvent = jest.fn();
+    gitAddRemoteMock = jest.fn();
+    gitFetchMock = jest.fn(({ onAuth }) => {
+      onAuth();
+      return Promise.resolve('fetch');
+    });
 
     git.add.mockImplementation(gitAddMock);
-    GlobalSaveFilesEvent.next.mockImplementation(globalSaveFilesEvent);
+    git.fetch.mockImplementation(gitFetchMock);
+    git.addRemote.mockImplementation(gitAddRemoteMock);
   });
 
   describe('Test function: createProjectTemplate', () => {
@@ -259,7 +254,7 @@ describe('Test composable: Project', () => {
     });
   });
 
-  describe('Test function: deleteProject', () => {
+  describe('Test function: deleteProjectById', () => {
     it('should delete one project', () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         foo: { id: 'foo' },
@@ -296,7 +291,7 @@ describe('Test composable: Project', () => {
     });
   });
 
-  describe('Test function: updateGitProject', () => {
+  describe('Test function: gitAddRemote', () => {
     it('should call all needed git method', async () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         test: {
@@ -308,7 +303,7 @@ describe('Test composable: Project', () => {
           },
         },
       }));
-      const result = await updateGitProject({
+      await gitAddRemote({
         id: 'test',
         git: {
           repository: 'test',
@@ -317,31 +312,28 @@ describe('Test composable: Project', () => {
         },
       });
 
-      expect(result).toEqual('FetchEventNext');
+      expect(gitAddRemoteMock).toBeCalled();
     });
   });
 
-  describe('Test function: fetchGit', () => {
-    it('should emit fetch event', async () => {
-      localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
-        test: {
-          id: 'test',
-          git: {
-            repository: 'test',
-            username: 'test',
-            token: 'test',
-          },
-        },
-      }));
-      const result = await fetchGit('test');
-      expect(result).toEqual('FetchEventNext');
+  describe('Test function: gitFetch', () => {
+    it('should not call git.fetch', async () => {
+      const result = await gitFetch({});
+      expect(gitFetchMock).not.toBeCalled();
+      expect(result).toBeUndefined();
+    });
+
+    it('should call git.fetch', async () => {
+      const result = await gitFetch({ git: { repository: 'test' } });
+      expect(gitFetchMock).toBeCalled();
+      expect(result).toEqual('fetch');
     });
   });
 
-  describe('Test function: checkout', () => {
+  describe('Test function: gitCheckout', () => {
     it('should emit checkout event', async () => {
-      const result = await checkout('projectId', 'test');
-      expect(result).toEqual('CheckoutEventNext');
+      const result = await gitCheckout('projectId', 'test').then(() => 'success');
+      expect(result).toEqual('success');
     });
   });
 
@@ -354,7 +346,7 @@ describe('Test composable: Project', () => {
 
       expect(result).toEqual([
         new FileInformation({ path: 'file.txt' }),
-        new FileInformation({ path: 'parent/file.txt' }),
+        new FileInformation({ path: 'emptyParent/__empty__' }),
         new FileInformation({ path: 'parent/file.txt' }),
       ]);
     });
@@ -407,18 +399,22 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: createBranchFrom', () => {
-    it('should not call checkout function when haveToCheckout is false', async () => {
-      git.checkout = jest.fn();
-      await createBranchFrom('test', 'branch', 'main', false);
-      expect(git.checkout).not.toBeCalled();
-      expect(GitEvent.NewBranchEvent.next).toBeCalled();
+    it('should succeed when there is no issue', async () => {
+      const result = await createBranchFrom('test', 'branch', 'main').then(() => 'success');
+
+      expect(result).toEqual('success');
     });
 
-    it('should call checkout function when haveToCheckout is true', async () => {
-      git.checkout = jest.fn();
-      await createBranchFrom('test', 'branch', 'main', true);
-      expect(git.checkout).toBeCalled();
-      expect(GitEvent.NewBranchEvent.next).toBeCalled();
+    it('should fail in case of ENOTDIR', async () => {
+      const error = await createBranchFrom('test', 'enotdir', 'main').catch(({ message }) => message);
+
+      expect(error).toEqual('ENOTDIR: File is not a directory.');
+    });
+
+    it('should fail in case of ERROR', async () => {
+      const error = await createBranchFrom('test', 'error', 'main').catch(({ message }) => message);
+
+      expect(error).toEqual('ERROR');
     });
   });
 
@@ -435,7 +431,8 @@ describe('Test composable: Project', () => {
         'branch',
         true,
       );
-      expect(GitEvent.PullEvent.next).toBeCalled();
+
+      expect(git.pull).toBeCalled();
     });
   });
 
@@ -456,6 +453,14 @@ describe('Test composable: Project', () => {
 
     it('should be an error on bad path', async () => {
       expect(await rm('error').catch((e) => e)).toBeDefined();
+    });
+  });
+
+  describe(' Test function: deleteProjectFile', () => {
+    it('should succeed', async () => {
+      const result = await deleteProjectFile('test', 'container/parent').then(() => 'success');
+
+      expect(result).toEqual('success');
     });
   });
 
@@ -483,7 +488,8 @@ describe('Test composable: Project', () => {
         'branch',
         true,
       );
-      expect(GitEvent.PushEvent.next).toBeCalled();
+
+      expect(git.push).toBeCalled();
     });
   });
 
@@ -504,13 +510,13 @@ describe('Test composable: Project', () => {
 
   describe('Test function: gitGlobalSave', () => {
     it('should emit GlobalSaveFilesEvent event', async () => {
-      await gitGlobalSave({
+      const result = await gitGlobalSave({
         git: {
           username: 'username',
           token: 'token',
         },
-      });
-      expect(globalSaveFilesEvent).toBeCalled();
+      }).then(() => 'success');
+      expect(result).toEqual('success');
     });
   });
 
