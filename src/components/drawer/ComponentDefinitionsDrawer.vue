@@ -10,6 +10,7 @@
       <q-input
         clearable
         v-model="definitionFilter"
+        data-cy="filter-plugin-definitions"
         :label="$t('page.modelizer.drawer.components.filterLabel')"
       >
         <template v-slot:prepend>
@@ -22,9 +23,15 @@
           group="components-definitions"
           header-class="text-bold"
           v-for="plugin in plugins"
+          class="plugin-definitions"
           :key="plugin.data.name"
-          :label="plugin.data.name"
+          :data-cy="`plugin-definitions-${plugin.data.name}`"
         >
+          <template v-slot:header>
+            <q-item-section data-cy="plugin-definitions-title">
+              {{ plugin.data.name }}
+            </q-item-section>
+          </template>
           <q-scroll-area
             :style="`height: calc(100vh - ${scrollAreaHeight(definitions)}px);`"
             class="sunken-area"
