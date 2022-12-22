@@ -3,6 +3,7 @@
     flat
     bordered
     class="component-definition-card"
+    :data-cy="`component-definition-${definition.type}`"
   >
     <q-item
       clickable
