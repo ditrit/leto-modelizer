@@ -3,10 +3,9 @@ ARG proxy_url
 FROM node:18.12-alpine as develop-stage
 ARG proxy_url
 WORKDIR /app
-COPY package*.json ./
+COPY . .
 RUN npm install -g npm@8.19.2
 RUN npm install
-COPY . .
 
 # Build stage
 FROM develop-stage as build-stage

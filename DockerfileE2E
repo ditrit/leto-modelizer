@@ -3,11 +3,6 @@ ARG proxy_url
 FROM node:18.12-alpine as develop-stage
 ARG proxy_url
 WORKDIR /app
-COPY package*.json ./
-RUN npm install -g npm@8.19.2
-RUN npm install
-RUN npm run plugin:install -- repository-name="leto-modelizer-plugin-test" repository-url="https://github.com/ditrit/leto-modelizer-plugin-test.git"
-RUN npm run plugin:init
 COPY . .
 
 # Build stage
