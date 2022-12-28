@@ -14,7 +14,10 @@
 
       <template v-else>
         <q-list style="min-width: 500px" dense>
-          <q-item v-if="noFiles">
+          <q-item
+            v-if="noFiles"
+            data-cy="git-status-empty-item"
+          >
             <q-item-section>
               {{ $t('page.modelizer.git.status.nothing') }}
             </q-item-section>
@@ -30,7 +33,10 @@
               :key="`staged_${file.path}`"
               v-for="file in stagedFiles"
             >
-              <q-item-section class="file-status-staged q-pl-md">
+              <q-item-section
+                class="file-status-staged q-pl-md"
+                data-cy="git-status-staged-item"
+              >
                 {{file.path}}
               </q-item-section>
             </q-item>
@@ -46,7 +52,10 @@
               :key="`modified_${file.path}`"
               v-for="file in modifiedFiles"
             >
-              <q-item-section class="file-status-modified q-pl-md">
+              <q-item-section
+                class="file-status-modified q-pl-md"
+                data-cy="git-status-modified-item"
+              >
                 {{file.path}}
               </q-item-section>
             </q-item>
@@ -62,7 +71,10 @@
               :key="`untracked_${file.path}`"
               v-for="file in untrackedFiles"
             >
-              <q-item-section class="file-status-untracked q-pl-md">
+              <q-item-section
+                class="file-status-untracked q-pl-md"
+                data-cy="git-status-untracked-item"
+              >
                 {{file.path}}
               </q-item-section>
             </q-item>
