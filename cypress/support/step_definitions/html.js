@@ -70,3 +70,15 @@ Then('I wait {int} second(s)', (time) => cy.wait(time * 1000));
 Then('I expect {string} to be disabled', (selector) => {
   cy.get(selector).should('be.disabled');
 });
+
+Then('I set active file content to {string}', (value) => {
+  cy.get('[data-cy="monaco-editor"]')
+    .click()
+    .focused()
+    .type('{ctrl}a')
+    .type(value);
+});
+
+Then('I expect active file content to contain {string}', async (value) => {
+  cy.contains('[data-cy="monaco-editor"]', value);
+});
