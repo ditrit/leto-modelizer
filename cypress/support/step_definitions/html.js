@@ -66,3 +66,7 @@ Then('I expect {string} appear {int} time(s) on screen', (templateSelector, coun
 });
 
 Then('I wait {int} second(s)', (time) => cy.wait(time * 1000));
+
+Then('I expect {string} to be disabled', (selector) => {
+  cy.get(selector).should('be.disabled');
+});

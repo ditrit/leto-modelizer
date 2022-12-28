@@ -7,7 +7,7 @@
     <q-checkbox
       v-if="isFolderWithChildren"
       v-model="confirmDelete"
-      data-cy="git-confirm-delete-checkbox"
+      data-cy="confirm-delete-checkbox"
       :label="$t('page.modelizer.fileExplorer.delete.folder.confirmDelete')"
     />
     <div class="flex row items-center justify-center">
