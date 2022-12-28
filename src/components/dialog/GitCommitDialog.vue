@@ -12,13 +12,19 @@
       </template>
       <template v-else>
         <q-list style="min-width: 500px" dense>
-          <q-item v-if="stagedFiles.length === 0">
+          <q-item
+            v-if="stagedFiles.length === 0"
+            data-cy="git-commit-empty-item"
+          >
             <q-item-section>
               {{ $t('page.modelizer.git.status.nothing') }}
             </q-item-section>
           </q-item>
           <template v-else>
-            <q-item class="text-weight-bold text-grey-7">
+            <q-item
+              class="text-weight-bold text-grey-7"
+              data-cy="git-commit-staged-item"
+            >
               <q-item-section>
                 {{ $t('page.modelizer.git.status.staged') }}
               </q-item-section>
@@ -26,6 +32,7 @@
             <q-item
               :key="`staged_${file.path}`"
               v-for="file in stagedFiles"
+              data-cy="git-commit-staged-item-file"
             >
               <q-item-section class="file-status-staged q-pl-md">
                 {{file.path}}
