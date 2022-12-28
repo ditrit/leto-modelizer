@@ -29,6 +29,7 @@
             color="primary"
             size="xs"
             :name="`${node.icon}${expanded ? '-open' : ''}`"
+            :data-cy="`file-explorer-icon-${node.label}`"
           />
           <file-name
             class="tree-node"
@@ -44,6 +45,7 @@
             class="file-explorer-buttons"
             :file="node"
             :project-name="projectName"
+            :data-cy="`file-explorer-buttons-${node.label}`"
           />
         </div>
       </div>

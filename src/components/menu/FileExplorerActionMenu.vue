@@ -2,8 +2,8 @@
   <q-menu
     ref="menu"
     @hide="emit('hide:menu')"
-    class="file-explorer-menu"
-    data-cy="file-explorer-menu"
+    class="file-explorer-action-menu"
+    data-cy="file-explorer-action-menu"
   >
     <q-list style="min-width: 150px">
       <template v-if="file.isFolder">
