@@ -30,7 +30,7 @@ Feature: Test modelizer text view: create git branch
     And I expect "[data-cy=\"git-current-branch\"] " is "test-new-branch"
 
 
-  Scenario: Scenario: Create new branch action without checkout option should create a new branch and not checkout on it
+  Scenario: Create new branch action without checkout option should create a new branch and not checkout on it
     When I click on "[data-cy=\"git-current-branch\"]"
     And I click on "[data-cy=\"git-menu-new-branch\"]"
     And I click on "[data-cy=\"git-checkout-checkbox\"]"
