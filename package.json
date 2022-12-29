@@ -37,7 +37,7 @@
     "@babel/core": "^7.20.12",
     "@babel/eslint-parser": "^7.19.1",
     "@babel/preset-env": "^7.20.2",
-    "@badeball/cypress-cucumber-preprocessor": "^15.0.0",
+    "@badeball/cypress-cucumber-preprocessor": "^15.1.0",
     "@cypress/browserify-preprocessor": "^3.0.2",
     "@quasar/app-webpack": "^3.6.2",
     "@quasar/quasar-app-extension-testing": "^2.0.6",
