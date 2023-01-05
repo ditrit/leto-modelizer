@@ -21,7 +21,7 @@
           v-show="viewType === 'text'"
           :project-name="projectName"
         />
-        <git-configuration-dialog :project-name="projectName"/>
+        <git-settings-dialog :project-name="projectName"/>
         <git-new-branch-dialog :project-name="projectName"/>
         <git-update-dialog :project-name="projectName"/>
         <create-file-dialog :project-name="projectName"/>
@@ -46,7 +46,7 @@ import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar';
 import ModelizerModelView from 'src/components/ModelizerModelView';
 import ModelizerTextView from 'src/components/ModelizerTextView';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
-import GitConfigurationDialog from 'components/dialog/GitConfigurationDialog';
+import GitSettingsDialog from 'components/dialog/GitSettingsDialog';
 import GitNewBranchDialog from 'components/dialog/GitNewBranchDialog';
 import GitUpdateDialog from 'components/dialog/GitUpdateDialog';
 import CreateFileDialog from 'components/dialog/CreateFileDialog';

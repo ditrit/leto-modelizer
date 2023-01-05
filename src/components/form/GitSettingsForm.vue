@@ -1,7 +1,7 @@
 <template>
   <q-form
     @submit="onSubmit"
-    data-cy="git-form"
+    data-cy="git-settings-form"
     class="q-gutter-md git-form">
     <q-input
       filled

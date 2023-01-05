@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import GitForm from 'src/components/form/GitForm.vue';
+import GitSettingsForm from 'src/components/form/GitSettingsForm.vue';
 import {
   getProjectById,
   saveProject,
@@ -48,14 +48,14 @@ jest.mock('src/composables/Project', () => ({
   }),
 }));
 
-describe('Test component: GitForm', () => {
+describe('Test component: GitSettingsForm', () => {
   let wrapper;
   const emit = jest.fn();
 
   GitEvent.UpdateRemoteEvent.next.mockImplementation(() => emit());
 
   beforeEach(() => {
-    wrapper = shallowMount(GitForm, {
+    wrapper = shallowMount(GitSettingsForm, {
       props: {
         projectName: 'test',
       },
@@ -71,7 +71,7 @@ describe('Test component: GitForm', () => {
 
     describe('Test variable: repository', () => {
       it('should be undefined without any git configuration in project', () => {
-        wrapper = shallowMount(GitForm, {
+        wrapper = shallowMount(GitSettingsForm, {
           props: {
             projectName: 'noGit',
           },
@@ -86,7 +86,7 @@ describe('Test component: GitForm', () => {
 
     describe('Test variable: token', () => {
       it('should be undefined without any git configuration in project', () => {
-        wrapper = shallowMount(GitForm, {
+        wrapper = shallowMount(GitSettingsForm, {
           props: {
             projectName: 'noGit',
           },
@@ -101,7 +101,7 @@ describe('Test component: GitForm', () => {
 
     describe('Test variable: username', () => {
       it('should be undefined without any git configuration in project', () => {
-        wrapper = shallowMount(GitForm, {
+        wrapper = shallowMount(GitSettingsForm, {
           props: {
             projectName: 'noGit',
           },
@@ -135,7 +135,7 @@ describe('Test component: GitForm', () => {
     });
 
     it('should emit a notification on error', async () => {
-      wrapper = shallowMount(GitForm, {
+      wrapper = shallowMount(GitSettingsForm, {
         props: {
           projectName: 'error',
         },

@@ -1,11 +1,17 @@
 <template>
-  <default-dialog dialog-key="GitProvider" data-cy="git-settings-dialog">
+  <default-dialog
+    dialog-key="GitProvider"
+    data-cy="git-settings-dialog"
+  >
     <template v-slot:title>
-      <q-icon color="primary" name="fa-brands fa-git-alt" />
+      <q-icon
+        color="primary"
+        name="fa-brands fa-git-alt"
+      />
       {{ $t('page.modelizer.settings.gitProvider.title') }}
     </template>
     <template v-slot:default>
-      <git-form
+      <git-settings-form
           :project-name="projectName"
           @project-git:save="DialogEvent.next({ type: 'close', key: 'GitProvider' })"/>
     </template>
@@ -15,9 +21,12 @@
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
 import DefaultDialog from 'components/dialog/DefaultDialog';
-import GitForm from 'components/form/GitForm';
+import GitSettingsForm from 'components/form/GitSettingsForm';
 
 defineProps({
-  projectName: String,
+  projectName: {
+    type: String,
+    required: true,
+  },
 });
 </script>
