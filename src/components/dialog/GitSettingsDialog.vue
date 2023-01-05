@@ -1,7 +1,13 @@
 <template>
-  <default-dialog dialog-key="GitProvider" data-cy="git-settings-dialog">
+  <default-dialog
+    dialog-key="GitProvider"
+    data-cy="git-settings-dialog"
+  >
     <template v-slot:title>
-      <q-icon color="primary" name="fa-brands fa-git-alt" />
+      <q-icon
+        color="primary"
+        name="fa-brands fa-git-alt"
+      />
       {{ $t('page.modelizer.settings.gitProvider.title') }}
     </template>
     <template v-slot:default>
@@ -18,6 +24,9 @@ import DefaultDialog from 'components/dialog/DefaultDialog';
 import GitSettingsForm from 'components/form/GitSettingsForm';
 
 defineProps({
-  projectName: String,
+  projectName: {
+    type: String,
+    required: true,
+  },
 });
 </script>
