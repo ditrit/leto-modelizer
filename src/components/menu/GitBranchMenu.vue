@@ -18,7 +18,7 @@
           <q-icon name="fa-solid fa-magnifying-glass" />
         </template>
       </q-input>
-      <q-item clickable @click="openGitStatusDialog">
+      <q-item clickable @click="openDialog('GitStatus')">
         <q-item-section avatar>
           <q-icon
             color="primary"
@@ -28,7 +28,7 @@
         </q-item-section>
         <q-item-section>{{ $t('actions.git.status') }}</q-item-section>
       </q-item>
-      <q-item clickable @click="openGitCommitDialog">
+      <q-item clickable @click="openDialog('GitCommit')">
         <q-item-section avatar>
           <q-icon
             color="primary"
@@ -38,7 +38,7 @@
         </q-item-section>
         <q-item-section>{{ $t('actions.git.commit') }}</q-item-section>
       </q-item>
-      <q-item clickable @click="newBranch">
+      <q-item clickable @click="openDialog('GitNewBranch')">
         <q-item-section avatar>
           <q-icon
             color="primary"
@@ -49,7 +49,7 @@
         <q-item-section>{{ $t('actions.git.newBranch') }}</q-item-section>
       </q-item>
 
-      <q-item clickable @click="openLog">
+      <q-item clickable @click="openDialog('GitLog')">
         <q-item-section avatar>
           <q-icon
             color="primary"
@@ -234,47 +234,16 @@ async function initBranches() {
 }
 
 /**
- * Send event to open the GitNewBranchDialog.
+ * Send event to open the dialog corresponding to the key and close the menu.
+ * @param {String} key - Event key.
  */
-function newBranch() {
+function openDialog(key) {
   DialogEvent.next({
     type: 'open',
-    key: 'GitNewBranch',
-    branch: props.currentBranchName,
-  });
-}
-
-/**
- * Send event to open the GitStatusDialog.
- */
-function openGitStatusDialog() {
-  menu.value.hide();
-  DialogEvent.next({
-    type: 'open',
-    key: 'GitStatus',
-  });
-}
-/**
- * Send event to open the GitNewBranchDialog and close the menu.
- */
-function openLog() {
-  DialogEvent.next({
-    type: 'open',
-    key: 'GitLog',
+    key,
     branch: props.currentBranchName,
   });
   menu.value.hide();
-}
-
-/**
- * Send event to open the GitCommitDialog.
- */
-function openGitCommitDialog() {
-  menu.value.hide();
-  DialogEvent.next({
-    type: 'open',
-    key: 'GitCommit',
-  });
 }
 
 onMounted(() => {

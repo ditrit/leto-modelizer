@@ -59,5 +59,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add component definition filter in definitions drawer
 - Add checkbox to filter tree and display only parsable files in ModelizerTextView
 - Display component definitions as a grid
+- Factorize the opening of git dialogs inside GitBranchMenu
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased

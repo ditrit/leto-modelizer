@@ -85,9 +85,6 @@ describe('Test component: GitBranchMenu', () => {
       props: {
         currentBranchName: 'main',
       },
-      mocks: {
-        DialogEvent,
-      },
       global: {
         plugins: [
           createI18n({ locale: 'en-US', messages: i18nConfiguration }),
@@ -129,44 +126,15 @@ describe('Test component: GitBranchMenu', () => {
   });
 
   describe('Test functions', () => {
-    describe('Test function: newBranch', () => {
-      it('should call dialog event', () => {
-        DialogEvent.next = jest.fn();
-        wrapper.vm.newBranch();
-        expect(DialogEvent.next).toBeCalled();
-      });
-    });
-
-    describe('Test function: openGitStatusDialog', () => {
-      it('should call dialog event', () => {
-        DialogEvent.next = jest.fn();
-        wrapper.vm.openGitStatusDialog();
-        expect(DialogEvent.next).toBeCalled();
-      });
-    });
-
-    describe('Test function: openGitCommitDialog', () => {
-      it('should call dialog event and hide menu', () => {
+    describe('Test function: openDialog', () => {
+      it('should call dialog event with the given key and hide menu', () => {
         DialogEvent.next = jest.fn();
         wrapper.vm.menu = {
           hide: jest.fn(),
         };
 
-        wrapper.vm.openGitCommitDialog();
-        expect(DialogEvent.next).toBeCalled();
-        expect(wrapper.vm.menu.hide).toBeCalled();
-      });
-    });
-
-    describe('Test function: openLog', () => {
-      it('should call dialog event and hide menu', () => {
-        DialogEvent.next = jest.fn();
-        wrapper.vm.menu = {
-          hide: jest.fn(),
-        };
-
-        wrapper.vm.openLog();
-        expect(DialogEvent.next).toBeCalled();
+        wrapper.vm.openDialog('GitStatus');
+        expect(DialogEvent.next).toHaveBeenCalledWith(({ key: 'GitStatus', branch: 'main', type: 'open' }));
         expect(wrapper.vm.menu.hide).toBeCalled();
       });
     });
