@@ -5,7 +5,7 @@
       {{ $t('page.modelizer.settings.gitProvider.title') }}
     </template>
     <template v-slot:default>
-      <git-form
+      <git-settings-form
           :project-name="projectName"
           @project-git:save="DialogEvent.next({ type: 'close', key: 'GitProvider' })"/>
     </template>
@@ -15,7 +15,7 @@
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
 import DefaultDialog from 'components/dialog/DefaultDialog';
-import GitForm from 'components/form/GitForm';
+import GitSettingsForm from 'components/form/GitSettingsForm';
 
 defineProps({
   projectName: String,
