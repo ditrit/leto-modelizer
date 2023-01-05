@@ -50,7 +50,8 @@ Feature: Test modelizer text view: filter git branch
     Then I expect "[data-cy=\"git-newBranch-form\"]" is closed
     And I expect "positive" toast to appear with text "Branch is created 🥳!"
 
-    When I scroll to "bottom" into "[data-cy=\"git-branch-menu\"]"
+    When I click on "[data-cy=\"git-current-branch\"]"
+    And I scroll to "bottom" into "[data-cy=\"git-branch-menu\"]"
     Then I expect "[data-cy=\"git-current-branch\"] " is "testNewBranch"
     And I expect "[data-cy=\"git-menu-branch-local-main\"]" exists
     And I expect "[data-cy=\"git-menu-branch-local-testNewBranch\"]" exists
