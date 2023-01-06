@@ -1,8 +1,9 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-page-container>
+  <!-- <q-layout view="lHh Lpr lFf"> -->
+  <q-layout view="hHh LpR lfr">
+    <!-- <q-page-container> -->
       <router-view />
-    </q-page-container>
+    <!-- </q-page-container> -->
   </q-layout>
 </template>
 

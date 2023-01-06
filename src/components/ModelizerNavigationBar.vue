@@ -143,9 +143,9 @@ watch(() => props.viewType, (newViewType) => {
 </script>
 
 <style lang="scss" scoped>
-.q-header {
-  position: relative;
-}
+// .q-header {
+//   position: relative;
+// }
 .app-logo-link {
   text-decoration: none;
 

@@ -1,5 +1,5 @@
 <template>
-  <div
+  <!-- <div
     class="modelizer-text-view row"
     data-cy="modelizer-text-view"
   >
@@ -33,14 +33,30 @@
         />
       </template>
     </file-tabs>
-  </div>
+  </div> -->
+  <q-page-container>
+    <q-page>
+      <file-tabs
+        :files="fileTabArray"
+        v-model="activeFileTab"
+        @update:close-file="deleteFileTab"
+      >
+        <template v-slot="{ file }">
+          <monaco-editor
+            :fileInput="file"
+            :project-name="projectName"
+          />
+        </template>
+      </file-tabs>
+    </q-page>
+  </q-page-container>
 </template>
 
 <script setup>
 import { getTree } from 'src/composables/FileExplorer';
 import MonacoEditor from 'components/editor/MonacoEditor.vue';
-import FileExplorer from 'components/FileExplorer.vue';
-import GitBranchCard from 'components/card/GitBranchCard';
+// import FileExplorer from 'components/FileExplorer.vue';
+// import GitBranchCard from 'components/card/GitBranchCard';
 import FileTabs from 'components/tab/FileTabs.vue';
 import {
   onMounted,
@@ -73,7 +89,7 @@ const activeFileTab = ref({ isSelected: false, id: '' });
 const nodes = ref([]);
 const selectedNode = ref({});
 const localFileInformations = ref([]);
-const showParsableFiles = ref(false);
+// const showParsableFiles = ref(false);
 
 let globalSaveFilesEventSubscription;
 let openFileSubscription;

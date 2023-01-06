@@ -1,5 +1,5 @@
 <template>
-  <q-layout
+  <!-- <q-layout
     view="lhh lpr lff"
     class="modelizer-model-view"
     data-cy="modelizer-model-view"
@@ -13,20 +13,31 @@
       </q-page>
     </q-page-container>
     <component-detail-panel />
-  </q-layout>
+  </q-layout> -->
+  <!-- <component-definitions-drawer
+    :plugins="data.plugins"
+  /> -->
+  <q-page-container>
+    <q-page>
+      <div id='root' data-cy="modelizer-model-view-draw-root"></div>
+      <!-- <svg id='root' data-cy="modelizer-model-view-draw-root"></svg> -->
+    </q-page>
+  </q-page-container>
+  <!-- <component-detail-panel /> -->
 </template>
 
 <script setup>
 import {
   onMounted,
   onUnmounted,
-  reactive,
+  // reactive,
+  watch,
 } from 'vue';
-import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer';
-import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
-import {
-  getPlugins,
-} from 'src/composables/PluginManager';
+// import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer';
+// import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
+// import {
+//   getPlugins,
+// } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getProjectFiles, readProjectFile } from 'src/composables/Project';
 import { FileInformation } from 'leto-modelizer-plugin-core';
@@ -41,11 +52,15 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  plugins: {
+    type: Array,
+    required: true,
+  },
 });
 
-const data = reactive({
-  plugins: [],
-});
+// const data = reactive({
+//   plugins: [],
+// });
 
 /**
  * Get array of FileInput from array of FileInformation if parsable by plugin.
@@ -87,7 +102,8 @@ async function drawComponents(plugin) {
  * @param {String} event.id - Id of the component to remove
  */
 function deletePluginComponentAndRedraw(event) {
-  data.plugins.forEach((plugin) => {
+  // data.plugins.forEach((plugin) => {
+  props.plugins.forEach((plugin) => {
     plugin.data.removeComponentById(event.id);
     plugin.draw('root');
   });
@@ -97,12 +113,17 @@ function deletePluginComponentAndRedraw(event) {
  * Update plugins array
  */
 function updatePlugins() {
-  data.plugins = getPlugins();
-  data.plugins.forEach((plugin) => drawComponents(plugin));
+  // data.plugins = getPlugins();
+  // data.plugins.forEach((plugin) => drawComponents(plugin));
+  props.plugins.forEach((plugin) => drawComponents(plugin));
 }
 
+watch(() => props.plugins, () => {
+  props.plugins.forEach((plugin) => drawComponents(plugin));
+});
+
 onMounted(() => {
-  updatePlugins();
+  // updatePlugins();
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePlugins);
   pluginDeleteSubscription = PluginEvent.DeleteEvent.subscribe(deletePluginComponentAndRedraw);
   pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePlugins);
@@ -124,7 +145,7 @@ onUnmounted(() => {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+    /* margin-top: 60px; FOR SVG INSTEAD OF DIV */
   }
 
   #viewport {
@@ -138,7 +159,7 @@ onUnmounted(() => {
 <style scoped>
   #root {
     height: 100vh;
-    width: 100%;
+    /* width: 100%; */
   }
 </style>
 
