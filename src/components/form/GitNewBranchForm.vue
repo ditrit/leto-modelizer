@@ -38,9 +38,14 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { notEmpty, isUniqueBranchName } from 'src/composables/QuasarFieldRule';
-import { getBranches, createBranchFrom } from 'src/composables/Project';
+import {
+  getBranches,
+  createBranchFrom,
+  gitCheckout,
+} from 'src/composables/Project';
 import { useI18n } from 'vue-i18n';
 import { Notify } from 'quasar';
+import GitEvent from 'src/composables/events/GitEvent';
 
 const emit = defineEmits(['git-branch:create']);
 
@@ -68,8 +73,15 @@ const branches = ref([]);
 function onSubmit() {
   submitting.value = true;
   return createBranchFrom(props.projectName, newBranch.value, props.branchName, checkout.value)
-    .then(() => {
+    .then(async () => {
       emit('git-branch:create');
+      GitEvent.NewBranchEvent.next();
+
+      if (checkout.value) {
+        await gitCheckout(props.projectName, newBranch.value);
+        GitEvent.CheckoutEvent.next(newBranch.value);
+      }
+
       Notify.create({
         type: 'positive',
         message: t('actions.git.branch.create'),

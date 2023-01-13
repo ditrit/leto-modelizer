@@ -19,3 +19,8 @@ When('I scroll to {string} into {string}', (position, templateSelector) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   cy.get(selector).scrollTo(position);
 });
+
+When('I hover {string} to make it visible', (templateSelector) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+  cy.get(selector).should('be.hidden').invoke('show');
+});

@@ -259,12 +259,6 @@ describe('Test class: FileStatus', () => {
         expect(fileStatus.status).toEqual('file-status-modified');
       });
 
-      it('should return unstaged status on unstaged file', () => {
-        const fileStatus = new FileStatus({ headStatus: 1, workdirStatus: 0, stageStatus: 1 });
-
-        expect(fileStatus.status).toEqual('file-status-unstaged');
-      });
-
       it('should return untracked status on untracked file', () => {
         const fileStatus = new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 0 });
 

@@ -2,22 +2,24 @@ Feature: Test modelizer text view: open file
 
   Background:
     Given I clear cache
-    And I set context field "repository_url" with "https://github.com/ditrit/leto-modelizer-project-test"
-    And I set context field "projectName" with "leto-modelizer-project-test"
-    And I visit the "/"
+    And  I set context field "repository_url" with "https://github.com/ditrit/leto-modelizer-project-test"
+    And  I set context field "projectName" with "leto-modelizer-project-test"
+    And  I visit the "/"
 
     When I click on "[data-cy=\"import-project\"]"
-    And I set on "[data-cy=\"import-project-form\"] [data-cy=\"git-repository-input\"]" text "{{ repository_url }}"
-    And I set on "[data-cy=\"import-project-form\"] [data-cy=\"git-username-input\"]" text "test"
-    And I set on "[data-cy=\"import-project-form\"] [data-cy=\"git-token-input\"]" text "test"
-    And I click on "[data-cy=\"import-project-form\"] [data-cy=\"import-project-form-submit\"]"
+    And  I set on "[data-cy=\"import-project-form\"] [data-cy=\"git-repository-input\"]" text "{{ repository_url }}"
+    And  I set on "[data-cy=\"import-project-form\"] [data-cy=\"git-username-input\"]" text "test"
+    And  I set on "[data-cy=\"import-project-form\"] [data-cy=\"git-token-input\"]" text "test"
+    And  I click on "[data-cy=\"import-project-form\"] [data-cy=\"import-project-form-submit\"]"
     Then I expect "positive" toast to appear with text "Project has been imported 🥳!"
-    And I expect "[data-cy=\"import-project-form\"]" is closed
-    And I expect current url is "modelizer/{{ projectName }}/model"
-    And I expect "[data-cy=\"project-name\"]" is "{{ projectName }}"
-    And I visit the "/#/modelizer/{{projectName}}/text"
-    And I expect "[data-cy=\"file-explorer\"] [data-cy=\"file-tab-label-{{ projectName }}\"]" exists
-    And I click on "[data-cy=\"file-explorer\"] [data-cy=\"file-tab-label-{{ projectName }}\"]"
+    And  I expect "[data-cy=\"import-project-form\"]" is closed
+    And  I expect current url is "modelizer/{{ projectName }}/model"
+    And  I expect "[data-cy=\"project-name\"]" is "{{ projectName }}"
+
+    When I visit the "/#/modelizer/{{projectName}}/text"
+    Then I expect "[data-cy=\"file-explorer\"] [data-cy=\"file-label-{{ projectName }}\"]" exists
+    And  I wait 2 seconds
+    And  I click on "[data-cy=\"file-explorer\"] [data-cy=\"file-label-{{ projectName }}\"]"
 
   Scenario: Double click on a file should open a tab
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
@@ -25,7 +27,7 @@ Feature: Test modelizer text view: open file
     And  I expect "[data-cy=\"monaco-editor\"]" exists
     And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
-    And  I expect "[data-cy=\"file-tab-label-README.md\"]" is "README.md"
+    And  I expect "[data-cy=\"file-label-README.md\"]" is "README.md"
 
   Scenario: Open a file and click to close the active tab should display nothing on the file tabs
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
@@ -39,7 +41,7 @@ Feature: Test modelizer text view: open file
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" not exists
     And  I expect "[data-cy=\"monaco-editor\"]" not exists
 
-  Scenario: Open two files then click on the inactive file and tab should switch the active tab
+  Scenario: Open two files then click on the inactive tab, it should switch and become active tab
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
     Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
@@ -49,11 +51,31 @@ Feature: Test modelizer text view: open file
     And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "README.md"
-    And  I expect "[data-cy=\"file-tab-label-branch.txt\"]" is "branch.txt"
+    And  I expect "[data-cy=\"file-label-branch.txt\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
 
     When I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]"
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "branch.txt"
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" not exists
+
+  Scenario: Open two files then click on the inactive file, its corresponding tab should switch and become active tab
+    When I double click on "[data-cy=\"file-explorer-README.md\"]"
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
+    And  I expect "[data-cy=\"file-tab-content-README.md\"]" exists
+
+    When I double click on "[data-cy=\"file-explorer-branch.txt\"]"
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "README.md"
+    And  I expect "[data-cy=\"file-label-branch.txt\"]" is "branch.txt"
+    And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
+    And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
+
+    When I double click on "[data-cy=\"file-explorer-README.md\"]"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
@@ -65,7 +87,7 @@ Feature: Test modelizer text view: open file
     Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "README.md"
-    And  I expect "[data-cy=\"file-tab-label-branch.txt\"]" is "branch.txt"
+    And  I expect "[data-cy=\"file-label-branch.txt\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "main"
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
 
@@ -125,4 +147,3 @@ Feature: Test modelizer text view: open file
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
-

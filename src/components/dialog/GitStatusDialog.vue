@@ -14,7 +14,10 @@
 
       <template v-else>
         <q-list style="min-width: 500px" dense>
-          <q-item v-if="noFiles">
+          <q-item
+            v-if="noFiles"
+            data-cy="git-status-empty-item"
+          >
             <q-item-section>
               {{ $t('page.modelizer.git.status.nothing') }}
             </q-item-section>
@@ -30,23 +33,29 @@
               :key="`staged_${file.path}`"
               v-for="file in stagedFiles"
             >
-              <q-item-section class="file-status-staged q-pl-md">
+              <q-item-section
+                class="file-status-staged q-pl-md"
+                data-cy="git-status-staged-item"
+              >
                 {{file.path}}
               </q-item-section>
             </q-item>
           </template>
 
-          <template v-if="unstagedFiles.length > 0">
+          <template v-if="modifiedFiles.length > 0">
             <q-item class="text-weight-bold text-grey-7">
               <q-item-section>
-                {{ $t('page.modelizer.git.status.unstaged') }}
+                {{ $t('page.modelizer.git.status.modified') }}
               </q-item-section>
             </q-item>
             <q-item
-              :key="`unstaged_${file.path}`"
-              v-for="file in unstagedFiles"
+              :key="`modified_${file.path}`"
+              v-for="file in modifiedFiles"
             >
-              <q-item-section class="file-status-unstaged q-pl-md">
+              <q-item-section
+                class="file-status-modified q-pl-md"
+                data-cy="git-status-modified-item"
+              >
                 {{file.path}}
               </q-item-section>
             </q-item>
@@ -62,7 +71,10 @@
               :key="`untracked_${file.path}`"
               v-for="file in untrackedFiles"
             >
-              <q-item-section class="file-status-unstaged q-pl-md">
+              <q-item-section
+                class="file-status-untracked q-pl-md"
+                data-cy="git-status-untracked-item"
+              >
                 {{file.path}}
               </q-item-section>
             </q-item>
@@ -94,10 +106,10 @@ const props = defineProps({
 const loading = ref(true);
 const filesStatus = ref([]);
 const stagedFiles = computed(() => filesStatus.value.filter((f) => f.isStaged));
-const unstagedFiles = computed(() => filesStatus.value.filter((f) => f.isUnstaged));
+const modifiedFiles = computed(() => filesStatus.value.filter((f) => f.hasUnstagedChanged));
 const untrackedFiles = computed(() => filesStatus.value.filter((f) => f.isUntracked));
 const noFiles = computed(() => stagedFiles.value.length === 0
-    && unstagedFiles.value.length === 0
+    && modifiedFiles.value.length === 0
     && untrackedFiles.value.length === 0);
 let dialogEventSubscription;
 

@@ -17,10 +17,10 @@
       <div
         :class="[
           'tree-node-container tree-node items-center',
-          {'text-bold' : selectedFile.id === node.id && !node.isFolder},
+          {'text-bold' : activeFileId === node.id && !node.isFolder},
           {'text-grey text-italic' : showParsableFiles && isFolderWithoutParsableFiles(node)},
         ]"
-        @dblclick="onNodeClicked(node)"
+        @dblclick="onNodeDoubleClicked(node)"
         :data-cy="`file-explorer-${node.label}`"
       >
         <div>
@@ -29,11 +29,12 @@
             color="primary"
             size="xs"
             :name="`${node.icon}${expanded ? '-open' : ''}`"
+            :data-cy="`file-explorer-icon-${node.label}`"
           />
           <file-name
             class="tree-node"
             :path="node.id"
-            :isActive="selectedFile.id  === node.id"
+            :isActive="activeFileId  === node.id"
             :label="node.label"
             :status="node.information?.status"
           />
@@ -44,6 +45,7 @@
             class="file-explorer-buttons"
             :file="node"
             :project-name="projectName"
+            :data-cy="`file-explorer-buttons-${node.label}`"
           />
         </div>
       </div>
@@ -53,13 +55,18 @@
 
 <script setup>
 import FileEvent from 'src/composables/events/FileEvent';
-import { ref, onMounted, onUnmounted } from 'vue';
-import { readProjectFile } from 'src/composables/Project';
+import {
+  ref,
+  watch,
+  onMounted,
+  onUnmounted,
+} from 'vue';
 import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
 import FileName from 'src/components/FileName.vue';
+import { getTree } from 'src/composables/FileExplorer';
 
 const props = defineProps({
-  nodes: {
+  fileInformations: {
     type: Array,
     required: true,
   },
@@ -74,11 +81,12 @@ const props = defineProps({
 });
 
 const fileExplorerRef = ref(null);
-const selectedFile = ref({ isSelected: false, id: '' });
+const nodes = ref([]);
+const activeFileId = ref(null);
 const filterTrigger = ref(props.showParsableFiles.toString()); // must be a String according to https://quasar.dev/vue-components/tree
 
-let selectFileSubscription;
-let expandNodeSubscription;
+let selectFileTabSubscription;
+let createFileNodeSubscription;
 
 /**
  * Filter tree nodes to only display parsable files and folders if showParsableFiles is true.
@@ -97,7 +105,7 @@ function filterParsableFiles(node) {
 }
 
 /**
- * Check if node is a sub folder containing no parsable files.
+ * Check if node is a folder containing no parsable files.
  * @param {Object} node - Current node.
  * @returns {Boolean} Result of tested conditions.
  */
@@ -106,53 +114,66 @@ function isFolderWithoutParsableFiles(node) {
 }
 
 /**
- * Expand a node by its id.
- * @param {String} nodeIdToExpand - Id of the node to expand.
+ * Expand a node by its id. If the created node is a file, update activeFileId with the file's id
+ * and send SelectFileNode event.
+ * @param {String} parentNodePath - The parent node's path of the created file node.
+ * @param {Object} node - The created file node.
+ * @param {Boolean} isFolder - True if the created file node is a folder, otherwise false.
  */
-function setExpandedNode(nodeIdToExpand) {
-  fileExplorerRef.value.setExpanded(nodeIdToExpand, true);
+function onCreateFileNode({ parentNodePath, node, isFolder }) {
+  if (fileExplorerRef.value.getNodeByKey(parentNodePath)) {
+    fileExplorerRef.value.setExpanded(parentNodePath, true);
+
+    if (!fileExplorerRef.value.isExpanded(parentNodePath)) {
+      // asynchronus behavior not explained (maybe quasar?)
+      setTimeout(() => onCreateFileNode({ parentNodePath, node, isFolder }), 1);
+      return;
+    }
+
+    if (!isFolder) {
+      activeFileId.value = node.id;
+      FileEvent.SelectFileNodeEvent.next(node);
+    }
+  }
 }
 
 /**
- * Set selectedFile equal to file param.
- * @param {Object} file - Tree file object.
- */
-function setSelectedFile(file) {
-  selectedFile.value = file;
-}
-
-/**
- * If node clicked is a file, set it as selectedFile value,
- * read file to get its content and pass it to OpenFileEvent.
+ * If node doubleclicked is a file, set activeFileId value to the file's id and
+ * send SelectFileNode event.
  * @param {Object} node - Tree node.
  * Example { icon: "fa-regular fa-file", id: "terraform/app.tf", isFolder: false, label: "app.tf" }
  */
-function onNodeClicked(node) {
+function onNodeDoubleClicked(node) {
   if (node.isFolder) {
     return;
   }
 
-  setSelectedFile({ isSelected: true, id: node.id });
-
-  readProjectFile(props.projectName, { path: node.id })
-    .then(({ content }) => {
-      FileEvent.OpenFileEvent.next({
-        id: node.id,
-        label: node.label,
-        content,
-        information: node.information,
-      });
-    });
+  activeFileId.value = node.id;
+  FileEvent.SelectFileNodeEvent.next(node);
 }
 
+/**
+ * Update file explorer tree nodes.
+ */
+function updateFileExplorer() {
+  nodes.value = getTree(props.projectName, props.fileInformations);
+}
+
+watch(() => props.fileInformations, () => {
+  updateFileExplorer();
+}, { deep: true });
+
 onMounted(() => {
-  selectFileSubscription = FileEvent.SelectFileEvent.subscribe(setSelectedFile);
-  expandNodeSubscription = FileEvent.ExpandFolderEvent.subscribe(setExpandedNode);
+  updateFileExplorer();
+  selectFileTabSubscription = FileEvent.SelectFileTabEvent.subscribe((id) => {
+    activeFileId.value = id;
+  });
+  createFileNodeSubscription = FileEvent.CreateFileNodeEvent.subscribe(onCreateFileNode);
 });
 
 onUnmounted(() => {
-  selectFileSubscription.unsubscribe();
-  expandNodeSubscription.unsubscribe();
+  selectFileTabSubscription.unsubscribe();
+  createFileNodeSubscription.unsubscribe();
 });
 </script>
 

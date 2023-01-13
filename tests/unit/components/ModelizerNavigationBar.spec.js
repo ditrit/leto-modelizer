@@ -3,6 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar.vue';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import FileEvent from 'src/composables/events/FileEvent';
 import { Notify } from 'quasar';
 import { gitGlobalSave } from 'src/composables/Project';
 
@@ -21,10 +22,13 @@ jest.mock('src/composables/events/ViewSwitchEvent', () => ({
 }));
 
 jest.mock('src/composables/events/PluginEvent', () => ({
-  RenderEvent: {
+  ParseEvent: {
     next: jest.fn(),
   },
-  ParseEvent: {
+}));
+
+jest.mock('src/composables/events/FileEvent', () => ({
+  GlobalSaveFilesEvent: {
     next: jest.fn(),
   },
 }));
@@ -42,12 +46,12 @@ jest.mock('src/composables/Project', () => ({
 describe('Test component: ModelizerNavigationBar', () => {
   let wrapper;
   const emit = jest.fn();
-  const renderEvent = jest.fn();
   const parseEvent = jest.fn();
+  const globalSaveFilesEvent = jest.fn();
 
   ViewSwitchEvent.next.mockImplementation(() => emit());
-  PluginEvent.RenderEvent.next.mockImplementation(renderEvent);
   PluginEvent.ParseEvent.next.mockImplementation(parseEvent);
+  FileEvent.GlobalSaveFilesEvent.next.mockImplementation(globalSaveFilesEvent);
   gitGlobalSave.mockImplementation(
     (project) => (project.git ? Promise.resolve() : Promise.reject()),
   );
@@ -70,13 +74,13 @@ describe('Test component: ModelizerNavigationBar', () => {
   });
 
   describe('Test variables initialization', () => {
-    describe('Test props: viewType', () => {
+    describe('Test prop: viewType', () => {
       it('should match "model"', () => {
         expect(wrapper.vm.props.viewType).toEqual('model');
       });
     });
 
-    describe('Test props: projectName', () => {
+    describe('Test prop: projectName', () => {
       it('should match "projectTest"', () => {
         expect(wrapper.vm.props.projectName).toEqual('projectTest');
       });
@@ -119,56 +123,50 @@ describe('Test component: ModelizerNavigationBar', () => {
     });
   });
 
-  describe('Test functions: save', () => {
-    it('should emit a positive notification on success', async () => {
-      Notify.create = jest.fn();
+  describe('Test functions', () => {
+    describe('Test function: save', () => {
+      it('should emit GlobalSaveFilesEvent and emit a positive notification on success', async () => {
+        Notify.create = jest.fn();
 
-      await wrapper.vm.save();
+        await wrapper.vm.save();
 
-      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
-    });
-
-    it('should emit a negative notification on error', async () => {
-      await wrapper.setProps({
-        viewType: 'model',
-        projectName: 'WrongProjectTest',
+        expect(globalSaveFilesEvent).toHaveBeenCalledTimes(1);
+        expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
       });
 
-      Notify.create = jest.fn();
+      it('should emit a negative notification on error', async () => {
+        await wrapper.setProps({
+          viewType: 'model',
+          projectName: 'WrongProjectTest',
+        });
 
-      await wrapper.vm.save();
+        Notify.create = jest.fn();
 
-      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
-    });
-  });
+        await wrapper.vm.save();
 
-  describe('Test functions: onViewSwitchUpdate', () => {
-    it('should not emit ViewSwitch event when newViewType is equal to props.viewType', () => {
-      expect(emit).not.toHaveBeenCalled();
-      wrapper.vm.onViewSwitchUpdate('model');
-      expect(emit).not.toHaveBeenCalled();
-    });
-
-    it('should emit ViewSwitch and RenderEvent events'
-      + 'when newViewType is not equal to props.viewType and is "text"', () => {
-      expect(emit).not.toHaveBeenCalled();
-      expect(renderEvent).not.toHaveBeenCalled();
-      wrapper.vm.onViewSwitchUpdate('text');
-      expect(emit).toHaveBeenCalledTimes(1);
-      expect(renderEvent).toHaveBeenCalledTimes(1);
-    });
-
-    it('should emit ViewSwitch and ParseEvent events'
-      + 'when newViewType is not equal to props.viewType and is "model"', async () => {
-      await wrapper.setProps({
-        viewType: 'text',
-        projectName: 'projectTest',
+        expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
       });
-      expect(emit).toHaveBeenCalledTimes(1);
-      expect(parseEvent).not.toHaveBeenCalled();
-      wrapper.vm.onViewSwitchUpdate('model');
-      expect(emit).toHaveBeenCalledTimes(2);
-      expect(parseEvent).toHaveBeenCalledTimes(1);
+    });
+
+    describe('Test function: onViewSwitchUpdate', () => {
+      it('should not emit ViewSwitch event when newViewType is equal to props.viewType', () => {
+        expect(emit).not.toHaveBeenCalled();
+        wrapper.vm.onViewSwitchUpdate('model');
+        expect(emit).not.toHaveBeenCalled();
+      });
+
+      it('should emit ViewSwitch and ParseEvent events'
+        + 'when newViewType is not equal to props.viewType and is "model"', async () => {
+        await wrapper.setProps({
+          viewType: 'text',
+          projectName: 'projectTest',
+        });
+        expect(emit).toHaveBeenCalledTimes(0);
+        expect(parseEvent).not.toHaveBeenCalled();
+        wrapper.vm.onViewSwitchUpdate('model');
+        expect(emit).toHaveBeenCalledTimes(1);
+        expect(parseEvent).toHaveBeenCalledTimes(1);
+      });
     });
   });
 

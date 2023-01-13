@@ -25,9 +25,6 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   DrawEvent: {
     next: jest.fn(),
   },
-  RenderEvent: {
-    next: jest.fn(),
-  },
 }));
 
 jest.mock('src/composables/events/ViewSwitchEvent', () => ({
@@ -94,10 +91,6 @@ describe('test component: Plugin Component Detail Panel', () => {
       expect(wrapper.vm.selectedComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
       expect(wrapper.vm.isVisible).toEqual(false);
-    });
-
-    it('should emit RenderEvent event', () => {
-      expect(PluginEvent.RenderEvent.next).toHaveBeenCalledTimes(1);
     });
   });
 

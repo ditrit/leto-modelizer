@@ -2,8 +2,8 @@
   <q-menu
     ref="menu"
     @hide="emit('hide:menu')"
-    class="file-explorer-menu"
-    data-cy="file-explorer-menu"
+    class="file-explorer-action-menu"
+    data-cy="file-explorer-action-menu"
   >
     <q-list style="min-width: 150px">
       <template v-if="file.isFolder">
@@ -81,7 +81,7 @@ import { gitAdd } from 'src/composables/Project';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import FileEvent from 'src/composables/events/FileEvent';
+import GitEvent from 'src/composables/events/GitEvent';
 
 const emit = defineEmits(['hide:menu']);
 
@@ -132,7 +132,8 @@ function deleteFile() {
 }
 
 /**
- * Add selected file and send UpdateFile event.
+ * Add selected file and send AddEvent.
+ * @param {Object} file - Selected file.
  */
 function addFile(file) {
   loading.value.add = true;
@@ -143,7 +144,7 @@ function addFile(file) {
         message: t('actions.fileExplorer.file.add'),
         html: true,
       });
-      FileEvent.UpdateFileEvent.next(file.id);
+      GitEvent.AddEvent.next(file.id);
     })
     .catch(() => {
       Notify.create({

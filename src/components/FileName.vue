@@ -1,7 +1,7 @@
 <template>
     <span
       :class="[isActive ? 'text-bold' : '', fileStatus]"
-      :data-cy="`file-tab-label-${label}`"
+      :data-cy="`file-label-${label}`"
     >
       {{ label }}
     </span>

@@ -56,19 +56,25 @@ describe('Test component: GitLogDialog', () => {
   });
 
   describe('Test functions', () => {
-    describe('Test function: setBranchName', () => {
-      it('should set branch name on valid event type', () => {
+    describe('Test function: onOpenGitLogDialog', () => {
+      it('should set branch name and set logItems to an empty array on valid event key', () => {
+        wrapper.vm.logItems = [{
+          oid: 'log',
+        }];
         expect(wrapper.vm.branchName).toBeNull();
 
-        wrapper.vm.setBranchName({ key: 'GitLog', branch: 'test' });
+        wrapper.vm.onOpenGitLogDialog({ key: 'GitLog', branch: 'test' });
         expect(wrapper.vm.branchName).toEqual('test');
+        expect(wrapper.vm.logItems).toEqual([]);
       });
 
-      it('should not set branch name on invalid event type', () => {
+      it('should not set branch name nor logItems on invalid event key', () => {
+        wrapper.vm.logItems = [{ oid: 'log' }];
         expect(wrapper.vm.branchName).toBeNull();
 
-        wrapper.vm.setBranchName({ key: 'InvalidEvent', branch: 'test' });
+        wrapper.vm.onOpenGitLogDialog({ key: 'InvalidEvent', branch: 'test' });
         expect(wrapper.vm.branchName).toBeNull();
+        expect(wrapper.vm.logItems).toEqual([{ oid: 'log' }]);
       });
     });
 

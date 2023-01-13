@@ -7,7 +7,7 @@
     <q-checkbox
       v-if="isFolderWithChildren"
       v-model="confirmDelete"
-      data-cy="git-confirm-delete-checkbox"
+      data-cy="confirm-delete-checkbox"
       :label="$t('page.modelizer.fileExplorer.delete.folder.confirmDelete')"
     />
     <div class="flex row items-center justify-center">
@@ -33,6 +33,7 @@ import { Notify } from 'quasar';
 import { deleteProjectFile } from 'src/composables/Project';
 import { useI18n } from 'vue-i18n';
 import { ref, computed } from 'vue';
+import FileEvent from 'src/composables/events/FileEvent';
 
 const emit = defineEmits(['file:delete']);
 
@@ -71,6 +72,7 @@ function onSubmit() {
   return deleteProjectFile(props.projectName, props.file.id, props.file.isFolder)
     .then(() => {
       emit('file:delete');
+      FileEvent.DeleteFileEvent.next(props.file);
       Notify.create({
         type: 'positive',
         message: t(`actions.fileExplorer.${props.file.isFolder ? 'folder' : 'file'}.delete`),

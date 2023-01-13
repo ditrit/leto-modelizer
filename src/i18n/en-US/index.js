@@ -70,6 +70,7 @@ export default {
         duplicate: 'Branch name already exists.',
       },
       cannotLockRef: 'Fatal: cannot lock reference.',
+      CheckoutConflictError: 'Update not possible due to unstaged modification(s)',
       MergeNotSupportedError: 'The remote history has been force rewritten, we haven\'t implemented yet the rebase option(<code>git pull -r</code>).<br/>Please delete and checkout once again your branch.',
     },
     fileExplorer: {
@@ -168,7 +169,7 @@ export default {
           title: 'Git status',
           nothing: 'Nothing to validate, the working copy is clean!',
           staged: 'Staged files:',
-          unstaged: 'Unstaged files:',
+          modified: 'Modified files:',
           untracked: 'Untracked files:',
         },
         commit: {
@@ -216,6 +217,7 @@ export default {
       localBranchesTitle: 'Local branches',
       remoteBranchesTitle: 'Remote branches',
       noBranches: 'Nothing to show.',
+      loading: 'Loading branches',
     },
   },
   plugin: {

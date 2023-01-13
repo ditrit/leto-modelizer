@@ -1,5 +1,8 @@
 <template>
-  <default-dialog dialog-key="GitLog" data-cy="git-log-dialog">
+  <default-dialog
+    dialog-key="GitLog"
+    data-cy="git-log-dialog"
+  >
     <template v-slot:title>
       <q-icon color="primary" name="fa-brands fa-git-alt" />
       {{ $t('page.modelizer.git.log.title') }}
@@ -11,12 +14,13 @@
           :offset="250"
           :scroll-target="scrollTargetRef"
         >
-          <q-list>
+          <q-list data-cy="git-log-list">
             <template v-for="(item) in logItems" :key="item.oid">
               <q-expansion-item
                 header-class="bg-primary text-white"
                 expand-icon-class="text-white"
                 expand-separator
+                data-cy="git-log-item"
               >
                 <template v-slot:header>
                   <q-item-section class="text-bold" color="primary" avatar>
@@ -118,13 +122,14 @@ function onLoad(index, done) {
 }
 
 /**
- * Set branch name on valid event.
- * @param {String} key - Event type.
+ * Set branch name and reset logItems on valid event.
+ * @param {String} key - Event key.
  * @param {String} branch - Branch name.
  */
-function setBranchName({ key, branch }) {
+function onOpenGitLogDialog({ key, branch }) {
   if (key === 'GitLog') {
     branchName.value = branch;
+    logItems.value = [];
   }
 }
 
@@ -142,7 +147,7 @@ function truncateCommitMessage(message) {
 }
 
 onMounted(() => {
-  dialogEventSubscription = DialogEvent.subscribe(setBranchName);
+  dialogEventSubscription = DialogEvent.subscribe(onOpenGitLogDialog);
 });
 onUnmounted(() => {
   dialogEventSubscription.unsubscribe();

@@ -4,13 +4,13 @@ import GitSettingsForm from 'src/components/form/GitSettingsForm.vue';
 import {
   getProjectById,
   saveProject,
-  updateGitProject,
+  gitAddRemote,
 } from 'src/composables/Project';
 import { Notify } from 'quasar';
 import GitEvent from 'src/composables/events/GitEvent';
 
 jest.mock('src/composables/events/GitEvent', () => ({
-  UpdateRemoteEvent: {
+  AddRemoteEvent: {
     next: jest.fn(),
   },
 }));
@@ -40,7 +40,7 @@ jest.mock('src/composables/Project', () => ({
     };
   }),
   saveProject: jest.fn(),
-  updateGitProject: jest.fn((project) => {
+  gitAddRemote: jest.fn((project) => {
     if (project.id === 'error') {
       return Promise.reject({ name: 'HttpError' });
     }
@@ -52,7 +52,7 @@ describe('Test component: GitSettingsForm', () => {
   let wrapper;
   const emit = jest.fn();
 
-  GitEvent.UpdateRemoteEvent.next.mockImplementation(() => emit());
+  GitEvent.AddRemoteEvent.next.mockImplementation(() => emit());
 
   beforeEach(() => {
     wrapper = shallowMount(GitSettingsForm, {
@@ -127,7 +127,7 @@ describe('Test component: GitSettingsForm', () => {
 
       expect(getProjectById).toBeCalled();
       expect(saveProject).toBeCalled();
-      expect(updateGitProject).toBeCalled();
+      expect(gitAddRemote).toBeCalled();
       expect(wrapper.vm.submitting).toEqual(false);
       expect(wrapper.emitted()['project-git:save']).toBeTruthy();
       expect(emit).toBeCalled();
@@ -150,7 +150,7 @@ describe('Test component: GitSettingsForm', () => {
 
       expect(getProjectById).toBeCalled();
       expect(saveProject).toBeCalled();
-      expect(updateGitProject).toBeCalled();
+      expect(gitAddRemote).toBeCalled();
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'warning' }));
     });
   });

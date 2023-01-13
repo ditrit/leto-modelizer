@@ -2,24 +2,17 @@ import FileEvent from 'src/composables/events/FileEvent';
 import { Subject } from 'rxjs';
 
 describe('Test composable: FileEvent', () => {
-  describe('Test event: OpenFileEvent', () => {
+  describe('Test event: SelectFileTabEvent', () => {
     it('should export a Subject', () => {
-      expect(FileEvent.OpenFileEvent).toBeDefined();
-      expect(FileEvent.OpenFileEvent).toEqual(new Subject());
+      expect(FileEvent.SelectFileTabEvent).toBeDefined();
+      expect(FileEvent.SelectFileTabEvent).toEqual(new Subject());
     });
   });
 
-  describe('Test event: SelectFileEvent', () => {
+  describe('Test event: SelectFileNodeEvent', () => {
     it('should export a Subject', () => {
-      expect(FileEvent.SelectFileEvent).toBeDefined();
-      expect(FileEvent.SelectFileEvent).toEqual(new Subject());
-    });
-  });
-
-  describe('Test event: SelectNodeEvent', () => {
-    it('should export a Subject', () => {
-      expect(FileEvent.SelectNodeEvent).toBeDefined();
-      expect(FileEvent.SelectNodeEvent).toEqual(new Subject());
+      expect(FileEvent.SelectFileNodeEvent).toBeDefined();
+      expect(FileEvent.SelectFileNodeEvent).toEqual(new Subject());
     });
   });
 
@@ -37,17 +30,24 @@ describe('Test composable: FileEvent', () => {
     });
   });
 
-  describe('Test event: ExpandFolderEvent', () => {
+  describe('Test event: CreateFileNodeEvent', () => {
     it('should export a Subject', () => {
-      expect(FileEvent.ExpandFolderEvent).toBeDefined();
-      expect(FileEvent.ExpandFolderEvent).toEqual(new Subject());
+      expect(FileEvent.CreateFileNodeEvent).toBeDefined();
+      expect(FileEvent.CreateFileNodeEvent).toEqual(new Subject());
     });
   });
 
-  describe('Test event: UpdateFileEvent', () => {
+  describe('Test event: UpdateEditorContentEvent', () => {
     it('should export a Subject', () => {
-      expect(FileEvent.UpdateFileEvent).toBeDefined();
-      expect(FileEvent.UpdateFileEvent).toEqual(new Subject());
+      expect(FileEvent.UpdateEditorContentEvent).toBeDefined();
+      expect(FileEvent.UpdateEditorContentEvent).toEqual(new Subject());
+    });
+  });
+
+  describe('Test event: UpdateFileContentEvent', () => {
+    it('should export a Subject', () => {
+      expect(FileEvent.UpdateFileContentEvent).toBeDefined();
+      expect(FileEvent.UpdateFileContentEvent).toEqual(new Subject());
     });
   });
 

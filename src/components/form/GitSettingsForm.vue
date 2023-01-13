@@ -48,11 +48,16 @@
 </template>
 
 <script setup>
+// TODO : RENAME GitForm to GitConfigurationForm
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
 import { notEmpty, isGitRepositoryUrl } from 'src/composables/QuasarFieldRule';
-import { getProjectById, saveProject, updateGitProject } from 'src/composables/Project';
+import {
+  getProjectById,
+  saveProject,
+  gitAddRemote,
+} from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
 
 const emit = defineEmits(['project-git:save']);
@@ -75,11 +80,11 @@ function onSubmit() {
     username: username.value,
     token: token.value,
   };
-  return updateGitProject(project)
+  return gitAddRemote(project)
     .then(() => {
       saveProject(project);
       emit('project-git:save');
-      GitEvent.UpdateRemoteEvent.next();
+      GitEvent.AddRemoteEvent.next();
       Notify.create({
         type: 'positive',
         message: t('actions.git.repository.exists'),

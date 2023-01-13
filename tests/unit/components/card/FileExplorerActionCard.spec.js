@@ -1,15 +1,8 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
-import FileEvent from 'src/composables/events/FileEvent';
 
 installQuasarPlugin();
-
-jest.mock('src/composables/events/FileEvent', () => ({
-  SelectNodeEvent: {
-    next: jest.fn(() => Promise.resolve('SelectNodeEvent')),
-  },
-}));
 
 describe('Test component: FileExplorerActionCard', () => {
   let wrapper;
@@ -37,14 +30,10 @@ describe('Test component: FileExplorerActionCard', () => {
     });
   });
 
-  describe('Test functions', () => {
-    describe('Test function: updateSelectedNode', () => {
-      it('should set isActionMenuOpen and call SelectNodeEvent', () => {
-        expect(wrapper.vm.isActionMenuOpen).toBe(false);
-
-        wrapper.vm.updateSelectedNode();
-        expect(wrapper.vm.isActionMenuOpen).toEqual(true);
-        expect(FileEvent.SelectNodeEvent.next).toBeCalled();
+  describe('Test variables initialization', () => {
+    describe('Test variable: isActionMenuOpen', () => {
+      it('should be false', () => {
+        expect(wrapper.vm.isActionMenuOpen).toEqual(false);
       });
     });
   });

@@ -34,6 +34,7 @@ import { ref } from 'vue';
 import { getProjectById, gitPush } from 'src/composables/Project';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import GitEvent from 'src/composables/events/GitEvent';
 
 const emit = defineEmits(['git-branch:push']);
 
@@ -64,6 +65,7 @@ async function onSubmit() {
     force.value,
   ).then(() => {
     emit('git-branch:push');
+    GitEvent.PushEvent.next();
     Notify.create({
       type: 'positive',
       message: t('actions.git.branch.push'),

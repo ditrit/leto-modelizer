@@ -2,6 +2,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import GitUpdateForm from 'src/components/form/GitUpdateForm.vue';
 import { Notify } from 'quasar';
+import GitEvent from 'src/composables/events/GitEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -11,6 +12,12 @@ jest.mock('vue-i18n', () => ({
   useI18n: () => ({
     t: (t) => t,
   }),
+}));
+
+jest.mock('src/composables/events/GitEvent', () => ({
+  PullEvent: {
+    next: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -56,13 +63,14 @@ describe('Test component: GitUpdateForm', () => {
   });
 
   describe('Test function: onSubmit', () => {
-    it('should emit an event on success and a notification', async () => {
+    it('should emit "git-branch:update" event, emit PullEvent and an event on success and a notification', async () => {
       Notify.create = jest.fn();
 
       await wrapper.vm.onSubmit();
 
       expect(wrapper.vm.submitting).toEqual(false);
       expect(wrapper.emitted()['git-branch:update']).toBeTruthy();
+      expect(GitEvent.PullEvent.next).toBeCalled();
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
     });
 

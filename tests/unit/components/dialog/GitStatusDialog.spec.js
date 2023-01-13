@@ -62,20 +62,20 @@ describe('Test component: GitStatusDialog', () => {
       });
     });
 
-    describe('Test computed: unstagedFiles', () => {
-      it('should be empty without unstaged file', () => {
+    describe('Test computed: modifiedFiles', () => {
+      it('should be empty without unstaged changed file', () => {
         wrapper.vm.filesStatus = [
           new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 0 }),
         ];
-        expect(wrapper.vm.unstagedFiles).toEqual([]);
+        expect(wrapper.vm.modifiedFiles).toEqual([]);
       });
 
-      it('should have one unstaged file', () => {
+      it('should have one unstaged changed file', () => {
         wrapper.vm.filesStatus = [
-          new FileStatus({ headStatus: 1, workdirStatus: 0, stageStatus: 1 }),
+          new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 3 }),
         ];
-        expect(wrapper.vm.unstagedFiles).toEqual([
-          new FileStatus({ headStatus: 1, workdirStatus: 0, stageStatus: 1 }),
+        expect(wrapper.vm.modifiedFiles).toEqual([
+          new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 3 }),
         ]);
       });
     });

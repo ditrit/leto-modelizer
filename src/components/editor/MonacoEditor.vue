@@ -7,15 +7,19 @@
 </template>
 
 <script setup>
-import { writeProjectFile } from 'src/composables/Project';
+import {
+  writeProjectFile,
+  readProjectFile,
+} from 'src/composables/Project';
 import {
   onMounted,
   onUpdated,
+  onUnmounted,
   nextTick,
   ref,
-  watch,
 } from 'vue';
 import FileEvent from 'src/composables/events/FileEvent';
+import GitEvent from 'src/composables/events/GitEvent';
 
 const monaco = require('monaco-editor');
 
@@ -24,7 +28,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  fileInput: {
+  file: {
     type: Object,
     require: true,
   },
@@ -32,25 +36,45 @@ const props = defineProps({
 
 const container = ref(null);
 let editor;
+let checkoutSubscription;
+let addRemoteSubscription;
+let pullSubscription;
+let updateFileContentSubsciption;
 
 /**
- * Update file content on fs and emit an event.
+ * Update file content on fs and emit UpdateEditorContentEvent.
  */
 async function updateFile() {
-  const file = { ...props.fileInput, content: editor.getValue() };
-  file.path = file.id;
+  const file = {
+    ...props.file,
+    path: props.file.id,
+    content: editor.getValue(),
+  };
+
   await writeProjectFile(props.projectName, file);
-  FileEvent.UpdateFileEvent.next(props.fileInput.id);
+  FileEvent.UpdateEditorContentEvent.next(file.id);
+}
+
+/**
+ * Read file on fs to get its content.
+ * @return {Promise<String>} Promise with file's content on success otherwise error.
+ */
+async function getFileContent() {
+  return readProjectFile(props.projectName, { path: props.file.id })
+    .then((fileInput) => fileInput.content);
 }
 
 /**
  * Setup monaco editor.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-function createEditor() {
+async function createEditor() {
+  const value = await getFileContent();
   editor = monaco.editor.create(container.value, {
-    value: props.fileInput.content,
+    value,
     language: 'text',
   });
+
   editor.onDidChangeModelContent(updateFile);
 }
 
@@ -66,16 +90,34 @@ function updateEditorLayout() {
   });
 }
 
-watch(() => props.fileInput.content, () => {
-  editor.setValue(props.fileInput.content);
-});
+/**
+ * Get file content and update editor value.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function updateEditorContent() {
+  const value = await getFileContent();
+
+  editor.setValue(value);
+}
 
 onMounted(() => {
+  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateEditorContent);
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateEditorContent);
+  pullSubscription = GitEvent.PullEvent.subscribe(updateEditorContent);
+  updateFileContentSubsciption = FileEvent.UpdateFileContentEvent.subscribe(updateEditorContent);
+
   nextTick(createEditor);
 });
 
 onUpdated(() => {
   nextTick(updateEditorLayout);
+});
+
+onUnmounted(() => {
+  checkoutSubscription.unsubscribe();
+  addRemoteSubscription.unsubscribe();
+  pullSubscription.unsubscribe();
+  updateFileContentSubsciption.unsubscribe();
 });
 </script>
 

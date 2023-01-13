@@ -12,13 +12,19 @@
       </template>
       <template v-else>
         <q-list style="min-width: 500px" dense>
-          <q-item v-if="stagedFiles.length === 0">
+          <q-item
+            v-if="stagedFiles.length === 0"
+            data-cy="git-commit-empty-item"
+          >
             <q-item-section>
               {{ $t('page.modelizer.git.status.nothing') }}
             </q-item-section>
           </q-item>
           <template v-else>
-            <q-item class="text-weight-bold text-grey-7">
+            <q-item
+              class="text-weight-bold text-grey-7"
+              data-cy="git-commit-staged-item"
+            >
               <q-item-section>
                 {{ $t('page.modelizer.git.status.staged') }}
               </q-item-section>
@@ -26,6 +32,7 @@
             <q-item
               :key="`staged_${file.path}`"
               v-for="file in stagedFiles"
+              data-cy="git-commit-staged-item-file"
             >
               <q-item-section class="file-status-staged q-pl-md">
                 {{file.path}}
@@ -56,7 +63,7 @@ import {
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { getStatus } from 'src/composables/Project';
 import GitCommitForm from 'components/form/GitCommitForm';
-import FileEvent from 'src/composables/events/FileEvent';
+import GitEvent from 'src/composables/events/GitEvent';
 
 const props = defineProps({
   projectName: {
@@ -71,7 +78,7 @@ let dialogEventSubscription;
 
 /**
  * Set files status on valid event.
- * @param {String} key - Event type.
+ * @param {String} key - Event key.
  */
 function setFilesStatus({ key }) {
   if (key === 'GitCommit') {
@@ -85,12 +92,10 @@ function setFilesStatus({ key }) {
 }
 
 /**
- * Send event on all staged files and close dialog.
+ * Send Commit event with staged files and close GitCommit dialog.
  */
 function onSave() {
-  stagedFiles.value.forEach((file) => {
-    FileEvent.UpdateFileEvent.next(file.path);
-  });
+  GitEvent.CommitEvent.next(stagedFiles.value);
   DialogEvent.next({ type: 'close', key: 'GitCommit' });
 }
 

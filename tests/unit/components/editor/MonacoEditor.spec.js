@@ -3,6 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import { editor } from 'app/__mocks__/monaco-editor';
 import MonacoEditor from 'components/editor/MonacoEditor.vue';
 import Project from 'src/composables/Project';
+import GitEvent from 'src/composables/events/GitEvent';
 import FileEvent from 'src/composables/events/FileEvent';
 
 installQuasarPlugin();
@@ -16,26 +17,51 @@ jest.mock('monaco-editor', () => ({
 
 jest.mock('src/composables/Project', () => ({
   writeProjectFile: jest.fn(),
+  readProjectFile: jest.fn(() => Promise.resolve('fileContent')),
+}));
+
+jest.mock('src/composables/events/GitEvent', () => ({
+  CheckoutEvent: {
+    subscribe: jest.fn(),
+  },
+  AddRemoteEvent: {
+    subscribe: jest.fn(),
+  },
+  PullEvent: {
+    subscribe: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
-  UpdateFileEvent: {
+  UpdateFileContentEvent: {
+    subscribe: jest.fn(),
+  },
+  UpdateEditorContentEvent: {
     next: jest.fn(),
   },
 }));
 
 describe('Tess component: MonacoEditor', () => {
   let wrapper;
+  let checkoutSubscribe;
+  let checkoutUnsubscribe;
+  let addRemoteSubscribe;
+  let addRemoteUnsubscribe;
+  let pullSubscribe;
+  let pullUnsubscribe;
+  let updateFileContentSubscribe;
+  let updateFileContentUnsubscribe;
 
   const dispose = jest.fn();
   const layout = jest.fn();
+  const setValue = jest.fn();
   const onDidChangeModelContent = jest.fn();
   const writeProjectFileMock = jest.fn(() => Promise.resolve());
 
   editor.create.mockImplementation(() => ({
     dispose,
     getValue: () => 'testValue',
-    setValue: (v) => v,
+    setValue,
     layout,
     onDidChangeModelContent,
   }));
@@ -43,11 +69,37 @@ describe('Tess component: MonacoEditor', () => {
   Project.writeProjectFile.mockImplementation(writeProjectFileMock);
 
   beforeEach(() => {
+    checkoutSubscribe = jest.fn();
+    checkoutUnsubscribe = jest.fn();
+    addRemoteSubscribe = jest.fn();
+    addRemoteUnsubscribe = jest.fn();
+    pullSubscribe = jest.fn();
+    pullUnsubscribe = jest.fn();
+    updateFileContentSubscribe = jest.fn();
+    updateFileContentUnsubscribe = jest.fn();
+
+    GitEvent.CheckoutEvent.subscribe.mockImplementation(() => {
+      checkoutSubscribe();
+      return { unsubscribe: checkoutUnsubscribe };
+    });
+    GitEvent.AddRemoteEvent.subscribe.mockImplementation(() => {
+      addRemoteSubscribe();
+      return { unsubscribe: addRemoteUnsubscribe };
+    });
+    GitEvent.PullEvent.subscribe.mockImplementation(() => {
+      pullSubscribe();
+      return { unsubscribe: pullUnsubscribe };
+    });
+    FileEvent.UpdateFileContentEvent.subscribe.mockImplementation(() => {
+      updateFileContentSubscribe();
+      return { unsubscribe: updateFileContentUnsubscribe };
+    });
+
     wrapper = shallowMount(MonacoEditor, {
       props: {
         projectName: 'project-00000000',
-        fileInput: {
-          content: 'Hello World',
+        file: {
+          id: 'file.js',
         },
       },
     });
@@ -60,18 +112,18 @@ describe('Tess component: MonacoEditor', () => {
       });
     });
 
-    describe('Test props: fileInput', () => {
-      it('should have content matching "Hello World"', () => {
-        expect(wrapper.vm.props.fileInput.content).toEqual('Hello World');
+    describe('Test props: file', () => {
+      it('should be an Object with id', () => {
+        expect(wrapper.vm.props.file).toEqual({ id: 'file.js' });
       });
     });
   });
 
   describe('Test function: updateFile', () => {
-    it('should call writeProjectFile and emit event', async () => {
+    it('should call writeProjectFile and emit UpdateEditorContentEvent', async () => {
       await wrapper.vm.updateFile();
       expect(writeProjectFileMock).toHaveBeenCalledTimes(1);
-      expect(FileEvent.UpdateFileEvent.next).toHaveBeenCalled();
+      expect(FileEvent.UpdateEditorContentEvent.next).toBeCalledWith('file.js');
     });
   });
 
@@ -99,15 +151,55 @@ describe('Tess component: MonacoEditor', () => {
     });
   });
 
-  describe('Test watcher: props.fileInput', () => {
-    it('should be trigger when props.fileInput is update', async () => {
-      await wrapper.setProps({
-        projectName: 'project-00000000',
-        fileInput: {
-          content: 'new content',
-        },
-      });
-      expect(wrapper.vm.props.fileInput.content).toEqual('new content');
+  describe('Test function: updateEditorContent', () => {
+    it('should call setValue', async () => {
+      await wrapper.vm.updateEditorContent();
+
+      expect(setValue).toHaveBeenCalled();
+    });
+  });
+
+  describe('Test hook function: onMounted', () => {
+    it('should subscribe to CheckoutEvent', () => {
+      expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to AddRemoteEvent', () => {
+      expect(addRemoteSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to PullEvent', () => {
+      expect(pullSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to UpdateFileContentEvent', () => {
+      expect(updateFileContentSubscribe).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test hook function: onUnmounted', () => {
+    it('should unsubscribe to CheckoutEvent', () => {
+      expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to AddRemoteEvent', () => {
+      expect(addRemoteUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(addRemoteUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to PullEvent', () => {
+      expect(pullUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(pullUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to UpdateFileContentEvent', () => {
+      expect(updateFileContentUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(updateFileContentUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });
