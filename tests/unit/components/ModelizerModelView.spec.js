@@ -123,31 +123,9 @@ describe('Test component: ModelizerModelView', () => {
     });
   });
 
-  describe('Test function: deletePluginComponentAndRedraw', () => {
-    it('should call plugin removeComponentById and draw functions', () => {
-      const draw = jest.fn();
-      const removeComponentById = jest.fn();
-      wrapper.vm.data.plugins = [{
-        data: {
-          removeComponentById,
-        },
-        draw,
-      }];
-
-      expect(draw).toHaveBeenCalledTimes(0);
-      wrapper.vm.deletePluginComponentAndRedraw({ id: 'toRemoveID' });
-      expect(removeComponentById).toHaveBeenCalledTimes(1);
-      expect(draw).toHaveBeenCalledTimes(1);
-    });
-  });
-
   describe('Test hook function: onMounted', () => {
     it('should subscribe to InitEvent', () => {
       expect(initSubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should subscribe to DeleteEvent', () => {
-      expect(deleteSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -156,12 +134,6 @@ describe('Test component: ModelizerModelView', () => {
       expect(initUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(initUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to DeleteEvent', () => {
-      expect(deleteUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(deleteUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });
