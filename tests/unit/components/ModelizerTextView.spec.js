@@ -27,7 +27,7 @@ jest.mock('src/composables/PluginManager', () => ({
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
-  GlobalSaveFilesEvent: {
+  GlobalUploadFilesEvent: {
     subscribe: jest.fn(),
   },
   CreateFileEvent: {
@@ -86,8 +86,8 @@ describe('Test component: ModelizerTextView', () => {
   let addUnsubscribe;
   let commitSubscribe;
   let commitUnsubscribe;
-  let globalSaveFilesSubscribe;
-  let globalSaveFilesUnsubscribe;
+  let globalUploadFilesSubscribe;
+  let globalUploadFilesUnsubscribe;
   let createFileSubscribe;
   let createFileUnsubscribe;
   let deleteFileSubscribe;
@@ -114,8 +114,8 @@ describe('Test component: ModelizerTextView', () => {
     addUnsubscribe = jest.fn();
     commitSubscribe = jest.fn();
     commitUnsubscribe = jest.fn();
-    globalSaveFilesSubscribe = jest.fn();
-    globalSaveFilesUnsubscribe = jest.fn();
+    globalUploadFilesSubscribe = jest.fn();
+    globalUploadFilesUnsubscribe = jest.fn();
     createFileSubscribe = jest.fn();
     createFileUnsubscribe = jest.fn();
     deleteFileSubscribe = jest.fn();
@@ -151,9 +151,9 @@ describe('Test component: ModelizerTextView', () => {
       commitSubscribe();
       return { unsubscribe: commitUnsubscribe };
     });
-    FileEvent.GlobalSaveFilesEvent.subscribe.mockImplementation(() => {
-      globalSaveFilesSubscribe();
-      return { unsubscribe: globalSaveFilesUnsubscribe };
+    FileEvent.GlobalUploadFilesEvent.subscribe.mockImplementation(() => {
+      globalUploadFilesSubscribe();
+      return { unsubscribe: globalUploadFilesUnsubscribe };
     });
     FileEvent.CreateFileEvent.subscribe.mockImplementation(() => {
       createFileSubscribe();
@@ -408,8 +408,8 @@ describe('Test component: ModelizerTextView', () => {
       expect(commitSubscribe).toHaveBeenCalledTimes(1);
     });
 
-    it('should subscribe to GlobalSaveFilesEvent', () => {
-      expect(globalSaveFilesSubscribe).toHaveBeenCalledTimes(1);
+    it('should subscribe to GlobalUploadFilesEvent', () => {
+      expect(globalUploadFilesSubscribe).toHaveBeenCalledTimes(1);
     });
 
     it('should subscribe to CreateFileEvent', () => {
@@ -466,10 +466,10 @@ describe('Test component: ModelizerTextView', () => {
       expect(commitUnsubscribe).toHaveBeenCalledTimes(1);
     });
 
-    it('should unsubscribe to GlobalSaveFilesEvent', () => {
-      expect(globalSaveFilesUnsubscribe).toHaveBeenCalledTimes(0);
+    it('should unsubscribe to GlobalUploadFilesEvent', () => {
+      expect(globalUploadFilesUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
-      expect(globalSaveFilesUnsubscribe).toHaveBeenCalledTimes(1);
+      expect(globalUploadFilesUnsubscribe).toHaveBeenCalledTimes(1);
     });
 
     it('should unsubscribe to CreateFileEvent', () => {
