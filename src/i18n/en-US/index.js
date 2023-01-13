@@ -126,16 +126,16 @@ export default {
           text: 'Text',
         },
         button: {
-          save: {
-            label: 'Save',
+          upload: {
+            label: 'Upload to Git',
             disable: {
-              title: 'Please set git configuration to enable saving.',
+              title: 'Please set git configuration to enable uploading.',
             },
             enable: {
-              title: 'Click to save you work.',
+              title: 'Click to upload you work to git.',
             },
-            success: 'Saved successfully ! 😉',
-            error: 'An error occured while saving.',
+            success: 'Uploaded successfully ! 😉',
+            error: 'An error occured while uploading.',
           },
         },
       },

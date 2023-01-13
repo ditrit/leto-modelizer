@@ -31,7 +31,7 @@
       <q-btn
         :disable="isSaveButtonDisable"
         :loading="isLoading"
-        :label="$t('page.modelizer.header.button.save.label')"
+        :label="$t('page.modelizer.header.button.upload.label')"
         :title="$t(savebuttonTitle)"
         @click="save()"
         color="positive"
@@ -92,9 +92,9 @@ const project = computed(() => getProjectById(props.projectName));
 const isSaveButtonDisable = computed(() => !project.value.git?.repository);
 const savebuttonTitle = computed(() => {
   if (isSaveButtonDisable.value) {
-    return 'page.modelizer.header.button.save.disable.title';
+    return 'page.modelizer.header.button.upload.disable.title';
   }
-  return 'page.modelizer.header.button.save.enable.title';
+  return 'page.modelizer.header.button.upload.enable.title';
 });
 
 /**
@@ -108,14 +108,14 @@ async function save() {
       FileEvent.GlobalSaveFilesEvent.next();
       Notify.create({
         type: 'positive',
-        message: t('page.modelizer.header.button.save.success'),
+        message: t('page.modelizer.header.button.upload.success'),
         html: true,
       });
     })
     .catch(() => {
       Notify.create({
         type: 'negative',
-        message: t('page.modelizer.header.button.save.error'),
+        message: t('page.modelizer.header.button.upload.error'),
         html: true,
       });
     })

@@ -110,7 +110,7 @@ describe('Test component: ModelizerNavigationBar', () => {
 
   describe('Test computed: savebuttonTitle', () => {
     it('should return enable title if project git repository is defined', () => {
-      expect(wrapper.vm.savebuttonTitle).toEqual('page.modelizer.header.button.save.enable.title');
+      expect(wrapper.vm.savebuttonTitle).toEqual('page.modelizer.header.button.upload.enable.title');
     });
 
     it('should return disable title if project git repository is not defined', async () => {
@@ -119,7 +119,7 @@ describe('Test component: ModelizerNavigationBar', () => {
         projectName: 'WrongProjectTest',
       });
 
-      expect(wrapper.vm.savebuttonTitle).toEqual('page.modelizer.header.button.save.disable.title');
+      expect(wrapper.vm.savebuttonTitle).toEqual('page.modelizer.header.button.upload.disable.title');
     });
   });
 
