@@ -26,7 +26,7 @@ jest.mock('src/composables/events/GitEvent', () => ({
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
-  GlobalSaveFilesEvent: {
+  GlobalUploadFilesEvent: {
     subscribe: jest.fn(),
   },
 }));
@@ -37,8 +37,8 @@ describe('Test component: GitBranchCard', () => {
   let addRemoteUnsubscribe;
   let checkoutSubscribe;
   let checkoutUnsubscribe;
-  let globalSaveFilesSubscribe;
-  let globalSaveFilesUnsubscribe;
+  let globalUploadFilesSubscribe;
+  let globalUploadFilesUnsubscribe;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -51,8 +51,8 @@ describe('Test component: GitBranchCard', () => {
     addRemoteUnsubscribe = jest.fn();
     checkoutSubscribe = jest.fn();
     checkoutUnsubscribe = jest.fn();
-    globalSaveFilesSubscribe = jest.fn();
-    globalSaveFilesUnsubscribe = jest.fn();
+    globalUploadFilesSubscribe = jest.fn();
+    globalUploadFilesUnsubscribe = jest.fn();
     GitEvent.AddRemoteEvent.subscribe.mockImplementation(() => {
       addRemoteSubscribe();
       return { unsubscribe: addRemoteUnsubscribe };
@@ -61,9 +61,9 @@ describe('Test component: GitBranchCard', () => {
       checkoutSubscribe();
       return { unsubscribe: checkoutUnsubscribe };
     });
-    FileEvent.GlobalSaveFilesEvent.subscribe.mockImplementation(() => {
-      globalSaveFilesSubscribe();
-      return { unsubscribe: globalSaveFilesUnsubscribe };
+    FileEvent.GlobalUploadFilesEvent.subscribe.mockImplementation(() => {
+      globalUploadFilesSubscribe();
+      return { unsubscribe: globalUploadFilesUnsubscribe };
     });
 
     wrapper = shallowMount(GitBranchCard, {});
@@ -114,8 +114,8 @@ describe('Test component: GitBranchCard', () => {
       expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
     });
 
-    it('should subscribe to GlobalSaveFilesEvent', () => {
-      expect(globalSaveFilesSubscribe).toHaveBeenCalledTimes(1);
+    it('should subscribe to GlobalUploadFilesEvent', () => {
+      expect(globalUploadFilesSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -132,10 +132,10 @@ describe('Test component: GitBranchCard', () => {
       expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
     });
 
-    it('should unsubscribe to GlobalSaveFilesEvent', () => {
-      expect(globalSaveFilesUnsubscribe).toHaveBeenCalledTimes(0);
+    it('should unsubscribe to GlobalUploadFilesEvent', () => {
+      expect(globalUploadFilesUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
-      expect(globalSaveFilesUnsubscribe).toHaveBeenCalledTimes(1);
+      expect(globalUploadFilesUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });
