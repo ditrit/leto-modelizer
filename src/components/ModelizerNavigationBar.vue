@@ -68,7 +68,7 @@ import FileEvent from 'src/composables/events/FileEvent';
 import { Notify } from 'quasar';
 import {
   getProjectById,
-  gitGlobalSave,
+  gitGlobalUpload,
 } from 'src/composables/Project';
 
 const { t } = useI18n();
@@ -98,14 +98,14 @@ const savebuttonTitle = computed(() => {
 });
 
 /**
- * Save global modifications and notify according to the result.
+ * Upload global modifications and notify according to the result.
  */
 async function save() {
   isLoading.value = true;
 
-  await gitGlobalSave(project.value)
+  await gitGlobalUpload(project.value)
     .then(() => {
-      FileEvent.GlobalSaveFilesEvent.next();
+      FileEvent.GlobalUploadFilesEvent.next();
       Notify.create({
         type: 'positive',
         message: t('page.modelizer.header.button.upload.success'),

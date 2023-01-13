@@ -5,7 +5,7 @@ import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import FileEvent from 'src/composables/events/FileEvent';
 import { Notify } from 'quasar';
-import { gitGlobalSave } from 'src/composables/Project';
+import { gitGlobalUpload } from 'src/composables/Project';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -28,13 +28,13 @@ jest.mock('src/composables/events/PluginEvent', () => ({
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
-  GlobalSaveFilesEvent: {
+  GlobalUploadFilesEvent: {
     next: jest.fn(),
   },
 }));
 
 jest.mock('src/composables/Project', () => ({
-  gitGlobalSave: jest.fn(),
+  gitGlobalUpload: jest.fn(),
   getProjectById: jest.fn((projectName) => {
     if (projectName === 'projectTest') {
       return { git: { repository: {} } };
@@ -47,12 +47,12 @@ describe('Test component: ModelizerNavigationBar', () => {
   let wrapper;
   const emit = jest.fn();
   const parseEvent = jest.fn();
-  const globalSaveFilesEvent = jest.fn();
+  const globalUploadFilesEvent = jest.fn();
 
   ViewSwitchEvent.next.mockImplementation(() => emit());
   PluginEvent.ParseEvent.next.mockImplementation(parseEvent);
-  FileEvent.GlobalSaveFilesEvent.next.mockImplementation(globalSaveFilesEvent);
-  gitGlobalSave.mockImplementation(
+  FileEvent.GlobalUploadFilesEvent.next.mockImplementation(globalUploadFilesEvent);
+  gitGlobalUpload.mockImplementation(
     (project) => (project.git ? Promise.resolve() : Promise.reject()),
   );
 
@@ -125,12 +125,12 @@ describe('Test component: ModelizerNavigationBar', () => {
 
   describe('Test functions', () => {
     describe('Test function: save', () => {
-      it('should emit GlobalSaveFilesEvent and emit a positive notification on success', async () => {
+      it('should emit GlobalUploadFilesEvent and emit a positive notification on success', async () => {
         Notify.create = jest.fn();
 
         await wrapper.vm.save();
 
-        expect(globalSaveFilesEvent).toHaveBeenCalledTimes(1);
+        expect(globalUploadFilesEvent).toHaveBeenCalledTimes(1);
         expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
       });
 
