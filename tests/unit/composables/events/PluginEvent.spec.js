@@ -23,10 +23,10 @@ describe('Test composable: PluginEvent', () => {
     });
   });
 
-  describe('Test event: DeleteEvent', () => {
+  describe('Test event: UpdateEvent', () => {
     it('should export a Subject', () => {
-      expect(PluginEvent.DeleteEvent).toBeDefined();
-      expect(PluginEvent.DeleteEvent).toEqual(new Subject());
+      expect(PluginEvent.UpdateEvent).toBeDefined();
+      expect(PluginEvent.UpdateEvent).toEqual(new Subject());
     });
   });
 

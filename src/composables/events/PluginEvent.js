@@ -19,10 +19,11 @@ const SelectEvent = new Subject();
 const EditEvent = new Subject();
 
 /**
- * Represent a rxjs Event object to emit and to receive events about plugins component deletion.
- * @typedef {Subject} DeleteEvent
+ * Represent a rxjs Event object to emit and to receive events about components update by
+ * the plugin.
+ * @typedef {Subject} UpdateEvent
  */
-const DeleteEvent = new Subject();
+const UpdateEvent = new Subject();
 
 /**
  * Represent a rxjs Event object to emit and to receive events about plugins component parsing.
@@ -40,7 +41,7 @@ export default {
   InitEvent,
   SelectEvent,
   EditEvent,
-  DeleteEvent,
+  UpdateEvent,
   ParseEvent,
   DrawEvent,
 };
