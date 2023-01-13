@@ -225,10 +225,11 @@ export async function readProjectFile(projectId, fileInformation) {
     );
   });
 
-  return new FileInput({
-    path: fileInformation.path,
-    content,
-  });
+  // TODO: Remove this when plugin-core FileInput can manage empty string as content.
+  const fileInput = new FileInput({ path: fileInformation.path });
+  fileInput.content = content || '';
+
+  return fileInput;
 }
 
 /**
