@@ -56,7 +56,7 @@ Options `repository-name` and `repository-url` can be added with the `npm run pl
 
 ```bash
 # Example with terraform plugin
-npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.1.7"
+npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.1.8"
 ```
 
 Now your plugin is installed, you can continue to install other plugin with the same command if you want.
