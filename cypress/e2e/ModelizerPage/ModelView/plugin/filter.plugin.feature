@@ -11,11 +11,11 @@ Feature: Test modelizer model view: plugin initialization
 
   Scenario Outline: Set text as "<filter>" should display only one element
     When I click on "[data-cy=\"plugin-definitions-leto-modelizer-plugin-test\"]"
-    Then I expect ".plugin-definitions" appear 1 time on screen
-    And I expect ".component-definition-card" appear 7 times on screen
+    Then I expect "[class*=\"plugin-definitions\"]" appear 1 time on screen
+    And I expect "[class*=\"component-definition-card\"]" appear 7 times on screen
 
     When I set on "[data-cy=\"filter-plugin-definitions\"]" text "<filter>"
-    And I expect ".component-definition-card" appear 1 time on screen
+    And I expect "[class*=\"component-definition-card\"]" appear 1 time on screen
     And I expect "[data-cy=\"component-definition-<filter>\"]" exists
 
     Examples:
@@ -30,11 +30,11 @@ Feature: Test modelizer model view: plugin initialization
 
   Scenario Outline: Set text as "<filter>" should display only two elements
     When I click on "[data-cy=\"plugin-definitions-leto-modelizer-plugin-test\"]"
-    Then I expect ".plugin-definitions" appear 1 time on screen
-    And I expect ".component-definition-card" appear 7 times on screen
+    Then I expect "[class*=\"plugin-definitions\"]" appear 1 time on screen
+    And I expect "[class*=\"component-definition-card\"]" appear 7 times on screen
 
     When I set on "[data-cy=\"filter-plugin-definitions\"]" text "<filter>"
-    And I expect ".component-definition-card" appear 2 times on screen
+    And I expect "[class*=\"component-definition-card\"]" appear 2 times on screen
     And I expect "[data-cy=\"component-definition-<element1>\"]" exists
     And I expect "[data-cy=\"component-definition-<element2>\"]" exists
 
@@ -46,11 +46,11 @@ Feature: Test modelizer model view: plugin initialization
 
   Scenario Outline: Set text as "<filter>" should not display any elements.
     When I click on "[data-cy=\"plugin-definitions-leto-modelizer-plugin-test\"]"
-    Then I expect ".plugin-definitions" appear 1 time on screen
-    And I expect ".component-definition-card" appear 7 times on screen
+    Then I expect "[class*=\"plugin-definitions\"]" appear 1 time on screen
+    And I expect "[class*=\"component-definition-card\"]" appear 7 times on screen
 
     When I set on "[data-cy=\"filter-plugin-definitions\"]" text "<filter>"
-    And I expect ".component-definition-card" appear 0 time on screen
+    And I expect "[class*=\"component-definition-card\"]" appear 0 time on screen
     Examples:
       | filter   |
       | bad      |
