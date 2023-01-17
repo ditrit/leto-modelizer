@@ -15,8 +15,8 @@ Feature: Test modelizer model view: plugin initialization
 
   Scenario: Should have only one plugin installed with all these definitions
     When I click on "[data-cy=\"plugin-definitions-leto-modelizer-plugin-test\"]"
-    Then I expect ".plugin-definitions" appear 1 time on screen
-    And I expect ".component-definition-card" appear 7 times on screen
+    Then I expect "[class*=\"plugin-definitions\"]" appear 1 time on screen
+    And I expect "[class*=\"component-definition-card\"]" appear 7 times on screen
     And I expect "[data-cy=\"component-definition-truck\"]" exists
     And I expect "[data-cy=\"component-definition-box\"]" exists
     And I expect "[data-cy=\"component-definition-envelope\"]" exists
