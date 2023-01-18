@@ -32,7 +32,6 @@ import { getProjectFiles, readProjectFile } from 'src/composables/Project';
 import { FileInformation } from 'leto-modelizer-plugin-core';
 
 let pluginInitSubscription;
-let pluginDeleteSubscription;
 let pluginParseSubscription;
 let pluginDrawSubscription;
 
@@ -82,18 +81,6 @@ async function drawComponents(plugin) {
 }
 
 /**
- * Search a component to delete among all the components of all the plugins.
- * @param {Object} event - Object containing id of the component to delete.
- * @param {String} event.id - Id of the component to remove
- */
-function deletePluginComponentAndRedraw(event) {
-  data.plugins.forEach((plugin) => {
-    plugin.data.removeComponentById(event.id);
-    plugin.draw('root');
-  });
-}
-
-/**
  * Update plugins array
  */
 function updatePlugins() {
@@ -104,14 +91,12 @@ function updatePlugins() {
 onMounted(() => {
   updatePlugins();
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePlugins);
-  pluginDeleteSubscription = PluginEvent.DeleteEvent.subscribe(deletePluginComponentAndRedraw);
   pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePlugins);
   pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePlugins);
 });
 
 onUnmounted(() => {
   pluginInitSubscription.unsubscribe();
-  pluginDeleteSubscription.unsubscribe();
   pluginParseSubscription.unsubscribe();
   pluginDrawSubscription.unsubscribe();
 });

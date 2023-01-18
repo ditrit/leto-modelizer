@@ -64,9 +64,8 @@ export async function instantiatePlugin(pluginName) {
   const plugin = new plugins[pluginName]();
 
   plugin.init({
-    SelectEvent: PluginEvent.SelectEvent,
-    EditEvent: PluginEvent.EditEvent,
-    DeleteEvent: PluginEvent.DeleteEvent,
+    SelectEvent: PluginEvent.EditEvent,
+    UpdateEvent: PluginEvent.UpdateEvent,
   });
 
   await createPluginResources(plugin).then((resources) => {
