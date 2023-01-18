@@ -71,14 +71,21 @@ Then('I expect {string} to be disabled', (selector) => {
   cy.get(selector).should('be.disabled');
 });
 
-Then('I set active file content to {string}', (value) => {
-  cy.get('[data-cy="monaco-editor"]')
+Then('I set active file content to {string}', async (value) => {
+  await cy.get('[data-cy="monaco-editor"]')
     .click()
     .focused()
     .type('{ctrl}a')
-    .type(value);
+    .clear()
+    .type(value, {
+      parseSpecialCharSequences: false,
+    });
 });
 
 Then('I expect active file content to contain {string}', async (value) => {
   cy.contains('[data-cy="monaco-editor"]', value);
+});
+
+Then('I expect active file content to not contain {string}', async (value) => {
+  cy.get('[data-cy="monaco-editor"]').should('not.contain', value);
 });

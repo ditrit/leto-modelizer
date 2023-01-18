@@ -25,7 +25,7 @@ import {
   gitAdd,
   gitCommit,
   gitLog,
-  gitGlobalSave,
+  gitGlobalUpload,
   importProject,
   PROJECT_STORAGE_KEY,
 } from 'src/composables/Project';
@@ -508,14 +508,15 @@ describe('Test composable: Project', () => {
     });
   });
 
-  describe('Test function: gitGlobalSave', () => {
-    it('should emit GlobalSaveFilesEvent event', async () => {
-      const result = await gitGlobalSave({
+  describe('Test function: gitGlobalUpload', () => {
+    it('should succeed', async () => {
+      const result = await gitGlobalUpload({
         git: {
           username: 'username',
           token: 'token',
         },
       }).then(() => 'success');
+
       expect(result).toEqual('success');
     });
   });

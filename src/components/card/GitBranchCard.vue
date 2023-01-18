@@ -27,7 +27,7 @@ import GitBranchMenu from 'components/menu/GitBranchMenu';
 
 let addRemoteSubscription;
 let checkoutSubscription;
-let globalSaveFilesEventSubscription;
+let globalUploadFilesEventSubscription;
 const route = useRoute();
 const loading = ref(true);
 const currentBranch = ref('');
@@ -55,11 +55,11 @@ onMounted(() => {
   updateBranch();
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateBranch);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(setCurrentBranch);
-  globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateBranch);
+  globalUploadFilesEventSubscription = FileEvent.GlobalUploadFilesEvent.subscribe(updateBranch);
 });
 onUnmounted(() => {
   addRemoteSubscription.unsubscribe();
   checkoutSubscription.unsubscribe();
-  globalSaveFilesEventSubscription.unsubscribe();
+  globalUploadFilesEventSubscription.unsubscribe();
 });
 </script>

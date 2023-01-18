@@ -31,7 +31,7 @@
       <q-btn
         :disable="isSaveButtonDisable"
         :loading="isLoading"
-        :label="$t('page.modelizer.header.button.save.label')"
+        :label="$t('page.modelizer.header.button.upload.label')"
         :title="$t(savebuttonTitle)"
         @click="save()"
         color="positive"
@@ -68,7 +68,7 @@ import FileEvent from 'src/composables/events/FileEvent';
 import { Notify } from 'quasar';
 import {
   getProjectById,
-  gitGlobalSave,
+  gitGlobalUpload,
 } from 'src/composables/Project';
 
 const { t } = useI18n();
@@ -92,30 +92,30 @@ const project = computed(() => getProjectById(props.projectName));
 const isSaveButtonDisable = computed(() => !project.value.git?.repository);
 const savebuttonTitle = computed(() => {
   if (isSaveButtonDisable.value) {
-    return 'page.modelizer.header.button.save.disable.title';
+    return 'page.modelizer.header.button.upload.disable.title';
   }
-  return 'page.modelizer.header.button.save.enable.title';
+  return 'page.modelizer.header.button.upload.enable.title';
 });
 
 /**
- * Save global modifications and notify according to the result.
+ * Upload global modifications and notify according to the result.
  */
 async function save() {
   isLoading.value = true;
 
-  await gitGlobalSave(project.value)
+  await gitGlobalUpload(project.value)
     .then(() => {
-      FileEvent.GlobalSaveFilesEvent.next();
+      FileEvent.GlobalUploadFilesEvent.next();
       Notify.create({
         type: 'positive',
-        message: t('page.modelizer.header.button.save.success'),
+        message: t('page.modelizer.header.button.upload.success'),
         html: true,
       });
     })
     .catch(() => {
       Notify.create({
         type: 'negative',
-        message: t('page.modelizer.header.button.save.error'),
+        message: t('page.modelizer.header.button.upload.error'),
         html: true,
       });
     })

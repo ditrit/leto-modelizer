@@ -15,10 +15,10 @@ const CreateFileEvent = new Subject();
 const DeleteFileEvent = new Subject();
 
 /**
- * Represent a rxjs Event object to emit and to receive events about files global saving.
- * @typedef {Subject} GlobalSaveFilesEvent
+ * Represent a rxjs Event object to emit and to receive events about files global uploading.
+ * @typedef {Subject} GlobalUploadFilesEvent
  */
-const GlobalSaveFilesEvent = new Subject();
+const GlobalUploadFilesEvent = new Subject();
 
 /**
  * Represent a rxjs Event object to emit and to receive events about file tab selection.
@@ -57,7 +57,7 @@ const UpdateFileContentEvent = new Subject();
 export default {
   CreateFileEvent,
   DeleteFileEvent,
-  GlobalSaveFilesEvent,
+  GlobalUploadFilesEvent,
   SelectFileTabEvent,
   SelectFileNodeEvent,
   CreateFileNodeEvent,

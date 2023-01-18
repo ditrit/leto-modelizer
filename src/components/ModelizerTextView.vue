@@ -65,7 +65,7 @@ const props = defineProps({
 const localFileInformations = ref([]);
 const showParsableFiles = ref(false);
 
-let globalSaveFilesEventSubscription;
+let globalUploadFilesEventSubscription;
 let updateEditorContentSubscription;
 let createFileSubscription;
 let deleteFileSubscription;
@@ -249,7 +249,8 @@ async function onSwitchView(newViewType) {
 
 onMounted(() => {
   updateProjectFiles();
-  globalSaveFilesEventSubscription = FileEvent.GlobalSaveFilesEvent.subscribe(updateProjectFiles);
+  globalUploadFilesEventSubscription = FileEvent.GlobalUploadFilesEvent
+    .subscribe(updateProjectFiles);
   createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFile);
   deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(onDeleteFile);
   updateEditorContentSubscription = FileEvent.UpdateEditorContentEvent
@@ -266,7 +267,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  globalSaveFilesEventSubscription.unsubscribe();
+  globalUploadFilesEventSubscription.unsubscribe();
   createFileSubscription.unsubscribe();
   deleteFileSubscription.unsubscribe();
   updateEditorContentSubscription.unsubscribe();

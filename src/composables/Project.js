@@ -543,10 +543,10 @@ export async function gitCommit(projectId, message) {
 }
 
 /**
- * Save all modifications on the new branch and push it.
+ * Add and commit all modifications on the new branch and push it.
  * @param {Object} project - Object containing all information about the project.
  */
-export async function gitGlobalSave(project) {
+export async function gitGlobalUpload(project) {
   const nowDate = new Date();
   const currentBranch = await getCurrentBranch(project.id);
   const newBranch = `leto-modelizer_${nowDate.getTime()}`;

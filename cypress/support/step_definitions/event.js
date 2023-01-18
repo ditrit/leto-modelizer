@@ -6,6 +6,12 @@ When('I click on {string}', (templateSelector) => {
   cy.get(selector).click();
 });
 
+//  TODO: to remove when another solution is found for the click
+When('I force click on {string}', (templateSelector) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+  cy.get(selector).click({ force: true });
+});
+
 When('I double click on {string}', (templateSelector) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   cy.get(selector).dblclick();
