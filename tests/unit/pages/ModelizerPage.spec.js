@@ -17,7 +17,7 @@ jest.mock('src/composables/events/ViewSwitchEvent', () => ({
   subscribe: jest.fn(),
 }));
 
-jest.mock('components/dialog/GitSettingsDialog', () => {});
+jest.mock('components/dialog/GitAuthenticationDialog', () => {});
 jest.mock('components/card/GitBranchCard', () => {});
 
 describe('Test page component: ModelizerPage', () => {
