@@ -1,19 +1,19 @@
 <template>
   <default-dialog
-    dialog-key="GitProvider"
-    data-cy="git-settings-dialog"
+    dialog-key="GitAddRemote"
+    data-cy="git-add-remote-dialog"
   >
     <template v-slot:title>
       <q-icon
         color="primary"
-        name="fa-brands fa-git-alt"
+        name="fa-solid fa-book-bookmark"
       />
-      {{ $t('page.modelizer.settings.gitProvider.title') }}
+      {{ $t('page.modelizer.settings.gitAddRemote.title') }}
     </template>
     <template v-slot:default>
-      <git-settings-form
-          :project-name="projectName"
-          @project-git:save="DialogEvent.next({ type: 'close', key: 'GitProvider' })"/>
+      <git-add-remote-form
+        :project-name="projectName"
+        @project-git:save="DialogEvent.next({ type: 'close', key: 'GitAddRemote' })"/>
     </template>
   </default-dialog>
 </template>
@@ -21,7 +21,7 @@
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
 import DefaultDialog from 'components/dialog/DefaultDialog';
-import GitSettingsForm from 'components/form/GitSettingsForm';
+import GitAddRemoteForm from 'components/form/GitAddRemoteForm';
 
 defineProps({
   projectName: {
