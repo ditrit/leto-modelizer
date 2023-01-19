@@ -4,8 +4,9 @@ import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar.vue';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import FileEvent from 'src/composables/events/FileEvent';
+import GitEvent from 'src/composables/events/GitEvent';
 import { Notify } from 'quasar';
-import { gitGlobalUpload } from 'src/composables/Project';
+import Project from 'src/composables/Project';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -33,11 +34,20 @@ jest.mock('src/composables/events/FileEvent', () => ({
   },
 }));
 
+jest.mock('src/composables/events/GitEvent', () => ({
+  AddRemoteEvent: {
+    subscribe: jest.fn(),
+  },
+  AuthenticationEvent: {
+    subscribe: jest.fn(),
+  },
+}));
+
 jest.mock('src/composables/Project', () => ({
   gitGlobalUpload: jest.fn(),
   getProjectById: jest.fn((projectName) => {
     if (projectName === 'projectTest') {
-      return { git: { repository: {} } };
+      return { git: { repository: {}, username: 'username', token: 'token' } };
     }
     return {};
   }),
@@ -45,6 +55,11 @@ jest.mock('src/composables/Project', () => ({
 
 describe('Test component: ModelizerNavigationBar', () => {
   let wrapper;
+  let addRemoteSubscribe;
+  let addRemoteUnsubscribe;
+  let authenticationSubscribe;
+  let authenticationUnsubscribe;
+
   const emit = jest.fn();
   const parseEvent = jest.fn();
   const globalUploadFilesEvent = jest.fn();
@@ -52,11 +67,25 @@ describe('Test component: ModelizerNavigationBar', () => {
   ViewSwitchEvent.next.mockImplementation(() => emit());
   PluginEvent.ParseEvent.next.mockImplementation(parseEvent);
   FileEvent.GlobalUploadFilesEvent.next.mockImplementation(globalUploadFilesEvent);
-  gitGlobalUpload.mockImplementation(
+  Project.gitGlobalUpload.mockImplementation(
     (project) => (project.git ? Promise.resolve() : Promise.reject()),
   );
 
   beforeEach(() => {
+    addRemoteSubscribe = jest.fn();
+    addRemoteUnsubscribe = jest.fn();
+    authenticationSubscribe = jest.fn();
+    authenticationUnsubscribe = jest.fn();
+
+    GitEvent.AddRemoteEvent.subscribe.mockImplementation(() => {
+      addRemoteSubscribe();
+      return { unsubscribe: addRemoteUnsubscribe };
+    });
+    GitEvent.AuthenticationEvent.subscribe.mockImplementation(() => {
+      authenticationSubscribe();
+      return { unsubscribe: authenticationUnsubscribe };
+    });
+
     wrapper = shallowMount(ModelizerNavigationBar, {
       props: {
         viewType: 'model',
@@ -93,56 +122,99 @@ describe('Test component: ModelizerNavigationBar', () => {
     });
   });
 
-  describe('Test computed: isSaveButtonDisable', () => {
-    it('should return false if project git repository is defined', () => {
-      expect(wrapper.vm.isSaveButtonDisable).toEqual(false);
-    });
+  describe('Test computed: buttonToggleOptions', () => {
+    it('should equal buttonToggleOpitons array ', () => {
+      const buttonToggleOptions = [{
+        label: 'page.modelizer.header.switch.model',
+        value: 'model',
+        slot: 'content',
+      }, {
+        label: 'page.modelizer.header.switch.text',
+        value: 'text',
+        slot: 'content',
+      }];
 
-    it('should return true if project git repository is not defined', async () => {
-      await wrapper.setProps({
-        viewType: 'model',
-        projectName: 'WrongProjectTest',
-      });
-
-      expect(wrapper.vm.isSaveButtonDisable).toEqual(true);
+      expect(wrapper.vm.buttonToggleOptions).toEqual(buttonToggleOptions);
     });
   });
 
-  describe('Test computed: savebuttonTitle', () => {
-    it('should return enable title if project git repository is defined', () => {
-      expect(wrapper.vm.savebuttonTitle).toEqual('page.modelizer.header.button.upload.enable.title');
+  describe('Test computed: isUploadButtonVisible', () => {
+    it('should return true if project git repository is defined', () => {
+      expect(wrapper.vm.isUploadButtonVisible).toEqual(true);
     });
 
-    it('should return disable title if project git repository is not defined', async () => {
-      await wrapper.setProps({
-        viewType: 'model',
-        projectName: 'WrongProjectTest',
-      });
+    it('should return false if project git config is not defined', () => {
+      wrapper.vm.project = {};
 
-      expect(wrapper.vm.savebuttonTitle).toEqual('page.modelizer.header.button.upload.disable.title');
+      expect(wrapper.vm.isUploadButtonVisible).toEqual(false);
+    });
+
+    it('should return false if project git repository is not defined', () => {
+      wrapper.vm.project = { git: {} };
+
+      expect(wrapper.vm.isUploadButtonVisible).toEqual(false);
+    });
+  });
+
+  describe('Test computed: isUploadButtonDisable', () => {
+    it('should return false if both project git username and git token are defined', () => {
+      expect(wrapper.vm.isUploadButtonDisable).toEqual(false);
+    });
+
+    it('should return true if both project git username and git token are not defined', () => {
+      wrapper.vm.project = { git: { repository: {} } };
+
+      expect(wrapper.vm.isUploadButtonDisable).toEqual(true);
+    });
+
+    it('should return true if project git username is defined and git token is not defined', () => {
+      wrapper.vm.project = { git: { repository: {}, username: 'username' } };
+
+      expect(wrapper.vm.isUploadButtonDisable).toEqual(true);
+    });
+
+    it('should return true if project git username is not defined and git token is defined', () => {
+      wrapper.vm.project = { git: { repository: {}, token: 'token' } };
+
+      expect(wrapper.vm.isUploadButtonDisable).toEqual(true);
+    });
+
+    it('should return true if project git config is not defined', () => {
+      wrapper.vm.project = {};
+
+      expect(wrapper.vm.isUploadButtonDisable).toEqual(true);
+    });
+  });
+
+  describe('Test computed: uploadButtonTitle', () => {
+    it('should return enable title if both project git username and git token are defined', () => {
+      expect(wrapper.vm.uploadButtonTitle).toEqual('page.modelizer.header.button.upload.enable.title');
+    });
+
+    it('should return disable title if both project git username and git token are not defined', () => {
+      wrapper.vm.project = { git: { repository: {} } };
+
+      expect(wrapper.vm.uploadButtonTitle).toEqual('page.modelizer.header.button.upload.disable.title');
     });
   });
 
   describe('Test functions', () => {
-    describe('Test function: save', () => {
+    describe('Test function: upload', () => {
       it('should emit GlobalUploadFilesEvent and emit a positive notification on success', async () => {
         Notify.create = jest.fn();
 
-        await wrapper.vm.save();
+        await wrapper.vm.upload();
 
         expect(globalUploadFilesEvent).toHaveBeenCalledTimes(1);
         expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
       });
 
       it('should emit a negative notification on error', async () => {
-        await wrapper.setProps({
-          viewType: 'model',
-          projectName: 'WrongProjectTest',
-        });
+        wrapper.vm.project = {};
 
         Notify.create = jest.fn();
 
-        await wrapper.vm.save();
+        await wrapper.vm.upload();
 
         expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
       });
@@ -168,6 +240,20 @@ describe('Test component: ModelizerNavigationBar', () => {
         expect(parseEvent).toHaveBeenCalledTimes(1);
       });
     });
+
+    describe('Test function: setProject', () => {
+      it('should update project value', () => {
+        wrapper.vm.project = {};
+        wrapper.vm.setProject();
+        expect(wrapper.vm.project).toEqual({
+          git: {
+            repository: {},
+            token: 'token',
+            username: 'username',
+          },
+        });
+      });
+    });
   });
 
   describe('Test watcher: props.viewType', () => {
@@ -177,6 +263,30 @@ describe('Test component: ModelizerNavigationBar', () => {
         projectName: 'projectTest',
       });
       expect(wrapper.vm.buttonToggleValue).toEqual('text');
+    });
+  });
+
+  describe('Test hook function: onMounted', () => {
+    it('should subscribe to AddRemoteEvent', () => {
+      expect(addRemoteSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to AddRemoteEvent', () => {
+      expect(authenticationSubscribe).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test hook function: onUnmounted', () => {
+    it('should unsubscribe to AddRemoteEvent', () => {
+      expect(addRemoteUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(addRemoteUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to AddRemoteEvent', () => {
+      expect(authenticationUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(authenticationUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });
