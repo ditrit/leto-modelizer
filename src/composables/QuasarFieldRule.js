@@ -18,7 +18,7 @@ export function notEmpty(t, value) {
  */
 export function isGitRepositoryUrl(t, value) {
   return /^http(s)?:\/\/.+\/.*(?<!\.git)$/.test(value)
-    || t('errors.invalid.gitProvider.repository');
+    || t('errors.invalid.gitAddRemote.repository');
 }
 
 /**

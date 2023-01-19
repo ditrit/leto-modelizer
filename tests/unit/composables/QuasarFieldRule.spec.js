@@ -41,7 +41,7 @@ describe('Test composable: InputRule', () => {
     });
 
     it('should return error on invalid git url', () => {
-      const key = 'errors.invalid.gitProvider.repository';
+      const key = 'errors.invalid.gitAddRemote.repository';
       expect(isGitRepositoryUrl(t, 'git@github.com/ditrit/leto-modelizer.git')).toEqual(key);
       expect(isGitRepositoryUrl(t, 'ftp://github.com/ditrit/leto-modelizer.git')).toEqual(key);
       expect(isGitRepositoryUrl(t, 'http://github.com/ditrit/leto-modelizer.git')).toEqual(key);

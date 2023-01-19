@@ -23,6 +23,9 @@ export default {
       repository: {
         exists: 'We have access to your repository &#129395;!',
       },
+      authentication: {
+        update: 'Git authentication updated &#129395;!',
+      },
       checkout: 'Checkout',
       newBranch: 'New branch',
       status: 'Status',
@@ -57,7 +60,7 @@ export default {
   errors: {
     empty: 'Please type something',
     invalid: {
-      gitProvider: {
+      gitAddRemote: {
         repository: 'Invalid repository url',
       },
       fileExplorer: {
@@ -129,7 +132,7 @@ export default {
           upload: {
             label: 'Upload to Git',
             disable: {
-              title: 'Please set git configuration to enable uploading.',
+              title: 'Please set git authentication to enable uploading.',
             },
             enable: {
               title: 'Click to upload you work to git.',
@@ -146,12 +149,16 @@ export default {
         },
       },
       settings: {
-        gitProvider: {
-          title: 'Git configuration',
-          repository: 'Repository url',
-          repositoryExample: 'Examples: "http://test.com/test" or "https://github.com/test"',
+        gitAuthentication: {
+          title: 'Git authentication',
           username: 'Username',
           token: 'Access token',
+        },
+        gitAddRemote: {
+          title: 'Add remote repository',
+          repository: 'Repository url',
+          repositoryExample: 'Examples: "http://test.com/test" or "https://github.com/test"',
+          warningMessage: 'Changing the remote can lead to conflicts and/or data loss',
         },
       },
       git: {
