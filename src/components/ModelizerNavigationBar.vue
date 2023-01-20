@@ -37,6 +37,7 @@
         @click="upload()"
         color="positive"
         class="q-mr-md"
+        data-cy="upload-to-git-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

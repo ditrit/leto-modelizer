@@ -16,7 +16,7 @@
             v-if="menuItem.visible"
             clickable
             class="settings-item"
-            data-cy="git-settings-menu"
+            :data-cy="`git-settings-menu-${menuItem.key}`"
             @click="onClick(menuItem.key)"
           >
             <q-item-section avatar>
