@@ -6,7 +6,10 @@
     icon="fa-solid fa-gear"
     data-cy="project-settings"
   >
-    <q-menu auto-close>
+    <q-menu
+      auto-close
+      data-cy="project-settings-menu"
+    >
       <q-list>
         <template
           v-for="menuItem in menuItems"
