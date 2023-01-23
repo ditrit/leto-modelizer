@@ -299,13 +299,12 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: deleteProjectById', () => {
-    it('should delete one project', () => {
+    it('should delete one project', async () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         foo: { id: 'foo' },
         bar: { id: 'bar' },
       }));
-      deleteProjectById('foo');
-
+      await deleteProjectById('foo');
       const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
 
       expect(projects.bar).toStrictEqual({ id: 'bar' });
