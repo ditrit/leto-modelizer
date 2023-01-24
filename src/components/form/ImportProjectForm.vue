@@ -6,8 +6,8 @@
   >
     <q-input
       v-model="repository"
-      :label="$t('page.modelizer.settings.gitProvider.repository')"
-      :hint="$t('page.modelizer.settings.gitProvider.repositoryExample')"
+      :label="$t('page.modelizer.settings.gitAddRemote.repository')"
+      :hint="$t('page.modelizer.settings.gitAddRemote.repositoryExample')"
       :rules="[v => notEmpty($t, v), v => isGitRepositoryUrl($t, v)]"
       filled
       lazy-rules
@@ -15,14 +15,14 @@
     />
     <q-input
       v-model="username"
-      :label="$t('page.modelizer.settings.gitProvider.username')"
+      :label="$t('page.modelizer.settings.gitAuthentication.username')"
       filled
       lazy-rules
       data-cy="git-username-input"
     />
     <q-input
       v-model="token"
-      :label="$t('page.modelizer.settings.gitProvider.token')"
+      :label="$t('page.modelizer.settings.gitAuthentication.token')"
       filled
       lazy-rules
       data-cy="git-token-input"

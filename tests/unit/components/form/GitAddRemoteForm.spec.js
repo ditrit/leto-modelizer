@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import GitSettingsForm from 'src/components/form/GitSettingsForm.vue';
+import GitAddRemoteForm from 'src/components/form/GitAddRemoteForm.vue';
 import {
   getProjectById,
   saveProject,
@@ -30,6 +30,7 @@ jest.mock('src/composables/Project', () => ({
     if (id === 'noGit') {
       return { id };
     }
+
     return {
       id,
       git: {
@@ -44,18 +45,19 @@ jest.mock('src/composables/Project', () => ({
     if (project.id === 'error') {
       return Promise.reject({ name: 'HttpError' });
     }
+
     return Promise.resolve();
   }),
 }));
 
-describe('Test component: GitSettingsForm', () => {
+describe('Test component: GitAddRemoteForm', () => {
   let wrapper;
   const emit = jest.fn();
 
   GitEvent.AddRemoteEvent.next.mockImplementation(() => emit());
 
   beforeEach(() => {
-    wrapper = shallowMount(GitSettingsForm, {
+    wrapper = shallowMount(GitAddRemoteForm, {
       props: {
         projectName: 'test',
       },
@@ -70,8 +72,8 @@ describe('Test component: GitSettingsForm', () => {
     });
 
     describe('Test variable: repository', () => {
-      it('should be undefined without any git configuration in project', () => {
-        wrapper = shallowMount(GitSettingsForm, {
+      it('should be undefined without any git remote in project', () => {
+        wrapper = shallowMount(GitAddRemoteForm, {
           props: {
             projectName: 'noGit',
           },
@@ -79,44 +81,14 @@ describe('Test component: GitSettingsForm', () => {
         expect(wrapper.vm.repository).toBeUndefined();
       });
 
-      it('should not be null with git configuration in project', () => {
+      it('should not be null with git remote in project', () => {
         expect(wrapper.vm.repository).toEqual('testRepository');
-      });
-    });
-
-    describe('Test variable: token', () => {
-      it('should be undefined without any git configuration in project', () => {
-        wrapper = shallowMount(GitSettingsForm, {
-          props: {
-            projectName: 'noGit',
-          },
-        });
-        expect(wrapper.vm.token).toBeUndefined();
-      });
-
-      it('should not be null with git configuration in project', () => {
-        expect(wrapper.vm.token).toEqual('testToken');
-      });
-    });
-
-    describe('Test variable: username', () => {
-      it('should be undefined without any git configuration in project', () => {
-        wrapper = shallowMount(GitSettingsForm, {
-          props: {
-            projectName: 'noGit',
-          },
-        });
-        expect(wrapper.vm.username).toBeUndefined();
-      });
-
-      it('should not be null with git configuration in project', () => {
-        expect(wrapper.vm.username).toEqual('testUsername');
       });
     });
   });
 
   describe('Test function: onSubmit', () => {
-    it('should emit an event on success', async () => {
+    it('should emit an event on success and emit a positive notification', async () => {
       wrapper.vm.repository = 'https://test/test.git';
       wrapper.vm.token = 'testToken';
       wrapper.vm.username = 'TestUsername';
@@ -135,7 +107,7 @@ describe('Test component: GitSettingsForm', () => {
     });
 
     it('should emit a notification on error', async () => {
-      wrapper = shallowMount(GitSettingsForm, {
+      wrapper = shallowMount(GitAddRemoteForm, {
         props: {
           projectName: 'error',
         },

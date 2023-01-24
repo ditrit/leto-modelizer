@@ -71,6 +71,10 @@ Then('I expect {string} to be disabled', (selector) => {
   cy.get(selector).should('be.disabled');
 });
 
+Then('I expect {string} to be enabled', (selector) => {
+  cy.get(selector).should('not.be.disabled');
+});
+
 Then('I set active file content to {string}', async (value) => {
   await cy.get('[data-cy="monaco-editor"]')
     .click()

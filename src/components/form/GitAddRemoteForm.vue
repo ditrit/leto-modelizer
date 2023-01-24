@@ -1,36 +1,26 @@
 <template>
   <q-form
     @submit="onSubmit"
-    data-cy="git-settings-form"
-    class="q-gutter-md git-form">
+    data-cy="git-add-remote-form"
+    class="q-gutter-md"
+  >
+    <div class="warning-message row items-center bg-warning q-py-sm">
+      <q-icon
+        name="fa-solid fa-triangle-exclamation"
+        class="q-pr-xs"
+      >
+      </q-icon>
+      {{ $t('page.modelizer.settings.gitAddRemote.warningMessage') }}
+    </div>
     <q-input
       filled
       v-model="repository"
-      :label="$t('page.modelizer.settings.gitProvider.repository')"
+      :label="$t('page.modelizer.settings.gitAddRemote.repository')"
       lazy-rules
       data-cy="git-repository-input"
-      :hint="$t('page.modelizer.settings.gitProvider.repositoryExample')"
+      :hint="$t('page.modelizer.settings.gitAddRemote.repositoryExample')"
       :rules="[v => notEmpty($t, v), v => isGitRepositoryUrl($t, v)]"
     />
-
-    <q-input
-      filled
-      v-model="username"
-      :label="$t('page.modelizer.settings.gitProvider.username')"
-      lazy-rules
-      data-cy="git-username-input"
-      :rules="[v => notEmpty($t, v)]"
-    />
-
-    <q-input
-      filled
-      v-model="token"
-      :label="$t('page.modelizer.settings.gitProvider.token')"
-      lazy-rules
-      data-cy="git-token-input"
-      :rules="[v => notEmpty($t, v)]"
-    />
-
     <div class="flex row items-center justify-center">
       <q-btn
         icon="fa-solid fa-save"
@@ -48,11 +38,13 @@
 </template>
 
 <script setup>
-// TODO : RENAME GitForm to GitConfigurationForm
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
-import { notEmpty, isGitRepositoryUrl } from 'src/composables/QuasarFieldRule';
+import {
+  notEmpty,
+  isGitRepositoryUrl,
+} from 'src/composables/QuasarFieldRule';
 import {
   getProjectById,
   saveProject,
@@ -63,22 +55,26 @@ import GitEvent from 'src/composables/events/GitEvent';
 const emit = defineEmits(['project-git:save']);
 
 const props = defineProps({
-  projectName: String,
+  projectName: {
+    type: String,
+    required: true,
+  },
 });
 
 const { t } = useI18n();
 const project = getProjectById(props.projectName);
 const repository = ref(project.git?.repository);
-const username = ref(project.git?.username);
-const token = ref(project.git?.token);
 const submitting = ref(false);
 
+/**
+ * Add git remote to the project, manage toast and loader.
+ */
 function onSubmit() {
   submitting.value = true;
   project.git = {
     repository: repository.value,
-    username: username.value,
-    token: token.value,
+    username: project.git?.username,
+    token: project.git?.token,
   };
   return gitAddRemote(project)
     .then(() => {
@@ -105,8 +101,9 @@ function onSubmit() {
 
 </script>
 
-<style lang="scss">
-.git-form {
-  min-width: 400px;
+<style scoped lang="scss">
+.warning-message {
+  border-radius: 4px;
+  padding: 8px 12px;
 }
 </style>

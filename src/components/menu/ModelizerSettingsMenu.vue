@@ -6,23 +6,30 @@
     icon="fa-solid fa-gear"
     data-cy="project-settings"
   >
-    <q-menu auto-close>
+    <q-menu
+      auto-close
+      data-cy="project-settings-menu"
+    >
       <q-list>
-        <q-item
-          data-cy="git-settings-menu"
-          class="settings-item"
+        <template
           v-for="menuItem in menuItems"
           :key="menuItem.key"
-          @click="onClick(menuItem.key)"
-          clickable
         >
-          <q-item-section avatar>
-            <q-icon color="primary" :name="menuItem.icon" />
-          </q-item-section>
-          <q-item-section no-wrap>
-            {{ $t(menuItem.title) }}
-          </q-item-section>
-        </q-item>
+          <q-item
+            v-if="menuItem.visible"
+            clickable
+            class="settings-item"
+            :data-cy="`git-settings-menu-${menuItem.key}`"
+            @click="onClick(menuItem.key)"
+          >
+            <q-item-section avatar>
+              <q-icon color="primary" :name="menuItem.icon" />
+            </q-item-section>
+            <q-item-section no-wrap>
+              {{ $t(menuItem.title) }}
+            </q-item-section>
+          </q-item>
+        </template>
       </q-list>
     </q-menu>
   </q-btn>
@@ -30,16 +37,63 @@
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
+import { getProjectById } from 'src/composables/Project';
+import GitEvent from 'src/composables/events/GitEvent';
+import {
+  computed,
+  ref,
+  onMounted,
+  onUnmounted,
+} from 'vue';
 
-const menuItems = [{
-  key: 'GitProvider',
-  icon: 'fa-brands fa-git-alt',
-  title: 'page.modelizer.settings.gitProvider.title',
-}];
+const props = defineProps({
+  projectName: {
+    type: String,
+    required: true,
+  },
+});
 
+let addRemoteSubscription;
+const project = ref({});
+const hasRepository = computed(() => !!project.value.git?.repository);
+const menuItems = computed(() => [
+  {
+    key: 'GitAddRemote',
+    icon: 'fa-solid fa-book-bookmark',
+    title: 'page.modelizer.settings.gitAddRemote.title',
+    visible: !hasRepository.value,
+  },
+  {
+    key: 'GitAuthentication',
+    icon: 'fa-brands fa-git-alt',
+    title: 'page.modelizer.settings.gitAuthentication.title',
+    visible: true,
+  },
+]);
+
+/**
+ * Send event to open the dialog corresponding to the key.
+ * @param {String} key - Event key.
+ */
 function onClick(key) {
   DialogEvent.next({ type: 'open', key });
 }
+
+/**
+ * Set project
+ */
+function setProject() {
+  project.value = getProjectById(props.projectName);
+}
+
+onMounted(() => {
+  setProject();
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(setProject);
+});
+
+onUnmounted(() => {
+  addRemoteSubscription.unsubscribe();
+});
 </script>
 
 <style lang="scss">

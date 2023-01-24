@@ -50,4 +50,11 @@ describe('Test composable: GitEvent', () => {
       expect(GitEvent.CommitEvent).toEqual(new Subject());
     });
   });
+
+  describe('Test event: AuthenticationEvent', () => {
+    it('should export a Subject', () => {
+      expect(GitEvent.AuthenticationEvent).toBeDefined();
+      expect(GitEvent.AuthenticationEvent).toEqual(new Subject());
+    });
+  });
 });

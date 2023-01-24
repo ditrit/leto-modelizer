@@ -29,13 +29,15 @@
     </div>
     <div class="row justify-between items-center">
       <q-btn
-        :disable="isSaveButtonDisable"
+        v-if="isUploadButtonVisible"
+        :disable="isUploadButtonDisable"
         :loading="isLoading"
         :label="$t('page.modelizer.header.button.upload.label')"
-        :title="$t(savebuttonTitle)"
-        @click="save()"
+        :title="$t(uploadButtonTitle)"
+        @click="upload()"
         color="positive"
         class="q-mr-md"
+        data-cy="upload-to-git-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>
@@ -53,13 +55,19 @@
         data-cy="modelizer-switch"
         rounded
       />
-      <modelizer-settings-menu/>
+      <modelizer-settings-menu :project-name="projectName" />
     </div>
   </q-header>
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue';
+import {
+  computed,
+  ref,
+  watch,
+  onMounted,
+  onUnmounted,
+} from 'vue';
 import { useI18n } from 'vue-i18n';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import ModelizerSettingsMenu from 'components/menu/ModelizerSettingsMenu.vue';
@@ -70,13 +78,25 @@ import {
   getProjectById,
   gitGlobalUpload,
 } from 'src/composables/Project';
+import GitEvent from 'src/composables/events/GitEvent';
 
 const { t } = useI18n();
 const props = defineProps({
-  viewType: String,
-  projectName: String,
+  viewType: {
+    type: String,
+    required: true,
+  },
+  projectName: {
+    type: String,
+    required: true,
+  },
 });
+
+let addRemoteSubscription;
+let authenticationSubscription;
+
 const isLoading = ref(false);
+const project = ref(getProjectById(props.projectName));
 const buttonToggleValue = ref(props.viewType);
 const buttonToggleOptions = computed(() => [{
   label: t('page.modelizer.header.switch.model'),
@@ -87,11 +107,11 @@ const buttonToggleOptions = computed(() => [{
   value: 'text',
   slot: 'content',
 }]);
-
-const project = computed(() => getProjectById(props.projectName));
-const isSaveButtonDisable = computed(() => !project.value.git?.repository);
-const savebuttonTitle = computed(() => {
-  if (isSaveButtonDisable.value) {
+const isUploadButtonVisible = computed(() => !!project.value.git && !!project.value.git.repository);
+const isUploadButtonDisable = computed(() => !project.value.git || !project.value.git.username
+  || !project.value.git.token);
+const uploadButtonTitle = computed(() => {
+  if (isUploadButtonDisable.value) {
     return 'page.modelizer.header.button.upload.disable.title';
   }
   return 'page.modelizer.header.button.upload.enable.title';
@@ -100,7 +120,7 @@ const savebuttonTitle = computed(() => {
 /**
  * Upload global modifications and notify according to the result.
  */
-async function save() {
+async function upload() {
   isLoading.value = true;
 
   await gitGlobalUpload(project.value)
@@ -137,8 +157,25 @@ function onViewSwitchUpdate(newViewType) {
   }
 }
 
+/**
+ * Set project.
+ */
+function setProject() {
+  project.value = getProjectById(props.projectName);
+}
+
 watch(() => props.viewType, (newViewType) => {
   buttonToggleValue.value = newViewType;
+});
+
+onMounted(() => {
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(setProject);
+  authenticationSubscription = GitEvent.AuthenticationEvent.subscribe(setProject);
+});
+
+onUnmounted(() => {
+  addRemoteSubscription.unsubscribe();
+  authenticationSubscription.unsubscribe();
 });
 </script>
 
