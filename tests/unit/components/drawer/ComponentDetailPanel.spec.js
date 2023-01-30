@@ -105,28 +105,6 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
-  describe('Test function: getAttribute', () => {
-    it('should return an existing attribute', () => {
-      const attribute = { name: 'attribute' };
-      const component = {
-        attributes: [attribute],
-      };
-      const definition = { name: 'attribute' };
-      expect(wrapper.vm.getAttribute(component, definition)).toEqual(attribute);
-    });
-
-    it('should return a new attribute', () => {
-      const component = { attributes: [] };
-      const definition = { name: 'attribute' };
-      expect(wrapper.vm.getAttribute(component, definition)).toEqual({
-        name: 'attribute',
-        type: null,
-        value: null,
-        definition,
-      });
-    });
-  });
-
   describe('Test function: getReferencedAttributes', () => {
     it('should return an existing attribute', () => {
       const definition = { name: 'attribute' };
@@ -159,27 +137,6 @@ describe('test component: Plugin Component Detail Panel', () => {
         type: null,
         value: null,
       }]);
-    });
-  });
-
-  describe('Test function: getSelectedComponentAttributes', () => {
-    const refAttribute = new ComponentAttribute({ name: 'refAttribute', definition: new ComponentAttributeDefinition() });
-    const unrefAttribute = new ComponentAttribute({ name: 'unrefAttribute', definition: null });
-
-    beforeEach(() => {
-      wrapper.vm.selectedComponentAttributes = [refAttribute, unrefAttribute];
-    });
-
-    it('should return referenced attributes', () => {
-      expect(wrapper.vm.getSelectedComponentAttributes('referenced')).toEqual([refAttribute]);
-    });
-
-    it('should return unreferenced attributes', () => {
-      expect(wrapper.vm.getSelectedComponentAttributes('unreferenced')).toEqual([unrefAttribute]);
-    });
-
-    it('should return empty array', () => {
-      expect(wrapper.vm.getSelectedComponentAttributes('unvalidKey')).toEqual([]);
     });
   });
 
@@ -217,21 +174,6 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
-  describe('Test function: deleteAttribute', () => {
-    it('should remove selected attribute from selectedComponentAttributes', () => {
-      wrapper.vm.selectedComponentAttributes = [{
-        name: 'attributeName',
-        value: '',
-        definition: null,
-        type: 'String',
-      }];
-
-      wrapper.vm.deleteAttribute('attributeName');
-
-      expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
-    });
-  });
-
   describe('Test function: addAttribute', () => {
     it('should add new attribute to selectedComponentAttributes', () => {
       wrapper.vm.selectedComponentAttributes = [];
@@ -241,6 +183,68 @@ describe('test component: Plugin Component Detail Panel', () => {
       expect(wrapper.vm.selectedComponentAttributes).toEqual([{
         name: 'attribut_1',
         value: '',
+        definition: null,
+        type: 'String',
+      }]);
+    });
+  });
+
+  describe('Test function: updateAttribute', () => {
+    it('should remove attribute when call function with event without attribute', () => {
+      wrapper.vm.selectedComponentAttributes = [{
+        name: 'attribut_1',
+        value: '',
+        definition: null,
+        type: 'String',
+      }];
+
+      wrapper.vm.updateAttribute({ name: 'attribut_1' });
+
+      expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
+    });
+
+    it('should update attribute value when call function with event with existing attribute name', () => {
+      wrapper.vm.selectedComponentAttributes = [{
+        name: 'attribut_1',
+        value: '',
+        definition: null,
+        type: 'String',
+      }];
+
+      wrapper.vm.updateAttribute({
+        name: 'attribut_1',
+        attribute: {
+          name: 'attribut_2',
+          value: 'test',
+          definition: null,
+          type: 'String',
+        },
+      });
+
+      expect(wrapper.vm.selectedComponentAttributes).toEqual([{
+        name: 'attribut_2',
+        value: 'test',
+        definition: null,
+        type: 'String',
+      }]);
+    });
+
+    it('should add attribute value when call function with event with attribute name not existing', () => {
+      wrapper.vm.selectedComponentAttributes = [];
+
+      wrapper.vm.updateAttribute({
+        name: 'attribut_1',
+        attribute: {
+          name: 'attribut_1',
+          value: 'test',
+          definition: null,
+          type: 'String',
+        },
+      });
+
+      expect(wrapper.vm.selectedComponentAttributes).toEqual([{
+        name: 'attribut_1',
+        value: 'test',
         definition: null,
         type: 'String',
       }]);
@@ -262,6 +266,40 @@ describe('test component: Plugin Component Detail Panel', () => {
       wrapper.vm.onViewSwitchUpdate('text');
 
       expect(wrapper.vm.isVisible).toEqual(false);
+    });
+  });
+
+  describe('Test function: getAttributeByDefinition', () => {
+    it('Should return attribute with null value when type is not Object', () => {
+      const component = new Component();
+      const definition = new ComponentAttributeDefinition({
+        name: 'test',
+        type: 'String',
+      });
+      expect(wrapper.vm.getAttributeByDefinition(component, definition)).toEqual(
+        new ComponentAttribute({
+          name: 'test',
+          type: 'String',
+          value: null,
+          definition,
+        }),
+      );
+    });
+
+    it('Should return attribute with array value when type is Object', () => {
+      const component = new Component();
+      const definition = new ComponentAttributeDefinition({
+        name: 'test',
+        type: 'Object',
+      });
+      expect(wrapper.vm.getAttributeByDefinition(component, definition)).toEqual(
+        new ComponentAttribute({
+          name: 'test',
+          type: 'Object',
+          value: [],
+          definition,
+        }),
+      );
     });
   });
 

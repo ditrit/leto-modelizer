@@ -25,106 +25,85 @@
         </q-item-section>
       </q-item>
     </q-list>
-    <div class="col"
-      v-if="selectedComponent && isVisible"
+
+    <div
+       v-if="selectedComponent && isVisible"
+       class="col"
     >
-      <q-form
-        @submit="save"
-        @reset="reset"
-      >
-        <q-input
-          v-model="selectedComponentId"
-          class="q-px-md q-pb-sm"
-          :label="$t('plugin.component.attribute.id')"
-        />
-          <template
-            v-for="localAttribute in localAttributes"
-            :key="`${localAttribute.title}-${Math.random()}`"
+      <q-form @submit="save" @reset="reset">
+        <q-list>
+          <q-item class="q-px-none">
+            <q-input
+              v-model="selectedComponentName"
+              class="q-px-md q-pb-sm"
+              :label="$t('plugin.component.attribute.name')"
+            />
+          </q-item>
+          <q-item
+            v-for="attribute in selectedComponentAttributes.filter(({ type }) => type !== 'Object')"
+            :key="`${attribute.title}-${Math.random()}`"
+            class="q-px-none"
           >
-
-            <q-separator/>
-
-            <q-expansion-item
-              :default-opened="localAttribute.expanded"
-              :label="$t(localAttribute.title)"
-              class="text-bold"
+            <attribute-section
+              :attribute="attribute"
+              :plugin="localPlugin"
+              :is-root="true"
+              @add:attribute="addAttribute"
+              @update:attribute="updateAttribute"
+            />
+          </q-item>
+          <q-item
+            v-if="selectedComponentAttributes.filter(({ type }) => type !== 'Object').length === 0"
+            class="text-grey text-weight-regular q-px-none justify-center"
+          >
+            {{ $t('plugin.component.attribute.noAttributes') }}
+          </q-item>
+          <q-item class="justify-center q-px-none">
+            <q-btn
+              no-caps
+              :label="$t('plugin.component.attribute.add')"
+              color="positive"
+              icon="fa-solid fa-plus"
+              data-cy="object-details-panel-attribute-add-button"
+              @click="addAttribute"
+            />
+          </q-item>
+          <q-item
+            v-for="attribute in selectedComponentAttributes.filter(({ type }) => type === 'Object')"
+            :key="`${attribute.title}-${Math.random()}`"
+            class="q-pa-none"
+            dense
+          >
+            <attribute-section
+              :attribute="attribute"
+              :plugin="localPlugin"
+              :is-root="true"
+              @add:attribute="addAttribute"
+              @update:attribute="updateAttribute"
+            />
+          </q-item>
+          <q-item class="row justify-evenly q-mt-md">
+            <q-btn
+              icon="fa-solid fa-floppy-disk"
+              :label="$t('plugin.component.attribute.save')"
+              type="submit"
+              color="positive"
+              :loading="submitting"
+              data-cy="object-details-panel-save-button"
             >
-
-              <q-separator/>
-
-              <q-item-section>
-                <div
-                  v-for="attribute in
-                    getSelectedComponentAttributes(localAttribute.attributeKey)"
-                  :key="`${attribute.type}-${Math.random()}`"
-                  class="row items-center q-mb-sm"
-                >
-                  <input-wrapper
-                    :attribute="attribute"
-                    :plugin="localPlugin"
-                    class="col"
-                    @update:attribute-name="(name) => attribute.name = name"
-                    @update:attribute-value="(value) => attribute.value = value"
-                  />
-                  <q-btn
-                    v-if="localAttribute.attributeKey == 'unreferenced'"
-                    class="q-mr-md"
-                    size="xs"
-                    round
-                    flat
-                    color="negative"
-                    icon="fa-solid fa-trash"
-                    data-cy="object-details-panel-attribute-delete-button"
-                    @click="deleteAttribute(attribute.name)"
-                  >
-                    <q-tooltip anchor="center left" self="center right">
-                      {{$t('plugin.component.attribute.delete')}}
-                    </q-tooltip>
-                  </q-btn>
-                </div>
-                <div
-                  v-if="getSelectedComponentAttributes(localAttribute.attributeKey).length === 0"
-                  class="text-grey text-weight-regular q-py-sm q-px-md"
-                >
-                  {{ $t('plugin.component.attribute.noAttributes') }}
-                </div>
-                <q-btn
-                  v-if="localAttribute.attributeKey == 'unreferenced'"
-                  no-caps
-                  class="q-my-md self-center"
-                  :label="$t('plugin.component.attribute.add')"
-                  color="positive"
-                  icon="fa-solid fa-plus"
-                  data-cy="object-details-panel-attribute-add-button"
-                  @click="addAttribute"
-                />
-              </q-item-section>
-            </q-expansion-item>
-
-            <q-separator/>
-
-          </template>
-        <div class="row justify-evenly q-mt-md">
-          <q-btn
-            icon="fa-solid fa-floppy-disk"
-            :label="$t('plugin.component.attribute.save')"
-            type="submit"
-            color="positive"
-            :loading="submitting"
-            data-cy="object-details-panel-save-button"
-          >
-            <template v-slot:loading>
-              <q-spinner-dots/>
-            </template>
-          </q-btn>
-          <q-btn
-            icon="fa-solid fa-arrow-rotate-left"
-            :label="$t('plugin.component.attribute.reset')"
-            type="reset"
-            color="info"
-            data-cy="object-details-panel-reset-button"
-          />
-        </div>
+              <template v-slot:loading>
+                <q-spinner-dots/>
+              </template>
+            </q-btn>
+            <q-btn
+              icon="fa-solid fa-arrow-rotate-left"
+              :label="$t('plugin.component.attribute.reset')"
+              type="reset"
+              color="info"
+              data-cy="object-details-panel-reset-button"
+            />
+          </q-item>
+        </q-list>
       </q-form>
     </div>
   </q-drawer>
@@ -136,29 +115,17 @@ import {
   onMounted,
   onUnmounted,
 } from 'vue';
-import InputWrapper from 'components/inputs/InputWrapper';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import { getPlugins, renderPlugin } from 'src/composables/PluginManager';
 import { ComponentAttribute } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
+import AttributeSection from 'components/panel/AttributeSection';
 
 const localPlugin = ref(null);
 const selectedComponent = ref({});
 const selectedComponentId = ref('');
 const selectedComponentAttributes = ref([]);
-const localAttributes = ref([
-  {
-    title: 'plugin.component.attribute.referenced',
-    attributeKey: 'referenced',
-    expanded: true,
-  },
-  {
-    title: 'plugin.component.attribute.unreferenced',
-    attributeKey: 'unreferenced',
-    expanded: true,
-  },
-]);
 const isVisible = ref(false);
 const submitting = ref(false);
 const route = useRoute();
@@ -185,16 +152,17 @@ async function save() {
 /**
  * Get attribute corresponding to the given definition.
  * Create one with the given definition if not existing.
- * @param {Object} component - Component containing the available attributes.
- * @param {Object} definition - Definition of the attribute to get.
+ * @param {Component} component - Component containing the available attributes.
+ * @param {ComponentAttributeDefinition} definition - Definition of the attribute to get.
  * @return {ComponentAttribute} the wanted attribute if available otherwise a newly created one.
  */
-function getAttribute(component, definition) {
+function getAttributeByDefinition(component, definition) {
   return component.attributes.find((attr) => attr.name === definition.name)
     || new ComponentAttribute({
       name: definition.name,
       type: definition.type,
       definition,
+      value: definition.type === 'Object' ? [] : null,
     });
 }
 
@@ -204,7 +172,8 @@ function getAttribute(component, definition) {
  * @return {Array} an array of referenced attributes.
  */
 function getReferencedAttributes(component) {
-  return component.definition.definedAttributes.map((defAttr) => getAttribute(component, defAttr));
+  return component.definition.definedAttributes
+    .map((defAttr) => getAttributeByDefinition(component, defAttr));
 }
 
 /**
@@ -218,30 +187,14 @@ function getUnreferencedAttributes(component) {
 }
 
 /**
- * Get an array of attributes corresponding to the attribute key.
- * @param {String} key - Attribute key.
- * @return {Array} an array of attributes.
- */
-function getSelectedComponentAttributes(key) {
-  switch (key) {
-    case 'referenced':
-      return selectedComponentAttributes.value.filter(({ definition }) => !!definition);
-    case 'unreferenced':
-      return selectedComponentAttributes.value.filter(({ definition }) => !definition);
-    default:
-      return [];
-  }
-}
-
-/**
  * Reset local values of name and attributes.
  */
 function reset() {
   selectedComponentId.value = selectedComponent.value.id;
-  selectedComponentAttributes.value = JSON.parse(JSON.stringify(
-    getReferencedAttributes(selectedComponent.value)
-      .concat(getUnreferencedAttributes(selectedComponent.value)),
-  ));
+  selectedComponentAttributes.value = JSON.parse(JSON.stringify([
+    ...getReferencedAttributes(selectedComponent.value),
+    ...getUnreferencedAttributes(selectedComponent.value),
+  ]));
 }
 
 /**
@@ -274,19 +227,6 @@ function onEdit({ id }) {
 }
 
 /**
- * Delete selected attribute by its name.
- * @param {String} attributeName - Name of attribute to delete.
- */
-function deleteAttribute(attributeName) {
-  const attributeIndex = selectedComponentAttributes.value
-    .findIndex(({ name }) => name === attributeName);
-
-  if (attributeIndex !== -1) {
-    selectedComponentAttributes.value.splice(attributeIndex, 1);
-  }
-}
-
-/**
  * Add a new attribute without definition.
  */
 function addAttribute() {
@@ -298,6 +238,28 @@ function addAttribute() {
   });
 }
 
+/**
+ * Update attribute.
+ * If provided `event.attribute` is null, this will remove the attribute from the attributes list.
+ * And if attribute's name doesn't exist in the list, it will add the attribute.
+ * @param {Object} event - Event.
+ * @param {String} event.name - Name of updated attribute.
+ * @param {ComponentAttribute} event.attribute - New attribute value or null.
+ */
+function updateAttribute(event) {
+  if (!event.attribute) {
+    selectedComponentAttributes.value = selectedComponentAttributes.value
+      .filter(({ name }) => name !== event.name);
+  } else {
+    const index = selectedComponentAttributes.value.findIndex(({ name }) => event.name === name);
+
+    if (index < 0) {
+      selectedComponentAttributes.value.push(event.attribute);
+    } else {
+      selectedComponentAttributes.value[index] = event.attribute;
+    }
+  }
+}
 /**
  * Close component detail panel if route is updated with a new view type.
  * @param {String} newViewType - Updated view type.
