@@ -8,11 +8,18 @@
       v-if="data.plugin"
       :plugin="data.plugin"
       :templates="templates"
-      :projectName="projectName"
+      :project-name="projectName"
     />
     <q-page-container>
       <q-page>
-        <div id='root' data-cy="modelizer-model-view-draw-root"></div>
+        <div
+          id="root"
+          data-cy="modelizer-model-view-draw-root"
+          @dragover.prevent
+          @drop.prevent="dropHandler"
+        >
+          <component-drop-overlay />
+        </div>
       </q-page>
     </q-page-container>
     <component-detail-panel
@@ -34,21 +41,27 @@ import {
 import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer';
 import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
 import {
-  getFileInputs,
   getPluginByName,
+  getFileInputs,
   renderModel,
 } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { getTemplatesByType } from 'src/composables/TemplateManager';
 import {
   readDir,
   readProjectFile,
+  appendProjectFile,
 } from 'src/composables/Project';
-import { FileInformation } from 'leto-modelizer-plugin-core';
+import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import { useRoute, useRouter } from 'vue-router';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
+import {
+  generateTemplate,
+  getTemplateFileByPath,
+  getTemplatesByType,
+} from 'src/composables/TemplateManager';
+import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay';
 
 const router = useRouter();
 const route = useRoute();
@@ -123,6 +136,17 @@ async function drawComponents() {
 }
 
 /**
+ * Display an error message to the user.
+ */
+function notifyError() {
+  Notify.create({
+    type: 'negative',
+    message: t('errors.templates.getData'),
+    html: true,
+  });
+}
+
+/**
  * Update plugins array and related component templates array.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
@@ -141,12 +165,48 @@ async function updatePluginsAndTemplates() {
       templates.value = response;
     })
     .catch(() => {
-      Notify.create({
-        type: 'negative',
-        message: t('errors.templates.getData'),
-        html: true,
-      });
+      notifyError();
     });
+}
+
+/**
+ * Instantiate from a dragged component definition or template.
+ * @param {DragEvent} event - The drag event.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function dropHandler(event) {
+  const dropData = JSON.parse(event.dataTransfer.getData('text/plain'));
+  const modelFolder = process.env.MODELS_DEFAULT_FOLDER
+    ? `${process.env.MODELS_DEFAULT_FOLDER}/${route.query.path}`
+    : `${route.query.path}`;
+
+  let files;
+
+  if (dropData.isTemplate) {
+    const activeTemplate = templates.value.find(
+      ({ key }) => key === dropData.definitionType,
+    );
+
+    files = await renderModel(route.params.projectName, modelFolder, data.plugin);
+
+    await Promise.all(activeTemplate.files
+      .map((file) => getTemplateFileByPath(`templates/${activeTemplate.key}/${file}`)
+        .then(({ data: fileContent }) => appendProjectFile(route.params.projectName, new FileInput({
+          path: `${modelFolder}/${file}`,
+          content: generateTemplate(fileContent),
+        })))
+        .catch(() => {
+          notifyError();
+        })));
+  } else {
+    const newComponentDefinition = data.plugin.data.definitions.components
+      .find(({ type }) => type === dropData.definitionType);
+
+    data.plugin.data.addComponent(newComponentDefinition, `${modelFolder}/`);
+    files = await renderModel(route.params.projectName, modelFolder, data.plugin);
+  }
+
+  PluginEvent.RenderEvent.next(files);
 }
 
 /**
@@ -194,15 +254,30 @@ onUnmounted(() => {
 });
 </script>
 
-<style>
+<style scoped>
+  #root {
+    height: calc(100vh - 74px);
+    width: 100%;
+  }
+  .modelizer-model-view {
+    height: calc(100vh - 64px)
+  }
+</style>
+
+<style lang="scss">
+// Quasar sets overflow to 'hidden' on all svg.
+// In our case, it needs to be set to 'visible' to manage position with % in plugin models.
+  div#root svg {
+    overflow: visible !important;
+    display: unset;
+    height: 100%;
+    width: 100%;
+  }
+
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /**
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePluginsAndTemplates);
-     * Draw components.
-     */
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
@@ -214,25 +289,4 @@ onUnmounted(() => {
     -ms-user-select: none;
     user-select: none;
   }
-</style>
-
-<style scoped>
-  #root {
-    height: calc(100vh - 74px);
-    width: 100%;
-  }
-  .modelizer-model-view {
-      height: calc(100vh - 64px)
-  }
-</style>
-
-<style lang="scss">
-// Quasar sets overflow to 'hidden' on all svg.
-// In our case, it needs to be set to 'visible' to manage position with % in plugin models.
-div#root svg {
-  overflow: visible !important;
-  display: unset;
-  height: 100%;
-  width: 100%;
-}
 </style>

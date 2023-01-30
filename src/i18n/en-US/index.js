@@ -7,6 +7,7 @@ export default {
       goToHome: 'Go to homepage',
       save: 'Save',
       delete: 'Delete',
+      dropZoneMessage: 'Drop component/template here',
       show: {
         more: 'Show {number} more...',
         less: 'Show less',

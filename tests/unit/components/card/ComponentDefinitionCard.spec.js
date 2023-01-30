@@ -186,4 +186,82 @@ describe('Test component: ComponentDefinitionCard', () => {
       });
     });
   });
+
+  describe('Test function: dragStartHandler', () => {
+    let event;
+    let overlayElement;
+
+    beforeEach(() => {
+      overlayElement = {
+        style: {},
+      };
+
+      document.getElementById = jest.fn(() => overlayElement);
+
+      event = {
+        clientX: 100,
+        clientY: 100,
+        dataTransfer: {
+          setData: jest.fn(),
+        },
+      };
+    });
+
+    it('should load a dragged component\'s information', () => {
+      wrapper.vm.dragStartHandler(event);
+
+      expect(event.dataTransfer.dropEffect).toEqual('copy');
+      expect(event.dataTransfer.setData).toHaveBeenCalledWith('text/plain', JSON.stringify({
+        pluginName: 'plugin',
+        isTemplate: false,
+        definitionType: 'component one',
+      }));
+    });
+
+    it('should load a dragged template\'s information', async () => {
+      await wrapper.setProps({
+        definition: {
+          type: 'component one',
+          isTemplate: true,
+          files: ['app.tf'],
+          key: 'template key',
+          plugin: 'pluginName',
+        },
+        pluginName: '',
+      });
+
+      wrapper.vm.dragStartHandler(event);
+
+      expect(event.dataTransfer.dropEffect).toEqual('copy');
+      expect(event.dataTransfer.setData).toHaveBeenCalledWith('text/plain', JSON.stringify({
+        pluginName: 'pluginName',
+        isTemplate: true,
+        definitionType: 'template key',
+      }));
+    });
+
+    it('should cause the overlay to appear', () => {
+      wrapper.vm.dragStartHandler(event);
+
+      expect(overlayElement.style.display).toEqual('block');
+    });
+  });
+
+  describe('Test function: dragEndHandler', () => {
+    let overlayElement;
+
+    beforeEach(() => {
+      overlayElement = {
+        style: {},
+      };
+
+      document.getElementById = jest.fn(() => overlayElement);
+    });
+
+    it('should hide the overlay', () => {
+      wrapper.vm.dragEndHandler();
+
+      expect(overlayElement.style.display).toEqual('none');
+    });
+  });
 });
