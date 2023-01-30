@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add onUpdateFile function in ModelizerTextView and create FileTabHeader component
 - Add Reference type attributes management in ComponentDetailPanel
 - Add Unreferenced attributes management in ComponentDetailPanel
+- Add object attributes management in ComponentDetailPanel
 - Add an input in InputWrapper to allow updating the key (name) of the unreferenced attribute
 - Add create and delete action for unreferenced attribute
 - Add process.env variable for isomorphic-git cors proxy url
