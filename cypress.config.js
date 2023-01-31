@@ -15,7 +15,7 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: 'http://localhost:8080',
     specPattern: '**/*.feature',
-    supportFile: false,
+    supportFile: './cypress/support/e2e.js',
     video: false,
     screenshotOnRunFailure: false,
     setupNodeEvents,

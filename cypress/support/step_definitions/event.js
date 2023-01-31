@@ -30,3 +30,10 @@ When('I hover {string} to make it visible', (templateSelector) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   cy.get(selector).should('be.hidden').invoke('show');
 });
+
+When('I drag {string} onto {string}', (templateOriginSelector, templateDestinationSelector) => {
+  const originSelector = nunjucks.renderString(templateOriginSelector, cy.context);
+  const destinationSelector = nunjucks.renderString(templateDestinationSelector, cy.context);
+
+  cy.get(originSelector).drag(destinationSelector, { force: true });
+});
