@@ -10,7 +10,7 @@ describe('Test component: ComponentDefinitionsDrawer', () => {
   beforeEach(() => {
     wrapper = shallowMount(ComponentDefinitionsDrawer, {
       props: {
-        plugins: [{
+        plugin: {
           data: {
             name: 'pluginName',
             definitions: {
@@ -19,7 +19,13 @@ describe('Test component: ComponentDefinitionsDrawer', () => {
               }],
             },
           },
-        }],
+        },
+        projectName: 'projectName',
+      },
+      global: {
+        components: {
+          'router-link': 'a',
+        },
       },
     });
   });
@@ -27,11 +33,9 @@ describe('Test component: ComponentDefinitionsDrawer', () => {
   describe('Test variables initialization', () => {
     describe('Test computed: componentDefinitions', () => {
       it('should be an Object with plugin names as keys and corresponding definitions as value', () => {
-        expect(wrapper.vm.componentDefinitions).toEqual({
-          pluginName: [{
-            type: 'componentType',
-          }],
-        });
+        expect(wrapper.vm.componentDefinitions).toEqual([{
+          type: 'componentType',
+        }]);
       });
     });
   });

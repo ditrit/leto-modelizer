@@ -213,6 +213,10 @@ export default {
         components: {
           header: 'Components definitions',
           filterLabel: 'Component filter',
+          button: {
+            label: 'Back to models',
+            title: 'Open models page',
+          },
         },
         templates: {
           title: 'Templates',

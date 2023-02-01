@@ -7,6 +7,16 @@
       {{ $t('page.modelizer.drawer.components.header') }}
     </template>
     <template v-slot:content>
+      <div class="row justify-center">
+        <q-btn
+          :label="$t('page.modelizer.drawer.components.button.label')"
+          :title="$t('page.modelizer.drawer.components.button.title')"
+          color="positive"
+          class="q-mr-md"
+          no-caps
+          @click="router.push(`/modelizer/${projectName}/models`)"
+        />
+      </div>
       <q-input
         clearable
         v-model="definitionFilter"
@@ -19,10 +29,10 @@
       </q-input>
       <q-list text-white>
         <q-expansion-item
+          v-if="plugin"
           expand-sperator
           group="components-definitions"
           header-class="text-bold"
-          v-for="plugin in plugins"
           class="plugin-definitions"
           :key="plugin.data.name"
           :data-cy="`plugin-definitions-${plugin.data.name}`"
@@ -37,7 +47,7 @@
             class="sunken-area"
           >
             <component-definition-grid
-              :definitions="componentDefinitions[plugin.data.name]"
+              :definitions="componentDefinitions"
               :pluginName="plugin.data.name"
             />
           </q-scroll-area>
@@ -78,20 +88,26 @@
 import { computed, ref } from 'vue';
 import DefaultDrawer from 'src/components/drawer/DefaultDrawer';
 import ComponentDefinitionGrid from 'src/components/grid/ComponentDefinitionGrid';
+import { useRouter } from 'vue-router';
 
-const isTemplateLibraryUrlDefined = !!process.env.TEMPLATE_LIBRARY_BASE_URL;
+const router = useRouter();
 
 const props = defineProps({
-  plugins: {
-    type: Array,
+  plugin: {
+    type: Object,
     required: true,
   },
   templates: {
     type: Array,
     default: () => [],
   },
+  projectName: {
+    type: String,
+    required: true,
+  },
 });
 
+const isTemplateLibraryUrlDefined = ref(!!process.env.TEMPLATE_LIBRARY_BASE_URL);
 const definitionFilter = ref('');
 
 /**
@@ -106,12 +122,8 @@ function isMatching(filter, value) {
     .some((searchedText) => value.toLowerCase().includes(searchedText));
 }
 
-const componentDefinitions = computed(() => props.plugins.reduce((acc, { data }) => {
-  acc[data.name] = data.definitions.components
-    .filter((def) => isMatching(definitionFilter.value, def.type));
-
-  return acc;
-}, {}));
+const componentDefinitions = computed(() => props.plugin?.data.definitions.components
+  .filter((def) => isMatching(definitionFilter.value, def.type)));
 
 /**
  * @typedef {{
