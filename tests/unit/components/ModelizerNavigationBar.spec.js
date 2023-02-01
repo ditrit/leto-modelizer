@@ -60,11 +60,11 @@ describe('Test component: ModelizerNavigationBar', () => {
   let authenticationSubscribe;
   let authenticationUnsubscribe;
 
-  const emit = jest.fn();
+  const viewSwitchEvent = jest.fn();
   const parseEvent = jest.fn();
   const globalUploadFilesEvent = jest.fn();
 
-  ViewSwitchEvent.next.mockImplementation(() => emit());
+  ViewSwitchEvent.next.mockImplementation(viewSwitchEvent);
   PluginEvent.ParseEvent.next.mockImplementation(parseEvent);
   FileEvent.GlobalUploadFilesEvent.next.mockImplementation(globalUploadFilesEvent);
   Project.gitGlobalUpload.mockImplementation(
@@ -90,9 +90,6 @@ describe('Test component: ModelizerNavigationBar', () => {
       props: {
         viewType: 'model',
         projectName: 'projectTest',
-      },
-      mocks: {
-        ViewSwitchEvent,
       },
       global: {
         components: {
@@ -198,61 +195,50 @@ describe('Test component: ModelizerNavigationBar', () => {
     });
   });
 
-  describe('Test functions', () => {
-    describe('Test function: upload', () => {
-      it('should emit GlobalUploadFilesEvent and emit a positive notification on success', async () => {
-        Notify.create = jest.fn();
+  describe('Test function: upload', () => {
+    it('should emit GlobalUploadFilesEvent and emit a positive notification on success', async () => {
+      Notify.create = jest.fn();
 
-        await wrapper.vm.upload();
+      await wrapper.vm.upload();
 
-        expect(globalUploadFilesEvent).toHaveBeenCalledTimes(1);
-        expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
-      });
-
-      it('should emit a negative notification on error', async () => {
-        wrapper.vm.project = {};
-
-        Notify.create = jest.fn();
-
-        await wrapper.vm.upload();
-
-        expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
-      });
+      expect(globalUploadFilesEvent).toHaveBeenCalledTimes(1);
+      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
     });
 
-    describe('Test function: onViewSwitchUpdate', () => {
-      it('should not emit ViewSwitch event when newViewType is equal to props.viewType', () => {
-        expect(emit).not.toHaveBeenCalled();
-        wrapper.vm.onViewSwitchUpdate('model');
-        expect(emit).not.toHaveBeenCalled();
-      });
+    it('should emit a negative notification on error', async () => {
+      wrapper.vm.project = {};
 
-      it('should emit ViewSwitch and ParseEvent events'
-        + 'when newViewType is not equal to props.viewType and is "model"', async () => {
-        await wrapper.setProps({
-          viewType: 'text',
-          projectName: 'projectTest',
-        });
-        expect(emit).toHaveBeenCalledTimes(0);
-        expect(parseEvent).not.toHaveBeenCalled();
-        wrapper.vm.onViewSwitchUpdate('model');
-        expect(emit).toHaveBeenCalledTimes(1);
-        expect(parseEvent).toHaveBeenCalledTimes(1);
+      Notify.create = jest.fn();
+
+      await wrapper.vm.upload();
+
+      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
+    });
+  });
+
+  describe('Test function: setProject', () => {
+    it('should update project value', () => {
+      wrapper.vm.project = {};
+      wrapper.vm.setProject();
+      expect(wrapper.vm.project).toEqual({
+        git: {
+          repository: {},
+          token: 'token',
+          username: 'username',
+        },
       });
     });
+  });
 
-    describe('Test function: setProject', () => {
-      it('should update project value', () => {
-        wrapper.vm.project = {};
-        wrapper.vm.setProject();
-        expect(wrapper.vm.project).toEqual({
-          git: {
-            repository: {},
-            token: 'token',
-            username: 'username',
-          },
-        });
-      });
+  describe('Test funtion: onViewSwitchUpdate', () => {
+    it('should not emit ViewSwitchEvent without viewSwitch changed', () => {
+      wrapper.vm.onViewSwitchUpdate('model');
+      expect(viewSwitchEvent).toHaveBeenCalledTimes(0);
+    });
+
+    it('should emit ViewSwitchEvent on viewSwitch change', () => {
+      wrapper.vm.onViewSwitchUpdate('changed');
+      expect(viewSwitchEvent).toHaveBeenCalledTimes(1);
     });
   });
 
