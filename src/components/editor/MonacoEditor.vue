@@ -153,7 +153,8 @@ onUnmounted(() => {
   flex: 1;
   flex-direction: column;
   margin-top: 1.5rem;
-  height: 100vh;
+  //132px is the combined navbar + file tabs height
+  height: calc(100vh - 132px - 1.5rem);
 
   #container {
     display: flex;
