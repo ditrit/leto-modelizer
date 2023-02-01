@@ -49,6 +49,18 @@ export default {
           error: 'An error occured while renaming model.',
         },
       },
+      delete: {
+        dialog: {
+          name: 'Delete model',
+        },
+        form: {
+          message: 'Are you sure this model should be deleted ?',
+        },
+        notify: {
+          success: 'Model has been deleted &#129395;!',
+          error: 'An error occured while deleting model.',
+        },
+      },
     },
     git: {
       repository: {

@@ -512,6 +512,27 @@ export async function rename(oldPath, newPath) {
 }
 
 /**
+ * Delete folder and all its content on fs.
+ * @param {String} path - Path of folder to delete.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function deleteProjectDir(path) {
+  const isDir = await isDirectory(path);
+
+  if (!isDir) {
+    return rm(path);
+  }
+
+  const dirEntries = await readDir(path);
+
+  if (dirEntries.length > 0) {
+    await Promise.allSettled(dirEntries.map((entry) => deleteProjectDir(`${path}/${entry}`)));
+  }
+
+  return rmDir(path);
+}
+
+/**
  * Delete project file or folder.
  * @param {String} projectId - Id of project.
  * @param {String} filePath - File path to delete.
