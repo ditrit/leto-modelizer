@@ -36,6 +36,19 @@ export default {
           error: 'An error occured while creating model.',
         },
       },
+      rename: {
+        dialog: {
+          name: 'Rename model',
+        },
+        form: {
+          name: 'Model name',
+        },
+        notify: {
+          success: 'Model has been renamed &#129395;!',
+          eperm: 'Model with the same name and plugin already exist.',
+          error: 'An error occured while renaming model.',
+        },
+      },
     },
     git: {
       repository: {

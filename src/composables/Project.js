@@ -496,6 +496,22 @@ export async function rm(path) {
 }
 
 /**
+ * Rename file on fs.
+ * @param {String} oldPath - Old path of file to rename.
+ * @param {String} newPath - New path of file to rename.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function rename(oldPath, newPath) {
+  return new Promise((resolve, reject) => {
+    fs.rename(
+      oldPath,
+      newPath,
+      (e) => (e ? reject(e) : resolve()),
+    );
+  });
+}
+
+/**
  * Delete project file or folder.
  * @param {String} projectId - Id of project.
  * @param {String} filePath - File path to delete.

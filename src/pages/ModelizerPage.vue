@@ -32,6 +32,7 @@
         <git-commit-dialog :project-name="projectName"/>
         <git-log-dialog :project-name="projectName"/>
         <create-model-dialog :project-name="projectName"/>
+        <rename-model-dialog :project-name="projectName"/>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -59,6 +60,7 @@ import GitPushDialog from 'components/dialog/GitPushDialog';
 import GitCommitDialog from 'components/dialog/GitCommitDialog';
 import GitLogDialog from 'components/dialog/GitLogDialog';
 import CreateModelDialog from 'components/dialog/CreateModelDialog';
+import RenameModelDialog from 'components/dialog/RenameModelDialog';
 
 const route = useRoute();
 const router = useRouter();
