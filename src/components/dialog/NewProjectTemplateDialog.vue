@@ -53,7 +53,7 @@ let dialogEventSubscription;
  */
 function addProject(projectId) {
   DialogEvent.next({ type: 'close', key: 'NewProjectTemplate' });
-  router.push(`/modelizer/${projectId}/model`);
+  router.push(`/modelizer/${projectId}/models`);
 }
 
 /**

@@ -13,6 +13,10 @@
         class="modelizer-page column"
         data-cy="modelizer-page"
       >
+        <modelizer-models-view
+          v-show="viewType === 'models'"
+          :project-name="projectName"
+        />
         <modelizer-model-view
           v-show="viewType === 'model'"
           :project-name="projectName"
@@ -48,6 +52,7 @@ import {
 import { useRouter, useRoute } from 'vue-router';
 import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar';
 import ModelizerModelView from 'src/components/ModelizerModelView';
+import ModelizerModelsView from 'src/components/ModelizerModelsView';
 import ModelizerTextView from 'src/components/ModelizerTextView';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog';

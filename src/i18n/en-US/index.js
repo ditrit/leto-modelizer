@@ -186,6 +186,9 @@ export default {
         import: 'In existing project',
       },
     },
+    models: {
+      name: 'List of Models',
+    },
     modelizer: {
       header: {
         switch: {

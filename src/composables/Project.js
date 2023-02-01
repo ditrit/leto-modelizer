@@ -8,6 +8,7 @@ import {
 } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
 import FileStatus from 'src/models/git/FileStatus';
+import { getPlugins } from 'src/composables/PluginManager';
 
 const fs = BrowserFS.BFSRequire('fs');
 
@@ -700,4 +701,43 @@ export async function initProject(project) {
   }));
   await gitAdd(project.id, 'README.md');
   return gitCommit(project.id, 'Initial commit.');
+}
+
+/**
+ * Get all models of the plugin.
+ * @param {String} modelsDefaultFolder - Path of the models folder.
+ * @param {String} pluginName - Name of the plugin.
+ * @return {Promise<Array>} Promise with an array of models on success otherwise an error.
+ */
+export async function getPluginModels(modelsdefaultFolder, pluginName) {
+  const dirEntries = await readDir(`${modelsdefaultFolder}/${pluginName}`);
+
+  if (!dirEntries) {
+    return [];
+  }
+
+  return Promise.allSettled(dirEntries.map(
+    (entry) => (async () => {
+      const isDir = await isDirectory(`${modelsdefaultFolder}/${pluginName}/${entry}`);
+      return isDir ? { name: entry, plugin: pluginName } : null;
+    })(),
+  )).then((allResults) => allResults
+    .filter((result) => result.status === 'fulfilled' && result.value)
+    .map((result) => result.value));
+}
+
+/**
+ * Get all models of the project.
+ * @param {String} modelsDefaultFolder - Path of the models folder.
+ * @return {Promise<Array>} Promise with an array of models on success otherwise an error.
+ */
+export async function getAllModels(modelsDefaultFolder) {
+  const plugins = getPlugins();
+
+  return Promise.allSettled(
+    plugins.map(({ data }) => getPluginModels(modelsDefaultFolder, data.name)),
+  ).then((results) => results
+    .filter((result) => result.status === 'fulfilled')
+    .map((result) => result.value)
+    .flat());
 }

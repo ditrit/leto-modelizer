@@ -2,7 +2,7 @@
   <router-link
     class="card-link"
     :data-cy="`project-card-${project.id}`"
-    :to="`/modelizer/${project.id}/model`"
+    :to="`/modelizer/${project.id}/models`"
   >
     <q-card
       v-ripple
