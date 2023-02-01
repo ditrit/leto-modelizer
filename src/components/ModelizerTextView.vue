@@ -287,7 +287,7 @@ onUnmounted(() => {
 .modelizer-text-view {
  // set min-height to full height excluding header height
  // 74px = height of header
-  min-height: calc(100vh - 74px)
+  height: calc(100vh - 74px)
 }
 .file-explorer-container {
   min-width: 200px;

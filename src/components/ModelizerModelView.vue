@@ -1,6 +1,6 @@
 <template>
   <q-layout
-    view="lhh lpr lff"
+    container
     class="modelizer-model-view"
     data-cy="modelizer-model-view"
   >
@@ -122,8 +122,11 @@ onUnmounted(() => {
 
 <style scoped>
   #root {
-    height: 100vh;
+    height: calc(100vh - 74px);
     width: 100%;
+  }
+  .modelizer-model-view {
+      height: calc(100vh - 64px)
   }
 </style>
 
@@ -132,5 +135,8 @@ onUnmounted(() => {
 // In our case, it needs to be set to 'visible' to manage position with % in plugin models.
 div#root svg {
   overflow: visible !important;
+  display: unset;
+  height: 100%;
+  width: 100%;
 }
 </style>
