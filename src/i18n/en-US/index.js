@@ -21,6 +21,22 @@ export default {
       importedProject: 'Project has been imported &#129395;!',
       createdProject: 'Project has been created &#129395;!',
     },
+    models: {
+      create: {
+        dialog: {
+          name: 'Create new model',
+        },
+        form: {
+          name: 'Model name',
+          plugin: 'Model plugin',
+        },
+        notify: {
+          success: 'Model has been created &#129395;!',
+          eexist: 'Model with the same name and plugin already exist.',
+          error: 'An error occured while creating model.',
+        },
+      },
+    },
     git: {
       repository: {
         exists: 'We have access to your repository &#129395;!',
