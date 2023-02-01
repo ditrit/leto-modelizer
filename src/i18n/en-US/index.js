@@ -23,6 +23,10 @@ export default {
     },
     models: {
       create: {
+        button: {
+          name: 'New model',
+          title: 'Open dialog to create new model',
+        },
         dialog: {
           name: 'Create new model',
         },
@@ -37,6 +41,9 @@ export default {
         },
       },
       rename: {
+        button: {
+          title: 'Rename model',
+        },
         dialog: {
           name: 'Rename model',
         },
@@ -50,6 +57,9 @@ export default {
         },
       },
       delete: {
+        button: {
+          title: 'Delete model',
+        },
         dialog: {
           name: 'Delete model',
         },
