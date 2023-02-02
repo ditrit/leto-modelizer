@@ -74,8 +74,6 @@ async function drawComponents(plugin) {
     props.projectName,
     new FileInformation({ path: 'leto-modelizer.config.json' }),
   );
-  // TODO: Remove this when plugin-core manage null as content.
-  config.content = (!config.content || config.content === '') ? '{}' : config.content;
 
   plugin.parse(config, fileInputs);
   plugin.draw('root');
