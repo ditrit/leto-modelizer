@@ -34,6 +34,7 @@ import { FileInformation } from 'leto-modelizer-plugin-core';
 let pluginInitSubscription;
 let pluginParseSubscription;
 let pluginDrawSubscription;
+let pluginRenderSubscription;
 
 const props = defineProps({
   projectName: {
@@ -93,12 +94,14 @@ onMounted(() => {
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePlugins);
   pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePlugins);
   pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePlugins);
+  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updatePlugins);
 });
 
 onUnmounted(() => {
   pluginInitSubscription.unsubscribe();
   pluginParseSubscription.unsubscribe();
   pluginDrawSubscription.unsubscribe();
+  pluginRenderSubscription.unsubscribe();
 });
 </script>
 

@@ -1,8 +1,14 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
+import { useRoute } from 'vue-router';
 import ComponentDefinitionCard from 'src/components/card/ComponentDefinitionCard.vue';
+import { renderPlugin } from 'src/composables/PluginManager';
 
 installQuasarPlugin();
+
+jest.mock('vue-router', () => ({
+  useRoute: jest.fn(),
+}));
 
 const testPlugin = {
   draw: null,
@@ -13,13 +19,17 @@ const testPlugin = {
 
 jest.mock('src/composables/PluginManager', () => ({
   getPluginByName: () => testPlugin,
-}));
-jest.mock('src/composables/Random', () => ({
-  randomHexString: () => 0x16,
+  renderPlugin: jest.fn(() => Promise.resolve([])),
 }));
 
 describe('Test component: ComponentDefinitionCard', () => {
   let wrapper;
+
+  useRoute.mockImplementation(() => ({
+    params: {
+      projectName: 'project-00000000',
+    },
+  }));
 
   beforeEach(() => {
     wrapper = shallowMount(ComponentDefinitionCard, {
@@ -45,20 +55,13 @@ describe('Test component: ComponentDefinitionCard', () => {
   describe('Test functions', () => {
     describe('Test function: onClickItem', () => {
       it('should draw components array with one element', () => {
-        window.crypto = {
-          getRandomValues: () => 0x16,
-        };
-
-        const id = `${0x16}`;
         const definition = { type: 'component one' };
-        const draw = jest.fn();
         const addComponent = jest.fn();
-        testPlugin.draw = draw;
         testPlugin.data.addComponent = addComponent;
 
         wrapper.vm.onClickItem();
-        expect(addComponent).toBeCalledWith(`${definition.type}_${id}`, definition);
-        expect(draw).toBeCalledWith('root');
+        expect(addComponent).toBeCalledWith(definition);
+        expect(renderPlugin).toBeCalledWith('plugin', 'project-00000000');
       });
     });
   });

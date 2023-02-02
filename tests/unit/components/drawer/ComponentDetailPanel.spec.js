@@ -25,6 +25,9 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   DrawEvent: {
     next: jest.fn(),
   },
+  RenderEvent: {
+    next: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/events/ViewSwitchEvent', () => ({
@@ -33,6 +36,7 @@ jest.mock('src/composables/events/ViewSwitchEvent', () => ({
 
 jest.mock('src/composables/PluginManager', () => ({
   getPlugins: jest.fn(),
+  renderPlugin: jest.fn(),
 }));
 
 describe('test component: Plugin Component Detail Panel', () => {
@@ -53,11 +57,13 @@ describe('test component: Plugin Component Detail Panel', () => {
     data: {
       getComponentById: () => null,
       components: [],
+      name: 'test',
     },
   }, {
     data: {
       getComponentById: () => new Component({ id: 'componentId', definition: new ComponentDefinition() }),
       components: [],
+      name: 'test',
     },
   }]);
 

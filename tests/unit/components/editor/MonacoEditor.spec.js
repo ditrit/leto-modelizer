@@ -5,6 +5,7 @@ import MonacoEditor from 'components/editor/MonacoEditor.vue';
 import Project from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
 import FileEvent from 'src/composables/events/FileEvent';
+import { FileInput } from 'leto-modelizer-plugin-core';
 
 installQuasarPlugin();
 
@@ -148,6 +149,25 @@ describe('Tess component: MonacoEditor', () => {
         height: 10,
         width: 11,
       });
+    });
+  });
+
+  describe('Test function: updateEditorContentFromFiles', () => {
+    it('should not call setValue without files', async () => {
+      await wrapper.vm.updateEditorContentFromFiles([]);
+
+      expect(setValue).not.toHaveBeenCalled();
+    });
+
+    it('should call setValue with valid file', async () => {
+      await wrapper.vm.updateEditorContentFromFiles([
+        new FileInput({
+          path: 'file.js',
+          content: 'test',
+        }),
+      ]);
+
+      expect(setValue).toHaveBeenCalled();
     });
   });
 

@@ -17,6 +17,9 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   ParseEvent: {
     subscribe: jest.fn(),
   },
+  RenderEvent: {
+    subscribe: jest.fn(),
+  },
   DrawEvent: {
     subscribe: jest.fn(),
   },
@@ -40,6 +43,8 @@ describe('Test component: ModelizerModelView', () => {
   let deleteUnsubscribe;
   let parseSubscribe;
   let parseUnsubscribe;
+  let renderSubscribe;
+  let renderUnsubscribe;
   let drawSubscribe;
   let drawUnsubscribe;
 
@@ -50,6 +55,8 @@ describe('Test component: ModelizerModelView', () => {
     deleteUnsubscribe = jest.fn();
     parseSubscribe = jest.fn();
     parseUnsubscribe = jest.fn();
+    renderSubscribe = jest.fn();
+    renderUnsubscribe = jest.fn();
     drawSubscribe = jest.fn();
     drawUnsubscribe = jest.fn();
 
@@ -64,6 +71,10 @@ describe('Test component: ModelizerModelView', () => {
     PluginEvent.ParseEvent.subscribe.mockImplementation(() => {
       parseSubscribe();
       return { unsubscribe: parseUnsubscribe };
+    });
+    PluginEvent.RenderEvent.subscribe.mockImplementation(() => {
+      renderSubscribe();
+      return { unsubscribe: renderUnsubscribe };
     });
     PluginEvent.DrawEvent.subscribe.mockImplementation(() => {
       drawSubscribe();

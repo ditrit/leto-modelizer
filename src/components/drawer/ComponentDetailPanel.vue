@@ -139,7 +139,7 @@ import {
 import InputWrapper from 'components/inputs/InputWrapper';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
-import { getPlugins } from 'src/composables/PluginManager';
+import { getPlugins, renderPlugin } from 'src/composables/PluginManager';
 import { ComponentAttribute } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
 
@@ -169,12 +169,15 @@ let viewSwitchSubscription;
 /**
  * Update local component data and emit DrawEvent & RenderEvent events.
  */
-function save() {
+async function save() {
   submitting.value = true;
   selectedComponent.value.id = selectedComponentId.value;
   selectedComponent.value.attributes = selectedComponentAttributes.value
     .filter(({ value }) => value !== null && value !== '');
 
+  const files = await renderPlugin(localPlugin.value.data.name, route.params.projectName);
+
+  PluginEvent.RenderEvent.next(files);
   submitting.value = false;
   isVisible.value = false;
 }

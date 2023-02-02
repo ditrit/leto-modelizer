@@ -45,15 +45,15 @@ import {
 } from 'vue';
 import {
   getProjectFiles,
-  writeProjectFile,
   getStatus,
 } from 'src/composables/Project';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
-import { getPlugins } from 'src/composables/PluginManager';
-import { FileInput, FileInformation } from 'leto-modelizer-plugin-core';
+import { getPlugins, renderPlugin } from 'src/composables/PluginManager';
+import { FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 const props = defineProps({
   projectName: {
@@ -188,25 +188,11 @@ function onDeleteFile(file) {
  */
 // TODO: Remove when ModelView refacto will be done.
 async function renderPlugins() {
-  const plugins = getPlugins();
-  const requests = [];
-  const config = new FileInput({
-    path: 'leto-modelizer.config.json',
-    content: '{}',
-  });
+  return renderPlugin(getPlugins()[0].data.name, props.projectName)
+    .then((allResults) => {
+      PluginEvent.RenderEvent.next(allResults);
 
-  plugins.forEach((plugin) => {
-    plugin.render(config).forEach((file) => requests.push(
-      writeProjectFile(props.projectName, file).then(() => file),
-    ));
-  });
-
-  requests.push(writeProjectFile(props.projectName, config).then(() => config));
-
-  return Promise.allSettled(requests)
-    .then((allResults) => allResults
-      .map((result) => result.value)
-      .reduce((acc, file) => {
+      return allResults.reduce((acc, file) => {
         if (localFileInformations.value.find(({ path }) => file.path === path)) {
           acc.updatedFiles.push(file);
         } else {
@@ -214,7 +200,8 @@ async function renderPlugins() {
         }
 
         return acc;
-      }, { createdFiles: [], updatedFiles: [] }));
+      }, { createdFiles: [], updatedFiles: [] });
+    });
 }
 
 /**

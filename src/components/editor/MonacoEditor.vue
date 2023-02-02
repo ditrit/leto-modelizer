@@ -20,6 +20,7 @@ import {
 } from 'vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 const monaco = require('monaco-editor');
 
@@ -39,7 +40,8 @@ let editor;
 let checkoutSubscription;
 let addRemoteSubscription;
 let pullSubscription;
-let updateFileContentSubsciption;
+let updateFileContentSubscription;
+let pluginRenderSubscription;
 
 /**
  * Update file content on fs and emit UpdateEditorContentEvent.
@@ -100,11 +102,24 @@ async function updateEditorContent() {
   editor.setValue(value);
 }
 
+/**
+ * Update editor value from files.
+ * @param {FileInput[]} files - All updated files.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+function updateEditorContentFromFiles(files) {
+  const file = files.find(({ path }) => path === props.file.id);
+  if (file) {
+    editor.setValue(file.content);
+  }
+}
+
 onMounted(() => {
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateEditorContent);
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateEditorContent);
   pullSubscription = GitEvent.PullEvent.subscribe(updateEditorContent);
-  updateFileContentSubsciption = FileEvent.UpdateFileContentEvent.subscribe(updateEditorContent);
+  updateFileContentSubscription = FileEvent.UpdateFileContentEvent.subscribe(updateEditorContent);
+  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updateEditorContentFromFiles);
 
   nextTick(createEditor);
 });
@@ -117,7 +132,8 @@ onUnmounted(() => {
   checkoutSubscription.unsubscribe();
   addRemoteSubscription.unsubscribe();
   pullSubscription.unsubscribe();
-  updateFileContentSubsciption.unsubscribe();
+  updateFileContentSubscription.unsubscribe();
+  pluginRenderSubscription.unsubscribe();
 });
 </script>
 

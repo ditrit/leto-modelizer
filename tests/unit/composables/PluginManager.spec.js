@@ -23,6 +23,24 @@ jest.mock('src/plugins', () => ({
     isParsable(file) {
       return file !== 'notParsable';
     }
+
+    // eslint-disable-next-line class-methods-use-this
+    render() {
+      return [
+        { path: 'path', content: 'content' },
+      ];
+    }
+  },
+}));
+
+jest.mock('src/composables/Project', () => ({
+  getProjectFiles: jest.fn(() => Promise.resolve([{ path: 'path', content: 'content' }])),
+  writeProjectFile: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock('src/composables/events/PluginEvent', () => ({
+  RenderEvent: {
+    next: jest.fn(),
   },
 }));
 
@@ -137,6 +155,21 @@ describe('Test composable: PluginManager', () => {
 
     it('should return true if file is parsable', () => {
       expect(PluginManager.isParsableFile('parsable')).toEqual(true);
+    });
+  });
+
+  describe('Test function: renderPlugin', () => {
+    it('should return updated file and emit a RenderEvent', async () => {
+      await PluginManager.initPlugins();
+
+      const plugin = PluginManager.getPluginByName('test');
+
+      plugin.render = jest.fn(() => [{ path: 'path', content: 'content' }]);
+      plugin.isParsable = jest.fn(() => true);
+
+      const files = await PluginManager.renderPlugin('test', 'projectId');
+
+      expect(files).toEqual([{ path: 'path', content: 'content' }]);
     });
   });
 });

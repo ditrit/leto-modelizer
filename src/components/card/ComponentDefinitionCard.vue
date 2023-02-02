@@ -33,9 +33,11 @@
 </template>
 
 <script setup>
-import { getPluginByName } from 'src/composables/PluginManager';
-import { randomHexString } from 'src/composables/Random';
+import { getPluginByName, renderPlugin } from 'src/composables/PluginManager';
+import { useRoute } from 'vue-router';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
+const route = useRoute();
 const props = defineProps({
   definition: {
     type: Object,
@@ -51,12 +53,12 @@ const props = defineProps({
  * On definition click, add a new component to the plugin components
  * and draw them all.
  */
-function onClickItem() {
+async function onClickItem() {
   const plugin = getPluginByName(props.pluginName);
-  const id = `${props.definition.type}_${randomHexString(8)}`;
 
-  plugin.data.addComponent(id, props.definition);
-  plugin.draw('root');
+  plugin.data.addComponent(props.definition);
+  const files = await renderPlugin(props.pluginName, route.params.projectName);
+  PluginEvent.RenderEvent.next(files);
 }
 </script>
 
