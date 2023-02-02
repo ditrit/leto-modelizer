@@ -230,7 +230,8 @@ export default {
   plugin: {
     component: {
       attribute: {
-        name: 'name',
+        id: 'id',
+        name: 'value',
         value: 'value',
         save: 'save',
         reset: 'reset',

@@ -56,7 +56,7 @@ describe('test component: Plugin Component Detail Panel', () => {
     },
   }, {
     data: {
-      getComponentById: () => new Component({ name: 'componentName', definition: new ComponentDefinition() }),
+      getComponentById: () => new Component({ id: 'componentId', definition: new ComponentDefinition() }),
       components: [],
     },
   }]);
@@ -78,16 +78,21 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
 
     wrapper = shallowMount(ComponentDetailPanel);
+    wrapper.vm.localPlugin = {
+      data: {
+        name: 'test',
+      },
+    };
   });
 
   describe('Test function: save', () => {
-    it('should update selectedComponent with selectedComponentName & selectedComponentAttributes', () => {
-      wrapper.vm.selectedComponentName = 'selectedComponentName';
+    it('should update selectedComponent with selectedComponentId & selectedComponentAttributes', () => {
+      wrapper.vm.selectedComponentId = 'selectedComponentId';
       wrapper.vm.selectedComponentAttributes = [];
 
       wrapper.vm.save();
 
-      expect(wrapper.vm.selectedComponent.name).toEqual(wrapper.vm.selectedComponentName);
+      expect(wrapper.vm.selectedComponent.id).toEqual(wrapper.vm.selectedComponentId);
       expect(wrapper.vm.selectedComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
       expect(wrapper.vm.isVisible).toEqual(false);
@@ -173,18 +178,18 @@ describe('test component: Plugin Component Detail Panel', () => {
   });
 
   describe('Test function: reset', () => {
-    it('should reset selectedComponentName & selectedComponentAttributes base on selectedComponent', () => {
+    it('should reset selectedComponentId & selectedComponentAttributes base on selectedComponent', () => {
       wrapper.vm.selectedComponent = {
-        name: 'newName',
+        id: 'newId',
         attributes: [],
         definition: new ComponentDefinition(),
       };
-      wrapper.vm.selectedComponentName = 'oldName';
+      wrapper.vm.selectedComponentId = 'oldId';
       wrapper.vm.selectedComponentAttributes = [{}];
 
       wrapper.vm.reset();
 
-      expect(wrapper.vm.selectedComponentName).toEqual('newName');
+      expect(wrapper.vm.selectedComponentId).toEqual('newId');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
     });
   });
@@ -193,15 +198,15 @@ describe('test component: Plugin Component Detail Panel', () => {
     it('should set isVisible to true and set local values', () => {
       expect(wrapper.vm.isVisible).toBeFalsy();
 
-      wrapper.vm.onEdit({ id: 0 });
+      wrapper.vm.onEdit({ id: 'id' });
 
       expect(wrapper.vm.isVisible).toBeTruthy();
       expect(wrapper.vm.selectedComponent).toEqual(new Component({
-        name: 'componentName',
+        id: 'componentId',
         attributes: [],
         definition: new ComponentDefinition(),
       }));
-      expect(wrapper.vm.selectedComponentName).toEqual('componentName');
+      expect(wrapper.vm.selectedComponentId).toEqual('componentId');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
     });
   });

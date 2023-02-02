@@ -33,9 +33,9 @@
         @reset="reset"
       >
         <q-input
-          v-model="selectedComponentName"
+          v-model="selectedComponentId"
           class="q-px-md q-pb-sm"
-          :label="$t('plugin.component.attribute.name')"
+          :label="$t('plugin.component.attribute.id')"
         />
           <template
             v-for="localAttribute in localAttributes"
@@ -145,7 +145,7 @@ import { useRoute } from 'vue-router';
 
 const localPlugin = ref(null);
 const selectedComponent = ref({});
-const selectedComponentName = ref('');
+const selectedComponentId = ref('');
 const selectedComponentAttributes = ref([]);
 const localAttributes = ref([
   {
@@ -171,7 +171,7 @@ let viewSwitchSubscription;
  */
 function save() {
   submitting.value = true;
-  selectedComponent.value.name = selectedComponentName.value;
+  selectedComponent.value.id = selectedComponentId.value;
   selectedComponent.value.attributes = selectedComponentAttributes.value
     .filter(({ value }) => value !== null && value !== '');
 
@@ -234,7 +234,7 @@ function getSelectedComponentAttributes(key) {
  * Reset local values of name and attributes.
  */
 function reset() {
-  selectedComponentName.value = selectedComponent.value.name;
+  selectedComponentId.value = selectedComponent.value.id;
   selectedComponentAttributes.value = JSON.parse(JSON.stringify(
     getReferencedAttributes(selectedComponent.value)
       .concat(getUnreferencedAttributes(selectedComponent.value)),
@@ -263,7 +263,7 @@ function onEdit({ id }) {
   }, null);
 
   selectedComponent.value = component;
-  selectedComponentName.value = component.name;
+  selectedComponentId.value = component.id;
   selectedComponentAttributes.value = JSON.parse(JSON.stringify(
     getReferencedAttributes(component)
       .concat(getUnreferencedAttributes(component)),
