@@ -150,6 +150,17 @@ describe('Tess component: MonacoEditor', () => {
         width: 11,
       });
     });
+
+    it('should init editor if editor is null', async () => {
+      wrapper.vm.editor = null;
+      wrapper.vm.container = {
+        offsetHeight: 10,
+        offsetWidth: 11,
+      };
+
+      await wrapper.vm.updateEditorLayout();
+      expect(wrapper.vm.editor).not.toBeNull();
+    });
   });
 
   describe('Test function: updateEditorContentFromFiles', () => {

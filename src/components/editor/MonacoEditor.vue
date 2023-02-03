@@ -12,6 +12,7 @@ import {
   readProjectFile,
 } from 'src/composables/Project';
 import {
+  onBeforeMount,
   onMounted,
   onUpdated,
   onUnmounted,
@@ -85,7 +86,12 @@ async function createEditor() {
  * Needed when viewType is firstly set to 'model' and ModelizerTextView is hidden,
  * meaning 'container' height and width are set to 0.
  */
-function updateEditorLayout() {
+async function updateEditorLayout() {
+  // For some unknown reasons, editor is null, but only appears on cypress tests.
+  // But to avoid potential bugs, we recreate editor if null.
+  if (!editor) {
+    await createEditor();
+  }
   editor.layout({
     height: container.value.offsetHeight,
     width: container.value.offsetWidth,
@@ -114,14 +120,18 @@ function updateEditorContentFromFiles(files) {
   }
 }
 
+onBeforeMount(() => {
+  if (!editor) {
+    nextTick(createEditor);
+  }
+});
+
 onMounted(() => {
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateEditorContent);
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateEditorContent);
   pullSubscription = GitEvent.PullEvent.subscribe(updateEditorContent);
   updateFileContentSubscription = FileEvent.UpdateFileContentEvent.subscribe(updateEditorContent);
   pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updateEditorContentFromFiles);
-
-  nextTick(createEditor);
 });
 
 onUpdated(() => {
