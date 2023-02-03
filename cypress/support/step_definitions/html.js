@@ -87,7 +87,10 @@ Then('I set active file content to {string}', async (value) => {
 });
 
 Then('I expect active file content to contain {string}', async (value) => {
-  cy.contains('[data-cy="monaco-editor"]', value);
+  cy.get('[data-cy="monaco-editor"]').should(($div) => {
+    const text = $div.text();
+    expect(text).to.match(new RegExp(value));
+  });
 });
 
 Then('I expect active file content to not contain {string}', async (value) => {

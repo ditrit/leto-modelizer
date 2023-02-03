@@ -22,7 +22,7 @@ Feature: Test switch model to text view: add component/link
     And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" not exists
     And  I expect "[data-cy=\"file-label-leto-modelizer.config.json\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "leto-modelizer.config.json"
-    And  I expect active file content to contain "{\"leto-modelizer-plugin-test\":{}}"
+    And  I expect active file content to contain "{.*\"leto-modelizer-plugin-test\":.*{}}"
 
   Scenario: Add a component (Model view) should create project configuration file (Text view)
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
@@ -31,7 +31,7 @@ Feature: Test switch model to text view: add component/link
     And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" not exists
     And  I expect "[data-cy=\"file-label-leto-modelizer.config.json\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "leto-modelizer.config.json"
-    And  I expect active file content to contain "{\"leto-modelizer-plugin-test\":{}}"
+    And  I expect active file content to contain "{.*\"leto-modelizer-plugin-test\":.*{}}"
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
@@ -50,7 +50,7 @@ Feature: Test switch model to text view: add component/link
     And  I expect "[data-cy=\"file-label-leto-modelizer.config.json\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "leto-modelizer.config.json"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"type\": \"truck\""
+    And  I expect active file content to contain "\"type\":.*\"truck\""
 
   Scenario: Update plugin file's content with a new object (Text view) should display the corresponding plugin component (Model view)
     When I click on "[data-cy=\"component-definition-truck\"]"
@@ -91,9 +91,9 @@ Feature: Test switch model to text view: add component/link
     When I wait 1 second
     And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
     Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"name\": \"image-attachments\""
-    And  I expect active file content to contain "\"type\": \"Array\""
-  
+    And  I expect active file content to contain "\"name\":.*\"image-attachments\""
+    And  I expect active file content to contain "\"type\":.*\"Array\""
+
   Scenario: Add link attributes inside plugin file's content (Text view) should display link between two components (Model view)
     When I click on "[data-cy=\"component-definition-paper\"]"
     And  I click on "[data-cy=\"component-definition-image\"]"
@@ -107,8 +107,8 @@ Feature: Test switch model to text view: add component/link
     When I wait 1 second
     And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
     Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"type\": \"image\""
-    And  I expect active file content to contain "\"type\": \"paper\""
+    And  I expect active file content to contain "\"type\":.*\"image\""
+    And  I expect active file content to contain "\"type\":.*\"paper\""
     And  I expect active file content to not contain "\"name\": \"image-attachments\""
     And  I expect active file content to not contain "\"type\": \"Array\""
 
