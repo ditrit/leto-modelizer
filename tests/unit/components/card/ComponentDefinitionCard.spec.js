@@ -3,8 +3,20 @@ import { shallowMount } from '@vue/test-utils';
 import { useRoute } from 'vue-router';
 import ComponentDefinitionCard from 'src/components/card/ComponentDefinitionCard.vue';
 import { renderPlugin } from 'src/composables/PluginManager';
+import TemplateManager from 'src/composables/TemplateManager';
+import Project from 'src/composables/Project';
+import PluginEvent from 'src/composables/events/PluginEvent';
+import { Notify } from 'quasar';
 
-installQuasarPlugin();
+installQuasarPlugin({
+  plugins: [Notify],
+});
+
+jest.mock('vue-i18n', () => ({
+  useI18n: () => ({
+    t: (t) => t,
+  }),
+}));
 
 jest.mock('vue-router', () => ({
   useRoute: jest.fn(),
@@ -17,13 +29,28 @@ const testPlugin = {
   },
 };
 
+jest.mock('src/composables/events/PluginEvent', () => ({
+  RenderEvent: {
+    next: jest.fn(),
+  },
+}));
+
 jest.mock('src/composables/PluginManager', () => ({
   getPluginByName: () => testPlugin,
   renderPlugin: jest.fn(() => Promise.resolve([])),
 }));
 
+jest.mock('src/composables/Project', () => ({
+  appendProjectFile: jest.fn(),
+}));
+
+jest.mock('src/composables/TemplateManager', () => ({
+  getTemplateFileByPath: jest.fn(),
+}));
+
 describe('Test component: ComponentDefinitionCard', () => {
   let wrapper;
+  let appendProjectFileMock;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -32,10 +59,17 @@ describe('Test component: ComponentDefinitionCard', () => {
   }));
 
   beforeEach(() => {
+    appendProjectFileMock = jest.fn();
+
+    Project.appendProjectFile.mockImplementation(() => Promise.resolve(appendProjectFileMock()));
+    TemplateManager.getTemplateFileByPath.mockImplementation(() => Promise.resolve({ data: 'template file content' }));
+
     wrapper = shallowMount(ComponentDefinitionCard, {
       props: {
         definition: {
           type: 'component one',
+          isTemplate: false,
+          icon: 'icon',
         },
         pluginName: 'plugin',
       },
@@ -43,25 +77,97 @@ describe('Test component: ComponentDefinitionCard', () => {
   });
 
   describe('Test props initialization', () => {
-    describe('Test prop: component', () => {
-      it('should match "component one"', () => {
+    describe('Test prop: definition', () => {
+      it('should match definition.type, definition.isTemplate and definition.icon', () => {
         expect(wrapper.vm.definition).toStrictEqual({
           type: 'component one',
+          isTemplate: false,
+          icon: 'icon',
         });
       });
+    });
+
+    describe('Test prop: pluginName', () => {
+      it('should match "plugin"', () => {
+        expect(wrapper.vm.pluginName).toEqual('plugin');
+      });
+    });
+  });
+
+  describe('Test computed: componentIcon', () => {
+    it('should return string based on pluginName and definition.icon if definition.template is false', () => {
+      expect(wrapper.vm.componentIcon).toStrictEqual('img:/plugins/plugin/icons/icon.svg');
+    });
+
+    it('should return string based on definition.icon if definition.template is true', async () => {
+      await wrapper.setProps({
+        definition: {
+          type: 'component one',
+          isTemplate: true,
+          icon: 'templateIcon',
+        },
+        pluginName: 'plugin',
+      });
+      expect(wrapper.vm.componentIcon).toStrictEqual('img:templateIcon');
     });
   });
 
   describe('Test functions', () => {
     describe('Test function: onClickItem', () => {
-      it('should draw components array with one element', () => {
-        const definition = { type: 'component one' };
+      it('should add component to plugin, call renderPlugin then emit RenderEvent'
+        + 'when clicking on a plugin component', async () => {
+        const definition = { type: 'component one', isTemplate: false, icon: 'icon' };
         const addComponent = jest.fn();
         testPlugin.data.addComponent = addComponent;
 
-        wrapper.vm.onClickItem();
+        await wrapper.vm.onClickItem();
         expect(addComponent).toBeCalledWith(definition);
         expect(renderPlugin).toBeCalledWith('plugin', 'project-00000000');
+        expect(PluginEvent.RenderEvent.next).toBeCalled();
+      });
+
+      it('should call appendProjectFile, renderPlugin then emit RenderEvent'
+        + 'when clicking on a template component', async () => {
+        await wrapper.setProps({
+          definition: {
+            type: 'component one',
+            isTemplate: true,
+            files: ['app.tf'],
+            key: 'template key',
+            plugin: 'pluginName',
+          },
+          pluginName: '',
+        });
+
+        await wrapper.vm.onClickItem();
+        expect(renderPlugin).toBeCalledWith('plugin', 'project-00000000');
+        expect(appendProjectFileMock).toHaveBeenCalled();
+        expect(PluginEvent.RenderEvent.next).toBeCalled();
+      });
+
+      it('should emit a negative notification when an error occured while getting template file'
+        + 'after clicking on a template component', async () => {
+        Notify.create = jest.fn();
+
+        TemplateManager.getTemplateFileByPath.mockReturnValueOnce(Promise.reject());
+
+        await wrapper.setProps({
+          definition: {
+            type: 'component one',
+            isTemplate: true,
+            files: ['app.tf'],
+            key: 'template key',
+            plugin: 'pluginName',
+          },
+          pluginName: '',
+        });
+
+        await wrapper.vm.onClickItem();
+        expect(Notify.create).toHaveBeenCalledWith({
+          message: 'errors.templates.getData',
+          html: true,
+          type: 'negative',
+        });
       });
     });
   });
