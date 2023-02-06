@@ -36,6 +36,7 @@ jest.mock('src/plugins', () => ({
 jest.mock('src/composables/Project', () => ({
   getProjectFiles: jest.fn(() => Promise.resolve([{ path: 'path', content: 'content' }])),
   writeProjectFile: jest.fn(() => Promise.resolve()),
+  readProjectFile: jest.fn(() => Promise.resolve({ id: 'TEST' })),
 }));
 
 jest.mock('src/composables/events/PluginEvent', () => ({
@@ -170,6 +171,36 @@ describe('Test composable: PluginManager', () => {
       const files = await PluginManager.renderPlugin('test', 'projectId');
 
       expect(files).toEqual([{ path: 'path', content: 'content' }]);
+    });
+  });
+
+  describe('Test function: getFileInputs', () => {
+    it('should return an array with 1 element', async () => {
+      const plugin = {
+        isParsable: () => true,
+      };
+      const result = await PluginManager.getFileInputs(plugin, [{}]);
+
+      expect(Array.isArray(result)).toBeTruthy();
+      expect(result.length).toEqual(1);
+    });
+  });
+
+  describe('Test function: drawComponents', () => {
+    it('should call parse() then draw() functions', async () => {
+      const plugin = {
+        data: {
+          components: [],
+        },
+        draw: jest.fn(),
+        isParsable: () => true,
+        parse: jest.fn(),
+      };
+
+      await PluginManager.drawComponents(plugin);
+
+      expect(plugin.parse).toHaveBeenCalledTimes(1);
+      expect(plugin.draw).toHaveBeenCalledTimes(1);
     });
   });
 });

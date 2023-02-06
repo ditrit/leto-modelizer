@@ -2,7 +2,6 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import ModelizerModelView from 'src/components/ModelizerModelView.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
-import Project from 'src/composables/Project';
 import PluginManager from 'src/composables/PluginManager';
 
 installQuasarPlugin();
@@ -25,14 +24,10 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   },
 }));
 
-jest.mock('src/composables/Project', () => ({
-  getProjectFiles: jest.fn(),
-  readProjectFile: jest.fn(),
-}));
-
 jest.mock('src/composables/PluginManager', () => ({
   deleteComponent: jest.fn(),
   getPlugins: jest.fn(),
+  drawComponents: jest.fn(),
 }));
 
 describe('Test component: ModelizerModelView', () => {
@@ -81,9 +76,6 @@ describe('Test component: ModelizerModelView', () => {
       return { unsubscribe: drawUnsubscribe };
     });
 
-    Project.getProjectFiles.mockImplementation(() => Promise.resolve([{}]));
-    Project.readProjectFile.mockImplementation(() => Promise.resolve({ id: 'TEST' }));
-
     PluginManager.deleteComponent.mockImplementation((componentId, components) => {
       const index = components.findIndex(({ id }) => id === componentId);
       if (index === -1) {
@@ -92,7 +84,8 @@ describe('Test component: ModelizerModelView', () => {
       components.splice(index, 1);
       return true;
     });
-    PluginManager.getPlugins.mockImplementation(() => []);
+    PluginManager.getPlugins.mockImplementation(() => [{ data: { name: 'pluginName' } }]);
+    PluginManager.drawComponents.mockImplementation(() => 'draw');
 
     wrapper = shallowMount(ModelizerModelView, {
       props: {
@@ -104,33 +97,14 @@ describe('Test component: ModelizerModelView', () => {
     });
   });
 
-  describe('Test function: getFileInputs', () => {
-    it('should return an array with 1 element', async () => {
-      const plugin = {
-        isParsable: () => true,
-      };
-      const result = await wrapper.vm.getFileInputs(plugin, [{}]);
+  describe('Test functions', () => {
+    describe('Test function: updatePlugins', () => {
+      it('should update data.plugins and call drawComponents', () => {
+        wrapper.vm.updatePlugins();
 
-      expect(Array.isArray(result)).toBeTruthy();
-      expect(result.length).toEqual(1);
-    });
-  });
-
-  describe('Test function: drawComponents', () => {
-    it('should update plugin.components and call draw() function', async () => {
-      const plugin = {
-        data: {
-          components: [],
-        },
-        draw: jest.fn(),
-        isParsable: () => true,
-        parse: jest.fn(),
-      };
-
-      await wrapper.vm.drawComponents(plugin);
-
-      expect(plugin.parse).toHaveBeenCalledTimes(1);
-      expect(plugin.draw).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.data.plugins).toEqual([{ data: { name: 'pluginName' } }]);
+        expect(PluginManager.drawComponents).toBeCalled();
+      });
     });
   });
 
