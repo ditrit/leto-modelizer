@@ -42,6 +42,33 @@
             />
           </q-scroll-area>
         </q-expansion-item>
+        <q-expansion-item
+          v-if="isTemplateLibraryUrlDefined"
+          expand-sperator
+          group="components-definitions"
+          header-class="text-bold"
+          class="template-definitions"
+          data-cy="`template-definitions"
+        >
+          <template v-slot:header>
+            <q-item-section data-cy="template-definitions-title">
+              {{  $t('page.modelizer.drawer.templates.title') }}
+            </q-item-section>
+          </template>
+          <q-scroll-area
+            v-if="templates.length"
+            :style="`height: calc(100vh - ${scrollAreaHeight(definitions)}px);`"
+            class="sunken-area"
+          >
+            <component-definition-grid :definitions="templates"/>
+          </q-scroll-area>
+          <div
+            v-else
+            class="q-px-md q-py-sm text-italic text-grey"
+          >
+            {{  $t('page.modelizer.drawer.templates.emptyMessage') }}
+          </div>
+        </q-expansion-item>
       </q-list>
     </template>
   </default-drawer>
@@ -52,9 +79,17 @@ import { computed, ref } from 'vue';
 import DefaultDrawer from 'src/components/drawer/DefaultDrawer';
 import ComponentDefinitionGrid from 'src/components/grid/ComponentDefinitionGrid';
 
+const isTemplateLibraryUrlDefined = !!process.env.TEMPLATE_LIBRARY_BASE_URL;
+
 const props = defineProps({
-  plugins: Array,
-  test: String,
+  plugins: {
+    type: Array,
+    required: true,
+  },
+  templates: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const definitionFilter = ref('');
