@@ -17,6 +17,7 @@ import {
   gitUpdate,
   createProjectFolder,
   writeProjectFile,
+  appendProjectFile,
   rmDir,
   rm,
   deleteProjectFile,
@@ -117,6 +118,7 @@ jest.mock('browserfs', () => ({
     readFile: jest.fn((path, format, cb) => cb(null, 'test')),
     mkdir: jest.fn((path, cb) => cb(path !== 'projectId/goodPath' ? 'error' : undefined)),
     writeFile: jest.fn((path, content, _, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
+    appendFile: jest.fn((path, content, _, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
     rmdir: jest.fn((path, cb) => {
       if (path === 'error') {
         return cb(true);
@@ -280,13 +282,25 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: writeProjectFile', () => {
-    it('should succed and return undefined', async () => {
+    it('should succeed and return undefined', async () => {
       const result = await writeProjectFile('projectId', { path: 'goodPath', content: 'content' });
       expect(result).toBeUndefined();
     });
 
     it('should fail and return error', async () => {
       const error = await writeProjectFile('projectId', { path: 'error', content: 'content' }).catch((e) => e);
+      expect(error).toBeDefined();
+    });
+  });
+
+  describe('Test function: appendProjectFile', () => {
+    it('should succeed and return undefined', async () => {
+      const result = await appendProjectFile('projectId', { path: 'goodPath', content: 'content' });
+      expect(result).toBeUndefined();
+    });
+
+    it('should fail and return error', async () => {
+      const error = await appendProjectFile('projectId', { path: 'error', content: 'content' }).catch((e) => e);
       expect(error).toBeDefined();
     });
   });
