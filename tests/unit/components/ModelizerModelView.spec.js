@@ -3,14 +3,21 @@ import { shallowMount } from '@vue/test-utils';
 import ModelizerModelView from 'src/components/ModelizerModelView.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import PluginManager from 'src/composables/PluginManager';
+import TemplateManager from 'src/composables/TemplateManager';
+import { Notify } from 'quasar';
 
-installQuasarPlugin();
+installQuasarPlugin({
+  plugins: [Notify],
+});
+
+jest.mock('vue-i18n', () => ({
+  useI18n: () => ({
+    t: (t) => t,
+  }),
+}));
 
 jest.mock('src/composables/events/PluginEvent', () => ({
   InitEvent: {
-    subscribe: jest.fn(),
-  },
-  DeleteEvent: {
     subscribe: jest.fn(),
   },
   ParseEvent: {
@@ -25,17 +32,18 @@ jest.mock('src/composables/events/PluginEvent', () => ({
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
-  deleteComponent: jest.fn(),
   getPlugins: jest.fn(),
   drawComponents: jest.fn(),
+}));
+
+jest.mock('src/composables/TemplateManager', () => ({
+  getTemplatesByType: jest.fn(() => Promise.resolve([{ plugin: 'plugin', isTemplate: true }])),
 }));
 
 describe('Test component: ModelizerModelView', () => {
   let wrapper;
   let initSubscribe;
   let initUnsubscribe;
-  let deleteSubscribe;
-  let deleteUnsubscribe;
   let parseSubscribe;
   let parseUnsubscribe;
   let renderSubscribe;
@@ -46,8 +54,6 @@ describe('Test component: ModelizerModelView', () => {
   beforeEach(() => {
     initSubscribe = jest.fn();
     initUnsubscribe = jest.fn();
-    deleteSubscribe = jest.fn();
-    deleteUnsubscribe = jest.fn();
     parseSubscribe = jest.fn();
     parseUnsubscribe = jest.fn();
     renderSubscribe = jest.fn();
@@ -58,10 +64,6 @@ describe('Test component: ModelizerModelView', () => {
     PluginEvent.InitEvent.subscribe.mockImplementation(() => {
       initSubscribe();
       return { unsubscribe: initUnsubscribe };
-    });
-    PluginEvent.DeleteEvent.subscribe.mockImplementation(() => {
-      deleteSubscribe();
-      return { unsubscribe: deleteUnsubscribe };
     });
     PluginEvent.ParseEvent.subscribe.mockImplementation(() => {
       parseSubscribe();
@@ -76,14 +78,6 @@ describe('Test component: ModelizerModelView', () => {
       return { unsubscribe: drawUnsubscribe };
     });
 
-    PluginManager.deleteComponent.mockImplementation((componentId, components) => {
-      const index = components.findIndex(({ id }) => id === componentId);
-      if (index === -1) {
-        return false;
-      }
-      components.splice(index, 1);
-      return true;
-    });
     PluginManager.getPlugins.mockImplementation(() => [{ data: { name: 'pluginName' } }]);
     PluginManager.drawComponents.mockImplementation(() => 'draw');
 
@@ -91,19 +85,29 @@ describe('Test component: ModelizerModelView', () => {
       props: {
         projectName: 'project-00000000',
       },
-      mocks: {
-        PluginEvent,
-      },
     });
   });
 
-  describe('Test functions', () => {
-    describe('Test function: updatePlugins', () => {
-      it('should update data.plugins and call drawComponents', () => {
-        wrapper.vm.updatePlugins();
+  describe('Test function: updatePluginsAndTemplates', () => {
+    it('should update data.plugins, call drawComponents and update component templates on success', async () => {
+      await wrapper.vm.updatePluginsAndTemplates();
 
-        expect(wrapper.vm.data.plugins).toEqual([{ data: { name: 'pluginName' } }]);
-        expect(PluginManager.drawComponents).toBeCalled();
+      expect(wrapper.vm.data.plugins).toEqual([{ data: { name: 'pluginName' } }]);
+      expect(PluginManager.drawComponents).toBeCalled();
+      expect(wrapper.vm.templates).toEqual([{ plugin: 'plugin', isTemplate: true }]);
+    });
+
+    it('should emit a negative notification on error after failing to retrieve templates', async () => {
+      TemplateManager.getTemplatesByType.mockReturnValueOnce(Promise.reject());
+
+      Notify.create = jest.fn();
+
+      await wrapper.vm.updatePluginsAndTemplates();
+
+      expect(Notify.create).toHaveBeenCalledWith({
+        message: 'errors.templates.getData',
+        html: true,
+        type: 'negative',
       });
     });
   });
@@ -112,6 +116,18 @@ describe('Test component: ModelizerModelView', () => {
     it('should subscribe to InitEvent', () => {
       expect(initSubscribe).toHaveBeenCalledTimes(1);
     });
+
+    it('should subscribe to ParseEvent', () => {
+      expect(parseSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to DrawEvent', () => {
+      expect(drawSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe to RenderEvent', () => {
+      expect(renderSubscribe).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('Test hook function: onUnmounted', () => {
@@ -119,6 +135,24 @@ describe('Test component: ModelizerModelView', () => {
       expect(initUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(initUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to ParseEvent', () => {
+      expect(parseUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(parseUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to DrawEvent', () => {
+      expect(drawUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(drawUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to RenderEvent', () => {
+      expect(renderUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(renderUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

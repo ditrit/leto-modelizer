@@ -6,6 +6,7 @@
   >
     <component-definitions-drawer
       :plugins="data.plugins"
+      :templates="templates"
     />
     <q-page-container>
       <q-page>
@@ -21,6 +22,7 @@ import {
   onMounted,
   onUnmounted,
   reactive,
+  ref,
 } from 'vue';
 import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer';
 import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
@@ -29,12 +31,16 @@ import {
   drawComponents,
 } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import { Notify } from 'quasar';
+import { useI18n } from 'vue-i18n';
+import { getTemplatesByType } from 'src/composables/TemplateManager';
 
 let pluginInitSubscription;
 let pluginParseSubscription;
 let pluginDrawSubscription;
 let pluginRenderSubscription;
 
+const { t } = useI18n();
 const props = defineProps({
   projectName: {
     type: String,
@@ -45,21 +51,33 @@ const props = defineProps({
 const data = reactive({
   plugins: [],
 });
+const templates = ref([]);
 
 /**
- * Update plugins array
+ * Update plugins array and related component templates array.
  */
-function updatePlugins() {
+async function updatePluginsAndTemplates() {
   data.plugins = getPlugins();
   data.plugins.forEach((plugin) => drawComponents(plugin, props.projectName));
+  await getTemplatesByType('component', data.plugins[0].data.name)
+    .then((response) => {
+      templates.value = response;
+    })
+    .catch(() => {
+      Notify.create({
+        type: 'negative',
+        message: t('errors.templates.getData'),
+        html: true,
+      });
+    });
 }
 
 onMounted(() => {
-  updatePlugins();
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePlugins);
-  pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePlugins);
-  pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePlugins);
-  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updatePlugins);
+  updatePluginsAndTemplates();
+  pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePluginsAndTemplates);
+  pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePluginsAndTemplates);
+  pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePluginsAndTemplates);
+  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updatePluginsAndTemplates);
 });
 
 onUnmounted(() => {
