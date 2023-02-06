@@ -62,5 +62,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Factorize the opening of git dialogs inside GitBranchMenu
 - Rename GitForm and GitConfigurationDialog to GitSettingsForm and GitSettingsDialog respectively
 - Split git setting dialog in two different dialogs : GitAuthenticationDialog & GitAddRemoteDialog
+- Create a component from a template
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
