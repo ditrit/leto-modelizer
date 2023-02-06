@@ -307,6 +307,30 @@ export async function writeProjectFile(projectId, file) {
   return new Promise((resolve, reject) => {
     fs.writeFile(
       `${projectId}/${file.path}`,
+      file.content || '',
+      'utf8',
+      (error) => {
+        if (error) {
+          reject({ name: error.code, message: error.message });
+        } else {
+          resolve();
+        }
+      },
+    );
+  });
+}
+
+/**
+ * Append the given content to a file.
+ * Create the file if not existing.
+ * @param {String} projectId - Id of project.
+ * @param {FileInput} file - File input to append.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function appendProjectFile(projectId, file) {
+  return new Promise((resolve, reject) => {
+    fs.appendFile(
+      `${projectId}/${file.path}`,
       file.content,
       'utf8',
       (error) => {

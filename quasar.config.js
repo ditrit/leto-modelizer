@@ -30,6 +30,7 @@ module.exports = configure((ctx) => ({
     'i18n',
     'browserfs',
     'vue-sanitize',
+    'axios',
   ],
 
   // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
@@ -73,6 +74,7 @@ module.exports = configure((ctx) => ({
     // Options below are automatically set depending on the env, set them if you want to override
     env: {
       CORS_ISOMORPHIC_BASE_URL: process.env.CORS_ISOMORPHIC_BASE_URL || 'https://cors.isomorphic-git.org',
+      TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL || '',
     },
     // extractCSS: false,
 
@@ -95,6 +97,14 @@ module.exports = configure((ctx) => ({
     },
     port: 8080,
     open: false, // opens browser window automatically
+    proxy: {
+      '/template-library': {
+        pathRewrite: { '^/template-library': '' },
+        target: process.env.TEMPLATE_LIBRARY_BASE_URL,
+        secure: false,
+        changeOrigin: true,
+      },
+    },
   },
 
   // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-framework

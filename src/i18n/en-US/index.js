@@ -67,6 +67,9 @@ export default {
         label: 'The name must not contain any \'/ \' characters',
       },
     },
+    templates: {
+      getData: 'An error occured while fetching component templates from library templates url.',
+    },
     git: {
       HttpError: 'Can\'t access the repository.',
       branch: {
@@ -147,6 +150,11 @@ export default {
           header: 'Components definitions',
           filterLabel: 'Component filter',
         },
+        templates: {
+          title: 'Templates',
+          emptyMessage: 'Nothing to display',
+        },
+        documentationLink: 'Link to the documentation',
       },
       settings: {
         gitAuthentication: {

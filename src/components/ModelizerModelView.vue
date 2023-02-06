@@ -6,6 +6,7 @@
   >
     <component-definitions-drawer
       :plugins="data.plugins"
+      :templates="templates"
     />
     <q-page-container>
       <q-page>
@@ -21,21 +22,25 @@ import {
   onMounted,
   onUnmounted,
   reactive,
+  ref,
 } from 'vue';
 import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer';
 import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
 import {
   getPlugins,
+  drawComponents,
 } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
-import { getProjectFiles, readProjectFile } from 'src/composables/Project';
-import { FileInformation } from 'leto-modelizer-plugin-core';
+import { Notify } from 'quasar';
+import { useI18n } from 'vue-i18n';
+import { getTemplatesByType } from 'src/composables/TemplateManager';
 
 let pluginInitSubscription;
 let pluginParseSubscription;
 let pluginDrawSubscription;
 let pluginRenderSubscription;
 
+const { t } = useI18n();
 const props = defineProps({
   projectName: {
     type: String,
@@ -46,53 +51,33 @@ const props = defineProps({
 const data = reactive({
   plugins: [],
 });
+const templates = ref([]);
 
 /**
- * Get array of FileInput from array of FileInformation if parsable by plugin.
- * @param {Object} plugin - Used to parse if possible.
- * @param {FileInformation[]} fileInformations - Array to parse.
- * @return {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
+ * Update plugins array and related component templates array.
  */
-async function getFileInputs(plugin, fileInformations) {
-  return Promise.allSettled(
-    fileInformations
-      .filter((fileInfo) => plugin.isParsable(fileInfo))
-      .map((fileInfo) => readProjectFile(props.projectName, fileInfo)),
-  ).then((allResults) => allResults
-    .filter((result) => result.status === 'fulfilled')
-    .map((result) => result.value));
-}
-
-/**
- * Update and draw new components.
- * @param {Object} plugin - Contens components to update and draw.
- */
-async function drawComponents(plugin) {
-  const fileInformations = await getProjectFiles(props.projectName);
-  const fileInputs = await getFileInputs(plugin, fileInformations);
-  const config = await readProjectFile(
-    props.projectName,
-    new FileInformation({ path: 'leto-modelizer.config.json' }),
-  );
-
-  plugin.parse(config, fileInputs);
-  plugin.draw('root');
-}
-
-/**
- * Update plugins array
- */
-function updatePlugins() {
+async function updatePluginsAndTemplates() {
   data.plugins = getPlugins();
-  data.plugins.forEach((plugin) => drawComponents(plugin));
+  data.plugins.forEach((plugin) => drawComponents(plugin, props.projectName));
+  await getTemplatesByType('component', data.plugins[0].data.name)
+    .then((response) => {
+      templates.value = response;
+    })
+    .catch(() => {
+      Notify.create({
+        type: 'negative',
+        message: t('errors.templates.getData'),
+        html: true,
+      });
+    });
 }
 
 onMounted(() => {
-  updatePlugins();
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePlugins);
-  pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePlugins);
-  pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePlugins);
-  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updatePlugins);
+  updatePluginsAndTemplates();
+  pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePluginsAndTemplates);
+  pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePluginsAndTemplates);
+  pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePluginsAndTemplates);
+  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updatePluginsAndTemplates);
 });
 
 onUnmounted(() => {

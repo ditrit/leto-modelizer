@@ -19,8 +19,8 @@
 
 Technical topology low-code editing tool.
 
-Leto modelizer is an application that can help you to generate infrastructure code without you to have written any code!
-One of theirs principales qualities is that you can choose:
+Leto modelizer is an application that can help you generate infrastructure code without you having to write any code!
+One of theirs main qualities is that you can choose:
 
 
 - which languages you can provide with this application
@@ -35,8 +35,7 @@ Or
 
 If your company take care only of terraform files, you just have to install terraform before build this app and deploy it.
 
-If you want only our own language component (maybe based on existing plugins), you can implement/override existing plugin.
-And just install your plugin definition.
+If you only want your own language component (maybe based on existing plugins), you can implement/override existing plugin and just install your plugin definition.
 
 ## How to install plugin
 
@@ -59,9 +58,9 @@ Options `repository-name` and `repository-url` can be added with the `npm run pl
 npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.1.10"
 ```
 
-Now your plugin is installed, you can continue to install other plugin with the same command if you want.
+Now your plugin is installed, you can continue to install other plugins with the same command if you want.
 
-When you install all your wanted plugins, please run this commands `npm run plugin:init` to finalise all plugins' installation.
+When you have installed all the desired plugins, please run this commands `npm run plugin:init` to complete all plugins' installation.
 
 ![](docs/plugin-init.png)
 
@@ -69,7 +68,7 @@ When you install all your wanted plugins, please run this commands `npm run plug
 
 ### Native build
 
-Once you have installed and initialized all yours plugins, run this commands to build the app:
+Once you have installed and initialized all your plugins, run this command to build the app:
 
 ```
 npm run build
@@ -79,14 +78,40 @@ It will generate the built application in the `dist` folder.
 
 ### Docker build
 
-To build this app with docker please use this command:
+To build this app with docker, please use this command:
 ```bash
 docker build . --build-arg proxy_url=http://localhost:9999 -t leto-modelizer
 ```
 
 The argument `proxy_url` refers to `CORS_ISOMORPHIC_BASE_URL` to specify the proxy's address you want to use.
 
-### Environment variable
+### Environment variables
+
+* Using templates from a remote repository
+
+`TEMPLATE_LIBRARY_BASE_URL` is used to define the url of a template library you want to use. To have more information on how to build your own template library, please visit [leto-modelizer-templates-library](https://github.com/ditrit/leto-modelizer-templates-library). To define `TEMPLATE_LIBRARY_BASE_URL`, go to your repository, open the `index.json` file (which contains all the metadata of your templates) in raw mode and get the url to the branch name, without including the file name.
+
+
+```bash
+# Example with the leto-modelizer-templates-library repository that contains all default templates for leto-modelizer.
+TEMPLATE_LIBRARY_BASE_URL="https://raw.githubusercontent.com/ditrit/leto-modelizer-templates-library/main" npm run build
+```
+
+To be able to access external resources for your templates, you need to set a reverse proxy named `template-library`. You can see an example below of an `nginx.conf` file:
+
+```bash
+http {
+  server {
+    listen 80;
+    location /template-library {
+      proxy_pass TEMPLATE_LIBRARY_BASE_URL; # replace by your url
+    }
+  }
+}
+```
+
+
+* Allow cloning and pushing repos in the browser
 
 `CORS_ISOMORPHIC_BASE_URL` is used to define the url of isomorphic-git cors proxy to allow cloning and pushing repos in the browser.
 By default, the url is `https://cors.isomorphic-git.org`.
@@ -99,11 +124,11 @@ CORS_ISOMORPHIC_BASE_URL="Something else" npm run build
 
 ## Official plugins
 
-For now, we don't have much plugin to propose to you, but follow us and in the next (few) months you will see new plugins (like Jenkins or Kubernetes).
+For now, we don't have many plugins to offer you, but follow us and in the next (few) months you will see new plugins (like Jenkins or Kubernetes).
 
 ### Terraform plugin
 
-Plugin to manage terraform files, by default it come from with aws provider definition.
+Plugin to manage terraform files, by default it comes with aws provider definition.
 
 [GitHub url](https://github.com/ditrit/terrator-plugin)
 
@@ -111,6 +136,3 @@ Option to use it in command `install`:
 
 - plugin name: `terrator-plugin`
 - repository url: `https://github.com/ditrit/terrator-plugin.git#0.1.10`
-
-
-
