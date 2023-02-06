@@ -1,5 +1,7 @@
 import { readTextFile } from 'src/composables/Files';
 import plugins from 'src/plugins';
+import { FileInput } from 'leto-modelizer-plugin-core';
+import { getProjectFiles, writeProjectFile } from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
 
 let instanciatePlugins = [];
@@ -57,7 +59,7 @@ export async function createPluginResources(plugin) {
 /**
  * Instantiate a plugin.
  *
- * @param {String} pluginName - Plugin name
+ * @param {String} pluginName - Plugin name.
  * @return {Promise<Plugin>} Promise with instanciated plugin on success otherwise an error.
  */
 export async function instantiatePlugin(pluginName) {
@@ -116,4 +118,25 @@ export function getPluginByName(name) {
  */
 export function isParsableFile(file) {
   return instanciatePlugins.some((plugin) => plugin.isParsable(file));
+}
+
+/**
+ * Call render from selected plugin for specific project.
+ * @param {String} pluginName - Plugin name.
+ * @param {String} projectId - Id of project.
+ * @return {Promise<FileInput[]>} Promise with updated files by render on success otherwise
+ * an error.
+ */
+export async function renderPlugin(pluginName, projectId) {
+  const plugin = getPluginByName(pluginName);
+  const config = new FileInput({
+    path: 'leto-modelizer.config.json',
+    content: '{}',
+  });
+  const files = await getProjectFiles(projectId);
+
+  return Promise.allSettled(
+    plugin.render(config, files.filter((file) => plugin.isParsable(file)))
+      .map((file) => writeProjectFile(projectId, file).then(() => file)),
+  ).then((allResults) => allResults.map((item) => item.value));
 }

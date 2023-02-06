@@ -29,8 +29,8 @@ Feature: Test modelizer text view: update file's content
     And  I expect active file content to contain "main"
 
     When I set active file content to "updated content"
-    Then I expect active file content to contain "updated content"
-  
+    Then I expect active file content to contain "updated.*content"
+
   Scenario: Check if the file updated content is still set after switching tab
     Given I click on "[data-cy=\"file-explorer\"] [data-cy=\"file-label-{{ projectName }}\"]"
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
@@ -43,14 +43,14 @@ Feature: Test modelizer text view: update file's content
     And  I expect active file content to contain "main"
 
     When I set active file content to "updated content"
-    Then I expect active file content to contain "updated content"
+    Then I expect active file content to contain "updated.*content"
 
     When I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-README.md\"]"
     And  I wait 1 second
     And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-branch.txt\"]"
     And  I wait 1 second
     Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
-    And  I expect active file content to contain "updated content"
+    And  I expect active file content to contain "updated.*content"
 
   Scenario: Open a file in root folder and update its content should change the file's class
     When I click on "[data-cy=\"file-explorer\"] [data-cy=\"file-label-{{ projectName }}\"]"
@@ -62,7 +62,7 @@ Feature: Test modelizer text view: update file's content
     And  I expect active file content to contain "main"
 
     When I set active file content to "updated content"
-    Then I expect active file content to contain "updated content"
+    Then I expect active file content to contain "updated.*content"
     And  I expect "[data-cy=\"file-label-branch.txt\"].file-status-modified" exists
 
   Scenario: Open a file in sub-folder and update its content should change the file's class
@@ -77,9 +77,9 @@ Feature: Test modelizer text view: update file's content
 
     When I set active file content to "updated content"
     Then I expect "[data-cy=\"file-label-app.tf\"].file-status-modified" exists
-    And  I expect active file content to contain "updated content"
+    And  I expect active file content to contain "updated.*content"
 
-  Scenario: Update a file's content should make the "add" action available inside file explorer menu 
+  Scenario: Update a file's content should make the "add" action available inside file explorer menu
     When I click on "[data-cy=\"file-explorer\"] [data-cy=\"file-label-{{ projectName }}\"]"
     And  I hover "[data-cy=\"file-explorer\"] [data-cy=\"file-explorer-buttons-branch.txt\"]" to make it visible
     And  I click on "[data-cy=\"file-explorer\"] [data-cy=\"file-explorer-buttons-branch.txt\"]"
@@ -92,7 +92,8 @@ Feature: Test modelizer text view: update file's content
 
     When I set active file content to "updated content"
     And  I click on "[data-cy=\"file-explorer\"] [data-cy=\"file-explorer-buttons-branch.txt\"]"
+    And I wait 1 second
     Then I expect "[data-cy=\"file-explorer-action-menu\"]" exists
     And  I expect "[data-cy=\"file-explorer-menu-add-file\"]" exists
     And  I expect "[data-cy=\"file-label-branch.txt\"].file-status-modified" exists
-    And  I expect active file content to contain "updated content"
+    And  I expect active file content to contain "updated.*content"

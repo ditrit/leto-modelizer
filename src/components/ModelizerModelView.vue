@@ -34,6 +34,7 @@ import { FileInformation } from 'leto-modelizer-plugin-core';
 let pluginInitSubscription;
 let pluginParseSubscription;
 let pluginDrawSubscription;
+let pluginRenderSubscription;
 
 const props = defineProps({
   projectName: {
@@ -73,8 +74,6 @@ async function drawComponents(plugin) {
     props.projectName,
     new FileInformation({ path: 'leto-modelizer.config.json' }),
   );
-  // TODO: Remove this when plugin-core manage null as content.
-  config.content = (!config.content || config.content === '') ? '{}' : config.content;
 
   plugin.parse(config, fileInputs);
   plugin.draw('root');
@@ -93,12 +92,14 @@ onMounted(() => {
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePlugins);
   pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePlugins);
   pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePlugins);
+  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updatePlugins);
 });
 
 onUnmounted(() => {
   pluginInitSubscription.unsubscribe();
   pluginParseSubscription.unsubscribe();
   pluginDrawSubscription.unsubscribe();
+  pluginRenderSubscription.unsubscribe();
 });
 </script>
 

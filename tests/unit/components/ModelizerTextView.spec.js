@@ -23,7 +23,12 @@ jest.mock('src/composables/Project', () => ({
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
-  getPlugins: jest.fn([]),
+  getPlugins: jest.fn(() => [{
+    data: {
+      name: 'test',
+    },
+  }]),
+  renderPlugin: jest.fn([]),
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
@@ -178,7 +183,18 @@ describe('Test component: ModelizerTextView', () => {
     Project.writeProjectFile.mockImplementation(() => Promise.resolve(writeProjectFileMock()));
     PluginManager.getPlugins.mockImplementation(() => [{
       render: () => [{ path: 'path' }],
+      data: {
+        name: 'test',
+      },
     }]);
+    PluginManager.renderPlugin.mockImplementation(() => Promise.resolve([
+      new FileInformation({
+        path: 'leto-modelizer.config.json',
+      }),
+      new FileInformation({
+        path: 'test.json',
+      }),
+    ]));
 
     wrapper = shallowMount(ModelizerTextView, {
       props: {
@@ -346,11 +362,6 @@ describe('Test component: ModelizerTextView', () => {
   });
 
   describe('Test function: renderPlugins', () => {
-    it('should call writeProjectFile once for components file and once more for config file', () => {
-      wrapper.vm.renderPlugins();
-      expect(writeProjectFileMock).toHaveBeenCalledTimes(2);
-    });
-
     it('should return one created file and one updated file', async () => {
       wrapper.vm.localFileInformations = [new FileInformation({
         path: 'leto-modelizer.config.json',

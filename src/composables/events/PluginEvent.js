@@ -26,13 +26,20 @@ const EditEvent = new Subject();
 const UpdateEvent = new Subject();
 
 /**
- * Represent a rxjs Event object to emit and to receive events about plugins component parsing.
+ * Represent a rxjs Event object to emit and to receive events about plugin parsing.
  * @typedef {Subject} ParseEvent
  */
 const ParseEvent = new Subject();
 
 /**
- * Represent a rxjs Event object to emit and to receive events about plugins component drawing.
+ * Represent a rxjs Event object to emit and to receive events about plugin components rendering.
+ * Subject contains a FileInput[] of all rendered files.
+ * @typedef {Subject} ParseEvent
+ */
+const RenderEvent = new Subject();
+
+/**
+ * Represent a rxjs Event object to emit and to receive events about plugin components drawing.
  * @typedef {Subject} DrawEvent
  */
 const DrawEvent = new Subject();
@@ -43,5 +50,6 @@ export default {
   EditEvent,
   UpdateEvent,
   ParseEvent,
+  RenderEvent,
   DrawEvent,
 };

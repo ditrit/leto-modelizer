@@ -26,7 +26,7 @@ Feature: Test switch model to text view: delete component/link
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
     And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"type\": \"image\""
+    And  I expect active file content to contain "\"type\":.*\"image\""
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
@@ -58,8 +58,8 @@ Feature: Test switch model to text view: delete component/link
     When I wait 1 second
     And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
     Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"type\": \"image\""
-    And  I expect active file content to contain "\"type\": \"money\""
+    And  I expect active file content to contain "\"type\":.*\"image\""
+    And  I expect active file content to contain "\"type\":.*\"money\""
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
@@ -73,8 +73,8 @@ Feature: Test switch model to text view: delete component/link
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect active file content to contain "\"type\": \"money\""
-    But  I expect active file content to not contain "\"type\": \"image\""
+    And  I expect active file content to contain "\"type\":.*\"money\""
+    But  I expect active file content to not contain "\"type\":.*\"image\""
 
   Scenario: Remove object inside plugin file content (Text view) should remove related component (Model view)
     #  NOTE: NOT WORKING if plugin file content is empty (error console -> TypeError: JSON.parse(...) is null - plugin-test.js)
@@ -169,10 +169,10 @@ Feature: Test switch model to text view: delete component/link
     When I wait 1 second
     And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
     Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"type\": \"image\""
-    And  I expect active file content to contain "\"type\": \"paper\""
-    And  I expect active file content to contain "\"name\": \"image-attachments\""
-    And  I expect active file content to contain "\"type\": \"Array\""
+    And  I expect active file content to contain "\"type\":.*\"image\""
+    And  I expect active file content to contain "\"type\":.*\"paper\""
+    And  I expect active file content to contain "\"name\":.*\"image-attachments\""
+    And  I expect active file content to contain "\"type\":.*\"Array\""
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
@@ -187,10 +187,10 @@ Feature: Test switch model to text view: delete component/link
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect active file content to contain "\"type\": \"image\""
-    And  I expect active file content to contain "\"type\": \"paper\""
-    But  I expect active file content to not contain "\"name\": \"image-attachments\""
-    And  I expect active file content to not contain "\"type\": \"Array\""
+    And  I expect active file content to contain "\"type\":.*\"image\""
+    And  I expect active file content to contain "\"type\":.*\"paper\""
+    But  I expect active file content to not contain "\"name\":.*\"image-attachments\""
+    And  I expect active file content to not contain "\"type\":.*\"Array\""
 
   Scenario: Remove link attribute inside plugin file content (Text view) should remove the link between the two components (Model view)
     When I click on "[data-cy=\"component-definition-paper\"]"
@@ -211,8 +211,8 @@ Feature: Test switch model to text view: delete component/link
     When I wait 1 second
     And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
     Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"type\": \"Array\""
-    And  I expect active file content to contain "\"name\": \"image-attachments\""
+    And  I expect active file content to contain "\"type\":.*\"Array\""
+    And  I expect active file content to contain "\"name\":.*\"image-attachments\""
 
     When I set active file content to "[{ \"path\": \"default.plugin-test.js\", \"__class\": \"Component\", \"id\": \"image_5f5d4a39\", \"name\": \"image_5f5d4a39\", \"attributes\": [], \"type\": \"image\" }, { \"path\": \"default.plugin-test.js\", \"__class\": \"Component\", \"id\": \"paper_4ba1f415\", \"name\": \"paper_4ba1f415\", \"attributes\": [], \"type\": \"paper\" }]"
     And  I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
