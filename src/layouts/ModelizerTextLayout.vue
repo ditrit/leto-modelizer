@@ -20,6 +20,7 @@
     <git-push-dialog :project-name="projectName" />
     <git-commit-dialog :project-name="projectName" />
     <git-log-dialog :project-name="projectName" />
+    <jenkins-authentication-dialog :project-name="projectName"/>
   </q-layout>
 </template>
 
@@ -38,6 +39,7 @@ import GitStatusDialog from 'src/components/dialog/GitStatusDialog';
 import GitPushDialog from 'src/components/dialog/GitPushDialog';
 import GitCommitDialog from 'src/components/dialog/GitCommitDialog';
 import GitLogDialog from 'src/components/dialog/GitLogDialog';
+import JenkinsAuthenticationDialog from 'src/components/dialog/JenkinsAuthenticationDialog';
 import {
   computed,
   onMounted,

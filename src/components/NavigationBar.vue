@@ -25,6 +25,21 @@
     </div>
     <div class="row justify-between items-center">
       <q-btn
+        v-if="isInstallPipelinesButtonVisible"
+        :loading="isInstallPipelinesLoading"
+        :label="$t('page.modelizer.header.button.installPipelines.label')"
+        :title="$t('page.modelizer.header.button.installPipelines.title')"
+        @click="installPipelines()"
+        color="white"
+        text-color="positive"
+        class="q-mr-xl"
+        data-cy="install-pipelines-button"
+      >
+        <template v-slot:loading>
+          <q-spinner-dots/>
+        </template>
+      </q-btn>
+      <q-btn
         v-if="isUploadButtonVisible"
         :disable="isUploadButtonDisable"
         :loading="isLoading"
@@ -71,10 +86,13 @@ import FileEvent from 'src/composables/events/FileEvent';
 import { Notify } from 'quasar';
 import {
   getProjectById,
+  getCurrentBranch,
   gitGlobalUpload,
+  jenkinsCascApplyAll,
 } from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
 import { useRoute, useRouter } from 'vue-router';
+import JenkinsEvent from 'src/composables/events/JenkinsEvent';
 
 const router = useRouter();
 const route = useRoute();
@@ -88,9 +106,11 @@ const props = defineProps({
 
 let addRemoteSubscription;
 let authenticationSubscription;
+let jenkinsAuthenticationSubscription;
 
 const query = computed(() => route.query);
 const isLoading = ref(false);
+const isInstallPipelinesLoading = ref(false);
 const project = ref(getProjectById(toRef(props, 'projectName').value));
 const buttonToggleValue = ref(['Draw', 'Text'].includes(route.name) ? route.name : null);
 const buttonToggleOptions = computed(() => [{
@@ -105,6 +125,10 @@ const buttonToggleOptions = computed(() => [{
 const isUploadButtonVisible = computed(() => !!project.value.git?.repository);
 const isUploadButtonDisable = computed(() => !project.value.git?.username
   || !project.value.git?.token);
+const isInstallPipelinesButtonVisible = computed(() => !!project.value.jenkins
+  && !!project.value.jenkins.url
+  && !!project.value.jenkins.username
+  && !!project.value.jenkins.token);
 const uploadButtonTitle = computed(() => {
   if (isUploadButtonDisable.value) {
     return 'page.modelizer.header.button.upload.disable.title';
@@ -123,8 +147,20 @@ async function upload() {
       FileEvent.GlobalUploadFilesEvent.next();
       Notify.create({
         type: 'positive',
-        message: t('page.modelizer.header.button.upload.success'),
+        message: t('page.modelizer.header.button.upload.success.message'),
         html: true,
+        timeout: 0,
+        actions: [
+          {
+            label: t('page.modelizer.header.button.upload.success.actionLabel'),
+            color: 'white',
+            handler: async () => window.open(`${project.value.git.repository}/compare/${await getCurrentBranch(project.value.id)}`, '_blank').focus(),
+          },
+          {
+            label: t('actions.default.close'),
+            color: 'white',
+          },
+        ],
       });
     })
     .catch(() => {
@@ -136,6 +172,57 @@ async function upload() {
     })
     .finally(() => {
       isLoading.value = false;
+    });
+}
+
+async function installPipelines() {
+  isInstallPipelinesLoading.value = true;
+
+  await jenkinsCascApplyAll(project.value)
+    .then(() => {
+      Notify.create({
+        type: 'positive',
+        message: t('page.modelizer.header.button.installPipelines.success.message'),
+        html: true,
+        timeout: 0,
+        actions: [
+          {
+            label: t('page.modelizer.header.button.installPipelines.success.actionLabel'),
+            color: 'white',
+            handler: () => {
+              window.open(project.value.jenkins.url, '_blank').focus();
+            },
+          },
+          {
+            label: t('actions.default.close'),
+            color: 'white',
+          },
+        ],
+      });
+    })
+    .catch(() => {
+      Notify.create({
+        type: 'negative',
+        message: t('page.modelizer.header.button.installPipelines.error.message'),
+        html: true,
+        timeout: 0,
+        actions: [
+          {
+            label: t('page.modelizer.header.button.installPipelines.error.actionLabel'),
+            color: 'white',
+            handler: () => {
+              window.open(`${project.value.jenkins.url}/log/all`, '_blank').focus();
+            },
+          },
+          {
+            label: t('actions.default.close'),
+            color: 'white',
+          },
+        ],
+      });
+    })
+    .finally(() => {
+      isInstallPipelinesLoading.value = false;
     });
 }
 
@@ -163,11 +250,13 @@ function setProject() {
 onMounted(() => {
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(setProject);
   authenticationSubscription = GitEvent.AuthenticationEvent.subscribe(setProject);
+  jenkinsAuthenticationSubscription = JenkinsEvent.AuthenticationEvent.subscribe(setProject);
 });
 
 onUnmounted(() => {
   addRemoteSubscription.unsubscribe();
   authenticationSubscription.unsubscribe();
+  jenkinsAuthenticationSubscription.unsubscribe();
 });
 </script>
 

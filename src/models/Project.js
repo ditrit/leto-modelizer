@@ -20,6 +20,11 @@ class Project {
       repository: null,
       username: null,
     },
+    jenkins: {
+      url: null,
+      username: null,
+      token: null,
+    },
   }) {
     /**
      * The id of this project.
@@ -40,6 +45,16 @@ class Project {
       repository: null,
       username: null,
       ...props.git,
+    };
+    /**
+     * Jenkins settings of this project.
+     * @type {{url: String, username: String, token: String}}
+     */
+    this.jenkins = {
+      url: null,
+      username: null,
+      token: null,
+      ...props.jenkins,
     };
   }
 

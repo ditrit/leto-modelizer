@@ -18,6 +18,7 @@ export default {
       search: 'Search',
       modify: 'Modify',
       ok: 'Ok',
+      close: 'Close',
     },
     home: {
       newProject: 'New project',
@@ -129,6 +130,11 @@ export default {
       commit: 'Commit',
       committed: 'Your files are committed &#129395;!',
       log: 'Log',
+    },
+    jenkins: {
+      authentication: {
+        update: 'Jenkins authentication updated &#129395;!',
+      },
     },
     fileExplorer: {
       empty: 'No files available in project.',
@@ -315,8 +321,23 @@ export default {
             enable: {
               title: 'Click to upload you work to git.',
             },
-            success: 'Uploaded successfully ! 😉',
+            success: {
+              message: 'Uploaded successfully ! 😉',
+              actionLabel: 'Pull Request',
+            },
             error: 'An error occured while uploading.',
+          },
+          installPipelines: {
+            label: 'Install pipelines',
+            title: 'Click to install Jenkins pipelines from CASC files in this project.',
+            success: {
+              message: 'Pipelines installed successfully ! 😉',
+              actionLabel: 'View',
+            },
+            error: {
+              message: 'An error occured while installing pipelines.',
+              actionLabel: 'Logs',
+            },
           },
         },
       },
@@ -359,6 +380,12 @@ export default {
           repository: 'Repository url',
           repositoryExample: 'Examples: "http://test.com/test" or "https://github.com/test"',
           warningMessage: 'Changing the remote can lead to conflicts and/or data loss',
+        },
+        jenkinsAuthentication: {
+          title: 'Jenkins authentication',
+          url: 'Server URL',
+          username: 'Username',
+          token: 'Access token',
         },
         user: {
           unknown: 'Unknown User',

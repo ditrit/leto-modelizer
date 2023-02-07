@@ -91,6 +91,12 @@ const menuItems = computed(() => [
     title: 'page.modelizer.settings.gitAuthentication.title',
     visible: true,
   },
+  {
+    key: 'JenkinsAuthentication',
+    icon: 'fa-brands fa-jenkins',
+    title: 'page.modelizer.settings.jenkinsAuthentication.title',
+    visible: true,
+  },
 ]);
 const userInitials = computed(
   () => `${user.value.firstname?.at(0)}${user.value.lastname?.at(0)}`.toUpperCase(),

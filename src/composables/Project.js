@@ -987,3 +987,22 @@ export async function exists(path) {
     );
   });
 }
+
+export async function jenkinsCascApplyAll(project) {
+  await Promise.all((await getProjectFiles(project.id)).map(async (fileInformation) => {
+    if (/^jenkins-casc.*\.ya?ml$/.test(fileInformation.path.split('/').at(-1))) {
+      const jcascFile = await readProjectFile(project.id, fileInformation);
+      const jenkinsUrl = project.jenkins.url.replace(/^https?:\/\//, '');
+      const r = await fetch(`/cors-proxy/${jenkinsUrl}/configuration-as-code/apply`, {
+        method: 'POST',
+        body: jcascFile.content,
+        headers: {
+          Authorization: `Basic ${btoa(`${project.jenkins.username}:${project.jenkins.token}`)}`,
+        },
+      });
+      if (r.status !== 200) {
+        throw new Error(`Expected status code 200, got ${r.status}`);
+      }
+    }
+  }));
+}
