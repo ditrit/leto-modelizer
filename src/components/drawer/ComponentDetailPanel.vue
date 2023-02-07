@@ -34,9 +34,9 @@
         <q-list>
           <q-item class="q-px-none">
             <q-input
-              v-model="selectedComponentName"
+              v-model="selectedComponentId"
               class="q-px-md q-pb-sm"
-              :label="$t('plugin.component.attribute.name')"
+              :label="$t('plugin.component.attribute.id')"
             />
           </q-item>
           <q-item

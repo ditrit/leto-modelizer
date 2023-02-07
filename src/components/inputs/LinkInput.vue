@@ -37,7 +37,7 @@ const linkInput = ref(null);
 const localValue = ref(props.attribute.value);
 const options = ref(props.plugin.data.getComponentsByType(
   props.attribute.definition.linkRef,
-).map(({ name }) => name));
+).map(({ id }) => id));
 const iconName = ref(props.plugin.data.definitions.components.find(
   ({ type }) => type === props.attribute.definition.linkRef,
 ).icon);
@@ -45,7 +45,7 @@ const iconName = ref(props.plugin.data.definitions.components.find(
 watch(() => props.plugin.data.components, () => {
   options.value = props.plugin.data.getComponentsByType(
     props.attribute.definition.linkRef,
-  ).map(({ name }) => name);
+  ).map(({ id }) => id);
 });
 
 watch(() => linkInput.value, () => {
