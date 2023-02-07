@@ -66,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create a component from a template
 - Create ArrayInput
 - Add menu to see definition of component or attribute
+- Add support for component creation via drag and drop
 - Add model selection page + draw only one model in modelization page
 - Add carousel in NewProjectTemplateDialog and image in ImportModelTemplateDialog
 
