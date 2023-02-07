@@ -27,7 +27,7 @@ describe('Test component: ReferenceInput', () => {
                 icon: 'referenceIconName',
               }],
             },
-            getComponentsByType: jest.fn(() => [{ name: 'ref' }]),
+            getComponentsByType: jest.fn(() => [{ id: 'ref' }]),
           },
         },
       },
@@ -79,7 +79,7 @@ describe('Test component: ReferenceInput', () => {
         },
         plugin: {
           data: {
-            getComponentsByType: jest.fn(() => [{ name: 'ref' }]),
+            getComponentsByType: jest.fn(() => [{ id: 'ref' }]),
             name: 'pluginName',
             components: [{
               name: 'ref',

@@ -58,6 +58,11 @@ const templates = ref([]);
  */
 async function updatePluginsAndTemplates() {
   data.plugins = getPlugins();
+
+  if (data.plugins.length === 0) {
+    return;
+  }
+
   data.plugins.forEach((plugin) => drawComponents(plugin, props.projectName));
   await getTemplatesByType('component', data.plugins[0].data.name)
     .then((response) => {

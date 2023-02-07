@@ -27,7 +27,7 @@ describe('Test component: LinkInput', () => {
                 icon: 'iconName',
               }],
             },
-            getComponentsByType: jest.fn(() => [{ name: 'componentName' }]),
+            getComponentsByType: jest.fn(() => [{ id: 'componentName' }]),
           },
         },
       },
@@ -79,7 +79,7 @@ describe('Test component: LinkInput', () => {
         },
         plugin: {
           data: {
-            getComponentsByType: jest.fn(() => [{ name: 'componentName' }]),
+            getComponentsByType: jest.fn(() => [{ id: 'componentName' }]),
             name: 'pluginName',
             components: [{
               name: 'componentName',

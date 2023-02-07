@@ -1,5 +1,5 @@
 <template>
-  <div class="row items-center">
+  <div class="row items-baseline">
     <template v-if="!attribute.definition">
       <q-input
         v-model="name"
@@ -7,7 +7,7 @@
         class="col-4 q-px-md"
         @update:model-value="(event) => emit('update:attribute-name', event)"
       />
-      <span>:</span>
+      <span class="text-subtitle1">=</span>
     </template>
     <component
       :is="inputList[getAttributeType(attribute)]"
@@ -18,6 +18,21 @@
       @update:model-value="(event) => emit('update:attribute-value', event)"
       hide-bottom-space
     />
+    <q-btn
+      v-if="!attribute.definition"
+      class="q-mr-md"
+      size="xs"
+      round
+      flat
+      color="negative"
+      icon="fa-solid fa-trash"
+      data-cy="object-details-panel-attribute-delete-button"
+      @click="emit('delete:attribute')"
+    >
+      <q-tooltip anchor="center left" self="center right">
+        {{$t('plugin.component.attribute.delete')}}
+      </q-tooltip>
+    </q-btn>
   </div>
 </template>
 
@@ -51,7 +66,11 @@ const { t } = useI18n();
 
 const name = ref(!props.attribute.definition ? props.attribute.name : '');
 
-const emit = defineEmits(['update:attribute-name', 'update:attribute-value']);
+const emit = defineEmits([
+  'update:attribute-name',
+  'update:attribute-value',
+  'delete:attribute',
+]);
 
 /**
  * Get the type of the given attribute.
