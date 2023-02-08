@@ -1,6 +1,7 @@
 import * as TemplateManager from 'src/composables/TemplateManager';
 import { ComponentDefinition } from 'leto-modelizer-plugin-core';
 import { templateLibraryApiClient } from 'src/boot/axios';
+import { generateTemplate } from 'src/composables/TemplateManager';
 
 jest.mock('src/boot/axios', () => ({
   templateLibraryApiClient: {
@@ -114,6 +115,16 @@ describe('Test composable: TemplateManager', () => {
       result.description = 'Schema of web application.';
 
       expect(componentTemplates).toEqual([result]);
+    });
+  });
+
+  describe('Test function: generateTemplate', () => {
+    it('should generate content with prefix', () => {
+      expect(generateTemplate('{{generateId("test_")}}')).toEqual(expect.stringMatching(/^test_.{6}$/));
+    });
+
+    it('should generate content without prefix', () => {
+      expect(generateTemplate('{{generateId()}}')).toEqual(expect.stringMatching(/^.{6}$/));
     });
   });
 });

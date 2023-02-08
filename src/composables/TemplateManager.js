@@ -1,5 +1,7 @@
 import { templateLibraryApiClient } from 'boot/axios';
 import { ComponentDefinition } from 'leto-modelizer-plugin-core';
+import nunjucks from 'nunjucks';
+import { randomHexString } from 'src/composables/Random';
 
 /**
  * Get a remote file's content.
@@ -58,5 +60,16 @@ export async function getTemplatesByType(type, pluginName = '') {
     definition.url = template.url;
     definition.description = template.description;
     return definition;
+  });
+}
+
+/**
+ * Generate template content with nunjucks.
+ * @param {String} content - Template of content.
+ * @return {String} Generated content.
+ */
+export function generateTemplate(content) {
+  return nunjucks.renderString(content, {
+    generateId: (prefix) => `${prefix || ''}${randomHexString(6)}`,
   });
 }
