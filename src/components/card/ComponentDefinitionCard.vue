@@ -3,7 +3,6 @@
     flat
     bordered
     class="component-definition-card"
-    :title="definition.description"
     :data-cy="`component-definition-${definition.type}`"
   >
     <q-item
@@ -21,24 +20,23 @@
           size="xl"
           :name="componentIcon"
         />
-        <q-btn
+        <q-icon
           v-if="definition.url"
-          flat
-          rounded
-          color="primary"
-          size="xs"
-          icon="fa-solid fa-book"
-          class="absolute-top-right q-px-xs"
+          class="absolute-top-right q-ma-xs"
           data-cy="component-definition-url"
-          :title="$t('page.modelizer.drawer.documentationLink')"
-          :href="$sanitize(definition.url)"
-          target="_blank"
-        />
+          name="fa-solid fa-circle-info"
+          color="info"
+          size="xs"
+          @click.stop="$event.preventDefault()"
+          style="cursor: help"
+        >
+          <definition-menu :definition="definition"/>
+        </q-icon>
       </q-item-section>
 
       <q-item-section>
         <q-item-label class="component-definition-type">
-          {{ definition.type }}
+          {{ definition.displayName || definition.type.replaceAll('_', ' ') }}
         </q-item-label>
       </q-item-section>
     </q-item>
@@ -58,6 +56,7 @@ import PluginEvent from 'src/composables/events/PluginEvent';
 import { FileInput } from 'leto-modelizer-plugin-core';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import DefinitionMenu from 'components/menu/DefinitionMenu.vue';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -116,6 +115,7 @@ async function onClickItem() {
 
 <style scoped>
   .component-definition-type {
-    word-break: break-all;
+    word-break: normal;
+    text-align: center;
   }
 </style>
