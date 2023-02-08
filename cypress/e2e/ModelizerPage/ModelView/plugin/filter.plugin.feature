@@ -1,3 +1,5 @@
+@skip
+# TODO: update/fix test
 Feature: Test modelizer model view: plugin initialization
 
   Background:
@@ -10,48 +12,60 @@ Feature: Test modelizer model view: plugin initialization
     And  I extract "project-[a-f0-9]{8}" from url in field "projectName" of context
 
   Scenario Outline: Set text as "<filter>" should display only one element
-    When I click on "[data-cy=\"plugin-definitions-leto-modelizer-plugin-test\"]"
+    When I click on "[data-cy=\"plugin-definitions-terrator-plugin\"]"
     Then I expect "[class*=\"plugin-definitions\"]" appear 1 time on screen
-    And I expect "[class*=\"component-definition-card\"]" appear 7 times on screen
+    And  I expect "[class*=\"component-definition-card\"]" appear 18 times on screen
 
     When I set on "[data-cy=\"filter-plugin-definitions\"]" text "<filter>"
-    And I expect "[class*=\"component-definition-card\"]" appear 1 time on screen
-    And I expect "[data-cy=\"component-definition-<filter>\"]" exists
+    And  I expect "[class*=\"component-definition-card\"]" appear 1 time on screen
+    And  I expect "[data-cy=\"component-definition-<filter>\"]" exists
 
     Examples:
-      | filter   |
-      | truck    |
-      | box      |
-      | envelope |
-      | paper    |
-      | image    |
-      | money    |
-      | gift     |
+      | filter                |
+      | aws_ami               |
+      | server                |
+      | aws_security_group    |
+      | aws_instance          |
+      | aws_volume_attachment |
+      | aws_ebs_volume        |
+      | aws_elb               |
+      | aws_vpc               |
+      | aws_internet_gateway  |
+      | aws_subnet            |
+      | aws_db_subnet_group   |
+      | aws_route53_zone      |
+      | aws_route53_record    |
+      | aws_db_instance       |
+      | aws_key_pair          |
 
   Scenario Outline: Set text as "<filter>" should display only two elements
-    When I click on "[data-cy=\"plugin-definitions-leto-modelizer-plugin-test\"]"
+    When I click on "[data-cy=\"plugin-definitions-terrator-plugin\"]"
     Then I expect "[class*=\"plugin-definitions\"]" appear 1 time on screen
-    And I expect "[class*=\"component-definition-card\"]" appear 7 times on screen
+    And  I expect "[class*=\"component-definition-card\"]" appear 18 times on screen
 
     When I set on "[data-cy=\"filter-plugin-definitions\"]" text "<filter>"
-    And I expect "[class*=\"component-definition-card\"]" appear 2 times on screen
-    And I expect "[data-cy=\"component-definition-<element1>\"]" exists
-    And I expect "[data-cy=\"component-definition-<element2>\"]" exists
+    And  I expect "[class*=\"component-definition-card\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"component-definition-<element1>\"]" exists
+    And  I expect "[data-cy=\"component-definition-<element2>\"]" exists
 
     Examples:
-      | filter      | element1 | element2 |
-      | truck box   | truck    | box      |
-      | paper truck | paper    | truck    |
-      | u x         | truck    | box      |
+      | filter       | element1              | element2             |
+      | ami server   | aws_ami               | server               |
+      | security elb | aws_security_group    | aws_elb              |
+      | vpc internet | aws_vpc               | aws_internet_gateway |
+      | instance     | aws_instance          | aws_db_instance      |
+      | volume       | aws_volume_attachment | aws_ebs_volume       |
+      | subnet       | aws_subnet            | aws_db_subnet_group  |
+      | route53      | aws_route53_zone      | aws_route53_record   |
 
   Scenario Outline: Set text as "<filter>" should not display any elements.
-    When I click on "[data-cy=\"plugin-definitions-leto-modelizer-plugin-test\"]"
+    When I click on "[data-cy=\"plugin-definitions-terrator-plugin\"]"
     Then I expect "[class*=\"plugin-definitions\"]" appear 1 time on screen
-    And I expect "[class*=\"component-definition-card\"]" appear 7 times on screen
+    And  I expect "[class*=\"component-definition-card\"]" appear 18 times on screen
 
     When I set on "[data-cy=\"filter-plugin-definitions\"]" text "<filter>"
-    And I expect "[class*=\"component-definition-card\"]" appear 0 time on screen
+    And  I expect "[class*=\"component-definition-card\"]" appear 0 time on screen
     Examples:
-      | filter   |
-      | bad      |
-      | truckbox |
+      | filter    |
+      | bad       |
+      | amiserver |

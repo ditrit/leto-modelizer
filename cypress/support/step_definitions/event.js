@@ -17,10 +17,6 @@ When('I double click on {string}', (templateSelector) => {
   cy.get(selector).dblclick();
 });
 
-When('I click on body to close popup', () => {
-  cy.get('body').click(0, 0);
-});
-
 When('I scroll to {string} into {string}', (position, templateSelector) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   cy.get(selector).scrollTo(position);
