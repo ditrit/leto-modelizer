@@ -69,7 +69,7 @@ export function isUniqueFileLabel(t, tree, value) {
  */
 export function isRequired(t, value, required) {
   return !required
-    || !(value === null || value === undefined || value === '')
+    || !(value === null || value === undefined || value.length === 0)
     || t('errors.rules.required');
 }
 

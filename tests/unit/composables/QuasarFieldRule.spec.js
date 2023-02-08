@@ -89,15 +89,29 @@ describe('Test composable: InputRule', () => {
   });
 
   describe('Test function: isRequired', () => {
+    const key = 'errors.rules.required';
+
     it('should return true', () => {
       expect(isRequired(null, null, undefined)).toBe(true);
       expect(isRequired(null, true, true)).toBe(true);
     });
 
     it('should return string error message', () => {
-      const key = 'errors.rules.required';
       expect(isRequired(t, null, true)).toEqual(key);
       expect(isRequired(t, undefined, true)).toEqual(key);
+    });
+
+    it('should return true on valid boolean', () => {
+      expect(isRequired(t, true, true)).toEqual(true);
+      expect(isRequired(t, false, true)).toEqual(true);
+    });
+
+    it('should return string error message on empty array', () => {
+      expect(isRequired(t, [], true)).toEqual(key);
+    });
+
+    it('should return true on not empty array', () => {
+      expect(isRequired(t, [1], true)).toEqual(true);
     });
   });
 
