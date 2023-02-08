@@ -9,6 +9,21 @@
       />
       <span class="text-subtitle1">=</span>
     </template>
+    <template v-else-if="attribute.definition.description || attribute.definition.url">
+      <q-icon
+        name="fa-solid fa-circle-info"
+        color="info"
+        size="sm"
+        class="q-ml-sm"
+        style="cursor: help"
+      >
+        <definition-menu
+          :definition="attribute.definition"
+          :is-attribute="true"
+          :offset="[100, 15]"
+        />
+      </q-icon>
+    </template>
     <component
       :is="inputList[getAttributeType(attribute)]"
       :attribute="attribute"
@@ -42,6 +57,7 @@ import {
   defineAsyncComponent,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
+import DefinitionMenu from 'components/menu/DefinitionMenu.vue';
 
 const props = defineProps({
   attribute: {
@@ -95,7 +111,7 @@ function getAttributeLabel(attribute) {
   let label = t('plugin.component.attribute.value');
 
   if (attribute.definition) {
-    label = attribute.name;
+    label = attribute.definition.displayName || attribute.name;
   } else if (getAttributeType(attribute) === 'Boolean') {
     label = '';
   }

@@ -250,6 +250,7 @@ export default {
         delete: 'Delete attribute',
         noAttributes: 'No attributes',
         section: 'Section name',
+        url: 'Open documentation',
       },
     },
   },

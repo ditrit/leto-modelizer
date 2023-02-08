@@ -65,5 +65,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Split git setting dialog in two different dialogs : GitAuthenticationDialog & GitAddRemoteDialog
 - Create a component from a template
 - Create ArrayInput
+- Add menu to see definition of component or attribute
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased
