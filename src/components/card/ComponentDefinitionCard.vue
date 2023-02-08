@@ -48,7 +48,7 @@ import {
   getPluginByName,
   renderPlugin,
 } from 'src/composables/PluginManager';
-import { getTemplateFileByPath } from 'src/composables/TemplateManager';
+import { generateTemplate, getTemplateFileByPath } from 'src/composables/TemplateManager';
 import { appendProjectFile } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
@@ -99,7 +99,7 @@ async function onClickItem() {
       .map((file) => getTemplateFileByPath(`templates/${props.definition.key}/${file}`)
         .then((result) => appendProjectFile(projectName, new FileInput({
           path: file,
-          content: result.data,
+          content: generateTemplate(result.data),
         })))
         .catch(() => {
           Notify.create({

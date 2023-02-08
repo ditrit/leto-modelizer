@@ -46,6 +46,7 @@ jest.mock('src/composables/Project', () => ({
 
 jest.mock('src/composables/TemplateManager', () => ({
   getTemplateFileByPath: jest.fn(),
+  generateTemplate: jest.fn((text) => text),
 }));
 
 describe('Test component: ComponentDefinitionCard', () => {
