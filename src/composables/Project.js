@@ -280,19 +280,41 @@ export async function getBranches(projectId) {
 
 /**
  * Create a new directory.
- * @param {String} projectId - Id of project.
  * @param {String} path - Path of the folder to create.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function createProjectFolder(projectId, path) {
+export async function mkdir(path) {
   return new Promise((resolve, reject) => {
-    fs.mkdir(`${projectId}/${path}`, (error) => {
+    fs.mkdir(path, (error) => {
       if (error) {
         reject({ name: error.code, message: error.message });
       } else {
         resolve();
       }
     });
+  });
+}
+
+/**
+ * Create a new directory. Ignore already exists error.
+ * @param {String} projectId - Id of project.
+ * @param {String} path - Path of the folder to create.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function createProjectFolder(projectId, path) {
+  return Promise.allSettled(path.split('/').reduce((acc, item, index) => {
+    if (index > 0) {
+      acc.push(`${acc[index - 1]}/${item}`);
+    } else {
+      acc.push(item);
+    }
+    return acc;
+  }, []).map((folder) => mkdir(`${projectId}/${folder}`))).then((allResults) => {
+    const error = allResults.find(({ status, reason }) => status === 'rejected' && reason.name !== 'EEXIST');
+    if (error) {
+      return Promise.reject(error);
+    }
+    return Promise.resolve();
   });
 }
 
@@ -322,12 +344,17 @@ export async function writeProjectFile(projectId, file) {
 
 /**
  * Append the given content to a file.
- * Create the file if not existing.
+ * Create the file and folder if not existing.
  * @param {String} projectId - Id of project.
  * @param {FileInput} file - File input to append.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function appendProjectFile(projectId, file) {
+  if (file.path.indexOf('/') > 0) {
+    const folder = file.path.substring(0, file.path.lastIndexOf('/'));
+    await createProjectFolder(projectId, folder);
+  }
+
   return new Promise((resolve, reject) => {
     fs.appendFile(
       `${projectId}/${file.path}`,
