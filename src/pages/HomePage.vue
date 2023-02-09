@@ -17,15 +17,46 @@
           :projects="getProjects()"
         />
       </div>
+      <div class="fit row justify-center q-mt-lg">
+        <TemplateGrid
+          class="col-md-8"
+          :templates="templates"
+          @add:template="openNewProjectTemplateDialog"
+        />
+      </div>
     </div>
     <import-project-dialog/>
+    <new-project-template-dialog/>
   </q-page>
 </template>
 
 <script setup>
 import ProjectGrid from 'src/components/grid/ProjectGrid';
+import TemplateGrid from 'src/components/grid/TemplateGrid';
 import { getProjects } from 'src/composables/Project';
+import { getTemplatesByType } from 'src/composables/TemplateManager';
 import ImportProjectDialog from 'components/dialog/ImportProjectDialog';
+import NewProjectTemplateDialog from 'components/dialog/NewProjectTemplateDialog';
+import { onMounted, ref } from 'vue';
+import DialogEvent from 'src/composables/events/DialogEvent';
+
+const templates = ref([]);
+
+/**
+ * Open NewProjectTemplate dialog.
+ * @param {Object} template - Selected project template.
+ */
+async function openNewProjectTemplateDialog(template) {
+  DialogEvent.next({
+    type: 'open',
+    key: 'NewProjectTemplate',
+    template,
+  });
+}
+
+onMounted(async () => {
+  templates.value = await getTemplatesByType('project');
+});
 </script>
 
 <style lang="scss" scoped>
