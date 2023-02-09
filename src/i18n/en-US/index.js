@@ -17,7 +17,9 @@ export default {
     home: {
       newProject: 'New project',
       importProject: 'Import project',
+      createProject: 'Create project',
       importedProject: 'Project has been imported &#129395;!',
+      createdProject: 'Project has been created &#129395;!',
     },
     git: {
       repository: {
@@ -121,6 +123,13 @@ export default {
         title: 'Recent projects',
         import: 'Import project',
         empty: 'No projects, please create a new project to have one here 😉',
+      },
+      template: {
+        createProject: 'Create a project from a template',
+        importProject: 'Import project with template',
+        selected: 'Selected template: {template}',
+        empty: 'No templates available',
+        import: 'In existing project',
       },
     },
     modelizer: {
