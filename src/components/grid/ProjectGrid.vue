@@ -2,7 +2,7 @@
   <div class="project-grid">
     <div>
       <div class="row items-center">
-        <h4>{{ $t('page.home.recentProjects') }}</h4>
+        <h4>{{ $t('page.home.project.title') }}</h4>
         <q-btn
           outline
           no-caps
@@ -36,7 +36,7 @@
         v-if="Object.keys(projects).length === 0"
         class="row text-center text-h6 text-grey empty-grid"
       >
-        {{ $t('projects.empty') }}
+        {{ $t('page.home.project.empty') }}
       </div>
     </div>
   </div>

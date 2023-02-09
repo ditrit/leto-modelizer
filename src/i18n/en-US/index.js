@@ -68,7 +68,7 @@ export default {
       },
     },
     templates: {
-      getData: 'An error occured while fetching component templates from library templates url.',
+      getData: 'An error occured while fetching remote template data.',
     },
     git: {
       HttpError: 'Can\'t access the repository.',
@@ -111,19 +111,17 @@ export default {
       },
     },
   },
-  projects: {
-    list: 'Projects list:',
-    empty: 'No projects, please create a new project to have one here 😉',
-  },
   error404: {
     title: '404',
     content: 'Oops. Nothing here...',
   },
   page: {
     home: {
-      chooseProject: 'Choose your project',
-      recentProjects: 'Recent projects',
-      importProject: 'Import project',
+      project: {
+        title: 'Recent projects',
+        import: 'Import project',
+        empty: 'No projects, please create a new project to have one here 😉',
+      },
     },
     modelizer: {
       header: {
