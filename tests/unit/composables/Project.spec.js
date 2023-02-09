@@ -39,6 +39,7 @@ jest.mock('isomorphic-git', () => ({
   init: jest.fn(() => Promise.resolve('init')),
   clone: jest.fn(({ onAuth }) => {
     onAuth();
+
     return Promise.resolve('clone');
   }),
   branch: jest.fn(({ ref }) => {
@@ -60,6 +61,7 @@ jest.mock('isomorphic-git', () => ({
     if (!remote) {
       return Promise.resolve(['HEAD', 'main', 'local']);
     }
+
     return Promise.resolve(['HEAD', 'main', 'remote']);
   }),
   resolveRef: jest.fn(() => Promise.resolve('resolveRef')),
@@ -67,11 +69,13 @@ jest.mock('isomorphic-git', () => ({
   currentBranch: jest.fn(() => Promise.resolve('main')),
   pull: jest.fn(({ onAuth }) => {
     onAuth();
+
     return Promise.resolve('pull');
   }),
   statusMatrix: jest.fn(() => Promise.resolve([['test', 0, 1, 2]])),
   push: jest.fn(({ onAuth }) => {
     onAuth();
+
     return Promise.resolve('pull');
   }),
   add: jest.fn(() => Promise.resolve('add')),
@@ -99,36 +103,42 @@ jest.mock('browserfs', () => ({
         || path === 'test/container/emptyParent') {
         return cb(null, { isDirectory: () => true });
       }
+
       return cb(null, { isDirectory: () => false });
     }),
     readdir: jest.fn((path, cb) => {
       const files = [];
+
       if (path === 'test'
         || path === 'test/container') {
         files.push('parent');
         files.push('emptyParent');
       }
+
       if (path === 'test'
         || path === 'test/parent'
         || path === 'test/container/parent') {
         files.push('file.txt');
       }
+
       return cb(null, files);
     }),
     readFile: jest.fn((path, format, cb) => cb(null, 'test')),
-    mkdir: jest.fn((path, cb) => cb(path !== 'projectId/goodPath' ? 'error' : undefined)),
+    mkdir: jest.fn((path, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
     writeFile: jest.fn((path, content, _, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
     appendFile: jest.fn((path, content, _, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
     rmdir: jest.fn((path, cb) => {
       if (path === 'error') {
         return cb(true);
       }
+
       return cb(false);
     }),
     unlink: jest.fn((path, cb) => {
       if (path === 'error') {
         return cb(true);
       }
+
       return cb(false);
     }),
   })),
@@ -145,6 +155,7 @@ describe('Test composable: Project', () => {
     gitAddRemoteMock = jest.fn();
     gitFetchMock = jest.fn(({ onAuth }) => {
       onAuth();
+
       return Promise.resolve('fetch');
     });
 
@@ -156,6 +167,7 @@ describe('Test composable: Project', () => {
   describe('Test function: createProjectTemplate', () => {
     it('should return project with generated ID', () => {
       const project = createProjectTemplate();
+
       expect(project).toBeDefined();
       expect(project.id).toEqual('project-00000000');
     });
@@ -164,6 +176,7 @@ describe('Test composable: Project', () => {
   describe('Test function: getProjects', () => {
     it('should return empty set', () => {
       const projects = getProjects();
+
       expect(projects).toBeDefined();
       expect(projects).toStrictEqual({});
     });
@@ -175,6 +188,7 @@ describe('Test composable: Project', () => {
         qaz: { id: 'qaz' },
         quz: { id: 'quz' },
       };
+
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
       expect(getProjects()).toStrictEqual(projects);
     });
@@ -183,13 +197,17 @@ describe('Test composable: Project', () => {
   describe('Test function: getProjectById', () => {
     it('should not find a project', () => {
       const project = getProjectById('foo');
+
       expect(project).not.toBeDefined();
     });
 
     it('should return saved project', () => {
       const projects = { foo: { id: 'foo' } };
+
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
+
       const project = getProjectById('foo');
+
       expect(project).toStrictEqual({ id: 'foo' });
     });
   });
@@ -197,16 +215,22 @@ describe('Test composable: Project', () => {
   describe('Test function: getProjectName', () => {
     it('should return local project Name', () => {
       const projects = { foo: { id: 'foo' } };
+
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
+
       const projectName = getProjectName('foo');
+
       expect(projects.foo.git).not.toBeDefined();
       expect(projectName).toEqual('foo');
     });
 
     it('should return remote repository name', () => {
       const projects = { foo: { id: 'foo', git: { repository: 'https://github.com/my-project', username: 'test', token: 'test' } } };
+
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
+
       const projectName = getProjectName('foo');
+
       expect(projects.foo.git).toBeDefined();
       expect(projectName).toEqual('my-project');
     });
@@ -216,7 +240,9 @@ describe('Test composable: Project', () => {
     it('should save projects', () => {
       saveProject({ id: 'foo' });
       saveProject({ id: 'bar' });
+
       const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
+
       expect(projects).toStrictEqual({
         foo: { id: 'foo' },
         bar: { id: 'bar' },
@@ -225,7 +251,9 @@ describe('Test composable: Project', () => {
 
     it('should update project', () => {
       saveProject({ id: 'foo', text: 'qaz' });
+
       let projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
+
       expect(projects.foo).toStrictEqual({ id: 'foo', text: 'qaz' });
       saveProject({ id: 'foo', text: 'quz' });
       projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
@@ -263,7 +291,9 @@ describe('Test composable: Project', () => {
         bar: { id: 'bar' },
       }));
       deleteProjectById('foo');
+
       const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
+
       expect(projects.bar).toStrictEqual({ id: 'bar' });
       expect(projects.foo).not.toBeDefined();
     });
@@ -272,11 +302,19 @@ describe('Test composable: Project', () => {
   describe('Test function: createProjectFolder', () => {
     it('should return undefined when dir is created', async () => {
       const result = await createProjectFolder('projectId', 'goodPath');
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should return undefined when dir is created', async () => {
+      const result = await createProjectFolder('projectId', 'a/b/c');
+
       expect(result).toBeUndefined();
     });
 
     it('should return an error when dir is not created', async () => {
-      const error = await createProjectFolder('projectId', 'badPath').catch((e) => e);
+      const error = await createProjectFolder('projectId', 'error').catch((e) => e);
+
       expect(error).toBeDefined();
     });
   });
@@ -284,11 +322,13 @@ describe('Test composable: Project', () => {
   describe('Test function: writeProjectFile', () => {
     it('should succeed and return undefined', async () => {
       const result = await writeProjectFile('projectId', { path: 'goodPath', content: 'content' });
+
       expect(result).toBeUndefined();
     });
 
     it('should fail and return error', async () => {
       const error = await writeProjectFile('projectId', { path: 'error', content: 'content' }).catch((e) => e);
+
       expect(error).toBeDefined();
     });
   });
@@ -296,12 +336,20 @@ describe('Test composable: Project', () => {
   describe('Test function: appendProjectFile', () => {
     it('should succeed and return undefined', async () => {
       const result = await appendProjectFile('projectId', { path: 'goodPath', content: 'content' });
+
       expect(result).toBeUndefined();
     });
 
     it('should fail and return error', async () => {
       const error = await appendProjectFile('projectId', { path: 'error', content: 'content' }).catch((e) => e);
+
       expect(error).toBeDefined();
+    });
+
+    it('should succeed with multiple folder and return undefined', async () => {
+      const result = await appendProjectFile('projectId', { path: 'test/goodPath', content: 'content' }).catch((e) => e);
+
+      expect(result).toBeUndefined();
     });
   });
 
@@ -333,12 +381,14 @@ describe('Test composable: Project', () => {
   describe('Test function: gitFetch', () => {
     it('should not call git.fetch', async () => {
       const result = await gitFetch({});
+
       expect(gitFetchMock).not.toBeCalled();
       expect(result).toBeUndefined();
     });
 
     it('should call git.fetch', async () => {
       const result = await gitFetch({ git: { repository: 'test' } });
+
       expect(gitFetchMock).toBeCalled();
       expect(result).toEqual('fetch');
     });
@@ -347,6 +397,7 @@ describe('Test composable: Project', () => {
   describe('Test function: gitCheckout', () => {
     it('should emit checkout event', async () => {
       const result = await gitCheckout('projectId', 'test').then(() => 'success');
+
       expect(result).toEqual('success');
     });
   });
@@ -356,6 +407,7 @@ describe('Test composable: Project', () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         test: { id: 'test', git: {} },
       }));
+
       const result = await getProjectFiles('test');
 
       expect(result).toEqual([
@@ -371,6 +423,7 @@ describe('Test composable: Project', () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
         test: { id: 'test', git: {} },
       }));
+
       const result = await readProjectFile('test', new FileInformation({ path: '/test/file.txt' }));
 
       expect(result).toEqual(new FileInput({ path: '/test/file.txt', content: 'test' }));
@@ -518,6 +571,7 @@ describe('Test composable: Project', () => {
   describe('Test function: gitCommit', () => {
     it('should call git commit and return SHA-1', async () => {
       const result = await gitCommit('test', 'wip');
+
       expect(result).toEqual('SHA-1');
     });
   });
@@ -538,6 +592,7 @@ describe('Test composable: Project', () => {
   describe('Test function: gitLog', () => {
     it('should return valid log', async () => {
       const result = await gitLog('test', 'main');
+
       expect(result).toEqual(['log']);
     });
 
