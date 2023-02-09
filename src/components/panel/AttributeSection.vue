@@ -4,6 +4,7 @@
     class="col"
     :attribute="localAttribute"
     :plugin="plugin"
+    :full-name="fullName"
     @delete:attribute="deleteAttribute"
     @update:attribute-name="updateAttributeName"
     @update:attribute-value="updateAttributeValue"
@@ -37,6 +38,14 @@
       <q-item-section>
         {{localAttribute.name}}
       </q-item-section>
+      <q-item-section v-if="hasError" side>
+        <q-icon
+          color="negative"
+          name="fa-solid fa-circle-exclamation"
+          size="xs"
+          :title="$t('errors.plugin.object')"
+        />
+      </q-item-section>
     </template>
     <q-list>
       <q-item
@@ -65,6 +74,8 @@
           :attribute="subAttribute"
           :is-children="true"
           :class="subAttribute.type === 'Object' ? 'q-ml-sm' : ''"
+          :full-name="`${fullName}.${subAttribute.name}`"
+          :current-error="currentError"
           @update:attribute="updateAttribute"
         />
       </q-item>
@@ -94,6 +105,8 @@
           :plugin="plugin"
           :attribute="subAttribute"
           :is-children="true"
+          :full-name="`${fullName}.${subAttribute.name}`"
+          :current-error="currentError"
           :class="subAttribute.type === 'Object' ? 'q-ml-sm' : ''"
           @update:attribute="updateAttribute"
         />
@@ -123,6 +136,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  fullName: {
+    type: String,
+    required: true,
+  },
+  currentError: {
+    type: String,
+    default: null,
+  },
 });
 const isObject = computed(() => props.attribute.type === 'Object');
 // TODO: update to reactive
@@ -132,6 +153,8 @@ const emit = defineEmits([
   'delete:attribute',
   'update:attribute',
 ]);
+const hasError = computed(() => props.currentError !== null
+  && props.currentError.indexOf(props.fullName) === 0);
 
 /**
  * Get all sub-attributes of the provided attribute. Retrieve a list that contains instantiated
@@ -240,6 +263,10 @@ function updateAttribute(event) {
     attribute: localAttribute.value,
   });
 }
+
+watch(hasError, () => {
+  localAttribute.value.expanded = hasError.value || localAttribute.value.expanded;
+});
 
 watch(() => props.attribute, () => {
   localAttribute.value = props.attribute;

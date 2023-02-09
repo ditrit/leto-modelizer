@@ -32,6 +32,7 @@
       :label="getAttributeLabel(attribute)"
       @update:model-value="(event) => emit('update:attribute-value', event)"
       hide-bottom-space
+      :full-name="fullName"
     />
     <q-btn
       v-if="!attribute.definition"
@@ -66,6 +67,10 @@ const props = defineProps({
   },
   plugin: {
     type: Object,
+    required: true,
+  },
+  fullName: {
+    type: String,
     required: true,
   },
 });

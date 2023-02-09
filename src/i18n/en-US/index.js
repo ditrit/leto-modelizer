@@ -100,6 +100,9 @@ export default {
         },
       },
     },
+    plugin: {
+      object: 'Some attributes are incorrect',
+    },
     rules: {
       required: 'Value is required.',
       string: {
