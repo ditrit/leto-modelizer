@@ -87,6 +87,20 @@ The argument `proxy_url` refers to `CORS_ISOMORPHIC_BASE_URL` to specify the pro
 
 ### Environment variables
 
+* Define the default path for your models
+
+`MODELS_DEFAULT_FOLDER` is used to define the path of the default folder in which the different plugins and models folders will be located.
+By default, the path will be `[root_project]/[plugin]/[model]/[file]`.
+
+For example, if you want the default models folder to be `YOUR_FOLDER`, the path will be `[root_project]/YOUR_FOLDER/[plugin]/[model]/[file]`.
+You can also have multiple level by adding a `/` between each name like `YOUR_FOLDER/test/example`. (Warning: Do not add any `/` at the beginning or the end).
+
+To define it :
+
+```bash
+MODELS_DEFAULT_FOLDER="YOUR_FOLDER" npm run build
+```
+
 * Using templates from a remote repository
 
 `TEMPLATE_LIBRARY_BASE_URL` is used to define the url of a template library you want to use. To have more information on how to build your own template library, please visit [leto-modelizer-templates-library](https://github.com/ditrit/leto-modelizer-templates-library). To define `TEMPLATE_LIBRARY_BASE_URL`, go to your repository, open the `index.json` file (which contains all the metadata of your templates) in raw mode and get the url to the branch name, without including the file name.
