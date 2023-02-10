@@ -20,6 +20,7 @@ describe('test component: AttributeSection', () => {
           value: '',
         },
         isRoot: true,
+        fullName: 'test',
       },
     });
   });
@@ -38,6 +39,31 @@ describe('test component: AttributeSection', () => {
         },
       });
       expect(wrapper.vm.isObject).toEqual(true);
+    });
+  });
+
+  describe('Test computed: hasError', () => {
+    it('should be false when currentError is null', async () => {
+      await wrapper.setProps({
+        currentError: null,
+      });
+      expect(wrapper.vm.hasError).toEqual(false);
+    });
+
+    it('should be false when fullName not start with currentError', async () => {
+      await wrapper.setProps({
+        currentError: 'tata',
+        fullName: 'test',
+      });
+      expect(wrapper.vm.hasError).toEqual(false);
+    });
+
+    it('should be true when fullName start with currentError', async () => {
+      await wrapper.setProps({
+        currentError: 'test.tata',
+        fullName: 'test',
+      });
+      expect(wrapper.vm.hasError).toEqual(true);
     });
   });
 
@@ -62,6 +88,25 @@ describe('test component: AttributeSection', () => {
         type: 'Object',
         value: [],
       });
+    });
+  });
+
+  describe('Test watcher: hasError', () => {
+    it('should update localAttribute', async () => {
+      expect(wrapper.vm.localAttribute.expanded).not.toBeDefined();
+
+      await wrapper.setProps({
+        currentError: 'test.tata',
+        fullName: 'test',
+      });
+
+      expect(wrapper.vm.localAttribute.expanded).toEqual(true);
+
+      await wrapper.setProps({
+        currentError: null,
+        fullName: 'test',
+      });
+      expect(wrapper.vm.localAttribute.expanded).toEqual(true);
     });
   });
 

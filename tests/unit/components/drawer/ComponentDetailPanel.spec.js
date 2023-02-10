@@ -197,10 +197,14 @@ describe('test component: Plugin Component Detail Panel', () => {
         definition: null,
         type: 'String',
       }];
+      wrapper.vm.form = {
+        validate: jest.fn(),
+      };
 
       wrapper.vm.updateAttribute({ name: 'attribut_1' });
 
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
+      expect(wrapper.vm.form.validate).toBeCalled();
     });
 
     it('should update attribute value when call function with event with existing attribute name', () => {
@@ -210,6 +214,9 @@ describe('test component: Plugin Component Detail Panel', () => {
         definition: null,
         type: 'String',
       }];
+      wrapper.vm.form = {
+        validate: jest.fn(),
+      };
 
       wrapper.vm.updateAttribute({
         name: 'attribut_1',
@@ -227,9 +234,13 @@ describe('test component: Plugin Component Detail Panel', () => {
         definition: null,
         type: 'String',
       }]);
+      expect(wrapper.vm.form.validate).toBeCalled();
     });
 
     it('should add attribute value when call function with event with attribute name not existing', () => {
+      wrapper.vm.form = {
+        validate: jest.fn(),
+      };
       wrapper.vm.selectedComponentAttributes = [];
 
       wrapper.vm.updateAttribute({
@@ -248,6 +259,7 @@ describe('test component: Plugin Component Detail Panel', () => {
         definition: null,
         type: 'String',
       }]);
+      expect(wrapper.vm.form.validate).toBeCalled();
     });
   });
 
@@ -266,6 +278,34 @@ describe('test component: Plugin Component Detail Panel', () => {
       wrapper.vm.onViewSwitchUpdate('text');
 
       expect(wrapper.vm.isVisible).toEqual(false);
+    });
+  });
+
+  describe('Test function: onError', () => {
+    it('should set currentError with value of full-name attribute', () => {
+      wrapper.vm.onError({
+        nativeEl: {
+          getAttribute: (name) => {
+            if (name === 'full-name') {
+              return 'test';
+            }
+
+            return 'bad';
+          },
+        },
+      });
+
+      expect(wrapper.vm.currentError).toEqual('test');
+    });
+  });
+
+  describe('Test function: clearError', () => {
+    it('should clear currentError', () => {
+      wrapper.vm.currentError = 'test';
+      expect(wrapper.vm.currentError).toEqual('test');
+
+      wrapper.vm.clearError();
+      expect(wrapper.vm.currentError).toBeNull();
     });
   });
 

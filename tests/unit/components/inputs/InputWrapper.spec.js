@@ -31,6 +31,7 @@ describe('Test component: InputWrapper', () => {
           },
         },
         plugin: {},
+        fullName: 'test',
       },
       global: i18nPlugin,
     });
@@ -69,6 +70,7 @@ describe('Test component: InputWrapper', () => {
               name: 'referenceTest',
             },
             plugin: {},
+            fullName: 'test',
           },
           global: i18nPlugin,
         });

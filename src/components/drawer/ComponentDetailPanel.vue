@@ -30,7 +30,13 @@
        v-if="selectedComponent && isVisible"
        class="col"
     >
-      <q-form @submit="save" @reset="reset">
+      <q-form
+        ref="form"
+        @submit="save"
+        @reset="reset"
+        @validation-error="onError"
+        @validation-success="clearError"
+      >
         <q-list>
           <q-item class="q-px-none">
             <q-input
@@ -48,6 +54,8 @@
               :attribute="attribute"
               :plugin="localPlugin"
               :is-root="true"
+              :full-name="attribute.name"
+              :current-error="currentError"
               @add:attribute="addAttribute"
               @update:attribute="updateAttribute"
             />
@@ -78,6 +86,8 @@
               :attribute="attribute"
               :plugin="localPlugin"
               :is-root="true"
+              :full-name="attribute.name"
+              :current-error="currentError"
               @add:attribute="addAttribute"
               @update:attribute="updateAttribute"
             />
@@ -128,6 +138,8 @@ const selectedComponentId = ref('');
 const selectedComponentAttributes = ref([]);
 const isVisible = ref(false);
 const submitting = ref(false);
+const currentError = ref(null);
+const form = ref(null);
 const route = useRoute();
 
 let pluginEditSubscription;
@@ -259,6 +271,7 @@ function updateAttribute(event) {
       selectedComponentAttributes.value[index] = event.attribute;
     }
   }
+  form.value.validate();
 }
 /**
  * Close component detail panel if route is updated with a new view type.
@@ -268,6 +281,21 @@ function onViewSwitchUpdate(newViewType) {
   if (newViewType !== route.params.viewType) {
     isVisible.value = false;
   }
+}
+
+/**
+ * Set currentError to full-name attribute value of field in error.
+ * @param {Object} event - Form event.
+ */
+function onError(event) {
+  currentError.value = event.nativeEl.getAttribute('full-name');
+}
+
+/**
+ * Set currentError value to null.
+ */
+function clearError() {
+  currentError.value = null;
 }
 
 onMounted(() => {
