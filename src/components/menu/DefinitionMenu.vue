@@ -11,9 +11,7 @@
         >
           <code>{{ definition.name }}</code>: {{ definition.type }}
         </div>
-        <div class="q-mt-md">
-          {{ definition.description }}
-        </div>
+        <div class="q-mt-md" v-html="$sanitize(definition.description)"></div>
         <div class="q-mt-lg text-right">
           <a
             :href="$sanitize(definition.url)"
