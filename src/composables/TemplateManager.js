@@ -8,11 +8,12 @@ import { randomHexString } from 'src/composables/Random';
  * @param {String} filePath - Path of the file.
  * @return {Promise<Object>} Promise with resources on success otherwise an error.
  */
-export async function getTemplateFileByPath(filePath) {
+export async function getTemplateFileByPath(filePath, responseType = 'json') {
   return templateLibraryApiClient.get(filePath, {
     headers: {
       Accept: '*',
     },
+    responseType,
   });
 }
 
