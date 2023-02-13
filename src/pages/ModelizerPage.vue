@@ -6,7 +6,6 @@
     <modelizer-navigation-bar
       :projectName="projectName"
       :viewType="viewType"
-      @changeView="changeView"
     />
     <q-page-container>
       <q-page
@@ -44,17 +43,12 @@
 </template>
 
 <script setup>
-import {
-  onMounted,
-  onUnmounted,
-  computed,
-} from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar';
 import ModelizerModelView from 'src/components/ModelizerModelView';
 import ModelizerModelsView from 'src/components/ModelizerModelsView';
 import ModelizerTextView from 'src/components/ModelizerTextView';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog';
 import GitAddRemoteDialog from 'components/dialog/GitAddRemoteDialog';
 import GitNewBranchDialog from 'components/dialog/GitNewBranchDialog';
@@ -70,35 +64,8 @@ import DeleteModelDialog from 'components/dialog/DeleteModelDialog';
 import RenameModelDialog from 'components/dialog/RenameModelDialog';
 
 const route = useRoute();
-const router = useRouter();
 const viewType = computed(() => route.params.viewType);
 const projectName = computed(() => route.params.projectName);
-let viewSwitchSubscription;
-
-/**
- * Update the route with the new view type.
- *
- * @param {string} newViewType
- */
-function changeView(newViewType) {
-  if (newViewType !== viewType.value) {
-    router.push({
-      name: 'modelizer',
-      params: {
-        viewType: newViewType,
-        projectName: projectName.value,
-      },
-    });
-  }
-}
-
-onMounted(() => {
-  viewSwitchSubscription = ViewSwitchEvent.subscribe(changeView);
-});
-
-onUnmounted(() => {
-  viewSwitchSubscription.unsubscribe();
-});
 </script>
 
 <style scoped>

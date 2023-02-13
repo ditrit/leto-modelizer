@@ -76,33 +76,4 @@ describe('Test page component: ModelizerPage', () => {
       });
     });
   });
-
-  describe('Test function: changeView', () => {
-    it('should call router.push', () => {
-      expect(wrapper.vm.viewType).toEqual('model');
-      wrapper.vm.changeView('text');
-      expect(push).toHaveBeenCalledTimes(1);
-      expect(push).toHaveBeenLastCalledWith({
-        name: 'modelizer',
-        params: {
-          viewType: 'text',
-          projectName: 'project-00000000',
-        },
-      });
-    });
-  });
-
-  describe('Test hook function: onMounted', () => {
-    it('should subscribe ViewSwitchEvent', () => {
-      expect(subscribe).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe ViewSwitchEvent', () => {
-      expect(unsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(unsubscribe).toHaveBeenCalledTimes(1);
-    });
-  });
 });
