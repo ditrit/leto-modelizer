@@ -8,7 +8,7 @@ import {
 } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
 import FileStatus from 'src/models/git/FileStatus';
-import { getPlugins } from 'src/composables/PluginManager';
+import { getFileInputs, getPlugins } from 'src/composables/PluginManager';
 
 const fs = BrowserFS.BFSRequire('fs');
 
@@ -147,7 +147,7 @@ async function isDirectory(path) {
  * @param {String} path - Path to check.
  * @return {Promise<String[]>} Promise with array of strings on success otherwise an error.
  */
-async function readDir(path) {
+export async function readDir(path) {
   return new Promise((resolve) => {
     fs.readdir(
       path,
@@ -740,4 +740,18 @@ export async function getAllModels(modelsDefaultFolder) {
     .filter((result) => result.status === 'fulfilled')
     .map((result) => result.value)
     .flat());
+}
+
+/**
+ * Get model files.
+ * @param {String} projectName - ID of the project.
+ * @param {String} modelPath - Path of the models folder.
+ * @param {Object} plugin - Plugin to render.
+ * @return {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
+ */
+export async function getModelFiles(projectName, modelPath, plugin) {
+  const files = await readDir(`${projectName}/${modelPath}`);
+  const fileInformations = files.map((file) => new FileInformation({ path: `${modelPath}/${file}` }));
+
+  return getFileInputs(plugin, fileInformations, projectName);
 }

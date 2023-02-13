@@ -46,7 +46,7 @@
 <script setup>
 import {
   getPluginByName,
-  renderPlugin,
+  renderModel,
 } from 'src/composables/PluginManager';
 import { generateTemplate, getTemplateFileByPath } from 'src/composables/TemplateManager';
 import { appendProjectFile } from 'src/composables/Project';
@@ -75,6 +75,7 @@ const componentIcon = computed(() => {
   if (props.definition.isTemplate) {
     return `img:${props.definition.icon}`;
   }
+
   return `img:/plugins/${props.pluginName}/icons/${props.definition.icon}.svg`;
 });
 
@@ -86,15 +87,20 @@ const componentIcon = computed(() => {
 async function onClickItem() {
   const { projectName } = route.params;
   const pluginName = props.pluginName || props.definition.plugin;
+  const plugin = getPluginByName(pluginName);
+  const modelFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
+    ? `${process.env.MODELS_DEFAULT_FOLDER}/${route.query.path}`
+    : `${route.query.path}`;
+
   let files;
 
   if (!props.definition.isTemplate) {
-    const plugin = getPluginByName(pluginName);
+    plugin.data.addComponent(props.definition, `${modelFolder}/`);
 
-    plugin.data.addComponent(props.definition);
-    files = await renderPlugin(pluginName, route.params.projectName);
+    files = await renderModel(route.params.projectName, modelFolder, plugin);
   } else {
-    files = await renderPlugin(pluginName, route.params.projectName);
+    files = await renderModel(route.params.projectName, modelFolder, plugin);
+
     await Promise.allSettled(props.definition.files
       .map((file) => getTemplateFileByPath(`templates/${props.definition.key}/${file}`)
         .then((result) => appendProjectFile(projectName, new FileInput({
@@ -109,6 +115,7 @@ async function onClickItem() {
           });
         })));
   }
+
   PluginEvent.RenderEvent.next(files);
 }
 </script>

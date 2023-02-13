@@ -5,6 +5,7 @@ import {
   getProjectFiles,
   writeProjectFile,
   readProjectFile,
+  getModelFiles,
 } from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
 
@@ -144,6 +145,32 @@ export async function renderPlugin(pluginName, projectId) {
     plugin.render(config, files.filter((file) => plugin.isParsable(file)))
       .map((file) => writeProjectFile(projectId, file).then(() => file)),
   ).then((allResults) => allResults.map((item) => item.value));
+}
+
+/**
+ * Render the given model with the corresponding pugin.
+ * Return rendered files.
+ * @param {String} projectId - ID of the project.
+ * @param {String} modelPath - Path of the models folder.
+ * @param {Object} plugin - Plugin to render.
+ * @return {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
+ */
+export async function renderModel(projectId, modelPath, plugin) {
+  const config = new FileInput({
+    path: `${modelPath}/leto-modelizer.config.json`,
+    content: '{}',
+  });
+
+  const files = await getModelFiles(projectId, modelPath, plugin);
+
+  const renderFiles = plugin.render(
+    config,
+    files.filter((file) => plugin.isParsable(file)),
+  );
+
+  return Promise.allSettled(
+    renderFiles.map((file) => writeProjectFile(projectId, file)),
+  ).then(() => renderFiles);
 }
 
 /**

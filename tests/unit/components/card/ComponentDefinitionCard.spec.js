@@ -2,7 +2,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import { useRoute } from 'vue-router';
 import ComponentDefinitionCard from 'src/components/card/ComponentDefinitionCard.vue';
-import { renderPlugin } from 'src/composables/PluginManager';
+import { renderModel } from 'src/composables/PluginManager';
 import TemplateManager from 'src/composables/TemplateManager';
 import Project from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
@@ -37,7 +37,7 @@ jest.mock('src/composables/events/PluginEvent', () => ({
 
 jest.mock('src/composables/PluginManager', () => ({
   getPluginByName: () => testPlugin,
-  renderPlugin: jest.fn(() => Promise.resolve([])),
+  renderModel: jest.fn(() => Promise.resolve([])),
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -56,6 +56,9 @@ describe('Test component: ComponentDefinitionCard', () => {
   useRoute.mockImplementation(() => ({
     params: {
       projectName: 'project-00000000',
+    },
+    query: {
+      path: 'path',
     },
   }));
 
@@ -93,82 +96,93 @@ describe('Test component: ComponentDefinitionCard', () => {
         expect(wrapper.vm.pluginName).toEqual('plugin');
       });
     });
+
+    describe('Test computed: componentIcon', () => {
+      it('should return string based on pluginName and definition.icon if definition.template is false', () => {
+        expect(wrapper.vm.componentIcon).toStrictEqual('img:/plugins/plugin/icons/icon.svg');
+      });
+
+      it('should return string based on definition.icon if definition.template is true', async () => {
+        await wrapper.setProps({
+          definition: {
+            type: 'component one',
+            isTemplate: true,
+            icon: 'templateIcon',
+          },
+          pluginName: 'plugin',
+        });
+        expect(wrapper.vm.componentIcon).toStrictEqual('img:templateIcon');
+      });
+    });
   });
 
-  describe('Test computed: componentIcon', () => {
-    it('should return string based on pluginName and definition.icon if definition.template is false', () => {
-      expect(wrapper.vm.componentIcon).toStrictEqual('img:/plugins/plugin/icons/icon.svg');
+  describe('Test function: onClickItem', () => {
+    it('should add component to model'
+      + ', call renderModel then emit RenderEvent', async () => {
+      process.env.MODELS_DEFAULT_FOLDER = '';
+      const definition = { type: 'component one', isTemplate: false, icon: 'icon' };
+      const addComponent = jest.fn();
+      testPlugin.data.addComponent = addComponent;
+
+      await wrapper.vm.onClickItem();
+      expect(addComponent).toHaveBeenLastCalledWith(definition, 'path/');
+      expect(renderModel).toHaveBeenCalledTimes(1);
+      expect(PluginEvent.RenderEvent.next).toBeCalled();
     });
 
-    it('should return string based on definition.icon if definition.template is true', async () => {
+    it('should add component to model with different path'
+      + ', call renderModel then emit RenderEvent', async () => {
+      process.env.MODELS_DEFAULT_FOLDER = 'test';
+      const definition = { type: 'component one', isTemplate: false, icon: 'icon' };
+      const addComponent = jest.fn();
+      testPlugin.data.addComponent = addComponent;
+
+      await wrapper.vm.onClickItem();
+      expect(addComponent).toHaveBeenLastCalledWith(definition, 'test/path/');
+      expect(renderModel).toHaveBeenCalledTimes(2);
+      expect(PluginEvent.RenderEvent.next).toBeCalled();
+    });
+
+    it('should call appendProjectFile, renderModel then emit RenderEvent', async () => {
       await wrapper.setProps({
         definition: {
           type: 'component one',
           isTemplate: true,
-          icon: 'templateIcon',
+          files: ['app.tf'],
+          key: 'template key',
+          plugin: 'pluginName',
         },
-        pluginName: 'plugin',
+        pluginName: '',
       });
-      expect(wrapper.vm.componentIcon).toStrictEqual('img:templateIcon');
+
+      await wrapper.vm.onClickItem();
+      expect(renderModel).toHaveBeenCalledTimes(3);
+      expect(appendProjectFileMock).toHaveBeenCalled();
+      expect(PluginEvent.RenderEvent.next).toBeCalled();
     });
-  });
 
-  describe('Test functions', () => {
-    describe('Test function: onClickItem', () => {
-      it('should add component to plugin, call renderPlugin then emit RenderEvent'
-        + 'when clicking on a plugin component', async () => {
-        const definition = { type: 'component one', isTemplate: false, icon: 'icon' };
-        const addComponent = jest.fn();
-        testPlugin.data.addComponent = addComponent;
+    it('should emit a negative notification when an error occured while getting template file'
+      + 'after clicking on a template component', async () => {
+      Notify.create = jest.fn();
 
-        await wrapper.vm.onClickItem();
-        expect(addComponent).toBeCalledWith(definition);
-        expect(renderPlugin).toBeCalledWith('plugin', 'project-00000000');
-        expect(PluginEvent.RenderEvent.next).toBeCalled();
+      TemplateManager.getTemplateFileByPath.mockReturnValueOnce(Promise.reject());
+
+      await wrapper.setProps({
+        definition: {
+          type: 'component one',
+          isTemplate: true,
+          files: ['app.tf'],
+          key: 'template key',
+          plugin: 'pluginName',
+        },
+        pluginName: '',
       });
 
-      it('should call appendProjectFile, renderPlugin then emit RenderEvent'
-        + 'when clicking on a template component', async () => {
-        await wrapper.setProps({
-          definition: {
-            type: 'component one',
-            isTemplate: true,
-            files: ['app.tf'],
-            key: 'template key',
-            plugin: 'pluginName',
-          },
-          pluginName: '',
-        });
-
-        await wrapper.vm.onClickItem();
-        expect(renderPlugin).toBeCalledWith('plugin', 'project-00000000');
-        expect(appendProjectFileMock).toHaveBeenCalled();
-        expect(PluginEvent.RenderEvent.next).toBeCalled();
-      });
-
-      it('should emit a negative notification when an error occured while getting template file'
-        + 'after clicking on a template component', async () => {
-        Notify.create = jest.fn();
-
-        TemplateManager.getTemplateFileByPath.mockReturnValueOnce(Promise.reject());
-
-        await wrapper.setProps({
-          definition: {
-            type: 'component one',
-            isTemplate: true,
-            files: ['app.tf'],
-            key: 'template key',
-            plugin: 'pluginName',
-          },
-          pluginName: '',
-        });
-
-        await wrapper.vm.onClickItem();
-        expect(Notify.create).toHaveBeenCalledWith({
-          message: 'errors.templates.getData',
-          html: true,
-          type: 'negative',
-        });
+      await wrapper.vm.onClickItem();
+      expect(Notify.create).toHaveBeenCalledWith({
+        message: 'errors.templates.getData',
+        html: true,
+        type: 'negative',
       });
     });
   });
