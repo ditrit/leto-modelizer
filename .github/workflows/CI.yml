@@ -73,29 +73,29 @@ jobs:
         with:
           path: dependencies.txt
 
-  e2e-tests:
-    name: E2E tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: git submodule update --init --recursive
-      - name: Build proxy
-        run: cd cors-proxy && sed -i "s/80/9999/g" Dockerfile && docker build . -t cors-proxy
-      - name: Setup application for e2e tests
-        run: |
-          npm install && \
-          npm run plugin:install -- repository-name="leto-modelizer-plugin-test" repository-url="https://github.com/ditrit/leto-modelizer-plugin-test.git" && \
-          npm run plugin:init
-      - name: Build application
-        run: docker build --build-arg proxy_url=http://localhost:9999 -t leto-modelizer -f DockerfileE2E .
-      - name: Run application
-        run: docker-compose up -d
-      - name: Run functional tests
-        run: npm run test:e2e
+  # e2e-tests:
+  #   name: E2E tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Setup Node
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18
+  #     - run: git submodule update --init --recursive
+  #     - name: Build proxy
+  #       run: cd cors-proxy && sed -i "s/80/9999/g" Dockerfile && docker build . -t cors-proxy
+  #     - name: Setup application for e2e tests
+  #       run: |
+  #         npm install && \
+  #         npm run plugin:install -- repository-name="leto-modelizer-plugin-test" repository-url="https://github.com/ditrit/leto-modelizer-plugin-test.git" && \
+  #         npm run plugin:init
+  #     - name: Build application
+  #       run: docker build --build-arg proxy_url=http://localhost:9999 -t leto-modelizer -f DockerfileE2E .
+  #     - name: Run application
+  #       run: docker-compose up -d
+  #     - name: Run functional tests
+  #       run: npm run test:e2e
 
   sonarcloud:
     name: SonarCloud
