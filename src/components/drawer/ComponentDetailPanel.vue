@@ -121,16 +121,24 @@
 
 <script setup>
 import {
+  computed,
   ref,
   onMounted,
   onUnmounted,
 } from 'vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
-import { getPlugins, renderPlugin } from 'src/composables/PluginManager';
+import { renderModel } from 'src/composables/PluginManager';
 import { ComponentAttribute } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
 import AttributeSection from 'components/panel/AttributeSection';
+
+const props = defineProps({
+  plugin: {
+    type: Object,
+    required: true,
+  },
+});
 
 const localPlugin = ref(null);
 const selectedComponent = ref({});
@@ -141,6 +149,7 @@ const submitting = ref(false);
 const currentError = ref(null);
 const form = ref(null);
 const route = useRoute();
+const query = computed(() => route.query);
 
 let pluginEditSubscription;
 let viewSwitchSubscription;
@@ -154,7 +163,15 @@ async function save() {
   selectedComponent.value.attributes = selectedComponentAttributes.value
     .filter(({ value }) => value !== null && value !== '');
 
-  const files = await renderPlugin(localPlugin.value.data.name, route.params.projectName);
+  const path = process.env.MODELS_DEFAULT_FOLDER !== ''
+    ? `${process.env.MODELS_DEFAULT_FOLDER}/${query.value.path}`
+    : `${query.value.path}`;
+
+  const files = await renderModel(
+    route.params.projectName,
+    path,
+    localPlugin.value,
+  );
 
   PluginEvent.RenderEvent.next(files);
   submitting.value = false;
@@ -216,19 +233,8 @@ function reset() {
 function onEdit({ id }) {
   isVisible.value = true;
 
-  const plugins = getPlugins();
-  const component = plugins.reduce((acc, plugin) => {
-    if (!acc) {
-      const foundComponent = plugin.data.getComponentById(id);
-
-      if (foundComponent) {
-        localPlugin.value = plugin;
-        acc = foundComponent;
-      }
-    }
-
-    return acc;
-  }, null);
+  localPlugin.value = props.plugin;
+  const component = props.plugin.data.getComponentById(id);
 
   selectedComponent.value = component;
   selectedComponentId.value = component.id;
@@ -273,6 +279,7 @@ function updateAttribute(event) {
   }
   form.value.validate();
 }
+
 /**
  * Close component detail panel if route is updated with a new view type.
  * @param {String} newViewType - Updated view type.
