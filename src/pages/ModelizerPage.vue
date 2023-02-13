@@ -37,6 +37,7 @@
         <create-model-dialog :project-name="projectName"/>
         <delete-model-dialog :project-name="projectName"/>
         <rename-model-dialog :project-name="projectName"/>
+        <import-model-template-dialog :project-name="projectName"/>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -62,6 +63,7 @@ import GitLogDialog from 'components/dialog/GitLogDialog';
 import CreateModelDialog from 'components/dialog/CreateModelDialog';
 import DeleteModelDialog from 'components/dialog/DeleteModelDialog';
 import RenameModelDialog from 'components/dialog/RenameModelDialog';
+import ImportModelTemplateDialog from 'components/dialog/ImportModelTemplateDialog';
 
 const route = useRoute();
 const viewType = computed(() => route.params.viewType);

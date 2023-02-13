@@ -5,6 +5,7 @@ import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import Project from 'src/composables/Project';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
+import DialogEvent from 'src/composables/events/DialogEvent';
 
 installQuasarPlugin();
 
@@ -14,6 +15,10 @@ jest.mock('src/composables/events/ModelEvent', () => ({
 
 jest.mock('src/composables/Project', () => ({
   getAllModels: jest.fn(),
+}));
+
+jest.mock('src/composables/TemplateManager', () => ({
+  getTemplatesByType: jest.fn(() => Promise.resolve(['models'])),
 }));
 
 describe('Test component: ModelizerModelsView', () => {
@@ -79,7 +84,25 @@ describe('Test component: ModelizerModelsView', () => {
     });
   });
 
+  describe('Test function: openNewModelTemplateDialog', () => {
+    it('should emit DialogEvent', async () => {
+      DialogEvent.next = jest.fn();
+
+      await wrapper.vm.openNewModelTemplateDialog({});
+
+      expect(DialogEvent.next).toBeCalledWith({
+        type: 'open',
+        key: 'ImportModelTemplate',
+        template: {},
+      });
+    });
+  });
+
   describe('Test hook function: onMounted', () => {
+    it('should set templates with return value of getTemplatesByType', () => {
+      expect(wrapper.vm.templates).toEqual(['models']);
+    });
+
     it('should subscribe to UpdateModelEvent', () => {
       expect(updateModelSubscribe).toHaveBeenCalledTimes(1);
     });

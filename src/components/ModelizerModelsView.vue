@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>{{ $t('page.models.name') }}</h2>
+    <h4>{{ $t('page.models.name') }}</h4>
     <q-btn
       :label="$t('actions.models.create.button.name')"
       :title="$t('actions.models.create.button.title')"
@@ -24,6 +24,15 @@
         />
       </router-link>
     </div>
+    <TemplateGrid
+      class="col-md-8"
+      :templates="templates"
+      @add:template="openNewModelTemplateDialog"
+    >
+      <template v-slot:header>
+        <h4>{{ $t('page.models.template.create') }}</h4>
+      </template>
+    </TemplateGrid>
   </div>
 </template>
 
@@ -33,11 +42,14 @@ import {
   onUnmounted,
   onUpdated,
   reactive,
+  ref,
 } from 'vue';
 import { getAllModels } from 'src/composables/Project';
+import { getTemplatesByType } from 'src/composables/TemplateManager';
 import ModelCard from 'src/components/card/ModelCard.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
+import TemplateGrid from 'src/components/grid/TemplateGrid';
 
 const props = defineProps({
   projectName: {
@@ -49,6 +61,7 @@ const props = defineProps({
 const data = reactive({
   models: [],
 });
+const templates = ref([]);
 
 let updateModelSubscription;
 
@@ -64,8 +77,21 @@ async function updateModels() {
   data.models = await getAllModels(path);
 }
 
-onMounted(() => {
+/**
+ * Open NewProjectTemplate dialog.
+ * @param {Object} template - Selected project template.
+ */
+async function openNewModelTemplateDialog(template) {
+  DialogEvent.next({
+    type: 'open',
+    key: 'ImportModelTemplate',
+    template,
+  });
+}
+
+onMounted(async () => {
   updateModels();
+  templates.value = await getTemplatesByType('model');
   updateModelSubscription = UpdateModelEvent.subscribe(updateModels);
 });
 
