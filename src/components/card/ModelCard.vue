@@ -1,55 +1,81 @@
 <template>
   <q-card
+    class="model-card cursor-pointer"
+    v-ripple
     :data-cy="`model-card$-${model.plugin}-${model.name}`"
   >
-    <q-card-section>
-      {{ model.name }}
-    </q-card-section>
-    <q-card-section>
-      {{ model.plugin }}
-    </q-card-section>
-    <q-card-actions>
-      <q-btn
-        class="q-mr-md"
-        :title="$t('actions.models.delete.button.title')"
-        size="xs"
-        round
-        flat
-        color="negative"
-        icon="fa-solid fa-trash"
-        data-cy="model-delete-button"
-        @click.prevent.stop="DialogEvent.next({
-          type: 'open',
-          key: 'DeleteModel',
-          model,
-        })"
-      />
-      <q-btn
-        class="q-mr-md"
-        :title="$t('actions.models.rename.button.title')"
-        size="xs"
-        round
-        flat
-        color="primary"
-        icon="fa-solid fa-pen"
-        data-cy="model-rename-button"
-        @click.prevent.stop="DialogEvent.next({
-          type: 'open',
-          key: 'RenameModel',
-          model,
-        })"
-      />
-    </q-card-actions>
+    <q-img :src="getModelImage()" height="100%">
+      <div
+        class="absolute-bottom text-subtitle2 text-center"
+        data-cy="model-card-title"
+      >
+        <div class="text-bold">
+          {{ model.name }}
+        </div>
+        <div class="text-italic">
+          {{ model.plugin }}
+        </div>
+        <q-btn
+          class="q-mr-md"
+          :title="$t('actions.models.delete.button.title')"
+          size="xs"
+          round
+          color="negative"
+          icon="fa-solid fa-trash"
+          data-cy="model-delete-button"
+          @click.prevent.stop="DialogEvent.next({
+            type: 'open',
+            key: 'DeleteModel',
+            model,
+          })"
+        />
+        <q-btn
+          class="q-mr-none"
+          :title="$t('actions.models.rename.button.title')"
+          size="xs"
+          round
+          color="primary"
+          icon="fa-solid fa-pen"
+          data-cy="model-rename-button"
+          @click.prevent.stop="DialogEvent.next({
+            type: 'open',
+            key: 'RenameModel',
+            model,
+          })"
+        />
+      </div>
+    </q-img>
   </q-card>
 </template>
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
 
-defineProps({
+const props = defineProps({
   model: {
     type: Object,
     required: true,
   },
 });
+
+/**
+ * Get image of model.
+ * Transform model name to a number between 0 and 4 and return associated image.
+ * @return {String} Image path.
+ */
+function getModelImage() {
+  const number = props.model.name.split('')
+    .map((char) => char.charCodeAt(0))
+    .reduce((acc, value) => acc + value) % 5;
+  return `images/project${number}.png`;
+}
 </script>
+
+<style scoped>
+.model-card {
+  width: 150px;
+  height: 150px;
+  text-decoration: none;
+  color: inherit;
+}
+</style>

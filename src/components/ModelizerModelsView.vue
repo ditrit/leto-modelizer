@@ -1,38 +1,54 @@
 <template>
-  <div>
-    <h4>{{ $t('page.models.name') }}</h4>
-    <q-btn
-      :label="$t('actions.models.create.button.name')"
-      :title="$t('actions.models.create.button.title')"
-      color="positive"
-      class="q-mr-md"
-      @click="DialogEvent.next({
-        type: 'open',
-        key: 'CreateModel',
-      })"
-    />
-    <div class="q-pa-md row items-start q-gutter-md">
-      <router-link
-        v-for="model in data.models"
-        :key="model.id"
-        :to="{
-          path: `/modelizer/${projectName}/model`,
-          query: { path: `${model.plugin}/${model.name}` }}"
-      >
-        <model-card
-          :model="model"
+  <div class="fit row justify-center">
+    <div class="col-md-8">
+      <div class="row items-center">
+        <h4>{{ $t('page.models.name') }}</h4>
+        <q-btn
+          outline
+          no-caps
+          class="q-ml-xl"
+          color="primary"
+          icon="fa-solid fa-plus"
+          :label="$t('actions.models.create.button.name')"
+          :title="$t('actions.models.create.button.title')"
+          @click="DialogEvent.next({
+            type: 'open',
+            key: 'CreateModel',
+          })"
         />
-      </router-link>
+      </div>
+      <div
+        v-if="data.models?.length === 0"
+        class="row text-center text-h6 text-grey empty-grid"
+      >
+        {{ $t('page.models.empty') }}
+      </div>
+      <div
+        v-else
+        class="q-pa-md row items-start q-gutter-md"
+      >
+        <router-link
+          v-for="model in data.models"
+          :key="model.id"
+          :to="{
+            path: `/modelizer/${projectName}/model`,
+            query: { path: `${model.plugin}/${model.name}` }}"
+        >
+          <model-card
+            :model="model"
+          />
+        </router-link>
+      </div>
+      <TemplateGrid
+        class="col-md-8"
+        :templates="templates"
+        @add:template="openNewModelTemplateDialog"
+      >
+        <template v-slot:header>
+          <h4>{{ $t('page.models.template.create') }}</h4>
+        </template>
+      </TemplateGrid>
     </div>
-    <TemplateGrid
-      class="col-md-8"
-      :templates="templates"
-      @add:template="openNewModelTemplateDialog"
-    >
-      <template v-slot:header>
-        <h4>{{ $t('page.models.template.create') }}</h4>
-      </template>
-    </TemplateGrid>
   </div>
 </template>
 
