@@ -201,6 +201,7 @@ export default {
     },
     models: {
       name: 'List of Models',
+      empty: 'No models available',
       template: {
         create: 'Create a model from a template',
         selectedPlugin: 'Selected plugin: {plugin}',
