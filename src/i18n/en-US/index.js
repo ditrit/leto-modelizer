@@ -71,6 +71,19 @@ export default {
           error: 'An error occured while deleting model.',
         },
       },
+      import: {
+        dialog: {
+          name: 'Import template model',
+        },
+        form: {
+          name: 'Model name',
+        },
+        notify: {
+          success: 'Model has been created &#129395;!',
+          eexist: 'Model with the same name and plugin already exist.',
+          error: 'An error occured while creating model.',
+        },
+      },
     },
     git: {
       repository: {
@@ -188,6 +201,11 @@ export default {
     },
     models: {
       name: 'List of Models',
+      template: {
+        create: 'Create a model from a template',
+        selectedPlugin: 'Selected plugin: {plugin}',
+        selectedTemplate: 'Selected template: {template}',
+      },
     },
     modelizer: {
       header: {
