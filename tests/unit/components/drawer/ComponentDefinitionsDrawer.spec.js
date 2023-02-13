@@ -4,6 +4,10 @@ import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitio
 
 installQuasarPlugin();
 
+jest.mock('vue-router', () => ({
+  useRouter: jest.fn(),
+}));
+
 describe('Test component: ComponentDefinitionsDrawer', () => {
   let wrapper;
 

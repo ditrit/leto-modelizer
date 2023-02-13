@@ -22,7 +22,11 @@
           class="col-md-8"
           :templates="templates"
           @add:template="openNewProjectTemplateDialog"
-        />
+        >
+          <template v-slot:header>
+            <h4>{{ $t('page.home.template.createProject') }}</h4>
+          </template>
+        </TemplateGrid>
       </div>
     </div>
     <import-project-dialog/>

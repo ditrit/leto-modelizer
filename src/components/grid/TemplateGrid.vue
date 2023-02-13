@@ -2,7 +2,7 @@
   <div class="project-grid">
     <div>
       <div class="row items-center">
-        <h4>{{ $t('page.home.template.createProject') }}</h4>
+        <slot name="header"></slot>
       </div>
       <div class="row">
         <TemplateCard
