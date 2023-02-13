@@ -52,7 +52,7 @@ describe('Test component: ProjectGrid', () => {
         await wrapper.vm.createProject();
         expect(createProjectTemplate).toBeCalled();
         expect(initProject).toBeCalled();
-        expect(push).toBeCalledWith('/modelizer/test/model');
+        expect(push).toBeCalledWith('/modelizer/test/models');
       });
     });
   });

@@ -20,6 +20,8 @@ import {
   appendProjectFile,
   rmDir,
   rm,
+  rename,
+  deleteProjectDir,
   deleteProjectFile,
   getStatus,
   gitPush,
@@ -29,6 +31,9 @@ import {
   gitGlobalUpload,
   importProject,
   PROJECT_STORAGE_KEY,
+  getPluginModels,
+  getAllModels,
+  getModelFiles,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -109,6 +114,9 @@ jest.mock('browserfs', () => ({
     readdir: jest.fn((path, cb) => {
       const files = [];
 
+      if (path === 'empty/pluginName') {
+        return cb(null);
+      }
       if (path === 'test'
         || path === 'test/container') {
         files.push('parent');
@@ -140,6 +148,12 @@ jest.mock('browserfs', () => ({
       }
 
       return cb(false);
+    }),
+    rename: jest.fn((oldPath, newPath, cb) => {
+      if (oldPath === newPath) {
+        return cb('error');
+      }
+      return cb();
     }),
   })),
 }));
@@ -523,6 +537,26 @@ describe('Test composable: Project', () => {
     });
   });
 
+  describe('Test function: rename', () => {
+    it('should be a success on good path', async () => {
+      expect(await rename('path', 'newPath')).toBeUndefined();
+    });
+
+    it('should be an error on bad path', async () => {
+      expect(await rename('error', 'error').catch((e) => e)).toBeDefined();
+    });
+  });
+
+  describe('Test function: deleteProjectDir', () => {
+    it('should be a success on good path', async () => {
+      expect(await deleteProjectDir('test')).toBeUndefined();
+    });
+
+    it('should be an error on bad path', async () => {
+      expect(await deleteProjectDir('error').catch((e) => e)).toBeDefined();
+    });
+  });
+
   describe(' Test function: deleteProjectFile', () => {
     it('should succeed', async () => {
       const result = await deleteProjectFile('test', 'container/parent').then(() => 'success');
@@ -604,6 +638,36 @@ describe('Test composable: Project', () => {
     it('should call git log with specified depth', async () => {
       await gitLog('test', 'main', 1);
       expect(git.log).toBeCalledWith(expect.objectContaining({ depth: 1 }));
+    });
+  });
+
+  describe('Test function: getPluginModels', () => {
+    it('should return an empty array', async () => {
+      expect(await getPluginModels('empty', 'pluginName')).toEqual([]);
+    });
+
+    it('should return an array with one entry', async () => {
+      expect(await getPluginModels('test', 'container')).toEqual([{
+        name: 'parent',
+        plugin: 'container',
+      }, {
+        name: 'emptyParent',
+        plugin: 'container',
+      }]);
+    });
+  });
+
+  describe('Test function: getAllModels', () => {
+    it('should return an empty array', async () => {
+      expect(await getAllModels('test')).toEqual([]);
+    });
+  });
+
+  describe('Test function: getModelFiles', () => {
+    it('should an array', async () => {
+      const array = await getModelFiles();
+
+      expect(Array.isArray(array)).toBeTruthy();
     });
   });
 });

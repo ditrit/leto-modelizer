@@ -35,6 +35,7 @@ jest.mock('src/plugins', () => ({
 
 jest.mock('src/composables/Project', () => ({
   getProjectFiles: jest.fn(() => Promise.resolve([{ path: 'path', content: 'content' }])),
+  getModelFiles: jest.fn(() => Promise.resolve([{ path: 'path', content: 'content' }])),
   writeProjectFile: jest.fn(() => Promise.resolve()),
   readProjectFile: jest.fn(() => Promise.resolve({ id: 'TEST' })),
 }));
@@ -171,6 +172,22 @@ describe('Test composable: PluginManager', () => {
       const files = await PluginManager.renderPlugin('test', 'projectId');
 
       expect(files).toEqual([{ path: 'path', content: 'content' }]);
+    });
+  });
+
+  describe('Test function: renderModel', () => {
+    it('should return an array', async () => {
+      const plugin = {
+        render: () => [],
+        isParsable: () => false,
+      };
+      const array = await PluginManager.renderModel(
+        'projectId',
+        'modelPath',
+        plugin,
+      );
+
+      expect(Array.isArray(array)).toBeTruthy();
     });
   });
 

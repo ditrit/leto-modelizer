@@ -62,7 +62,7 @@ const router = useRouter();
 async function createProject() {
   const project = createProjectTemplate();
   await initProject(project);
-  router.push(`/modelizer/${project.id}/model`);
+  router.push(`/modelizer/${project.id}/models`);
 }
 </script>
 

@@ -10,16 +10,23 @@ import FileStatus from 'src/models/git/FileStatus';
 import { FileInformation } from 'leto-modelizer-plugin-core';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 installQuasarPlugin();
 const mockFileStatus = new FileStatus({
   path: 'terraform/app.tf', headStatus: 0, workdirStatus: 0, stageStatus: 0,
 });
 
+jest.mock('vue-router', () => ({
+  useRoute: jest.fn(),
+  useRouter: jest.fn(),
+}));
+
 jest.mock('src/composables/Project', () => ({
   getProjectFiles: jest.fn(() => Promise.resolve([{ path: 'terraform/app.tf' }])),
   getStatus: jest.fn(() => Promise.resolve([mockFileStatus])),
   writeProjectFile: jest.fn(),
+  getAllModels: jest.fn(),
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
@@ -29,6 +36,8 @@ jest.mock('src/composables/PluginManager', () => ({
     },
   }]),
   renderPlugin: jest.fn([]),
+  getPluginByName: jest.fn(),
+  renderModel: jest.fn(),
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
@@ -49,6 +58,9 @@ jest.mock('src/composables/events/FileEvent', () => ({
   },
   UpdateFileContentEvent: {
     next: jest.fn(),
+  },
+  SelectFileTabEvent: {
+    subscribe: jest.fn(),
   },
 }));
 
@@ -104,6 +116,10 @@ describe('Test component: ModelizerTextView', () => {
   let createFileNodeNext;
   let updateFileContentNext;
   let writeProjectFileMock;
+  let selectFileTabEventSubscribe;
+  let selectFileTabEventUnsubscribe;
+  let useRouterPush;
+  let renderMock;
 
   beforeEach(() => {
     addRemoteSubscribe = jest.fn();
@@ -131,6 +147,15 @@ describe('Test component: ModelizerTextView', () => {
     viewSwitchUnsubscribe = jest.fn();
     createFileNodeNext = jest.fn();
     updateFileContentNext = jest.fn();
+    selectFileTabEventSubscribe = jest.fn();
+    selectFileTabEventUnsubscribe = jest.fn();
+    useRouterPush = jest.fn();
+    renderMock = jest.fn();
+
+    useRoute.mockImplementation(() => ({ query: { path: 'coucou' } }));
+    useRouter.mockImplementation(() => ({
+      push: useRouterPush,
+    }));
 
     GitEvent.AddRemoteEvent.subscribe.mockImplementation(() => {
       addRemoteSubscribe();
@@ -156,6 +181,7 @@ describe('Test component: ModelizerTextView', () => {
       commitSubscribe();
       return { unsubscribe: commitUnsubscribe };
     });
+
     FileEvent.GlobalUploadFilesEvent.subscribe.mockImplementation(() => {
       globalUploadFilesSubscribe();
       return { unsubscribe: globalUploadFilesUnsubscribe };
@@ -172,15 +198,24 @@ describe('Test component: ModelizerTextView', () => {
       updateEditorContentSubscribe();
       return { unsubscribe: updateEditorContentUnsubscribe };
     });
+    FileEvent.SelectFileTabEvent.subscribe.mockImplementation(() => {
+      selectFileTabEventSubscribe();
+      return { unsubscribe: selectFileTabEventUnsubscribe };
+    });
+    FileEvent.CreateFileNodeEvent.next.mockImplementation(createFileNodeNext);
+    FileEvent.UpdateFileContentEvent.next.mockImplementation(updateFileContentNext);
+
     ViewSwitchEvent.subscribe.mockImplementation(() => {
       viewSwitchSubscribe();
       return { unsubscribe: viewSwitchUnsubscribe };
     });
 
-    FileEvent.CreateFileNodeEvent.next.mockImplementation(createFileNodeNext);
-    FileEvent.UpdateFileContentEvent.next.mockImplementation(updateFileContentNext);
-
     Project.writeProjectFile.mockImplementation(() => Promise.resolve(writeProjectFileMock()));
+    Project.getAllModels.mockImplementation(() => [{
+      plugin: 'plugin',
+      name: 'name',
+    }]);
+
     PluginManager.getPlugins.mockImplementation(() => [{
       render: () => [{ path: 'path' }],
       data: {
@@ -195,6 +230,14 @@ describe('Test component: ModelizerTextView', () => {
         path: 'test.json',
       }),
     ]));
+    PluginManager.getPluginByName.mockImplementation(() => Promise.resolve({}));
+    PluginManager.renderModel.mockImplementation(() => {
+      renderMock();
+      return Promise.resolve([
+        { path: 'createdFile' },
+        { path: 'updatedFile' },
+      ]);
+    });
 
     wrapper = shallowMount(ModelizerTextView, {
       props: {
@@ -361,16 +404,41 @@ describe('Test component: ModelizerTextView', () => {
     });
   });
 
-  describe('Test function: renderPlugins', () => {
-    it('should return one created file and one updated file', async () => {
-      wrapper.vm.localFileInformations = [new FileInformation({
-        path: 'leto-modelizer.config.json',
-      })];
+  describe('Test function: renderPluginFiles', () => {
+    it('should call renderModel()', async () => {
+      process.env.MODELS_DEFAULT_FOLDER = 'test';
 
-      const { createdFiles, updatedFiles } = await wrapper.vm.renderPlugins();
+      await wrapper.vm.renderPluginFiles();
 
-      expect(createdFiles.length).toEqual(1);
-      expect(updatedFiles.length).toEqual(1);
+      expect(renderMock).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test function: getModel', () => {
+    it('should return model corresponding to the selected file', async () => {
+      process.env.MODELS_DEFAULT_FOLDER = '';
+      wrapper.vm.selectedFileTabPath = 'plugin/name/filename';
+      const model = await wrapper.vm.getModel();
+
+      expect(model).toEqual({
+        plugin: 'plugin',
+        name: 'name',
+      });
+    });
+
+    it('should return undefined if MODELS_DEFAULT_FOLDER is defined', async () => {
+      process.env.MODELS_DEFAULT_FOLDER = 'test';
+      wrapper.vm.selectedFileTabPath = 'plugin/name/filename';
+      const model = await wrapper.vm.getModel();
+
+      expect(model).toEqual(undefined);
+    });
+
+    it('should return undefined otherwise', async () => {
+      wrapper.vm.selectedFileTabPath = null;
+      const model = await wrapper.vm.getModel();
+
+      expect(model).toEqual(undefined);
     });
   });
 
@@ -384,7 +452,7 @@ describe('Test component: ModelizerTextView', () => {
 
     it('should send CreateFileNode & UpdateFileContent event otherwise', async () => {
       wrapper.vm.localFileInformations = [new FileInformation({
-        path: 'leto-modelizer.config.json',
+        path: 'updatedFile',
       })];
 
       await wrapper.vm.onSwitchView('text');

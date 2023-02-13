@@ -75,6 +75,7 @@ module.exports = configure((ctx) => ({
     env: {
       CORS_ISOMORPHIC_BASE_URL: process.env.CORS_ISOMORPHIC_BASE_URL || 'https://cors.isomorphic-git.org',
       TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL || '',
+      MODELS_DEFAULT_FOLDER: process.env.MODELS_DEFAULT_FOLDER || '',
     },
     // extractCSS: false,
 

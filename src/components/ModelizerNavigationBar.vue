@@ -44,6 +44,7 @@
         </template>
       </q-btn>
       <q-btn-toggle
+        v-show="viewType !== 'models'"
         v-model="buttonToggleValue"
         :options="buttonToggleOptions"
         @update:model-value="onViewSwitchUpdate"
@@ -71,7 +72,6 @@ import {
 import { useI18n } from 'vue-i18n';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import ModelizerSettingsMenu from 'components/menu/ModelizerSettingsMenu.vue';
-import PluginEvent from 'src/composables/events/PluginEvent';
 import FileEvent from 'src/composables/events/FileEvent';
 import { Notify } from 'quasar';
 import {
@@ -151,10 +151,8 @@ async function upload() {
  */
 function onViewSwitchUpdate(newViewType) {
   if (newViewType === props.viewType) return;
+
   ViewSwitchEvent.next(newViewType);
-  if (newViewType === 'model') {
-    PluginEvent.ParseEvent.next();
-  }
 }
 
 /**

@@ -8,6 +8,7 @@ import {
 } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
 import FileStatus from 'src/models/git/FileStatus';
+import { getFileInputs, getPlugins } from 'src/composables/PluginManager';
 
 const fs = BrowserFS.BFSRequire('fs');
 
@@ -146,7 +147,7 @@ async function isDirectory(path) {
  * @param {String} path - Path to check.
  * @return {Promise<String[]>} Promise with array of strings on success otherwise an error.
  */
-async function readDir(path) {
+export async function readDir(path) {
   return new Promise((resolve) => {
     fs.readdir(
       path,
@@ -496,6 +497,43 @@ export async function rm(path) {
 }
 
 /**
+ * Rename file on fs.
+ * @param {String} oldPath - Old path of file to rename.
+ * @param {String} newPath - New path of file to rename.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function rename(oldPath, newPath) {
+  return new Promise((resolve, reject) => {
+    fs.rename(
+      oldPath,
+      newPath,
+      (e) => (e ? reject(e) : resolve()),
+    );
+  });
+}
+
+/**
+ * Delete folder and all its content on fs.
+ * @param {String} path - Path of folder to delete.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function deleteProjectDir(path) {
+  const isDir = await isDirectory(path);
+
+  if (!isDir) {
+    return rm(path);
+  }
+
+  const dirEntries = await readDir(path);
+
+  if (dirEntries.length > 0) {
+    await Promise.allSettled(dirEntries.map((entry) => deleteProjectDir(`${path}/${entry}`)));
+  }
+
+  return rmDir(path);
+}
+
+/**
  * Delete project file or folder.
  * @param {String} projectId - Id of project.
  * @param {String} filePath - File path to delete.
@@ -663,4 +701,57 @@ export async function initProject(project) {
   }));
   await gitAdd(project.id, 'README.md');
   return gitCommit(project.id, 'Initial commit.');
+}
+
+/**
+ * Get all models of the plugin.
+ * @param {String} modelsDefaultFolder - Path of the models folder.
+ * @param {String} pluginName - Name of the plugin.
+ * @return {Promise<Array>} Promise with an array of models on success otherwise an error.
+ */
+export async function getPluginModels(modelsdefaultFolder, pluginName) {
+  const dirEntries = await readDir(`${modelsdefaultFolder}/${pluginName}`);
+
+  if (!dirEntries) {
+    return [];
+  }
+
+  return Promise.allSettled(dirEntries.map(
+    (entry) => (async () => {
+      const isDir = await isDirectory(`${modelsdefaultFolder}/${pluginName}/${entry}`);
+      return isDir ? { name: entry, plugin: pluginName } : null;
+    })(),
+  )).then((allResults) => allResults
+    .filter((result) => result.status === 'fulfilled' && result.value)
+    .map((result) => result.value));
+}
+
+/**
+ * Get all models of the project.
+ * @param {String} modelsDefaultFolder - Path of the models folder.
+ * @return {Promise<Array>} Promise with an array of models on success otherwise an error.
+ */
+export async function getAllModels(modelsDefaultFolder) {
+  const plugins = getPlugins();
+
+  return Promise.allSettled(
+    plugins.map(({ data }) => getPluginModels(modelsDefaultFolder, data.name)),
+  ).then((results) => results
+    .filter((result) => result.status === 'fulfilled')
+    .map((result) => result.value)
+    .flat());
+}
+
+/**
+ * Get model files.
+ * @param {String} projectName - ID of the project.
+ * @param {String} modelPath - Path of the models folder.
+ * @param {Object} plugin - Plugin to render.
+ * @return {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
+ */
+export async function getModelFiles(projectName, modelPath, plugin) {
+  const files = await readDir(`${projectName}/${modelPath}`);
+  const fileInformations = files.map((file) => new FileInformation({ path: `${modelPath}/${file}` }));
+
+  return getFileInputs(plugin, fileInformations, projectName);
 }

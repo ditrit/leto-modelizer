@@ -6,7 +6,7 @@ const ModelizerLongRoute = {
   path: '/modelizer/:projectName/:viewType',
   component: ModelizerPage,
   beforeEnter: (to, _from, next) => {
-    const valideViewTypes = ['model', 'text'];
+    const valideViewTypes = ['model', 'text', 'models'];
     const project = getProjectById(to.params.projectName);
 
     if (!project || !valideViewTypes.includes(to.params.viewType)) {

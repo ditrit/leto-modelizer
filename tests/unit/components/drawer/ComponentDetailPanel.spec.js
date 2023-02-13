@@ -2,7 +2,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
-import { getPlugins } from 'src/composables/PluginManager';
+import { getPlugins, renderModel } from 'src/composables/PluginManager';
 import ComponentDetailPanel from 'src/components/drawer/ComponentDetailPanel.vue';
 import {
   Component,
@@ -37,6 +37,7 @@ jest.mock('src/composables/events/ViewSwitchEvent', () => ({
 jest.mock('src/composables/PluginManager', () => ({
   getPlugins: jest.fn(),
   renderPlugin: jest.fn(),
+  renderModel: jest.fn(),
 }));
 
 describe('test component: Plugin Component Detail Panel', () => {
@@ -51,6 +52,7 @@ describe('test component: Plugin Component Detail Panel', () => {
       projectName: 'project-00000000',
       viewType: 'model',
     },
+    query: { path: 'coucou' },
   }));
 
   getPlugins.mockImplementation(() => [{
@@ -66,6 +68,7 @@ describe('test component: Plugin Component Detail Panel', () => {
       name: 'test',
     },
   }]);
+  renderModel.mockImplementation(() => {});
 
   beforeEach(() => {
     pluginEditSubscription = jest.fn();
@@ -83,7 +86,20 @@ describe('test component: Plugin Component Detail Panel', () => {
       return { unsubscribe: viewSwitchUnsubscription };
     });
 
-    wrapper = shallowMount(ComponentDetailPanel);
+    wrapper = shallowMount(ComponentDetailPanel, {
+      props: {
+        plugin: {
+          data: {
+            name: 'pluginName',
+            definitions: {
+              components: [{
+                type: 'componentType',
+              }],
+            },
+          },
+        },
+      },
+    });
     wrapper.vm.localPlugin = {
       data: {
         name: 'test',
@@ -95,6 +111,15 @@ describe('test component: Plugin Component Detail Panel', () => {
     it('should update selectedComponent with selectedComponentId & selectedComponentAttributes', () => {
       wrapper.vm.selectedComponentId = 'selectedComponentId';
       wrapper.vm.selectedComponentAttributes = [];
+
+      wrapper.vm.save();
+
+      expect(wrapper.vm.selectedComponent.id).toEqual(wrapper.vm.selectedComponentId);
+      expect(wrapper.vm.selectedComponent.attributes)
+        .toEqual(wrapper.vm.selectedComponentAttributes);
+      expect(wrapper.vm.isVisible).toEqual(false);
+
+      process.env.MODELS_DEFAULT_FOLDER = '';
 
       wrapper.vm.save();
 
@@ -161,14 +186,17 @@ describe('test component: Plugin Component Detail Panel', () => {
     it('should set isVisible to true and set local values', () => {
       expect(wrapper.vm.isVisible).toBeFalsy();
 
-      wrapper.vm.onEdit({ id: 'id' });
-
-      expect(wrapper.vm.isVisible).toBeTruthy();
-      expect(wrapper.vm.selectedComponent).toEqual(new Component({
+      const component = new Component({
         id: 'componentId',
         attributes: [],
         definition: new ComponentDefinition(),
-      }));
+      });
+
+      wrapper.vm.props.plugin.data.getComponentById = () => component;
+      wrapper.vm.onEdit({ id: 'id' });
+
+      expect(wrapper.vm.isVisible).toBeTruthy();
+      expect(wrapper.vm.selectedComponent).toEqual(component);
       expect(wrapper.vm.selectedComponentId).toEqual('componentId');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
     });

@@ -65,7 +65,7 @@ describe('Test component: NewProjectTemplateDialog', () => {
         wrapper.vm.addProject('test');
 
         expect(DialogEvent.next).toBeCalledWith({ type: 'close', key: 'NewProjectTemplate' });
-        expect(push).toBeCalledWith('/modelizer/test/model');
+        expect(push).toBeCalledWith('/modelizer/test/models');
       });
     });
 

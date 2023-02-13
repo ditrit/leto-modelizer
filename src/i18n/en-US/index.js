@@ -21,6 +21,57 @@ export default {
       importedProject: 'Project has been imported &#129395;!',
       createdProject: 'Project has been created &#129395;!',
     },
+    models: {
+      create: {
+        button: {
+          name: 'New model',
+          title: 'Open dialog to create new model',
+        },
+        dialog: {
+          name: 'Create new model',
+        },
+        form: {
+          name: 'Model name',
+          plugin: 'Model plugin',
+        },
+        notify: {
+          success: 'Model has been created &#129395;!',
+          eexist: 'Model with the same name and plugin already exist.',
+          error: 'An error occured while creating model.',
+        },
+      },
+      rename: {
+        button: {
+          title: 'Rename model',
+        },
+        dialog: {
+          name: 'Rename model',
+        },
+        form: {
+          name: 'Model name',
+        },
+        notify: {
+          success: 'Model has been renamed &#129395;!',
+          eperm: 'Model with the same name and plugin already exist.',
+          error: 'An error occured while renaming model.',
+        },
+      },
+      delete: {
+        button: {
+          title: 'Delete model',
+        },
+        dialog: {
+          name: 'Delete model',
+        },
+        form: {
+          message: 'Are you sure this model should be deleted ?',
+        },
+        notify: {
+          success: 'Model has been deleted &#129395;!',
+          error: 'An error occured while deleting model.',
+        },
+      },
+    },
     git: {
       repository: {
         exists: 'We have access to your repository &#129395;!',
@@ -135,6 +186,9 @@ export default {
         import: 'In existing project',
       },
     },
+    models: {
+      name: 'List of Models',
+    },
     modelizer: {
       header: {
         switch: {
@@ -159,6 +213,10 @@ export default {
         components: {
           header: 'Components definitions',
           filterLabel: 'Component filter',
+          button: {
+            label: 'Back to models',
+            title: 'Open models page',
+          },
         },
         templates: {
           title: 'Templates',
