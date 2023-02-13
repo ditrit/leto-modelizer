@@ -3,6 +3,7 @@
     ref="stringInput"
     v-model="localValue"
     clearable
+    :type="props.attribute.definition?.displayType"
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
       (value) => isStringTooShort($t, value, attribute.definition?.rules.min),
@@ -45,3 +46,13 @@ watch(() => props.attribute, () => {
   }
 });
 </script>
+
+<style>
+  textarea {
+    height: 300px;
+    font-family: "Droid Sans Mono", monospace, monospace;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: scroll;
+  }
+</style>
