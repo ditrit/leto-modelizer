@@ -11,7 +11,39 @@
       {{ $t(`page.home.template.${isChecked ? 'import': 'create'}Project`) }}
     </template>
     <template v-slot:default>
-      <div class="q-pb-md text-subtitle2">
+      <div v-if="projectTemplate?.models.length">
+        <q-carousel
+          v-model="slide"
+          swipeable
+          animated
+          control-type="flat"
+          control-color="primary"
+          navigation
+          padding
+          arrows
+          height="200px"
+          class="text-primary rounded-borders"
+        >
+          <q-carousel-slide
+            v-for="(model, index) in projectTemplate?.models"
+            :key="index"
+            :name="index+1"
+            class="column no-wrap flex-center"
+          >
+            <div v-viewer>
+              <img
+                :src="`template-library/templates/${projectTemplate.key}/${model}/schema.svg`"
+                :alt="`${projectTemplate.key}/${model}/schema.svg`"
+                class="carousel-img"
+              />
+            </div>
+            <div class="q-mt-md text-center text-black">
+              {{  model }}
+            </div>
+          </q-carousel-slide>
+        </q-carousel>
+      </div>
+      <div class="text-subtitle2">
         {{ $t('page.home.template.selected', { template: templateName }) }}
       </div>
       <q-checkbox
@@ -41,9 +73,9 @@ import {
 } from 'vue';
 
 const router = useRouter();
-
 const projectTemplate = ref(null);
 const isChecked = ref(false);
+const slide = ref(1);
 const templateName = computed(() => projectTemplate.value.type);
 let dialogEventSubscription;
 
@@ -74,3 +106,16 @@ onUnmounted(() => {
   dialogEventSubscription.unsubscribe();
 });
 </script>
+
+<style scoped lang="scss">
+.carousel-img {
+  cursor: zoom-in;
+  height: 100px;
+}
+</style>
+
+<style>
+.viewer-move {
+  background-color: white;
+}
+</style>

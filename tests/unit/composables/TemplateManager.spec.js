@@ -77,6 +77,15 @@ describe('Test composable: TemplateManager', () => {
           url: null,
           files: ['app.tf'],
         },
+        {
+          key: 'project_template',
+          name: 'Project template',
+          type: 'project',
+          description: 'Project template example.',
+          url: null,
+          models: ['plugin/infra1', 'plugin/infra2'],
+          files: ['plugin/infra1/main.tf', 'plugin/infra1/provider.tf', 'plugin/infra2/main.tf'],
+        },
       ];
       templateLibraryApiClient.get.mockReturnValueOnce(Promise.resolve({ data: { templates } }));
     });
@@ -84,17 +93,21 @@ describe('Test composable: TemplateManager', () => {
     it('should return filtered component type templates', async () => {
       const componentTemplates = await TemplateManager.getTemplatesByType('component', 'terrator-plugin');
 
-      const result = new ComponentDefinition({
+      let result = new ComponentDefinition({
         type: 'Test application',
         icon: '/template-library/templates/terraform_test_application/icon.svg',
       });
 
-      result.isTemplate = true;
-      result.plugin = 'terrator-plugin';
-      result.files = ['app.tf'];
-      result.key = 'terraform_test_application';
-      result.url = null;
-      result.description = 'Initialized test application.';
+      result = {
+        ...result,
+        isTemplate: true,
+        plugin: 'terrator-plugin',
+        files: ['app.tf'],
+        key: 'terraform_test_application',
+        url: null,
+        models: undefined,
+        description: 'Initialized test application.',
+      };
 
       expect(componentTemplates).toEqual([result]);
     });
@@ -102,17 +115,43 @@ describe('Test composable: TemplateManager', () => {
     it('should return filtered model type templates', async () => {
       const componentTemplates = await TemplateManager.getTemplatesByType('model');
 
-      const result = new ComponentDefinition({
+      let result = new ComponentDefinition({
         type: 'Web application',
         icon: '/template-library/templates/terraform_webapp/icon.svg',
       });
 
-      result.isTemplate = true;
-      result.plugin = 'terrator-plugin';
-      result.files = ['main.tf'];
-      result.key = 'terraform_webapp';
-      result.url = null;
-      result.description = 'Schema of web application.';
+      result = {
+        ...result,
+        isTemplate: true,
+        plugin: 'terrator-plugin',
+        files: ['main.tf'],
+        key: 'terraform_webapp',
+        url: null,
+        models: undefined,
+        description: 'Schema of web application.',
+      };
+
+      expect(componentTemplates).toEqual([result]);
+    });
+
+    it('should return filtered project type templates', async () => {
+      const componentTemplates = await TemplateManager.getTemplatesByType('project');
+
+      let result = new ComponentDefinition({
+        type: 'Project template',
+        icon: '/template-library/templates/project_template/icon.svg',
+      });
+
+      result = {
+        ...result,
+        isTemplate: true,
+        plugin: undefined,
+        files: ['plugin/infra1/main.tf', 'plugin/infra1/provider.tf', 'plugin/infra2/main.tf'],
+        key: 'project_template',
+        url: null,
+        models: ['plugin/infra1', 'plugin/infra2'],
+        description: 'Project template example.',
+      };
 
       expect(componentTemplates).toEqual([result]);
     });
