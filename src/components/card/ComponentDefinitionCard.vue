@@ -104,7 +104,7 @@ async function onClickItem() {
     await Promise.allSettled(props.definition.files
       .map((file) => getTemplateFileByPath(`templates/${props.definition.key}/${file}`)
         .then((result) => appendProjectFile(projectName, new FileInput({
-          path: file,
+          path: `${modelFolder}/${file}`,
           content: generateTemplate(result.data),
         })))
         .catch(() => {
