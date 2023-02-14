@@ -5,6 +5,7 @@ import i18nConfiguration from 'src/i18n';
 import NewProjectTemplateDialog from 'src/components/dialog/NewProjectTemplateDialog.vue';
 import { useRouter } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
+import { directive as viewer } from 'v-viewer';
 
 installQuasarPlugin();
 
@@ -43,6 +44,9 @@ describe('Test component: NewProjectTemplateDialog', () => {
         plugins: [
           createI18n({ locale: 'en-US', messages: i18nConfiguration }),
         ],
+        directives: {
+          viewer,
+        },
       },
     });
   });

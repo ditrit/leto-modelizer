@@ -29,6 +29,7 @@
     "monaco-editor-webpack-plugin": "^7.0.1",
     "quasar": "^2.11.5",
     "rxjs": "^7.8.0",
+    "v-viewer": "^3.0.11",
     "vue": "^3.2.47",
     "vue-3-sanitize": "^0.1.4",
     "vue-i18n": "^9.2.2",

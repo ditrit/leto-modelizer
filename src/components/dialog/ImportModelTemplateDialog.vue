@@ -10,15 +10,28 @@
       />
       {{ $t(`actions.models.import.dialog.name`) }}
     </template>
-    <template v-slot:default>
-      <div class="q-pb-md text-subtitle2">
-        {{ $t('page.models.template.selectedTemplate', { template: modelTemplate?.type }) }}
+    <template
+      v-if="modelTemplate"
+      v-slot:default
+    >
+      <div class="q-pb-md text-center text-subtitle2">
+        {{ modelTemplate.type }}
       </div>
-      <div class="q-pb-md text-subtitle2 text-italic">
-        {{  modelTemplate?.description }}
+      <div
+        v-viewer
+        class="row justify-center q-mb-sm"
+      >
+        <img
+          :src="`template-library/templates/${modelTemplate.key}/schema.svg`"
+          :alt="`${modelTemplate.key}/schema.svg`"
+          class="carousel-img"
+        />
+      </div>
+      <div class="q-pb-md text-center text-subtitle2 text-italic">
+        {{  modelTemplate.description }}
       </div>
       <div class="q-pb-md text-subtitle2">
-        {{ $t('page.models.template.selectedPlugin', { plugin: modelTemplate?.plugin }) }}
+        {{ $t('page.models.template.selectedPlugin', { plugin: modelTemplate.plugin }) }}
       </div>
       <import-model-template-form
         :project-name="projectName"
@@ -67,3 +80,14 @@ onUnmounted(() => {
   dialogEventSubscription.unsubscribe();
 });
 </script>
+<style scoped lang="scss">
+.carousel-img {
+  cursor: zoom-in;
+  height: 100px;
+}
+</style>
+<style>
+.viewer-move {
+  background-color: white;
+}
+</style>

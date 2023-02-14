@@ -4,6 +4,7 @@ import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import ImportModelTemplateDialog from 'src/components/dialog/ImportModelTemplateDialog.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
+import { directive as viewer } from 'v-viewer';
 
 installQuasarPlugin();
 
@@ -30,6 +31,9 @@ describe('Test component: ImportModelTemplateDialog', () => {
         plugins: [
           createI18n({ locale: 'en-US', messages: i18nConfiguration }),
         ],
+        directives: {
+          viewer,
+        },
       },
       props: {
         projectName: 'projectName',

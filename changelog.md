@@ -67,5 +67,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create ArrayInput
 - Add menu to see definition of component or attribute
 - Add model selection page + draw only one model in modelization page
+- Add carousel in NewProjectTemplateDialog and image in ImportModelTemplateDialog
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased

@@ -54,13 +54,16 @@ export async function getTemplatesByType(type, pluginName = '') {
       icon: `/template-library/templates/${template.key}/icon.svg`,
     });
 
-    definition.isTemplate = true;
-    definition.plugin = template.plugin;
-    definition.files = template.files;
-    definition.key = template.key;
-    definition.url = template.url;
-    definition.description = template.description;
-    return definition;
+    return {
+      ...definition,
+      isTemplate: true,
+      plugin: template.plugin,
+      files: template.files,
+      key: template.key,
+      url: template.url,
+      description: template.description,
+      models: template.models,
+    };
   });
 }
 
