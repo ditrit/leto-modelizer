@@ -6,8 +6,13 @@ import Project from 'src/composables/Project';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import DialogEvent from 'src/composables/events/DialogEvent';
+import { useRoute } from 'vue-router';
 
 installQuasarPlugin();
+
+jest.mock('vue-router', () => ({
+  useRoute: jest.fn(),
+}));
 
 jest.mock('src/composables/events/ModelEvent', () => ({
   subscribe: jest.fn(),
@@ -29,6 +34,13 @@ describe('Test component: ModelizerModelsView', () => {
   beforeEach(() => {
     updateModelSubscribe = jest.fn();
     updateModelUnsubscribe = jest.fn();
+
+    useRoute.mockImplementation(() => ({
+      params: {
+        projectName: 'projectName',
+        viewType: 'models',
+      },
+    }));
 
     UpdateModelEvent.subscribe.mockImplementation(() => {
       updateModelSubscribe();
@@ -64,6 +76,12 @@ describe('Test component: ModelizerModelsView', () => {
   describe('Test props: projectName', () => {
     it('should match "projectName"', () => {
       expect(wrapper.vm.projectName).toEqual('projectName');
+    });
+  });
+
+  describe('Test computed: viewType', () => {
+    it('should match route.params.viewType', () => {
+      expect(wrapper.vm.viewType).toEqual('models');
     });
   });
 
