@@ -31,6 +31,7 @@ module.exports = configure((ctx) => ({
     'browserfs',
     'vue-sanitize',
     'axios',
+    'v-viewer',
   ],
 
   // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
