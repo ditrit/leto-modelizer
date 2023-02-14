@@ -243,7 +243,7 @@ describe('Test component: ModelizerNavigationBar', () => {
   });
 
   describe('Test watcher: props.viewType', () => {
-    it('should be trigger when props.viewType is update with a different value', async () => {
+    it('should be triggered when props.viewType is updated with a different value', async () => {
       await wrapper.setProps({
         viewType: 'text',
         projectName: 'projectTest',
