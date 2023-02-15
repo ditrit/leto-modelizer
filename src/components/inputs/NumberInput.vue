@@ -2,7 +2,7 @@
   <q-input
     type="number"
     ref="numberInput"
-    v-model="localValue"
+    v-model.number="localValue"
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
       (value) => isNumberTooSmall($t, value, attribute.definition?.rules.min),
