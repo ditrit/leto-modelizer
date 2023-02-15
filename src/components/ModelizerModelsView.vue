@@ -29,7 +29,7 @@
       >
         <router-link
           v-for="model in data.models"
-          :key="model.id"
+          :key="`${model.plugin}/${model.name}`"
           :to="{
             path: `/modelizer/${projectName}/model`,
             query: { path: `${model.plugin}/${model.name}` }}"
@@ -56,9 +56,10 @@
 import {
   onMounted,
   onUnmounted,
-  onUpdated,
   reactive,
   ref,
+  watch,
+  computed,
 } from 'vue';
 import { getAllModels } from 'src/composables/Project';
 import { getTemplatesByType } from 'src/composables/TemplateManager';
@@ -66,7 +67,9 @@ import ModelCard from 'src/components/card/ModelCard.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import TemplateGrid from 'src/components/grid/TemplateGrid';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const props = defineProps({
   projectName: {
     type: String,
@@ -78,6 +81,7 @@ const data = reactive({
   models: [],
 });
 const templates = ref([]);
+const viewType = computed(() => route.params.viewType);
 
 let updateModelSubscription;
 
@@ -105,14 +109,16 @@ async function openNewModelTemplateDialog(template) {
   });
 }
 
+watch(() => viewType.value, () => {
+  if (viewType.value === 'models') {
+    updateModels();
+  }
+});
+
 onMounted(async () => {
   updateModels();
   templates.value = await getTemplatesByType('model');
   updateModelSubscription = UpdateModelEvent.subscribe(updateModels);
-});
-
-onUpdated(() => {
-  updateModels();
 });
 
 onUnmounted(() => {
