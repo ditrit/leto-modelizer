@@ -36,7 +36,7 @@
         />
       </q-item-section>
       <q-item-section>
-        {{localAttribute.name}}
+        {{ localAttribute.definition?.displayName || localAttribute.name }}
       </q-item-section>
       <q-item-section v-if="hasError" side>
         <q-icon
