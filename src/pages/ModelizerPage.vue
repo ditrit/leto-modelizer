@@ -12,11 +12,11 @@
         data-cy="modelizer-page"
       >
         <modelizer-model-view
-          v-show="viewType === 'draw'"
+          v-if="viewType === 'draw'"
           :project-name="projectName"
         />
         <modelizer-text-view
-          v-show="viewType === 'text'"
+          v-else-if="viewType === 'text'"
           :project-name="projectName"
         />
         <git-authentication-dialog :project-name="projectName" />
