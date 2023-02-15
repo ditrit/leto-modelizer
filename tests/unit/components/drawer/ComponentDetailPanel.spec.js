@@ -325,6 +325,12 @@ describe('test component: Plugin Component Detail Panel', () => {
 
       expect(wrapper.vm.currentError).toEqual('test');
     });
+
+    it('should not set currentError when onError param is falsy', () => {
+      wrapper.vm.onError(false);
+
+      expect(wrapper.vm.currentError).toBeNull();
+    });
   });
 
   describe('Test function: clearError', () => {
