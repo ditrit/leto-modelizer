@@ -46,6 +46,7 @@ describe('test component: Plugin Component Detail Panel', () => {
   let pluginEditUnsubscription;
   let viewSwitchSubscription;
   let viewSwitchUnsubscription;
+  let pluginRenderNext;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -75,11 +76,14 @@ describe('test component: Plugin Component Detail Panel', () => {
     pluginEditUnsubscription = jest.fn();
     viewSwitchSubscription = jest.fn();
     viewSwitchUnsubscription = jest.fn();
+    pluginRenderNext = jest.fn();
 
     PluginEvent.EditEvent.subscribe.mockImplementation(() => {
       pluginEditSubscription();
       return { unsubscribe: pluginEditUnsubscription };
     });
+
+    PluginEvent.RenderEvent.next.mockImplementation(pluginRenderNext);
 
     ViewSwitchEvent.subscribe.mockImplementation(() => {
       viewSwitchSubscription();
@@ -107,12 +111,12 @@ describe('test component: Plugin Component Detail Panel', () => {
     };
   });
 
-  describe('Test function: save', () => {
+  describe('Test function: submit', () => {
     it('should update selectedComponent with selectedComponentId & selectedComponentAttributes', () => {
       wrapper.vm.selectedComponentId = 'selectedComponentId';
       wrapper.vm.selectedComponentAttributes = [];
 
-      wrapper.vm.save();
+      wrapper.vm.submit();
 
       expect(wrapper.vm.selectedComponent.id).toEqual(wrapper.vm.selectedComponentId);
       expect(wrapper.vm.selectedComponent.attributes)
@@ -121,12 +125,49 @@ describe('test component: Plugin Component Detail Panel', () => {
 
       process.env.MODELS_DEFAULT_FOLDER = '';
 
-      wrapper.vm.save();
+      wrapper.vm.submit();
 
       expect(wrapper.vm.selectedComponent.id).toEqual(wrapper.vm.selectedComponentId);
       expect(wrapper.vm.selectedComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
       expect(wrapper.vm.isVisible).toEqual(false);
+      expect(wrapper.vm.forceSave).toEqual(false);
+    });
+  });
+
+  describe('Test function: save', () => {
+    it('should emit event if form validation is successful', async () => {
+      wrapper.vm.form = {
+        validate: jest.fn(() => Promise.resolve(true)),
+      };
+
+      await wrapper.vm.save();
+      await wrapper.vm.$nextTick();
+
+      expect(pluginRenderNext).toHaveBeenCalledTimes(1);
+    });
+
+    it('should emit event if form validation is not successful but forceSave is true', async () => {
+      wrapper.vm.form = {
+        validate: jest.fn(() => Promise.resolve(false)),
+      };
+      wrapper.vm.forceSave = true;
+
+      await wrapper.vm.save();
+      await wrapper.vm.$nextTick();
+
+      expect(pluginRenderNext).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not emit event if form validation is not successful and forceSave is false', async () => {
+      wrapper.vm.form = {
+        validate: jest.fn(() => Promise.resolve(false)),
+      };
+
+      await wrapper.vm.save();
+      await wrapper.vm.$nextTick();
+
+      expect(pluginRenderNext).not.toHaveBeenCalled();
     });
   });
 
@@ -174,11 +215,13 @@ describe('test component: Plugin Component Detail Panel', () => {
       };
       wrapper.vm.selectedComponentId = 'oldId';
       wrapper.vm.selectedComponentAttributes = [{}];
+      wrapper.vm.forceSave = true;
 
       wrapper.vm.reset();
 
       expect(wrapper.vm.selectedComponentId).toEqual('newId');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
+      expect(wrapper.vm.forceSave).toEqual(false);
     });
   });
 
