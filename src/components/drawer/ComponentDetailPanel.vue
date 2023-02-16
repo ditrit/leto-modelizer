@@ -32,7 +32,6 @@
     >
       <q-form
         ref="form"
-        @submit="save"
         @reset="reset"
         @validation-error="onError"
         @validation-success="clearError"
@@ -92,6 +91,12 @@
               @update:attribute="updateAttribute"
             />
           </q-item>
+          <q-item>
+            <q-checkbox
+              v-model="forceSave"
+              :label="$t('plugin.component.attribute.forceSave')"
+            />
+          </q-item>
           <q-item class="row justify-evenly q-mt-md">
             <q-btn
               icon="fa-solid fa-floppy-disk"
@@ -99,6 +104,7 @@
               type="submit"
               color="positive"
               :loading="submitting"
+              @click="save"
               data-cy="object-details-panel-save-button"
             >
               <template v-slot:loading>
@@ -148,6 +154,7 @@ const isVisible = ref(false);
 const submitting = ref(false);
 const currentError = ref(null);
 const form = ref(null);
+const forceSave = ref(false);
 const route = useRoute();
 const query = computed(() => route.query);
 
@@ -157,7 +164,7 @@ let viewSwitchSubscription;
 /**
  * Update local component data and emit DrawEvent & RenderEvent events.
  */
-async function save() {
+async function submit() {
   submitting.value = true;
   selectedComponent.value.id = selectedComponentId.value;
   selectedComponent.value.attributes = selectedComponentAttributes.value
@@ -176,6 +183,20 @@ async function save() {
   PluginEvent.RenderEvent.next(files);
   submitting.value = false;
   isVisible.value = false;
+  forceSave.value = false;
+}
+
+/**
+ * Handle form validation.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function save() {
+  return form.value.validate().then((success) => {
+    if (forceSave.value || success) {
+      return submit();
+    }
+    return Promise.resolve();
+  });
 }
 
 /**
@@ -224,6 +245,7 @@ function reset() {
     ...getReferencedAttributes(selectedComponent.value),
     ...getUnreferencedAttributes(selectedComponent.value),
   ]));
+  forceSave.value = false;
 }
 
 /**

@@ -69,5 +69,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for component creation via drag and drop
 - Add model selection page + draw only one model in modelization page
 - Add carousel in NewProjectTemplateDialog and image in ImportModelTemplateDialog
+- Add checkbox to force save attribute field(s) in error
 
 [unreleased]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#unreleased

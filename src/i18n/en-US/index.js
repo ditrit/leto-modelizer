@@ -332,6 +332,7 @@ export default {
         save: 'save',
         reset: 'reset',
         title: 'Component details',
+        forceSave: 'Allow saving with error field(s)',
         referenced: 'Referenced object attribute',
         unreferenced: 'Unreferenced object attribute',
         add: 'Add attribute',
