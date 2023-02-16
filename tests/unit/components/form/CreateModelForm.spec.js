@@ -30,6 +30,10 @@ jest.mock('src/composables/Project', () => ({
   }),
 }));
 
+jest.mock('src/composables/PluginManager', () => ({
+  getPlugins: jest.fn(() => [{ data: { name: 'pluginName' } }]),
+}));
+
 describe('Test component: CreateModelForm', () => {
   let wrapper;
   let useRouterPush;
