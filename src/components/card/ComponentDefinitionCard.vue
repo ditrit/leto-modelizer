@@ -3,6 +3,11 @@
     flat
     bordered
     class="component-definition-card"
+    draggable="true"
+    @dragstart="dragStartHandler"
+    @dragend="dragEndHandler"
+    :id="`component-definition-${definition.type}`"
+    :title="definition.description"
     :data-cy="`component-definition-${definition.type}`"
   >
     <q-item
@@ -44,6 +49,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import {
   getPluginByName,
   renderModel,
@@ -51,7 +57,6 @@ import {
 import { generateTemplate, getTemplateFileByPath } from 'src/composables/TemplateManager';
 import { appendProjectFile } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
-import { computed } from 'vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { FileInput } from 'leto-modelizer-plugin-core';
 import { Notify } from 'quasar';
@@ -70,6 +75,33 @@ const props = defineProps({
     default: '',
   },
 });
+
+/**
+ * Setup drag data.
+ *
+ * @param {DragEvent} event - The starting drag event.
+ */
+function dragStartHandler(event) {
+  const dragData = {
+    pluginName: props.pluginName || props.definition.plugin,
+    isTemplate: props.definition.isTemplate,
+    definitionType: props.definition.isTemplate ? props.definition.key : props.definition.type,
+  };
+  const overlayElement = document.getElementById('overlay');
+
+  event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
+  overlayElement.style.display = 'block';
+  event.dataTransfer.dropEffect = 'copy';
+}
+
+/**
+ * Hide overlay after dropping a component.
+ */
+function dragEndHandler() {
+  const overlayElement = document.getElementById('overlay');
+
+  overlayElement.style.display = 'none';
+}
 
 const componentIcon = computed(() => {
   if (props.definition.isTemplate) {

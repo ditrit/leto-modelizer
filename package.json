@@ -36,6 +36,7 @@
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@4tw/cypress-drag-drop": "^2.2.3",
     "@babel/core": "^7.20.12",
     "@babel/eslint-parser": "^7.19.1",
     "@babel/preset-env": "^7.20.2",
@@ -49,6 +50,7 @@
     "babel-jest": "^29.4.2",
     "babel-loader": "^9.1.2",
     "cypress": "^12.5.1",
+    "cypress-real-events": "^1.7.6",
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
     "eslint": "^8.33.0",

@@ -12,6 +12,10 @@ installQuasarPlugin({
   plugins: [Notify],
 });
 
+jest.mock('vue-router', () => ({
+  useRoute: jest.fn(),
+}));
+
 jest.mock('vue-i18n', () => ({
   useI18n: () => ({
     t: (t) => t,
@@ -47,16 +51,26 @@ jest.mock('src/composables/PluginManager', () => ({
   deleteComponent: jest.fn(),
   getPluginByName: jest.fn(),
   getFileInputs: jest.fn(),
-  renderModel: () => [{ path: 'path' }],
+  renderModel: jest.fn(() => [{ path: 'path' }]),
+  renderPlugin: jest.fn(() => Promise.resolve([])),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
-  getTemplatesByType: jest.fn(() => Promise.resolve([{ plugin: 'plugin', isTemplate: true }])),
+  getTemplatesByType: jest.fn(() => Promise.resolve([{ plugin: 'plugin', isTemplate: true }, {
+    type: 'component one',
+    isTemplate: true,
+    files: ['app.tf'],
+    key: 'testTemplate',
+    plugin: 'pluginName',
+  }])),
+  getTemplateFileByPath: jest.fn(),
+  generateTemplate: jest.fn((text) => text),
 }));
 
 jest.mock('src/composables/Project', () => ({
   getProjectFiles: jest.fn(),
   readProjectFile: jest.fn(),
+  appendProjectFile: jest.fn(),
   readDir: jest.fn(),
 }));
 
@@ -76,6 +90,8 @@ describe('Test component: ModelizerModelView', () => {
   let pluginDraw;
   let useRouterPush;
   let pluginRenderNext;
+  let appendProjectFileMock;
+  let testPlugin;
 
   beforeEach(() => {
     initSubscribe = jest.fn();
@@ -92,6 +108,7 @@ describe('Test component: ModelizerModelView', () => {
     pluginDraw = jest.fn();
     useRouterPush = jest.fn();
     pluginRenderNext = jest.fn();
+    appendProjectFileMock = jest.fn();
 
     useRoute.mockImplementation(() => ({
       params: {
@@ -105,6 +122,9 @@ describe('Test component: ModelizerModelView', () => {
     useRouter.mockImplementation(() => ({
       push: useRouterPush,
     }));
+
+    Project.appendProjectFile.mockImplementation(() => Promise.resolve(appendProjectFileMock()));
+    TemplateManager.getTemplateFileByPath.mockImplementation(() => Promise.resolve({ data: 'template file content' }));
 
     PluginEvent.InitEvent.subscribe.mockImplementation(() => {
       initSubscribe();
@@ -128,6 +148,20 @@ describe('Test component: ModelizerModelView', () => {
     });
     PluginEvent.RenderEvent.next.mockImplementation(pluginRenderNext);
 
+    testPlugin = {
+      data: {
+        name: 'pluginName',
+        addComponent: jest.fn(),
+        definitions: {
+          components: [
+            { type: 'testComponent', isTemplate: false, icon: 'icon' },
+          ],
+        },
+      },
+      parse: pluginParse,
+      draw: pluginDraw,
+    };
+
     Project.getProjectFiles.mockImplementation(() => Promise.resolve([{}]));
     Project.readProjectFile.mockImplementation(() => Promise.resolve({ id: 'TEST' }));
     Project.readDir.mockImplementation(() => Promise.resolve([]));
@@ -142,11 +176,7 @@ describe('Test component: ModelizerModelView', () => {
       return true;
     });
     PluginManager.getPlugins.mockImplementation(() => []);
-    PluginManager.getPluginByName.mockImplementation(() => ({
-      data: { name: 'pluginName' },
-      parse: pluginParse,
-      draw: pluginDraw,
-    }));
+    PluginManager.getPluginByName.mockImplementation(() => testPlugin);
     PluginManager.getFileInputs.mockImplementation(() => []);
 
     wrapper = shallowMount(ModelizerModelView, {
@@ -168,8 +198,8 @@ describe('Test component: ModelizerModelView', () => {
     it('should update data.plugins, call drawComponents and update component templates on success', async () => {
       await wrapper.vm.updatePluginsAndTemplates();
 
-      expect(wrapper.vm.data.plugin).toEqual(expect.objectContaining({ data: { name: 'pluginName' } }));
-      expect(wrapper.vm.templates).toEqual([{ plugin: 'plugin', isTemplate: true }]);
+      expect(wrapper.vm.data.plugin).toEqual(expect.objectContaining({ data: expect.objectContaining({ name: 'pluginName' }) }));
+      expect(wrapper.vm.templates).toEqual(expect.arrayContaining([{ plugin: 'plugin', isTemplate: true }]));
     });
 
     it('should emit a negative notification on error after failing to retrieve templates', async () => {
@@ -178,6 +208,83 @@ describe('Test component: ModelizerModelView', () => {
       Notify.create = jest.fn();
 
       await wrapper.vm.updatePluginsAndTemplates();
+
+      expect(Notify.create).toHaveBeenCalledWith({
+        message: 'errors.templates.getData',
+        html: true,
+        type: 'negative',
+      });
+    });
+  });
+
+  describe('Test function: dropHandler', () => {
+    let event;
+
+    beforeEach(() => {
+      event = {
+        preventDefault: jest.fn(),
+        dataTransfer: {
+          getData: jest.fn(),
+        },
+      };
+    });
+
+    it.each([
+      ['', 'path'],
+      ['test', 'test/path'],
+    ])(`should add component to plugin, call renderModel then emit RenderEvent 
+    when dropping a plugin component with models path set to "%s"`, async (modelFolder, destinationPath) => {
+      process.env.MODELS_DEFAULT_FOLDER = modelFolder;
+
+      event.dataTransfer.getData.mockReturnValueOnce(JSON.stringify({
+        isTemplate: false,
+        pluginName: 'pluginName',
+        definitionType: 'testComponent',
+      }));
+
+      await wrapper.vm.dropHandler(event);
+
+      expect(testPlugin.data.addComponent).toBeCalledWith({ type: 'testComponent', isTemplate: false, icon: 'icon' }, `${destinationPath}/`);
+      expect(PluginManager.renderModel).toBeCalledWith('project-00000000', destinationPath, expect.objectContaining({
+        data: expect.objectContaining({ name: 'pluginName' }),
+      }));
+      expect(PluginEvent.RenderEvent.next).toBeCalled();
+    });
+
+    it.each([
+      ['', 'path'],
+      ['test', 'test/path'],
+    ])(`should call appendProjectFile, renderModel then emit RenderEvent 
+    when dropping a template component with models path set to "%s"`, async (modelFolder, destinationPath) => {
+      process.env.MODELS_DEFAULT_FOLDER = modelFolder;
+      event.dataTransfer.getData.mockReturnValueOnce(JSON.stringify({
+        isTemplate: true,
+        pluginName: 'pluginName',
+        definitionType: 'testTemplate',
+      }));
+
+      await wrapper.vm.dropHandler(event);
+
+      expect(PluginManager.renderModel).toBeCalledWith('project-00000000', destinationPath, expect.objectContaining({
+        data: expect.objectContaining({ name: 'pluginName' }),
+      }));
+      expect(appendProjectFileMock).toHaveBeenCalled();
+      expect(PluginEvent.RenderEvent.next).toBeCalled();
+    });
+
+    it(`should emit a negative notification when an error occured while getting template file 
+    after dropping a template component`, async () => {
+      Notify.create = jest.fn();
+
+      TemplateManager.getTemplateFileByPath.mockReturnValueOnce(Promise.reject());
+
+      event.dataTransfer.getData.mockReturnValueOnce(JSON.stringify({
+        isTemplate: true,
+        pluginName: 'pluginName',
+        definitionType: 'testTemplate',
+      }));
+
+      await wrapper.vm.dropHandler(event);
 
       expect(Notify.create).toHaveBeenCalledWith({
         message: 'errors.templates.getData',
