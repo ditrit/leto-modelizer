@@ -150,3 +150,25 @@ Option to use it in command `install`:
 
 - plugin name: `terrator-plugin`
 - repository url: `https://github.com/ditrit/terrator-plugin.git#0.1.12`
+
+## Compatibility versions table
+
+<table>
+  <thead>
+    <tr>
+      <th rowspan="2">Leto-modelizer</th>
+      <th colspan="2">Supported version</th>
+    </tr>
+    <tr>
+      <th>Plugin-core</th>
+      <th>Terrator-plugin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1.0.0</td>
+      <td>= 0.13.0</td>
+      <td>= 0.1.12</td>
+    </tr>
+  </tbody>
+</table>
