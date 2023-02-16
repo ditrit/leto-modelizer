@@ -83,7 +83,8 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .carousel-img {
   cursor: zoom-in;
-  height: 100px;
+  max-height: 300px;
+  max-width: 520px;
 }
 </style>
 <style>
