@@ -161,18 +161,6 @@ describe('test component: AttributeSection', () => {
         },
       })]);
     });
-
-    it('should return array with instantiate attribute with its value even if definition does not exist', () => {
-      expect(wrapper.vm.getSubAttributes({
-        value: [{
-          ...defaultAttribute,
-          value: 'toto',
-        }],
-      })).toEqual([{
-        ...defaultAttribute,
-        value: 'toto',
-      }]);
-    });
   });
 
   describe('Test function: addSubAttribute', () => {

@@ -317,9 +317,7 @@ function onViewSwitchUpdate(newViewType) {
  * @param {Object} event - Form event.
  */
 function onError(event) {
-  if (event) {
-    currentError.value = event.nativeEl.getAttribute('full-name');
-  }
+  currentError.value = event?.nativeEl?.getAttribute('full-name') || null;
 }
 
 /**
