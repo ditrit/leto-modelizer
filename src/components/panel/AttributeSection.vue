@@ -165,21 +165,24 @@ const hasError = computed(() => props.currentError !== null
 function getSubAttributes(attribute) {
   const attributes = [];
 
-  if (attribute.value?.length > 0) {
-    attribute.value.forEach((attr) => attributes.push(attr));
-  }
-
   attribute.definition?.definedAttributes
-    ?.filter(({ name }) => !attributes.some((attr) => attr.name === name))
-    .forEach((definition) => attributes.push(new ComponentAttribute({
-      name: definition.name,
-      type: definition.type,
-      definition,
-    })));
+    ?.forEach((definition) => {
+      const attr = attribute.value.find(({ name }) => name === definition.name);
+
+      if (attr) {
+        attributes.push(attr);
+      } else {
+        attributes.push(new ComponentAttribute({
+          name: definition.name,
+          type: definition.type,
+          definition,
+        }));
+      }
+    });
 
   return [
-    ...attributes.filter(({ definition }) => definition !== null),
-    ...attributes.filter(({ definition }) => definition === null),
+    ...attributes,
+    ...attribute.value.filter(({ definition }) => definition === null),
   ];
 }
 
