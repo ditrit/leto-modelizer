@@ -89,7 +89,7 @@ async function onSubmit() {
       router.push({
         name: 'modelizer',
         params: {
-          viewType: 'model',
+          viewType: 'draw',
           projectName: props.projectName,
         },
         query: { path: `${modelPlugin.value}/${modelName.value}` },

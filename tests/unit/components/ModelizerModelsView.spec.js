@@ -5,12 +5,13 @@ import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 installQuasarPlugin();
 
 jest.mock('vue-router', () => ({
   useRoute: jest.fn(),
+  useRouter: jest.fn(),
 }));
 
 jest.mock('src/composables/events/ModelEvent', () => ({
@@ -29,6 +30,7 @@ describe('Test component: ModelizerModelsView', () => {
   let wrapper;
   let updateModelSubscribe;
   let updateModelUnsubscribe;
+  const useRouterPush = jest.fn();
 
   beforeEach(() => {
     updateModelSubscribe = jest.fn();
@@ -39,6 +41,10 @@ describe('Test component: ModelizerModelsView', () => {
         projectName: 'projectName',
         viewType: 'models',
       },
+    }));
+
+    useRouter.mockImplementation(() => ({
+      push: useRouterPush,
     }));
 
     UpdateModelEvent.subscribe.mockImplementation(() => {
@@ -73,6 +79,28 @@ describe('Test component: ModelizerModelsView', () => {
   describe('Test computed: viewType', () => {
     it('should match route.params.viewType', () => {
       expect(wrapper.vm.viewType).toEqual('models');
+    });
+  });
+
+  describe('Test function: onModelCardClick', () => {
+    it('should call router.push with the given model parameters', () => {
+      const model = {
+        plugin: 'pluginName',
+        name: 'modelName',
+      };
+
+      wrapper.vm.onModelCardClick(model);
+
+      expect(useRouterPush).toBeCalledWith({
+        name: 'modelizer',
+        params: {
+          viewType: 'draw',
+          projectName: 'projectName',
+        },
+        query: {
+          path: 'pluginName/modelName',
+        },
+      });
     });
   });
 

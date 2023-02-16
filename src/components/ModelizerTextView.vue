@@ -247,7 +247,7 @@ async function getModel() {
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function onSwitchView(viewType) {
-  if (viewType === 'model') {
+  if (viewType === 'draw') {
     const model = await getModel();
     const modelPath = model ? `${model.plugin}/${model.name}` : query.value.path;
 

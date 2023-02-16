@@ -3,10 +3,10 @@ import { getProjectById } from 'src/composables/Project';
 
 const ModelizerLongRoute = {
   name: 'modelizer',
-  path: '/modelizer/:projectName/:viewType',
+  path: '/:projectName/modelizer/:viewType',
   component: ModelizerPage,
   beforeEnter: (to, _from, next) => {
-    const valideViewTypes = ['model', 'text', 'models'];
+    const valideViewTypes = ['draw', 'text'];
     const project = getProjectById(to.params.projectName);
 
     if (!project || !valideViewTypes.includes(to.params.viewType)) {
@@ -18,12 +18,12 @@ const ModelizerLongRoute = {
 };
 
 const ModelizerRoute = {
-  path: '/modelizer/:projectName',
+  path: '/:projectName/modelizer',
   redirect: (to) => ({
     name: 'modelizer',
     params: {
       projectName: to.params.projectName,
-      viewType: 'model',
+      viewType: 'draw',
     },
   }),
   children: [

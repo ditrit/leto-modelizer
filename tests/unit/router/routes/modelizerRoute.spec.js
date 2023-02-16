@@ -20,7 +20,7 @@ describe('Test routes: ModelizerRoutes', () => {
       const to = {
         params: {
           projectName: 'projectNameTest',
-          viewType: 'model',
+          viewType: 'draw',
         },
       };
 
@@ -34,7 +34,7 @@ describe('Test routes: ModelizerRoutes', () => {
       const to = {
         params: {
           projectName: 'badProject',
-          viewType: 'model',
+          viewType: 'draw',
         },
       };
 

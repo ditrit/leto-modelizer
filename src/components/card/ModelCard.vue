@@ -78,7 +78,5 @@ function getModelImage() {
 .model-card {
   width: 150px;
   height: 150px;
-  text-decoration: none;
-  color: inherit;
 }
 </style>

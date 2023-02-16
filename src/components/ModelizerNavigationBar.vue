@@ -100,8 +100,8 @@ const isLoading = ref(false);
 const project = ref(getProjectById(props.projectName));
 const buttonToggleValue = ref(props.viewType);
 const buttonToggleOptions = computed(() => [{
-  label: t('page.modelizer.header.switch.model'),
-  value: 'model',
+  label: t('page.modelizer.header.switch.draw'),
+  value: 'draw',
   slot: 'content',
 }, {
   label: t('page.modelizer.header.switch.text'),

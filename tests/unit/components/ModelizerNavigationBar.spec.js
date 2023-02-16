@@ -122,8 +122,8 @@ describe('Test component: ModelizerNavigationBar', () => {
   describe('Test computed: buttonToggleOptions', () => {
     it('should equal buttonToggleOpitons array ', () => {
       const buttonToggleOptions = [{
-        label: 'page.modelizer.header.switch.model',
-        value: 'model',
+        label: 'page.modelizer.header.switch.draw',
+        value: 'draw',
         slot: 'content',
       }, {
         label: 'page.modelizer.header.switch.text',
