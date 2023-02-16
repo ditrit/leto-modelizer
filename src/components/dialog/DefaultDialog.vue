@@ -66,4 +66,8 @@ onUnmounted(() => {
     right: 2px;
     z-index: 10;
   }
+
+  .q-dialog__inner--minimized > div {
+      max-width: 680px;
+  }
 </style>

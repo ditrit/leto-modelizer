@@ -22,7 +22,6 @@
           navigation
           padding
           arrows
-          height="200px"
           class="text-primary rounded-borders carousel"
         >
           <q-carousel-slide
@@ -108,7 +107,8 @@ onUnmounted(() => {
 }
 .carousel-img {
   cursor: zoom-in;
-  height: 100px;
+  max-height: 300px;
+  max-width: 520px;
 }
 </style>
 
