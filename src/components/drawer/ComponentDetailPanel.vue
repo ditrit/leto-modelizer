@@ -277,7 +277,7 @@ function updateAttribute(event) {
       selectedComponentAttributes.value[index] = event.attribute;
     }
   }
-  form.value.validate();
+  form.value.validate(false);
 }
 
 /**
@@ -295,7 +295,9 @@ function onViewSwitchUpdate(newViewType) {
  * @param {Object} event - Form event.
  */
 function onError(event) {
-  currentError.value = event.nativeEl.getAttribute('full-name');
+  if (event) {
+    currentError.value = event.nativeEl.getAttribute('full-name');
+  }
 }
 
 /**
