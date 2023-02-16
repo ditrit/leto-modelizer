@@ -61,7 +61,7 @@ const props = defineProps({
 
 const plugins = reactive(getPlugins());
 const modelName = ref(null);
-const modelPlugin = ref(null);
+const modelPlugin = ref(plugins[0]?.data.name);
 const submitting = ref(false);
 
 /**
