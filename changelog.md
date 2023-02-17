@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * The file is now deleted when the last component of this file is deleted.
+* Fix console error on reloading Model view page.
 
 ## [1.0.0] - 2023/02/16
 
