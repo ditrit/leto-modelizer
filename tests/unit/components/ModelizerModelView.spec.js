@@ -215,6 +215,17 @@ describe('Test component: ModelizerModelView', () => {
         type: 'negative',
       });
     });
+
+    it('should do nothing when there is no plugin', async () => {
+      PluginManager.getPluginByName = jest.fn(() => null);
+      TemplateManager.getTemplatesByType.mockReturnValueOnce(Promise.reject());
+
+      Notify.create = jest.fn();
+
+      await wrapper.vm.updatePluginsAndTemplates();
+
+      expect(Notify.create).not.toHaveBeenCalled();
+    });
   });
 
   describe('Test function: dropHandler', () => {
