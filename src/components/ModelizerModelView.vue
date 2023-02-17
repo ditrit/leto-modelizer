@@ -158,6 +158,10 @@ async function updatePluginsAndTemplates() {
   const pluginName = query.value.path.split('/')[0];
   data.plugin = getPluginByName(pluginName);
 
+  if (!data.plugin) {
+    return;
+  }
+
   drawComponents();
 
   await getTemplatesByType('component', data.plugin.data.name)
