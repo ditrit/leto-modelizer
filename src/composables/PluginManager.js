@@ -6,6 +6,7 @@ import {
   writeProjectFile,
   readProjectFile,
   getModelFiles,
+  deleteProjectFile,
 } from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
 
@@ -169,7 +170,13 @@ export async function renderModel(projectId, modelPath, plugin) {
   );
 
   return Promise.allSettled(
-    renderFiles.map((file) => writeProjectFile(projectId, file)),
+    renderFiles.map((file) => {
+      if (file.content) {
+        return writeProjectFile(projectId, file);
+      }
+
+      return deleteProjectFile(projectId, file.path);
+    }),
   ).then(() => renderFiles);
 }
 

@@ -1,4 +1,5 @@
 import * as PluginManager from 'src/composables/PluginManager';
+import { deleteProjectFile, writeProjectFile } from 'src/composables/Project';
 
 jest.mock('src/plugins', () => ({
   test: class {
@@ -37,6 +38,7 @@ jest.mock('src/composables/Project', () => ({
   getProjectFiles: jest.fn(() => Promise.resolve([{ path: 'path', content: 'content' }])),
   getModelFiles: jest.fn(() => Promise.resolve([{ path: 'path', content: 'content' }])),
   writeProjectFile: jest.fn(() => Promise.resolve()),
+  deleteProjectFile: jest.fn(() => Promise.resolve()),
   readProjectFile: jest.fn(() => Promise.resolve({ id: 'TEST' })),
 }));
 
@@ -188,6 +190,42 @@ describe('Test composable: PluginManager', () => {
       );
 
       expect(Array.isArray(array)).toBeTruthy();
+    });
+
+    it('should call writeProjectFile when render file content is not null', async () => {
+      const plugin = {
+        render: () => [{
+          path: 'test',
+          content: 'test',
+        }],
+        isParsable: () => false,
+      };
+      const array = await PluginManager.renderModel(
+        'projectId',
+        'modelPath',
+        plugin,
+      );
+
+      expect(Array.isArray(array)).toBeTruthy();
+      expect(writeProjectFile).toBeCalled();
+    });
+
+    it('should call deleteProjectFile when render file content is null', async () => {
+      const plugin = {
+        render: () => [{
+          path: 'test',
+          content: null,
+        }],
+        isParsable: () => false,
+      };
+      const array = await PluginManager.renderModel(
+        'projectId',
+        'modelPath',
+        plugin,
+      );
+
+      expect(Array.isArray(array)).toBeTruthy();
+      expect(deleteProjectFile).toBeCalled();
     });
   });
 
