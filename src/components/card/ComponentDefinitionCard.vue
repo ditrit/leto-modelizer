@@ -156,5 +156,6 @@ async function onClickItem() {
   .component-definition-type {
     word-break: normal;
     text-align: center;
+    margin-top: 4px;
   }
 </style>
