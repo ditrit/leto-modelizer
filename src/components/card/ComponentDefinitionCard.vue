@@ -40,7 +40,7 @@
         </q-icon>
       </q-item-section>
 
-      <q-item-section>
+      <q-item-section top>
         <q-item-label class="component-definition-type">
           {{ definition.displayName || definition.type.replaceAll('_', ' ') }}
         </q-item-label>
@@ -149,6 +149,10 @@ async function onClickItem() {
 </script>
 
 <style scoped>
+  .component-definition-card, .component-definition-card > .q-item {
+    height: 100%;
+  }
+
   .component-definition-type {
     word-break: normal;
     text-align: center;
