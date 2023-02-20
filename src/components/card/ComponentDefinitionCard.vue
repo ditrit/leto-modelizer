@@ -39,7 +39,7 @@
         </q-icon>
       </q-item-section>
 
-      <q-item-section top>
+      <q-item-section top class="q-mt-xs">
         <q-item-label class="component-definition-type">
           {{ definition.displayName || definition.type.replaceAll('_', ' ') }}
         </q-item-label>
