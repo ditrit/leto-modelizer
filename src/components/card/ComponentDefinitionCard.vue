@@ -2,7 +2,7 @@
   <q-card
     flat
     bordered
-    class="component-definition-card"
+    class="component-definition-card full-height"
     draggable="true"
     @dragstart="dragStartHandler"
     @dragend="dragEndHandler"
@@ -13,7 +13,7 @@
     <q-item
       clickable
       @click="onClickItem"
-      class="column q-pl-xs q-pr-xs items-center"
+      class="column q-pl-xs q-pr-xs items-center full-height"
     >
       <q-item-section
         v-if="definition.icon"
@@ -39,7 +39,7 @@
         </q-icon>
       </q-item-section>
 
-      <q-item-section>
+      <q-item-section top>
         <q-item-label class="component-definition-type">
           {{ definition.displayName || definition.type.replaceAll('_', ' ') }}
         </q-item-label>
