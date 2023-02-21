@@ -87,7 +87,7 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('./package-lock.json') }}
       - name: Run unit tests
-        run: npm run test
+        run: export NODE_OPTIONS=--max_old_space_size=8192 && npm run test
       - name: Upload line coverage report
         uses: actions/upload-artifact@v3
         with:
