@@ -33,7 +33,7 @@
       :is="inputList[getAttributeType(attribute)]"
       :attribute="attribute"
       :plugin="plugin"
-      class="col q-px-md"
+      class="input-wrapper col q-px-md"
       :label="getAttributeLabel(attribute)"
       hide-bottom-space
       :full-name="fullName"
@@ -142,3 +142,15 @@ watch(() => props.attribute, () => {
   name.value = !props.attribute.definition ? props.attribute.name : '';
 });
 </script>
+
+<style scoped>
+  .input-wrapper:deep() .q-field__label {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  .input-wrapper:deep() i.text-negative {
+    color: var(--q-warning) !important;
+  }
+  .input-wrapper.q-field--error:deep() .q-field__bottom, .input-wrapper:deep() .text-negative {
+    color: #CB7A01 !important;
+  }
+</style>

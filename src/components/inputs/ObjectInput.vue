@@ -32,7 +32,7 @@
         side
       >
         <q-icon
-          color="negative"
+          color="warning"
           name="fa-solid fa-circle-exclamation"
           size="xs"
           :title="$t('errors.plugin.object')"
