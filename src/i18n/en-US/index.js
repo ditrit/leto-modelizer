@@ -313,6 +313,30 @@ export default {
         filterParsableFiles: 'Show parsable files',
       },
     },
+    about: {
+      title: 'About Leto Modelizer',
+      letoModelizer: {
+        title: 'What is Leto Modelizer ?',
+        description: 'It is a low code modelizer that works with external plugins for integration technology (terraform, jenkins, kubernetes...). The goal of Leto Modelizer is to become the standard tool for all developers to easily reuse and exploit the skills of architecture and/or DevOps experts.',
+        github: 'Github repository',
+      },
+      ditrit: {
+        title: 'DitRit association',
+        description: 'DitRit, which stands for "Design it, Run it !", is a public interest association. It seeks to address the problems faced by companies in their implementation of Agile/DevOps approaches. In this context, DitRit develops and proposes open source solutions to illustrate its work.',
+        github: 'Github organization',
+        website: 'Ditrit.io',
+      },
+      team: {
+        title: 'Main team',
+      },
+      sponsors: {
+        title: 'Sponsors',
+      },
+    },
+  },
+  footer: {
+    version: 'Version {version}',
+    about: 'About',
   },
   menu: {
     git: {
