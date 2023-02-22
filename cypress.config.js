@@ -19,6 +19,7 @@ module.exports = defineConfig({
     video: false,
     screenshotOnRunFailure: false,
     setupNodeEvents,
+    experimentalRunAllSpecs: true,
   },
   retries: 3,
 });
