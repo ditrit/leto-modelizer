@@ -19,15 +19,30 @@
             {{ project.id }}
           </div>
           <q-btn
+            class="q-mr-md"
+            :title="$t('actions.home.deleteProject.title')"
+            size="xs"
             round
             color="negative"
-            size="xs"
             icon="fa-solid fa-trash"
-            :title="$t('actions.home.deleteProject.title')"
             :data-cy="`delete-project-${project.id}`"
             @click.stop.prevent="DialogEvent.next({
               type: 'open',
               key: 'DeleteProject',
+              id: project.id,
+            })"
+          />
+          <q-btn
+            class="q-mr-none"
+            :title="$t('actions.home.renameProject.title')"
+            size="xs"
+            round
+            color="primary"
+            icon="fa-solid fa-pen"
+            :data-cy="`rename-project-${project.id}`"
+            @click.stop.prevent="DialogEvent.next({
+              type: 'open',
+              key: 'RenameProject',
               id: project.id,
             })"
           />
