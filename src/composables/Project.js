@@ -761,3 +761,19 @@ export async function deleteProjectById(projectId) {
     localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
   }
 }
+
+/**
+* Rename project.
+* @param {String} projectId - Id of project.
+* @param {String} newProjectName - Project new name.
+*/
+export async function renameProject(projectId, newProjectName) {
+  await rename(`/${projectId}`, `/${newProjectName}`);
+
+  const projects = getProjects();
+
+  projects[newProjectName] = projects[projectId];
+  projects[newProjectName].id = newProjectName;
+  delete projects[projectId];
+  localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
+}

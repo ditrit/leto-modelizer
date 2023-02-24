@@ -34,6 +34,7 @@ import {
   getPluginModels,
   getAllModels,
   getModelFiles,
+  renameProject,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -668,5 +669,19 @@ describe('Test composable: Project', () => {
 
       expect(Array.isArray(array)).toBeTruthy();
     });
+  });
+});
+
+describe('Test function: renameProject', () => {
+  it('should rename a project', async () => {
+    localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
+      foo: { id: 'foo' },
+    }));
+    await renameProject('foo', 'bar');
+
+    const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
+
+    expect(projects.foo).not.toBeDefined();
+    expect(projects.bar).toStrictEqual({ id: 'bar' });
   });
 });
