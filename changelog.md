@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Create About page and footer.
 * Project management:
   * Delete project.
+  * Rename project.
+  * Create blank project with custom name.
+  * Create project from template with custom name.
 * Component edition:
   * Allowed to have a predefined list of values for Array attribute.
 
