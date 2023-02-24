@@ -32,6 +32,7 @@
     <import-project-dialog/>
     <new-project-template-dialog/>
     <delete-project-dialog/>
+    <rename-project-dialog/>
   </q-page>
 </template>
 
@@ -49,6 +50,7 @@ import {
   onMounted,
   onUnmounted,
 } from 'vue';
+import RenameProjectDialog from 'components/dialog/RenameProjectDialog';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 const templates = ref([]);
@@ -83,7 +85,6 @@ onMounted(async () => {
 onUnmounted(() => {
   updateProjectSubscription.unsubscribe();
 });
-
 </script>
 
 <style lang="scss" scoped>
