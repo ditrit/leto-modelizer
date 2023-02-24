@@ -26,6 +26,10 @@ export default {
         confirmDelete: 'Are you sure you want to delete {name} ?',
         success: 'Project has been deleted 😥',
       },
+      renameProject: {
+        title: 'Rename project',
+        success: 'Project has been renamed 😉',
+      },
     },
     models: {
       create: {
@@ -139,8 +143,10 @@ export default {
         label: 'The name must not contain any \'/ \' characters',
       },
     },
-    project: {
+    projects: {
+      duplicate: 'Project name already exists.',
       delete: 'An error occured while deleting project.',
+      create: 'An error occured while creating project.',
     },
     templates: {
       getData: 'An error occured while fetching remote template data.',
@@ -176,6 +182,7 @@ export default {
     plugin: {
       object: 'Some attributes are incorrect',
     },
+    renameProject: 'An error occured while renaming project.',
     rules: {
       required: 'Value is required.',
       string: {
@@ -199,6 +206,9 @@ export default {
       project: {
         title: 'Recent projects',
         import: 'Import project',
+        create: 'Create project',
+        rename: 'Rename project',
+        name: 'Project name',
         empty: 'No projects, please create a new project to have one here 😉',
         delete: 'Delete project',
       },
