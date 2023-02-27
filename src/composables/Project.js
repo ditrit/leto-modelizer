@@ -93,18 +93,6 @@ export async function importProject(project) {
 }
 
 /**
- * Clear one project by ID.
- * @param {String} projectId - Id of project.
- */
-export function deleteProjectById(projectId) {
-  const projects = getProjects();
-  if (projects[projectId]) {
-    delete projects[projectId];
-    localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
-  }
-}
-
-/**
  * Fetch project on git.
  * Warning: It seems that `git.fetch` can throw unexpected error.
  * @param {Project} project - Project to update.
@@ -754,4 +742,22 @@ export async function getModelFiles(projectName, modelPath, plugin) {
   const fileInformations = files.map((file) => new FileInformation({ path: `${modelPath}/${file}` }));
 
   return getFileInputs(plugin, fileInformations, projectName);
+}
+
+/**
+* Delete one project by ID.
+* @param {String} projectId - Id of project.
+* @return {Promise<void>} Promise with nothing on success otherwise an error.
+*/
+export async function deleteProjectById(projectId) {
+  const projects = getProjects();
+  const projectFiles = await readDir(`/${projectId}`);
+
+  if (projects[projectId]) {
+    await Promise.all(projectFiles.map((file) => deleteProjectFile(projectId, file, true)));
+    await rmDir(projectId);
+
+    delete projects[projectId];
+    localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
+  }
 }

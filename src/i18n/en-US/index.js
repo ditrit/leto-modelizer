@@ -21,6 +21,11 @@ export default {
       createProject: 'Create project',
       importedProject: 'Project has been imported &#129395;!',
       createdProject: 'Project has been created &#129395;!',
+      deleteProject: {
+        title: 'Delete project',
+        confirmDelete: 'Are you sure you want to delete {name} ?',
+        success: 'Project has been deleted 😥',
+      },
     },
     models: {
       create: {
@@ -134,6 +139,9 @@ export default {
         label: 'The name must not contain any \'/ \' characters',
       },
     },
+    project: {
+      delete: 'An error occured while deleting project.',
+    },
     templates: {
       getData: 'An error occured while fetching remote template data.',
     },
@@ -191,6 +199,7 @@ export default {
         title: 'Recent projects',
         import: 'Import project',
         empty: 'No projects, please create a new project to have one here 😉',
+        delete: 'Delete project',
       },
       template: {
         createProject: 'Create a project from a template',

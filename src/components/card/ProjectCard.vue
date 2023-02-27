@@ -8,13 +8,29 @@
       v-ripple
       tabindex="0"
       class="cursor-pointer project-card"
+      data-cy="project-card"
     >
       <q-img :src="getProjectImage()" height="100%">
         <div
           class="absolute-bottom text-subtitle2 text-center"
           data-cy="project-card-title"
         >
-          {{ project.id }}
+          <div>
+            {{ project.id }}
+          </div>
+          <q-btn
+            round
+            color="negative"
+            size="xs"
+            icon="fa-solid fa-trash"
+            :title="$t('actions.home.deleteProject.title')"
+            :data-cy="`delete-project-${project.id}`"
+            @click.stop.prevent="DialogEvent.next({
+              type: 'open',
+              key: 'DeleteProject',
+              id: project.id,
+            })"
+          />
         </div>
       </q-img>
     </q-card>
@@ -22,6 +38,8 @@
 </template>
 
 <script setup>
+import DialogEvent from 'src/composables/events/DialogEvent';
+
 const props = defineProps({
   project: {
     type: Object,
