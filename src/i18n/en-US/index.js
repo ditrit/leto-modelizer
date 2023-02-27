@@ -369,7 +369,7 @@ export default {
         website: 'Ditrit.io',
       },
       team: {
-        title: 'Main team',
+        title: 'Contact',
       },
       sponsors: {
         title: 'Sponsors',

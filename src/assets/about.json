@@ -1,5 +1,16 @@
 {
-  "sponsors": [],
+  "sponsors": [
+    {
+      "avatar": "https://www.orness.com/wp-content/uploads/2019/10/t.png",
+      "name": "Orness",
+      "link": "https://www.orness.com"
+    },
+    {
+      "avatar": "https://www.societegenerale.com/sites/default/files/logo-societe-generale.png",
+      "name": "Société Générale",
+      "link": "https://www.societegenerale.com"
+    }
+  ],
   "management": [
     {
       "avatar": "https://avatars2.githubusercontent.com/u/25821411",
@@ -7,31 +18,5 @@
       "job": "CTO and co-founder of Orness, President of DitRit"
     }
   ],
-  "team": [
-    {
-      "avatar": "https://avatars2.githubusercontent.com/u/62500081",
-      "name": "Justine Hell",
-      "job": "Developer"
-    },
-    {
-      "avatar": "https://avatars2.githubusercontent.com/u/6179956",
-      "name": "Vincent Moittie",
-      "job": "Lead developer"
-    },
-    {
-      "avatar": "https://avatars2.githubusercontent.com/u/7418386",
-      "name": "Pierre Tanghe",
-      "job": "Developer"
-    },
-    {
-      "avatar": "https://avatars2.githubusercontent.com/u/76247403",
-      "name": "Dimitri Chauvel",
-      "job": "Developer"
-    },
-    {
-      "avatar": "https://avatars2.githubusercontent.com/u/15038252",
-      "name": "Drien Breton",
-      "job": "Developer"
-    }
-  ]
+  "team": []
 }
