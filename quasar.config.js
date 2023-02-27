@@ -15,6 +15,7 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 /* eslint global-require: 0 */
 
 const { configure } = require('quasar/wrappers');
+const { version } = require('./package.json');
 
 module.exports = configure((ctx) => ({
   // https://v2.quasar.dev/quasar-cli-webpack/supporting-ts
@@ -77,6 +78,7 @@ module.exports = configure((ctx) => ({
       CORS_ISOMORPHIC_BASE_URL: process.env.CORS_ISOMORPHIC_BASE_URL || 'https://cors.isomorphic-git.org',
       TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL || '',
       MODELS_DEFAULT_FOLDER: process.env.MODELS_DEFAULT_FOLDER || '',
+      VERSION: version,
     },
     // extractCSS: false,
 

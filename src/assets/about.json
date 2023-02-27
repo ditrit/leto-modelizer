@@ -1,0 +1,37 @@
+{
+  "sponsors": [],
+  "management": [
+    {
+      "avatar": "https://avatars2.githubusercontent.com/u/25821411",
+      "name": "Xavier Talon",
+      "job": "CTO and co-founder of Orness, President of DitRit"
+    }
+  ],
+  "team": [
+    {
+      "avatar": "https://avatars2.githubusercontent.com/u/62500081",
+      "name": "Justine Hell",
+      "job": "Developer"
+    },
+    {
+      "avatar": "https://avatars2.githubusercontent.com/u/6179956",
+      "name": "Vincent Moittie",
+      "job": "Lead developer"
+    },
+    {
+      "avatar": "https://avatars2.githubusercontent.com/u/7418386",
+      "name": "Pierre Tanghe",
+      "job": "Developer"
+    },
+    {
+      "avatar": "https://avatars2.githubusercontent.com/u/76247403",
+      "name": "Dimitri Chauvel",
+      "job": "Developer"
+    },
+    {
+      "avatar": "https://avatars2.githubusercontent.com/u/15038252",
+      "name": "Drien Breton",
+      "job": "Developer"
+    }
+  ]
+}

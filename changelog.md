@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Create About page and footer.
+
 ### Fixed
 
 * The file is now deleted when the last component of this file is deleted.
