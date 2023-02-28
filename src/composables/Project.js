@@ -1,4 +1,3 @@
-import { randomHexString } from 'src/composables/Random';
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/web';
 import * as BrowserFS from 'browserfs';
@@ -19,14 +18,6 @@ export const PROJECT_STORAGE_KEY = 'projects';
  * @typedef {Object} Project
  * @property {String} id - project id.
  */
-
-/**
- * Create a project with generated id.
- * @return {Project} Project object with generated id.
- */
-export function createProjectTemplate() {
-  return { id: `project-${randomHexString(8)}` };
-}
 
 /**
  * Get a map of all projects.

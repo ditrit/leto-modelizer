@@ -1,5 +1,4 @@
 import {
-  createProjectTemplate,
   getProjects,
   getProjectById,
   getProjectName,
@@ -89,10 +88,6 @@ jest.mock('isomorphic-git', () => ({
   log: jest.fn(() => Promise.resolve(['log'])),
 }));
 
-jest.mock('src/composables/Random', () => ({
-  randomHexString: () => '00000000',
-}));
-
 jest.mock('browserfs', () => ({
   install: jest.fn(),
   configure: jest.fn(),
@@ -177,15 +172,6 @@ describe('Test composable: Project', () => {
     git.add.mockImplementation(gitAddMock);
     git.fetch.mockImplementation(gitFetchMock);
     git.addRemote.mockImplementation(gitAddRemoteMock);
-  });
-
-  describe('Test function: createProjectTemplate', () => {
-    it('should return project with generated ID', () => {
-      const project = createProjectTemplate();
-
-      expect(project).toBeDefined();
-      expect(project.id).toEqual('project-00000000');
-    });
   });
 
   describe('Test function: getProjects', () => {
