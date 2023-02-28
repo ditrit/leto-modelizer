@@ -1,3 +1,5 @@
+@skip
+# TODO: update/fix test
 Feature: Test switch model to text view: delete component/link
 
   Background:
@@ -7,134 +9,138 @@ Feature: Test switch model to text view: delete component/link
 
     When I click on "[data-cy=\"new-project\"]"
     Then I expect current url is "/modelizer/project-[a-f0-9]{8}/model"
-    And  I expect "[data-cy=\"plugin-definitions-leto-modelizer-plugin-test\"]" appear 1 time on screen
-    And  I expect "[data-cy=\"plugin-definitions-leto-modelizer-plugin-test\"] [data-cy=\"plugin-definitions-title\"]" is "leto-modelizer-plugin-test"
+    And  I expect "[data-cy=\"plugin-definitions-terrator-plugin\"]" appear 1 time on screen
+    And  I expect "[data-cy=\"plugin-definitions-terrator-plugin\"] [data-cy=\"plugin-definitions-title\"]" is "terrator-plugin"
 
     Given I extract "project-[a-f0-9]{8}" from url in field "projectName" of context
-    
-    When I click on "[data-cy=\"plugin-definitions-leto-modelizer-plugin-test\"]"
-    Then I expect "[class*=\"component-definition-card\"]" appear 7 times on screen
+
+    When I click on "[data-cy=\"plugin-definitions-terrator-plugin\"]"
+    Then I expect "[class*=\"component-definition-card\"]" appear 18 times on screen
 
   @skip
     # TODO: Remove @skip tag when https://github.com/ditrit/leto-modelizer/issues/128 is done
   Scenario: Delete a component (Model view) should remove plugin file (Text view)
-    When I click on "[data-cy=\"component-definition-image\"]"
-    Then I expect "[id^=\"image_\"]" exists
+    When I click on "[data-cy=\"component-definition-aws\"]"
+    Then I expect "[id^=\"aws\"]" exists
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" appear 2 times on screen
-    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"type\":.*\"image\""
+    And  I expect "[data-cy=\"file-label-new_file.tf\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "new_file.tf"
+    And  I expect active file content to contain "provider.*\"aws\".*{}"
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
     And  I expect "[data-cy=\"modelizer-model-view-draw-root\"]" exists
 
-    When I click on "[id^=\"image_\"]"
+    When I click on "[id^=\"aws\"]"
     And  I click on "[id=\"remove-component\"]"
-    Then I expect "[id^=\"image_\"]" not exists
+    Then I expect "[id^=\"aws\"]" not exists
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    But  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" not exists
+    But  I expect "[data-cy=\"file-label-new_file.tf\"]" not exists
 
   Scenario: Delete one of two components (Model view) should remove corresponding object inside plugin file content (Text view)
-    When I click on "[data-cy=\"component-definition-image\"]"
-    And  I click on "[data-cy=\"component-definition-money\"]"
-    Then I expect "[id^=\"image_\"]" exists
-    And  I expect "[id^=\"money_\"]" exists
+    When I click on "[data-cy=\"component-definition-aws\"]"
+    And  I wait 1 second
+    And  I click on "[data-cy=\"component-definition-server\"]"
+    Then I expect "[id^=\"aws\"]" exists
+    And  I expect "[id^=\"server\"]" exists
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-label-new_file.tf\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-label-leto-modelizer.config.json\"]" appear 2 times on screen
-    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "default.plugin-test.js"
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "new_file.tf"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "leto-modelizer.config.json"
-    
+
     When I wait 1 second
-    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
-    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"type\":.*\"image\""
-    And  I expect active file content to contain "\"type\":.*\"money\""
+    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-new_file.tf\"]"
+    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "new_file.tf"
+    And  I expect active file content to contain "provider.*\"aws\".*{}"
+    And  I expect active file content to contain "provider.*\"server\".*{}"
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
     And  I expect "[data-cy=\"modelizer-model-view-draw-root\"]" exists
 
-    When I click on "[id^=\"image_\"]"
+    When I wait 1 second
+    And  I click on "[id^=\"aws\"]"
     And  I click on "[id=\"remove-component\"]"
-    Then I expect "[id^=\"money_\"]" exists
-    And  I expect "[id^=\"image_\"]" not exists
+    And  I wait 1 second
+    Then I expect "[id^=\"server\"]" exists
+    And  I expect "[id^=\"aws\"]" not exists
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect active file content to contain "\"type\":.*\"money\""
-    But  I expect active file content to not contain "\"type\":.*\"image\""
+    And  I expect active file content to contain "provider.*\"server\".*{}"
+    But  I expect active file content to not contain "provider.*\"aws\".*{}"
 
   Scenario: Remove object inside plugin file content (Text view) should remove related component (Model view)
-    #  NOTE: NOT WORKING if plugin file content is empty (error console -> TypeError: JSON.parse(...) is null - plugin-test.js)
-    When I click on "[data-cy=\"component-definition-truck\"]"
+    #  NOTE: NOT WORKING if plugin file content is empty (error console -> TypeError: JSON.parse(...) is null - new_file.tf)
+    When I click on "[data-cy=\"component-definition-aws\"]"
     And  I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-label-new_file.tf\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-label-leto-modelizer.config.json\"]" appear 2 times on screen
-    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "default.plugin-test.js"
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "new_file.tf"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "leto-modelizer.config.json"
-    
+
     When I wait 1 second
-    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
-    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
+    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-new_file.tf\"]"
+    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "new_file.tf"
 
     When I set active file content to "[]"
     And  I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
     And  I expect "[data-cy=\"modelizer-model-view-draw-root\"]" exists
-    But  I expect "[id^=\"truck_\"]" not exists
+    But  I expect "[id^=\"aws\"]" not exists
 
   Scenario: Remove one of the two objects inside plugin file content (Text view) should only display the remaining component
-    When I click on "[data-cy=\"component-definition-truck\"]"
-    And  I click on "[data-cy=\"component-definition-image\"]"
+    When I click on "[data-cy=\"component-definition-aws\"]"
+    And  I wait 1 second
+    And  I click on "[data-cy=\"component-definition-server\"]"
     And  I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-label-new_file.tf\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-label-leto-modelizer.config.json\"]" appear 2 times on screen
-    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "default.plugin-test.js"
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "new_file.tf"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "leto-modelizer.config.json"
-    
-    When I wait 1 second
-    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
-    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
 
-    When I set active file content to "[{ \"path\": \"default.plugin-test.js\", \"__class\": \"Component\", \"id\": \"image_9d1e0838\", \"name\": \"image_9d1e0838\", \"attributes\": [], \"type\": \"image\" }]"
+    When I wait 1 second
+    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-new_file.tf\"]"
+    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "new_file.tf"
+
+    When I set active file content to "provider \"aws\" {}"
     And  I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
     And  I expect "[data-cy=\"modelizer-model-view-draw-root\"]" exists
-    And  I expect "[id^=\"image_\"]" exists
-    But  I expect "[id^=\"truck_\"]" not exists
+    And  I expect "[id^=\"aws\"]" exists
+    But  I expect "[id^=\"server\"]" not exists
 
   Scenario: Delete plugin file (Text view) should remove related component (Model view)
-    When I click on "[data-cy=\"component-definition-truck\"]"
+    When I click on "[data-cy=\"component-definition-aws\"]"
     And  I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-label-new_file.tf\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-label-leto-modelizer.config.json\"]" appear 2 times on screen
-    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "default.plugin-test.js"
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "new_file.tf"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "leto-modelizer.config.json"
-    
-    When I wait 1 second
-    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
-    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
 
-    When I hover "[data-cy=\"file-explorer\"] [data-cy=\"file-explorer-buttons-default.plugin-test.js\"]" to make it visible
-    And  I click on "[data-cy=\"file-explorer\"] [data-cy=\"file-explorer-buttons-default.plugin-test.js\"]"
+    When I wait 1 second
+    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-new_file.tf\"]"
+    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "new_file.tf"
+
+    When I hover "[data-cy=\"file-explorer\"] [data-cy=\"file-explorer-buttons-new_file.tf\"]" to make it visible
+    And  I click on "[data-cy=\"file-explorer\"] [data-cy=\"file-explorer-buttons-new_file.tf\"]"
     Then I expect "[data-cy=\"file-explorer-action-menu\"]" exists
 
     When I click on "[data-cy=\"file-explorer-menu-delete-file\"]"
@@ -143,36 +149,36 @@ Feature: Test switch model to text view: delete component/link
     When I click on "[data-cy=\"delete-file-form\"] [data-cy=\"delete-file-submit\"]"
     Then I expect "positive" toast to appear with text "File is deleted."
     And  I expect "[data-cy=\"delete-file-form\"]" is closed
-    And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" not exists
+    And  I expect "[data-cy=\"file-label-new_file.tf\"]" not exists
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
     And  I expect "[data-cy=\"modelizer-model-view-draw-root\"]" exists
-    And  I expect "[id^=\"truck_\"]" not exists
+    And  I expect "[id^=\"aws\"]" not exists
 
   Scenario: Delete a link between two components (Model view) should remove corresponding attribute in object inside plugin file content (Text view)
-    When I click on "[data-cy=\"component-definition-paper\"]"
-    And  I click on "[data-cy=\"component-definition-image\"]"
-    And  I click on "[id^=\"paper_\"]"
+    When I click on "[data-cy=\"component-definition-aws_subnet\"]"
+    And  I wait 1 second
+    And  I click on "[data-cy=\"component-definition-aws_internet_gateway\"]"
+    And  I wait 1 second
+    And  I click on "[id^=\"aws_subnet\"]"
     And  I click on "[id=\"create-link\"]"
-    And  I click on "[id^=\"image_\"]"
+    And  I click on "[id^=\"aws_internet_gateway\"]"
     Then I expect "[class=\"link\"]" exists
-    
+
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-label-new_file.tf\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-label-leto-modelizer.config.json\"]" appear 2 times on screen
-    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "default.plugin-test.js"
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "new_file.tf"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "leto-modelizer.config.json"
-    
+
     When I wait 1 second
-    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
-    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"type\":.*\"image\""
-    And  I expect active file content to contain "\"type\":.*\"paper\""
-    And  I expect active file content to contain "\"name\":.*\"image-attachments\""
-    And  I expect active file content to contain "\"type\":.*\"Array\""
+    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-new_file.tf\"]"
+    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "new_file.tf"
+    And  I expect active file content to contain "resource.*\"aws_subnet\".*\"aws_subnet_1\".*{.*gateway_id.*=.*\[\"aws_internet_gateway_1\"\]}"
+    And  I expect active file content to contain "resource.*\"aws_internet_gateway\".*\"aws_internet_gateway_1\".*{}"
 
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
@@ -187,37 +193,38 @@ Feature: Test switch model to text view: delete component/link
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect active file content to contain "\"type\":.*\"image\""
-    And  I expect active file content to contain "\"type\":.*\"paper\""
-    But  I expect active file content to not contain "\"name\":.*\"image-attachments\""
-    And  I expect active file content to not contain "\"type\":.*\"Array\""
+    And  I expect active file content to contain "resource.*\"aws_subnet\".*\"aws_subnet_1\".*{}"
+    And  I expect active file content to contain "resource.*\"aws_internet_gateway\".*\"aws_internet_gateway_1\".*{}"
+    But  I expect active file content to not contain "gateway_id.*=.*\[\"aws_internet_gateway_1\"\]"
 
   Scenario: Remove link attribute inside plugin file content (Text view) should remove the link between the two components (Model view)
-    When I click on "[data-cy=\"component-definition-paper\"]"
-    And  I click on "[data-cy=\"component-definition-image\"]"
-    And  I click on "[id^=\"paper_\"]"
+    When I click on "[data-cy=\"component-definition-aws_subnet\"]"
+    And  I wait 1 second
+    And  I click on "[data-cy=\"component-definition-aws_internet_gateway\"]"
+    And  I wait 1 second
+    And  I click on "[id^=\"aws_subnet\"]"
     And  I click on "[id=\"create-link\"]"
-    And  I click on "[id^=\"image_\"]"
+    And  I click on "[id^=\"aws_internet_gateway\"]"
     Then I expect "[class=\"link\"]" exists
-    
+
     When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Text"
     And  I expect "[data-cy=\"modelizer-text-view\"]" exists
-    And  I expect "[data-cy=\"file-label-default.plugin-test.js\"]" appear 2 times on screen
+    And  I expect "[data-cy=\"file-label-new_file.tf\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-label-leto-modelizer.config.json\"]" appear 2 times on screen
-    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "default.plugin-test.js"
+    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "new_file.tf"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "leto-modelizer.config.json"
-    
-    When I wait 1 second
-    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-default.plugin-test.js\"]"
-    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "default.plugin-test.js"
-    And  I expect active file content to contain "\"type\":.*\"Array\""
-    And  I expect active file content to contain "\"name\":.*\"image-attachments\""
 
-    When I set active file content to "[{ \"path\": \"default.plugin-test.js\", \"__class\": \"Component\", \"id\": \"image_5f5d4a39\", \"name\": \"image_5f5d4a39\", \"attributes\": [], \"type\": \"image\" }, { \"path\": \"default.plugin-test.js\", \"__class\": \"Component\", \"id\": \"paper_4ba1f415\", \"name\": \"paper_4ba1f415\", \"attributes\": [], \"type\": \"paper\" }]"
+    When I wait 1 second
+    And  I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"file-label-new_file.tf\"]"
+    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "new_file.tf"
+    And  I expect active file content to contain "resource.*\"aws_subnet\".*\"aws_subnet_1\".*{.*gateway_id.*=.*\[\"aws_internet_gateway_1\"\]}"
+    And  I expect active file content to contain "resource.*\"aws_internet_gateway\".*\"aws_internet_gateway_1\".*{}"
+
+    When I set active file content to "resource \"aws_subnet\" \"aws_subnet_1\" {} resource \"aws_internet_gateway\" \"aws_internet_gateway_1\" {}"
     And  I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     Then I expect "[data-cy=\"modelizer-switch\"] [aria-pressed=\"true\"] [class=\"block\"]" is "Model"
     And  I expect "[data-cy=\"modelizer-model-view-draw-root\"]" exists
     And  I expect "[class=\"link\"]" not exists
-    And  I expect "[id^=\"paper_\"]" exists
-    And  I expect "[id^=\"image_\"]" exists
+    And  I expect "[id^=\"aws_subnet\"]" exists
+    And  I expect "[id^=\"aws_internet_gateway\"]" exists

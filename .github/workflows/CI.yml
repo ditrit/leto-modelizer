@@ -140,3 +140,40 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  e2e-tests:
+    name: E2E tests
+    needs: [sonarcloud]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: actions/cache/restore@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('./package-lock.json') }}
+      - name: Submodule update
+        run: |
+          git config --global --add safe.directory /__w/leto-modelizer/leto-modelizer
+          git submodule update --init --recursive
+      - name: Build proxy
+        run: cd cors-proxy && sed -i "s/80/9999/g" Dockerfile && docker build . -t cors-proxy
+      - name: Install terrator-plugin
+        run: |
+          npm ci && \
+          npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.1.12" && \
+          npm run plugin:init
+      - name: Build production
+        run: |
+          TEMPLATE_LIBRARY_BASE_URL="https://raw.githubusercontent.com/ditrit/leto-modelizer-templates-library/main" \
+          CORS_ISOMORPHIC_BASE_URL="http://localhost:9999" \
+          npm run build
+      - name: Build application
+        run: docker build -t leto-modelizer -f DockerfileE2E .
+      - name: Run application
+        run: docker-compose up -d
+      - name: Run functional tests
+        run: npm run test:e2e

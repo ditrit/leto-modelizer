@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Project management:
   * Delete project
 
+### Changed
+
+* Update e2e test plugin to terrator-plugin.
+
 ### Fixed
 
 * The file is now deleted when the last component of this file is deleted.

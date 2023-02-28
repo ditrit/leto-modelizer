@@ -37,7 +37,7 @@ Feature: Test modelizer text view: open file
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
 
     When I click on "[data-cy=\"active-tab\"] [data-cy=\"close-file-tab\"]"
-    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 0 time on screen
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 0 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" not exists
     And  I expect "[data-cy=\"monaco-editor\"]" not exists
 
@@ -48,7 +48,7 @@ Feature: Test modelizer text view: open file
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" exists
 
     When I double click on "[data-cy=\"file-explorer-branch.txt\"]"
-    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-label-branch.txt\"]" is "branch.txt"
@@ -56,7 +56,7 @@ Feature: Test modelizer text view: open file
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
 
     When I click on "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]"
-    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
+    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" not exists
@@ -76,7 +76,7 @@ Feature: Test modelizer text view: open file
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
 
     When I double click on "[data-cy=\"file-explorer-README.md\"]"
-    And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
+    Then I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"inactive-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 2 times on screen
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" not exists
@@ -92,7 +92,7 @@ Feature: Test modelizer text view: open file
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
 
     When I click on "[data-cy=\"active-tab\"] [data-cy=\"close-file-tab\"]"
-    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
+    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "README.md"
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" exists
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" not exists
@@ -106,9 +106,8 @@ Feature: Test modelizer text view: open file
     When I click on "[data-cy=\"git-current-branch\"]"
     And  I click on "[data-cy=\"git-menu-branch-remote-test/remote\"]"
     And  I click on "[data-cy=\"git-menu-branch-checkout-test/remote\"]"
-    And  I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
-    And  I click on body to close popup
-    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
+    Then I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
 
@@ -122,9 +121,8 @@ Feature: Test modelizer text view: open file
     When I click on "[data-cy=\"git-current-branch\"]"
     And  I click on "[data-cy=\"git-menu-branch-remote-test/remote\"]"
     And  I click on "[data-cy=\"git-menu-branch-checkout-test/remote\"]"
-    And  I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
-    And  I click on body to close popup
-    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
+    Then I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
@@ -141,9 +139,8 @@ Feature: Test modelizer text view: open file
     When I click on "[data-cy=\"git-current-branch\"]"
     And  I click on "[data-cy=\"git-menu-branch-remote-test/remote\"]"
     And  I click on "[data-cy=\"git-menu-branch-checkout-test/remote\"]"
-    And  I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
-    And  I click on body to close popup
-    Then I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
+    Then I expect "[data-cy=\"git-current-branch\"]" is "test/remote"
+    And  I expect "[data-cy=\"file-tabs-container\"] [role=\"tab\"]" appear 1 time on screen
     And  I expect "[data-cy=\"file-tab-content-README.md\"]" not exists
     And  I expect "[data-cy=\"file-tabs-container\"] [data-cy=\"active-tab\"]" is "branch.txt"
     And  I expect "[data-cy=\"file-tab-content-branch.txt\"]" is "test/remote"
