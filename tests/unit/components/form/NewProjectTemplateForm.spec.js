@@ -18,6 +18,7 @@ jest.mock('src/composables/Project', () => ({
   importProject: jest.fn(() => Promise.resolve()),
   initProject: jest.fn(() => Promise.resolve()),
   appendProjectFile: jest.fn(() => Promise.resolve()),
+  getProjects: jest.fn(() => ['project']),
 }));
 
 jest.mock('src/composables/Random', () => ({
@@ -38,7 +39,7 @@ describe('Test component: NewProjectTemplateForm', () => {
           files: ['test.js'],
           key: 'key',
         },
-        isImportAction: false,
+        isChecked: false,
       },
     });
   });
@@ -53,15 +54,16 @@ describe('Test component: NewProjectTemplateForm', () => {
       });
     });
 
-    describe('Test prop: isImportAction', () => {
+    describe('Test prop: isChecked', () => {
       it('should be false', () => {
-        expect(wrapper.vm.isImportAction).toEqual(false);
+        expect(wrapper.vm.isChecked).toEqual(false);
       });
     });
   });
 
   describe('Test function: onSubmit', () => {
-    it('should call initProject when isImportAction is false', async () => {
+    it('should call initProject when localIsChecked is false', async () => {
+      wrapper.vm.localIsChecked = false;
       Notify.create = jest.fn();
 
       await wrapper.vm.onSubmit();
@@ -69,16 +71,8 @@ describe('Test component: NewProjectTemplateForm', () => {
       expect(Project.initProject).toBeCalled();
     });
 
-    it('should call importProject when isImportAction is true', async () => {
-      await wrapper.setProps({
-        template: {
-          files: ['test.js'],
-          key: 'key',
-        },
-        isImportAction: true,
-      });
-
-      wrapper.vm.repository = 'https://github.com/test';
+    it('should call importProject when localIsChecked is true', async () => {
+      wrapper.vm.localIsChecked = true;
 
       Notify.create = jest.fn();
 
@@ -104,6 +98,18 @@ describe('Test component: NewProjectTemplateForm', () => {
       await wrapper.vm.onSubmit();
 
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'warning' }));
+    });
+  });
+
+  describe('Test watcher: props.isChecked', () => {
+    it('should be triggered when props.isChecked is updated', async () => {
+      expect(wrapper.vm.localIsChecked).toEqual(false);
+
+      await wrapper.setProps({
+        isChecked: true,
+      });
+
+      expect(wrapper.vm.localIsChecked).toEqual(true);
     });
   });
 });
