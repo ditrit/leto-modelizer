@@ -8,11 +8,11 @@ Feature: Test switch model to text view: add component/link
     And I visit the "/"
 
     When I click on "[data-cy=\"new-project\"]"
-    Then I expect current url is "/modelizer/project-[a-f0-9]{8}/model"
+    And  I set on "[data-cy=\"new-project-form\"] [data-cy=\"project-name-input\"]" text "projectName"
+    And  I click on "[data-cy=\"new-project-form\"] [data-cy=\"new-project-form-submit\"]"
+    Then I expect current url is "/modelizer/projectName/model"
     And  I expect "[data-cy=\"plugin-definitions-terrator-plugin\"]" appear 1 time on screen
     And  I expect "[data-cy=\"plugin-definitions-terrator-plugin\"] [data-cy=\"plugin-definitions-title\"]" is "terrator-plugin"
-
-    Given I extract "project-[a-f0-9]{8}" from url in field "projectName" of context
 
     When I click on "[data-cy=\"plugin-definitions-terrator-plugin\"]"
     Then I expect "[class*=\"component-definition-card\"]" appear 18 times on screen

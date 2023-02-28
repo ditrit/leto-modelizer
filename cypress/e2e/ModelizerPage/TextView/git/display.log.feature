@@ -8,10 +8,11 @@ Feature: Test modelizer text view: git log display
 
     When I visit the "/"
     And  I click on "[data-cy=\"new-project\"]"
-    Then I expect current url is "/modelizer/project-[a-f0-9]{8}/model"
+    And  I set on "[data-cy=\"new-project-form\"] [data-cy=\"project-name-input\"]" text "projectName"
+    And  I click on "[data-cy=\"new-project-form\"] [data-cy=\"new-project-form-submit\"]"
+    Then I expect current url is "/modelizer/projectName/model"
 
-    When I extract "project-[a-f0-9]{8}" from url in field "projectName" of context
-    And  I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
+    When I click on "[data-cy=\"modelizer-switch\"] [aria-pressed=\"false\"]"
     And  I click on "[data-cy=\"git-current-branch\"]"
     Then I expect "[data-cy=\"git-menu-log\"]" exists
 
