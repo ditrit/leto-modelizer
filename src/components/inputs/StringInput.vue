@@ -36,4 +36,12 @@ watch(() => stringInput.value, () => {
     stringInput.value.validate();
   }
 });
+
+watch(() => props.attribute, () => {
+  localValue.value = props.attribute.value;
+
+  if (stringInput.value) {
+    stringInput.value.validate();
+  }
+});
 </script>

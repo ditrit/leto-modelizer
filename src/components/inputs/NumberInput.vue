@@ -36,4 +36,12 @@ watch(() => numberInput.value, () => {
     numberInput.value.validate();
   }
 });
+
+watch(() => props.attribute, () => {
+  localValue.value = props.attribute.value;
+
+  if (numberInput.value) {
+    numberInput.value.validate();
+  }
+});
 </script>

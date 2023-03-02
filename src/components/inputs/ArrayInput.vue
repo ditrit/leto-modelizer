@@ -35,4 +35,12 @@ watch(() => arrayInput.value, () => {
     arrayInput.value.validate();
   }
 });
+
+watch(() => props.attribute, () => {
+  localValue.value = props.attribute.value;
+
+  if (arrayInput.value) {
+    arrayInput.value.validate();
+  }
+});
 </script>

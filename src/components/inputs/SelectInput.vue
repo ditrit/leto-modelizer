@@ -30,4 +30,12 @@ watch(() => selectInput.value, () => {
     selectInput.value.validate();
   }
 });
+
+watch(() => props.attribute, () => {
+  localValue.value = props.attribute.value;
+
+  if (selectInput.value) {
+    selectInput.value.validate();
+  }
+});
 </script>
