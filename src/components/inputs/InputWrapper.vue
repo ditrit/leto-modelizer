@@ -100,7 +100,7 @@ const emit = defineEmits([
  * @return {String} the corresponding type.
  */
 function getAttributeType(attribute) {
-  if (attribute.definition?.rules.values) {
+  if (attribute.definition?.rules.values && attribute.definition?.type !== 'Array') {
     return 'Select';
   }
 
