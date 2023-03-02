@@ -110,6 +110,17 @@ export function isStringMatchingRegExp(t, value, regexp) {
 }
 
 /**
+ * Check if the value contains only number.
+ * @param {Function} t - I18n translate function.
+ * @param {String} value - Value to check.
+ * @return {Boolean|String} Return true if value is valid,
+ * otherwise the translated error message.
+ */
+export function isNumber(t, value) {
+  return !Number.isNaN(Number(value)) || t('errors.rules.number.nan');
+}
+
+/**
  * Check if the value is greater than or equal to min.
  * @param {Function} t - I18n translate function.
  * @param {Number} value - Value to check.
