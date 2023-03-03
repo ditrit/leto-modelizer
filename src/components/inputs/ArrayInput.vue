@@ -4,6 +4,7 @@
     use-input
     use-chips
     multiple
+    :options="options"
     hide-dropdown-icon
     input-debounce="0"
     new-value-mode="add"
@@ -24,5 +25,6 @@ const props = defineProps({
   },
 });
 
+const options = ref(props.attribute.definition.rules.values);
 const localValue = ref(props.attribute.value);
 </script>
