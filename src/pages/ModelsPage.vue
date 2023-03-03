@@ -9,7 +9,7 @@
     />
     <q-page-container>
       <q-page>
-        <modelizer-models-view
+        <models-view
           :project-name="projectName"
         />
 
@@ -27,7 +27,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar';
-import ModelizerModelsView from 'src/components/ModelizerModelsView';
+import ModelsView from 'src/components/ModelsView';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog';
 import CreateModelDialog from 'components/dialog/CreateModelDialog';
 import DeleteModelDialog from 'components/dialog/DeleteModelDialog';

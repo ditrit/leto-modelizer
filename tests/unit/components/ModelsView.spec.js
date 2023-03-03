@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import ModelizerModelsView from 'src/components/ModelizerModelsView.vue';
+import ModelsView from 'src/components/ModelsView.vue';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
@@ -26,7 +26,7 @@ jest.mock('src/composables/TemplateManager', () => ({
   getTemplatesByType: jest.fn(() => Promise.resolve(['models'])),
 }));
 
-describe('Test component: ModelizerModelsView', () => {
+describe('Test component: ModelsView', () => {
   let wrapper;
   let updateModelSubscribe;
   let updateModelUnsubscribe;
@@ -52,7 +52,7 @@ describe('Test component: ModelizerModelsView', () => {
       return { unsubscribe: updateModelUnsubscribe };
     });
 
-    wrapper = shallowMount(ModelizerModelsView, {
+    wrapper = shallowMount(ModelsView, {
       props: {
         projectName: 'projectName',
       },
