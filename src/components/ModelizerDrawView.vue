@@ -1,8 +1,8 @@
 <template>
   <q-layout
     container
-    class="modelizer-model-view"
-    data-cy="modelizer-model-view"
+    class="modelizer-draw-view"
+    data-cy="modelizer-draw-view"
   >
     <component-definitions-drawer
       v-if="data.plugin"
@@ -239,7 +239,7 @@ onUnmounted(() => {
     height: calc(100vh - 74px);
     width: 100%;
   }
-  .modelizer-model-view {
+  .modelizer-draw-view {
     height: calc(100vh - 64px)
   }
 </style>

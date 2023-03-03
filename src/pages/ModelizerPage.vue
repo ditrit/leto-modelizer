@@ -11,7 +11,7 @@
         class="modelizer-page column"
         data-cy="modelizer-page"
       >
-        <modelizer-model-view
+        <modelizer-draw-view
           v-if="viewType === 'draw'"
           :project-name="projectName"
         />
@@ -38,7 +38,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import NavigationBar from 'src/components/NavigationBar';
-import ModelizerModelView from 'src/components/ModelizerModelView';
+import ModelizerDrawView from 'src/components/ModelizerDrawView';
 import ModelizerTextView from 'src/components/ModelizerTextView';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog';
 import GitAddRemoteDialog from 'components/dialog/GitAddRemoteDialog';

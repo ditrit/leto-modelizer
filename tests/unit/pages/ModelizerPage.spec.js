@@ -36,7 +36,7 @@ describe('Test page component: ModelizerPage', () => {
           'router-link',
           'router-view',
           'modelizer-navigation-bar',
-          'modelizer-model-view',
+          'modelizer-draw-view',
           'modelizer-text-view',
         ],
       },
