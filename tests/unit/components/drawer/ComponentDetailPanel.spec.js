@@ -111,15 +111,52 @@ describe('test component: Plugin Component Detail Panel', () => {
     };
   });
 
+  describe('Test function: sanitizeAttributes', () => {
+    it('should return sanitized array', () => {
+      const attributes = [{
+        name: 'attribute_no_value',
+      }, {
+        name: 'attribute_empty_value',
+      }, {
+        name: 'attribute',
+        value: 'value',
+      }, {
+        name: 'object_empty',
+        type: 'Object',
+        value: [],
+      }, {
+        name: 'object',
+        type: 'Object',
+        value: [{
+          name: 'attribute_in_object',
+          value: 'value',
+        }],
+      }];
+
+      expect(wrapper.vm.sanitizeAttributes(attributes)).toEqual([{
+        name: 'attribute',
+        value: 'value',
+      }, {
+        name: 'object',
+        type: 'Object',
+        value: [{
+          name: 'attribute_in_object',
+          value: 'value',
+        }],
+      }]);
+    });
+  });
+
   describe('Test function: submit', () => {
     it('should update selectedComponent with selectedComponentId & selectedComponentAttributes', () => {
+      wrapper.vm.originalComponent = {};
       wrapper.vm.selectedComponentId = 'selectedComponentId';
       wrapper.vm.selectedComponentAttributes = [];
 
       wrapper.vm.submit();
 
-      expect(wrapper.vm.selectedComponent.id).toEqual(wrapper.vm.selectedComponentId);
-      expect(wrapper.vm.selectedComponent.attributes)
+      expect(wrapper.vm.originalComponent.id).toEqual(wrapper.vm.selectedComponentId);
+      expect(wrapper.vm.originalComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
       expect(wrapper.vm.isVisible).toEqual(false);
 
@@ -127,8 +164,8 @@ describe('test component: Plugin Component Detail Panel', () => {
 
       wrapper.vm.submit();
 
-      expect(wrapper.vm.selectedComponent.id).toEqual(wrapper.vm.selectedComponentId);
-      expect(wrapper.vm.selectedComponent.attributes)
+      expect(wrapper.vm.originalComponent.id).toEqual(wrapper.vm.selectedComponentId);
+      expect(wrapper.vm.originalComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
       expect(wrapper.vm.isVisible).toEqual(false);
       expect(wrapper.vm.forceSave).toEqual(false);
@@ -137,6 +174,7 @@ describe('test component: Plugin Component Detail Panel', () => {
 
   describe('Test function: save', () => {
     it('should emit event if form validation is successful', async () => {
+      wrapper.vm.originalComponent = {};
       wrapper.vm.form = {
         validate: jest.fn(() => Promise.resolve(true)),
       };
@@ -148,6 +186,7 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
 
     it('should emit event if form validation is not successful but forceSave is true', async () => {
+      wrapper.vm.originalComponent = {};
       wrapper.vm.form = {
         validate: jest.fn(() => Promise.resolve(false)),
       };
@@ -208,7 +247,7 @@ describe('test component: Plugin Component Detail Panel', () => {
 
   describe('Test function: reset', () => {
     it('should reset selectedComponentId & selectedComponentAttributes base on selectedComponent', () => {
-      wrapper.vm.selectedComponent = {
+      wrapper.vm.originalComponent = {
         id: 'newId',
         attributes: [],
         definition: new ComponentDefinition(),
@@ -239,98 +278,19 @@ describe('test component: Plugin Component Detail Panel', () => {
       wrapper.vm.onEdit({ id: 'id' });
 
       expect(wrapper.vm.isVisible).toBeTruthy();
-      expect(wrapper.vm.selectedComponent).toEqual(component);
+      expect(wrapper.vm.originalComponent).toEqual(component);
       expect(wrapper.vm.selectedComponentId).toEqual('componentId');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
     });
   });
 
-  describe('Test function: addAttribute', () => {
-    it('should add new attribute to selectedComponentAttributes', () => {
-      wrapper.vm.selectedComponentAttributes = [];
-
-      wrapper.vm.addAttribute();
-
-      expect(wrapper.vm.selectedComponentAttributes).toEqual([{
-        name: 'attribut_1',
-        value: '',
-        definition: null,
-        type: 'String',
-      }]);
-    });
-  });
-
-  describe('Test function: updateAttribute', () => {
-    it('should remove attribute when call function with event without attribute', () => {
-      wrapper.vm.selectedComponentAttributes = [{
-        name: 'attribut_1',
-        value: '',
-        definition: null,
-        type: 'String',
-      }];
-      wrapper.vm.form = {
-        validate: jest.fn(),
-      };
-
-      wrapper.vm.updateAttribute({ name: 'attribut_1' });
-
-      expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
-      expect(wrapper.vm.form.validate).toBeCalled();
-    });
-
-    it('should update attribute value when call function with event with existing attribute name', () => {
-      wrapper.vm.selectedComponentAttributes = [{
-        name: 'attribut_1',
-        value: '',
-        definition: null,
-        type: 'String',
-      }];
-      wrapper.vm.form = {
-        validate: jest.fn(),
-      };
-
-      wrapper.vm.updateAttribute({
-        name: 'attribut_1',
-        attribute: {
-          name: 'attribut_2',
-          value: 'test',
-          definition: null,
-          type: 'String',
-        },
+  describe('Test function: updateAttributes', () => {
+    it('should update attributesUpdated', () => {
+      wrapper.vm.updateAttributes({
+        attributes: [{ name: 'attribut_1' }],
       });
 
-      expect(wrapper.vm.selectedComponentAttributes).toEqual([{
-        name: 'attribut_2',
-        value: 'test',
-        definition: null,
-        type: 'String',
-      }]);
-      expect(wrapper.vm.form.validate).toBeCalled();
-    });
-
-    it('should add attribute value when call function with event with attribute name not existing', () => {
-      wrapper.vm.form = {
-        validate: jest.fn(),
-      };
-      wrapper.vm.selectedComponentAttributes = [];
-
-      wrapper.vm.updateAttribute({
-        name: 'attribut_1',
-        attribute: {
-          name: 'attribut_1',
-          value: 'test',
-          definition: null,
-          type: 'String',
-        },
-      });
-
-      expect(wrapper.vm.selectedComponentAttributes).toEqual([{
-        name: 'attribut_1',
-        value: 'test',
-        definition: null,
-        type: 'String',
-      }]);
-      expect(wrapper.vm.form.validate).toBeCalled();
+      expect(wrapper.vm.attributesUpdated).toEqual([{ name: 'attribut_1' }]);
     });
   });
 

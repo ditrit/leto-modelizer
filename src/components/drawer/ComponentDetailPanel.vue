@@ -27,99 +27,65 @@
     </q-list>
 
     <div
-       v-if="selectedComponent && isVisible"
+       v-if="originalComponent && isVisible"
        class="col"
     >
       <q-form
+        greedy
         ref="form"
-        @reset="reset"
         @validation-error="onError"
         @validation-success="clearError"
       >
-        <q-list>
-          <q-item class="q-px-none">
-            <q-input
-              v-model="selectedComponentId"
-              class="q-px-md q-pb-sm"
-              :label="$t('plugin.component.attribute.id')"
-            />
-          </q-item>
-          <q-item
-            v-for="attribute in selectedComponentAttributes.filter(({ type }) => type !== 'Object')"
-            :key="`${attribute.title}-${Math.random()}`"
-            class="q-px-none"
-          >
-            <attribute-section
-              :attribute="attribute"
-              :plugin="localPlugin"
-              :is-root="true"
-              :full-name="attribute.name"
-              :current-error="currentError"
-              @add:attribute="addAttribute"
-              @update:attribute="updateAttribute"
-            />
-          </q-item>
-          <q-item
-            v-if="selectedComponentAttributes.filter(({ type }) => type !== 'Object').length === 0"
-            class="text-grey text-weight-regular q-px-none justify-center"
-          >
-            {{ $t('plugin.component.attribute.noAttributes') }}
-          </q-item>
-          <q-item class="justify-center q-px-none">
-            <q-btn
-              no-caps
-              :label="$t('plugin.component.attribute.add')"
-              color="positive"
-              icon="fa-solid fa-plus"
-              data-cy="object-details-panel-attribute-add-button"
-              @click="addAttribute"
-            />
-          </q-item>
-          <q-item
-            v-for="attribute in selectedComponentAttributes.filter(({ type }) => type === 'Object')"
-            :key="`${attribute.title}-${Math.random()}`"
-            class="q-pa-none"
-            dense
-          >
-            <attribute-section
-              :attribute="attribute"
-              :plugin="localPlugin"
-              :is-root="true"
-              :full-name="attribute.name"
-              :current-error="currentError"
-              @add:attribute="addAttribute"
-              @update:attribute="updateAttribute"
-            />
-          </q-item>
-          <q-item>
-            <q-checkbox
-              v-model="forceSave"
-              :label="$t('plugin.component.attribute.forceSave')"
-            />
-          </q-item>
-          <q-item class="row justify-evenly q-mt-md">
-            <q-btn
-              icon="fa-solid fa-floppy-disk"
-              :label="$t('plugin.component.attribute.save')"
-              type="submit"
-              color="positive"
-              :loading="submitting"
-              @click="save"
-              data-cy="object-details-panel-save-button"
-            >
-              <template v-slot:loading>
-                <q-spinner-dots/>
-              </template>
-            </q-btn>
-            <q-btn
-              icon="fa-solid fa-arrow-rotate-left"
-              :label="$t('plugin.component.attribute.reset')"
-              type="reset"
-              color="info"
-              data-cy="object-details-panel-reset-button"
-            />
-          </q-item>
-        </q-list>
+        <attributes-list
+          :attributes="selectedComponentAttributes"
+          :plugin="plugin"
+          :isRoot="true"
+          :full-name="'root'"
+          :current-error="currentError"
+          @update:attributes="updateAttributes"
+        >
+          <template v-slot:header>
+            <!-- Selected component name -->
+            <q-item class="q-px-none">
+              <q-input
+                v-model="selectedComponentId"
+                class="q-px-md q-pb-sm"
+                :label="$t('plugin.component.attribute.id')"
+              />
+            </q-item>
+          </template>
+          <template v-slot:footer>
+            <!-- Action SelectedComponent -->
+            <q-item>
+              <q-checkbox
+                v-model="forceSave"
+                :label="$t('plugin.component.attribute.forceSave')"
+              />
+            </q-item>
+            <q-item class="row justify-evenly q-mt-md">
+              <q-btn
+                icon="fa-solid fa-floppy-disk"
+                :label="$t('plugin.component.attribute.save')"
+                type="submit"
+                color="positive"
+                :loading="submitting"
+                @click="save"
+                data-cy="object-details-panel-save-button"
+              >
+                <template v-slot:loading>
+                  <q-spinner-dots/>
+                </template>
+              </q-btn>
+              <q-btn
+                icon="fa-solid fa-arrow-rotate-left"
+                :label="$t('plugin.component.attribute.reset')"
+                color="info"
+                data-cy="object-details-panel-reset-button"
+                @click="reset"
+              />
+            </q-item>
+          </template>
+        </attributes-list>
       </q-form>
     </div>
   </q-drawer>
@@ -137,7 +103,7 @@ import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import { renderModel } from 'src/composables/PluginManager';
 import { ComponentAttribute } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
-import AttributeSection from 'components/panel/AttributeSection';
+import AttributesList from 'src/components/inputs/AttributesList.vue';
 
 const props = defineProps({
   plugin: {
@@ -146,8 +112,6 @@ const props = defineProps({
   },
 });
 
-const localPlugin = ref(null);
-const selectedComponent = ref({});
 const selectedComponentId = ref('');
 const selectedComponentAttributes = ref([]);
 const isVisible = ref(false);
@@ -157,18 +121,45 @@ const form = ref(null);
 const forceSave = ref(false);
 const route = useRoute();
 const query = computed(() => route.query);
+const originalComponent = ref(null);
+const attributesUpdated = ref([]);
 
 let pluginEditSubscription;
 let viewSwitchSubscription;
+
+/**
+ * Return the array of attributes with only needed attributes.
+ * @param {Array} attributes - Array of attribute to sanitize.
+ * @return {Array} Sanitized array.
+ */
+function sanitizeAttributes(attributes) {
+  return attributes.reduce((acc, attribute) => {
+    if (attribute.value && attribute.value !== '') {
+      if (attribute.type !== 'Object') {
+        acc.push(attribute);
+      } else {
+        const sanitizedValue = sanitizeAttributes(attribute.value);
+
+        if (sanitizedValue.length !== 0) {
+          acc.push({
+            ...attribute,
+            value: sanitizedValue,
+          });
+        }
+      }
+    }
+    return acc;
+  }, []);
+}
 
 /**
  * Update local component data and emit DrawEvent & RenderEvent events.
  */
 async function submit() {
   submitting.value = true;
-  selectedComponent.value.id = selectedComponentId.value;
-  selectedComponent.value.attributes = selectedComponentAttributes.value
-    .filter(({ value }) => value !== null && value !== '');
+
+  originalComponent.value.id = selectedComponentId.value;
+  originalComponent.value.attributes = sanitizeAttributes(attributesUpdated.value);
 
   const path = process.env.MODELS_DEFAULT_FOLDER !== ''
     ? `${process.env.MODELS_DEFAULT_FOLDER}/${query.value.path}`
@@ -177,7 +168,7 @@ async function submit() {
   const files = await renderModel(
     route.params.projectName,
     path,
-    localPlugin.value,
+    props.plugin,
   );
 
   PluginEvent.RenderEvent.next(files);
@@ -240,11 +231,13 @@ function getUnreferencedAttributes(component) {
  * Reset local values of name and attributes.
  */
 function reset() {
-  selectedComponentId.value = selectedComponent.value.id;
-  selectedComponentAttributes.value = JSON.parse(JSON.stringify([
-    ...getReferencedAttributes(selectedComponent.value),
-    ...getUnreferencedAttributes(selectedComponent.value),
-  ]));
+  selectedComponentId.value = originalComponent.value.id;
+  selectedComponentAttributes.value = JSON.parse(JSON.stringify(
+    getReferencedAttributes(originalComponent.value)
+      .concat(getUnreferencedAttributes(originalComponent.value)),
+  ));
+  attributesUpdated.value = [...selectedComponentAttributes.value];
+
   forceSave.value = false;
 }
 
@@ -255,27 +248,14 @@ function reset() {
 function onEdit({ id }) {
   isVisible.value = true;
 
-  localPlugin.value = props.plugin;
-  const component = props.plugin.data.getComponentById(id);
+  originalComponent.value = props.plugin.data.getComponentById(id);
 
-  selectedComponent.value = component;
-  selectedComponentId.value = component.id;
+  selectedComponentId.value = originalComponent.value.id;
   selectedComponentAttributes.value = JSON.parse(JSON.stringify(
-    getReferencedAttributes(component)
-      .concat(getUnreferencedAttributes(component)),
+    getReferencedAttributes(originalComponent.value)
+      .concat(getUnreferencedAttributes(originalComponent.value)),
   ));
-}
-
-/**
- * Add a new attribute without definition.
- */
-function addAttribute() {
-  selectedComponentAttributes.value.push({
-    name: `attribut_${selectedComponentAttributes.value.length + 1}`,
-    value: '',
-    definition: null,
-    type: 'String',
-  });
+  attributesUpdated.value = [...selectedComponentAttributes.value];
 }
 
 /**
@@ -286,20 +266,8 @@ function addAttribute() {
  * @param {String} event.name - Name of updated attribute.
  * @param {ComponentAttribute} event.attribute - New attribute value or null.
  */
-function updateAttribute(event) {
-  if (!event.attribute) {
-    selectedComponentAttributes.value = selectedComponentAttributes.value
-      .filter(({ name }) => name !== event.name);
-  } else {
-    const index = selectedComponentAttributes.value.findIndex(({ name }) => event.name === name);
-
-    if (index < 0) {
-      selectedComponentAttributes.value.push(event.attribute);
-    } else {
-      selectedComponentAttributes.value[index] = event.attribute;
-    }
-  }
-  form.value.validate(false);
+function updateAttributes(event) {
+  attributesUpdated.value = [...event.attributes];
 }
 
 /**

@@ -53,4 +53,12 @@ watch(() => referenceInput.value, () => {
     referenceInput.value.validate();
   }
 });
+
+watch(() => props.attribute, () => {
+  localValue.value = props.attribute.value;
+
+  if (referenceInput.value) {
+    referenceInput.value.validate();
+  }
+});
 </script>

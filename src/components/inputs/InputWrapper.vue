@@ -5,7 +5,10 @@
         v-model="name"
         :label="$t('plugin.component.attribute.name')"
         class="col-4 q-px-md"
-        @update:model-value="(event) => emit('update:attribute-name', event)"
+        @update:model-value="(event) => emit('update:attribute-name', {
+          attributeName: attribute.name,
+          newName: event,
+        })"
       />
       <span class="text-subtitle1">=</span>
     </template>
@@ -30,7 +33,10 @@
       :plugin="plugin"
       class="col q-px-md"
       :label="getAttributeLabel(attribute)"
-      @update:model-value="(event) => emit('update:attribute-value', event)"
+      @update:modelValue="(event) => emit('update:attribute-value', {
+        attributeName: attribute.name,
+        newValue: event,
+      })"
       hide-bottom-space
       :full-name="fullName"
     />
@@ -56,6 +62,7 @@
 import {
   ref,
   defineAsyncComponent,
+  watch,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 import DefinitionMenu from 'components/menu/DefinitionMenu.vue';
@@ -123,4 +130,8 @@ function getAttributeLabel(attribute) {
 
   return label;
 }
+
+watch(() => props.attribute, () => {
+  name.value = !props.attribute.definition ? props.attribute.name : '';
+});
 </script>

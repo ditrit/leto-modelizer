@@ -1,5 +1,6 @@
 <template>
   <q-select
+    ref="arrayInput"
     v-model="localValue"
     use-input
     use-chips
@@ -15,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { isRequired } from 'src/composables/QuasarFieldRule';
 
 const props = defineProps({
@@ -25,6 +26,21 @@ const props = defineProps({
   },
 });
 
+const arrayInput = ref(null);
 const options = ref(props.attribute.definition.rules.values);
 const localValue = ref(props.attribute.value);
+
+watch(() => arrayInput.value, () => {
+  if (arrayInput.value) {
+    arrayInput.value.validate();
+  }
+});
+
+watch(() => props.attribute, () => {
+  localValue.value = props.attribute.value;
+
+  if (arrayInput.value) {
+    arrayInput.value.validate();
+  }
+});
 </script>

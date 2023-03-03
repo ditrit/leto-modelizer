@@ -8,6 +8,7 @@ import {
   isStringTooShort,
   isStringTooLong,
   isStringMatchingRegExp,
+  isNumber,
   isNumberTooSmall,
   isNumberTooBig,
 } from 'src/composables/QuasarFieldRule';
@@ -148,6 +149,19 @@ describe('Test composable: InputRule', () => {
     it('should return string error message', () => {
       const key = 'errors.rules.string.regexp';
       expect(isStringMatchingRegExp(t, 'a', '^[a-z]{3,}$')).toEqual(key);
+    });
+  });
+
+  describe('Test function: isNumber', () => {
+    it('should return true', () => {
+      expect(isNumber(null, 2)).toBe(true);
+      expect(isNumber(null, '2')).toBe(true);
+      expect(isNumber(null, '')).toBe(true);
+    });
+
+    it('should return string error message', () => {
+      const key = 'errors.rules.number.nan';
+      expect(isNumber(t, '1A')).toEqual(key);
     });
   });
 

@@ -53,4 +53,12 @@ watch(() => linkInput.value, () => {
     linkInput.value.validate();
   }
 });
+
+watch(() => props.attribute, () => {
+  localValue.value = props.attribute.value;
+
+  if (linkInput.value) {
+    linkInput.value.validate();
+  }
+});
 </script>

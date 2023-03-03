@@ -184,6 +184,7 @@ export default {
         regexp: 'It should match the RegExp "{regexp}".',
       },
       number: {
+        nan: 'It should be only numeric character(s)',
         min: 'It should be greater than or equal to {min}',
         max: 'It should be less than or equal to {max}',
       },
