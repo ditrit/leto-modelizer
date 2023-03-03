@@ -54,8 +54,7 @@ import {
   appendProjectFile,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
-import { useRoute, useRouter } from 'vue-router';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
+import { useRoute } from 'vue-router';
 import {
   generateTemplate,
   getTemplateFileByPath,
@@ -63,7 +62,6 @@ import {
 } from 'src/composables/TemplateManager';
 import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay';
 
-const router = useRouter();
 const route = useRoute();
 const query = computed(() => route.query);
 
@@ -72,7 +70,6 @@ let pluginParseSubscription;
 let pluginDrawSubscription;
 let pluginRenderSubscription;
 let pluginUpdateSubscription;
-let viewSwitchSubscription;
 
 const { t } = useI18n();
 const props = defineProps({
@@ -213,23 +210,6 @@ async function dropHandler(event) {
   PluginEvent.RenderEvent.next(files);
 }
 
-/**
- * Redirect to text view with model path.
- * @param {String} newViewType - New viewType.
- */
-async function onSwitchView(newViewType) {
-  if (newViewType === 'text') {
-    router.push({
-      name: 'modelizer',
-      params: {
-        viewType: newViewType,
-        projectName: props.projectName,
-      },
-      query: query.value,
-    });
-  }
-}
-
 watch(() => viewType.value, () => {
   if (viewType.value === 'model') {
     updatePluginsAndTemplates();
@@ -243,8 +223,6 @@ onMounted(() => {
   pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePluginsAndTemplates);
   pluginUpdateSubscription = PluginEvent.UpdateEvent.subscribe(renderModelComponents);
   pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updatePluginsAndTemplates);
-
-  viewSwitchSubscription = ViewSwitchEvent.subscribe(onSwitchView);
 });
 
 onUnmounted(() => {
@@ -253,8 +231,6 @@ onUnmounted(() => {
   pluginDrawSubscription.unsubscribe();
   pluginRenderSubscription.unsubscribe();
   pluginUpdateSubscription.unsubscribe();
-
-  viewSwitchSubscription.unsubscribe();
 });
 </script>
 

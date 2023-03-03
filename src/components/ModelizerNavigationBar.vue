@@ -55,7 +55,7 @@
         no-caps
         rounded
         data-cy="modelizer-switch-button"
-        @update:model-value="onViewSwitchUpdate"
+        @update:model-value="onViewTypeUpdate"
       />
       <modelizer-settings-menu :project-name="projectName" />
     </div>
@@ -71,7 +71,6 @@ import {
   onUnmounted,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import ModelizerSettingsMenu from 'components/menu/ModelizerSettingsMenu.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import { Notify } from 'quasar';
@@ -80,7 +79,10 @@ import {
   gitGlobalUpload,
 } from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
+import { useRoute, useRouter } from 'vue-router';
 
+const router = useRouter();
+const route = useRoute();
 const { t } = useI18n();
 const props = defineProps({
   viewType: {
@@ -96,6 +98,7 @@ const props = defineProps({
 let addRemoteSubscription;
 let authenticationSubscription;
 
+const query = computed(() => route.query);
 const isLoading = ref(false);
 const project = ref(getProjectById(props.projectName));
 const buttonToggleValue = ref(props.viewType);
@@ -146,14 +149,19 @@ async function upload() {
 }
 
 /**
- * Emit event with the new view type.
+ * Update url with the new view type.
  *
- * @param {string} newViewType
+ * @param {string} newViewType - 'draw' or 'text'.
  */
-function onViewSwitchUpdate(newViewType) {
-  if (newViewType === props.viewType) return;
-
-  ViewSwitchEvent.next(newViewType);
+function onViewTypeUpdate(newViewType) {
+  router.push({
+    name: 'modelizer',
+    params: {
+      viewType: newViewType,
+      projectName: props.projectName,
+    },
+    query: query.value,
+  });
 }
 
 /**
@@ -165,7 +173,7 @@ function setProject() {
 
 watch(() => props.viewType, (newViewType) => {
   buttonToggleValue.value = newViewType;
-});
+})
 
 onMounted(() => {
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(setProject);

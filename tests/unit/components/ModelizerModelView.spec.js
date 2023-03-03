@@ -327,24 +327,6 @@ describe('Test component: ModelizerModelView', () => {
     });
   });
 
-  describe('Test function: onSwitchView', () => {
-    it('should redirect to text view when viewType is "text"', async () => {
-      wrapper.vm.onSwitchView('text');
-      expect(useRouterPush).toHaveBeenCalledWith(expect.objectContaining({
-        name: 'modelizer',
-        params: {
-          viewType: 'text',
-          projectName: 'project-00000000',
-        },
-      }));
-    });
-
-    it('should do nothing otherwise', async () => {
-      wrapper.vm.onSwitchView('notText');
-      expect(useRouterPush).toHaveBeenCalledTimes(0);
-    });
-  });
-
   describe('Test hook function: onMounted', () => {
     it('should subscribe to InitEvent', () => {
       expect(initSubscribe).toHaveBeenCalledTimes(1);

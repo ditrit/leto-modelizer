@@ -3,7 +3,6 @@ import { shallowMount } from '@vue/test-utils';
 import ModelizerTextView from 'src/components/ModelizerTextView.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import Project from 'src/composables/Project';
 import PluginManager from 'src/composables/PluginManager';
 import FileStatus from 'src/models/git/FileStatus';
@@ -85,10 +84,6 @@ jest.mock('src/composables/events/GitEvent', () => ({
   },
 }));
 
-jest.mock('src/composables/events/ViewSwitchEvent', () => ({
-  subscribe: jest.fn(),
-}));
-
 describe('Test component: ModelizerTextView', () => {
   let wrapper;
   let addRemoteSubscribe;
@@ -111,8 +106,6 @@ describe('Test component: ModelizerTextView', () => {
   let deleteFileUnsubscribe;
   let updateEditorContentSubscribe;
   let updateEditorContentUnsubscribe;
-  let viewSwitchSubscribe;
-  let viewSwitchUnsubscribe;
   let createFileNodeNext;
   let updateFileContentNext;
   let writeProjectFileMock;
@@ -143,8 +136,6 @@ describe('Test component: ModelizerTextView', () => {
     deleteFileUnsubscribe = jest.fn();
     updateEditorContentSubscribe = jest.fn();
     updateEditorContentUnsubscribe = jest.fn();
-    viewSwitchSubscribe = jest.fn();
-    viewSwitchUnsubscribe = jest.fn();
     createFileNodeNext = jest.fn();
     updateFileContentNext = jest.fn();
     selectFileTabEventSubscribe = jest.fn();
@@ -152,7 +143,7 @@ describe('Test component: ModelizerTextView', () => {
     useRouterPush = jest.fn();
     renderMock = jest.fn();
 
-    useRoute.mockImplementation(() => ({ query: { path: 'coucou' } }));
+    useRoute.mockImplementation(() => ({ query: { path: 'pluginName/modelName' } }));
     useRouter.mockImplementation(() => ({
       push: useRouterPush,
     }));
@@ -204,11 +195,6 @@ describe('Test component: ModelizerTextView', () => {
     });
     FileEvent.CreateFileNodeEvent.next.mockImplementation(createFileNodeNext);
     FileEvent.UpdateFileContentEvent.next.mockImplementation(updateFileContentNext);
-
-    ViewSwitchEvent.subscribe.mockImplementation(() => {
-      viewSwitchSubscribe();
-      return { unsubscribe: viewSwitchUnsubscribe };
-    });
 
     Project.writeProjectFile.mockImplementation(() => Promise.resolve(writeProjectFileMock()));
     Project.getAllModels.mockImplementation(() => [{
@@ -404,16 +390,6 @@ describe('Test component: ModelizerTextView', () => {
     });
   });
 
-  describe('Test function: renderPluginFiles', () => {
-    it('should call renderModel()', async () => {
-      process.env.MODELS_DEFAULT_FOLDER = 'test';
-
-      await wrapper.vm.renderPluginFiles();
-
-      expect(renderMock).toHaveBeenCalledTimes(1);
-    });
-  });
-
   describe('Test function: getModel', () => {
     it('should return model corresponding to the selected file', async () => {
       process.env.MODELS_DEFAULT_FOLDER = '';
@@ -442,23 +418,51 @@ describe('Test component: ModelizerTextView', () => {
     });
   });
 
-  describe('Test function: onSwitchView', () => {
-    it('should do nothing if param is not equal to "text"', async () => {
-      await wrapper.vm.onSwitchView('model');
+  describe('Test function: onSelectFileTab', () => {
+    it('should only set selectedFileTabPath', async () => {
+      await wrapper.vm.onSelectFileTab('pluginName/modelName/fileName');
 
-      expect(createFileNodeNext).not.toBeCalled();
-      expect(updateFileContentNext).not.toBeCalled();
+      expect(wrapper.vm.selectedFileTabPath).toEqual('pluginName/modelName/fileName');
+      expect(useRouterPush).toHaveBeenCalledTimes(0);
+
+      await wrapper.vm.onSelectFileTab(null);
+
+      expect(wrapper.vm.selectedFileTabPath).toBeNull();
+      expect(useRouterPush).toHaveBeenCalledTimes(0);
     });
 
-    it('should send CreateFileNode & UpdateFileContent event otherwise', async () => {
-      wrapper.vm.localFileInformations = [new FileInformation({
-        path: 'updatedFile',
-      })];
+    it('should also call router.push()', async () => {
+      process.env.MODELS_DEFAULT_FOLDER = '';
 
-      await wrapper.vm.onSwitchView('text');
+      await wrapper.vm.onSelectFileTab('notPlugin/fileName');
 
-      expect(createFileNodeNext).toBeCalled();
-      expect(updateFileContentNext).toBeCalled();
+      expect(wrapper.vm.selectedFileTabPath).toEqual('notPlugin/fileName');
+      expect(useRouterPush).toHaveBeenCalledTimes(1);
+      expect(useRouterPush).toHaveBeenCalledWith({
+        name: 'modelizer',
+        params: {
+          viewType: 'text',
+          projectName: wrapper.vm.props.projectName,
+        },
+        query: {
+          path: 'pluginName/modelName',
+        },
+      });
+
+      await wrapper.vm.onSelectFileTab('plugin/name/fileName');
+
+      expect(wrapper.vm.selectedFileTabPath).toEqual('plugin/name/fileName');
+      expect(useRouterPush).toHaveBeenCalledTimes(2);
+      expect(useRouterPush).toHaveBeenCalledWith({
+        name: 'modelizer',
+        params: {
+          viewType: 'text',
+          projectName: wrapper.vm.props.projectName,
+        },
+        query: {
+          path: 'plugin/name',
+        },
+      });
     });
   });
 
@@ -501,10 +505,6 @@ describe('Test component: ModelizerTextView', () => {
 
     it('should subscribe to UpdateEditorContentEvent', () => {
       expect(updateEditorContentSubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should subscribe to ViewSwitchEvent', () => {
-      expect(viewSwitchSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -567,12 +567,6 @@ describe('Test component: ModelizerTextView', () => {
       expect(updateEditorContentUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(updateEditorContentUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to ViewSwitchEvent', () => {
-      expect(viewSwitchUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(viewSwitchUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

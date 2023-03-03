@@ -1,7 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import PluginEvent from 'src/composables/events/PluginEvent';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import { getPlugins, renderModel } from 'src/composables/PluginManager';
 import ComponentDetailPanel from 'src/components/drawer/ComponentDetailPanel.vue';
 import {
@@ -30,10 +29,6 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   },
 }));
 
-jest.mock('src/composables/events/ViewSwitchEvent', () => ({
-  subscribe: jest.fn(),
-}));
-
 jest.mock('src/composables/PluginManager', () => ({
   getPlugins: jest.fn(),
   renderPlugin: jest.fn(),
@@ -44,8 +39,6 @@ describe('test component: Plugin Component Detail Panel', () => {
   let wrapper;
   let pluginEditSubscription;
   let pluginEditUnsubscription;
-  let viewSwitchSubscription;
-  let viewSwitchUnsubscription;
   let pluginRenderNext;
 
   useRoute.mockImplementation(() => ({
@@ -74,8 +67,6 @@ describe('test component: Plugin Component Detail Panel', () => {
   beforeEach(() => {
     pluginEditSubscription = jest.fn();
     pluginEditUnsubscription = jest.fn();
-    viewSwitchSubscription = jest.fn();
-    viewSwitchUnsubscription = jest.fn();
     pluginRenderNext = jest.fn();
 
     PluginEvent.EditEvent.subscribe.mockImplementation(() => {
@@ -84,11 +75,6 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
 
     PluginEvent.RenderEvent.next.mockImplementation(pluginRenderNext);
-
-    ViewSwitchEvent.subscribe.mockImplementation(() => {
-      viewSwitchSubscription();
-      return { unsubscribe: viewSwitchUnsubscription };
-    });
 
     wrapper = shallowMount(ComponentDetailPanel, {
       props: {
@@ -294,24 +280,6 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
-  describe('Test function: onViewSwitchUpdate', () => {
-    beforeEach(() => {
-      wrapper.vm.isVisible = true;
-    });
-
-    it('should not set isVisible to false when newViewType is equal to route.params.viewType', () => {
-      wrapper.vm.onViewSwitchUpdate('model');
-
-      expect(wrapper.vm.isVisible).toEqual(true);
-    });
-
-    it('should set isVisible to false when newViewType is equal to route.params.viewType', () => {
-      wrapper.vm.onViewSwitchUpdate('text');
-
-      expect(wrapper.vm.isVisible).toEqual(false);
-    });
-  });
-
   describe('Test function: onError', () => {
     it('should set currentError with value of full-name attribute', () => {
       wrapper.vm.onError({
@@ -384,10 +352,6 @@ describe('test component: Plugin Component Detail Panel', () => {
     it('should subscribe to EditEvent', () => {
       expect(pluginEditSubscription).toHaveBeenCalledTimes(1);
     });
-
-    it('should subscribe to ViewSwitchEvent', () => {
-      expect(viewSwitchSubscription).toHaveBeenCalledTimes(1);
-    });
   });
 
   describe('Test hook function: onUnmounted', () => {
@@ -395,12 +359,6 @@ describe('test component: Plugin Component Detail Panel', () => {
       expect(pluginEditUnsubscription).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(pluginEditUnsubscription).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to ViewSwitchEvent', () => {
-      expect(viewSwitchUnsubscription).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(viewSwitchUnsubscription).toHaveBeenCalledTimes(1);
     });
   });
 });

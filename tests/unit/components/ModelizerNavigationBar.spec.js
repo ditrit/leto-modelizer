@@ -1,25 +1,25 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar.vue';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import { Notify } from 'quasar';
 import Project from 'src/composables/Project';
+import { useRouter } from 'vue-router';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
+jest.mock('vue-router', () => ({
+  useRouter: jest.fn(),
+}));
+
 jest.mock('vue-i18n', () => ({
   useI18n: () => ({
     t: (t) => t,
   }),
-}));
-
-jest.mock('src/composables/events/ViewSwitchEvent', () => ({
-  next: jest.fn(),
 }));
 
 jest.mock('src/composables/events/PluginEvent', () => ({
@@ -59,12 +59,11 @@ describe('Test component: ModelizerNavigationBar', () => {
   let addRemoteUnsubscribe;
   let authenticationSubscribe;
   let authenticationUnsubscribe;
+  let mockPush;
 
-  const viewSwitchEvent = jest.fn();
   const parseEvent = jest.fn();
   const globalUploadFilesEvent = jest.fn();
 
-  ViewSwitchEvent.next.mockImplementation(viewSwitchEvent);
   PluginEvent.ParseEvent.next.mockImplementation(parseEvent);
   FileEvent.GlobalUploadFilesEvent.next.mockImplementation(globalUploadFilesEvent);
   Project.gitGlobalUpload.mockImplementation(
@@ -76,6 +75,7 @@ describe('Test component: ModelizerNavigationBar', () => {
     addRemoteUnsubscribe = jest.fn();
     authenticationSubscribe = jest.fn();
     authenticationUnsubscribe = jest.fn();
+    mockPush = jest.fn();
 
     GitEvent.AddRemoteEvent.subscribe.mockImplementation(() => {
       addRemoteSubscribe();
@@ -85,6 +85,9 @@ describe('Test component: ModelizerNavigationBar', () => {
       authenticationSubscribe();
       return { unsubscribe: authenticationUnsubscribe };
     });
+    useRouter.mockImplementation(() => ({
+      push: mockPush,
+    }));
 
     wrapper = shallowMount(ModelizerNavigationBar, {
       props: {
@@ -230,15 +233,18 @@ describe('Test component: ModelizerNavigationBar', () => {
     });
   });
 
-  describe('Test funtion: onViewSwitchUpdate', () => {
-    it('should not emit ViewSwitchEvent without viewSwitch changed', () => {
-      wrapper.vm.onViewSwitchUpdate('model');
-      expect(viewSwitchEvent).toHaveBeenCalledTimes(0);
-    });
-
-    it('should emit ViewSwitchEvent on viewSwitch change', () => {
-      wrapper.vm.onViewSwitchUpdate('changed');
-      expect(viewSwitchEvent).toHaveBeenCalledTimes(1);
+  describe('Test funtion: onViewTypeUpdate', () => {
+    it('should call router.push with newViewType', () => {
+      wrapper.vm.onViewTypeUpdate('changed');
+      expect(mockPush).toHaveBeenCalledTimes(1);
+      expect(mockPush).toHaveBeenCalledWith({
+        name: 'modelizer',
+        params: {
+          viewType: 'changed',
+          projectName: wrapper.vm.props.projectName,
+        },
+        query: wrapper.vm.query,
+      });
     });
   });
 
