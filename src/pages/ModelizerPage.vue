@@ -2,7 +2,7 @@
   <q-layout
     class="modelizer-page column"
   >
-    <modelizer-navigation-bar
+    <navigation-bar
       :project-name="projectName"
       :view-type="viewType"
     />
@@ -37,7 +37,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar';
+import NavigationBar from 'src/components/NavigationBar';
 import ModelizerModelView from 'src/components/ModelizerModelView';
 import ModelizerTextView from 'src/components/ModelizerTextView';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog';

@@ -3,7 +3,7 @@
     class="models-page column"
     data-cy="models-page"
   >
-    <modelizer-navigation-bar
+    <navigation-bar
       :view-type="'models'"
       :project-name="projectName"
     />
@@ -26,7 +26,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar';
+import NavigationBar from 'src/components/NavigationBar';
 import ModelsView from 'src/components/ModelsView';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog';
 import CreateModelDialog from 'components/dialog/CreateModelDialog';

@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar.vue';
+import NavigationBar from 'src/components/NavigationBar.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
@@ -53,7 +53,7 @@ jest.mock('src/composables/Project', () => ({
   }),
 }));
 
-describe('Test component: ModelizerNavigationBar', () => {
+describe('Test component: NavigationBar', () => {
   let wrapper;
   let addRemoteSubscribe;
   let addRemoteUnsubscribe;
@@ -89,7 +89,7 @@ describe('Test component: ModelizerNavigationBar', () => {
       push: mockPush,
     }));
 
-    wrapper = shallowMount(ModelizerNavigationBar, {
+    wrapper = shallowMount(NavigationBar, {
       props: {
         viewType: 'model',
         projectName: 'projectTest',
