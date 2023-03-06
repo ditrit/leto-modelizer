@@ -11,7 +11,7 @@
           icon="fa-solid fa-plus"
           data-cy="new-project"
           :label="$t('actions.home.newProject')"
-          @click="createProject"
+          @click="DialogEvent.next({ type: 'open', key: 'NewProject' })"
         />
         <q-btn
           outline
@@ -44,8 +44,6 @@
 
 <script setup>
 import ProjectCard from 'src/components/card/ProjectCard.vue';
-import { useRouter } from 'vue-router';
-import { createProjectTemplate, initProject } from 'src/composables/Project';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 defineProps({
@@ -54,16 +52,6 @@ defineProps({
     required: true,
   },
 });
-const router = useRouter();
-
-/**
- * Create project on fs, init project on git and redirect to project page.
- */
-async function createProject() {
-  const project = createProjectTemplate();
-  await initProject(project);
-  router.push(`/modelizer/${project.id}/models`);
-}
 </script>
 
 <style scoped>

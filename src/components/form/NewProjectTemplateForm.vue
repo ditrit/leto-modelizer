@@ -4,8 +4,24 @@
     class="q-gutter-md new-project-template-form"
     data-cy="new-project-template-form"
   >
+    <q-input
+      v-model="projectName"
+      :label="$t('page.home.project.name')"
+      :rules="[
+        v => notEmpty($t, v),
+        v => isUniqueProjectName($t, Object.keys(getProjects()), v)
+      ]"
+      filled
+      lazy-rules
+      data-cy="project-name-input"
+    />
+    <q-checkbox
+      v-model="localIsChecked"
+      class="q-mb-sm"
+      :label="$t('page.home.template.import')"
+    />
     <template
-      v-if="isImportAction"
+      v-if="isChecked"
     >
       <q-input
         v-model="repository"
@@ -50,25 +66,29 @@
 <script setup>
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
-import { notEmpty, isGitRepositoryUrl } from 'src/composables/QuasarFieldRule';
+import { ref, watch } from 'vue';
+import {
+  notEmpty,
+  isGitRepositoryUrl,
+  isUniqueProjectName,
+} from 'src/composables/QuasarFieldRule';
 import {
   importProject,
   appendProjectFile,
   initProject,
+  getProjects,
 } from 'src/composables/Project';
 import { getTemplateFileByPath } from 'src/composables/TemplateManager';
 import { FileInput } from 'leto-modelizer-plugin-core';
-import { randomHexString } from 'src/composables/Random';
 
-const emit = defineEmits(['project:add']);
+const emit = defineEmits(['project:add', 'update:checked']);
 
 const props = defineProps({
   template: {
     type: Object,
     required: true,
   },
-  isImportAction: {
+  isChecked: {
     type: Boolean,
     default: false,
   },
@@ -76,6 +96,8 @@ const props = defineProps({
 
 const { t } = useI18n();
 const project = {};
+const projectName = ref('');
+const localIsChecked = ref(props.isChecked);
 const repository = ref();
 const username = ref();
 const token = ref();
@@ -87,16 +109,14 @@ const submitting = ref(false);
 function onSubmit() {
   submitting.value = true;
 
-  const newProjectName = repository.value ? repository.value.split('/').at(-1) : 'project-template';
-
-  project.id = `${newProjectName}-${randomHexString(8)}`;
+  project.id = projectName.value;
   project.git = {
     repository: repository.value,
     username: username.value,
     token: token.value,
   };
 
-  const addProject = props.isImportAction
+  const addProject = localIsChecked.value
     ? importProject(project)
     : initProject(project);
 
@@ -121,7 +141,7 @@ function onSubmit() {
       emit('project:add', project.id);
       Notify.create({
         type: 'positive',
-        message: t(`actions.home.${props.isImportAction ? 'imported' : 'created'}Project`),
+        message: t(`actions.home.${localIsChecked.value ? 'imported' : 'created'}Project`),
         html: true,
       });
     })
@@ -136,6 +156,16 @@ function onSubmit() {
       submitting.value = false;
     });
 }
+
+watch(() => localIsChecked.value, () => {
+  if (localIsChecked.value !== props.isChecked) {
+    emit('update:checked', localIsChecked.value);
+  }
+});
+
+watch(() => props.isChecked, () => {
+  localIsChecked.value = props.isChecked;
+});
 </script>
 
 <style lang="scss" scoped>

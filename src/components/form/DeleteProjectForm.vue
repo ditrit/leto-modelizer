@@ -69,7 +69,7 @@ function onSubmit() {
     .catch(() => {
       Notify.create({
         type: 'negative',
-        message: t('errors.project.delete'),
+        message: t('errors.projects.delete'),
         html: true,
       });
     })

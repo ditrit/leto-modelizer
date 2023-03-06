@@ -143,3 +143,16 @@ export function isNumberTooSmall(t, value, min) {
 export function isNumberTooBig(t, value, max) {
   return !max || value <= max || t('errors.rules.number.max', { max });
 }
+
+/**
+ * Check if a project name does not already exist.
+ * @param {Function} t - I18n translate function.
+ * @param {Array} projects - List of project names.
+ * @param {String} value - Value to check.
+ * @return {boolean|String} Return true if the project name doesn't already exist,
+ * otherwise the translated error message.
+ */
+export function isUniqueProjectName(t, projects, value) {
+  return projects.every((project) => project !== value)
+    || t('errors.projects.duplicate');
+}

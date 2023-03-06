@@ -7,13 +7,14 @@ Feature: Test homepage: project deletion
 
   Scenario: Delete existing project
     When I click on "[data-cy=\"new-project\"]"
-    Then I expect current url is "modelizer/project-[a-f0-9]{8}/model"
-    And  I extract "project-[a-f0-9]{8}" from url in field "projectName" of context
+    And  I set on "[data-cy=\"new-project-form\"] [data-cy=\"project-name-input\"]" text "projectName"
+    And  I click on "[data-cy=\"new-project-form\"] [data-cy=\"new-project-form-submit\"]"
+    Then I expect current url is "modelizer/projectName/model"
 
     When I click on "[data-cy=\"app-logo-link\"]"
     Then I expect current url is "/"
 
-    When I click on "[data-cy=\"delete-project-{{ projectName }}\"]"
+    When I click on "[data-cy=\"delete-project-projectName\"]"
     And  I click on "[data-cy=\"delete-project-form\"] [data-cy=\"confirm-delete-project-checkbox\"]"
     And  I click on "[data-cy=\"delete-project-form\"] [data-cy=\"delete-project-form-submit\"]"
     Then I expect "positive" toast to appear with text "Project has been deleted 😥"

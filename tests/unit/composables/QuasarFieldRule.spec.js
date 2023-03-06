@@ -11,6 +11,7 @@ import {
   isNumber,
   isNumberTooSmall,
   isNumberTooBig,
+  isUniqueProjectName,
 } from 'src/composables/QuasarFieldRule';
 
 describe('Test composable: InputRule', () => {
@@ -186,6 +187,17 @@ describe('Test composable: InputRule', () => {
     it('should return string error message', () => {
       const key = 'errors.rules.number.max';
       expect(isNumberTooBig(t, 4, 3)).toEqual(key);
+    });
+  });
+
+  describe('Test function: isUniqueProjectName', () => {
+    it('should return true when value does not exist in given project names array', () => {
+      expect(isUniqueProjectName(t, ['projectId'], 'test')).toBe(true);
+    });
+
+    it('should return the error message when value already exists in given project names array', () => {
+      const key = 'errors.projects.duplicate';
+      expect(isUniqueProjectName(t, ['duplicate'], 'duplicate')).toEqual(key);
     });
   });
 });

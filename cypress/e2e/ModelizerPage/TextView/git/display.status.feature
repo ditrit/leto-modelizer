@@ -6,9 +6,11 @@ Feature: Test modelizer text view: git status display
     And   I visit the "/"
 
     When I click on "[data-cy=\"new-project\"]"
-    Then I expect current url is "/modelizer/project-[a-f0-9]{8}/model"
-    And  I extract "project-[a-f0-9]{8}" from url in field "projectName" of context
-    And  I visit the "/#/modelizer/{{projectName}}/text"
+    And  I set on "[data-cy=\"new-project-form\"] [data-cy=\"project-name-input\"]" text "projectName"
+    And  I click on "[data-cy=\"new-project-form\"] [data-cy=\"new-project-form-submit\"]"
+    Then I expect current url is "/modelizer/projectName/model"
+
+    When I visit the "/#/modelizer/projectName/text"
 
   Scenario: Display dialog containing an empty list
     When I click on "[data-cy=\"git-current-branch\"]"
@@ -20,8 +22,8 @@ Feature: Test modelizer text view: git status display
 
   Scenario: Display file status changes in status dialog
     #  Create a file
-    When I hover "[data-cy=\"file-explorer-buttons-{{ projectName }}\"]" to make it visible
-    And  I click on "[data-cy=\"file-explorer-buttons-{{ projectName }}\"]"
+    When I hover "[data-cy=\"file-explorer-buttons-projectName\"]" to make it visible
+    And  I click on "[data-cy=\"file-explorer-buttons-projectName\"]"
     And  I click on "[data-cy=\"file-explorer-menu-create-file\"]"
     Then I expect "[data-cy=\"create-file-dialog\"]" exists
 

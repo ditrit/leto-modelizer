@@ -1,5 +1,4 @@
 import {
-  createProjectTemplate,
   getProjects,
   getProjectById,
   getProjectName,
@@ -34,6 +33,7 @@ import {
   getPluginModels,
   getAllModels,
   getModelFiles,
+  renameProject,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -86,10 +86,6 @@ jest.mock('isomorphic-git', () => ({
   add: jest.fn(() => Promise.resolve('add')),
   commit: jest.fn(() => Promise.resolve('SHA-1')),
   log: jest.fn(() => Promise.resolve(['log'])),
-}));
-
-jest.mock('src/composables/Random', () => ({
-  randomHexString: () => '00000000',
 }));
 
 jest.mock('browserfs', () => ({
@@ -176,15 +172,6 @@ describe('Test composable: Project', () => {
     git.add.mockImplementation(gitAddMock);
     git.fetch.mockImplementation(gitFetchMock);
     git.addRemote.mockImplementation(gitAddRemoteMock);
-  });
-
-  describe('Test function: createProjectTemplate', () => {
-    it('should return project with generated ID', () => {
-      const project = createProjectTemplate();
-
-      expect(project).toBeDefined();
-      expect(project.id).toEqual('project-00000000');
-    });
   });
 
   describe('Test function: getProjects', () => {
@@ -668,5 +655,19 @@ describe('Test composable: Project', () => {
 
       expect(Array.isArray(array)).toBeTruthy();
     });
+  });
+});
+
+describe('Test function: renameProject', () => {
+  it('should rename a project', async () => {
+    localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
+      foo: { id: 'foo' },
+    }));
+    await renameProject('foo', 'bar');
+
+    const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
+
+    expect(projects.foo).not.toBeDefined();
+    expect(projects.bar).toStrictEqual({ id: 'bar' });
   });
 });

@@ -43,18 +43,14 @@
           </q-carousel-slide>
         </q-carousel>
       </div>
-      <div class="text-subtitle2">
+      <div class="text-subtitle2 q-pb-md">
         {{ $t('page.home.template.selected', { template: templateName }) }}
       </div>
-      <q-checkbox
-        v-model="isChecked"
-        class="q-mb-md"
-        :label="$t('page.home.template.import')"
-      />
       <new-project-template-form
         @project:add="addProject"
+        @update:checked="e => isChecked = e"
         :template="projectTemplate"
-        :isImportAction="isChecked"
+        :isChecked="isChecked"
       />
     </template>
   </default-dialog>
