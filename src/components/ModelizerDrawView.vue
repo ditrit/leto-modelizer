@@ -36,7 +36,6 @@ import {
   reactive,
   ref,
   computed,
-  watch,
 } from 'vue';
 import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer';
 import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
@@ -78,7 +77,6 @@ const props = defineProps({
     required: true,
   },
 });
-const viewType = computed(() => route.params.viewType);
 
 const data = reactive({
   plugin: null,
@@ -209,12 +207,6 @@ async function dropHandler(event) {
 
   PluginEvent.RenderEvent.next(files);
 }
-
-watch(() => viewType.value, () => {
-  if (viewType.value === 'model') {
-    updatePluginsAndTemplates();
-  }
-});
 
 onMounted(() => {
   updatePluginsAndTemplates();
