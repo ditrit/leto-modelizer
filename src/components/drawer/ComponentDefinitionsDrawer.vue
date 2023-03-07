@@ -24,7 +24,10 @@
         :label="$t('page.modelizer.drawer.components.filterLabel')"
       >
         <template v-slot:prepend>
-          <q-icon name="fa-solid fa-magnifying-glass" />
+          <q-icon
+            name="fa-solid fa-magnifying-glass"
+            class="q-ml-md"
+          />
         </template>
       </q-input>
       <q-list text-white>
@@ -39,7 +42,7 @@
         >
           <template v-slot:header>
             <q-item-section data-cy="plugin-definitions-title">
-              {{ plugin.data.name }}
+              {{ $t('page.modelizer.drawer.components.title') }}
             </q-item-section>
           </template>
           <q-scroll-area
