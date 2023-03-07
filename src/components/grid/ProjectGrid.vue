@@ -35,6 +35,7 @@
       <div
         v-if="Object.keys(projects).length === 0"
         class="row text-center text-h6 text-grey empty-grid"
+        data-cy="project-grid-empty"
       >
         {{ $t('page.home.project.empty') }}
       </div>
