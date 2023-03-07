@@ -4,7 +4,6 @@
   >
     <navigation-bar
       :project-name="projectName"
-      :view-type="viewType"
     />
     <q-page-container>
       <q-page

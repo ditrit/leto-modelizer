@@ -13,6 +13,11 @@ installQuasarPlugin({
 });
 
 jest.mock('vue-router', () => ({
+  useRoute: jest.fn(() => ({
+    params: {
+      viewType: 'draw',
+    },
+  })),
   useRouter: jest.fn(),
 }));
 
@@ -91,7 +96,6 @@ describe('Test component: NavigationBar', () => {
 
     wrapper = shallowMount(NavigationBar, {
       props: {
-        viewType: 'model',
         projectName: 'projectTest',
       },
       global: {
@@ -103,12 +107,6 @@ describe('Test component: NavigationBar', () => {
   });
 
   describe('Test variables initialization', () => {
-    describe('Test prop: viewType', () => {
-      it('should match "model"', () => {
-        expect(wrapper.vm.props.viewType).toEqual('model');
-      });
-    });
-
     describe('Test prop: projectName', () => {
       it('should match "projectTest"', () => {
         expect(wrapper.vm.props.projectName).toEqual('projectTest');
@@ -116,8 +114,8 @@ describe('Test component: NavigationBar', () => {
     });
 
     describe('Test ref: buttonToggleValue', () => {
-      it('should match "model"', () => {
-        expect(wrapper.vm.props.viewType).toEqual('model');
+      it('should match "draw"', () => {
+        expect(wrapper.vm.buttonToggleValue).toEqual('draw');
       });
     });
   });
@@ -245,16 +243,6 @@ describe('Test component: NavigationBar', () => {
         },
         query: wrapper.vm.query,
       });
-    });
-  });
-
-  describe('Test watcher: props.viewType', () => {
-    it('should be triggered when props.viewType is updated with a different value', async () => {
-      await wrapper.setProps({
-        viewType: 'text',
-        projectName: 'projectTest',
-      });
-      expect(wrapper.vm.buttonToggleValue).toEqual('text');
     });
   });
 

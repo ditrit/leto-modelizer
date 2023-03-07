@@ -45,7 +45,7 @@
         </template>
       </q-btn>
       <q-btn-toggle
-        v-show="viewType !== 'models'"
+        v-if="buttonToggleValue"
         v-model="buttonToggleValue"
         :options="buttonToggleOptions"
         class="view-selector q-mr-md"
@@ -66,7 +66,6 @@
 import {
   computed,
   ref,
-  watch,
   onMounted,
   onUnmounted,
 } from 'vue';
@@ -85,10 +84,6 @@ const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 const props = defineProps({
-  viewType: {
-    type: String,
-    required: true,
-  },
   projectName: {
     type: String,
     required: true,
@@ -101,7 +96,7 @@ let authenticationSubscription;
 const query = computed(() => route.query);
 const isLoading = ref(false);
 const project = ref(getProjectById(props.projectName));
-const buttonToggleValue = ref(props.viewType);
+const buttonToggleValue = ref(route.params.viewType);
 const buttonToggleOptions = computed(() => [{
   label: t('page.modelizer.header.switch.draw'),
   value: 'draw',
@@ -170,10 +165,6 @@ function onViewTypeUpdate(newViewType) {
 function setProject() {
   project.value = getProjectById(props.projectName);
 }
-
-watch(() => props.viewType, (newViewType) => {
-  buttonToggleValue.value = newViewType;
-})
 
 onMounted(() => {
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(setProject);

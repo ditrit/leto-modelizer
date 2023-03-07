@@ -4,7 +4,6 @@
     data-cy="models-page"
   >
     <navigation-bar
-      :view-type="'models'"
       :project-name="projectName"
     />
     <q-page-container>
