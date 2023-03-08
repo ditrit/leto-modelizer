@@ -168,7 +168,7 @@ jobs:
           npm run plugin:init
       - name: Build production
         run: |
-          TEMPLATE_LIBRARY_BASE_URL="https://raw.githubusercontent.com/ditrit/leto-modelizer-templates-library/main" \
+          TEMPLATE_LIBRARY_BASE_URL="https://raw.githubusercontent.com/ditrit/leto-modelizer-templates-library/leto-modelizer/e2e_test" \
           CORS_ISOMORPHIC_BASE_URL="http://localhost:9999" \
           npm run build
       - name: Build application
