@@ -1,18 +1,14 @@
 ARG proxy_url
-# Develop stage
-FROM node:18.12-alpine as develop-stage
+# Build stage
+FROM node:18.12-alpine as build-stage
 ARG proxy_url
 WORKDIR /app
 COPY . .
-
-# Build stage
-FROM develop-stage as build-stage
-ARG proxy_url
-WORKDIR /app
-RUN CORS_ISOMORPHIC_BASE_URL="${proxy_url}" npm run build
+RUN TEMPLATE_LIBRARY_BASE_URL="https://raw.githubusercontent.com/ditrit/leto-modelizer-templates-library/leto-modelizer/e2e_test" CORS_ISOMORPHIC_BASE_URL="/cors-proxy" npm run build
 
 # Production stage
 FROM nginx:1.18.0-alpine as production-stage
 COPY --from=build-stage /app/dist/spa /usr/share/nginx/html
+COPY --from=build-stage /app/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
