@@ -156,3 +156,17 @@ export function isUniqueProjectName(t, projects, value) {
   return projects.every((project) => project !== value)
     || t('errors.projects.duplicate');
 }
+
+/**
+ * Check if a model name for a plugin does not already exist.
+ * @param {Function} t - I18n translate function.
+ * @param {Array} models - List of model names.
+ * @param {String} plugin - Selected plugin.
+ * @param {String} value - Value to check.
+ * @return {boolean|String} Return true if the model name doesn't already exist,
+ * otherwise the translated error message.
+ */
+export function isUniqueModel(t, models, plugin, value) {
+  return models.every((model) => !(model.name === value && model.plugin === plugin))
+    || t('errors.models.duplicate');
+}

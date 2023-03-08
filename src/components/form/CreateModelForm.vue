@@ -11,6 +11,7 @@
       lazy-rules
       :rules="[
         (v) => notEmpty($t, v),
+        v => isUniqueModel($t, models, modelPlugin, v)
       ]"
       data-cy="name-input"
     />
@@ -44,10 +45,10 @@
 <script setup>
 import { Notify } from 'quasar';
 import { getPlugins } from 'src/composables/PluginManager';
-import { reactive, ref } from 'vue';
-import { notEmpty } from 'src/composables/QuasarFieldRule';
+import { onMounted, reactive, ref } from 'vue';
+import { isUniqueModel, notEmpty } from 'src/composables/QuasarFieldRule';
 import { useI18n } from 'vue-i18n';
-import { createProjectFolder } from 'src/composables/Project';
+import { createProjectFolder, getAllModels } from 'src/composables/Project';
 import { useRouter } from 'vue-router';
 
 const { t } = useI18n();
@@ -64,11 +65,12 @@ const plugins = reactive(getPlugins());
 const modelName = ref(null);
 const modelPlugin = ref(plugins[0]?.data.name);
 const submitting = ref(false);
+const models = ref([]);
 
 /**
  * Create a new model folder and its parent folders if necessary.
  * Emit a positive notification on success and redirect to model page.
- * Otherwise, emit an negative notification.
+ * Otherwise, emit a negative notification.
  * @return {Promise<void>} Promise with nothing on success or error.
  */
 async function onSubmit() {
@@ -111,4 +113,10 @@ async function onSubmit() {
       submitting.value = false;
     });
 }
+
+onMounted(() => {
+  getAllModels(props.projectName).then((array) => {
+    models.value = array;
+  });
+});
 </script>

@@ -31,6 +31,7 @@ jest.mock('src/composables/Project', () => ({
     }
     return Promise.resolve();
   }),
+  getAllModels: jest.fn(() => Promise.resolve([])),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({

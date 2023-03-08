@@ -148,6 +148,9 @@ export default {
       delete: 'An error occured while deleting project.',
       create: 'An error occured while creating project.',
     },
+    models: {
+      duplicate: 'Model name already exists for this plugin.',
+    },
     templates: {
       getData: 'An error occured while fetching remote template data.',
     },
