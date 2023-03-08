@@ -162,21 +162,6 @@ describe('Test composable: PluginManager', () => {
     });
   });
 
-  describe('Test function: renderPlugin', () => {
-    it('should return updated file and emit a RenderEvent', async () => {
-      await PluginManager.initPlugins();
-
-      const plugin = PluginManager.getPluginByName('test');
-
-      plugin.render = jest.fn(() => [{ path: 'path', content: 'content' }]);
-      plugin.isParsable = jest.fn(() => true);
-
-      const files = await PluginManager.renderPlugin('test', 'projectId');
-
-      expect(files).toEqual([{ path: 'path', content: 'content' }]);
-    });
-  });
-
   describe('Test function: renderModel', () => {
     it('should return an array', async () => {
       const plugin = {

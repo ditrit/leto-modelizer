@@ -127,28 +127,6 @@ export function isParsableFile(file) {
 }
 
 /**
- * Call render from selected plugin for specific project.
- *
- * @param {String} pluginName - Plugin name.
- * @param {String} projectId - Id of project.
- * @return {Promise<FileInput[]>} Promise with updated files by render on success otherwise
- * an error.
- */
-export async function renderPlugin(pluginName, projectId) {
-  const plugin = getPluginByName(pluginName);
-  const config = new FileInput({
-    path: 'leto-modelizer.config.json',
-    content: '{}',
-  });
-  const files = await getProjectFiles(projectId);
-
-  return Promise.allSettled(
-    plugin.render(config, files.filter((file) => plugin.isParsable(file)))
-      .map((file) => writeProjectFile(projectId, file).then(() => file)),
-  ).then((allResults) => allResults.map((item) => item.value));
-}
-
-/**
  * Render the given model with the corresponding pugin.
  * Return rendered files.
  * @param {String} projectId - ID of the project.
