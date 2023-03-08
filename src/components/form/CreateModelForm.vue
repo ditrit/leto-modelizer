@@ -22,6 +22,7 @@
       :rules="[
         (v) => notEmpty($t, v),
       ]"
+      data-cy="plugin-select"
     />
     <div class="flex row items-center justify-center">
       <q-btn

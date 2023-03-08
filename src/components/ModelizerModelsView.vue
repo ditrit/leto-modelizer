@@ -15,6 +15,7 @@
             type: 'open',
             key: 'CreateModel',
           })"
+          data-cy="create-model-button"
         />
       </div>
       <div
