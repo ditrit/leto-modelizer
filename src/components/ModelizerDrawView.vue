@@ -43,6 +43,8 @@ import {
   getPluginByName,
   getFileInputs,
   renderModel,
+  addNewComponent,
+  addNewTemplateComponent,
 } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { Notify } from 'quasar';
@@ -50,15 +52,10 @@ import { useI18n } from 'vue-i18n';
 import {
   readDir,
   readProjectFile,
-  appendProjectFile,
 } from 'src/composables/Project';
-import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
+import { FileInformation } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
-import {
-  generateTemplate,
-  getTemplateFileByPath,
-  getTemplatesByType,
-} from 'src/composables/TemplateManager';
+import { getTemplatesByType } from 'src/composables/TemplateManager';
 import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay';
 
 const route = useRoute();
@@ -175,37 +172,38 @@ async function updatePluginsAndTemplates() {
  */
 async function dropHandler(event) {
   const dropData = JSON.parse(event.dataTransfer.getData('text/plain'));
-  const modelFolder = process.env.MODELS_DEFAULT_FOLDER
-    ? `${process.env.MODELS_DEFAULT_FOLDER}/${route.query.path}`
-    : `${route.query.path}`;
 
-  let files;
+  if (!dropData.isTemplate) {
+    const componentDefinition = data.plugin.data.definitions.components
+      .find(({ type }) => type === dropData.definitionType);
 
-  if (dropData.isTemplate) {
-    const activeTemplate = templates.value.find(
+    await addNewComponent(
+      route.params.projectName,
+      data.plugin,
+      `${defaultFolder.value}${route.query.path}`,
+      componentDefinition,
+    );
+    data.plugin.draw('root');
+  } else {
+    const templateDefinition = templates.value.find(
       ({ key }) => key === dropData.definitionType,
     );
 
-    files = await renderModel(route.params.projectName, modelFolder, data.plugin);
-
-    await Promise.all(activeTemplate.files
-      .map((file) => getTemplateFileByPath(`templates/${activeTemplate.key}/${file}`)
-        .then(({ data: fileContent }) => appendProjectFile(route.params.projectName, new FileInput({
-          path: `${modelFolder}/${file}`,
-          content: generateTemplate(fileContent),
-        })))
-        .catch(() => {
-          notifyError();
-        })));
-  } else {
-    const newComponentDefinition = data.plugin.data.definitions.components
-      .find(({ type }) => type === dropData.definitionType);
-
-    data.plugin.data.addComponent(newComponentDefinition, `${modelFolder}/`);
-    files = await renderModel(route.params.projectName, modelFolder, data.plugin);
+    await addNewTemplateComponent(
+      route.params.projectName,
+      data.plugin,
+      `${defaultFolder.value}${route.query.path}`,
+      templateDefinition,
+    ).then(() => {
+      data.plugin.draw('root');
+    }).catch(() => {
+      Notify.create({
+        type: 'negative',
+        message: t('errors.templates.getData'),
+        html: true,
+      });
+    });
   }
-
-  PluginEvent.RenderEvent.next(files);
 }
 
 onMounted(() => {

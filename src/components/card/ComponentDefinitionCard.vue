@@ -49,16 +49,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import {
+  addNewComponent,
+  addNewTemplateComponent,
   getPluginByName,
-  renderModel,
 } from 'src/composables/PluginManager';
-import { generateTemplate, getTemplateFileByPath } from 'src/composables/TemplateManager';
-import { appendProjectFile } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
-import PluginEvent from 'src/composables/events/PluginEvent';
-import { FileInput } from 'leto-modelizer-plugin-core';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import DefinitionMenu from 'components/menu/DefinitionMenu.vue';
@@ -75,6 +72,10 @@ const props = defineProps({
     required: true,
   },
 });
+
+const plugin = ref(getPluginByName(props.pluginName));
+const projectName = computed(() => route.params.projectName);
+const query = computed(() => route.query);
 
 /**
  * Setup drag data.
@@ -114,41 +115,36 @@ const componentIcon = computed(() => {
 /**
  * On plugin definition click, add a new component to the plugin components.
  * On template definition click, get all related remote files and append them to existing files.
- * Then emit RenderEvent.
  */
 async function onClickItem() {
-  const { projectName } = route.params;
-  const pluginName = props.pluginName || props.definition.plugin;
-  const plugin = getPluginByName(pluginName);
-  const modelFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${process.env.MODELS_DEFAULT_FOLDER}/${route.query.path}`
-    : `${route.query.path}`;
-
-  let files;
+  const defaultFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
+    ? `${process.env.MODELS_DEFAULT_FOLDER}/`
+    : '';
 
   if (!props.definition.isTemplate) {
-    plugin.data.addComponent(props.definition, `${modelFolder}/`);
-
-    files = await renderModel(route.params.projectName, modelFolder, plugin);
+    await addNewComponent(
+      projectName.value,
+      plugin.value,
+      `${defaultFolder}${query.value.path}`,
+      props.definition,
+    );
+    plugin.value.draw('root');
   } else {
-    files = await renderModel(route.params.projectName, modelFolder, plugin);
-
-    await Promise.allSettled(props.definition.files
-      .map((file) => getTemplateFileByPath(`templates/${props.definition.key}/${file}`)
-        .then((result) => appendProjectFile(projectName, new FileInput({
-          path: `${modelFolder}/${file}`,
-          content: generateTemplate(result.data),
-        })))
-        .catch(() => {
-          Notify.create({
-            type: 'negative',
-            message: t('errors.templates.getData'),
-            html: true,
-          });
-        })));
+    addNewTemplateComponent(
+      projectName.value,
+      plugin.value,
+      `${defaultFolder}${query.value.path}`,
+      props.definition,
+    ).then(() => {
+      plugin.value.draw('root');
+    }).catch(() => {
+      Notify.create({
+        type: 'negative',
+        message: t('errors.templates.getData'),
+        html: true,
+      });
+    });
   }
-
-  PluginEvent.RenderEvent.next(files);
 }
 </script>
 

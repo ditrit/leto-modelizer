@@ -1,5 +1,8 @@
 import { templateLibraryApiClient } from 'boot/axios';
-import { ComponentDefinition } from 'leto-modelizer-plugin-core';
+import {
+  ComponentDefinition,
+  FileInput,
+} from 'leto-modelizer-plugin-core';
 import nunjucks from 'nunjucks';
 import { randomHexString } from 'src/composables/Random';
 
@@ -76,4 +79,22 @@ export function generateTemplate(content) {
   return nunjucks.renderString(content, {
     generateId: (prefix) => `${prefix || ''}${randomHexString(6)}`,
   });
+}
+
+/**
+ * Get files of the templates.
+ * @param {String} path - Model path (Plugin name & model name).
+ * @param {Object} templateDefinition - Definition of the template.
+ * @return {Promise<FileInput[]>} Promise with a FileInput array on success otherwise an error.
+ */
+export async function getTemplateFiles(path, templateDefinition) {
+  return Promise.all(
+    templateDefinition.files.map(
+      (file) => getTemplateFileByPath(`templates/${templateDefinition.key}/${file}`)
+        .then(({ data }) => new FileInput({
+          path: `${path}/${file}`,
+          content: generateTemplate(data),
+        })),
+    ),
+  );
 }

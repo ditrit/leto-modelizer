@@ -9,6 +9,12 @@ jest.mock('src/boot/axios', () => ({
   },
 }));
 
+jest.mock('src/composables/Project', () => ({
+  readProjectFile: jest.fn(() => Promise.resolve({ id: 'TEST' })),
+  appendProjectFile: jest.fn(() => Promise.resolve()),
+  readDir: jest.fn(() => Promise.resolve([])),
+}));
+
 describe('Test composable: TemplateManager', () => {
   describe('Test function: getTemplateFileByPath', () => {
     it('should return a request containing object with data', async () => {
@@ -164,6 +170,17 @@ describe('Test composable: TemplateManager', () => {
 
     it('should generate content without prefix', () => {
       expect(generateTemplate('{{generateId()}}')).toEqual(expect.stringMatching(/^.{6}$/));
+    });
+  });
+
+  describe(' Test Function: getTemplateFiles', () => {
+    it('should return an array containing 1 item', async () => {
+      const definition = {
+        files: ['filename'],
+      };
+      const result = await TemplateManager.getTemplateFiles('path', definition);
+
+      expect(result.length).toEqual(1);
     });
   });
 });

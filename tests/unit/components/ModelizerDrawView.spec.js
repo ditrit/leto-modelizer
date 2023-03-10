@@ -53,6 +53,8 @@ jest.mock('src/composables/PluginManager', () => ({
   getFileInputs: jest.fn(),
   renderModel: jest.fn(() => [{ path: 'path' }]),
   renderPlugin: jest.fn(() => Promise.resolve([])),
+  addNewComponent: jest.fn(),
+  addNewTemplateComponent: jest.fn(),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
@@ -229,74 +231,51 @@ describe('Test component: ModelizerDrawView', () => {
   });
 
   describe('Test function: dropHandler', () => {
-    let event;
-
-    beforeEach(() => {
-      event = {
-        preventDefault: jest.fn(),
+    it('should call addNewComponent() when isTemplate is false', async () => {
+      const event = {
         dataTransfer: {
-          getData: jest.fn(),
+          getData: () => JSON.stringify({ isTemplate: false }),
         },
       };
-    });
+      const addNewComponent = jest.fn();
 
-    it.each([
-      ['', 'path'],
-      ['test', 'test/path'],
-    ])(`should add component to plugin, call renderModel then emit RenderEvent 
-    when dropping a plugin component with models path set to "%s"`, async (modelFolder, destinationPath) => {
-      process.env.MODELS_DEFAULT_FOLDER = modelFolder;
-
-      event.dataTransfer.getData.mockReturnValueOnce(JSON.stringify({
-        isTemplate: false,
-        pluginName: 'pluginName',
-        definitionType: 'testComponent',
-      }));
+      PluginManager.addNewComponent.mockImplementation(addNewComponent);
 
       await wrapper.vm.dropHandler(event);
 
-      expect(testPlugin.data.addComponent).toBeCalledWith({ type: 'testComponent', isTemplate: false, icon: 'icon' }, `${destinationPath}/`);
-      expect(PluginManager.renderModel).toBeCalledWith('project-00000000', destinationPath, expect.objectContaining({
-        data: expect.objectContaining({ name: 'pluginName' }),
-      }));
-      expect(PluginEvent.RenderEvent.next).toBeCalled();
+      expect(addNewComponent).toHaveBeenCalledTimes(1);
     });
 
-    it.each([
-      ['', 'path'],
-      ['test', 'test/path'],
-    ])(`should call appendProjectFile, renderModel then emit RenderEvent 
-    when dropping a template component with models path set to "%s"`, async (modelFolder, destinationPath) => {
-      process.env.MODELS_DEFAULT_FOLDER = modelFolder;
-      event.dataTransfer.getData.mockReturnValueOnce(JSON.stringify({
-        isTemplate: true,
-        pluginName: 'pluginName',
-        definitionType: 'testTemplate',
-      }));
+    it('should call addNewTemplateComponent() when isTemplate is true', async () => {
+      const event = {
+        dataTransfer: {
+          getData: () => JSON.stringify({ isTemplate: true }),
+        },
+      };
+      const addNewTemplateComponent = jest.fn(() => Promise.resolve());
+
+      PluginManager.addNewTemplateComponent.mockImplementation(addNewTemplateComponent);
 
       await wrapper.vm.dropHandler(event);
 
-      expect(PluginManager.renderModel).toBeCalledWith('project-00000000', destinationPath, expect.objectContaining({
-        data: expect.objectContaining({ name: 'pluginName' }),
-      }));
-      expect(appendProjectFileMock).toHaveBeenCalled();
-      expect(PluginEvent.RenderEvent.next).toBeCalled();
+      expect(addNewTemplateComponent).toHaveBeenCalledTimes(1);
     });
 
-    it(`should emit a negative notification when an error occured while getting template file 
-    after dropping a template component`, async () => {
+    it(`should call addNewTemplateComponent() and notify an erreur
+      when isTemplate is true but download failed`, async () => {
+      const event = {
+        dataTransfer: {
+          getData: () => JSON.stringify({ isTemplate: true }),
+        },
+      };
+      const addNewTemplateComponent = jest.fn(() => Promise.reject());
       Notify.create = jest.fn();
 
-      TemplateManager.getTemplateFileByPath.mockReturnValueOnce(Promise.reject());
-
-      event.dataTransfer.getData.mockReturnValueOnce(JSON.stringify({
-        isTemplate: true,
-        pluginName: 'pluginName',
-        definitionType: 'testTemplate',
-      }));
+      PluginManager.addNewTemplateComponent.mockImplementation(addNewTemplateComponent);
 
       await wrapper.vm.dropHandler(event);
 
+      expect(addNewTemplateComponent).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith({
         message: 'errors.templates.getData',
         html: true,
