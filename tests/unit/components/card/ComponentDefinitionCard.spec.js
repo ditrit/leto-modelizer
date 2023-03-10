@@ -227,7 +227,7 @@ describe('Test component: ComponentDefinitionCard', () => {
           key: 'template key',
           plugin: 'pluginName',
         },
-        pluginName: '',
+        pluginName: 'pluginName',
       });
 
       wrapper.vm.dragStartHandler(event);

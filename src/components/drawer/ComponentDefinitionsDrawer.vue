@@ -71,7 +71,10 @@
             :style="`height: calc(100vh - ${scrollAreaHeight(definitions)}px);`"
             class="sunken-area"
           >
-            <component-definition-grid :definitions="templates" />
+            <component-definition-grid
+              :definitions="templates"
+              :plugin-name="plugin.data.name"
+            />
           </q-scroll-area>
           <div
             v-else

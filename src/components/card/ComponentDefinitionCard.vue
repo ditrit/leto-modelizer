@@ -72,7 +72,7 @@ const props = defineProps({
   },
   pluginName: {
     type: String,
-    default: '',
+    required: true,
   },
 });
 
@@ -83,7 +83,7 @@ const props = defineProps({
  */
 function dragStartHandler(event) {
   const dragData = {
-    pluginName: props.pluginName || props.definition.plugin,
+    pluginName: props.pluginName,
     isTemplate: props.definition.isTemplate,
     definitionType: props.definition.isTemplate ? props.definition.key : props.definition.type,
   };

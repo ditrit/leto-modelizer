@@ -30,7 +30,7 @@ defineProps({
   },
   pluginName: {
     type: String,
-    default: '',
+    required: true,
   },
 });
 const disablePagination = ref({ rowsPerPage: 0 });
