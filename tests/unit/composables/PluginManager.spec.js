@@ -35,7 +35,6 @@ jest.mock('src/plugins', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  getProjectFiles: jest.fn(() => Promise.resolve([{ path: 'path', content: 'content' }])),
   getModelFiles: jest.fn(() => Promise.resolve([{ path: 'path', content: 'content' }])),
   writeProjectFile: jest.fn(() => Promise.resolve()),
   deleteProjectFile: jest.fn(() => Promise.resolve()),
@@ -230,24 +229,6 @@ describe('Test composable: PluginManager', () => {
 
       expect(Array.isArray(result)).toBeTruthy();
       expect(result.length).toEqual(1);
-    });
-  });
-
-  describe('Test function: drawComponents', () => {
-    it('should call parse() then draw() functions', async () => {
-      const plugin = {
-        data: {
-          components: [],
-        },
-        draw: jest.fn(),
-        isParsable: () => true,
-        parse: jest.fn(),
-      };
-
-      await PluginManager.drawComponents(plugin);
-
-      expect(plugin.parse).toHaveBeenCalledTimes(1);
-      expect(plugin.draw).toHaveBeenCalledTimes(1);
     });
   });
 

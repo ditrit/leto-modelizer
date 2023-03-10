@@ -2,7 +2,6 @@ import { readTextFile } from 'src/composables/Files';
 import plugins from 'src/plugins';
 import { FileInput, FileInformation } from 'leto-modelizer-plugin-core';
 import {
-  getProjectFiles,
   writeProjectFile,
   readProjectFile,
   getModelFiles,
@@ -177,24 +176,6 @@ export async function getFileInputs(plugin, fileInformations, projectName) {
   ).then((allResults) => allResults
     .filter((result) => result.status === 'fulfilled')
     .map((result) => result.value));
-}
-
-/**
- * Update and draw new components.
- *
- * @param {Object} plugin - Contens components to update and draw.
- * @param {String} projectName - Project name.
- */
-export async function drawComponents(plugin, projectName) {
-  const fileInformations = await getProjectFiles(projectName);
-  const fileInputs = await getFileInputs(plugin, fileInformations, projectName);
-  const config = await readProjectFile(
-    projectName,
-    new FileInformation({ path: 'leto-modelizer.config.json' }),
-  );
-
-  plugin.parse(config, fileInputs);
-  plugin.draw('root');
 }
 
 /**
