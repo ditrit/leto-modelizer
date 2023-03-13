@@ -6,7 +6,7 @@ Feature: Test homepage: project deletion
     And  I visit the "/"
 
   Scenario: Delete existing project
-    When I click on '[data-cy="new-project"]'
+    When I click on '[data-cy="new-project-button"]'
     And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
     And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     Then I expect current url is "modelizer/projectName/model"
@@ -23,7 +23,7 @@ Feature: Test homepage: project deletion
 
   Scenario: Delete project should remove it from database
     Given I set context field "projectName" with "leto-modelizer-project-test"
-    When I click on '[data-cy="import-project"]'
+    When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
     And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
     And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"
@@ -59,7 +59,7 @@ Feature: Test homepage: project deletion
     And  I expect '[data-cy="delete-project-form"]' is closed
     And  I expect '[data-cy="project-card_{{ projectName }}"]' not exists
 
-    When I click on '[data-cy="import-project"]'
+    When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
     And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
     And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"

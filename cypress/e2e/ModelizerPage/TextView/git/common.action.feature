@@ -4,7 +4,7 @@ Feature: Test modelizer text view: common action of git branch menu
     Given I clear cache
     And I visit the "/"
 
-    When I click on '[data-cy="new-project"]'
+    When I click on '[data-cy="new-project-button"]'
     And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
     And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     Then I expect current url is "/modelizer/projectName/model"

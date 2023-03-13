@@ -3,7 +3,7 @@ Feature: Test homepage: open project
   Scenario: Open existing project
     Given I clear cache
     And  I visit the "/"
-    And  I click on '[data-cy="new-project"]'
+    And  I click on '[data-cy="new-project-button"]'
     And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
     And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     And  I expect current url is "modelizer/projectName/model"

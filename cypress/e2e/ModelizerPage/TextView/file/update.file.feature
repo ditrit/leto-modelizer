@@ -6,7 +6,7 @@ Feature: Test modelizer text view: update file's content
     And I set context field "projectName" with "leto-modelizer-project-test"
     And I visit the "/"
 
-    When I click on '[data-cy="import-project"]'
+    When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
     And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
     And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"
