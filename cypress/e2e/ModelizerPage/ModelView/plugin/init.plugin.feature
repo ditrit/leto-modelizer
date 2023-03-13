@@ -20,7 +20,7 @@ Feature: Test modelizer model view: plugin initialization
     When I click on '[data-cy="plugin-definitions-terrator-plugin"]'
     Then I expect '[class*="plugin-definitions"]' appear 1 time on screen
     And  I expect '[class*="component-definition-card"]' appear 18 times on screen
-    And  I expect '[data-cy="component-definition-<element>"]' exists
+    And  I expect '[data-cy="component-definition_<element>"]' exists
 
     Examples:
       | element               |

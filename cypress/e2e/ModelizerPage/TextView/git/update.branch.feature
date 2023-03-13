@@ -17,7 +17,7 @@ Feature: Test modelizer text view: update git branch
 
 
   Scenario: Update action should be available only for branch that are local and remote
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-branch-local-main"]'
     Then I expect '[data-cy="git-menu-branch-update-main"]' exists
     And  I click on '[data-cy="git-menu-branch-local-main"]'
@@ -31,7 +31,7 @@ Feature: Test modelizer text view: update git branch
     And  I click on '[data-cy="git-menu-branch-remote-test/remote1"]'
 
   Scenario: Execute update action with fast forward should be a success
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-branch-local-main"]'
     And  I click on '[data-cy="git-menu-branch-update-main"]'
     Then I expect checkbox '[data-cy="git-update-form"] [data-cy="fast-forward-checkbox"]' is checked
@@ -41,7 +41,7 @@ Feature: Test modelizer text view: update git branch
     And I expect "positive" toast to appear with text "Branch is updated 🥳!"
 
   Scenario: Execute update action without fast forward should be a success
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-branch-local-main"]'
     And  I click on '[data-cy="git-menu-branch-update-main"]'
     And  I click on '[data-cy="git-update-form"] [data-cy="fast-forward-checkbox"]'

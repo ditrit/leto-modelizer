@@ -13,7 +13,7 @@ Feature: Test modelizer text view: git status display
     When I visit the "/#/modelizer/projectName/text"
 
   Scenario: Display dialog containing an empty list
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-menu-status"]' exists
 
     When I click on '[data-cy="git-menu-status"]'
@@ -32,7 +32,7 @@ Feature: Test modelizer text view: git status display
     Then I expect '[data-cy="file-explorer-newFile.js"] [data-cy="file-label-newFile.js"]' appear 1 time on screen
 
     #  Check file status
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-status"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
     And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 0 time on screen
@@ -46,7 +46,7 @@ Feature: Test modelizer text view: git status display
     Then I click on '[data-cy="file-explorer-menu-add-file"]'
 
     #  Check file status
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-status"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
     And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen
@@ -58,7 +58,7 @@ Feature: Test modelizer text view: git status display
     When I set active file content to "updated content"
 
     #  Check file status
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-status"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
     And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen

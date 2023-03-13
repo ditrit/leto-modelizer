@@ -19,7 +19,7 @@ Feature: Test modelizer model view: plugin initialization
 
     When I set on '[data-cy="filter-plugin-definitions"]' text "<filter>"
     And  I expect '[class*="component-definition-card"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definition-<filter>"]' exists
+    And  I expect '[data-cy="component-definition_<filter>"]' exists
 
     Examples:
       | filter                |
@@ -46,8 +46,8 @@ Feature: Test modelizer model view: plugin initialization
 
     When I set on '[data-cy="filter-plugin-definitions"]' text "<filter>"
     And  I expect '[class*="component-definition-card"]' appear 2 times on screen
-    And  I expect '[data-cy="component-definition-<element1>"]' exists
-    And  I expect '[data-cy="component-definition-<element2>"]' exists
+    And  I expect '[data-cy="component-definition_<element1>"]' exists
+    And  I expect '[data-cy="component-definition_<element2>"]' exists
 
     Examples:
       | filter       | element1              | element2             |

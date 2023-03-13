@@ -8,7 +8,7 @@
     icon="fa-solid fa-code-branch"
     :loading="loading"
     :label="currentBranch"
-    data-cy="git-current-branch"
+    data-cy="git-current-branch-button"
   >
     <template v-slot:loading>
       <q-spinner-dots/>
@@ -18,6 +18,7 @@
 </template>
 
 <script setup>
+// TODO : Rename file
 import { getCurrentBranch } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
 import { onMounted, onUnmounted, ref } from 'vue';

@@ -1,19 +1,18 @@
 <template>
   <router-link
     class="card-link"
-    :data-cy="`project-card-${project.id}`"
     :to="`/modelizer/${project.id}/models`"
   >
     <q-card
       v-ripple
       tabindex="0"
       class="cursor-pointer project-card"
-      data-cy="project-card"
+      :data-cy="`project-card_${project.id}`"
     >
       <q-img :src="getProjectImage()" height="100%">
         <div
           class="absolute-bottom text-subtitle2 text-center"
-          data-cy="project-card-title"
+          data-cy="title-container"
         >
           <div>
             {{ project.id }}
@@ -25,7 +24,7 @@
             round
             color="negative"
             icon="fa-solid fa-trash"
-            :data-cy="`delete-project-${project.id}`"
+            data-cy="delete-button"
             @click.stop.prevent="DialogEvent.next({
               type: 'open',
               key: 'DeleteProject',
@@ -39,7 +38,7 @@
             round
             color="primary"
             icon="fa-solid fa-pen"
-            :data-cy="`rename-project-${project.id}`"
+            data-cy="rename-button"
             @click.stop.prevent="DialogEvent.next({
               type: 'open',
               key: 'RenameProject',

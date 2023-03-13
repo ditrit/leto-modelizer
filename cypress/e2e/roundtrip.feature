@@ -25,4 +25,4 @@ Feature: Test roundtrip of the application
 
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is "/"
-    And  I expect '[data-cy="project-card-projectName"]' exists
+    And  I expect '[data-cy="project-card_projectName"]' exists

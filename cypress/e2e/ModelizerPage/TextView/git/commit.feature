@@ -13,7 +13,7 @@ Feature: Test modelizer text view: git commit
     Then I expect current url is "/modelizer/projectName/model"
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    And  I click on '[data-cy="git-current-branch"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     And  I wait 1 second
     Then I expect '[data-cy="git-menu-commit"]' exists
 
@@ -48,7 +48,7 @@ Feature: Test modelizer text view: git commit
     And  I click on '[data-cy="file-explorer-menu-add-file"]'
 
     #  Commit
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-menu-commit"]' exists
 
     When I click on '[data-cy="git-menu-commit"]'
@@ -63,7 +63,7 @@ Feature: Test modelizer text view: git commit
 
     #  New commit message is not added inside list of logs
     When I click on '[data-cy="close-dialog-button"]'
-    And  I click on '[data-cy="git-current-branch"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-log"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
@@ -95,7 +95,7 @@ Feature: Test modelizer text view: git commit
     And  I click on '[data-cy="file-explorer-menu-add-file"]'
 
     #  Commit
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-menu-commit"]' exists
 
     When I click on '[data-cy="git-menu-commit"]'
@@ -110,7 +110,7 @@ Feature: Test modelizer text view: git commit
     And  I expect "positive" toast to appear with text "Your files are committed &#129395;!"
 
     #  New commit message is added inside list of logs
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-log"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists

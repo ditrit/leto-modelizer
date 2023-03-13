@@ -13,7 +13,7 @@ Feature: Test modelizer text view: git log display
     Then I expect current url is "/modelizer/projectName/model"
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    And  I click on '[data-cy="git-current-branch"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-menu-log"]' exists
 
   Scenario: Display dialog containing the list of logs

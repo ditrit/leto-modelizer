@@ -20,7 +20,7 @@ Feature: Test modelizer model view: add plugin component
   Scenario Outline: Click on the <element> component should display it on the page
     Then I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>"]' not exists
 
-    When I click on '[data-cy="component-definition-<element>"]'
+    When I click on '[data-cy="component-definition_<element>"]'
     Then I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>"]' exists
     And  I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>"]' appear 1 time on screen
 
@@ -47,9 +47,9 @@ Feature: Test modelizer model view: add plugin component
   Scenario Outline: Dragging the <element> component should display it on the page
     Then I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>_"]' not exists
 
-    When I drag '[data-cy="component-definition-<element>"]' onto '[data-cy="modelizer-model-view-draw-root"]'
-    Then I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>_"]' exists
-    And  I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>_"]' appear 1 time on screen
+    When I drag '[data-cy="component-definition_<element>"]' onto '[data-cy="modelizer-model-view"] [data-cy="draw-root"]'
+    Then I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>"]' exists
+    And  I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>"]' appear 1 time on screen
 
     Examples:
       | element               |

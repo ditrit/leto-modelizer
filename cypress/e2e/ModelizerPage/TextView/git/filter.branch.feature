@@ -16,7 +16,7 @@ Feature: Test modelizer text view: filter git branch
     And  I visit the "/#/modelizer/{{projectName}}/text"
 
   Scenario: Expect to have no branch with "no_main" filter
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-menu-branch-local-main"]' exists
     And  I expect '[data-cy="git-menu-branch-remote-main"]' exists
 
@@ -25,7 +25,7 @@ Feature: Test modelizer text view: filter git branch
     And  I expect '[data-cy="git-menu-branch-remote-main"]' not exists
 
   Scenario: Expect to have main branch with "main" filter
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-menu-branch-local-main"]' exists
     And  I expect '[data-cy="git-menu-branch-remote-main"]' exists
 
@@ -38,7 +38,7 @@ Feature: Test modelizer text view: filter git branch
     And  I expect '[data-cy="git-menu-branch-remote-main"]' exists
 
   Scenario: Create new branch then check if filter works
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-new-branch"]'
     Then I expect checkbox '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]' is checked
     And  I expect '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' exists
@@ -50,9 +50,9 @@ Feature: Test modelizer text view: filter git branch
     Then I expect '[data-cy="git-new-branch-form"]' is closed
     And  I expect "positive" toast to appear with text "Branch is created 🥳!"
 
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I scroll to "bottom" into '[data-cy="git-branch-menu"]'
-    Then I expect '[data-cy="git-current-branch"]' is "testNewBranch"
+    Then I expect '[data-cy="git-current-branch-button"]' is "testNewBranch"
     And  I expect '[data-cy="git-menu-branch-local-main"]' exists
     And  I expect '[data-cy="git-menu-branch-local-testNewBranch"]' exists
     And  I expect '[data-cy="git-menu-branch-remote-main"]' exists

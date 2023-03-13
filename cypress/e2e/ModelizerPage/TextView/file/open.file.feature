@@ -103,10 +103,10 @@ Feature: Test modelizer text view: open file
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "branch.txt"
     And  I expect '[data-cy="file-tab-content-branch.txt"]' is "main"
 
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-branch-remote-test/remote"]'
     And  I click on '[data-cy="git-menu-branch-checkout-test/remote"]'
-    Then I expect '[data-cy="git-current-branch"]' is "test/remote"
+    Then I expect '[data-cy="git-current-branch-button"]' is "test/remote"
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "branch.txt"
     And  I expect '[data-cy="file-tab-content-branch.txt"]' is "test/remote"
@@ -118,10 +118,10 @@ Feature: Test modelizer text view: open file
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "branch.txt"
     And  I expect '[data-cy="file-tab-content-branch.txt"]' is "main"
 
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-branch-remote-test/remote"]'
     And  I click on '[data-cy="git-menu-branch-checkout-test/remote"]'
-    Then I expect '[data-cy="git-current-branch"]' is "test/remote"
+    Then I expect '[data-cy="git-current-branch-button"]' is "test/remote"
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tab-content-README.md"]' not exists
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "branch.txt"
@@ -136,10 +136,10 @@ Feature: Test modelizer text view: open file
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is "branch.txt"
     And  I expect '[data-cy="file-tab-content-README.md"]' exists
 
-    When I click on '[data-cy="git-current-branch"]'
+    When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-menu-branch-remote-test/remote"]'
     And  I click on '[data-cy="git-menu-branch-checkout-test/remote"]'
-    Then I expect '[data-cy="git-current-branch"]' is "test/remote"
+    Then I expect '[data-cy="git-current-branch-button"]' is "test/remote"
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tab-content-README.md"]' not exists
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "branch.txt"

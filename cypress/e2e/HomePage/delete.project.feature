@@ -14,12 +14,12 @@ Feature: Test homepage: project deletion
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is "/"
 
-    When I click on '[data-cy="delete-project-projectName"]'
+    When I click on '[data-cy="project-card_projectName"] [data-cy="delete-button"]'
     And  I click on '[data-cy="delete-project-form"] [data-cy="confirm-delete-checkbox"]'
     And  I click on '[data-cy="delete-project-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Project has been deleted 😥"
     And  I expect '[data-cy="delete-project-form"]' is closed
-    And  I expect '[data-cy="project-card"]' not exists
+    And  I expect '[data-cy="project-card_projectName"]' not exists
 
   Scenario: Delete project should remove it from database
     Given I set context field "projectName" with "leto-modelizer-project-test"
@@ -52,12 +52,12 @@ Feature: Test homepage: project deletion
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is "/"
 
-    When I click on '[data-cy="delete-project-{{ projectName }}"]'
+    When I click on '[data-cy="project-card_{{ projectName }}"] [data-cy="delete-button"]'
     And  I click on '[data-cy="delete-project-form"] [data-cy="confirm-delete-checkbox"]'
     And  I click on '[data-cy="delete-project-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Project has been deleted 😥"
     And  I expect '[data-cy="delete-project-form"]' is closed
-    And  I expect '[data-cy="project-card"]' not exists
+    And  I expect '[data-cy="project-card_{{ projectName }}"]' not exists
 
     When I click on '[data-cy="import-project"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
