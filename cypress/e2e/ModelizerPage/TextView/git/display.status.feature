@@ -18,7 +18,7 @@ Feature: Test modelizer text view: git status display
 
     When I click on '[data-cy="git-menu-status"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
-    And  I expect '[data-cy="git-status-empty-item"]' exists
+    And  I expect '[data-cy="git-status-dialog"] [data-cy="empty-item"]' exists
 
   Scenario: Display file status changes in status dialog
     #  Create a file
@@ -35,10 +35,10 @@ Feature: Test modelizer text view: git status display
     When I click on '[data-cy="git-current-branch"]'
     And  I click on '[data-cy="git-menu-status"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
-    And  I expect '[data-cy="git-status-staged-item"]' appear 0 time on screen
-    And  I expect '[data-cy="git-status-modified-item"]' appear 0 time on screen
-    And  I expect '[data-cy="git-status-untracked-item"]' appear 1 time on screen
-    And  I click on '[data-cy="dialog-icon-close"]'
+    And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 0 time on screen
+    And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 0 time on screen
+    And  I expect '[data-cy="git-status-dialog"] [data-cy="untracked-item"]' appear 1 time on screen
+    And  I click on '[data-cy="close-dialog-button"]'
 
     #  Add file
     When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]' to make it visible
@@ -49,10 +49,10 @@ Feature: Test modelizer text view: git status display
     When I click on '[data-cy="git-current-branch"]'
     And  I click on '[data-cy="git-menu-status"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
-    And  I expect '[data-cy="git-status-staged-item"]' appear 1 time on screen
-    And  I expect '[data-cy="git-status-modified-item"]' appear 0 time on screen
-    And  I expect '[data-cy="git-status-untracked-item"]' appear 0 time on screen
-    And  I click on '[data-cy="dialog-icon-close"]'
+    And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen
+    And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 0 time on screen
+    And  I expect '[data-cy="git-status-dialog"] [data-cy="untracked-item"]' appear 0 time on screen
+    And  I click on '[data-cy="close-dialog-button"]'
 
     #  Update file content
     When I set active file content to "updated content"
@@ -61,7 +61,7 @@ Feature: Test modelizer text view: git status display
     When I click on '[data-cy="git-current-branch"]'
     And  I click on '[data-cy="git-menu-status"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
-    And  I expect '[data-cy="git-status-staged-item"]' appear 1 time on screen
-    And  I expect '[data-cy="git-status-modified-item"]' appear 1 time on screen
-    And  I expect '[data-cy="git-status-untracked-item"]' appear 0 time on screen
-    And  I click on '[data-cy="dialog-icon-close"]'
+    And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen
+    And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 1 time on screen
+    And  I expect '[data-cy="git-status-dialog"] [data-cy="untracked-item"]' appear 0 time on screen
+    And  I click on '[data-cy="close-dialog-button"]'

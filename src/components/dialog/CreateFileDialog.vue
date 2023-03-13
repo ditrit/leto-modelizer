@@ -1,5 +1,8 @@
 <template>
-  <default-dialog dialog-key="CreateFile" data-cy="create-file-dialog">
+  <default-dialog
+    dialog-key="CreateFile"
+    data-cy="create-file-dialog"
+  >
     <template v-slot:title>
       <q-icon
         color="primary"

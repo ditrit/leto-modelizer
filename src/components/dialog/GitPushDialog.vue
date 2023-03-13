@@ -1,5 +1,8 @@
 <template>
-  <default-dialog dialog-key="GitPush" data-cy="git-push-dialog">
+  <default-dialog
+    dialog-key="GitPush"
+    data-cy="git-push-dialog"
+  >
     <template v-slot:title>
       <q-icon color="primary" name="fa-brands fa-git-alt" />
       {{ $t('page.modelizer.git.push.title') }}

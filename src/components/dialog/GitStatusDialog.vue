@@ -1,5 +1,8 @@
 <template>
-  <default-dialog dialog-key="GitStatus" data-cy="git-status-dialog">
+  <default-dialog
+    dialog-key="GitStatus"
+    data-cy="git-status-dialog"
+  >
     <template v-slot:title>
       <q-icon color="primary" name="fa-brands fa-git-alt" />
       {{ $t('page.modelizer.git.status.title') }}
@@ -16,7 +19,7 @@
         <q-list style="min-width: 500px" dense>
           <q-item
             v-if="noFiles"
-            data-cy="git-status-empty-item"
+            data-cy="empty-item"
           >
             <q-item-section>
               {{ $t('page.modelizer.git.status.nothing') }}
@@ -35,7 +38,7 @@
             >
               <q-item-section
                 class="file-status-staged q-pl-md"
-                data-cy="git-status-staged-item"
+                data-cy="staged-item"
               >
                 {{file.path}}
               </q-item-section>
@@ -54,7 +57,7 @@
             >
               <q-item-section
                 class="file-status-modified q-pl-md"
-                data-cy="git-status-modified-item"
+                data-cy="modified-item"
               >
                 {{file.path}}
               </q-item-section>
@@ -68,12 +71,12 @@
               </q-item-section>
             </q-item>
             <q-item
-              :key="`untracked_${file.path}`"
               v-for="file in untrackedFiles"
+              :key="`untracked_${file.path}`"
             >
               <q-item-section
                 class="file-status-untracked q-pl-md"
-                data-cy="git-status-untracked-item"
+                data-cy="untracked-item"
               >
                 {{file.path}}
               </q-item-section>

@@ -20,16 +20,16 @@ Feature: Test modelizer text view: git commit
   Scenario: Commit with no change
     When I click on '[data-cy="git-menu-commit"]'
     Then I expect '[data-cy="git-commit-dialog"]' exists
-    And  I expect '[data-cy="git-commit-empty-item"]' exists
+    And  I expect '[data-cy="git-commit-dialog"] [data-cy="empty-item"]' exists
 
   Scenario: Commit an added file without commit message fails
     #  Check list of logs
     When I click on '[data-cy="git-menu-log"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
-    And  I expect '[data-cy="git-log-list"]' exists
-    And  I expect '[data-cy="git-log-item"]' appear 1 time on screen
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' appear 1 time on screen
 
-    When I click on '[data-cy="dialog-icon-close"]'
+    When I click on '[data-cy="close-dialog-button"]'
     Then I expect '[data-cy="git-log-dialog"]' not exists
 
     #  Create a file
@@ -53,8 +53,8 @@ Feature: Test modelizer text view: git commit
 
     When I click on '[data-cy="git-menu-commit"]'
     Then I expect '[data-cy="git-commit-dialog"]' exists
-    And  I expect '[data-cy="git-commit-staged-item"]' exists
-    And  I expect '[data-cy="git-commit-staged-item-file"]' appear 1 time on screen
+    And  I expect '[data-cy="git-commit-dialog"] [data-cy="staged-item-title"]' exists
+    And  I expect '[data-cy="git-commit-dialog"] [data-cy="staged-item-file"]' appear 1 time on screen
 
     #  Empty commit message displays an error
     When I click on '[data-cy="git-form-submit"]'
@@ -62,21 +62,21 @@ Feature: Test modelizer text view: git commit
     And  I expect '[data-cy="git-commit-form"] [role="alert"]' is "Please type something"
 
     #  New commit message is not added inside list of logs
-    When I click on '[data-cy="dialog-icon-close"]'
+    When I click on '[data-cy="close-dialog-button"]'
     And  I click on '[data-cy="git-current-branch"]'
     And  I click on '[data-cy="git-menu-log"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
-    And  I expect '[data-cy="git-log-list"]' exists
-    And  I expect '[data-cy="git-log-item"]' appear 1 times on screen
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' appear 1 times on screen
 
   Scenario: Commit an added file with commit message succeeds
     #  Check list of logs
     When I click on '[data-cy="git-menu-log"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
-    And  I expect '[data-cy="git-log-list"]' exists
-    And  I expect '[data-cy="git-log-item"]' appear 1 time on screen
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' appear 1 time on screen
 
-    When I click on '[data-cy="dialog-icon-close"]'
+    When I click on '[data-cy="close-dialog-button"]'
     Then I expect '[data-cy="git-log-dialog"]' not exists
 
     #  Create a file
@@ -100,8 +100,8 @@ Feature: Test modelizer text view: git commit
 
     When I click on '[data-cy="git-menu-commit"]'
     Then I expect '[data-cy="git-commit-dialog"]' exists
-    And  I expect '[data-cy="git-commit-staged-item"]' exists
-    And  I expect '[data-cy="git-commit-staged-item-file"]' appear 1 time on screen
+    And  I expect '[data-cy="git-commit-dialog"] [data-cy="staged-item-title"]' exists
+    And  I expect '[data-cy="git-commit-dialog"] [data-cy="staged-item-file"]' appear 1 time on screen
 
     #  Valid commit message displays a successful notification
     When I set on '[data-cy="git-message-input"]' text "commit"
@@ -113,6 +113,6 @@ Feature: Test modelizer text view: git commit
     When I click on '[data-cy="git-current-branch"]'
     And  I click on '[data-cy="git-menu-log"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
-    And  I expect '[data-cy="git-log-list"]' exists
-    And  I expect '[data-cy="git-log-item"]' appear 2 times on screen
-    And  I expect '[data-cy="git-log-item"]' is "commit"
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' appear 2 times on screen
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' is "commit"

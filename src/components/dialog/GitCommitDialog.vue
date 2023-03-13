@@ -1,5 +1,8 @@
 <template>
-  <default-dialog dialog-key="GitCommit" data-cy="git-commit-dialog">
+  <default-dialog
+    dialog-key="GitCommit"
+    data-cy="git-commit-dialog"
+  >
     <template v-slot:title>
       <q-icon color="primary" name="fa-brands fa-git-alt" />
       {{ $t('page.modelizer.git.commit.title') }}
@@ -14,7 +17,7 @@
         <q-list style="min-width: 500px" dense>
           <q-item
             v-if="stagedFiles.length === 0"
-            data-cy="git-commit-empty-item"
+            data-cy="empty-item"
           >
             <q-item-section>
               {{ $t('page.modelizer.git.status.nothing') }}
@@ -23,16 +26,16 @@
           <template v-else>
             <q-item
               class="text-weight-bold text-grey-7"
-              data-cy="git-commit-staged-item"
+              data-cy="staged-item-title"
             >
               <q-item-section>
                 {{ $t('page.modelizer.git.status.staged') }}
               </q-item-section>
             </q-item>
             <q-item
-              :key="`staged_${file.path}`"
               v-for="file in stagedFiles"
-              data-cy="git-commit-staged-item-file"
+              :key="`staged_${file.path}`"
+              data-cy="staged-item-file"
             >
               <q-item-section class="file-status-staged q-pl-md">
                 {{file.path}}

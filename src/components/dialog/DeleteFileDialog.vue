@@ -1,5 +1,8 @@
 <template>
-  <default-dialog dialog-key="DeleteFile" data-cy="delete-file-dialog">
+  <default-dialog
+    dialog-key="DeleteFile"
+    data-cy="delete-file-dialog"
+  >
     <template v-slot:title>
       <q-icon
         color="primary"

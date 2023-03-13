@@ -20,6 +20,6 @@ Feature: Test modelizer text view: git log display
     When I wait 1 second
     And  I click on '[data-cy="git-menu-log"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
-    And  I expect '[data-cy="git-log-list"]' exists
-    And  I expect '[data-cy="git-log-item"]' appear 1 time on screen
-    And  I expect '[data-cy="git-log-item"]' is "Initial commit."
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' appear 1 time on screen
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' is "Initial commit."

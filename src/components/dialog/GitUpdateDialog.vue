@@ -1,5 +1,8 @@
 <template>
-  <default-dialog dialog-key="GitUpdate" data-cy="git-update-dialog">
+  <default-dialog
+    dialog-key="GitUpdate"
+    data-cy="git-update-dialog"
+  >
     <template v-slot:title>
       <q-icon color="primary" name="fa-brands fa-git-alt" />
       {{ $t('page.modelizer.git.update.title') }}
