@@ -91,7 +91,6 @@ describe('Test component: ModelizerDrawView', () => {
   let pluginParse;
   let pluginDraw;
   let useRouterPush;
-  let pluginRenderNext;
   let appendProjectFileMock;
   let testPlugin;
 
@@ -109,7 +108,6 @@ describe('Test component: ModelizerDrawView', () => {
     pluginParse = jest.fn();
     pluginDraw = jest.fn();
     useRouterPush = jest.fn();
-    pluginRenderNext = jest.fn();
     appendProjectFileMock = jest.fn();
 
     useRoute.mockImplementation(() => ({
@@ -148,7 +146,6 @@ describe('Test component: ModelizerDrawView', () => {
       updateSubscribe();
       return { unsubscribe: updateUnsubscribe };
     });
-    PluginEvent.RenderEvent.next.mockImplementation(pluginRenderNext);
 
     testPlugin = {
       data: {
@@ -189,10 +186,12 @@ describe('Test component: ModelizerDrawView', () => {
   });
 
   describe('Test function: renderModelComponents', () => {
-    it('should emit RenderEvent with rendered files', async () => {
+    it('should call PluginManager.renderModel()', async () => {
+      expect(PluginManager.renderModel).toHaveBeenCalledTimes(0);
+
       await wrapper.vm.renderModelComponents();
 
-      expect(pluginRenderNext).toHaveBeenCalledTimes(1);
+      expect(PluginManager.renderModel).toHaveBeenCalledTimes(1);
     });
   });
 

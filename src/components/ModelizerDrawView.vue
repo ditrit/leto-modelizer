@@ -88,13 +88,11 @@ const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function renderModelComponents() {
-  const files = await renderModel(
+  await renderModel(
     props.projectName,
     `${defaultFolder.value}${query.value.path}`,
     data.plugin,
   );
-
-  PluginEvent.RenderEvent.next(files);
 }
 
 /**
