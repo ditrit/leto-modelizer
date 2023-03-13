@@ -6,8 +6,8 @@ Feature: Test git authentication dialog
     And I visit the "/"
 
     When I click on '[data-cy="new-project"]'
-    And  I set on '[data-cy="new-project-form"] [data-cy="project-name-input"]' text "projectName"
-    And  I click on '[data-cy="new-project-form"] [data-cy="new-project-form-submit"]'
+    And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
+    And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     Then I expect current url is "/modelizer/projectName/model"
 
     When I visit the "/#/modelizer/projectName/text"
@@ -17,9 +17,9 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="git-settings-menu-GitAuthentication"]'
     Then I expect '[data-cy="git-authentication-form"]' exists
 
-    When I set on '[data-cy="git-authentication-form"] [data-cy="git-username-input"]' text "test"
-    And  I set on '[data-cy="git-authentication-form"] [data-cy="git-token-input"]' text "test"
-    And  I click on '[data-cy="git-authentication-form"] [data-cy="git-form-submit"]'
+    When I set on '[data-cy="git-authentication-form"] [data-cy="username-input"]' text "test"
+    And  I set on '[data-cy="git-authentication-form"] [data-cy="token-input"]' text "test"
+    And  I click on '[data-cy="git-authentication-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Git authentication updated &#129395;!"
     And  I expect '[data-cy="git-authentication-form"]' is closed
 
@@ -28,9 +28,9 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="git-settings-menu-GitAuthentication"]'
     Then I expect '[data-cy="git-authentication-form"]' exists
 
-    When I set on '[data-cy="git-authentication-form"] [data-cy="git-username-input"]' text "test"
-    And  I set on '[data-cy="git-authentication-form"] [data-cy="git-token-input"]' text "test"
-    And  I click on '[data-cy="git-authentication-form"] [data-cy="git-form-submit"]'
+    When I set on '[data-cy="git-authentication-form"] [data-cy="username-input"]' text "test"
+    And  I set on '[data-cy="git-authentication-form"] [data-cy="token-input"]' text "test"
+    And  I click on '[data-cy="git-authentication-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Git authentication updated &#129395;!"
     And  I expect '[data-cy="git-authentication-form"]' is closed
 
@@ -38,15 +38,15 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="git-settings-menu-GitAddRemote"]'
     Then I expect '[data-cy="git-add-remote-form"]' exists
 
-    When I set on '[data-cy="git-add-remote-form"] [data-cy="git-repository-input"]' text "https://github.com/ditrit/leto-modelizer-project-test"
-    And  I click on '[data-cy="git-add-remote-form"] [data-cy="git-form-submit"]'
+    When I set on '[data-cy="git-add-remote-form"] [data-cy="repository-input"]' text "https://github.com/ditrit/leto-modelizer-project-test"
+    And  I click on '[data-cy="git-add-remote-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "We have access to your repository 🥳!"
     And  I expect '[data-cy="git-add-remote-form"]' is closed
     
     When I click on '[data-cy="project-settings"]'
     And  I click on '[data-cy="git-settings-menu-GitAuthentication"]'
-    Then I expect field '[data-cy="git-authentication-form"] [data-cy="git-username-input"]' is "test"
-    And  I expect field '[data-cy="git-authentication-form"] [data-cy="git-token-input"]' is "test"
+    Then I expect field '[data-cy="git-authentication-form"] [data-cy="username-input"]' is "test"
+    And  I expect field '[data-cy="git-authentication-form"] [data-cy="token-input"]' is "test"
 
   Scenario: Set git add remote repository then set valid git authentication should enable the "Upload to git" button.
     Given I expect '[data-cy="upload-to-git-button"]' not exists
@@ -55,8 +55,8 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="git-settings-menu-GitAddRemote"]'
     Then I expect '[data-cy="git-add-remote-form"]' exists
 
-    When I set on '[data-cy="git-add-remote-form"] [data-cy="git-repository-input"]' text "https://github.com/ditrit/leto-modelizer-project-test"
-    And  I click on '[data-cy="git-add-remote-form"] [data-cy="git-form-submit"]'
+    When I set on '[data-cy="git-add-remote-form"] [data-cy="repository-input"]' text "https://github.com/ditrit/leto-modelizer-project-test"
+    And  I click on '[data-cy="git-add-remote-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "We have access to your repository 🥳!"
     And  I expect '[data-cy="git-add-remote-form"]' is closed
     And  I expect '[data-cy="upload-to-git-button"]' exists
@@ -66,9 +66,9 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="git-settings-menu-GitAuthentication"]'
     Then I expect '[data-cy="git-authentication-form"]' exists
 
-    When I set on '[data-cy="git-authentication-form"] [data-cy="git-username-input"]' text "test"
-    And  I set on '[data-cy="git-authentication-form"] [data-cy="git-token-input"]' text "test"
-    And  I click on '[data-cy="git-authentication-form"] [data-cy="git-form-submit"]'
+    When I set on '[data-cy="git-authentication-form"] [data-cy="username-input"]' text "test"
+    And  I set on '[data-cy="git-authentication-form"] [data-cy="token-input"]' text "test"
+    And  I click on '[data-cy="git-authentication-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Git authentication updated &#129395;!"
     And  I expect '[data-cy="git-authentication-form"]' is closed
     And  I expect '[data-cy="upload-to-git-button"]' to be enabled
@@ -80,8 +80,8 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="git-settings-menu-GitAddRemote"]'
     Then I expect '[data-cy="git-add-remote-form"]' exists
 
-    When I set on '[data-cy="git-add-remote-form"] [data-cy="git-repository-input"]' text "https://github.com/ditrit/leto-modelizer-project-test"
-    And  I click on '[data-cy="git-add-remote-form"] [data-cy="git-form-submit"]'
+    When I set on '[data-cy="git-add-remote-form"] [data-cy="repository-input"]' text "https://github.com/ditrit/leto-modelizer-project-test"
+    And  I click on '[data-cy="git-add-remote-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "We have access to your repository 🥳!"
     And  I expect '[data-cy="git-add-remote-form"]' is closed
     And  I expect '[data-cy="upload-to-git-button"]' exists
@@ -91,8 +91,8 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="git-settings-menu-GitAuthentication"]'
     Then I expect '[data-cy="git-authentication-form"]' exists
 
-    When I set on '[data-cy="git-authentication-form"] [data-cy="git-token-input"]' text "test"
-    And  I click on '[data-cy="git-authentication-form"] [data-cy="git-form-submit"]'
+    When I set on '[data-cy="git-authentication-form"] [data-cy="token-input"]' text "test"
+    And  I click on '[data-cy="git-authentication-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Git authentication updated &#129395;!"
     And  I expect '[data-cy="git-authentication-form"]' is closed
     And  I expect '[data-cy="upload-to-git-button"]' to be disabled
@@ -104,8 +104,8 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="git-settings-menu-GitAddRemote"]'
     Then I expect '[data-cy="git-add-remote-form"]' exists
 
-    When I set on '[data-cy="git-add-remote-form"] [data-cy="git-repository-input"]' text "https://github.com/ditrit/leto-modelizer-project-test"
-    And  I click on '[data-cy="git-add-remote-form"] [data-cy="git-form-submit"]'
+    When I set on '[data-cy="git-add-remote-form"] [data-cy="repository-input"]' text "https://github.com/ditrit/leto-modelizer-project-test"
+    And  I click on '[data-cy="git-add-remote-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "We have access to your repository 🥳!"
     And  I expect '[data-cy="git-add-remote-form"]' is closed
     And  I expect '[data-cy="upload-to-git-button"]' exists
@@ -115,8 +115,8 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="git-settings-menu-GitAuthentication"]'
     Then I expect '[data-cy="git-authentication-form"]' exists
 
-    When I set on '[data-cy="git-authentication-form"] [data-cy="git-username-input"]' text "username"
-    And  I click on '[data-cy="git-authentication-form"] [data-cy="git-form-submit"]'
+    When I set on '[data-cy="git-authentication-form"] [data-cy="username-input"]' text "username"
+    And  I click on '[data-cy="git-authentication-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Git authentication updated &#129395;!"
     And  I expect '[data-cy="git-authentication-form"]' is closed
     And  I expect '[data-cy="upload-to-git-button"]' to be disabled

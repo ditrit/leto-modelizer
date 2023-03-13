@@ -17,7 +17,7 @@
         type="submit"
         :loading="submitting"
         :disable="isFolderWithChildren && !confirmDelete"
-        data-cy="delete-file-submit"
+        data-cy="submit-button"
         color="negative"
       >
         <template v-slot:loading>

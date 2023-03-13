@@ -13,14 +13,14 @@
       ]"
       filled
       lazy-rules
-      data-cy="project-name-input"
+      data-cy="name-input"
     />
     <div class="flex row items-center justify-center">
       <q-btn
         :label="$t(`actions.home.createProject`)"
         icon="fa-solid fa-save"
         type="submit"
-        data-cy="new-project-form-submit"
+        data-cy="submit-button"
         color="positive">
       </q-btn>
     </div>

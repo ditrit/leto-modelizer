@@ -17,7 +17,7 @@
       v-model="repository"
       :label="$t('page.modelizer.settings.gitAddRemote.repository')"
       lazy-rules
-      data-cy="git-repository-input"
+      data-cy="repository-input"
       :hint="$t('page.modelizer.settings.gitAddRemote.repositoryExample')"
       :rules="[v => notEmpty($t, v), v => isGitRepositoryUrl($t, v)]"
     />
@@ -27,8 +27,9 @@
         :label="$t('actions.default.save')"
         type="submit"
         :loading="submitting"
-        data-cy="git-form-submit"
-        color="positive">
+        data-cy="submit-button"
+        color="positive"
+      >
         <template v-slot:loading>
           <q-spinner-dots/>
         </template>

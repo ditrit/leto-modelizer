@@ -4,8 +4,8 @@ Feature: Test homepage: open project
     Given I clear cache
     And  I visit the "/"
     And  I click on '[data-cy="new-project"]'
-    And  I set on '[data-cy="new-project-form"] [data-cy="project-name-input"]' text "projectName"
-    And  I click on '[data-cy="new-project-form"] [data-cy="new-project-form-submit"]'
+    And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
+    And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     And  I expect current url is "modelizer/projectName/model"
 
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'

@@ -6,8 +6,8 @@ Feature: Test modelizer text view: git branch display
     And I visit the "/"
 
     When I click on '[data-cy="new-project"]'
-    And  I set on '[data-cy="new-project-form"] [data-cy="project-name-input"]' text "projectName"
-    And  I click on '[data-cy="new-project-form"] [data-cy="new-project-form-submit"]'
+    And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
+    And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     Then I expect current url is "/modelizer/projectName/model"
 
     When I visit the "/#/modelizer/projectName/text"

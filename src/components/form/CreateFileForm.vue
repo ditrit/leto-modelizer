@@ -9,7 +9,7 @@
       filled
       :label="$t(`page.modelizer.fileExplorer.create.${isFolder ? 'folder' : 'file'}.input`)"
       lazy-rules
-      data-cy="create-file-input"
+      data-cy="name-input"
       :rules="[
         (v) => notEmpty(t, v),
         (v) => isValidFileLabel($t, v),
@@ -22,7 +22,7 @@
         :label="$t('actions.default.save')"
         type="submit"
         :loading="submitting"
-        data-cy="create-file-submit"
+        data-cy="submit-button"
         color="positive"
       >
         <template v-slot:loading>

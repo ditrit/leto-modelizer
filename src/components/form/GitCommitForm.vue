@@ -10,7 +10,7 @@
       v-model="message"
       :label="$t('page.modelizer.git.commit.message')"
       lazy-rules
-      data-cy="git-message-input"
+      data-cy="message-input"
       :rules="[(v) => notEmpty(t, v)]"
     />
     <div class="flex row items-center justify-center">
@@ -19,7 +19,7 @@
         :label="$t('actions.git.commit')"
         :loading="submitting"
         type="submit"
-        data-cy="git-form-submit"
+        data-cy="submit-button"
         color="positive"
       >
         <template v-slot:loading>

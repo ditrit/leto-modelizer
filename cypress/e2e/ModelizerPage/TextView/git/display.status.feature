@@ -6,8 +6,8 @@ Feature: Test modelizer text view: git status display
     And   I visit the "/"
 
     When I click on '[data-cy="new-project"]'
-    And  I set on '[data-cy="new-project-form"] [data-cy="project-name-input"]' text "projectName"
-    And  I click on '[data-cy="new-project-form"] [data-cy="new-project-form-submit"]'
+    And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
+    And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     Then I expect current url is "/modelizer/projectName/model"
 
     When I visit the "/#/modelizer/projectName/text"
@@ -27,8 +27,8 @@ Feature: Test modelizer text view: git status display
     And  I click on '[data-cy="file-explorer-menu-create-file"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-input"]' text "newFile.js"
-    And  I click on '[data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="file-explorer-newFile.js"] [data-cy="file-label-newFile.js"]' appear 1 time on screen
 
     #  Check file status

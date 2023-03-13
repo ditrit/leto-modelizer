@@ -6,7 +6,7 @@
   >
     <q-checkbox
       v-model="confirmDelete"
-      data-cy="confirm-delete-project-checkbox"
+      data-cy="confirm-delete-checkbox"
       :label="$t(
         'actions.home.deleteProject.confirmDelete',
         { name: props.projectId },
@@ -19,7 +19,7 @@
         icon="fa-solid fa-trash"
         type="submit"
         :disable="!confirmDelete"
-        data-cy="delete-project-form-submit"
+        data-cy="submit-button"
         color="negative"
       >
         <template v-slot:loading>

@@ -7,10 +7,10 @@ Feature: Test modelizer text view: delete file and folder
     And I visit the "/"
 
     When I click on '[data-cy="import-project"]'
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-repository-input"]' text "{{ repository_url }}"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-username-input"]' text "test"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-token-input"]' text "test"
-    And  I click on '[data-cy="import-project-form"] [data-cy="import-project-form-submit"]'
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
+    And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
+    And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"
+    And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Project has been imported 🥳!"
     And  I expect '[data-cy="import-project-form"]' is closed
     And  I expect current url is "modelizer/{{ projectName }}/model"
@@ -29,7 +29,7 @@ Feature: Test modelizer text view: delete file and folder
     When I click on '[data-cy="file-explorer-menu-delete-file"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
-    When I click on '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]'
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="file-label-branch.txt.js"]' not exists
@@ -45,7 +45,7 @@ Feature: Test modelizer text view: delete file and folder
     When I click on '[data-cy="file-explorer-menu-delete-file"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
-    When I click on '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]'
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="file-explorer-icon-{{ projectName }}"].fa-folder-open' exists
@@ -66,7 +66,7 @@ Feature: Test modelizer text view: delete file and folder
     When I click on '[data-cy="file-explorer-menu-delete-file"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
-    When I click on '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]'
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 0 time on screen
@@ -87,7 +87,7 @@ Feature: Test modelizer text view: delete file and folder
     When I click on '[data-cy="file-explorer-menu-delete-file"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
-    When I click on '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]'
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
@@ -100,8 +100,8 @@ Feature: Test modelizer text view: delete file and folder
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
     When I click on '[data-cy="file-explorer-menu-create-folder"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
-    When I set on '[data-cy="create-file-form"] [data-cy="create-file-input"]' text "folder"
-    And  I click on '[data-cy="create-file-form"] [data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "folder"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Folder is created &#129395;!"
     And  I expect '[data-cy="create-file-form"]' is closed
     And  I expect '[data-cy="file-label-folder"]' appear 1 time on screen
@@ -112,9 +112,9 @@ Feature: Test modelizer text view: delete file and folder
 
     When I click on '[data-cy="file-explorer-menu-delete-file"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
-    And  I expect '[data-cy="confirm-delete-checkbox"]' not exists
+    And  I expect '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' not exists
 
-    When I click on '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]'
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Folder is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="file-label-folder"]' not exists
@@ -131,14 +131,14 @@ Feature: Test modelizer text view: delete file and folder
 
     When I click on '[data-cy="file-explorer-menu-delete-file"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
-    And  I expect '[data-cy="confirm-delete-checkbox"]' exists
-    And  I expect checkbox '[data-cy="confirm-delete-checkbox"]' is not checked
-    And  I expect '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]' to be disabled
+    And  I expect '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' exists
+    And  I expect checkbox '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' is not checked
+    And  I expect '[data-cy="delete-file-form"] [data-cy="submit-button"]' to be disabled
 
-    When I click on '[data-cy="confirm-delete-checkbox"]'
-    Then I expect checkbox '[data-cy="confirm-delete-checkbox"]' is checked
+    When I click on '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]'
+    Then I expect checkbox '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' is checked
 
-    When I click on '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]'
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Folder is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
     #  Check elements to delete are deleted, and elements to keep are still present
@@ -165,8 +165,8 @@ Feature: Test modelizer text view: delete file and folder
     When I click on '[data-cy="file-explorer-menu-create-folder"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="create-file-input"]' text "folder"
-    And  I click on '[data-cy="create-file-form"] [data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "folder"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Folder is created &#129395;!"
     And  I expect '[data-cy="create-file-form"]' is closed
     And  I expect '[data-cy="file-label-folder"]' appear 1 time on screen
@@ -180,8 +180,8 @@ Feature: Test modelizer text view: delete file and folder
     When I click on '[data-cy="file-explorer-menu-create-file"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="create-file-input"]' text "file.js"
-    And  I click on '[data-cy="create-file-form"] [data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "file.js"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is created &#129395;!"
     And  I expect '[data-cy="create-file-form"]' is closed
     And  I expect '[data-cy="file-label-file.js"]' appear 2 times on screen
@@ -195,14 +195,14 @@ Feature: Test modelizer text view: delete file and folder
 
     When I click on '[data-cy="file-explorer-menu-delete-file"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
-    And  I expect '[data-cy="confirm-delete-checkbox"]' exists
-    And  I expect checkbox '[data-cy="confirm-delete-checkbox"]' is not checked
-    And  I expect '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]' to be disabled
+    And  I expect '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' exists
+    And  I expect checkbox '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' is not checked
+    And  I expect '[data-cy="delete-file-form"] [data-cy="submit-button"]' to be disabled
 
-    When I click on '[data-cy="confirm-delete-checkbox"]'
-    Then I expect checkbox '[data-cy="confirm-delete-checkbox"]' is checked
+    When I click on '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]'
+    Then I expect checkbox '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' is checked
 
-    When I click on '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]'
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Folder is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
     #  Check "folder", "app.tf" and "file.js" are deleted and all tab closed
@@ -230,8 +230,8 @@ Feature: Test modelizer text view: delete file and folder
     When I click on '[data-cy="file-explorer-menu-create-folder"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="create-file-input"]' text "folder"
-    And  I click on '[data-cy="create-file-form"] [data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "folder"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Folder is created &#129395;!"
     And  I expect '[data-cy="create-file-form"]' is closed
     And  I expect '[data-cy="file-label-folder"]' appear 1 time on screen
@@ -245,8 +245,8 @@ Feature: Test modelizer text view: delete file and folder
     When I click on '[data-cy="file-explorer-menu-create-file"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="create-file-input"]' text "file.js"
-    And  I click on '[data-cy="create-file-form"] [data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "file.js"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is created &#129395;!"
 
     And  I expect '[data-cy="create-file-form"]' is closed
@@ -262,14 +262,14 @@ Feature: Test modelizer text view: delete file and folder
 
     When I click on '[data-cy="file-explorer-menu-delete-file"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
-    And  I expect '[data-cy="confirm-delete-checkbox"]' exists
-    And  I expect checkbox '[data-cy="confirm-delete-checkbox"]' is not checked
-    And  I expect '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]' to be disabled
+    And  I expect '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' exists
+    And  I expect checkbox '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' is not checked
+    And  I expect '[data-cy="delete-file-form"] [data-cy="submit-button"]' to be disabled
 
-    When I click on '[data-cy="confirm-delete-checkbox"]'
-    Then I expect checkbox '[data-cy="confirm-delete-checkbox"]' is checked
+    When I click on '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]'
+    Then I expect checkbox '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' is checked
     
-    When I click on '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]'
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Folder is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
     #  Check "folder", "app.tf" and "file.js" are deleted, related tabs closed and active tab is "README.md"

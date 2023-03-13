@@ -7,10 +7,10 @@ Feature: Test modelizer text view: create file and folder
     And I visit the "/"
 
     When I click on '[data-cy="import-project"]'
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-repository-input"]' text "{{ repository_url }}"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-username-input"]' text "test"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-token-input"]' text "test"
-    And  I click on '[data-cy="import-project-form"] [data-cy="import-project-form-submit"]'
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
+    And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
+    And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"
+    And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Project has been imported 🥳!"
     And  I expect '[data-cy="import-project-form"]' is closed
     And  I expect current url is "modelizer/{{ projectName }}/model"
@@ -28,8 +28,8 @@ Feature: Test modelizer text view: create file and folder
     When I click on '[data-cy="file-explorer-menu-create-file"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="create-file-input"]' text "newFile.js"
-    And  I click on '[data-cy="create-file-form"] [data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is created &#129395;!"
     And  I expect '[data-cy="create-file-form"]' is closed
     #  New active tab is open with created file's label
@@ -52,8 +52,8 @@ Feature: Test modelizer text view: create file and folder
     When I click on '[data-cy="file-explorer-menu-create-file"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="create-file-input"]' text "newFile.js"
-    And  I click on '[data-cy="create-file-form"] [data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is created &#129395;!"
     And  I expect '[data-cy="create-file-form"]' is closed
     #  New tab is open with created file's label
@@ -75,8 +75,8 @@ Feature: Test modelizer text view: create file and folder
     When I click on '[data-cy="file-explorer-menu-create-folder"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="create-file-input"]' text "newFolder"
-    And  I click on '[data-cy="create-file-form"] [data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFolder"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Folder is created &#129395;!"
     And  I expect '[data-cy="create-file-form"]' is closed
     #  No tab open
@@ -96,8 +96,8 @@ Feature: Test modelizer text view: create file and folder
     When I click on '[data-cy="file-explorer-menu-create-folder"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="create-file-input"]' text "newFolder"
-    And  I click on '[data-cy="create-file-form"] [data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFolder"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Folder is created &#129395;!"
     And  I expect '[data-cy="create-file-form"]' is closed
     #  No tab open

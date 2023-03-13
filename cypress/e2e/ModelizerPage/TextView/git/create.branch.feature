@@ -7,10 +7,10 @@ Feature: Test modelizer text view: create git branch
     And I visit the "/"
 
     When I click on '[data-cy="import-project"]'
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-repository-input"]' text "{{ repository_url }}"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-username-input"]' text "test"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-token-input"]' text "test"
-    And  I click on '[data-cy="import-project-form"] [data-cy="import-project-form-submit"]'
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
+    And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
+    And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"
+    And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Project has been imported 🥳!"
     And  I expect '[data-cy="import-project-form"]' is closed
     And  I visit the "/#/modelizer/{{projectName}}/text"
@@ -18,14 +18,14 @@ Feature: Test modelizer text view: create git branch
   Scenario: Create new branch action with checkout option should create a new branch and checkout on it
     When I click on '[data-cy="git-current-branch"]'
     And  I click on '[data-cy="git-menu-new-branch"]'
-    Then I expect checkbox '[data-cy="git-checkout-checkbox"]' is checked
-    And  I expect '[data-cy="git-newBranch-form"] [data-cy="git-branch-input"]' exists
+    Then I expect checkbox '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]' is checked
+    And  I expect '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' exists
 
     When I wait 2 seconds
-    And  I click on '[data-cy="git-newBranch-form"] [data-cy="git-branch-input"]'
-    And  I set on '[data-cy="git-newBranch-form"] [data-cy="git-branch-input"]' text "test-new-branch"
-    And  I click on '[data-cy="git-newBranch-form"] [data-cy="git-form-submit"]'
-    Then I expect '[data-cy="git-newBranch-form"]' is closed
+    And  I click on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]'
+    And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text "test-new-branch"
+    And  I click on '[data-cy="git-new-branch-form"] [data-cy="submit-button"]'
+    Then I expect '[data-cy="git-new-branch-form"]' is closed
     And  I expect "positive" toast to appear with text "Branch is created 🥳!"
     And  I expect '[data-cy="git-current-branch"]' is "test-new-branch"
 
@@ -33,11 +33,11 @@ Feature: Test modelizer text view: create git branch
   Scenario: Create new branch action without checkout option should create a new branch and not checkout on it
     When I click on '[data-cy="git-current-branch"]'
     And  I click on '[data-cy="git-menu-new-branch"]'
-    And  I click on '[data-cy="git-checkout-checkbox"]'
-    Then I expect checkbox '[data-cy="git-checkout-checkbox"]' is not checked
+    And  I click on '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]'
+    Then I expect checkbox '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]' is not checked
 
-    When I set on '[data-cy="git-newBranch-form"] [data-cy="git-branch-input"]' text "test-new-branch"
-    And  I click on '[data-cy="git-newBranch-form"] [data-cy="git-form-submit"]'
-    Then I expect '[data-cy="git-newBranch-form"]' is closed
+    When I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text "test-new-branch"
+    And  I click on '[data-cy="git-new-branch-form"] [data-cy="submit-button"]'
+    Then I expect '[data-cy="git-new-branch-form"]' is closed
     And  I expect "positive" toast to appear with text "Branch is created 🥳!"
     And  I expect '[data-cy="git-current-branch"]' is "main"

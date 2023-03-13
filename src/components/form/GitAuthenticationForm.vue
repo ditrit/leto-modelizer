@@ -8,13 +8,13 @@
       filled
       v-model="username"
       :label="$t('page.modelizer.settings.gitAuthentication.username')"
-      data-cy="git-username-input"
+      data-cy="username-input"
     />
     <q-input
       filled
       v-model="token"
       :label="$t('page.modelizer.settings.gitAuthentication.token')"
-      data-cy="git-token-input"
+      data-cy="token-input"
     />
     <div class="flex row items-center justify-center">
       <q-btn
@@ -22,7 +22,7 @@
         :label="$t('actions.default.save')"
         type="submit"
         :loading="submitting"
-        data-cy="git-form-submit"
+        data-cy="submit-button"
         color="positive">
         <template v-slot:loading>
           <q-spinner-dots/>

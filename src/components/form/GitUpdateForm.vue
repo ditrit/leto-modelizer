@@ -8,7 +8,7 @@
     <div v-html="$t('page.modelizer.git.update.description', { branch: branchName })"></div>
     <q-checkbox
       v-model="fastForward"
-      data-cy="git-fastForward-checkbox"
+      data-cy="fast-forward-checkbox"
     >
       <span v-html="$t('page.modelizer.git.update.fastForward')"></span>
     </q-checkbox>
@@ -18,7 +18,7 @@
         :label="$t('actions.default.update')"
         type="submit"
         :loading="submitting"
-        data-cy="git-form-submit"
+        data-cy="submit-button"
         color="positive"
       >
         <template v-slot:loading>

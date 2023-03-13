@@ -8,8 +8,8 @@ Feature: Test modelizer text view: git commit
 
     When I visit the "/"
     And  I click on '[data-cy="new-project"]'
-    And  I set on '[data-cy="new-project-form"] [data-cy="project-name-input"]' text "projectName"
-    And  I click on '[data-cy="new-project-form"] [data-cy="new-project-form-submit"]'
+    And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
+    And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     Then I expect current url is "/modelizer/projectName/model"
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -38,8 +38,8 @@ Feature: Test modelizer text view: git commit
     And  I click on '[data-cy="file-explorer-menu-create-file"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-input"]' text "newFile.js"
-    And  I click on '[data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="file-explorer-newFile.js"] [data-cy="file-label-newFile.js"]' appear 1 time on screen
 
     #  Add file
@@ -57,7 +57,7 @@ Feature: Test modelizer text view: git commit
     And  I expect '[data-cy="git-commit-dialog"] [data-cy="staged-item-file"]' appear 1 time on screen
 
     #  Empty commit message displays an error
-    When I click on '[data-cy="git-form-submit"]'
+    When I click on '[data-cy="git-commit-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="git-commit-dialog"]' exists
     And  I expect '[data-cy="git-commit-form"] [role="alert"]' is "Please type something"
 
@@ -85,8 +85,8 @@ Feature: Test modelizer text view: git commit
     And  I click on '[data-cy="file-explorer-menu-create-file"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-input"]' text "newFile.js"
-    And  I click on '[data-cy="create-file-submit"]'
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="file-explorer-newFile.js"] [data-cy="file-label-newFile.js"]' appear 1 time on screen
 
     #  Add file
@@ -104,8 +104,8 @@ Feature: Test modelizer text view: git commit
     And  I expect '[data-cy="git-commit-dialog"] [data-cy="staged-item-file"]' appear 1 time on screen
 
     #  Valid commit message displays a successful notification
-    When I set on '[data-cy="git-message-input"]' text "commit"
-    And  I click on '[data-cy="git-form-submit"]'
+    When I set on '[data-cy="git-commit-form"] [data-cy="message-input"]' text "commit"
+    And  I click on '[data-cy="git-commit-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="git-commit-dialog"]' not exists
     And  I expect "positive" toast to appear with text "Your files are committed &#129395;!"
 

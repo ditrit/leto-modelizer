@@ -7,10 +7,10 @@ Feature: Test modelizer text view: update file's content
     And I visit the "/"
 
     When I click on '[data-cy="import-project"]'
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-repository-input"]' text "{{ repository_url }}"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-username-input"]' text "test"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-token-input"]' text "test"
-    And  I click on '[data-cy="import-project-form"] [data-cy="import-project-form-submit"]'
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
+    And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
+    And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"
+    And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Project has been imported 🥳!"
     And  I expect '[data-cy="import-project-form"]' is closed
     And  I expect current url is "modelizer/{{ projectName }}/model"

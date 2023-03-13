@@ -7,16 +7,16 @@ Feature: Test homepage: project deletion
 
   Scenario: Delete existing project
     When I click on '[data-cy="new-project"]'
-    And  I set on '[data-cy="new-project-form"] [data-cy="project-name-input"]' text "projectName"
-    And  I click on '[data-cy="new-project-form"] [data-cy="new-project-form-submit"]'
+    And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
+    And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     Then I expect current url is "modelizer/projectName/model"
 
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is "/"
 
     When I click on '[data-cy="delete-project-projectName"]'
-    And  I click on '[data-cy="delete-project-form"] [data-cy="confirm-delete-project-checkbox"]'
-    And  I click on '[data-cy="delete-project-form"] [data-cy="delete-project-form-submit"]'
+    And  I click on '[data-cy="delete-project-form"] [data-cy="confirm-delete-checkbox"]'
+    And  I click on '[data-cy="delete-project-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Project has been deleted 😥"
     And  I expect '[data-cy="delete-project-form"]' is closed
     And  I expect '[data-cy="project-card"]' not exists
@@ -24,10 +24,10 @@ Feature: Test homepage: project deletion
   Scenario: Delete project should remove it from database
     Given I set context field "projectName" with "leto-modelizer-project-test"
     When I click on '[data-cy="import-project"]'
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-repository-input"]' text "{{ repository_url }}"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-username-input"]' text "test"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-token-input"]' text "test"
-    And  I click on '[data-cy="import-project-form"] [data-cy="import-project-form-submit"]'
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
+    And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
+    And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"
+    And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Project has been imported 🥳!"
     And  I expect '[data-cy="import-project-form"]' is closed
     And  I expect current url is "modelizer/{{ projectName }}/model"
@@ -44,7 +44,7 @@ Feature: Test homepage: project deletion
     When I click on '[data-cy="file-explorer-menu-delete-file"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
-    When I click on '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]'
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="file-label-branch.txt.js"]' not exists
@@ -53,17 +53,17 @@ Feature: Test homepage: project deletion
     Then I expect current url is "/"
 
     When I click on '[data-cy="delete-project-{{ projectName }}"]'
-    And  I click on '[data-cy="delete-project-form"] [data-cy="confirm-delete-project-checkbox"]'
-    And  I click on '[data-cy="delete-project-form"] [data-cy="delete-project-form-submit"]'
+    And  I click on '[data-cy="delete-project-form"] [data-cy="confirm-delete-checkbox"]'
+    And  I click on '[data-cy="delete-project-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Project has been deleted 😥"
     And  I expect '[data-cy="delete-project-form"]' is closed
     And  I expect '[data-cy="project-card"]' not exists
 
     When I click on '[data-cy="import-project"]'
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-repository-input"]' text "{{ repository_url }}"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-username-input"]' text "test"
-    And  I set on '[data-cy="import-project-form"] [data-cy="git-token-input"]' text "test"
-    And  I click on '[data-cy="import-project-form"] [data-cy="import-project-form-submit"]'
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
+    And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
+    And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"
+    And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "Project has been imported 🥳!"
     And  I expect '[data-cy="import-project-form"]' is closed
     And  I expect current url is "modelizer/{{ projectName }}/model"

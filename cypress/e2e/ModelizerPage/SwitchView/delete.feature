@@ -8,8 +8,8 @@ Feature: Test switch model to text view: delete component/link
     And I visit the "/"
 
     When I click on '[data-cy="new-project"]'
-    And  I set on '[data-cy="new-project-form"] [data-cy="project-name-input"]' text "projectName"
-    And  I click on '[data-cy="new-project-form"] [data-cy="new-project-form-submit"]'
+    And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
+    And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     Then I expect current url is "/modelizer/projectName/model"
     And  I expect '[data-cy="plugin-definitions-terrator-plugin"]' appear 1 time on screen
     And  I expect '[data-cy="plugin-definitions-terrator-plugin"] [data-cy="plugin-definitions-title"]' is "terrator-plugin"
@@ -146,7 +146,7 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="file-explorer-menu-delete-file"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
-    When I click on '[data-cy="delete-file-form"] [data-cy="delete-file-submit"]'
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="file-label-new_file.tf"]' not exists
