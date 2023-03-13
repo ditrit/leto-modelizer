@@ -31,16 +31,6 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   InitEvent: {
     subscribe: jest.fn(),
   },
-  ParseEvent: {
-    subscribe: jest.fn(),
-  },
-  RenderEvent: {
-    next: jest.fn(),
-    subscribe: jest.fn(),
-  },
-  DrawEvent: {
-    subscribe: jest.fn(),
-  },
   UpdateEvent: {
     subscribe: jest.fn(),
   },
@@ -80,12 +70,6 @@ describe('Test component: ModelizerDrawView', () => {
   let wrapper;
   let initSubscribe;
   let initUnsubscribe;
-  let parseSubscribe;
-  let parseUnsubscribe;
-  let renderSubscribe;
-  let renderUnsubscribe;
-  let drawSubscribe;
-  let drawUnsubscribe;
   let updateSubscribe;
   let updateUnsubscribe;
   let pluginParse;
@@ -97,12 +81,6 @@ describe('Test component: ModelizerDrawView', () => {
   beforeEach(() => {
     initSubscribe = jest.fn();
     initUnsubscribe = jest.fn();
-    parseSubscribe = jest.fn();
-    parseUnsubscribe = jest.fn();
-    renderSubscribe = jest.fn();
-    renderUnsubscribe = jest.fn();
-    drawSubscribe = jest.fn();
-    drawUnsubscribe = jest.fn();
     updateSubscribe = jest.fn();
     updateUnsubscribe = jest.fn();
     pluginParse = jest.fn();
@@ -129,18 +107,6 @@ describe('Test component: ModelizerDrawView', () => {
     PluginEvent.InitEvent.subscribe.mockImplementation(() => {
       initSubscribe();
       return { unsubscribe: initUnsubscribe };
-    });
-    PluginEvent.ParseEvent.subscribe.mockImplementation(() => {
-      parseSubscribe();
-      return { unsubscribe: parseUnsubscribe };
-    });
-    PluginEvent.RenderEvent.subscribe.mockImplementation(() => {
-      renderSubscribe();
-      return { unsubscribe: renderUnsubscribe };
-    });
-    PluginEvent.DrawEvent.subscribe.mockImplementation(() => {
-      drawSubscribe();
-      return { unsubscribe: drawUnsubscribe };
     });
     PluginEvent.UpdateEvent.subscribe.mockImplementation(() => {
       updateSubscribe();
@@ -309,18 +275,6 @@ describe('Test component: ModelizerDrawView', () => {
     it('should subscribe to InitEvent', () => {
       expect(initSubscribe).toHaveBeenCalledTimes(1);
     });
-
-    it('should subscribe to ParseEvent', () => {
-      expect(parseSubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should subscribe to DrawEvent', () => {
-      expect(drawSubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should subscribe to RenderEvent', () => {
-      expect(renderSubscribe).toHaveBeenCalledTimes(1);
-    });
   });
 
   describe('Test hook function: onUnmounted', () => {
@@ -328,24 +282,6 @@ describe('Test component: ModelizerDrawView', () => {
       expect(initUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(initUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to ParseEvent', () => {
-      expect(parseUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(parseUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to DrawEvent', () => {
-      expect(drawUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(drawUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to RenderEvent', () => {
-      expect(renderUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(renderUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

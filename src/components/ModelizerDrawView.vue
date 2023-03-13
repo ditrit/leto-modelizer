@@ -62,9 +62,6 @@ const route = useRoute();
 const query = computed(() => route.query);
 
 let pluginInitSubscription;
-let pluginParseSubscription;
-let pluginDrawSubscription;
-let pluginRenderSubscription;
 let pluginUpdateSubscription;
 
 const { t } = useI18n();
@@ -207,17 +204,11 @@ async function dropHandler(event) {
 onMounted(() => {
   updatePluginsAndTemplates();
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePluginsAndTemplates);
-  pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePluginsAndTemplates);
-  pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePluginsAndTemplates);
   pluginUpdateSubscription = PluginEvent.UpdateEvent.subscribe(renderModelComponents);
-  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updatePluginsAndTemplates);
 });
 
 onUnmounted(() => {
   pluginInitSubscription.unsubscribe();
-  pluginParseSubscription.unsubscribe();
-  pluginDrawSubscription.unsubscribe();
-  pluginRenderSubscription.unsubscribe();
   pluginUpdateSubscription.unsubscribe();
 });
 </script>
