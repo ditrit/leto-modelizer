@@ -17,7 +17,7 @@ Feature: Test modelizer text view: create git branch
 
   Scenario: Create new branch action with checkout option should create a new branch and checkout on it
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-new-branch"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     Then I expect checkbox '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]' is checked
     And  I expect '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' exists
 
@@ -32,7 +32,7 @@ Feature: Test modelizer text view: create git branch
 
   Scenario: Create new branch action without checkout option should create a new branch and not checkout on it
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-new-branch"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]'
     Then I expect checkbox '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]' is not checked
 

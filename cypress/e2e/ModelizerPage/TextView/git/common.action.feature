@@ -15,7 +15,7 @@ Feature: Test modelizer text view: common action of git branch menu
     When I click on '[data-cy="git-current-branch-button"]'
     And  I wait 2 seconds
     # Create new branch test 1
-    And  I click on '[data-cy="git-menu-new-branch"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     And  I expect '[data-cy="git-new-branch-form"]' exists
     And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text "test1"
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]'
@@ -23,7 +23,7 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I expect '[data-cy="git-new-branch-form"]' is closed
     # Create new branch test 2
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-new-branch"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     And  I expect '[data-cy="git-new-branch-form"]' exists
     And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text "test2"
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]'
@@ -31,7 +31,7 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I expect '[data-cy="git-new-branch-form"]' is closed
     # Create new branch test 3
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-new-branch"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     And  I expect '[data-cy="git-new-branch-form"]' exists
     And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text "test3"
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]'
@@ -39,7 +39,7 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I expect '[data-cy="git-new-branch-form"]' is closed
     # Create new branch test 4
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-new-branch"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     And  I expect '[data-cy="git-new-branch-form"]' exists
     And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text "test4"
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]'
@@ -47,7 +47,7 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I expect '[data-cy="git-new-branch-form"]' is closed
     # Create new branch test 5
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-new-branch"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     And  I expect '[data-cy="git-new-branch-form"]' exists
     And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text "test5"
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="checkout-checkbox"]'
@@ -57,11 +57,11 @@ Feature: Test modelizer text view: common action of git branch menu
     When I click on '[data-cy="git-current-branch-button"]'
     And  I wait 2 seconds
     And  I scroll to "bottom" into '[data-cy="git-branch-menu"]'
-    Then I expect '[data-cy="git-branch-expand-menu-text"]' is "Show 1 more..."
+    Then I expect '[data-cy="git-branch-menu"] [data-cy="expand-local-branch-menu"] [data-cy="expand-list-text"]' is "Show 1 more..."
 
-    When I click on '[data-cy="git-branch-expand-local-menu"]'
-    Then I expect '[data-cy="git-branch-expand-local-menu"] [data-cy="git-branch-expand-menu-text"]' is "Show less"
+    When I click on '[data-cy="git-branch-menu"] [data-cy="expand-local-branch-menu"]'
+    Then I expect '[data-cy="git-branch-menu"] [data-cy="expand-local-branch-menu"] [data-cy="expand-list-text"]' is "Show less"
 
-    When I click on '[data-cy="project-settings"]'
+    When I click on '[data-cy="modelizer-settings-button"]'
     And  I click on '[data-cy="git-current-branch-button"]'
-    Then I expect '[data-cy="git-branch-expand-local-menu"] [data-cy="git-branch-expand-menu-text"]' is "Show 1 more..."
+    Then I expect '[data-cy="git-branch-menu"] [data-cy="expand-local-branch-menu"] [data-cy="expand-list-text"]' is "Show 1 more..."

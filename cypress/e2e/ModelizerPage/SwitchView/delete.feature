@@ -143,7 +143,7 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-new_file.tf"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-delete-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
     When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'

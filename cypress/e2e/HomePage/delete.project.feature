@@ -41,7 +41,7 @@ Feature: Test homepage: project deletion
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-branch.txt"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-delete-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
     When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'

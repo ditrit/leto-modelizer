@@ -4,7 +4,7 @@
     color="white"
     text-color="primary"
     icon="fa-solid fa-gear"
-    data-cy="project-settings"
+    data-cy="modelizer-settings-button"
   >
     <q-menu
       auto-close
@@ -19,7 +19,7 @@
             v-if="menuItem.visible"
             clickable
             class="settings-item"
-            :data-cy="`git-settings-menu-${menuItem.key}`"
+            :data-cy="`item_${menuItem.key}`"
             @click="onClick(menuItem.key)"
           >
             <q-item-section avatar>

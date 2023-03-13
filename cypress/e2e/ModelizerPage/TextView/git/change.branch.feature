@@ -18,7 +18,7 @@ Feature: Test modelizer text view: change git branch
 
   Scenario: Checkout action should change current branch
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-branch-remote-test/remote1"]'
-    And  I click on '[data-cy="git-menu-branch-checkout-test/remote1"]'
-    Then I expect '[data-cy="git-menu-branch-checkout-loader-test/remote1"]' not exists
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="remote-branch_test/remote1"]'
+    And  I click on '[data-cy="git-branch-action-menu"] [data-cy="checkout_test/remote1"]'
+    Then I expect '[data-cy="git-branch-action-menu"] [data-cy="checkout-loader_test/remote1"]' not exists
     And  I expect '[data-cy="git-current-branch-button"]' is "test/remote1"

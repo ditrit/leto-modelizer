@@ -26,7 +26,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-branch.txt"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-delete-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
     When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
@@ -42,7 +42,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-app.tf"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-delete-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
     When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
@@ -63,7 +63,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-app.tf"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-delete-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
     When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
@@ -84,7 +84,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-branch.txt"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-delete-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
 
     When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
@@ -98,7 +98,7 @@ Feature: Test modelizer text view: delete file and folder
     When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
-    When I click on '[data-cy="file-explorer-menu-create-folder"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-folder-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "folder"
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
@@ -110,7 +110,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-folder"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-delete-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
     And  I expect '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' not exists
 
@@ -129,7 +129,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-delete-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
     And  I expect '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' exists
     And  I expect checkbox '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' is not checked
@@ -162,7 +162,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-create-folder"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-folder-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "folder"
@@ -177,7 +177,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-folder"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-create-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "file.js"
@@ -193,7 +193,7 @@ Feature: Test modelizer text view: delete file and folder
     When I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-delete-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
     And  I expect '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' exists
     And  I expect checkbox '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' is not checked
@@ -227,7 +227,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-create-folder"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-folder-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "folder"
@@ -242,7 +242,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-folder"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-create-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "file.js"
@@ -260,7 +260,7 @@ Feature: Test modelizer text view: delete file and folder
     When I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-delete-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
     Then I expect '[data-cy="delete-file-dialog"]' exists
     And  I expect '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' exists
     And  I expect checkbox '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' is not checked

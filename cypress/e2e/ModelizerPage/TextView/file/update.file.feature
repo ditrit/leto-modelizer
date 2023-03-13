@@ -84,7 +84,7 @@ Feature: Test modelizer text view: update file's content
     And  I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-branch.txt"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-branch.txt"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
-    And  I expect '[data-cy="file-explorer-menu-add-file"]' not exists
+    And  I expect '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]' not exists
     And  I expect '[data-cy="file-label-branch.txt"].file-status-unmodified' exists
 
     When I double click on '[data-cy="file-explorer"] [data-cy="file-label-branch.txt"]'
@@ -94,6 +94,6 @@ Feature: Test modelizer text view: update file's content
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-branch.txt"]'
     And  I wait 1 second
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
-    And  I expect '[data-cy="file-explorer-menu-add-file"]' exists
+    And  I expect '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]' exists
     And  I expect '[data-cy="file-label-branch.txt"].file-status-modified' exists
     And  I expect active file content to contain "updated.*content"

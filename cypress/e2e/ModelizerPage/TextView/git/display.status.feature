@@ -14,9 +14,9 @@ Feature: Test modelizer text view: git status display
 
   Scenario: Display dialog containing an empty list
     When I click on '[data-cy="git-current-branch-button"]'
-    Then I expect '[data-cy="git-menu-status"]' exists
+    Then I expect '[data-cy="git-branch-menu"] [data-cy="git-status-item"]' exists
 
-    When I click on '[data-cy="git-menu-status"]'
+    When I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
     And  I expect '[data-cy="git-status-dialog"] [data-cy="empty-item"]' exists
 
@@ -24,7 +24,7 @@ Feature: Test modelizer text view: git status display
     #  Create a file
     When I hover '[data-cy="file-explorer-buttons-projectName"]' to make it visible
     And  I click on '[data-cy="file-explorer-buttons-projectName"]'
-    And  I click on '[data-cy="file-explorer-menu-create-file"]'
+    And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
@@ -33,7 +33,7 @@ Feature: Test modelizer text view: git status display
 
     #  Check file status
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-status"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
     And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 0 time on screen
     And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 0 time on screen
@@ -43,11 +43,11 @@ Feature: Test modelizer text view: git status display
     #  Add file
     When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]'
-    Then I click on '[data-cy="file-explorer-menu-add-file"]'
+    Then I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
 
     #  Check file status
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-status"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
     And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen
     And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 0 time on screen
@@ -59,7 +59,7 @@ Feature: Test modelizer text view: git status display
 
     #  Check file status
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-status"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
     And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen
     And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 1 time on screen

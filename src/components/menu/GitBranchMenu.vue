@@ -9,7 +9,7 @@
     <q-list style="min-width: 500px">
       <q-input
         ref="searchInput"
-        data-cy="git-branch-menu-search-bar"
+        data-cy="search-branch-input"
         v-model="searchedBranch"
         dense
         clearable
@@ -18,43 +18,61 @@
           <q-icon name="fa-solid fa-magnifying-glass" />
         </template>
       </q-input>
-      <q-item clickable @click="openDialog('GitStatus')">
+      <q-item
+        clickable
+        @click="openDialog('GitStatus')"
+        data-cy="git-status-item"
+      >
         <q-item-section avatar>
           <q-icon
             color="primary"
             name="fa-solid fa-question"
-            data-cy="git-menu-status"
           />
         </q-item-section>
-        <q-item-section>{{ $t('actions.git.status') }}</q-item-section>
+        <q-item-section>
+          {{ $t('actions.git.status') }}
+        </q-item-section>
       </q-item>
-      <q-item clickable @click="openDialog('GitCommit')">
+      <q-item
+        clickable
+        @click="openDialog('GitCommit')"
+        data-cy="git-commit-item"
+      >
         <q-item-section avatar>
           <q-icon
             color="primary"
             name="fa-solid fa-floppy-disk"
-            data-cy="git-menu-commit"
           />
         </q-item-section>
-        <q-item-section>{{ $t('actions.git.commit') }}</q-item-section>
+        <q-item-section>
+          {{ $t('actions.git.commit') }}
+        </q-item-section>
       </q-item>
-      <q-item clickable @click="openDialog('GitNewBranch')">
+      <q-item
+        clickable
+        @click="openDialog('GitNewBranch')"
+        data-cy="git-new-branch-item"
+      >
         <q-item-section avatar>
           <q-icon
             color="primary"
             name="fa-solid fa-plus"
-            data-cy="git-menu-new-branch"
           />
         </q-item-section>
-        <q-item-section>{{ $t('actions.git.newBranch') }}</q-item-section>
+        <q-item-section>
+          {{ $t('actions.git.newBranch') }}
+        </q-item-section>
       </q-item>
 
-      <q-item clickable @click="openDialog('GitLog')">
+      <q-item
+        clickable
+        @click="openDialog('GitLog')"
+        data-cy="git-log-item"
+      >
         <q-item-section avatar>
           <q-icon
             color="primary"
             name="fa-solid fa-list"
-            data-cy="git-menu-log"
           />
         </q-item-section>
         <q-item-section>{{ $t('actions.git.log') }}</q-item-section>
@@ -64,22 +82,22 @@
         <git-branch-header-menu :title="$t('menu.git.localBranchesTitle')"/>
         <template v-for="(branch, index) in localBranches">
           <git-branch-item-menu
+            v-if="showLocal || index < maxItem"
             :key="`local_${branch.name}`"
             :name="branch.name"
             :full-name="branch.fullName"
             :isCurrentBranch="branch.name === currentBranchName"
             :on-local="branch.onLocal"
             :on-remote="branch.onRemote"
-            v-if="showLocal || index < maxItem"
             @action:done="menu.hide()"
-            :data-cy="`git-menu-branch-local-${branch.name}`"
+            :data-cy="`local-branch_${branch.name}`"
           />
         </template>
         <git-branch-expand-list-menu
-          data-cy="git-branch-expand-local-menu"
+          v-if="localBranches.length > maxItem"
+          data-cy="expand-local-branch-menu"
           :open="showLocal"
           :number="localBranches.length - maxItem"
-          v-if="localBranches.length > maxItem"
           @click="manageExpandMenu(true)"
         />
       </template>
@@ -88,22 +106,22 @@
         <git-branch-header-menu :title="$t('menu.git.remoteBranchesTitle')"/>
         <template v-for="(branch, index) in remoteBranches">
           <git-branch-item-menu
+            v-if="showRemote || index < maxItem"
             :key="`remote_${branch.name}`"
             :name="branch.name"
             :full-name="branch.fullName"
             :isCurrentBranch="branch.name === currentBranchName"
             :on-local="branch.onLocal"
             :on-remote="branch.onRemote"
-            v-if="showRemote || index < maxItem"
             @action:done="menu.hide()"
-            :data-cy="`git-menu-branch-remote-${branch.name}`"
+            :data-cy="`remote-branch_${branch.name}`"
           />
         </template>
         <git-branch-expand-list-menu
-          data-cy="git-branch-expand-remote-menu"
+          v-if="remoteBranches.length > maxItem"
+          data-cy="expand-remote-branch-menu"
           :open="showRemote"
           :number="remoteBranches.length - maxItem"
-          v-if="remoteBranches.length > maxItem"
           @click="manageExpandMenu(false)"
         />
       </template>

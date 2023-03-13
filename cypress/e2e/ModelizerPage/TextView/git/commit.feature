@@ -15,16 +15,16 @@ Feature: Test modelizer text view: git commit
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I click on '[data-cy="git-current-branch-button"]'
     And  I wait 1 second
-    Then I expect '[data-cy="git-menu-commit"]' exists
+    Then I expect '[data-cy="git-branch-menu"] [data-cy="git-commit-item"]' exists
 
   Scenario: Commit with no change
-    When I click on '[data-cy="git-menu-commit"]'
+    When I click on '[data-cy="git-branch-menu"] [data-cy="git-commit-item"]'
     Then I expect '[data-cy="git-commit-dialog"]' exists
     And  I expect '[data-cy="git-commit-dialog"] [data-cy="empty-item"]' exists
 
   Scenario: Commit an added file without commit message fails
     #  Check list of logs
-    When I click on '[data-cy="git-menu-log"]'
+    When I click on '[data-cy="git-branch-menu"] [data-cy="git-log-item"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' appear 1 time on screen
@@ -35,7 +35,7 @@ Feature: Test modelizer text view: git commit
     #  Create a file
     When I hover '[data-cy="file-explorer-buttons-projectName"]' to make it visible
     And  I click on '[data-cy="file-explorer-buttons-projectName"]'
-    And  I click on '[data-cy="file-explorer-menu-create-file"]'
+    And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
@@ -45,13 +45,13 @@ Feature: Test modelizer text view: git commit
     #  Add file
     When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]'
-    And  I click on '[data-cy="file-explorer-menu-add-file"]'
+    And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
 
     #  Commit
     When I click on '[data-cy="git-current-branch-button"]'
-    Then I expect '[data-cy="git-menu-commit"]' exists
+    Then I expect '[data-cy="git-branch-menu"] [data-cy="git-commit-item"]' exists
 
-    When I click on '[data-cy="git-menu-commit"]'
+    When I click on '[data-cy="git-branch-menu"] [data-cy="git-commit-item"]'
     Then I expect '[data-cy="git-commit-dialog"]' exists
     And  I expect '[data-cy="git-commit-dialog"] [data-cy="staged-item-title"]' exists
     And  I expect '[data-cy="git-commit-dialog"] [data-cy="staged-item-file"]' appear 1 time on screen
@@ -64,14 +64,14 @@ Feature: Test modelizer text view: git commit
     #  New commit message is not added inside list of logs
     When I click on '[data-cy="close-dialog-button"]'
     And  I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-log"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-log-item"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' appear 1 times on screen
 
   Scenario: Commit an added file with commit message succeeds
     #  Check list of logs
-    When I click on '[data-cy="git-menu-log"]'
+    When I click on '[data-cy="git-branch-menu"] [data-cy="git-log-item"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' appear 1 time on screen
@@ -82,7 +82,7 @@ Feature: Test modelizer text view: git commit
     #  Create a file
     When I hover '[data-cy="file-explorer-buttons-projectName"]' to make it visible
     And  I click on '[data-cy="file-explorer-buttons-projectName"]'
-    And  I click on '[data-cy="file-explorer-menu-create-file"]'
+    And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
@@ -92,13 +92,13 @@ Feature: Test modelizer text view: git commit
     #  Add file
     When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]'
-    And  I click on '[data-cy="file-explorer-menu-add-file"]'
+    And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
 
     #  Commit
     When I click on '[data-cy="git-current-branch-button"]'
-    Then I expect '[data-cy="git-menu-commit"]' exists
+    Then I expect '[data-cy="git-branch-menu"] [data-cy="git-commit-item"]' exists
 
-    When I click on '[data-cy="git-menu-commit"]'
+    When I click on '[data-cy="git-branch-menu"] [data-cy="git-commit-item"]'
     Then I expect '[data-cy="git-commit-dialog"]' exists
     And  I expect '[data-cy="git-commit-dialog"] [data-cy="staged-item-title"]' exists
     And  I expect '[data-cy="git-commit-dialog"] [data-cy="staged-item-file"]' appear 1 time on screen
@@ -111,7 +111,7 @@ Feature: Test modelizer text view: git commit
 
     #  New commit message is added inside list of logs
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-menu-log"]'
+    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-log-item"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]]' appear 2 times on screen

@@ -1,9 +1,12 @@
 <template>
-  <q-menu ref="menu">
+  <q-menu
+    ref="menu"
+    data-cy="git-branch-action-menu"
+  >
     <q-list>
       <q-item
         v-if="!isCurrentBranch"
-        :data-cy="`git-menu-branch-checkout-${branchName}`"
+        :data-cy="`checkout_${branchName}`"
         clickable
         @click="onCheckout"
       >
@@ -11,12 +14,12 @@
       </q-item>
       <q-linear-progress
         v-if="!isCurrentBranch && loading.checkout"
-        :data-cy="`git-menu-branch-checkout-loader-${branchName}`"
+        :data-cy="`checkout-loader_${branchName}`"
         color="primary"
         indeterminate
       />
       <q-item
-        :data-cy="`git-menu-branch-new-branch-${branchName}`"
+        :data-cy="`new-branch_${branchName}`"
         clickable
         @click="openDialog('GitNewBranch')"
       >
@@ -29,7 +32,7 @@
 
       <q-item
         v-if="onLocal && onRemote"
-        :data-cy="`git-menu-branch-update-${branchName}`"
+        :data-cy="`update_${branchName}`"
         clickable
         @click="openDialog('GitUpdate')"
       >
@@ -40,7 +43,7 @@
 
       <q-item
         v-if="onLocal"
-        :data-cy="`git-menu-branch-push-${branchName}`"
+        :data-cy="`push_${branchName}`"
         clickable
         @click="openDialog('GitPush')"
       >

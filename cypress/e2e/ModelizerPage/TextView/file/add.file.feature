@@ -26,14 +26,14 @@ Feature: Test modelizer text view: add file
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-README.md"]'
     Then I expect '[data-cy="file-label-README.md"].file-status-unmodified' exists
     And  I expect '[data-cy="file-explorer-action-menu"]' exists
-    But  I expect '[data-cy="file-explorer-menu-add-file"]' not exists
+    But  I expect '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]' not exists
 
   Scenario: Create a file inside the root folder and add it on git should change the file's status
     When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-create-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
@@ -47,7 +47,7 @@ Feature: Test modelizer text view: add file
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-add-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     Then I expect "positive" toast to appear with text "File is added &#129395;!"
     And  I expect '[data-cy="file-label-newFile.js"].file-status-staged' exists
 
@@ -57,7 +57,7 @@ Feature: Test modelizer text view: add file
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-create-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
@@ -71,7 +71,7 @@ Feature: Test modelizer text view: add file
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-add-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     Then I expect "positive" toast to appear with text "File is added &#129395;!"
     And  I expect '[data-cy="file-label-newFile.js"].file-status-staged' exists
     

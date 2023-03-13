@@ -25,7 +25,7 @@ Feature: Test modelizer text view: create file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-create-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
@@ -49,7 +49,7 @@ Feature: Test modelizer text view: create file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-create-file"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
@@ -72,7 +72,7 @@ Feature: Test modelizer text view: create file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-create-folder"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-folder-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFolder"
@@ -93,7 +93,7 @@ Feature: Test modelizer text view: create file and folder
     And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
-    When I click on '[data-cy="file-explorer-menu-create-folder"]'
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-folder-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFolder"
