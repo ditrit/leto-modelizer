@@ -161,9 +161,9 @@ describe('Test component: ModelizerDrawView', () => {
     });
   });
 
-  describe('Test function: updatePluginsAndTemplates', () => {
-    it('should update data.plugins, call drawComponents and update component templates on success', async () => {
-      await wrapper.vm.updatePluginsAndTemplates();
+  describe('Test function: initView', () => {
+    it('should update data.plugin and update component templates on success', async () => {
+      await wrapper.vm.initView();
 
       expect(wrapper.vm.data.plugin).toEqual(expect.objectContaining({ data: expect.objectContaining({ name: 'pluginName' }) }));
       expect(wrapper.vm.templates).toEqual(expect.arrayContaining([{ plugin: 'plugin', isTemplate: true }]));
@@ -174,7 +174,7 @@ describe('Test component: ModelizerDrawView', () => {
 
       Notify.create = jest.fn();
 
-      await wrapper.vm.updatePluginsAndTemplates();
+      await wrapper.vm.initView();
 
       expect(Notify.create).toHaveBeenCalledWith({
         message: 'errors.templates.getData',
@@ -189,7 +189,7 @@ describe('Test component: ModelizerDrawView', () => {
 
       Notify.create = jest.fn();
 
-      await wrapper.vm.updatePluginsAndTemplates();
+      await wrapper.vm.initView();
 
       expect(Notify.create).not.toHaveBeenCalled();
     });

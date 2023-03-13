@@ -123,21 +123,10 @@ async function drawComponents() {
 }
 
 /**
- * Display an error message to the user.
- */
-function notifyError() {
-  Notify.create({
-    type: 'negative',
-    message: t('errors.templates.getData'),
-    html: true,
-  });
-}
-
-/**
- * Update plugins array and related component templates array.
+ * Update plugin, draw components and update component templates array.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-async function updatePluginsAndTemplates() {
+async function initView() {
   if (!query.value || !query.value.path) {
     return;
   }
@@ -156,7 +145,11 @@ async function updatePluginsAndTemplates() {
       templates.value = response;
     })
     .catch(() => {
-      notifyError();
+      Notify.create({
+        type: 'negative',
+        message: t('errors.templates.getData'),
+        html: true,
+      });
     });
 }
 
@@ -202,8 +195,8 @@ async function dropHandler(event) {
 }
 
 onMounted(() => {
-  updatePluginsAndTemplates();
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePluginsAndTemplates);
+  initView();
+  pluginInitSubscription = PluginEvent.InitEvent.subscribe(initView);
   pluginUpdateSubscription = PluginEvent.UpdateEvent.subscribe(renderModelComponents);
 });
 
