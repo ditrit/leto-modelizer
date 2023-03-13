@@ -13,11 +13,11 @@ Feature: Test modelizer model view: plugin initialization
     Then I expect current url is "/modelizer/projectName/model"
 
   Scenario: Plugin test should appear in component definitions list
-    Then I expect '[data-cy="plugin-definitions-terrator-plugin"]' exists
-    And  I expect '[data-cy="plugin-definitions-terrator-plugin"] [data-cy="plugin-definitions-title"]' is "terrator-plugin"
+    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"]' exists
+    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [data-cy="title"]' is "terrator-plugin"
 
   Scenario: Should have only one plugin installed with all these definitions
-    When I click on '[data-cy="plugin-definitions-terrator-plugin"]'
+    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
     Then I expect '[class*="plugin-definitions"]' appear 1 time on screen
     And  I expect '[class*="component-definition-card"]' appear 18 times on screen
     And  I expect '[data-cy="component-definition_<element>"]' exists

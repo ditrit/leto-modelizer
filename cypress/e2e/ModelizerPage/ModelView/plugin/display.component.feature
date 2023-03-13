@@ -11,10 +11,10 @@ Feature: Test modelizer model view: add plugin component
     And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
     And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
     Then I expect current url is "/modelizer/projectName/model"
-    And  I expect '[data-cy="plugin-definitions-terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="plugin-definitions-terrator-plugin"] [data-cy="plugin-definitions-title"]' is "terrator-plugin"
+    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [data-cy="title"]' is "terrator-plugin"
 
-    When I click on '[data-cy="plugin-definitions-terrator-plugin"]'
+    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
     Then I expect '[class*="component-definition-card"]' appear 18 times on screen
 
   Scenario Outline: Click on the <element> component should display it on the page

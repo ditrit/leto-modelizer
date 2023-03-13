@@ -13,11 +13,11 @@ Feature: Test modelizer model view: plugin initialization
     Then I expect current url is "/modelizer/projectName/model"
 
   Scenario Outline: Set text as "<filter>" should display only one element
-    When I click on '[data-cy="plugin-definitions-terrator-plugin"]'
+    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
     Then I expect '[class*="plugin-definitions"]' appear 1 time on screen
     And  I expect '[class*="component-definition-card"]' appear 18 times on screen
 
-    When I set on '[data-cy="filter-plugin-definitions"]' text "<filter>"
+    When I set on '[data-cy="definitions-filter-input"]' text "<filter>"
     And  I expect '[class*="component-definition-card"]' appear 1 time on screen
     And  I expect '[data-cy="component-definition_<filter>"]' exists
 
@@ -40,11 +40,11 @@ Feature: Test modelizer model view: plugin initialization
       | aws_key_pair          |
 
   Scenario Outline: Set text as "<filter>" should display only two elements
-    When I click on '[data-cy="plugin-definitions-terrator-plugin"]'
+    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
     Then I expect '[class*="plugin-definitions"]' appear 1 time on screen
     And  I expect '[class*="component-definition-card"]' appear 18 times on screen
 
-    When I set on '[data-cy="filter-plugin-definitions"]' text "<filter>"
+    When I set on '[data-cy="definitions-filter-input"]' text "<filter>"
     And  I expect '[class*="component-definition-card"]' appear 2 times on screen
     And  I expect '[data-cy="component-definition_<element1>"]' exists
     And  I expect '[data-cy="component-definition_<element2>"]' exists
@@ -60,11 +60,11 @@ Feature: Test modelizer model view: plugin initialization
       | route53      | aws_route53_zone      | aws_route53_record   |
 
   Scenario Outline: Set text as "<filter>" should not display any elements.
-    When I click on '[data-cy="plugin-definitions-terrator-plugin"]'
+    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
     Then I expect '[class*="plugin-definitions"]' appear 1 time on screen
     And  I expect '[class*="component-definition-card"]' appear 18 times on screen
 
-    When I set on '[data-cy="filter-plugin-definitions"]' text "<filter>"
+    When I set on '[data-cy="definitions-filter-input"]' text "<filter>"
     And  I expect '[class*="component-definition-card"]' appear 0 time on screen
     Examples:
       | filter    |

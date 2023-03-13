@@ -19,7 +19,7 @@
             round
             flat
             icon="fa-solid fa-xmark"
-            data-cy="object-details-panel-close-button"
+            data-cy="close-button"
             @click="isVisible = false"
           />
         </q-item-section>
@@ -70,7 +70,7 @@
                 color="positive"
                 :loading="submitting"
                 @click="save"
-                data-cy="object-details-panel-save-button"
+                data-cy="save-button"
               >
                 <template v-slot:loading>
                   <q-spinner-dots/>
@@ -80,7 +80,7 @@
                 icon="fa-solid fa-arrow-rotate-left"
                 :label="$t('plugin.component.attribute.reset')"
                 color="info"
-                data-cy="object-details-panel-reset-button"
+                data-cy="reset-button"
                 @click="reset"
               />
             </q-item>
