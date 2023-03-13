@@ -11,7 +11,7 @@ Feature: Test homepage: project deletion
     And  I click on '[data-cy="new-project-form"] [data-cy="new-project-form-submit"]'
     Then I expect current url is "modelizer/projectName/model"
 
-    When I click on '[data-cy="app-logo-link"]'
+    When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is "/"
 
     When I click on '[data-cy="delete-project-projectName"]'
@@ -49,7 +49,7 @@ Feature: Test homepage: project deletion
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="file-label-branch.txt.js"]' not exists
 
-    When I click on '[data-cy="app-logo-link"]'
+    When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is "/"
 
     When I click on '[data-cy="delete-project-{{ projectName }}"]'

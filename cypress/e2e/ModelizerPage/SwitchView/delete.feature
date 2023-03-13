@@ -23,23 +23,23 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="component-definition-aws"]'
     Then I expect '[id^="aws"]' exists
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-label-new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "new_file.tf"
     And  I expect active file content to contain "provider.*\"aws\".*{}"
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Model"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
     And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
 
     When I click on '[id^="aws"]'
     And  I click on '[id="remove-component"]'
     Then I expect '[id^="aws"]' not exists
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     But  I expect '[data-cy="file-label-new_file.tf"]' not exists
 
@@ -50,8 +50,8 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[id^="aws"]' exists
     And  I expect '[id^="server"]' exists
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-label-new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-label-leto-modelizer.config.json"]' appear 2 times on screen
@@ -64,8 +64,8 @@ Feature: Test switch model to text view: delete component/link
     And  I expect active file content to contain "provider.*\"aws\".*{}"
     And  I expect active file content to contain "provider.*\"server\".*{}"
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Model"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
     And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
 
     When I wait 1 second
@@ -75,8 +75,8 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[id^="server"]' exists
     And  I expect '[id^="aws"]' not exists
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect active file content to contain "provider.*\"server\".*{}"
     But  I expect active file content to not contain "provider.*\"aws\".*{}"
@@ -84,8 +84,8 @@ Feature: Test switch model to text view: delete component/link
   Scenario: Remove object inside plugin file content (Text view) should remove related component (Model view)
     #  NOTE: NOT WORKING if plugin file content is empty (error console -> TypeError: JSON.parse(...) is null - new_file.tf)
     When I click on '[data-cy="component-definition-aws"]'
-    And  I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-label-new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-label-leto-modelizer.config.json"]' appear 2 times on screen
@@ -97,8 +97,8 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "new_file.tf"
 
     When I set active file content to "[]"
-    And  I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Model"
+    And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
     And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
     But  I expect '[id^="aws"]' not exists
 
@@ -106,8 +106,8 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="component-definition-aws"]'
     And  I wait 1 second
     And  I click on '[data-cy="component-definition-server"]'
-    And  I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-label-new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-label-leto-modelizer.config.json"]' appear 2 times on screen
@@ -119,16 +119,16 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "new_file.tf"
 
     When I set active file content to "provider \"aws\" {}"
-    And  I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Model"
+    And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
     And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
     And  I expect '[id^="aws"]' exists
     But  I expect '[id^="server"]' not exists
 
   Scenario: Delete plugin file (Text view) should remove related component (Model view)
     When I click on '[data-cy="component-definition-aws"]'
-    And  I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-label-new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-label-leto-modelizer.config.json"]' appear 2 times on screen
@@ -151,8 +151,8 @@ Feature: Test switch model to text view: delete component/link
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="file-label-new_file.tf"]' not exists
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Model"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
     And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
     And  I expect '[id^="aws"]' not exists
 
@@ -166,8 +166,8 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[id^="aws_internet_gateway"]'
     Then I expect '[class="link"]' exists
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-label-new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-label-leto-modelizer.config.json"]' appear 2 times on screen
@@ -180,8 +180,8 @@ Feature: Test switch model to text view: delete component/link
     And  I expect active file content to contain "resource.*\"aws_subnet\".*\"aws_subnet_1\".*{.*gateway_id.*=.*\[\"aws_internet_gateway_1\"\]}"
     And  I expect active file content to contain "resource.*\"aws_internet_gateway\".*\"aws_internet_gateway_1\".*{}"
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Model"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
     And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
     And  I expect '[class="link"]' appear 1 time on screen
 
@@ -190,8 +190,8 @@ Feature: Test switch model to text view: delete component/link
     And  I force click on '[id="remove-link"]'
     Then I expect '[class="link"]' not exists
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect active file content to contain "resource.*\"aws_subnet\".*\"aws_subnet_1\".*{}"
     And  I expect active file content to contain "resource.*\"aws_internet_gateway\".*\"aws_internet_gateway_1\".*{}"
@@ -207,8 +207,8 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[id^="aws_internet_gateway"]'
     Then I expect '[class="link"]' exists
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-label-new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-label-leto-modelizer.config.json"]' appear 2 times on screen
@@ -222,8 +222,8 @@ Feature: Test switch model to text view: delete component/link
     And  I expect active file content to contain "resource.*\"aws_internet_gateway\".*\"aws_internet_gateway_1\".*{}"
 
     When I set active file content to "resource \"aws_subnet\" \"aws_subnet_1\" {} resource \"aws_internet_gateway\" \"aws_internet_gateway_1\" {}"
-    And  I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Model"
+    And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
     And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
     And  I expect '[class="link"]' not exists
     And  I expect '[id^="aws_subnet"]' exists

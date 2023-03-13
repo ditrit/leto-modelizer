@@ -18,12 +18,12 @@ Feature: Test modelizer page: switch view (text/model)
   @skip
   # TODO: update/fix test
   Scenario: Modelizer "model" page should load the correct content
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Model"
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
     And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
 
   Scenario: Modelizer "text" page should load the correct content
     When I visit the "/#/modelizer/projectName/text"
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-explorer"]' exists
     And  I expect '[data-cy="file-tabs"]' exists
@@ -31,13 +31,13 @@ Feature: Test modelizer page: switch view (text/model)
   @skip
   # TODO: update/fix test
   Scenario: Clicking on switch should change page content
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
-    Then I expect '[data-cy="modelizer-switch"] [aria-pressed="true"] [class="block"]' is "Text"
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-explorer"]' exists
     And  I expect '[data-cy="file-tabs"]' exists
     And  I expect current url is "/projectName/text"
 
-    When I click on '[data-cy="modelizer-switch"] [aria-pressed="false"]'
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
     And  I expect current url is "/projectName/model"

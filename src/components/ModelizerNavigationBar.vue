@@ -1,11 +1,12 @@
 <template>
   <q-header
     class="bg-primary text-white shadow-1 row justify-between items-center q-px-lg"
+    data-cy="navigation-bar"
   >
-    <div class="app-homepage-link">
+    <div>
       <router-link
-        class="app-logo-link"
-        data-cy="app-logo-link"
+        class="home-page-link"
+        data-cy="home-page-link"
         to="/"
       >
         <q-icon
@@ -14,7 +15,7 @@
           name="img:icons/logo_modelizer.svg"
           :left="true"
         />
-        <label class="app-logo-label vertical-middle">
+        <label class="icon-label vertical-middle">
           {{ $t('application.name') }}
         </label>
       </router-link>
@@ -53,7 +54,7 @@
         text-color="accent"
         color="white"
         no-caps
-        data-cy="modelizer-switch"
+        data-cy="modelizer-switch-button"
         rounded
       />
       <modelizer-settings-menu :project-name="projectName" />
@@ -181,10 +182,10 @@ onUnmounted(() => {
 .q-header {
   position: relative;
 }
-.app-logo-link {
+.home-page-link {
   text-decoration: none;
 
-  .app-logo-label{
+  .icon-label{
     cursor: pointer;
     color: white;
     font-size: medium;

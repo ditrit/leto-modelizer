@@ -10,5 +10,5 @@ Feature: Test modelizer page: default functionalities
     And  I click on '[data-cy="new-project-form"] [data-cy="new-project-form-submit"]'
     Then I expect current url is "/modelizer/projectName/model"
 
-    When I click on '[data-cy="app-logo-link"]'
+    When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is "/"
