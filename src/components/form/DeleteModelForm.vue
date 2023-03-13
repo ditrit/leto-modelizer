@@ -13,7 +13,7 @@
         :label="$t('actions.default.delete')"
         type="submit"
         :loading="submitting"
-        data-cy="delete-model-submit"
+        data-cy="submit-button"
         color="negative"
       >
         <template v-slot:loading>

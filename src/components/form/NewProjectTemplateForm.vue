@@ -13,12 +13,13 @@
       ]"
       filled
       lazy-rules
-      data-cy="project-name-input"
+      data-cy="name-input"
     />
     <q-checkbox
       v-model="localIsChecked"
       class="q-mb-sm"
       :label="$t('page.home.template.import')"
+      data-cy="import-project-checkbox"
     />
     <template
       v-if="isChecked"
@@ -30,21 +31,21 @@
         :rules="[v => notEmpty($t, v), v => isGitRepositoryUrl($t, v)]"
         filled
         lazy-rules
-        data-cy="git-repository-input"
+        data-cy="repository-input"
       />
       <q-input
         v-model="username"
         :label="$t('page.modelizer.settings.gitAuthentication.username')"
         filled
         lazy-rules
-        data-cy="git-username-input"
+        data-cy="username-input"
       />
       <q-input
         v-model="token"
         :label="$t('page.modelizer.settings.gitAuthentication.token')"
         filled
         lazy-rules
-        data-cy="git-token-input"
+        data-cy="token-input"
       />
     </template>
     <div class="flex row items-center justify-center">
@@ -53,7 +54,7 @@
         :loading="submitting"
         icon="fa-solid fa-save"
         type="submit"
-        data-cy="new-project-template-form-submit"
+        data-cy="submit-button"
         color="positive">
         <template v-slot:loading>
           <q-spinner-dots/>

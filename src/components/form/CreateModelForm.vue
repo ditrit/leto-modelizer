@@ -9,7 +9,7 @@
       filled
       :label="$t('actions.models.create.form.name')"
       lazy-rules
-      data-cy="create-model-name-input"
+      data-cy="name-input"
       :rules="[
         (v) => notEmpty($t, v),
       ]"
@@ -29,7 +29,7 @@
         :label="$t('actions.default.save')"
         type="submit"
         :loading="submitting"
-        data-cy="create-model-submit"
+        data-cy="submit-button"
         color="positive"
       >
         <template v-slot:loading>

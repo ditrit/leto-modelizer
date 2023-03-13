@@ -8,7 +8,7 @@
     <div v-html="$t('page.modelizer.git.push.description', { branch: branchName })"></div>
     <q-checkbox
       v-model="force"
-      data-cy="git-force-checkbox"
+      data-cy="force-checkbox"
     >
       <span v-html="$t('page.modelizer.git.push.force', { branch: branchName })"></span>
     </q-checkbox>
@@ -18,7 +18,7 @@
         :label="$t('actions.git.push')"
         type="submit"
         :loading="submitting"
-        data-cy="git-form-submit"
+        data-cy="submit-button"
         color="positive"
       >
         <template v-slot:loading>

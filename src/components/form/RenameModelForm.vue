@@ -9,7 +9,7 @@
       filled
       :label="$t('actions.models.rename.form.name')"
       lazy-rules
-      data-cy="rename-model-name-input"
+      data-cy="name-input"
       :rules="[
         (v) => notEmpty($t, v),
       ]"
@@ -20,7 +20,7 @@
         :label="$t('actions.default.save')"
         type="submit"
         :loading="submitting"
-        data-cy="rename-model-submit"
+        data-cy="submit-button"
         color="positive"
       >
         <template v-slot:loading>
