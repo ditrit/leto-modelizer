@@ -24,9 +24,6 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   DrawEvent: {
     next: jest.fn(),
   },
-  RenderEvent: {
-    next: jest.fn(),
-  },
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
@@ -39,7 +36,6 @@ describe('test component: Plugin Component Detail Panel', () => {
   let wrapper;
   let pluginEditSubscription;
   let pluginEditUnsubscription;
-  let pluginRenderNext;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -67,14 +63,11 @@ describe('test component: Plugin Component Detail Panel', () => {
   beforeEach(() => {
     pluginEditSubscription = jest.fn();
     pluginEditUnsubscription = jest.fn();
-    pluginRenderNext = jest.fn();
 
     PluginEvent.EditEvent.subscribe.mockImplementation(() => {
       pluginEditSubscription();
       return { unsubscribe: pluginEditUnsubscription };
     });
-
-    PluginEvent.RenderEvent.next.mockImplementation(pluginRenderNext);
 
     wrapper = shallowMount(ComponentDetailPanel, {
       props: {
@@ -87,6 +80,7 @@ describe('test component: Plugin Component Detail Panel', () => {
               }],
             },
           },
+          draw: jest.fn(),
         },
       },
     });
@@ -159,40 +153,43 @@ describe('test component: Plugin Component Detail Panel', () => {
   });
 
   describe('Test function: save', () => {
-    it('should emit event if form validation is successful', async () => {
+    it('should set isVisible to false if form validation is successful', async () => {
       wrapper.vm.originalComponent = {};
       wrapper.vm.form = {
         validate: jest.fn(() => Promise.resolve(true)),
       };
+      wrapper.vm.isVisible = true;
 
       await wrapper.vm.save();
-      await wrapper.vm.$nextTick();
 
-      expect(pluginRenderNext).toHaveBeenCalledTimes(1);
+      expect(wrapper.vm.isVisible).toEqual(false);
     });
 
-    it('should emit event if form validation is not successful but forceSave is true', async () => {
+    it(`should set isVisible to false
+      if form validation is not successful but forceSave is true`, async () => {
       wrapper.vm.originalComponent = {};
       wrapper.vm.form = {
         validate: jest.fn(() => Promise.resolve(false)),
       };
+      wrapper.vm.isVisible = true;
       wrapper.vm.forceSave = true;
 
       await wrapper.vm.save();
-      await wrapper.vm.$nextTick();
 
-      expect(pluginRenderNext).toHaveBeenCalledTimes(1);
+      expect(wrapper.vm.isVisible).toEqual(false);
+      expect(wrapper.vm.forceSave).toEqual(false);
     });
 
-    it('should not emit event if form validation is not successful and forceSave is false', async () => {
+    it(`should not set isVisible to false
+      if form validation is not successful and forceSave is false`, async () => {
       wrapper.vm.form = {
         validate: jest.fn(() => Promise.resolve(false)),
       };
+      wrapper.vm.isVisible = true;
 
       await wrapper.vm.save();
-      await wrapper.vm.$nextTick();
 
-      expect(pluginRenderNext).not.toHaveBeenCalled();
+      expect(wrapper.vm.isVisible).toEqual(true);
     });
   });
 

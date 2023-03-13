@@ -154,7 +154,8 @@ function sanitizeAttributes(attributes) {
 }
 
 /**
- * Update local component data and emit DrawEvent & RenderEvent events.
+ * Update component data, redraw model and render files.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function submit() {
   submitting.value = true;
@@ -162,17 +163,18 @@ async function submit() {
   originalComponent.value.id = selectedComponentId.value;
   originalComponent.value.attributes = sanitizeAttributes(attributesUpdated.value);
 
+  props.plugin.draw('root');
+
   const path = process.env.MODELS_DEFAULT_FOLDER !== ''
     ? `${process.env.MODELS_DEFAULT_FOLDER}/${query.value.path}`
     : `${query.value.path}`;
 
-  const files = await renderModel(
+  await renderModel(
     route.params.projectName,
     path,
     props.plugin,
   );
 
-  PluginEvent.RenderEvent.next(files);
   submitting.value = false;
   isVisible.value = false;
   forceSave.value = false;
