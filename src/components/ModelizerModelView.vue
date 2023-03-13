@@ -14,7 +14,7 @@
       <q-page>
         <div
           id="root"
-          data-cy="modelizer-model-view-draw-root"
+          data-cy="draw-container"
           @dragover.prevent
           @drop.prevent="dropHandler"
         >

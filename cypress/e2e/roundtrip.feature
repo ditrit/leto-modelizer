@@ -20,7 +20,7 @@ Feature: Test roundtrip of the application
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
     And  I expect current url is "/#/modelizer/projectName/model"
 
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'

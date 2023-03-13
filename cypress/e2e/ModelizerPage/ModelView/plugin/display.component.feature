@@ -18,11 +18,11 @@ Feature: Test modelizer model view: add plugin component
     Then I expect '[class*="component-definition-card"]' appear 18 times on screen
 
   Scenario Outline: Click on the <element> component should display it on the page
-    Then I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>"]' not exists
+    Then I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>"]' not exists
 
     When I click on '[data-cy="component-definition_<element>"]'
-    Then I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>"]' exists
-    And  I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>"]' appear 1 time on screen
+    Then I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>"]' appear 1 time on screen
 
     Examples:
       | element               |
@@ -45,11 +45,11 @@ Feature: Test modelizer model view: add plugin component
       | aws_key_pair          |
 
   Scenario Outline: Dragging the <element> component should display it on the page
-    Then I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>_"]' not exists
+    Then I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>_"]' not exists
 
-    When I drag '[data-cy="component-definition_<element>"]' onto '[data-cy="modelizer-model-view"] [data-cy="draw-root"]'
-    Then I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>"]' exists
-    And  I expect '[data-cy="modelizer-model-view-draw-root"] [id^="<element>"]' appear 1 time on screen
+    When I drag '[data-cy="component-definition_<element>"]' onto '[data-cy="modelizer-model-view"] [data-cy="draw-container"]'
+    Then I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>"]' appear 1 time on screen
 
     Examples:
       | element               |

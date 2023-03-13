@@ -32,7 +32,7 @@ Feature: Test switch model to text view: delete component/link
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
 
     When I click on '[id^="aws"]'
     And  I click on '[id="remove-component"]'
@@ -66,7 +66,7 @@ Feature: Test switch model to text view: delete component/link
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
 
     When I wait 1 second
     And  I click on '[id^="aws"]'
@@ -99,7 +99,7 @@ Feature: Test switch model to text view: delete component/link
     When I set active file content to "[]"
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
     But  I expect '[id^="aws"]' not exists
 
   Scenario: Remove one of the two objects inside plugin file content (Text view) should only display the remaining component
@@ -121,7 +121,7 @@ Feature: Test switch model to text view: delete component/link
     When I set active file content to "provider \"aws\" {}"
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
     And  I expect '[id^="aws"]' exists
     But  I expect '[id^="server"]' not exists
 
@@ -153,7 +153,7 @@ Feature: Test switch model to text view: delete component/link
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
     And  I expect '[id^="aws"]' not exists
 
   Scenario: Delete a link between two components (Model view) should remove corresponding attribute in object inside plugin file content (Text view)
@@ -182,7 +182,7 @@ Feature: Test switch model to text view: delete component/link
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
     And  I expect '[class="link"]' appear 1 time on screen
 
     #  NOTE: must force click because the following two elements are covered by an overflowing svg element
@@ -224,7 +224,7 @@ Feature: Test switch model to text view: delete component/link
     When I set active file content to "resource \"aws_subnet\" \"aws_subnet_1\" {} resource \"aws_internet_gateway\" \"aws_internet_gateway_1\" {}"
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
     And  I expect '[class="link"]' not exists
     And  I expect '[id^="aws_subnet"]' exists
     And  I expect '[id^="aws_internet_gateway"]' exists

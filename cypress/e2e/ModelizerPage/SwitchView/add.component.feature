@@ -37,7 +37,7 @@ Feature: Test switch model to text view: add component/link
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
 
     When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
     And  I wait 1 second
@@ -70,7 +70,7 @@ Feature: Test switch model to text view: add component/link
     When I set active file content to "module \"server\" {}"
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
     And  I expect '[id^="server"]' exists
     But  I expect '[id^="aws"]' not exists
 
@@ -118,7 +118,7 @@ Feature: Test switch model to text view: add component/link
     And  I wait 2 seconds
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
     And  I wait 1 second
     And  I expect '[id^="aws_subnet"]' exists
     And  I expect '[id^="aws_internet_gateway"]' exists

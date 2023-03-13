@@ -19,7 +19,7 @@ Feature: Test modelizer page: switch view (text/model)
   # TODO: update/fix test
   Scenario: Modelizer "model" page should load the correct content
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Model"
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
 
   Scenario: Modelizer "text" page should load the correct content
     When I visit the "/#/modelizer/projectName/text"
@@ -39,5 +39,5 @@ Feature: Test modelizer page: switch view (text/model)
     And  I expect current url is "/projectName/text"
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    And  I expect '[data-cy="modelizer-model-view-draw-root"]' exists
+    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"]' exists
     And  I expect current url is "/projectName/model"
