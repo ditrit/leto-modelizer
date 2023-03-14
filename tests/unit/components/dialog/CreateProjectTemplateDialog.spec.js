@@ -2,7 +2,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
-import NewProjectTemplateDialog from 'src/components/dialog/NewProjectTemplateDialog.vue';
+import CreateProjectTemplateDialog from 'src/components/dialog/CreateProjectTemplateDialog.vue';
 import { useRouter } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { directive as viewer } from 'v-viewer';
@@ -19,7 +19,7 @@ jest.mock('src/composables/events/DialogEvent', () => ({
   subscribe: jest.fn(),
 }));
 
-describe('Test component: NewProjectTemplateDialog', () => {
+describe('Test component: CreateProjectTemplateDialog', () => {
   let wrapper;
   let subscribe;
   let unsubscribe;
@@ -39,7 +39,7 @@ describe('Test component: NewProjectTemplateDialog', () => {
       return { unsubscribe };
     });
 
-    wrapper = shallowMount(NewProjectTemplateDialog, {
+    wrapper = shallowMount(CreateProjectTemplateDialog, {
       global: {
         plugins: [
           createI18n({ locale: 'en-US', messages: i18nConfiguration }),
@@ -68,7 +68,7 @@ describe('Test component: NewProjectTemplateDialog', () => {
 
         wrapper.vm.addProject('test');
 
-        expect(DialogEvent.next).toBeCalledWith({ type: 'close', key: 'NewProjectTemplate' });
+        expect(DialogEvent.next).toBeCalledWith({ type: 'close', key: 'CreateProjectTemplate' });
         expect(push).toBeCalledWith('/modelizer/test/models');
       });
     });
@@ -77,7 +77,7 @@ describe('Test component: NewProjectTemplateDialog', () => {
       it('should set projectTemplate value on valid event type', () => {
         expect(wrapper.vm.projectTemplate).toBeNull();
 
-        wrapper.vm.setProjectTemplate({ key: 'NewProjectTemplate', template: 'test' });
+        wrapper.vm.setProjectTemplate({ key: 'CreateProjectTemplate', template: 'test' });
         expect(wrapper.vm.projectTemplate).toEqual('test');
       });
 
