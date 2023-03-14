@@ -9,9 +9,9 @@
           class="q-ml-xl"
           color="primary"
           icon="fa-solid fa-plus"
-          data-cy="new-project-button"
+          data-cy="create-project-button"
           :label="$t('actions.home.newProject')"
-          @click="DialogEvent.next({ type: 'open', key: 'NewProject' })"
+          @click="DialogEvent.next({ type: 'open', key: 'CreateProject' })"
         />
         <q-btn
           outline

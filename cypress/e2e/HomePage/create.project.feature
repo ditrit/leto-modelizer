@@ -4,9 +4,9 @@ Feature: Test homepage: project creation
     Given I clear cache
     And  I visit the "/"
 
-    When I click on '[data-cy="new-project-button"]'
-    And  I set on '[data-cy="new-project-form"] [data-cy="name-input"]' text "projectName"
-    And  I click on '[data-cy="new-project-form"] [data-cy="submit-button"]'
+    When I click on '[data-cy="create-project-button"]'
+    And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text "projectName"
+    And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
 
   Scenario: Create project should redirect to project model view page
     Then I expect current url is "modelizer/projectName/models"

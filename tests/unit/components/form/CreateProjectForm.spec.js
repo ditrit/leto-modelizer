@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import NewProjectForm from 'src/components/form/NewProjectForm.vue';
+import CreateProjectForm from 'src/components/form/CreateProjectForm.vue';
 
 installQuasarPlugin();
 
@@ -8,11 +8,11 @@ jest.mock('src/composables/Project', () => ({
   getProjects: jest.fn(() => ['project']),
 }));
 
-describe('Test component: NewProjectForm', () => {
+describe('Test component: CreateProjectForm', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(NewProjectForm, {});
+    wrapper = shallowMount(CreateProjectForm, {});
   });
 
   describe('Test function: onSubmit', () => {
