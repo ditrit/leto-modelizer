@@ -1,10 +1,10 @@
 <template>
-    <span
-      :class="[isActive ? 'text-bold' : '', fileStatus]"
-      :data-cy="`file-label-${label}`"
-    >
-      {{ label }}
-    </span>
+  <span
+    :class="[isActive ? 'text-bold' : '', fileStatus]"
+    :data-cy="`${isFolder ? 'folder': 'file'}_${path}`"
+  >
+    {{ label }}
+  </span>
 </template>
 
 <script setup>
@@ -26,6 +26,10 @@ const props = defineProps({
   label: {
     type: String,
     required: true,
+  },
+  isFolder: {
+    type: Boolean,
+    default: false,
   },
 });
 

@@ -33,18 +33,18 @@ Feature: Test modelizer text view: git commit
     Then I expect '[data-cy="git-log-dialog"]' not exists
 
     #  Create a file
-    When I hover '[data-cy="file-explorer-buttons-projectName"]' to make it visible
-    And  I click on '[data-cy="file-explorer-buttons-projectName"]'
+    When I hover '[data-cy="file-button_projectName"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_projectName"]'
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
-    Then I expect '[data-cy="file-explorer-newFile.js"] [data-cy="file-label-newFile.js"]' appear 1 time on screen
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' appear 1 time on screen
 
     #  Add file
-    When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]'
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
 
     #  Commit
@@ -80,18 +80,18 @@ Feature: Test modelizer text view: git commit
     Then I expect '[data-cy="git-log-dialog"]' not exists
 
     #  Create a file
-    When I hover '[data-cy="file-explorer-buttons-projectName"]' to make it visible
-    And  I click on '[data-cy="file-explorer-buttons-projectName"]'
+    When I hover '[data-cy="folder-button_projectName"]' to make it visible
+    And  I click on '[data-cy="folder-button_projectName"]'
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
-    Then I expect '[data-cy="file-explorer-newFile.js"] [data-cy="file-label-newFile.js"]' appear 1 time on screen
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' appear 1 time on screen
 
     #  Add file
-    When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]'
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
 
     #  Commit

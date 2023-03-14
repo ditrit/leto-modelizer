@@ -17,20 +17,20 @@ Feature: Test modelizer text view: add file
     And  I expect '[data-cy="project-name"]' is "{{ projectName }}"
 
     When I visit the "/#/modelizer/{{projectName}}/text"
-    Then I expect '[data-cy="file-explorer"] [data-cy="file-label-{{ projectName }}"]' exists
+    Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
     And  I wait 2 seconds
 
   Scenario: An unmodified file should not have the "add" action inside file explorer menu
-    When I click on '[data-cy="file-explorer"] [data-cy="file-label-{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-README.md"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-README.md"]'
-    Then I expect '[data-cy="file-label-README.md"].file-status-unmodified' exists
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
+    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_README.md"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_README.md"]'
+    Then I expect '[data-cy="file_README.md"].file-status-unmodified' exists
     And  I expect '[data-cy="file-explorer-action-menu"]' exists
     But  I expect '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]' not exists
 
   Scenario: Create a file inside the root folder and add it on git should change the file's status
-    When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
@@ -41,20 +41,20 @@ Feature: Test modelizer text view: add file
     Then I expect "positive" toast to appear with text "File is created &#129395;!"
     And  I expect '[data-cy="create-file-form"]' is closed
     And  I expect ".file-status-untracked" appear 2 times on screen
-    And  I expect '[data-cy="file-label-newFile.js"].file-status-untracked' exists
+    And  I expect '[data-cy="file_newFile.js"].file-status-untracked' exists
  
-    When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     Then I expect "positive" toast to appear with text "File is added &#129395;!"
-    And  I expect '[data-cy="file-label-newFile.js"].file-status-staged' exists
+    And  I expect '[data-cy="file_newFile.js"].file-status-staged' exists
 
   Scenario: Create a file inside sub-folder and add it on git should change the file's status
-    When I click on '[data-cy="file-explorer"] [data-cy="file-label-{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
+    And  I hover '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
@@ -65,13 +65,13 @@ Feature: Test modelizer text view: add file
     Then I expect "positive" toast to appear with text "File is created &#129395;!"
     And  I expect '[data-cy="create-file-form"]' is closed
     And  I expect ".file-status-untracked" appear 2 times on screen
-    And  I expect '[data-cy="file-label-newFile.js"].file-status-untracked' exists
+    And  I expect '[data-cy="file_terraform/newFile.js"].file-status-untracked' exists
  
-    When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-newFile.js"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_terraform/newFile.js"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_terraform/newFile.js"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     Then I expect "positive" toast to appear with text "File is added &#129395;!"
-    And  I expect '[data-cy="file-label-newFile.js"].file-status-staged' exists
+    And  I expect '[data-cy="file_terraform/newFile.js"].file-status-staged' exists
     

@@ -33,12 +33,12 @@ Feature: Test homepage: project deletion
     And  I expect current url is "modelizer/{{ projectName }}/model"
 
     When I visit the "/#/modelizer/{{ projectName }}/text"
-    Then I expect '[data-cy="file-explorer"] [data-cy="file-label-{{ projectName }}"]' exists
+    Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
     And  I wait 1 second
 
-    When I click on '[data-cy="file-explorer"] [data-cy="file-label-{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-branch.txt"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-branch.txt"]'
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
+    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
@@ -47,7 +47,7 @@ Feature: Test homepage: project deletion
     When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect "positive" toast to appear with text "File is deleted."
     And  I expect '[data-cy="delete-file-form"]' is closed
-    And  I expect '[data-cy="file-label-branch.txt.js"]' not exists
+    And  I expect '[data-cy="file_branch.txt.js"]' not exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is "/"
@@ -69,8 +69,8 @@ Feature: Test homepage: project deletion
     And  I expect current url is "modelizer/{{ projectName }}/model"
 
     When I visit the "/#/modelizer/{{projectName}}/text"
-    Then I expect '[data-cy="file-explorer"] [data-cy="file-label-{{ projectName }}\"]' exists
+    Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}\"]' exists
     And  I wait 1 second
 
-    When I click on '[data-cy="file-explorer"] [data-cy="file-label-{{ projectName }}"]'
-    Then I expect '[data-cy="file-explorer-branch.txt"]' exists
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_branch.txt"]' exists

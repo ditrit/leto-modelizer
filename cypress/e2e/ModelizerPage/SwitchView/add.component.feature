@@ -21,8 +21,8 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
-    And  I expect '[data-cy="file-label-new_file.tf"]' not exists
-    And  I expect '[data-cy="file-label-leto-modelizer.config.json"]' appear 2 times on screen
+    And  I expect '[data-cy="file_new_file.tf"]' not exists
+    And  I expect '[data-cy="file_leto-modelizer.config.json"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "leto-modelizer.config.json"
     And  I expect active file content to contain "{.*\"terrator-plugin\":.*{}}"
 
@@ -30,8 +30,8 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
-    And  I expect '[data-cy="file-label-new_file.tf"]' not exists
-    And  I expect '[data-cy="file-label-leto-modelizer.config.json"]' appear 2 times on screen
+    And  I expect '[data-cy="file_new_file.tf"]' not exists
+    And  I expect '[data-cy="file_leto-modelizer.config.json"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "leto-modelizer.config.json"
     And  I expect active file content to contain "{.*\"terrator-plugin\":.*{}}"
 
@@ -41,30 +41,30 @@ Feature: Test switch model to text view: add component/link
 
     When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
     And  I wait 1 second
-    And  I click on '[data-cy="component-definition-aws"]'
+    And  I click on '[data-cy="component-definition_aws"]'
     Then I expect '[id^="aws"]' exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
-    And  I expect '[data-cy="file-label-new_file.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file-label-leto-modelizer.config.json"]' appear 2 times on screen
+    And  I expect '[data-cy="file_new_file.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file_leto-modelizer.config.json"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is "leto-modelizer.config.json"
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "new_file.tf"
     And  I expect active file content to contain "provider.*\"aws\".*{}"
 
   Scenario: Update plugin file content with a new object (Text view) should display the corresponding plugin component (Model view)
-    When I click on '[data-cy="component-definition-aws"]'
+    When I click on '[data-cy="component-definition_aws"]'
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
     And  I expect '[data-cy="modelizer-text-view"]' exists
-    And  I expect '[data-cy="file-label-new_file.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file-label-leto-modelizer.config.json"]' appear 2 times on screen
+    And  I expect '[data-cy="file_new_file.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file_leto-modelizer.config.json"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is "new_file.tf"
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "leto-modelizer.config.json"
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file-label-new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "new_file.tf"
 
     When I set active file content to "module \"server\" {}"
@@ -75,9 +75,9 @@ Feature: Test switch model to text view: add component/link
     But  I expect '[id^="aws"]' not exists
 
   Scenario: Link two components (Model view) should update plugin file content with new attributes properties (Text view)
-    When I click on '[data-cy="component-definition-aws_subnet"]'
+    When I click on '[data-cy="component-definition_aws_subnet"]'
     And  I wait 1 second
-    And  I click on '[data-cy="component-definition-aws_internet_gateway"]'
+    And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
     And  I wait 1 second
     And  I click on '[id^="aws_subnet"]'
     And  I click on '[id="create-link"]'
@@ -91,15 +91,15 @@ Feature: Test switch model to text view: add component/link
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "leto-modelizer.config.json"
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file-label-new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "new_file.tf"
     And  I expect active file content to contain "resource.*\"aws_subnet\".*\"aws_subnet_1\".*{.*gateway_id.*=.*\[\"aws_internet_gateway_1\"\]}"
     And  I expect active file content to contain "resource.*\"aws_internet_gateway\".*\"aws_internet_gateway_1\".*{}"
 
   Scenario: Add link attributes inside plugin file content (Text view) should display link between two components (Model view)
-    When I click on '[data-cy="component-definition-aws_subnet"]'
+    When I click on '[data-cy="component-definition_aws_subnet"]'
     And  I wait 1 second
-    And  I click on '[data-cy="component-definition-aws_internet_gateway"]'
+    And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is "Text"
@@ -108,7 +108,7 @@ Feature: Test switch model to text view: add component/link
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "leto-modelizer.config.json"
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file-label-new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "new_file.tf"
     And  I expect active file content to contain "resource.*\"aws_subnet\".*\"aws_subnet_1\".*{}"
     And  I expect active file content to contain "resource.*\"aws_internet_gateway\".*\"aws_internet_gateway_1\".*{}"

@@ -17,12 +17,12 @@ Feature: Test modelizer text view: create file and folder
     And  I expect '[data-cy="project-name"]' is "{{ projectName }}"
 
     When I visit the "/#/modelizer/{{projectName}}/text"
-    Then I expect '[data-cy="file-explorer"] [data-cy="file-label-{{ projectName }}"]' exists
+    Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
     And  I wait 2 seconds
 
   Scenario: Create a file inside the root folder should expand the root folder and open corresponding active tab
-    When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
@@ -36,17 +36,17 @@ Feature: Test modelizer text view: create file and folder
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "newFile.js"
     #  Created file is added inside file explorer and file tabs
-    And  I expect '[data-cy="file-label-newFile.js"]' appear 2 times on screen
+    And  I expect '[data-cy="file_newFile.js"]' appear 2 times on screen
     #  Created file's label is red
     And  I expect ".file-status-untracked" appear 2 times on screen
-    And  I expect '[data-cy="file-label-newFile.js"].file-status-untracked' exists
+    And  I expect '[data-cy="file_newFile.js"].file-status-untracked' exists
     #  Root folder is expanded
-    And  I expect '[data-cy="file-explorer-icon-{{ projectName }}"].fa-folder-open' exists
+    And  I expect '[data-cy="folder-icon_{{ projectName }}"].fa-folder-open' exists
 
   Scenario: Create a file inside sub-folder should open corresponding active tab and expand the parent folder
-    When I click on '[data-cy="file-explorer"] [data-cy="file-label-{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
+    And  I hover '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
@@ -60,16 +60,16 @@ Feature: Test modelizer text view: create file and folder
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is "newFile.js"
     #  Created file is added inside file explorer and file tabs
-    And  I expect '[data-cy="file-label-newFile.js"]' appear 2 times on screen
+    And  I expect '[data-cy="file_terraform/newFile.js"]' appear 2 times on screen
     #  Created file's label is red
     And  I expect ".file-status-untracked" appear 2 times on screen
-    And  I expect '[data-cy="file-label-newFile.js"].file-status-untracked' exists
+    And  I expect '[data-cy="file_terraform/newFile.js"].file-status-untracked' exists
     #  Parent folder is expanded
-    And  I expect '[data-cy="file-explorer-icon-terraform"].fa-folder-open' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder-icon_terraform"].fa-folder-open' exists
   
   Scenario: Create a folder inside the root folder should expand root folder
-    When I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-{{ projectName }}"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-folder-action-item"]'
@@ -82,15 +82,15 @@ Feature: Test modelizer text view: create file and folder
     #  No tab open
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 0 time on screen
     #  Created folder is added inside file explorer
-    And  I expect '[data-cy="file-label-newFolder"]' appear 1 time on screen
+    And  I expect '[data-cy="folder_newFolder"]' appear 1 time on screen
     #  Root folder is expanded, created folder is not expanded
-    And  I expect '[data-cy="file-explorer-icon-{{ projectName }}"].fa-folder-open' exists
-    And  I expect '[data-cy="file-explorer-icon-newFolder"].fa-folder' exists
+    And  I expect '[data-cy="folder-icon_{{ projectName }}"].fa-folder-open' exists
+    And  I expect '[data-cy="folder-icon_newFolder"].fa-folder' exists
 
   Scenario: Create a folder inside folder should expand parent folder
-    When I click on '[data-cy="file-explorer"] [data-cy="file-label-{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-explorer-buttons-terraform"]'
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
+    And  I hover '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-folder-action-item"]'
@@ -103,8 +103,8 @@ Feature: Test modelizer text view: create file and folder
     #  No tab open
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 0 time on screen
     #  Created folder is added inside file explorer
-    And  I expect '[data-cy="file-label-newFolder"]' appear 1 time on screen
+    And  I expect '[data-cy="folder_terraform/newFolder"]' appear 1 time on screen
     #  Root and parent folder are expanded, created folder is not expanded
-    And  I expect '[data-cy="file-explorer-icon-{{ projectName }}"].fa-folder-open' exists
-    And  I expect '[data-cy="file-explorer-icon-terraform"].fa-folder-open' exists
-    And  I expect '[data-cy="file-explorer-icon-newFolder"].fa-folder' exists
+    And  I expect '[data-cy="folder-icon_{{ projectName }}"].fa-folder-open' exists
+    And  I expect '[data-cy="folder-icon_terraform"].fa-folder-open' exists
+    And  I expect '[data-cy="folder-icon_terraform/newFolder"].fa-folder' exists
