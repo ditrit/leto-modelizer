@@ -4,7 +4,7 @@ FROM node:18.12-alpine as build-stage
 ARG proxy_url
 WORKDIR /app
 COPY . .
-RUN TEMPLATE_LIBRARY_BASE_URL="https://raw.githubusercontent.com/ditrit/leto-modelizer-templates-library/leto-modelizer/e2e_test" CORS_ISOMORPHIC_BASE_URL="/cors-proxy" npm run build
+RUN TEMPLATE_LIBRARY_BASE_URL="https://raw.githubusercontent.com/ditrit/leto-modelizer-templates-library/leto-modelizer/e2e_test" CORS_ISOMORPHIC_BASE_URL="/cors-proxy" KEEP_CYPRESS_ATTRIBUTE=true npm run build
 
 # Production stage
 FROM nginx:1.18.0-alpine as production-stage

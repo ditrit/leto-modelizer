@@ -17,6 +17,36 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const { configure } = require('quasar/wrappers');
 const { version } = require('./package.json');
 
+const removeAttribute = (node) => {
+  if (process.env.KEEP_CYPRESS_ATTRIBUTE === 'true' || process.env.NODE_ENV === 'development') {
+    return;
+  }
+
+  const attributesToRemove = ['data-cy'];
+  const nodeIsElement = node.type === 1;
+
+  if (nodeIsElement) {
+    node.props = node.props.filter((prop) => {
+      const propIsAttribute = prop.type === 6;
+      const propIsDynamicAttribute = prop.name === 'bind';
+
+      if (propIsAttribute) {
+        const attributeName = prop.name;
+
+        return !attributesToRemove.includes(attributeName);
+      }
+
+      if (propIsDynamicAttribute) {
+        const attributeName = prop.arg?.content;
+
+        return !attributesToRemove.includes(attributeName);
+      }
+
+      return true;
+    });
+  }
+};
+
 module.exports = configure((ctx) => ({
   // https://v2.quasar.dev/quasar-cli-webpack/supporting-ts
   supportTS: false,
@@ -90,6 +120,17 @@ module.exports = configure((ctx) => ({
         .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }]);
       chain.plugin('monaco-editor-webpack-plugin')
         .use(MonacoWebpackPlugin, [{ extensions: ['js', 'vue'] }]);
+      chain.module
+        .rule('vue')
+        .use('vue-loader')
+        .tap((options) => {
+          options.compilerOptions = {
+            ...(options.compilerOptions || {}),
+            nodeTransforms: [removeAttribute],
+          };
+
+          return options;
+        });
     },
 
   },
