@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Create project from template with custom name.
 * Component edition:
   * Allowed to have a predefined list of values for Array attribute.
+* Add new environment variable `KEEP_CYPRESS_ATTRIBUTE` to keep all cypress attribute in html.
 
 ### Changed
 
