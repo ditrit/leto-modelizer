@@ -102,11 +102,11 @@ describe('Test component: ModelizerModelsView', () => {
     });
   });
 
-  describe('Test function: openNewModelTemplateDialog', () => {
+  describe('Test function: openImportModelTemplateDialog', () => {
     it('should emit DialogEvent', async () => {
       DialogEvent.next = jest.fn();
 
-      await wrapper.vm.openNewModelTemplateDialog({});
+      await wrapper.vm.openImportModelTemplateDialog({});
 
       expect(DialogEvent.next).toBeCalledWith({
         type: 'open',

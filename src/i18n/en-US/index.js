@@ -205,8 +205,8 @@ export default {
     home: {
       project: {
         title: 'Recent projects',
-        import: 'Import project',
-        create: 'Create project',
+        import: 'Import new project',
+        create: 'Create new project',
         rename: 'Rename project',
         name: 'Project name',
         empty: 'No projects, please create a new project to have one here 😉',

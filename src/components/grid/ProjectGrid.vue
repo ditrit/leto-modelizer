@@ -25,7 +25,7 @@
         />
       </div>
       <div class="row">
-        <ProjectCard
+        <project-card
           v-for="project in projects"
           :key="project.id"
           :project="project"

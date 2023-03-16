@@ -12,13 +12,13 @@
     </div>
     <div class="column items-center home-content">
       <div class="fit row justify-center">
-        <ProjectGrid
+        <project-grid
           class="col-md-8"
           :projects="projects"
         />
       </div>
       <div class="fit row justify-center q-mt-lg">
-        <TemplateGrid
+        <template-grid
           class="col-md-8"
           :templates="templates"
           @add:template="openCreateProjectTemplateDialog"
@@ -26,7 +26,7 @@
           <template v-slot:header>
             <h4>{{ $t('page.home.template.createProject') }}</h4>
           </template>
-        </TemplateGrid>
+        </template-grid>
       </div>
     </div>
     <import-project-dialog/>
