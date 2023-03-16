@@ -1,7 +1,7 @@
 <template>
   <default-drawer
-    data-cy="components-definitions-drawer"
     class="components-definitions-drawer"
+    data-cy="components-definitions-drawer"
   >
     <template v-slot:drawerName>
       {{ $t('page.modelizer.drawer.components.header') }}
@@ -20,8 +20,8 @@
       <q-input
         clearable
         v-model="definitionFilter"
-        data-cy="definitions-filter-input"
         :label="$t('page.modelizer.drawer.components.filterLabel')"
+        data-cy="definitions-filter-input"
       >
         <template v-slot:prepend>
           <q-icon name="fa-solid fa-magnifying-glass" />

@@ -3,9 +3,9 @@
     v-model="isVisible"
     no-swipe-close
     bordered
-    data-cy="object-details-panel"
     side="right"
     :width="350"
+    data-cy="object-details-panel"
   >
     <q-list>
       <q-item>
@@ -19,8 +19,8 @@
             round
             flat
             icon="fa-solid fa-xmark"
-            data-cy="close-button"
             @click="isVisible = false"
+            data-cy="close-button"
           />
         </q-item-section>
       </q-item>
@@ -80,8 +80,8 @@
                 icon="fa-solid fa-arrow-rotate-left"
                 :label="$t('plugin.component.attribute.reset')"
                 color="info"
-                data-cy="reset-button"
                 @click="reset"
+                data-cy="reset-button"
               />
             </q-item>
           </template>

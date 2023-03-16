@@ -2,21 +2,21 @@
   <q-form
     ref="form"
     @submit="onSubmit"
-    data-cy="git-new-branch-form"
     class="q-gutter-md git-new-branch-form"
+    data-cy="git-new-branch-form"
   >
     <q-input
       filled
       v-model="newBranch"
       :label="$t('page.modelizer.git.newBranch.branch')"
       lazy-rules
-      data-cy="branch-name-input"
       :rules="[(v) => notEmpty(t, v), (v) => isUniqueBranchName(t, branches, v)]"
+      data-cy="branch-name-input"
     />
     <q-checkbox
       v-model="checkout"
-      data-cy="checkout-checkbox"
       :label="$t('page.modelizer.git.newBranch.checkout')"
+      data-cy="checkout-checkbox"
     />
     <div class="flex row items-center justify-center">
       <q-btn
@@ -24,8 +24,8 @@
         :label="$t('actions.default.create')"
         type="submit"
         :loading="submitting"
-        data-cy="submit-button"
         color="positive"
+        data-cy="submit-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

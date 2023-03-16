@@ -19,8 +19,8 @@
             v-if="menuItem.visible"
             clickable
             class="settings-item"
-            :data-cy="`item_${menuItem.key}`"
             @click="onClick(menuItem.key)"
+            :data-cy="`item_${menuItem.key}`"
           >
             <q-item-section avatar>
               <q-icon color="primary" :name="menuItem.icon" />

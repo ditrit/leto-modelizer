@@ -1,18 +1,18 @@
 <template>
   <q-menu
     class="git-branch-menu"
-    data-cy="git-branch-menu"
     ref="menu"
     @before-show="onOpen"
     @show="onShow"
+    data-cy="git-branch-menu"
   >
     <q-list style="min-width: 500px">
       <q-input
         ref="searchInput"
-        data-cy="search-branch-input"
         v-model="searchedBranch"
         dense
         clearable
+        data-cy="search-branch-input"
       >
         <template v-slot:prepend>
           <q-icon name="fa-solid fa-magnifying-glass" />
@@ -95,10 +95,10 @@
         </template>
         <git-branch-expand-list-menu
           v-if="localBranches.length > maxItem"
-          data-cy="expand-local-branch-menu"
           :open="showLocal"
           :number="localBranches.length - maxItem"
           @click="manageExpandMenu(true)"
+          data-cy="expand-local-branch-menu"
         />
       </template>
 
@@ -119,10 +119,10 @@
         </template>
         <git-branch-expand-list-menu
           v-if="remoteBranches.length > maxItem"
-          data-cy="expand-remote-branch-menu"
           :open="showRemote"
           :number="remoteBranches.length - maxItem"
           @click="manageExpandMenu(false)"
+          data-cy="expand-remote-branch-menu"
         />
       </template>
 

@@ -2,8 +2,8 @@
   <q-form
     ref="form"
     @submit="onSubmit"
-    data-cy="git-push-form"
     class="q-gutter-md git-push-form"
+    data-cy="git-push-form"
   >
     <div v-html="$t('page.modelizer.git.push.description', { branch: branchName })"></div>
     <q-checkbox
@@ -18,8 +18,8 @@
         :label="$t('actions.git.push')"
         type="submit"
         :loading="submitting"
-        data-cy="submit-button"
         color="positive"
+        data-cy="submit-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

@@ -6,22 +6,22 @@
     <q-list>
       <q-item
         v-if="!isCurrentBranch"
-        :data-cy="`checkout_${branchName}`"
         clickable
         @click="onCheckout"
+        :data-cy="`checkout_${branchName}`"
       >
         <q-item-section>{{ $t('actions.git.checkout') }}</q-item-section>
       </q-item>
       <q-linear-progress
         v-if="!isCurrentBranch && loading.checkout"
-        :data-cy="`checkout-loader_${branchName}`"
         color="primary"
         indeterminate
+        :data-cy="`checkout-loader_${branchName}`"
       />
       <q-item
-        :data-cy="`new-branch_${branchName}`"
         clickable
         @click="openDialog('GitNewBranch')"
+        :data-cy="`new-branch_${branchName}`"
       >
         <q-item-section>
           {{ $t('actions.git.newBranchFrom', { branch: branchName }) }}
@@ -32,9 +32,9 @@
 
       <q-item
         v-if="onLocal && onRemote"
-        :data-cy="`update_${branchName}`"
         clickable
         @click="openDialog('GitUpdate')"
+        :data-cy="`update_${branchName}`"
       >
         <q-item-section>
           {{ $t('actions.git.update') }}
@@ -43,9 +43,9 @@
 
       <q-item
         v-if="onLocal"
-        :data-cy="`push_${branchName}`"
         clickable
         @click="openDialog('GitPush')"
+        :data-cy="`push_${branchName}`"
       >
         <q-item-section>
           {{ $t('actions.git.push') }}

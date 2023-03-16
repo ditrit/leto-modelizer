@@ -1,8 +1,8 @@
 <template>
   <q-form
     @submit="onSubmit"
-    data-cy="git-add-remote-form"
     class="q-gutter-md"
+    data-cy="git-add-remote-form"
   >
     <div class="warning-message row items-center bg-warning q-py-sm">
       <q-icon
@@ -17,9 +17,9 @@
       v-model="repository"
       :label="$t('page.modelizer.settings.gitAddRemote.repository')"
       lazy-rules
-      data-cy="repository-input"
       :hint="$t('page.modelizer.settings.gitAddRemote.repositoryExample')"
       :rules="[v => notEmpty($t, v), v => isGitRepositoryUrl($t, v)]"
+      data-cy="repository-input"
     />
     <div class="flex row items-center justify-center">
       <q-btn
@@ -27,8 +27,8 @@
         :label="$t('actions.default.save')"
         type="submit"
         :loading="submitting"
-        data-cy="submit-button"
         color="positive"
+        data-cy="submit-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

@@ -9,9 +9,9 @@
     no-transition
     no-selection-unset
     class="file-explorer"
-    data-cy="file-explorer"
     :filter="filterTrigger"
     :filter-method="filterParsableFiles"
+    data-cy="file-explorer"
   >
     <template #default-header="{expanded, node}">
       <div

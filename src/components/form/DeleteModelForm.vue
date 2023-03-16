@@ -1,8 +1,8 @@
 <template>
   <q-form
     @submit="onSubmit"
-    data-cy="delete-model-form"
     class="q-gutter-md delete-model-form"
+    data-cy="delete-model-form"
   >
     <div class="flex row items-center justify-center">
       {{$t('actions.models.delete.form.message')}}
@@ -13,8 +13,8 @@
         :label="$t('actions.default.delete')"
         type="submit"
         :loading="submitting"
-        data-cy="submit-button"
         color="negative"
+        data-cy="submit-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

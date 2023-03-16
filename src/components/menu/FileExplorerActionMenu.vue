@@ -9,8 +9,8 @@
       <template v-if="file.isFolder">
         <q-item
           clickable
-          data-cy="create-folder-action-item"
           @click="createFile(true)"
+          data-cy="create-folder-action-item"
         >
           <q-item-section avatar>
             <q-icon
@@ -25,8 +25,8 @@
         </q-item>
         <q-item
           clickable
-          data-cy="create-file-action-item"
           @click="createFile(false)"
+          data-cy="create-file-action-item"
         >
           <q-item-section avatar>
             <q-icon
@@ -43,8 +43,8 @@
       <template v-if="isFile && allowGitAdd">
         <q-item
           clickable
-          data-cy="git-add-file-action-item"
           @click="addFile(file)"
+          data-cy="git-add-file-action-item"
         >
           <q-item-section avatar>
             <q-icon
@@ -59,16 +59,16 @@
         </q-item>
         <q-linear-progress
           v-if="loading.add"
-          data-cy="git-add-loader"
           color="primary"
           indeterminate
+          data-cy="git-add-loader"
         />
       </template>
       <q-item
         v-if="!file.isRootFolder"
         clickable
-        data-cy="delete-file-action-item"
         @click="deleteFile"
+        data-cy="delete-file-action-item"
       >
         <q-item-section avatar>
           <q-icon

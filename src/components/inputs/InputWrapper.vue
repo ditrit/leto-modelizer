@@ -50,8 +50,8 @@
       flat
       color="negative"
       icon="fa-solid fa-trash"
-      data-cy="delete-attribute-button"
       @click="emit('delete:attribute')"
+      data-cy="delete-attribute-button"
     >
       <q-tooltip anchor="center left" self="center right">
         {{$t('plugin.component.attribute.delete')}}

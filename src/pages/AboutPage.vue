@@ -6,8 +6,8 @@
     <div class="row col-md-6 justify-center items-center bg-primary about-banner">
       <router-link
         class="col-1"
-        data-cy="home-page-link"
         to="/"
+        data-cy="home-page-link"
       >
         <q-img
           src="icons/logo_modelizer.svg"

@@ -54,8 +54,9 @@
         :loading="submitting"
         icon="fa-solid fa-save"
         type="submit"
+        color="positive"
         data-cy="submit-button"
-        color="positive">
+      >
         <template v-slot:loading>
           <q-spinner-dots/>
         </template>

@@ -6,8 +6,8 @@
     <div>
       <router-link
         class="home-page-link"
-        data-cy="home-page-link"
         to="/"
+        data-cy="home-page-link"
       >
         <q-icon
           color="primary"
@@ -54,8 +54,8 @@
         text-color="accent"
         color="white"
         no-caps
-        data-cy="modelizer-switch-button"
         rounded
+        data-cy="modelizer-switch-button"
       />
       <modelizer-settings-menu :project-name="projectName" />
     </div>

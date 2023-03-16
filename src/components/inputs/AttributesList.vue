@@ -31,8 +31,8 @@
         :label="$t('plugin.component.attribute.add')"
         color="positive"
         icon="fa-solid fa-plus"
-        data-cy="add-button"
         @click="addAttribute"
+        data-cy="add-button"
       />
     </q-item>
     <!-- Attributes Object -->

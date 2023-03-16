@@ -14,9 +14,9 @@
       <q-page>
         <div
           id="root"
-          data-cy="draw-container"
           @dragover.prevent
           @drop.prevent="dropHandler"
+          data-cy="draw-container"
         >
           <component-drop-overlay />
         </div>

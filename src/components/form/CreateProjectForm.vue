@@ -20,9 +20,9 @@
         :label="$t(`actions.home.createProject`)"
         icon="fa-solid fa-save"
         type="submit"
+        color="positive"
         data-cy="submit-button"
-        color="positive">
-      </q-btn>
+      />
     </div>
   </q-form>
 </template>

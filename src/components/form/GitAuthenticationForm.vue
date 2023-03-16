@@ -1,8 +1,8 @@
 <template>
   <q-form
     @submit="onSubmit"
-    data-cy="git-authentication-form"
     class="q-gutter-md git-authentication-form"
+    data-cy="git-authentication-form"
   >
     <q-input
       filled
@@ -22,8 +22,9 @@
         :label="$t('actions.default.save')"
         type="submit"
         :loading="submitting"
+        color="positive"
         data-cy="submit-button"
-        color="positive">
+      >
         <template v-slot:loading>
           <q-spinner-dots/>
         </template>
