@@ -2,38 +2,38 @@ Feature: Test modelizer text view: filter git branch
 
   Background:
     Given I clear cache
-    And I set context field "repository_url" with "https://github.com/ditrit/leto-modelizer-project-test"
-    And I set context field "projectName" with "leto-modelizer-project-test"
-    And I visit the "/"
+    And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
+    And   I set context field 'projectName' with 'leto-modelizer-project-test'
+    And   I visit the '/'
 
     When I click on '[data-cy="import-project-button"]'
-    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
-    And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
-    And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
+    And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text 'test'
+    And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text 'test'
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
-    Then I expect "positive" toast to appear with text "Project has been imported 🥳!"
+    Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
     And  I expect '[data-cy="import-project-form"]' is closed
-    And  I visit the "/#/modelizer/{{projectName}}/text"
+    And  I visit the '/#/modelizer/{{projectName}}/text'
 
-  Scenario: Expect to have no branch with "no_main" filter
+  Scenario: Expect to have no branch with 'no_main' filter
     When I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' exists
 
-    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text "not_main"
+    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text 'not_main'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' not exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' not exists
 
-  Scenario: Expect to have main branch with "main" filter
+  Scenario: Expect to have main branch with 'main' filter
     When I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' exists
 
-    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text "not_main"
+    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text 'not_main'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' not exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' not exists
 
-    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text "main"
+    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text 'main'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' exists
 
@@ -45,31 +45,31 @@ Feature: Test modelizer text view: filter git branch
 
     When I wait 2 seconds
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]'
-    And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text "testNewBranch"
+    And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text 'testNewBranch'
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="git-new-branch-form"]' is closed
-    And  I expect "positive" toast to appear with text "Branch is created 🥳!"
+    And  I expect 'positive' toast to appear with text 'Branch is created 🥳!'
 
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I scroll to "bottom" into '[data-cy="git-branch-menu"]'
-    Then I expect '[data-cy="git-current-branch-button"]' is "testNewBranch"
+    And  I scroll to 'bottom' into '[data-cy="git-branch-menu"]'
+    Then I expect '[data-cy="git-current-branch-button"]' is 'testNewBranch'
     And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_testNewBranch"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' exists
 
-    When I scroll to "top" into '[data-cy="git-branch-menu"]'
-    And  I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text "not_main"
+    When I scroll to 'top' into '[data-cy="git-branch-menu"]'
+    And  I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text 'not_main'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' not exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_test-testNewBranch"]' not exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' not exists
 
-    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text "no_main main"
+    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text 'no_main main'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_testNewBranch"]' not exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' exists
 
-    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text "no_main main testNewBranch"
-    And  I scroll to "bottom" into '[data-cy="git-branch-menu"]'
+    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text 'no_main main testNewBranch'
+    And  I scroll to 'bottom' into '[data-cy="git-branch-menu"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_testNewBranch"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' exists

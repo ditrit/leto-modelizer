@@ -2,15 +2,15 @@ Feature: Test modelizer text view: git status display
 
   Background:
     Given I clear cache
-    And   I set viewport size to "1536" px for width and "960" px for height
-    And   I visit the "/"
+    And   I set viewport size to '1536' px for width and '960' px for height
+    And   I visit the '/'
 
     When I click on '[data-cy="create-project-button"]'
-    And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text "projectName"
+    And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
-    Then I expect current url is "/modelizer/projectName/model"
+    Then I expect current url is '/modelizer/projectName/model'
 
-    When I visit the "/#/modelizer/projectName/text"
+    When I visit the '/#/modelizer/projectName/text'
 
   Scenario: Display dialog containing an empty list
     When I click on '[data-cy="git-current-branch-button"]'
@@ -27,7 +27,7 @@ Feature: Test modelizer text view: git status display
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text "newFile.js"
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'newFile.js'
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' appear 1 time on screen
 
@@ -55,7 +55,7 @@ Feature: Test modelizer text view: git status display
     And  I click on '[data-cy="close-dialog-button"]'
 
     #  Update file content
-    When I set active file content to "updated content"
+    When I set active file content to 'updated content'
 
     #  Check file status
     When I click on '[data-cy="git-current-branch-button"]'

@@ -2,18 +2,18 @@ Feature: Test modelizer text view: update git branch
 
   Background:
     Given I clear cache
-    And I set context field "repository_url" with "https://github.com/ditrit/leto-modelizer-project-test"
-    And I set context field "projectName" with "leto-modelizer-project-test"
-    And I visit the "/"
+    And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
+    And   I set context field 'projectName' with 'leto-modelizer-project-test'
+    And   I visit the '/'
 
     When I click on '[data-cy="import-project-button"]'
-    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text "{{ repository_url }}"
-    And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text "test"
-    And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text "test"
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
+    And  I set on '[data-cy="import-project-form"] [data-cy="username-input"]' text 'test'
+    And  I set on '[data-cy="import-project-form"] [data-cy="token-input"]' text 'test'
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
-    Then I expect "positive" toast to appear with text "Project has been imported 🥳!"
+    Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
     And  I expect '[data-cy="import-project-form"]' is closed
-    And  I visit the "/#/modelizer/{{projectName}}/text"
+    And  I visit the '/#/modelizer/{{projectName}}/text'
 
 
   Scenario: Update action should be available only for branch that are local and remote
@@ -38,7 +38,7 @@ Feature: Test modelizer text view: update git branch
 
     When I click on '[data-cy="git-update-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="git-update-form"]' is closed
-    And I expect "positive" toast to appear with text "Branch is updated 🥳!"
+    And I expect 'positive' toast to appear with text 'Branch is updated 🥳!'
 
   Scenario: Execute update action without fast forward should be a success
     When I click on '[data-cy="git-current-branch-button"]'
@@ -49,4 +49,4 @@ Feature: Test modelizer text view: update git branch
 
     When I click on '[data-cy="git-update-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="git-update-form"]' is closed
-    And  I expect "positive" toast to appear with text "Branch is updated 🥳!"
+    And  I expect 'positive' toast to appear with text 'Branch is updated 🥳!'
