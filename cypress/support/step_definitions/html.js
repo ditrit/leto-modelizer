@@ -93,6 +93,25 @@ Then('I expect active file content to contain {string}', async (value) => {
   });
 });
 
+Then('I expect active file content to be equal to {string}', async (TemplateFilePath) => {
+  const filePath = nunjucks.renderString(TemplateFilePath, cy.context);
+  let fileContent;
+
+  cy.readFile(filePath).then((file) => {
+    fileContent = file.trim();
+
+    return cy.get('[data-cy="monaco-editor"] .view-lines .view-line');
+  }).then((lines) => {
+    let text = '';
+
+    for (let index = 0; index < lines.length; index += 1) {
+      text += `${lines[index].textContent.replaceAll(/\s/g, ' ')}\n`;
+    }
+
+    expect(text.trim().indexOf(fileContent) >= 0).to.eq(true);
+  });
+});
+
 Then('I expect active file content to not contain {string}', async (value) => {
   cy.get('[data-cy="monaco-editor"]').should('not.contain', value);
 });

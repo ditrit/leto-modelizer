@@ -15,6 +15,7 @@
           class="q-mr-md"
           no-caps
           @click="router.push(`/modelizer/${projectName}/models`)"
+          data-cy="models-page-link-button"
         />
       </div>
       <q-input

@@ -225,11 +225,7 @@ async function renderPluginFiles(pluginName) {
  */
 async function getModel() {
   if (selectedFileTabPath.value) {
-    const modelsPath = process.env.MODELS_DEFAULT_FOLDER !== ''
-      ? `${props.projectName}/${process.env.MODELS_DEFAULT_FOLDER}`
-      : `${props.projectName}`;
-
-    const models = await getAllModels(modelsPath);
+    const models = await getAllModels(props.projectName);
 
     const defaultFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
       ? `${process.env.MODELS_DEFAULT_FOLDER}/`

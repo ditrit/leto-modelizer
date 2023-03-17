@@ -12,6 +12,7 @@ import {
   isNumberTooSmall,
   isNumberTooBig,
   isUniqueProjectName,
+  isUniqueModel,
 } from 'src/composables/QuasarFieldRule';
 
 describe('Test composable: InputRule', () => {
@@ -44,6 +45,7 @@ describe('Test composable: InputRule', () => {
 
     it('should return error on invalid git url', () => {
       const key = 'errors.invalid.gitAddRemote.repository';
+
       expect(isGitRepositoryUrl(t, 'git@github.com/ditrit/leto-modelizer.git')).toEqual(key);
       expect(isGitRepositoryUrl(t, 'ftp://github.com/ditrit/leto-modelizer.git')).toEqual(key);
       expect(isGitRepositoryUrl(t, 'http://github.com/ditrit/leto-modelizer.git')).toEqual(key);
@@ -58,6 +60,7 @@ describe('Test composable: InputRule', () => {
 
     it('should return string error message with duplicated branch', () => {
       const key = 'errors.git.branch.duplicate';
+
       expect(isUniqueBranchName(t, [{ name: 'test' }], 'test')).toEqual(key);
     });
   });
@@ -71,6 +74,7 @@ describe('Test composable: InputRule', () => {
 
     it('should return string error message on invalid tree node label', () => {
       const key = 'errors.invalid.fileExplorer.label';
+
       expect(isValidFileLabel(t, '/folderName')).toEqual(key);
       expect(isValidFileLabel(t, 'app/file.tf')).toEqual(key);
       expect(isValidFileLabel(t, 'folder/app.tf')).toEqual(key);
@@ -86,6 +90,7 @@ describe('Test composable: InputRule', () => {
 
     it('should return string error message with duplicated node label', () => {
       const key = 'errors.fileExplorer.label.duplicate';
+
       expect(isUniqueFileLabel(t, [{ label: 'test' }], 'test')).toEqual(key);
     });
   });
@@ -125,6 +130,7 @@ describe('Test composable: InputRule', () => {
 
     it('should return string error message', () => {
       const key = 'errors.rules.string.min';
+
       expect(isStringTooShort(t, 'no', 3)).toEqual(key);
     });
   });
@@ -137,6 +143,7 @@ describe('Test composable: InputRule', () => {
 
     it('should return string error message', () => {
       const key = 'errors.rules.string.max';
+
       expect(isStringTooLong(t, 'nono', 3)).toEqual(key);
     });
   });
@@ -149,6 +156,7 @@ describe('Test composable: InputRule', () => {
 
     it('should return string error message', () => {
       const key = 'errors.rules.string.regexp';
+
       expect(isStringMatchingRegExp(t, 'a', '^[a-z]{3,}$')).toEqual(key);
     });
   });
@@ -162,6 +170,7 @@ describe('Test composable: InputRule', () => {
 
     it('should return string error message', () => {
       const key = 'errors.rules.number.nan';
+
       expect(isNumber(t, '1A')).toEqual(key);
     });
   });
@@ -174,6 +183,7 @@ describe('Test composable: InputRule', () => {
 
     it('should return string error message', () => {
       const key = 'errors.rules.number.min';
+
       expect(isNumberTooSmall(t, 2, 3)).toEqual(key);
     });
   });
@@ -186,6 +196,7 @@ describe('Test composable: InputRule', () => {
 
     it('should return string error message', () => {
       const key = 'errors.rules.number.max';
+
       expect(isNumberTooBig(t, 4, 3)).toEqual(key);
     });
   });
@@ -197,7 +208,32 @@ describe('Test composable: InputRule', () => {
 
     it('should return the error message when value already exists in given project names array', () => {
       const key = 'errors.projects.duplicate';
+
       expect(isUniqueProjectName(t, ['duplicate'], 'duplicate')).toEqual(key);
+    });
+  });
+
+  describe('Test function: isUniqueModel', () => {
+    it('should return true when value does not exist in given model names array', () => {
+      expect(isUniqueModel(t, [{
+        name: 'test1',
+        plugin: 'plugin2',
+      }, {
+        name: 'test2',
+        plugin: 'plugin1',
+      }, {
+        name: 'test2',
+        plugin: 'plugin2',
+      }], 'plugin1', 'test1')).toBe(true);
+    });
+
+    it('should return the error message when value already exists in given model names array', () => {
+      const key = 'errors.models.duplicate';
+
+      expect(isUniqueModel(t, [{
+        name: 'test1',
+        plugin: 'plugin1',
+      }], 'plugin1', 'test1')).toEqual(key);
     });
   });
 });

@@ -2,7 +2,6 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import ModelizerModelsView from 'src/components/ModelizerModelsView.vue';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
-import Project from 'src/composables/Project';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import DialogEvent from 'src/composables/events/DialogEvent';
@@ -19,7 +18,7 @@ jest.mock('src/composables/events/ModelEvent', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  getAllModels: jest.fn(),
+  getAllModels: jest.fn(() => Promise.resolve([{}])),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
@@ -45,14 +44,6 @@ describe('Test component: ModelizerModelsView', () => {
     UpdateModelEvent.subscribe.mockImplementation(() => {
       updateModelSubscribe();
       return { unsubscribe: updateModelUnsubscribe };
-    });
-
-    Project.getAllModels.mockImplementation((path) => {
-      if (path !== 'projectName/coucou') {
-        return Promise.resolve();
-      }
-
-      return Promise.resolve([{}]);
     });
 
     wrapper = shallowMount(ModelizerModelsView, {
@@ -87,18 +78,9 @@ describe('Test component: ModelizerModelsView', () => {
 
   describe('Test function: updateModels', () => {
     it('should set data.models to an array with 1 element', async () => {
-      process.env.MODELS_DEFAULT_FOLDER = 'coucou';
       await wrapper.vm.updateModels();
 
-      expect(Array.isArray(wrapper.vm.data.models)).toBeTruthy();
       expect(wrapper.vm.data.models.length).toEqual(1);
-    });
-
-    it('should set data.models to undefined', async () => {
-      process.env.MODELS_DEFAULT_FOLDER = '';
-      await wrapper.vm.updateModels();
-
-      expect(wrapper.vm.data.models).not.toBeDefined();
     });
   });
 

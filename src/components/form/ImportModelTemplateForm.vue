@@ -11,6 +11,7 @@
       lazy-rules
       :rules="[
         (v) => notEmpty($t, v),
+        v => isUniqueModel($t, models, template.plugin, v)
       ]"
       data-cy="name-input"
     />
@@ -33,12 +34,13 @@
 
 <script setup>
 import { Notify } from 'quasar';
-import { ref } from 'vue';
-import { notEmpty } from 'src/composables/QuasarFieldRule';
+import { onMounted, ref } from 'vue';
+import { isUniqueModel, notEmpty } from 'src/composables/QuasarFieldRule';
 import { useI18n } from 'vue-i18n';
 import {
   createProjectFolder,
   appendProjectFile,
+  getAllModels,
 } from 'src/composables/Project';
 import { useRouter } from 'vue-router';
 import { FileInput } from 'leto-modelizer-plugin-core';
@@ -58,11 +60,12 @@ const props = defineProps({
 });
 const modelName = ref(null);
 const submitting = ref(false);
+const models = ref([]);
 
 /**
  * Create a new model folder and its parent folders if necessary.
  * Emit a positive notification on success and redirect to model page.
- * Otherwise, emit an negative notification.
+ * Otherwise, emit a negative notification.
  */
 async function onSubmit() {
   const pluginFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
@@ -118,4 +121,10 @@ async function onSubmit() {
       submitting.value = false;
     });
 }
+
+onMounted(() => {
+  getAllModels(props.projectName).then((array) => {
+    models.value = array;
+  });
+});
 </script>

@@ -15,6 +15,7 @@
             type: 'open',
             key: 'CreateModel',
           })"
+          data-cy="create-model-button"
         />
       </div>
       <div
@@ -90,11 +91,7 @@ let updateModelSubscription;
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateModels() {
-  const path = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${props.projectName}/${process.env.MODELS_DEFAULT_FOLDER}`
-    : `${props.projectName}`;
-
-  data.models = await getAllModels(path);
+  data.models = await getAllModels(props.projectName);
 }
 
 /**

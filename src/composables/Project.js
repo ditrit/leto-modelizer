@@ -707,14 +707,17 @@ export async function getPluginModels(modelsdefaultFolder, pluginName) {
 
 /**
  * Get all models of the project.
- * @param {String} modelsDefaultFolder - Path of the models folder.
+ * @param {String} projectId - Id of project.
  * @return {Promise<Array>} Promise with an array of models on success otherwise an error.
  */
-export async function getAllModels(modelsDefaultFolder) {
+export async function getAllModels(projectId) {
+  const path = process.env.MODELS_DEFAULT_FOLDER !== ''
+    ? `${projectId}/${process.env.MODELS_DEFAULT_FOLDER}`
+    : `${projectId}`;
   const plugins = getPlugins();
 
   return Promise.allSettled(
-    plugins.map(({ data }) => getPluginModels(modelsDefaultFolder, data.name)),
+    plugins.map(({ data }) => getPluginModels(path, data.name)),
   ).then((results) => results
     .filter((result) => result.status === 'fulfilled')
     .map((result) => result.value)
