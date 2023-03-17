@@ -3,6 +3,7 @@
     v-ripple
     tabindex="0"
     class="cursor-pointer template-card"
+    :data-cy="`template-card_${template.key}`"
   >
     <q-img
       :src="`/template-library/templates/${template.key}/icon.svg`"
@@ -10,7 +11,7 @@
     >
       <div
         class="absolute-bottom text-subtitle2 text-center"
-        data-cy="template-card-title"
+        data-cy="title-container"
       >
         {{ template.type }}
       </div>

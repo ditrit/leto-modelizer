@@ -12,26 +12,26 @@
     </div>
     <div class="column items-center home-content">
       <div class="fit row justify-center">
-        <ProjectGrid
+        <project-grid
           class="col-md-8"
           :projects="projects"
         />
       </div>
       <div class="fit row justify-center q-mt-lg">
-        <TemplateGrid
+        <template-grid
           class="col-md-8"
           :templates="templates"
-          @add:template="openNewProjectTemplateDialog"
+          @add:template="openCreateProjectTemplateDialog"
         >
           <template v-slot:header>
             <h4>{{ $t('page.home.template.createProject') }}</h4>
           </template>
-        </TemplateGrid>
+        </template-grid>
       </div>
     </div>
     <import-project-dialog/>
-    <new-project-template-dialog/>
-    <new-project-dialog/>
+    <create-project-template-dialog/>
+    <create-project-dialog/>
     <delete-project-dialog/>
     <rename-project-dialog/>
   </q-page>
@@ -43,8 +43,8 @@ import TemplateGrid from 'src/components/grid/TemplateGrid';
 import { getProjects } from 'src/composables/Project';
 import { getTemplatesByType } from 'src/composables/TemplateManager';
 import ImportProjectDialog from 'components/dialog/ImportProjectDialog';
-import NewProjectTemplateDialog from 'components/dialog/NewProjectTemplateDialog';
-import NewProjectDialog from 'components/dialog/NewProjectDialog';
+import CreateProjectTemplateDialog from 'components/dialog/CreateProjectTemplateDialog';
+import CreateProjectDialog from 'components/dialog/CreateProjectDialog';
 import DeleteProjectDialog from 'components/dialog/DeleteProjectDialog';
 import ProjectEvent from 'src/composables/events/ProjectEvent';
 import {
@@ -67,13 +67,13 @@ function setProjects() {
 }
 
 /**
- * Open NewProjectTemplate dialog.
+ * Open CreateProjectTemplate dialog.
  * @param {Object} template - Selected project template.
  */
-async function openNewProjectTemplateDialog(template) {
+async function openCreateProjectTemplateDialog(template) {
   DialogEvent.next({
     type: 'open',
-    key: 'NewProjectTemplate',
+    key: 'CreateProjectTemplate',
     template,
   });
 }

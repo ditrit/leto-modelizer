@@ -1,7 +1,6 @@
 <template>
   <q-layout
     class="modelizer-page column"
-    data-cy="modelizer-page"
   >
     <modelizer-navigation-bar
       :projectName="projectName"

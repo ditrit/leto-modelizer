@@ -2,16 +2,16 @@
   <q-form
     ref="form"
     @submit="onSubmit"
-    data-cy="git-commit-form"
     class="q-gutter-md git-commit-form"
+    data-cy="git-commit-form"
   >
     <q-input
       filled
       v-model="message"
       :label="$t('page.modelizer.git.commit.message')"
       lazy-rules
-      data-cy="git-message-input"
       :rules="[(v) => notEmpty(t, v)]"
+      data-cy="message-input"
     />
     <div class="flex row items-center justify-center">
       <q-btn
@@ -19,8 +19,8 @@
         :label="$t('actions.git.commit')"
         :loading="submitting"
         type="submit"
-        data-cy="git-form-submit"
         color="positive"
+        data-cy="submit-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

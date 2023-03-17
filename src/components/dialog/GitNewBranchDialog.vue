@@ -1,5 +1,8 @@
 <template>
-  <default-dialog dialog-key="GitNewBranch" data-cy="git-newBranch-dialog">
+  <default-dialog
+    dialog-key="GitNewBranch"
+    data-cy="git-new-branch-dialog"
+  >
     <template v-slot:title>
       <q-icon color="primary" name="fa-brands fa-git-alt" />
       {{ $t('page.modelizer.git.newBranch.title') }}

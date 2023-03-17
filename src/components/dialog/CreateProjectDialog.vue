@@ -1,7 +1,7 @@
 <template>
   <default-dialog
-    dialog-key="NewProject"
-    data-cy="new-project-dialog"
+    dialog-key="CreateProject"
+    data-cy="create-project-dialog"
   >
     <template v-slot:title>
       <q-icon
@@ -11,7 +11,7 @@
       {{ $t(`page.home.project.create`) }}
     </template>
     <template v-slot:default>
-      <new-project-form
+      <create-project-form
         @project:create="createProject"
       />
     </template>
@@ -21,7 +21,7 @@
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
 import DefaultDialog from 'src/components/dialog/DefaultDialog';
-import NewProjectForm from 'src/components/form/NewProjectForm';
+import CreateProjectForm from 'src/components/form/CreateProjectForm';
 import { useRouter } from 'vue-router';
 import { initProject } from 'src/composables/Project';
 import { Notify } from 'quasar';
@@ -32,14 +32,14 @@ const { t } = useI18n();
 
 /**
  * Create project on fs, init project on git,
- * close NewProject and redirect to project page.
+ * close CreateProject and redirect to project page.
  * Manage notification.
  */
 async function createProject(projectId) {
   const project = { id: projectId };
 
   await initProject(project).then(() => {
-    DialogEvent.next({ type: 'close', key: 'NewProject' });
+    DialogEvent.next({ type: 'close', key: 'CreateProject' });
     router.push(`/modelizer/${projectId}/models`);
     Notify.create({
       type: 'positive',

@@ -14,13 +14,13 @@
           :offset="250"
           :scroll-target="scrollTargetRef"
         >
-          <q-list data-cy="git-log-list">
+          <q-list data-cy="log-list">
             <template v-for="(item) in logItems" :key="item.oid">
               <q-expansion-item
                 header-class="bg-primary text-white"
                 expand-icon-class="text-white"
                 expand-separator
-                data-cy="git-log-item"
+                data-cy="item"
               >
                 <template v-slot:header>
                   <q-item-section class="text-bold" color="primary" avatar>

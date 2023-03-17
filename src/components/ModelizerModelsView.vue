@@ -39,15 +39,15 @@
           />
         </router-link>
       </div>
-      <TemplateGrid
+      <template-grid
         class="col-md-8"
         :templates="templates"
-        @add:template="openNewModelTemplateDialog"
+        @add:template="openImportModelTemplateDialog"
       >
         <template v-slot:header>
           <h4>{{ $t('page.models.template.create') }}</h4>
         </template>
-      </TemplateGrid>
+      </template-grid>
     </div>
   </div>
 </template>
@@ -98,10 +98,10 @@ async function updateModels() {
 }
 
 /**
- * Open NewProjectTemplate dialog.
+ * Open ImportModelTemplate dialog.
  * @param {Object} template - Selected project template.
  */
-async function openNewModelTemplateDialog(template) {
+async function openImportModelTemplateDialog(template) {
   DialogEvent.next({
     type: 'open',
     key: 'ImportModelTemplate',

@@ -12,7 +12,7 @@
       :rules="[
         (v) => notEmpty($t, v),
       ]"
-      data-cy="import-model-template-name-input"
+      data-cy="name-input"
     />
     <div class="flex row items-center justify-center">
       <q-btn
@@ -21,7 +21,7 @@
         type="submit"
         :loading="submitting"
         color="positive"
-        data-cy="import-model-template-submit"
+        data-cy="submit-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

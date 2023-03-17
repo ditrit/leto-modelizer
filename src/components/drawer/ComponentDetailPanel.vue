@@ -3,9 +3,9 @@
     v-model="isVisible"
     no-swipe-close
     bordered
-    data-cy="object-details-panel"
     side="right"
     :width="350"
+    data-cy="object-details-panel"
   >
     <q-list>
       <q-item>
@@ -19,8 +19,8 @@
             round
             flat
             icon="fa-solid fa-xmark"
-            data-cy="object-details-panel-close-button"
             @click="isVisible = false"
+            data-cy="close-button"
           />
         </q-item-section>
       </q-item>
@@ -70,7 +70,7 @@
                 color="positive"
                 :loading="submitting"
                 @click="save"
-                data-cy="object-details-panel-save-button"
+                data-cy="save-button"
               >
                 <template v-slot:loading>
                   <q-spinner-dots/>
@@ -80,8 +80,8 @@
                 icon="fa-solid fa-arrow-rotate-left"
                 :label="$t('plugin.component.attribute.reset')"
                 color="info"
-                data-cy="object-details-panel-reset-button"
                 @click="reset"
+                data-cy="reset-button"
               />
             </q-item>
           </template>

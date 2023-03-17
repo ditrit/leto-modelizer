@@ -11,21 +11,21 @@
       :rules="[v => notEmpty($t, v), v => isGitRepositoryUrl($t, v)]"
       filled
       lazy-rules
-      data-cy="git-repository-input"
+      data-cy="repository-input"
     />
     <q-input
       v-model="username"
       :label="$t('page.modelizer.settings.gitAuthentication.username')"
       filled
       lazy-rules
-      data-cy="git-username-input"
+      data-cy="username-input"
     />
     <q-input
       v-model="token"
       :label="$t('page.modelizer.settings.gitAuthentication.token')"
       filled
       lazy-rules
-      data-cy="git-token-input"
+      data-cy="token-input"
     />
     <div class="flex row items-center justify-center">
       <q-btn
@@ -33,8 +33,9 @@
         :loading="submitting"
         icon="fa-solid fa-save"
         type="submit"
-        data-cy="import-project-form-submit"
-        color="positive">
+        color="positive"
+        data-cy="submit-button"
+      >
         <template v-slot:loading>
           <q-spinner-dots/>
         </template>

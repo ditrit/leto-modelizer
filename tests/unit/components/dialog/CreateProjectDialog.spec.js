@@ -1,7 +1,7 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import { Notify } from 'quasar';
-import NewProjectDialog from 'src/components/dialog/NewProjectDialog.vue';
+import CreateProjectDialog from 'src/components/dialog/CreateProjectDialog.vue';
 import { useRouter } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { directive as viewer } from 'v-viewer';
@@ -27,7 +27,7 @@ jest.mock('src/composables/Project', () => ({
   initProject: jest.fn(),
 }));
 
-describe('Test component: NewProjectDialog', () => {
+describe('Test component: CreateProjectDialog', () => {
   let wrapper;
 
   const push = jest.fn();
@@ -37,7 +37,7 @@ describe('Test component: NewProjectDialog', () => {
   }));
 
   beforeEach(() => {
-    wrapper = shallowMount(NewProjectDialog, {
+    wrapper = shallowMount(CreateProjectDialog, {
       global: {
         directives: {
           viewer,
@@ -57,7 +57,7 @@ describe('Test component: NewProjectDialog', () => {
 
         await wrapper.vm.createProject('test');
 
-        expect(DialogEvent.next).toBeCalledWith({ type: 'close', key: 'NewProject' });
+        expect(DialogEvent.next).toBeCalledWith({ type: 'close', key: 'CreateProject' });
         expect(push).toBeCalledWith('/modelizer/test/models');
         expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
       });

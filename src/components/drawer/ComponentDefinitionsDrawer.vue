@@ -1,7 +1,7 @@
 <template>
   <default-drawer
-    data-cy="components-definitions-drawer"
     class="components-definitions-drawer"
+    data-cy="components-definitions-drawer"
   >
     <template v-slot:drawerName>
       {{ $t('page.modelizer.drawer.components.header') }}
@@ -20,8 +20,8 @@
       <q-input
         clearable
         v-model="definitionFilter"
-        data-cy="filter-plugin-definitions"
         :label="$t('page.modelizer.drawer.components.filterLabel')"
+        data-cy="definitions-filter-input"
       >
         <template v-slot:prepend>
           <q-icon name="fa-solid fa-magnifying-glass" />
@@ -35,10 +35,10 @@
           header-class="text-bold"
           class="plugin-definitions"
           :key="plugin.data.name"
-          :data-cy="`plugin-definitions-${plugin.data.name}`"
+          :data-cy="`component-defnitions-item_${plugin.data.name}`"
         >
           <template v-slot:header>
-            <q-item-section data-cy="plugin-definitions-title">
+            <q-item-section data-cy="title">
               {{ plugin.data.name }}
             </q-item-section>
           </template>
@@ -58,10 +58,10 @@
           group="components-definitions"
           header-class="text-bold"
           class="template-definitions"
-          data-cy="`template-definitions"
+          data-cy="template-definitions-item"
         >
           <template v-slot:header>
-            <q-item-section data-cy="template-definitions-title">
+            <q-item-section data-cy="title">
               {{  $t('page.modelizer.drawer.templates.title') }}
             </q-item-section>
           </template>

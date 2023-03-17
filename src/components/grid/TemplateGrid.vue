@@ -5,7 +5,7 @@
         <slot name="header"></slot>
       </div>
       <div class="row">
-        <TemplateCard
+        <template-card
           v-for="template in templates"
           :key="template.key"
           :template="template"

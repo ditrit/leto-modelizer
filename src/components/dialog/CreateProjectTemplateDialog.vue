@@ -1,7 +1,7 @@
 <template>
   <default-dialog
-    dialog-key="NewProjectTemplate"
-    data-cy="new-project-template-dialog"
+    dialog-key="CreateProjectTemplate"
+    data-cy="create-project-template-dialog"
   >
     <template v-slot:title>
       <q-icon
@@ -46,7 +46,7 @@
       <div class="text-subtitle2 q-pb-md">
         {{ $t('page.home.template.selected', { template: templateName }) }}
       </div>
-      <new-project-template-form
+      <create-project-template-form
         @project:add="addProject"
         @update:checked="e => isChecked = e"
         :template="projectTemplate"
@@ -59,7 +59,7 @@
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
 import DefaultDialog from 'src/components/dialog/DefaultDialog';
-import NewProjectTemplateForm from 'src/components/form/NewProjectTemplateForm';
+import CreateProjectTemplateForm from 'src/components/form/CreateProjectTemplateForm';
 import { useRouter } from 'vue-router';
 import {
   onMounted,
@@ -76,11 +76,11 @@ const templateName = computed(() => projectTemplate.value.type);
 let dialogEventSubscription;
 
 /**
- * Close NewProjectTemplate and redirect to project model page.
+ * Close CreateProjectTemplate and redirect to project model page.
  * @param {String} projectId - Id of the new project.
  */
 function addProject(projectId) {
-  DialogEvent.next({ type: 'close', key: 'NewProjectTemplate' });
+  DialogEvent.next({ type: 'close', key: 'CreateProjectTemplate' });
   router.push(`/modelizer/${projectId}/models`);
 }
 
@@ -90,7 +90,7 @@ function addProject(projectId) {
  * @param {Object} template - Selected template.
  */
 function setProjectTemplate({ key, template }) {
-  if (key === 'NewProjectTemplate') {
+  if (key === 'CreateProjectTemplate') {
     projectTemplate.value = template;
   }
 }

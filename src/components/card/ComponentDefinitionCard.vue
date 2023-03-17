@@ -8,7 +8,7 @@
     @dragend="dragEndHandler"
     :id="`component-definition-${definition.type}`"
     :title="definition.description"
-    :data-cy="`component-definition-${definition.type}`"
+    :data-cy="`component-definition_${definition.type}`"
   >
     <q-item
       clickable
@@ -28,12 +28,12 @@
         <q-icon
           v-if="definition.url"
           class="absolute-top-right q-ma-xs"
-          data-cy="component-definition-url"
           name="fa-solid fa-circle-info"
           color="info"
           size="xs"
           @click.stop="$event.preventDefault()"
           style="cursor: help"
+          data-cy="url-icon"
         >
           <definition-menu :definition="definition"/>
         </q-icon>

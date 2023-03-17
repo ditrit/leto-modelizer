@@ -21,7 +21,7 @@
         icon="fa-solid fa-xmark"
         class="q-ml-sm"
         @click.stop="emit('update:close-file', file.id)"
-        data-cy="close-file-tab"
+        data-cy="close-button"
       />
     </div>
   </q-tab>

@@ -9,9 +9,9 @@
           class="q-ml-xl"
           color="primary"
           icon="fa-solid fa-plus"
-          data-cy="new-project"
           :label="$t('actions.home.newProject')"
-          @click="DialogEvent.next({ type: 'open', key: 'NewProject' })"
+          @click="DialogEvent.next({ type: 'open', key: 'CreateProject' })"
+          data-cy="create-project-button"
         />
         <q-btn
           outline
@@ -19,13 +19,13 @@
           class="q-ml-sm"
           color="primary"
           icon="fa-solid fa-cloud-arrow-down"
-          data-cy="import-project"
           :label="$t('actions.home.importProject')"
           @click="DialogEvent.next({ type: 'open', key: 'ImportProject' })"
+          data-cy="import-project-button"
         />
       </div>
       <div class="row">
-        <ProjectCard
+        <project-card
           v-for="project in projects"
           :key="project.id"
           :project="project"

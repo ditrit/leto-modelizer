@@ -1,28 +1,28 @@
 <template>
   <q-form
     @submit="onSubmit"
-    class="q-gutter-md new-project-form"
-    data-cy="new-project-form"
+    class="q-gutter-md create-project-form"
+    data-cy="create-project-form"
   >
     <q-input
       v-model="projectName"
       :label="$t('page.home.project.name')"
       :rules="[
         v => notEmpty($t, v),
-        v => isUniqueProjectName($t, Object.keys(getProjects()), v)
+        v => isUniqueProjectName($t, projectNames, v)
       ]"
       filled
       lazy-rules
-      data-cy="project-name-input"
+      data-cy="name-input"
     />
     <div class="flex row items-center justify-center">
       <q-btn
         :label="$t(`actions.home.createProject`)"
         icon="fa-solid fa-save"
         type="submit"
-        data-cy="new-project-form-submit"
-        color="positive">
-      </q-btn>
+        color="positive"
+        data-cy="submit-button"
+      />
     </div>
   </q-form>
 </template>
@@ -40,9 +40,10 @@ import {
 const emit = defineEmits(['project:create']);
 
 const projectName = ref('');
+const projectNames = ref(Object.keys(getProjects()));
 
 /**
- * Emit new project name.
+ * Emit created project name.
  */
 function onSubmit() {
   emit('project:create', projectName.value);
@@ -50,7 +51,7 @@ function onSubmit() {
 </script>
 
 <style lang="scss" scoped>
-.new-project-form {
+.create-project-form {
   min-width: 400px;
 }
 </style>

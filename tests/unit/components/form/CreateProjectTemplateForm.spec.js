@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import NewProjectTemplateForm from 'src/components/form/NewProjectTemplateForm.vue';
+import CreateProjectTemplateForm from 'src/components/form/CreateProjectTemplateForm.vue';
 import { Notify } from 'quasar';
 import Project from 'src/composables/Project';
 
@@ -29,11 +29,11 @@ jest.mock('src/composables/TemplateManager', () => ({
   getTemplateFileByPath: jest.fn(() => Promise.resolve()),
 }));
 
-describe('Test component: NewProjectTemplateForm', () => {
+describe('Test component: CreateProjectTemplateForm', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(NewProjectTemplateForm, {
+    wrapper = shallowMount(CreateProjectTemplateForm, {
       props: {
         template: {
           files: ['test.js'],

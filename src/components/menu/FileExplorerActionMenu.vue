@@ -7,26 +7,32 @@
   >
     <q-list style="min-width: 150px">
       <template v-if="file.isFolder">
-        <q-item clickable @click="createFile(true)">
+        <q-item
+          clickable
+          @click="createFile(true)"
+          data-cy="create-folder-action-item"
+        >
           <q-item-section avatar>
             <q-icon
               color="primary"
               size="xs"
               name="fa-solid fa-folder-plus"
-              data-cy="file-explorer-menu-create-folder"
             />
           </q-item-section>
           <q-item-section>
             {{ $t('actions.fileExplorer.newFolder') }}
           </q-item-section>
         </q-item>
-        <q-item clickable @click="createFile(false)">
+        <q-item
+          clickable
+          @click="createFile(false)"
+          data-cy="create-file-action-item"
+        >
           <q-item-section avatar>
             <q-icon
               color="primary"
               size="xs"
               name="fa-solid fa-file-circle-plus"
-              data-cy="file-explorer-menu-create-file"
             />
           </q-item-section>
           <q-item-section>
@@ -38,13 +44,13 @@
         <q-item
           clickable
           @click="addFile(file)"
+          data-cy="git-add-file-action-item"
         >
           <q-item-section avatar>
             <q-icon
               color="primary"
               size="xs"
               name="fa-solid fa-plus"
-              data-cy="file-explorer-menu-add-file"
             />
           </q-item-section>
           <q-item-section>
@@ -53,18 +59,22 @@
         </q-item>
         <q-linear-progress
           v-if="loading.add"
-          data-cy="file-explorer-menu-add-loader"
           color="primary"
           indeterminate
+          data-cy="git-add-loader"
         />
       </template>
-      <q-item v-if="!file.isRootFolder" clickable @click="deleteFile">
+      <q-item
+        v-if="!file.isRootFolder"
+        clickable
+        @click="deleteFile"
+        data-cy="delete-file-action-item"
+      >
         <q-item-section avatar>
           <q-icon
             color="primary"
             size="xs"
             name="fa-solid fa-trash"
-            data-cy="file-explorer-menu-delete-file"
           />
         </q-item-section>
         <q-item-section>

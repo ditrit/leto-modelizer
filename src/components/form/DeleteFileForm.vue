@@ -1,14 +1,14 @@
 <template>
   <q-form
     @submit="onSubmit"
-    data-cy="delete-file-form"
     class="q-gutter-md delete-file-form"
+    data-cy="delete-file-form"
   >
     <q-checkbox
       v-if="isFolderWithChildren"
       v-model="confirmDelete"
-      data-cy="confirm-delete-checkbox"
       :label="$t('page.modelizer.fileExplorer.delete.folder.confirmDelete')"
+      data-cy="confirm-delete-checkbox"
     />
     <div class="flex row items-center justify-center">
       <q-btn
@@ -17,8 +17,8 @@
         type="submit"
         :loading="submitting"
         :disable="isFolderWithChildren && !confirmDelete"
-        data-cy="delete-file-submit"
         color="negative"
+        data-cy="submit-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

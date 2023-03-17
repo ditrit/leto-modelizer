@@ -1,10 +1,10 @@
 <template>
-  <q-list>
+  <q-list data-cy="attributes-list">
     <slot name="header"></slot>
     <!-- Attributes not Object -->
     <q-item
       v-for="attribute in data.localAttributes.filter(({ type }) => type !== 'Object')"
-      :key="attribute.title"
+      :key="attribute.name"
       class="q-px-none"
     >
       <input-wrapper
@@ -31,14 +31,14 @@
         :label="$t('plugin.component.attribute.add')"
         color="positive"
         icon="fa-solid fa-plus"
-        data-cy="object-details-panel-attribute-add-button"
         @click="addAttribute"
+        data-cy="add-button"
       />
     </q-item>
     <!-- Attributes Object -->
     <q-item
       v-for="attribute in data.localAttributes.filter(({ type }) => type === 'Object')"
-      :key="attribute.title"
+      :key="attribute.name"
       class="q-pa-none"
       dense
     >

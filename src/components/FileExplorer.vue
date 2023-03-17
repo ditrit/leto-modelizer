@@ -9,9 +9,9 @@
     no-transition
     no-selection-unset
     class="file-explorer"
-    data-cy="file-explorer"
     :filter="filterTrigger"
     :filter-method="filterParsableFiles"
+    data-cy="file-explorer"
   >
     <template #default-header="{expanded, node}">
       <div
@@ -21,7 +21,6 @@
           {'text-grey text-italic' : showParsableFiles && isFolderWithoutParsableFiles(node)},
         ]"
         @dblclick="onNodeDoubleClicked(node)"
-        :data-cy="`file-explorer-${node.label}`"
       >
         <div>
           <q-icon
@@ -29,7 +28,7 @@
             color="primary"
             size="xs"
             :name="`${node.icon}${expanded ? '-open' : ''}`"
-            :data-cy="`file-explorer-icon-${node.label}`"
+            :data-cy="`${node.isFolder ? 'folder': 'file'}-icon_${node.id}`"
           />
           <file-name
             class="tree-node"
@@ -37,15 +36,16 @@
             :isActive="activeFileId  === node.id"
             :label="node.label"
             :status="node.information?.status"
+            :isFolder="node.isFolder"
           />
         </div>
         <span class="col-grow"></span>
         <div class="row no-wrap">
           <file-explorer-action-card
-            class="file-explorer-buttons"
+            class="file-explorer-button"
             :file="node"
             :project-name="projectName"
-            :data-cy="`file-explorer-buttons-${node.label}`"
+            :data-cy="`${node.isFolder ? 'folder': 'file'}-button_${node.id}`"
           />
         </div>
       </div>
@@ -198,12 +198,12 @@ onUnmounted(() => {
     background: rgba($primary, 0.1);
     border-radius: 4px;
 
-    .file-explorer-buttons {
+    .file-explorer-button {
       display: inline-block
     }
   }
 }
-.file-explorer-buttons {
+.file-explorer-button {
   display: none
 }
 </style>

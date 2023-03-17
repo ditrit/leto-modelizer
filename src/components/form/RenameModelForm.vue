@@ -1,18 +1,18 @@
 <template>
   <q-form
     @submit="onSubmit"
-    data-cy="rename-model-form"
     class="q-gutter-md rename-model-form"
+    data-cy="rename-model-form"
   >
     <q-input
       v-model="modelName"
       filled
       :label="$t('actions.models.rename.form.name')"
       lazy-rules
-      data-cy="rename-model-name-input"
       :rules="[
         (v) => notEmpty($t, v),
       ]"
+      data-cy="name-input"
     />
     <div class="flex row items-center justify-center">
       <q-btn
@@ -20,8 +20,8 @@
         :label="$t('actions.default.save')"
         type="submit"
         :loading="submitting"
-        data-cy="rename-model-submit"
         color="positive"
+        data-cy="submit-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

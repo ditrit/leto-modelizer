@@ -2,9 +2,9 @@
   <q-item clickable>
     <q-item-section avatar>
       <q-icon
+        v-if="isCurrentBranch"
         color="primary"
         name="fa-solid fa-tag"
-        v-if="isCurrentBranch"
         data-cy="git-menu-current-branch"
       >
         <q-tooltip>

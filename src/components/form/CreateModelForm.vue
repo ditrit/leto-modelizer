@@ -1,18 +1,18 @@
 <template>
   <q-form
     @submit="onSubmit"
-    data-cy="create-model-form"
     class="q-gutter-md create-model-form"
+    data-cy="create-model-form"
   >
     <q-input
       v-model="modelName"
       filled
       :label="$t('actions.models.create.form.name')"
       lazy-rules
-      data-cy="create-model-name-input"
       :rules="[
         (v) => notEmpty($t, v),
       ]"
+      data-cy="name-input"
     />
     <q-select
       filled
@@ -29,8 +29,8 @@
         :label="$t('actions.default.save')"
         type="submit"
         :loading="submitting"
-        data-cy="create-model-submit"
         color="positive"
+        data-cy="submit-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

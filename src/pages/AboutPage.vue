@@ -1,13 +1,13 @@
 <template>
   <q-page
     class="about-page"
-    data-cy="modelizer-page"
+    data-cy="about-page"
   >
     <div class="row col-md-6 justify-center items-center bg-primary about-banner">
       <router-link
         class="col-1"
-        data-cy="go-to-homepage"
         to="/"
+        data-cy="home-page-link"
       >
         <q-img
           src="icons/logo_modelizer.svg"
@@ -28,6 +28,7 @@
           to="/"
           :label="$t('actions.default.goToHome')"
           no-caps
+          data-cy="home-page-button"
         />
       </div>
       <section class="fit row justify-center">

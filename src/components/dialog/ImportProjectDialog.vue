@@ -1,5 +1,8 @@
 <template>
-  <default-dialog dialog-key="ImportProject" data-cy="import-project-dialog">
+  <default-dialog
+    dialog-key="ImportProject"
+    data-cy="import-project-dialog"
+  >
     <template v-slot:title>
       <q-icon color="primary" name="fa-brands fa-git-alt" />
       {{ $t('page.home.project.import') }}

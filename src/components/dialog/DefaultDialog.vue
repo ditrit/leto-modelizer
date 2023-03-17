@@ -3,9 +3,9 @@
     <q-card class="q-pa-md">
       <q-btn
         icon="fa-solid fa-xmark"
-        class="dialog-icon-close"
+        class="close-dialog-button"
         flat round dense v-close-popup
-        data-cy="dialog-icon-close"
+        data-cy="close-dialog-button"
       />
       <q-card-section class="text-h6 q-mb-xl">
         <slot name="title"></slot>
@@ -24,7 +24,10 @@ import {
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 const props = defineProps({
-  dialogKey: String,
+  dialogKey: {
+    type: String,
+    required: true,
+  },
 });
 const show = ref(false);
 let dialogEventSubscription;
@@ -48,7 +51,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-  .dialog-icon-close {
+  .close-dialog-button {
     position: absolute;
     top: 2px;
     right: 2px;

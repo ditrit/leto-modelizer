@@ -1,20 +1,20 @@
 <template>
   <q-form
     @submit="onSubmit"
-    data-cy="create-file-form"
     class="q-gutter-md create-file-form"
+    data-cy="create-file-form"
   >
     <q-input
       v-model="fileName"
       filled
       :label="$t(`page.modelizer.fileExplorer.create.${isFolder ? 'folder' : 'file'}.input`)"
       lazy-rules
-      data-cy="create-file-input"
       :rules="[
         (v) => notEmpty(t, v),
         (v) => isValidFileLabel($t, v),
         (v) => isUniqueFileLabel($t, file.children, v),
       ]"
+      data-cy="name-input"
     />
     <div class="flex row items-center justify-center">
       <q-btn
@@ -22,8 +22,8 @@
         :label="$t('actions.default.save')"
         type="submit"
         :loading="submitting"
-        data-cy="create-file-submit"
         color="positive"
+        data-cy="submit-button"
       >
         <template v-slot:loading>
           <q-spinner-dots/>

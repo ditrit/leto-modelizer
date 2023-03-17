@@ -13,7 +13,7 @@
       ]"
       filled
       lazy-rules
-      data-cy="git-project-name-input"
+      data-cy="name-input"
     />
     <div class="flex row items-center justify-center">
       <q-btn
@@ -21,8 +21,9 @@
         :loading="submitting"
         icon="fa-solid fa-save"
         type="submit"
-        data-cy="rename-project-form-submit"
-        color="positive">
+        color="positive"
+        data-cy="submit-button"
+      >
         <template v-slot:loading>
           <q-spinner-dots/>
         </template>

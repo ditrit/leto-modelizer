@@ -55,17 +55,17 @@ describe('Test page component: HomePage', () => {
     });
   });
 
-  describe('Test function: openNewProjectTemplateDialog', () => {
+  describe('Test function: openCreateProjectTemplateDialog', () => {
     it('should emit DialogEvent', () => {
       DialogEvent.next = jest.fn();
 
       expect(DialogEvent.next).not.toHaveBeenCalled();
 
-      wrapper.vm.openNewProjectTemplateDialog({});
+      wrapper.vm.openCreateProjectTemplateDialog({});
 
       expect(DialogEvent.next).toHaveBeenCalledWith({
         type: 'open',
-        key: 'NewProjectTemplate',
+        key: 'CreateProjectTemplate',
         template: {},
       });
     });

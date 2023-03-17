@@ -22,7 +22,7 @@
         v-for="file in fileTabArray"
         :key="file.id"
         :name="file.id"
-        :data-cy="`file-tab-content-${file.label}`"
+        :data-cy="`file-tab-panel_${file.label}`"
       >
         <slot :file="file"></slot>
       </q-tab-panel>

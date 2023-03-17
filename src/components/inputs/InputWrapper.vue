@@ -1,5 +1,7 @@
 <template>
-  <div class="row items-baseline">
+  <div
+    class="row items-baseline"
+  >
     <template v-if="!attribute.definition">
       <q-input
         v-model="name"
@@ -48,8 +50,8 @@
       flat
       color="negative"
       icon="fa-solid fa-trash"
-      data-cy="object-details-panel-attribute-delete-button"
       @click="emit('delete:attribute')"
+      data-cy="delete-attribute-button"
     >
       <q-tooltip anchor="center left" self="center right">
         {{$t('plugin.component.attribute.delete')}}
