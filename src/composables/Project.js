@@ -77,7 +77,7 @@ export async function importProject(project) {
       username: project.git.username,
       password: project.git.token,
     }),
-    corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
+    corsProxy: '/cors-proxy',
     singleBranch: true,
     depth: 1,
   }).then(() => saveProject(project));
@@ -100,7 +100,7 @@ export async function gitFetch(project) {
         username: project.git.username,
         password: project.git.token,
       }),
-      corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
+      corsProxy: '/cors-proxy',
     });
   }
   return Promise.resolve();
@@ -443,7 +443,7 @@ export async function gitUpdate(project, branchName, fastForward) {
       name: 'LetoModelizer',
       email: 'LetoModelizer@no-reply.com',
     },
-    corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
+    corsProxy: '/cors-proxy',
   });
 }
 
@@ -587,7 +587,7 @@ export async function gitPush(project, branchName, force) {
       username: project.git.username,
       password: project.git.token,
     }),
-    corsProxy: process.env.CORS_ISOMORPHIC_BASE_URL,
+    corsProxy: '/cors-proxy',
   });
 }
 

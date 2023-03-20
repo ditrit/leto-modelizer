@@ -105,7 +105,6 @@ module.exports = configure((ctx) => ({
 
     // Options below are automatically set depending on the env, set them if you want to override
     env: {
-      CORS_ISOMORPHIC_BASE_URL: process.env.CORS_ISOMORPHIC_BASE_URL || 'https://cors.isomorphic-git.org',
       TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL || '',
       MODELS_DEFAULT_FOLDER: process.env.MODELS_DEFAULT_FOLDER || '',
       VERSION: version,
@@ -147,6 +146,12 @@ module.exports = configure((ctx) => ({
         pathRewrite: { '^/template-library': '' },
         target: process.env.TEMPLATE_LIBRARY_BASE_URL,
         secure: false,
+        changeOrigin: true,
+      },
+      '/cors-proxy': {
+        pathRewrite: { '^/cors-proxy/github\\.com': '' },
+        target: 'https://github.com',
+        secure: true,
         changeOrigin: true,
       },
     },
