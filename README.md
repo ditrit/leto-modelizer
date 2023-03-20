@@ -136,6 +136,14 @@ To override it :
 CORS_ISOMORPHIC_BASE_URL="Something else" npm run build
 ```
 
+* Allow to keep `data-cy` attribute in html
+
+`KEEP_CYPRESS_ATTRIBUTE` is used to keep all `data-cy` attribute in the generated html.
+
+```bash
+KEEP_CYPRESS_ATTRIBUTE=true npm run build
+```
+
 ## Official plugins
 
 For now, we don't have many plugins to offer you, but follow us and in the next (few) months you will see new plugins (like Jenkins or Kubernetes).
