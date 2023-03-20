@@ -83,7 +83,9 @@ To build this app with docker, please use this command:
 docker build . --build-arg proxy_url=http://localhost:9999 -t leto-modelizer
 ```
 
-The argument `proxy_url` refers to `CORS_ISOMORPHIC_BASE_URL` to specify the proxy's address you want to use.
+### Proxy
+
+See [nginx configuration](nginx.conf).
 
 ### Environment variables
 
@@ -122,18 +124,6 @@ http {
     }
   }
 }
-```
-
-
-* Allow cloning and pushing repos in the browser
-
-`CORS_ISOMORPHIC_BASE_URL` is used to define the url of isomorphic-git cors proxy to allow cloning and pushing repos in the browser.
-By default, the url is `https://cors.isomorphic-git.org`.
-
-To override it :
-
-```bash
-CORS_ISOMORPHIC_BASE_URL="Something else" npm run build
 ```
 
 * Allow to keep `data-cy` attribute in html
