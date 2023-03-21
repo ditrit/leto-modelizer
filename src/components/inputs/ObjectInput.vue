@@ -7,7 +7,7 @@
     :header-class="`${ !isRoot ? 'bg-secondary' : 'bg-primary'} text-white`"
     dense
   >
-    <template v-slot:header>
+    <template #header>
       <q-item-section avatar>
         <q-icon
           v-if="attribute.definition !== null"
@@ -27,7 +27,10 @@
       <q-item-section>
         {{ attribute.definition?.displayName || attribute.name }}
       </q-item-section>
-      <q-item-section v-if="hasError" side>
+      <q-item-section
+        v-if="hasError"
+        side
+      >
         <q-icon
           color="negative"
           name="fa-solid fa-circle-exclamation"

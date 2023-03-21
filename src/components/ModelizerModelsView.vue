@@ -2,7 +2,9 @@
   <div class="fit row justify-center">
     <div class="col-md-8">
       <div class="row items-center">
-        <h4>{{ $t('page.models.name') }}</h4>
+        <h4>
+          {{ $t('page.models.name') }}
+        </h4>
         <q-btn
           outline
           no-caps
@@ -11,11 +13,11 @@
           icon="fa-solid fa-plus"
           :label="$t('actions.models.create.button.name')"
           :title="$t('actions.models.create.button.title')"
+          data-cy="create-model-button"
           @click="DialogEvent.next({
             type: 'open',
             key: 'CreateModel',
           })"
-          data-cy="create-model-button"
         />
       </div>
       <div
@@ -45,8 +47,10 @@
         :templates="templates"
         @add:template="openImportModelTemplateDialog"
       >
-        <template v-slot:header>
-          <h4>{{ $t('page.models.template.create') }}</h4>
+        <template #header>
+          <h4>
+            {{ $t('page.models.template.create') }}
+          </h4>
         </template>
       </template-grid>
     </div>

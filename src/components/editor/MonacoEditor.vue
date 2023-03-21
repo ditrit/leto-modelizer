@@ -1,8 +1,12 @@
 <template>
-  <div class="monaco-editor"
+  <div
+    class="monaco-editor"
     data-cy="monaco-editor"
   >
-    <div id="container" ref="container"></div>
+    <div
+      id="container"
+      ref="container"
+    />
   </div>
 </template>
 
@@ -32,7 +36,7 @@ const props = defineProps({
   },
   file: {
     type: Object,
-    require: true,
+    required: true,
   },
 });
 

@@ -3,18 +3,18 @@
     dialog-key="CreateFile"
     data-cy="create-file-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         name="fa-solid fa-file-circle-plus"
       />
       {{ $t(`page.modelizer.fileExplorer.create.${onFolder ? 'folder' : 'file'}.title`) }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <create-file-form
         :project-name="projectName"
         :file="newFile"
-        :isFolder="onFolder"
+        :is-folder="onFolder"
         @file:create="DialogEvent.next({ type: 'close', key: 'CreateFile' })"
       />
     </template>

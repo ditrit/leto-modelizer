@@ -125,7 +125,10 @@
               :key="index"
               class="col-12 col-md-6 col-lg-4 q-mb-lg"
             >
-              <q-card flat bordered>
+              <q-card
+                flat
+                bordered
+              >
                 <q-item>
                   <q-item-section avatar>
                     <q-avatar size="80px">
@@ -144,7 +147,7 @@
                   </q-item-section>
                   <q-item-section>
                     <q-item-label>
-                      {{  people.name }}
+                      {{ people.name }}
                     </q-item-label>
                     <q-item-label caption>
                       {{ people.job }}
@@ -160,7 +163,10 @@
               :key="index"
               class="col-12 col-md-6 col-lg-4"
             >
-              <q-card flat bordered>
+              <q-card
+                flat
+                bordered
+              >
                 <q-item>
                   <q-item-section avatar>
                     <q-avatar size="80px">
@@ -179,7 +185,7 @@
                   </q-item-section>
                   <q-item-section>
                     <q-item-label>
-                      {{  people.name }}
+                      {{ people.name }}
                     </q-item-label>
                     <q-item-label caption>
                       {{ people.job }}
@@ -208,13 +214,14 @@
               target="_blank"
             >
               <q-card
-                flat bordered
+                flat
+                bordered
                 class="full-height"
               >
                 <q-item
                   class="row items-center full-height"
                 >
-                  <q-img :src="sponsor.avatar"/>
+                  <q-img :src="sponsor.avatar" />
                 </q-item>
               </q-card>
             </a>

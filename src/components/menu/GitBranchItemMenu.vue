@@ -8,19 +8,23 @@
         data-cy="git-menu-current-branch"
       >
         <q-tooltip>
-          {{$t('menu.git.currentBranch')}}
+          {{ $t('menu.git.currentBranch') }}
         </q-tooltip>
       </q-icon>
     </q-item-section>
-    <q-item-section>{{name}}</q-item-section>
-    <q-item-section class="text-right text-grey-8">{{fullName}}</q-item-section>
+    <q-item-section>
+      {{ name }}
+    </q-item-section>
+    <q-item-section class="text-right text-grey-8">
+      {{ fullName }}
+    </q-item-section>
     <q-item-section side>
-      <q-icon name="fa-solid fa-angle-right"/>
+      <q-icon name="fa-solid fa-angle-right" />
     </q-item-section>
     <git-branch-action-menu
       anchor="top end"
       self="top start"
-      :isCurrentBranch="isCurrentBranch"
+      :is-current-branch="isCurrentBranch"
       :on-local="onLocal"
       :on-remote="onRemote"
       :branch-name="name"

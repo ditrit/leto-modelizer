@@ -3,14 +3,14 @@
     dialog-key="CreateModel"
     data-cy="create-model-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         name="fa-solid fa-scroll"
       />
       {{ $t(`actions.models.create.dialog.name`) }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <create-model-form
         :project-name="projectName"
       />

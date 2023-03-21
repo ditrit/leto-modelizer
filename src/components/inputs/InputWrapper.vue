@@ -35,12 +35,12 @@
       :plugin="plugin"
       class="col q-px-md"
       :label="getAttributeLabel(attribute)"
-      @update:modelValue="(event) => emit('update:attribute-value', {
+      hide-bottom-space
+      :full-name="fullName"
+      @update:model-value="(event) => emit('update:attribute-value', {
         attributeName: attribute.name,
         newValue: event,
       })"
-      hide-bottom-space
-      :full-name="fullName"
     />
     <q-btn
       v-if="!attribute.definition"
@@ -50,11 +50,14 @@
       flat
       color="negative"
       icon="fa-solid fa-trash"
-      @click="emit('delete:attribute')"
       data-cy="delete-attribute-button"
+      @click="emit('delete:attribute')"
     >
-      <q-tooltip anchor="center left" self="center right">
-        {{$t('plugin.component.attribute.delete')}}
+      <q-tooltip
+        anchor="center left"
+        self="center right"
+      >
+        {{ $t('plugin.component.attribute.delete') }}
       </q-tooltip>
     </q-btn>
   </div>

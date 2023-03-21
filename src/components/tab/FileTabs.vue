@@ -1,5 +1,8 @@
 <template>
-  <div class="col" data-cy="file-tabs">
+  <div
+    class="col"
+    data-cy="file-tabs"
+  >
     <q-tabs
       v-model="activeFileId"
       dense
@@ -13,7 +16,7 @@
         v-for="file in fileTabArray"
         :key="file.id"
         :file="file"
-        :isActive="(file.id === activeFileId)"
+        :is-active="(file.id === activeFileId)"
         @update:close-file="deleteFileTab"
       />
     </q-tabs>
@@ -24,7 +27,7 @@
         :name="file.id"
         :data-cy="`file-tab-panel_${file.label}`"
       >
-        <slot :file="file"></slot>
+        <slot :file="file" />
       </q-tab-panel>
     </q-tab-panels>
   </div>

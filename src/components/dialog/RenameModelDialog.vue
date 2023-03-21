@@ -3,14 +3,14 @@
     dialog-key="RenameModel"
     data-cy="rename-model-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         name="fa-solid fa-scroll"
       />
       {{ $t(`actions.models.rename.dialog.name`) }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <rename-model-form
         :project-name="projectName"
         :model="renamedModel"

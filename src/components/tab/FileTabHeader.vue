@@ -9,7 +9,7 @@
     <div class="row items-center">
       <file-name
         :path="file.id"
-        :isActive="isActive"
+        :is-active="isActive"
         :label="file.label"
         :status="file.information?.status"
       />
@@ -20,8 +20,8 @@
         :color="isActive? 'primary' : 'gray'"
         icon="fa-solid fa-xmark"
         class="q-ml-sm"
-        @click.stop="emit('update:close-file', file.id)"
         data-cy="close-button"
+        @click.stop="emit('update:close-file', file.id)"
       />
     </div>
   </q-tab>

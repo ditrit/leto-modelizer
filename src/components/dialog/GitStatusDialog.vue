@@ -3,20 +3,29 @@
     dialog-key="GitStatus"
     data-cy="git-status-dialog"
   >
-    <template v-slot:title>
-      <q-icon color="primary" name="fa-brands fa-git-alt" />
+    <template #title>
+      <q-icon
+        color="primary"
+        name="fa-brands fa-git-alt"
+      />
       {{ $t('page.modelizer.git.status.title') }}
     </template>
 
-    <template v-slot:default>
+    <template #default>
       <template v-if="loading">
         <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px" />
+          <q-spinner-dots
+            color="primary"
+            size="40px"
+          />
         </div>
       </template>
 
       <template v-else>
-        <q-list style="min-width: 500px" dense>
+        <q-list
+          style="min-width: 500px"
+          dense
+        >
           <q-item
             v-if="noFiles"
             data-cy="empty-item"
@@ -33,14 +42,14 @@
               </q-item-section>
             </q-item>
             <q-item
-              :key="`staged_${file.path}`"
               v-for="file in stagedFiles"
+              :key="`staged_${file.path}`"
             >
               <q-item-section
                 class="file-status-staged q-pl-md"
                 data-cy="staged-item"
               >
-                {{file.path}}
+                {{ file.path }}
               </q-item-section>
             </q-item>
           </template>
@@ -52,14 +61,14 @@
               </q-item-section>
             </q-item>
             <q-item
-              :key="`modified_${file.path}`"
               v-for="file in modifiedFiles"
+              :key="`modified_${file.path}`"
             >
               <q-item-section
                 class="file-status-modified q-pl-md"
                 data-cy="modified-item"
               >
-                {{file.path}}
+                {{ file.path }}
               </q-item-section>
             </q-item>
           </template>
@@ -78,7 +87,7 @@
                 class="file-status-untracked q-pl-md"
                 data-cy="untracked-item"
               >
-                {{file.path}}
+                {{ file.path }}
               </q-item-section>
             </q-item>
           </template>

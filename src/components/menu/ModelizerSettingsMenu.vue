@@ -19,11 +19,14 @@
             v-if="menuItem.visible"
             clickable
             class="settings-item"
-            @click="onClick(menuItem.key)"
             :data-cy="`item_${menuItem.key}`"
+            @click="onClick(menuItem.key)"
           >
             <q-item-section avatar>
-              <q-icon color="primary" :name="menuItem.icon" />
+              <q-icon
+                color="primary"
+                :name="menuItem.icon"
+              />
             </q-item-section>
             <q-item-section no-wrap>
               {{ $t(menuItem.title) }}

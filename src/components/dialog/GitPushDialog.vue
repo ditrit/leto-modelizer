@@ -3,11 +3,14 @@
     dialog-key="GitPush"
     data-cy="git-push-dialog"
   >
-    <template v-slot:title>
-      <q-icon color="primary" name="fa-brands fa-git-alt" />
+    <template #title>
+      <q-icon
+        color="primary"
+        name="fa-brands fa-git-alt"
+      />
       {{ $t('page.modelizer.git.push.title') }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <git-push-form
         :project-name="projectName"
         :branch-name="branchName"

@@ -3,22 +3,21 @@
     dialog-key="DeleteFile"
     data-cy="delete-file-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         :name="isFolder ? 'fa-solid fa-folder-minus' : 'fa-solid fa-file-circle-minus'"
       />
       {{ $t(`page.modelizer.fileExplorer.delete.${ isFolder ? 'folder' : 'file' }.title`) }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <div
         class="q-pb-lg"
         v-html="$t(
           `page.modelizer.fileExplorer.delete.${ isFolder ? 'folder' : 'file' }.description`,
           { name: deletedFile.label },
         )"
-      >
-      </div>
+      />
       <delete-file-form
         :project-name="projectName"
         :file="deletedFile"

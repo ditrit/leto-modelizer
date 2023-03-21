@@ -3,17 +3,18 @@
     dialog-key="GitAddRemote"
     data-cy="git-add-remote-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         name="fa-solid fa-book-bookmark"
       />
       {{ $t('page.modelizer.settings.gitAddRemote.title') }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <git-add-remote-form
         :project-name="projectName"
-        @project-git:save="DialogEvent.next({ type: 'close', key: 'GitAddRemote' })"/>
+        @project-git:save="DialogEvent.next({ type: 'close', key: 'GitAddRemote' })"
+      />
     </template>
   </default-dialog>
 </template>

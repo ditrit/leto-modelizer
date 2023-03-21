@@ -1,10 +1,13 @@
 <template>
   <q-card
-    class="model-card cursor-pointer"
     v-ripple
+    class="model-card cursor-pointer"
     :data-cy="`model-card_${model.plugin}-${model.name}`"
   >
-    <q-img :src="getModelImage()" height="100%">
+    <q-img
+      :src="getModelImage()"
+      height="100%"
+    >
       <div
         class="absolute-bottom text-subtitle2 text-center"
         data-cy="title-container"
@@ -22,12 +25,12 @@
           round
           color="negative"
           icon="fa-solid fa-trash"
+          data-cy="delete-button"
           @click.prevent.stop="DialogEvent.next({
             type: 'open',
             key: 'DeleteModel',
             model,
           })"
-          data-cy="delete-button"
         />
         <q-btn
           class="q-mr-none"
@@ -36,12 +39,12 @@
           round
           color="primary"
           icon="fa-solid fa-pen"
+          data-cy="rename-button"
           @click.prevent.stop="DialogEvent.next({
             type: 'open',
             key: 'RenameModel',
             model,
           })"
-          data-cy="rename-button"
         />
       </div>
     </q-img>

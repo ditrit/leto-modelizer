@@ -3,14 +3,14 @@
     dialog-key="DeleteModel"
     data-cy="delete-model-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         name="fa-solid fa-scroll"
       />
       {{ $t(`actions.models.delete.dialog.name`) }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <delete-model-form
         :project-name="projectName"
         :model="deletedModel"

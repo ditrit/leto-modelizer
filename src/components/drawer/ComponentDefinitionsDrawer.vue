@@ -3,10 +3,10 @@
     class="components-definitions-drawer"
     data-cy="components-definitions-drawer"
   >
-    <template v-slot:drawerName>
+    <template #drawerName>
       {{ $t('page.modelizer.drawer.components.header') }}
     </template>
-    <template v-slot:content>
+    <template #content>
       <div class="row justify-center">
         <q-btn
           :label="$t('page.modelizer.drawer.components.button.label')"
@@ -14,31 +14,31 @@
           color="positive"
           class="q-mr-md"
           no-caps
-          @click="router.push(`/modelizer/${projectName}/models`)"
           data-cy="models-page-link-button"
+          @click="router.push(`/modelizer/${projectName}/models`)"
         />
       </div>
       <q-input
-        clearable
         v-model="definitionFilter"
+        clearable
         :label="$t('page.modelizer.drawer.components.filterLabel')"
         data-cy="definitions-filter-input"
       >
-        <template v-slot:prepend>
+        <template #prepend>
           <q-icon name="fa-solid fa-magnifying-glass" />
         </template>
       </q-input>
       <q-list text-white>
         <q-expansion-item
           v-if="plugin"
+          :key="plugin.data.name"
           expand-sperator
           group="components-definitions"
           header-class="text-bold"
           class="plugin-definitions"
-          :key="plugin.data.name"
           :data-cy="`component-defnitions-item_${plugin.data.name}`"
         >
-          <template v-slot:header>
+          <template #header>
             <q-item-section data-cy="title">
               {{ plugin.data.name }}
             </q-item-section>
@@ -49,7 +49,7 @@
           >
             <component-definition-grid
               :definitions="componentDefinitions"
-              :pluginName="plugin.data.name"
+              :plugin-name="plugin.data.name"
             />
           </q-scroll-area>
         </q-expansion-item>
@@ -61,9 +61,9 @@
           class="template-definitions"
           data-cy="template-definitions-item"
         >
-          <template v-slot:header>
+          <template #header>
             <q-item-section data-cy="title">
-              {{  $t('page.modelizer.drawer.templates.title') }}
+              {{ $t('page.modelizer.drawer.templates.title') }}
             </q-item-section>
           </template>
           <q-scroll-area
@@ -71,13 +71,13 @@
             :style="`height: calc(100vh - ${scrollAreaHeight(definitions)}px);`"
             class="sunken-area"
           >
-            <component-definition-grid :definitions="templates"/>
+            <component-definition-grid :definitions="templates" />
           </q-scroll-area>
           <div
             v-else
             class="q-px-md q-py-sm text-italic text-grey"
           >
-            {{  $t('page.modelizer.drawer.templates.emptyMessage') }}
+            {{ $t('page.modelizer.drawer.templates.emptyMessage') }}
           </div>
         </q-expansion-item>
       </q-list>

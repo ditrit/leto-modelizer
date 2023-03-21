@@ -1,8 +1,8 @@
 <template>
   <q-form
-    @submit="onSubmit"
     class="q-gutter-md delete-project-form"
     data-cy="delete-project-form"
+    @submit="onSubmit"
   >
     <q-checkbox
       v-model="confirmDelete"
@@ -22,7 +22,7 @@
         color="negative"
         data-cy="submit-button"
       >
-        <template v-slot:loading>
+        <template #loading>
           <q-spinner-dots />
         </template>
       </q-btn>

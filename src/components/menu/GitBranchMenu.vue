@@ -1,10 +1,10 @@
 <template>
   <q-menu
-    class="git-branch-menu"
     ref="menu"
+    class="git-branch-menu"
+    data-cy="git-branch-menu"
     @before-show="onOpen"
     @show="onShow"
-    data-cy="git-branch-menu"
   >
     <q-list style="min-width: 500px">
       <q-input
@@ -14,14 +14,14 @@
         clearable
         data-cy="search-branch-input"
       >
-        <template v-slot:prepend>
+        <template #prepend>
           <q-icon name="fa-solid fa-magnifying-glass" />
         </template>
       </q-input>
       <q-item
         clickable
-        @click="openDialog('GitStatus')"
         data-cy="git-status-item"
+        @click="openDialog('GitStatus')"
       >
         <q-item-section avatar>
           <q-icon
@@ -35,8 +35,8 @@
       </q-item>
       <q-item
         clickable
-        @click="openDialog('GitCommit')"
         data-cy="git-commit-item"
+        @click="openDialog('GitCommit')"
       >
         <q-item-section avatar>
           <q-icon
@@ -50,8 +50,8 @@
       </q-item>
       <q-item
         clickable
-        @click="openDialog('GitNewBranch')"
         data-cy="git-new-branch-item"
+        @click="openDialog('GitNewBranch')"
       >
         <q-item-section avatar>
           <q-icon
@@ -66,8 +66,8 @@
 
       <q-item
         clickable
-        @click="openDialog('GitLog')"
         data-cy="git-log-item"
+        @click="openDialog('GitLog')"
       >
         <q-item-section avatar>
           <q-icon
@@ -75,65 +75,69 @@
             name="fa-solid fa-list"
           />
         </q-item-section>
-        <q-item-section>{{ $t('actions.git.log') }}</q-item-section>
+        <q-item-section>
+          {{ $t('actions.git.log') }}
+        </q-item-section>
       </q-item>
 
       <template v-if="localBranches.length > 0">
-        <git-branch-header-menu :title="$t('menu.git.localBranchesTitle')"/>
+        <git-branch-header-menu :title="$t('menu.git.localBranchesTitle')" />
         <template v-for="(branch, index) in localBranches">
           <git-branch-item-menu
             v-if="showLocal || index < maxItem"
             :key="`local_${branch.name}`"
             :name="branch.name"
             :full-name="branch.fullName"
-            :isCurrentBranch="branch.name === currentBranchName"
+            :is-current-branch="branch.name === currentBranchName"
             :on-local="branch.onLocal"
             :on-remote="branch.onRemote"
-            @action:done="menu.hide()"
             :data-cy="`local-branch_${branch.name}`"
+            @action:done="menu.hide()"
           />
         </template>
         <git-branch-expand-list-menu
           v-if="localBranches.length > maxItem"
           :open="showLocal"
           :number="localBranches.length - maxItem"
-          @click="manageExpandMenu(true)"
           data-cy="expand-local-branch-menu"
+          @click="manageExpandMenu(true)"
         />
       </template>
 
       <template v-if="remoteBranches.length > 0">
-        <git-branch-header-menu :title="$t('menu.git.remoteBranchesTitle')"/>
+        <git-branch-header-menu :title="$t('menu.git.remoteBranchesTitle')" />
         <template v-for="(branch, index) in remoteBranches">
           <git-branch-item-menu
             v-if="showRemote || index < maxItem"
             :key="`remote_${branch.name}`"
             :name="branch.name"
             :full-name="branch.fullName"
-            :isCurrentBranch="branch.name === currentBranchName"
+            :is-current-branch="branch.name === currentBranchName"
             :on-local="branch.onLocal"
             :on-remote="branch.onRemote"
-            @action:done="menu.hide()"
             :data-cy="`remote-branch_${branch.name}`"
+            @action:done="menu.hide()"
           />
         </template>
         <git-branch-expand-list-menu
           v-if="remoteBranches.length > maxItem"
           :open="showRemote"
           :number="remoteBranches.length - maxItem"
-          @click="manageExpandMenu(false)"
           data-cy="expand-remote-branch-menu"
+          @click="manageExpandMenu(false)"
         />
       </template>
 
       <template v-if="loading">
-        <span class="q-mr-xs">{{ $t('menu.git.loading')}}</span>
-        <q-spinner-dots thickness="2"/>
+        <span class="q-mr-xs">{{ $t('menu.git.loading') }}</span>
+        <q-spinner-dots thickness="2" />
       </template>
 
       <template v-if="hasNoBranches && !loading">
         <q-item>
-          <q-item-section>{{ $t('menu.git.noBranches')}}</q-item-section>
+          <q-item-section>
+            {{ $t('menu.git.noBranches') }}
+          </q-item-section>
         </q-item>
       </template>
     </q-list>

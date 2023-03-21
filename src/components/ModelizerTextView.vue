@@ -4,7 +4,7 @@
     data-cy="modelizer-text-view"
   >
     <div class="col-md-2 bg-grey-2 file-explorer-container">
-      <git-branch-card/>
+      <git-branch-card />
       <q-checkbox
         v-model="showParsableFiles"
         class="q-ml-lg"
@@ -13,7 +13,7 @@
       />
       <file-explorer
         class="q-px-md q-py-sm overflow-auto"
-        :fileInformations="localFileInformations"
+        :file-informations="localFileInformations"
         :project-name="projectName"
         :show-parsable-files="showParsableFiles"
       />
@@ -21,9 +21,9 @@
 
     <q-separator vertical />
     <file-tabs
-      :fileInformations="localFileInformations"
+      :file-informations="localFileInformations"
     >
-      <template v-slot="{ file }">
+      <template #default="{ file }">
         <monaco-editor
           :file="file"
           :project-name="projectName"

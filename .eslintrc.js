@@ -25,8 +25,8 @@ module.exports = {
     // but leave only one uncommented!
     // See https://eslint.vuejs.org/rules/#available-rules
     'plugin:vue/vue3-essential', // Priority A: Essential (Error Prevention)
-    // 'plugin:vue/vue3-strongly-recommended', // Priority B: Strongly Recommended (Improving Readability)
-    // 'plugin:vue/vue3-recommended', // Priority C: Recommended (Minimizing Arbitrary Choices and Cognitive Overhead)
+    'plugin:vue/vue3-strongly-recommended', // Priority B: Strongly Recommended (Improving Readability)
+    'plugin:vue/vue3-recommended', // Priority C: Recommended (Minimizing Arbitrary Choices and Cognitive Overhead)
 
     'airbnb-base',
 
@@ -82,5 +82,9 @@ module.exports = {
         'message': 'Use \'src/\' for base of import. Don\'t use \'./\' or \'../\'.',
       }],
     }],
+    "vue/no-v-html": 'off',
+    "vue/singleline-html-element-content-newline": ["error", {
+      "ignoreWhenNoAttributes": false,
+    }]
   }
 }

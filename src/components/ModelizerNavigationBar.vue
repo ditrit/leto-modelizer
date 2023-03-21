@@ -35,20 +35,19 @@
         :loading="isLoading"
         :label="$t('page.modelizer.header.button.upload.label')"
         :title="$t(uploadButtonTitle)"
-        @click="upload()"
         color="positive"
         class="q-mr-md"
         data-cy="upload-to-git-button"
+        @click="upload()"
       >
-        <template v-slot:loading>
-          <q-spinner-dots/>
+        <template #loading>
+          <q-spinner-dots />
         </template>
       </q-btn>
       <q-btn-toggle
         v-show="viewType !== 'models'"
         v-model="buttonToggleValue"
         :options="buttonToggleOptions"
-        @update:model-value="onViewSwitchUpdate"
         class="view-selector q-mr-md"
         toggle-color="accent"
         text-color="accent"
@@ -56,6 +55,7 @@
         no-caps
         rounded
         data-cy="modelizer-switch-button"
+        @update:model-value="onViewSwitchUpdate"
       />
       <modelizer-settings-menu :project-name="projectName" />
     </div>

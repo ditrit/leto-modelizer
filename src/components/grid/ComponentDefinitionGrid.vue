@@ -8,9 +8,12 @@
     :pagination="disablePagination"
     class="component-definition-grid"
   >
-    <template v-slot:item="props">
+    <template #item="props">
       <div class="q-pa-xs col-4 text-primary">
-        <component-definition-card :definition="props.row" :pluginName="pluginName" />
+        <component-definition-card
+          :definition="props.row"
+          :plugin-name="pluginName"
+        />
       </div>
     </template>
   </q-table>

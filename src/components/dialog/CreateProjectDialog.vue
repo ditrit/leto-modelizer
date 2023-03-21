@@ -3,14 +3,14 @@
     dialog-key="CreateProject"
     data-cy="create-project-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         name="fa-solid fa-square-plus"
       />
       {{ $t(`page.home.project.create`) }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <create-project-form
         @project:create="createProject"
       />
