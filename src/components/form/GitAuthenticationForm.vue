@@ -1,18 +1,18 @@
 <template>
   <q-form
-    @submit="onSubmit"
     class="q-gutter-md git-authentication-form"
     data-cy="git-authentication-form"
+    @submit="onSubmit"
   >
     <q-input
-      filled
       v-model="username"
+      filled
       :label="$t('page.modelizer.settings.gitAuthentication.username')"
       data-cy="username-input"
     />
     <q-input
-      filled
       v-model="token"
+      filled
       :label="$t('page.modelizer.settings.gitAuthentication.token')"
       data-cy="token-input"
     />
@@ -25,8 +25,8 @@
         color="positive"
         data-cy="submit-button"
       >
-        <template v-slot:loading>
-          <q-spinner-dots/>
+        <template #loading>
+          <q-spinner-dots />
         </template>
       </q-btn>
     </div>

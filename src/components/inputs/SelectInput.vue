@@ -1,8 +1,8 @@
 <template>
   <q-select
     ref="selectInput"
-    clearable
     v-model="localValue"
+    clearable
     :options="options"
     :rules="[
       (value) => isRequired($t, value, attribute.definition.required),

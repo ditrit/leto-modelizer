@@ -1,20 +1,19 @@
 <template>
   <q-form
-    @submit="onSubmit"
     class="q-gutter-md"
     data-cy="git-add-remote-form"
+    @submit="onSubmit"
   >
     <div class="warning-message row items-center bg-warning q-py-sm">
       <q-icon
         name="fa-solid fa-triangle-exclamation"
         class="q-pr-xs"
-      >
-      </q-icon>
+      />
       {{ $t('page.modelizer.settings.gitAddRemote.warningMessage') }}
     </div>
     <q-input
-      filled
       v-model="repository"
+      filled
       :label="$t('page.modelizer.settings.gitAddRemote.repository')"
       lazy-rules
       :hint="$t('page.modelizer.settings.gitAddRemote.repositoryExample')"
@@ -30,8 +29,8 @@
         color="positive"
         data-cy="submit-button"
       >
-        <template v-slot:loading>
-          <q-spinner-dots/>
+        <template #loading>
+          <q-spinner-dots />
         </template>
       </q-btn>
     </div>

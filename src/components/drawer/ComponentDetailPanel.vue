@@ -10,7 +10,10 @@
     <q-list>
       <q-item>
         <q-item-section>
-          <q-item-label overline header>
+          <q-item-label
+            overline
+            header
+          >
             {{ $t('plugin.component.attribute.title') }}
           </q-item-label>
         </q-item-section>
@@ -19,32 +22,32 @@
             round
             flat
             icon="fa-solid fa-xmark"
-            @click="isVisible = false"
             data-cy="close-button"
+            @click="isVisible = false"
           />
         </q-item-section>
       </q-item>
     </q-list>
 
     <div
-       v-if="originalComponent && isVisible"
-       class="col"
+      v-if="originalComponent && isVisible"
+      class="col"
     >
       <q-form
-        greedy
         ref="form"
+        greedy
         @validation-error="onError"
         @validation-success="clearError"
       >
         <attributes-list
           :attributes="selectedComponentAttributes"
           :plugin="plugin"
-          :isRoot="true"
+          :is-root="true"
           :full-name="'root'"
           :current-error="currentError"
           @update:attributes="updateAttributes"
         >
-          <template v-slot:header>
+          <template #header>
             <!-- Selected component name -->
             <q-item class="q-px-none">
               <q-input
@@ -54,7 +57,7 @@
               />
             </q-item>
           </template>
-          <template v-slot:footer>
+          <template #footer>
             <!-- Action SelectedComponent -->
             <q-item>
               <q-checkbox
@@ -69,19 +72,19 @@
                 type="submit"
                 color="positive"
                 :loading="submitting"
-                @click="save"
                 data-cy="save-button"
+                @click="save"
               >
-                <template v-slot:loading>
-                  <q-spinner-dots/>
+                <template #loading>
+                  <q-spinner-dots />
                 </template>
               </q-btn>
               <q-btn
                 icon="fa-solid fa-arrow-rotate-left"
                 :label="$t('plugin.component.attribute.reset')"
                 color="info"
-                @click="reset"
                 data-cy="reset-button"
+                @click="reset"
               />
             </q-item>
           </template>

@@ -1,8 +1,8 @@
 <template>
   <q-form
-    @submit="onSubmit"
     class="q-gutter-md create-model-form"
     data-cy="create-model-form"
+    @submit="onSubmit"
   >
     <q-input
       v-model="modelName"
@@ -16,8 +16,8 @@
       data-cy="name-input"
     />
     <q-select
-      filled
       v-model="modelPlugin"
+      filled
       :label="$t('actions.models.create.form.plugin')"
       :options="plugins.map(({ data }) => data.name)"
       :rules="[
@@ -34,8 +34,8 @@
         color="positive"
         data-cy="submit-button"
       >
-        <template v-slot:loading>
-          <q-spinner-dots/>
+        <template #loading>
+          <q-spinner-dots />
         </template>
       </q-btn>
     </div>

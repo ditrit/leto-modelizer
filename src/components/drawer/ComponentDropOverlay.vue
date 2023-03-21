@@ -1,6 +1,6 @@
 <template>
   <div id="overlay">
-    <div class="overlay-background"></div>
+    <div class="overlay-background" />
     <q-card
       id="text"
       rounded
@@ -9,7 +9,7 @@
     >
       <q-card-section>
         <q-avatar>
-          <q-icon name="fa-solid fa-plus"></q-icon>
+          <q-icon name="fa-solid fa-plus" />
         </q-avatar>
         {{ $t('actions.default.dropZoneMessage') }}
       </q-card-section>

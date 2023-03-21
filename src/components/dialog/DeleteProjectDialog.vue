@@ -1,16 +1,16 @@
 <template>
   <default-dialog
-    dialog-key='DeleteProject'
+    dialog-key="DeleteProject"
     data-cy="delete-project-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
-        color='primary'
-        name='fa-solid fa-folder-minus'
+        color="primary"
+        name="fa-solid fa-folder-minus"
       />
       {{ $t('page.home.project.delete') }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <delete-project-form
         :project-id="projectId"
         @project:delete="DialogEvent.next({ type: 'close', key: 'DeleteProject' })"

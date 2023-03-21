@@ -1,8 +1,8 @@
 <template>
   <q-form
-    @submit="onSubmit"
     class="q-gutter-md delete-file-form"
     data-cy="delete-file-form"
+    @submit="onSubmit"
   >
     <q-checkbox
       v-if="isFolderWithChildren"
@@ -20,8 +20,8 @@
         color="negative"
         data-cy="submit-button"
       >
-        <template v-slot:loading>
-          <q-spinner-dots/>
+        <template #loading>
+          <q-spinner-dots />
         </template>
       </q-btn>
     </div>

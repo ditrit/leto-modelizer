@@ -1,19 +1,19 @@
 <template>
   <q-card
+    :id="`component-definition-${definition.type}`"
     flat
     bordered
     class="component-definition-card"
     draggable="true"
-    @dragstart="dragStartHandler"
-    @dragend="dragEndHandler"
-    :id="`component-definition-${definition.type}`"
     :title="definition.description"
     :data-cy="`component-definition_${definition.type}`"
+    @dragstart="dragStartHandler"
+    @dragend="dragEndHandler"
   >
     <q-item
       clickable
-      @click="onClickItem"
       class="column q-pl-xs q-pr-xs items-center"
+      @click="onClickItem"
     >
       <q-item-section
         v-if="definition.icon"
@@ -31,11 +31,11 @@
           name="fa-solid fa-circle-info"
           color="info"
           size="xs"
-          @click.stop="$event.preventDefault()"
           style="cursor: help"
           data-cy="url-icon"
+          @click.stop="$event.preventDefault()"
         >
-          <definition-menu :definition="definition"/>
+          <definition-menu :definition="definition" />
         </q-icon>
       </q-item-section>
 

@@ -1,8 +1,8 @@
 <template>
   <q-form
-    @submit="onSubmit"
     class="q-gutter-md rename-model-form"
     data-cy="rename-model-form"
+    @submit="onSubmit"
   >
     <q-input
       v-model="modelName"
@@ -23,8 +23,8 @@
         color="positive"
         data-cy="submit-button"
       >
-        <template v-slot:loading>
-          <q-spinner-dots/>
+        <template #loading>
+          <q-spinner-dots />
         </template>
       </q-btn>
     </div>

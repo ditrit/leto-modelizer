@@ -1,8 +1,8 @@
 <template>
   <q-form
-    @submit="onSubmit"
     class="q-gutter-md import-project-form"
     data-cy="import-project-form"
+    @submit="onSubmit"
   >
     <q-input
       v-model="repository"
@@ -36,8 +36,8 @@
         color="positive"
         data-cy="submit-button"
       >
-        <template v-slot:loading>
-          <q-spinner-dots/>
+        <template #loading>
+          <q-spinner-dots />
         </template>
       </q-btn>
     </div>

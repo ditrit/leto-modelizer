@@ -2,29 +2,32 @@
   <q-drawer
     v-model="componentsDrawer"
     :mini="!componentsDrawer || drawerMiniState"
-    @click.capture="openDrawer"
     show-if-above
     bordered
     side="left"
+    @click.capture="openDrawer"
   >
     <q-list>
       <q-item>
         <q-item-section>
-          <q-item-label overline header>
-            <slot name="drawerName"></slot>
+          <q-item-label
+            overline
+            header
+          >
+            <slot name="drawerName" />
           </q-item-label>
         </q-item-section>
         <q-item-section avatar>
           <q-btn
             round
             flat
-            @click="drawerMiniState = true"
             :icon="`fa-solid fa-${ drawerMiniState ? 'bars' : 'minus' }`"
+            @click="drawerMiniState = true"
           />
         </q-item-section>
       </q-item>
     </q-list>
-    <slot name="content"></slot>
+    <slot name="content" />
   </q-drawer>
 </template>
 

@@ -3,7 +3,7 @@
     dialog-key="ImportModelTemplate"
     data-cy="import-model-template-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         name="fa-solid fa-scroll"
@@ -12,7 +12,7 @@
     </template>
     <template
       v-if="modelTemplate"
-      v-slot:default
+      #default
     >
       <div class="q-pb-md text-center text-subtitle2">
         {{ modelTemplate.type }}
@@ -25,10 +25,10 @@
           :src="`template-library/templates/${modelTemplate.key}/schema.svg`"
           :alt="`${modelTemplate.key}/schema.svg`"
           class="carousel-img"
-        />
+        >
       </div>
       <div class="q-pb-md text-center text-subtitle2 text-italic">
-        {{  modelTemplate.description }}
+        {{ modelTemplate.description }}
       </div>
       <div class="q-pb-md text-subtitle2">
         {{ $t('page.models.template.selectedPlugin', { plugin: modelTemplate.plugin }) }}

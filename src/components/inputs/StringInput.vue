@@ -1,8 +1,8 @@
 <template>
   <q-input
     ref="stringInput"
-    clearable
     v-model="localValue"
+    clearable
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
       (value) => isStringTooShort($t, value, attribute.definition?.rules.min),

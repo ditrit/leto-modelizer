@@ -1,15 +1,15 @@
 <template>
   <q-select
     ref="linkInput"
+    v-model="localValue"
     multiple
     clearable
-    v-model="localValue"
     :options="options"
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
     ]"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon
         color="primary"
         :name="`img:/plugins/${plugin.data.name}/icons/${iconName}.svg`"

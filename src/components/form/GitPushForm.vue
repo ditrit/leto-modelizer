@@ -1,16 +1,16 @@
 <template>
   <q-form
     ref="form"
-    @submit="onSubmit"
     class="q-gutter-md git-push-form"
     data-cy="git-push-form"
+    @submit="onSubmit"
   >
-    <div v-html="$t('page.modelizer.git.push.description', { branch: branchName })"></div>
+    <div v-html="$t('page.modelizer.git.push.description', { branch: branchName })" />
     <q-checkbox
       v-model="force"
       data-cy="force-checkbox"
     >
-      <span v-html="$t('page.modelizer.git.push.force', { branch: branchName })"></span>
+      <span v-html="$t('page.modelizer.git.push.force', { branch: branchName })" />
     </q-checkbox>
     <div class="flex row items-center justify-center">
       <q-btn
@@ -21,8 +21,8 @@
         color="positive"
         data-cy="submit-button"
       >
-        <template v-slot:loading>
-          <q-spinner-dots/>
+        <template #loading>
+          <q-spinner-dots />
         </template>
       </q-btn>
     </div>

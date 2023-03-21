@@ -3,14 +3,14 @@
     dialog-key="RenameProject"
     data-cy="rename-project-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         name="fa-solid fa-pen"
       />
       {{ $t('page.home.project.rename') }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <rename-project-form
         :project-id="projectId"
       />

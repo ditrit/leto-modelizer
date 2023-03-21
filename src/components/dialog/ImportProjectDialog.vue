@@ -3,11 +3,14 @@
     dialog-key="ImportProject"
     data-cy="import-project-dialog"
   >
-    <template v-slot:title>
-      <q-icon color="primary" name="fa-brands fa-git-alt" />
+    <template #title>
+      <q-icon
+        color="primary"
+        name="fa-brands fa-git-alt"
+      />
       {{ $t('page.home.project.import') }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <import-project-form
         @project:import="importProject"
       />

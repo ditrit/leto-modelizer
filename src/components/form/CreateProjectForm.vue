@@ -1,8 +1,8 @@
 <template>
   <q-form
-    @submit="onSubmit"
     class="q-gutter-md create-project-form"
     data-cy="create-project-form"
+    @submit="onSubmit"
   >
     <q-input
       v-model="projectName"

@@ -3,11 +3,14 @@
     dialog-key="GitNewBranch"
     data-cy="git-new-branch-dialog"
   >
-    <template v-slot:title>
-      <q-icon color="primary" name="fa-brands fa-git-alt" />
+    <template #title>
+      <q-icon
+        color="primary"
+        name="fa-brands fa-git-alt"
+      />
       {{ $t('page.modelizer.git.newBranch.title') }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <git-new-branch-form
         :project-name="projectName"
         :branch-name="branchName"

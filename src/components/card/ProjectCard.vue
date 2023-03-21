@@ -9,7 +9,10 @@
       class="cursor-pointer project-card"
       :data-cy="`project-card_${project.id}`"
     >
-      <q-img :src="getProjectImage()" height="100%">
+      <q-img
+        :src="getProjectImage()"
+        height="100%"
+      >
         <div
           class="absolute-bottom text-subtitle2 text-center"
           data-cy="title-container"
@@ -24,12 +27,12 @@
             round
             color="negative"
             icon="fa-solid fa-trash"
+            data-cy="delete-button"
             @click.stop.prevent="DialogEvent.next({
               type: 'open',
               key: 'DeleteProject',
               id: project.id,
             })"
-            data-cy="delete-button"
           />
           <q-btn
             class="q-mr-none"
@@ -38,12 +41,12 @@
             round
             color="primary"
             icon="fa-solid fa-pen"
+            data-cy="rename-button"
             @click.stop.prevent="DialogEvent.next({
               type: 'open',
               key: 'RenameProject',
               id: project.id,
             })"
-            data-cy="rename-button"
           />
         </div>
       </q-img>

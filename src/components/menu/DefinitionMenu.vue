@@ -1,5 +1,8 @@
 <template>
-  <q-menu ref="menu" no-refocus>
+  <q-menu
+    ref="menu"
+    no-refocus
+  >
     <q-card>
       <q-card-section>
         <div class="text-h6">
@@ -11,7 +14,10 @@
         >
           <code>{{ definition.name }}</code>: {{ definition.type }}
         </div>
-        <div class="q-mt-md" v-html="$sanitize(definition.description)"></div>
+        <div
+          class="q-mt-md"
+          v-html="$sanitize(definition.description)"
+        />
         <div
           v-if="definition.url"
           class="q-mt-lg text-right"

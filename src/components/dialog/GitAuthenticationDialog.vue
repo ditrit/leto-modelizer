@@ -3,17 +3,18 @@
     dialog-key="GitAuthentication"
     data-cy="git-authentication-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         name="fa-brands fa-git-alt"
       />
       {{ $t('page.modelizer.settings.gitAuthentication.title') }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <git-authentication-form
         :project-name="projectName"
-        @project-git:save="DialogEvent.next({ type: 'close', key: 'GitAuthentication' })"/>
+        @project-git:save="DialogEvent.next({ type: 'close', key: 'GitAuthentication' })"
+      />
     </template>
   </default-dialog>
 </template>

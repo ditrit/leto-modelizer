@@ -3,18 +3,27 @@
     dialog-key="GitCommit"
     data-cy="git-commit-dialog"
   >
-    <template v-slot:title>
-      <q-icon color="primary" name="fa-brands fa-git-alt" />
+    <template #title>
+      <q-icon
+        color="primary"
+        name="fa-brands fa-git-alt"
+      />
       {{ $t('page.modelizer.git.commit.title') }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <template v-if="loading">
         <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px" />
+          <q-spinner-dots
+            color="primary"
+            size="40px"
+          />
         </div>
       </template>
       <template v-else>
-        <q-list style="min-width: 500px" dense>
+        <q-list
+          style="min-width: 500px"
+          dense
+        >
           <q-item
             v-if="stagedFiles.length === 0"
             data-cy="empty-item"
@@ -38,7 +47,7 @@
               data-cy="staged-item-file"
             >
               <q-item-section class="file-status-staged q-pl-md">
-                {{file.path}}
+                {{ file.path }}
               </q-item-section>
             </q-item>
             <q-item>

@@ -2,15 +2,18 @@
   <q-dialog v-model="show">
     <q-card class="q-pa-md">
       <q-btn
+        v-close-popup
         icon="fa-solid fa-xmark"
         class="close-dialog-button"
-        flat round dense v-close-popup
+        flat
+        round
+        dense
         data-cy="close-dialog-button"
       />
       <q-card-section class="text-h6 q-mb-xl">
-        <slot name="title"></slot>
+        <slot name="title" />
       </q-card-section>
-      <slot></slot>
+      <slot />
     </q-card>
   </q-dialog>
 </template>

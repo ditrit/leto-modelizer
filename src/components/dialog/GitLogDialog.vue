@@ -3,73 +3,92 @@
     dialog-key="GitLog"
     data-cy="git-log-dialog"
   >
-    <template v-slot:title>
-      <q-icon color="primary" name="fa-brands fa-git-alt" />
+    <template #title>
+      <q-icon
+        color="primary"
+        name="fa-brands fa-git-alt"
+      />
       {{ $t('page.modelizer.git.log.title') }}
     </template>
-    <template v-slot:default>
-      <div ref="scrollTargetRef" style="max-height: 250px; overflow: auto;">
+    <template #default>
+      <div
+        ref="scrollTargetRef"
+        style="max-height: 250px; overflow: auto;"
+      >
         <q-infinite-scroll
-          @load="onLoad"
           :offset="250"
           :scroll-target="scrollTargetRef"
+          @load="onLoad"
         >
           <q-list data-cy="log-list">
-            <template v-for="(item) in logItems" :key="item.oid">
+            <template
+              v-for="(item) in logItems"
+              :key="item.oid"
+            >
               <q-expansion-item
                 header-class="bg-primary text-white"
                 expand-icon-class="text-white"
                 expand-separator
                 data-cy="item"
               >
-                <template v-slot:header>
-                  <q-item-section class="text-bold" color="primary" avatar>
-                    {{item.oid.slice(0, 8)}}
+                <template #header>
+                  <q-item-section
+                    class="text-bold"
+                    color="primary"
+                    avatar
+                  >
+                    {{ item.oid.slice(0, 8) }}
                   </q-item-section>
                   <q-item-section>
                     {{ truncateCommitMessage(item.commit.message) }}
                   </q-item-section>
                 </template>
-                <q-list dense class="bg-secondary text-white">
+                <q-list
+                  dense
+                  class="bg-secondary text-white"
+                >
                   <q-item>
                     <q-item-section avatar>
-                      <q-avatar icon="fa-solid fa-hashtag"/>
+                      <q-avatar icon="fa-solid fa-hashtag" />
                     </q-item-section>
                     <q-item-section>
-                      {{item.oid}}
+                      {{ item.oid }}
                     </q-item-section>
                   </q-item>
                   <q-item>
                     <q-item-section avatar>
-                      <q-avatar icon="fa-solid fa-user"/>
+                      <q-avatar icon="fa-solid fa-user" />
                     </q-item-section>
                     <q-item-section>
-                      {{item.commit.author.name}} &#60;{{item.commit.author.email}}&#62;
+                      {{ item.commit.author.name }} &#60;{{ item.commit.author.email }}&#62;
                     </q-item-section>
                   </q-item>
                   <q-item>
                     <q-item-section avatar>
-                      <q-avatar icon="fa-solid fa-calendar"/>
+                      <q-avatar icon="fa-solid fa-calendar" />
                     </q-item-section>
                     <q-item-section>
-                      {{new Date(item.commit.committer.timestamp * 1000).toLocaleString()}}
+                      {{ new Date(item.commit.committer.timestamp * 1000).toLocaleString() }}
                     </q-item-section>
                   </q-item>
                   <q-item>
                     <q-item-section avatar>
-                      <q-avatar icon="fa-solid fa-message"/>
+                      <q-avatar icon="fa-solid fa-message" />
                     </q-item-section>
                     <q-item-section>
-                      <p v-html="$sanitize(item.commit.message.replaceAll('\n', '<br>'))"></p>
+                      <p v-html="$sanitize(item.commit.message.replaceAll('\n', '<br>'))" />
                     </q-item-section>
                   </q-item>
                 </q-list>
               </q-expansion-item>
             </template>
           </q-list>
-          <template v-slot:loading>
+          <template #loading>
             <div class="row justify-center q-my-md">
-              <q-spinner-dots color="primary" size="40px" />
+              <q-spinner-dots
+                color="primary"
+                size="40px"
+              />
             </div>
           </template>
         </q-infinite-scroll>

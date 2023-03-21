@@ -2,7 +2,7 @@
   <div class="project-grid">
     <div>
       <div class="row items-center">
-        <slot name="header"></slot>
+        <slot name="header" />
       </div>
       <div class="row">
         <template-card
@@ -25,6 +25,8 @@
 
 <script setup>
 import TemplateCard from 'src/components/card/TemplateCard';
+
+defineEmits(['add:template']);
 
 defineProps({
   templates: {

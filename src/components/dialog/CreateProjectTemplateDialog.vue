@@ -3,14 +3,14 @@
     dialog-key="CreateProjectTemplate"
     data-cy="create-project-template-dialog"
   >
-    <template v-slot:title>
+    <template #title>
       <q-icon
         color="primary"
         :name="`${isChecked ? 'fa-brands fa-git-alt' : 'fa-solid fa-square-plus'}`"
       />
       {{ $t(`page.home.template.${isChecked ? 'import': 'create'}Project`) }}
     </template>
-    <template v-slot:default>
+    <template #default>
       <div v-if="projectTemplate?.models.length">
         <q-carousel
           v-model="slide"
@@ -35,10 +35,10 @@
                 :src="`template-library/templates/${projectTemplate.key}/${model}/schema.svg`"
                 :alt="`${projectTemplate.key}/${model}/schema.svg`"
                 class="carousel-img"
-              />
+              >
             </div>
             <div class="q-mt-md text-center text-black">
-              {{  model }}
+              {{ model }}
             </div>
           </q-carousel-slide>
         </q-carousel>
@@ -47,10 +47,10 @@
         {{ $t('page.home.template.selected', { template: templateName }) }}
       </div>
       <create-project-template-form
+        :template="projectTemplate"
+        :is-checked="isChecked"
         @project:add="addProject"
         @update:checked="e => isChecked = e"
-        :template="projectTemplate"
-        :isChecked="isChecked"
       />
     </template>
   </default-dialog>

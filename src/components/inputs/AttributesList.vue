@@ -1,6 +1,6 @@
 <template>
   <q-list data-cy="attributes-list">
-    <slot name="header"></slot>
+    <slot name="header" />
     <!-- Attributes not Object -->
     <q-item
       v-for="attribute in data.localAttributes.filter(({ type }) => type !== 'Object')"
@@ -31,8 +31,8 @@
         :label="$t('plugin.component.attribute.add')"
         color="positive"
         icon="fa-solid fa-plus"
-        @click="addAttribute"
         data-cy="add-button"
+        @click="addAttribute"
       />
     </q-item>
     <!-- Attributes Object -->
@@ -45,13 +45,13 @@
       <object-input
         :attribute="attribute"
         :plugin="plugin"
-        :isRoot="isRoot"
+        :is-root="isRoot"
         :full-name="`${fullName}.${attribute.name}`"
         :current-error="currentError"
         @update:attribute-value="updateAttributeValue"
       />
     </q-item>
-    <slot name="footer"></slot>
+    <slot name="footer" />
   </q-list>
 </template>
 

@@ -2,7 +2,9 @@
   <div class="project-grid">
     <div>
       <div class="row items-center">
-        <h4>{{ $t('page.home.project.title') }}</h4>
+        <h4>
+          {{ $t('page.home.project.title') }}
+        </h4>
         <q-btn
           outline
           no-caps
@@ -10,8 +12,8 @@
           color="primary"
           icon="fa-solid fa-plus"
           :label="$t('actions.home.newProject')"
-          @click="DialogEvent.next({ type: 'open', key: 'CreateProject' })"
           data-cy="create-project-button"
+          @click="DialogEvent.next({ type: 'open', key: 'CreateProject' })"
         />
         <q-btn
           outline
@@ -20,8 +22,8 @@
           color="primary"
           icon="fa-solid fa-cloud-arrow-down"
           :label="$t('actions.home.importProject')"
-          @click="DialogEvent.next({ type: 'open', key: 'ImportProject' })"
           data-cy="import-project-button"
+          @click="DialogEvent.next({ type: 'open', key: 'ImportProject' })"
         />
       </div>
       <div class="row">

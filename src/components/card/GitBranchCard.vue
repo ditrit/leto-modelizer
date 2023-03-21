@@ -10,10 +10,10 @@
     :label="currentBranch"
     data-cy="git-current-branch-button"
   >
-    <template v-slot:loading>
-      <q-spinner-dots/>
+    <template #loading>
+      <q-spinner-dots />
     </template>
-    <git-branch-menu :current-branch-name="currentBranch"/>
+    <git-branch-menu :current-branch-name="currentBranch" />
   </q-btn>
 </template>
 

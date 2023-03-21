@@ -23,17 +23,19 @@
           :templates="templates"
           @add:template="openCreateProjectTemplateDialog"
         >
-          <template v-slot:header>
-            <h4>{{ $t('page.home.template.createProject') }}</h4>
+          <template #header>
+            <h4>
+              {{ $t('page.home.template.createProject') }}
+            </h4>
           </template>
         </template-grid>
       </div>
     </div>
-    <import-project-dialog/>
-    <create-project-template-dialog/>
-    <create-project-dialog/>
-    <delete-project-dialog/>
-    <rename-project-dialog/>
+    <import-project-dialog />
+    <create-project-template-dialog />
+    <create-project-dialog />
+    <delete-project-dialog />
+    <rename-project-dialog />
   </q-page>
 </template>
 

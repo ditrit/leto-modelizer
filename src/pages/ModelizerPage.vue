@@ -3,8 +3,8 @@
     class="modelizer-page column"
   >
     <modelizer-navigation-bar
-      :projectName="projectName"
-      :viewType="viewType"
+      :project-name="projectName"
+      :view-type="viewType"
     />
     <q-page-container>
       <q-page
@@ -23,20 +23,20 @@
           v-show="viewType === 'text'"
           :project-name="projectName"
         />
-        <git-authentication-dialog :project-name="projectName"/>
-        <git-add-remote-dialog :project-name="projectName"/>
-        <git-new-branch-dialog :project-name="projectName"/>
-        <git-update-dialog :project-name="projectName"/>
-        <create-file-dialog :project-name="projectName"/>
-        <delete-file-dialog :project-name="projectName"/>
-        <git-status-dialog :project-name="projectName"/>
-        <git-push-dialog :project-name="projectName"/>
-        <git-commit-dialog :project-name="projectName"/>
-        <git-log-dialog :project-name="projectName"/>
-        <create-model-dialog :project-name="projectName"/>
-        <delete-model-dialog :project-name="projectName"/>
-        <rename-model-dialog :project-name="projectName"/>
-        <import-model-template-dialog :project-name="projectName"/>
+        <git-authentication-dialog :project-name="projectName" />
+        <git-add-remote-dialog :project-name="projectName" />
+        <git-new-branch-dialog :project-name="projectName" />
+        <git-update-dialog :project-name="projectName" />
+        <create-file-dialog :project-name="projectName" />
+        <delete-file-dialog :project-name="projectName" />
+        <git-status-dialog :project-name="projectName" />
+        <git-push-dialog :project-name="projectName" />
+        <git-commit-dialog :project-name="projectName" />
+        <git-log-dialog :project-name="projectName" />
+        <create-model-dialog :project-name="projectName" />
+        <delete-model-dialog :project-name="projectName" />
+        <rename-model-dialog :project-name="projectName" />
+        <import-model-template-dialog :project-name="projectName" />
       </q-page>
     </q-page-container>
   </q-layout>

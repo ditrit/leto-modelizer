@@ -1,16 +1,16 @@
 <template>
   <q-menu
     ref="menu"
-    @hide="emit('hide:menu')"
     class="file-explorer-action-menu"
     data-cy="file-explorer-action-menu"
+    @hide="emit('hide:menu')"
   >
     <q-list style="min-width: 150px">
       <template v-if="file.isFolder">
         <q-item
           clickable
-          @click="createFile(true)"
           data-cy="create-folder-action-item"
+          @click="createFile(true)"
         >
           <q-item-section avatar>
             <q-icon
@@ -25,8 +25,8 @@
         </q-item>
         <q-item
           clickable
-          @click="createFile(false)"
           data-cy="create-file-action-item"
+          @click="createFile(false)"
         >
           <q-item-section avatar>
             <q-icon
@@ -43,8 +43,8 @@
       <template v-if="isFile && allowGitAdd">
         <q-item
           clickable
-          @click="addFile(file)"
           data-cy="git-add-file-action-item"
+          @click="addFile(file)"
         >
           <q-item-section avatar>
             <q-icon
@@ -67,8 +67,8 @@
       <q-item
         v-if="!file.isRootFolder"
         clickable
-        @click="deleteFile"
         data-cy="delete-file-action-item"
+        @click="deleteFile"
       >
         <q-item-section avatar>
           <q-icon

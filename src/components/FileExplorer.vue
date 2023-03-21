@@ -33,13 +33,13 @@
           <file-name
             class="tree-node"
             :path="node.id"
-            :isActive="activeFileId  === node.id"
+            :is-active="activeFileId === node.id"
             :label="node.label"
             :status="node.information?.status"
-            :isFolder="node.isFolder"
+            :is-folder="node.isFolder"
           />
         </div>
-        <span class="col-grow"></span>
+        <span class="col-grow" />
         <div class="row no-wrap">
           <file-explorer-action-card
             class="file-explorer-button"
