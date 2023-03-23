@@ -1,5 +1,3 @@
-@skip
-# TODO: update/fix test
 Feature: Test modelizer text view: git commit
 
   Background:
@@ -10,7 +8,15 @@ Feature: Test modelizer text view: git commit
     And  I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
-    Then I expect current url is '/modelizer/projectName/model'
+    Then I expect current url is 'projectName/models'
+
+    # Model creation
+    When I click on '[data-cy="create-model-button"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/modelName'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I click on '[data-cy="git-current-branch-button"]'
@@ -33,8 +39,8 @@ Feature: Test modelizer text view: git commit
     Then I expect '[data-cy="git-log-dialog"]' not exists
 
     #  Create a file
-    When I hover '[data-cy="file-button_projectName"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_projectName"]'
+    When I hover '[data-cy="folder-button_projectName"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_projectName"]'
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     Then I expect '[data-cy="create-file-dialog"]' exists
 
@@ -67,7 +73,7 @@ Feature: Test modelizer text view: git commit
     And  I click on '[data-cy="git-branch-menu"] [data-cy="git-log-item"]'
     Then I expect '[data-cy="git-log-dialog"]' exists
     And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
-    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]' appear 1 times on screen
+    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]' appear 1 time on screen
 
   Scenario: Commit an added file with commit message succeeds
     #  Check list of logs

@@ -14,7 +14,7 @@ Feature: Test models page: rename model
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{modelName}}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I click on '[data-cy="models-page-link-button"]'
-    Then I expect current url is '/#/modelizer/{{projectName}}/models'
+    Then I expect current url is '{{projectName}}/models'
     And  I expect '[data-cy="model-card_terrator-plugin-{{modelName}}"] [data-cy="rename-button"]' exists
 
   Scenario: Rename model and verify the new name
@@ -30,12 +30,13 @@ Feature: Test models page: rename model
 
     # Click on model and go to text view and check files
     When I click on '[data-cy="model-card_terrator-plugin-{{modelName}}"]'
-    Then I expect current url is 'modelizer/{{projectName}}/model\?path=terrator-plugin/{{modelName}}'
+    Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelName}}'
     And  I expect '[data-cy="components-definitions-drawer"]' exists
     And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is 'modelizer/{{projectName}}/text\?path=terrator-plugin/{{modelName}}'
+    And  I wait 1 second
+    Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelName}}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
 
     When I click on '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]'
@@ -43,4 +44,3 @@ Feature: Test models page: rename model
 
     When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/{{modelName}}/leto-modelizer.config.json"]' exists

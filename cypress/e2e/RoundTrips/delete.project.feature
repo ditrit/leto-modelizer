@@ -8,6 +8,7 @@ Feature: Test homepage: project deletion
 
   Scenario: Delete project should remove it from database
     Given I set context field 'projectName' with 'leto-modelizer-project-test'
+    And   I set context field 'modelName' with 'model-name'
 
     # Import project
     When I click on '[data-cy="import-project-button"]'
@@ -17,12 +18,21 @@ Feature: Test homepage: project deletion
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
     And  I expect '[data-cy="import-project-form"]' is closed
-    And  I expect current url is 'modelizer/{{projectName}}/models'
+    And  I expect current url is '{{projectName}}/models'
+
+    # Model creation
+    When I click on '[data-cy="create-model-button"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{modelName}}'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelName}}'
 
     # Check project root folder is created in Text view
-    When I visit the '/#/modelizer/{{projectName}}/text'
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
+    Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelName}}'
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
 
     # Delete file
     When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
@@ -55,11 +65,19 @@ Feature: Test homepage: project deletion
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
     And  I expect '[data-cy="import-project-form"]' is closed
-    And  I expect current url is '/modelizer/{{ projectName }}/model'
+    And  I expect current url is '{{ projectName }}/models'
 
-    When I visit the '/#/modelizer/{{ projectName }}/text'
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
+    # Model creation
+    When I click on '[data-cy="create-model-button"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{modelName}}'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelName}}'
+
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
+    Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
 
     # Check previously deleted file is created after project import
     When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'

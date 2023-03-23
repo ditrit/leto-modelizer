@@ -8,9 +8,19 @@ Feature: Test modelizer text view: git status display
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
-    Then I expect current url is '/modelizer/projectName/model'
+    Then I expect current url is 'projectName/models'
 
-    When I visit the '/#/modelizer/projectName/text'
+    # Model creation
+    When I click on '[data-cy="create-model-button"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
+
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I wait 1 second
+    Then I expect '[data-cy="file-explorer"] [data-cy="folder_projectName"]' exists
 
   Scenario: Display dialog containing an empty list
     When I click on '[data-cy="git-current-branch-button"]'

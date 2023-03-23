@@ -18,16 +18,17 @@ Feature: Test roundtrip of the application : import project with template files
     And  I set on '[data-cy="create-project-template-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
-    And  I expect current url is 'modelizer/{{projectName}}/models'
+    And  I expect current url is '{{projectName}}/models'
     And  I expect '[data-cy="model-card_terrator-plugin-infra1"]' appear 1 time on screen
     And  I expect '[data-cy="model-card_terrator-plugin-infra2"]' appear 1 time on screen
 
     When I click on '[data-cy="model-card_terrator-plugin-infra2"]'
-    Then I expect current url is 'modelizer/{{projectName}}/model\?path=terrator-plugin/infra2'
+    Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/infra2'
 
     # Check project files and folders are created in Text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is 'modelizer/{{projectName}}/text\?path=terrator-plugin/infra2'
+    And  I wait 1 second
+    Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/infra2'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
 
     When I wait 2 seconds
@@ -58,7 +59,8 @@ Feature: Test roundtrip of the application : import project with template files
     When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra1"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra2"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/infra2/leto-modelizer.config.json"]' exists
+
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra2"]'
     And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/infra2/main.tf"]' exists
 
     When I double click on '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/infra2/main.tf"]'

@@ -1,5 +1,3 @@
-@skip
-# TODO: update/fix test
 Feature: Test modelizer model view: plugin initialization
 
   Background:
@@ -10,15 +8,24 @@ Feature: Test modelizer model view: plugin initialization
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
-    Then I expect current url is '/modelizer/projectName/model'
+    Then I expect current url is 'projectName/models'
 
-  Scenario Outline: Set text as '<filter>'should display only one element
+    # Model creation
+    When I click on '[data-cy="create-model-button"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
+
     When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
+    And  I wait 1 second
     Then I expect '[class*="plugin-definitions"]' appear 1 time on screen
-    And  I expect '[class*="component-definition-card"]' appear 18 times on screen
+    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 18 times on screen
 
+  Scenario Outline: Set text as '<filter>' should display only one element
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
-    And  I expect '[class*="component-definition-card"]' appear 1 time on screen
+    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 1 time on screen
     And  I expect '[data-cy="component-definition_<filter>"]' exists
 
     Examples:
@@ -40,12 +47,8 @@ Feature: Test modelizer model view: plugin initialization
       | aws_key_pair          |
 
   Scenario Outline: Set text as '<filter>' should display only two elements
-    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
-    Then I expect '[class*="plugin-definitions"]' appear 1 time on screen
-    And  I expect '[class*="component-definition-card"]' appear 18 times on screen
-
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
-    And  I expect '[class*="component-definition-card"]' appear 2 times on screen
+    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 2 times on screen
     And  I expect '[data-cy="component-definition_<element1>"]' exists
     And  I expect '[data-cy="component-definition_<element2>"]' exists
 
@@ -60,12 +63,9 @@ Feature: Test modelizer model view: plugin initialization
       | route53      | aws_route53_zone      | aws_route53_record   |
 
   Scenario Outline: Set text as '<filter>' should not display any elements.
-    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
-    Then I expect '[class*="plugin-definitions"]' appear 1 time on screen
-    And  I expect '[class*="component-definition-card"]' appear 18 times on screen
-
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
-    And  I expect '[class*="component-definition-card"]' appear 0 time on screen
+    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 0 time on screen
+
     Examples:
       | filter    |
       | bad       |

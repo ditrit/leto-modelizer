@@ -14,13 +14,25 @@ Feature: Test modelizer text view: open file
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
     And  I expect '[data-cy="import-project-form"]' is closed
-    And  I expect current url is '/modelizer/{{ projectName }}/model'
+    And  I expect current url is '{{ projectName }}/models'
     And  I expect '[data-cy="project-name"]' is '{{ projectName }}'
 
-    When I visit the '/#/modelizer/{{projectName}}/text'
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
+    # Model creation
+    When I click on '[data-cy="create-model-button"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/modelName'
+
+    # Go to text view and check files
+    When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelName}}'
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
     And  I wait 2 seconds
-    And  I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
+
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_README.md"]' exists
 
   Scenario: Double click on a file should open a tab
     When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
@@ -32,6 +44,7 @@ Feature: Test modelizer text view: open file
 
   Scenario: Open a file and click to close the active tab should display nothing on the file tabs
     When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
+    And  I wait 1 second
     Then I expect '[data-cy="file-tabs"]' exists
     And  I expect '[data-cy="monaco-editor"]' exists
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
@@ -44,6 +57,7 @@ Feature: Test modelizer text view: open file
 
   Scenario: Open two files then click on the inactive tab, it should switch and become active tab
     When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
+    And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'README.md'
     And  I expect '[data-cy="file-tab-panel_README.md"]' exists
@@ -64,6 +78,7 @@ Feature: Test modelizer text view: open file
 
   Scenario: Open two files then click on the inactive file, its corresponding tab should switch and become active tab
     When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
+    And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'README.md'
     And  I expect '[data-cy="file-tab-panel_README.md"]' exists
@@ -84,7 +99,9 @@ Feature: Test modelizer text view: open file
 
   Scenario: Open two files and click to close the active tab, the other opened tab becomes the active tab
     When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
+    And  I wait 1 second
     And  I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'branch.txt'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'README.md'
@@ -114,7 +131,9 @@ Feature: Test modelizer text view: open file
 
   Scenario: Open two files, checkout branch and if an opened file no longer exists, its corresponding tab should be closed
     When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
+    And  I wait 1 second
     And  I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'branch.txt'
     And  I expect '[data-cy="file-tab-panel_branch.txt"]' is 'main'

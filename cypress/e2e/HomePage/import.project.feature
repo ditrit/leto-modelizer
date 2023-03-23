@@ -13,13 +13,13 @@ Feature: Test home page: project import
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
-    And  I expect current url is 'modelizer/{{projectName}}/models'
+    And  I expect current url is '{{projectName}}/models'
 
   Scenario: Import project should add the project in Home page
     When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
-    Then I expect current url is 'modelizer/{{projectName}}/models'
+    Then I expect current url is '{{projectName}}/models'
 
     When I visit the '/'
     Then I expect '[data-cy="project-card_{{projectName}}"]' appear 1 time on screen
@@ -75,7 +75,7 @@ Feature: Test home page: project import
     And  I set on '[data-cy="create-project-template-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
-    And  I expect current url is 'modelizer/{{projectName}}/models'
+    And  I expect current url is '{{projectName}}/models'
 
   Scenario: Import project with a template should add the project in Home page
     Then I expect '[data-cy="template-card_project_template"]' exists
@@ -85,7 +85,7 @@ Feature: Test home page: project import
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{projectName}}'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
-    Then I expect current url is 'modelizer/{{projectName}}/models'
+    Then I expect current url is '{{projectName}}/models'
 
     When I visit the '/'
     Then I expect '[data-cy="project-card_{{projectName}}"]' appear 1 time on screen
@@ -100,7 +100,7 @@ Feature: Test home page: project import
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{projectName}}'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
-    Then I expect current url is 'modelizer/{{projectName}}/models'
+    Then I expect current url is '{{projectName}}/models'
 
     # Import another project with the same name
     When I visit the '/'

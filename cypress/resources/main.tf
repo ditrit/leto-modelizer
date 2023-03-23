@@ -1,5 +1,5 @@
 provider "aws" {
-    region = "fr"
+  region = "fr"
 }
 
 resource "aws_instance" "nginx" {

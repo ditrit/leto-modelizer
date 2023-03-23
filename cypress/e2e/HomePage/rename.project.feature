@@ -11,7 +11,7 @@ Feature: Test home page: project rename
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectTest'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
-    And  I expect current url is 'modelizer/projectTest/models'
+    And  I expect current url is 'projectTest/models'
 
     # Check project is displayed in home page
     When I visit the '/'

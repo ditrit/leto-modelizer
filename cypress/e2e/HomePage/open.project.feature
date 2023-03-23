@@ -13,4 +13,4 @@ Feature: Test home page: open project
     And  I expect '[data-cy="project-card_projectName"] [data-cy="title-container"]' is 'projectName'
 
     When I click on '[data-cy="project-card_projectName"]'
-    Then I expect current url is '/modelizer/projectName/models'
+    Then I expect current url is 'projectName/models'

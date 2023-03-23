@@ -13,10 +13,18 @@ Feature: Test modelizer text view: update file content
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
     And  I expect '[data-cy="import-project-form"]' is closed
-    And  I expect current url is '/modelizer/{{ projectName }}/model'
+    And  I expect current url is '{{ projectName }}/models'
     And  I expect '[data-cy="project-name"]' is '{{ projectName }}'
 
-    When I visit the '/#/modelizer/{{projectName}}/text'
+    # Model creation
+    When I click on '[data-cy="create-model-button"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/modelName'
+
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
     And  I wait 1 second
 
@@ -36,7 +44,9 @@ Feature: Test modelizer text view: update file content
     Given I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
 
     When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
+    And  I wait 1 second
     And  I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    And  I wait 1 second
     Then I expect '[data-cy="file_branch.txt"]' appear 2 times on screen
     And  I expect '[data-cy="file_README.md"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
