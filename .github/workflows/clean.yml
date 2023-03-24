@@ -6,6 +6,7 @@ on:
 
 jobs:
   del_runs:
+    name: Purge workflow and cache
     runs-on: ubuntu-latest
     steps:
       - name: Delete workflow runs
@@ -14,7 +15,9 @@ jobs:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
           retain_days: 7
-      - name: Delete cache
-        uses: MyAlbum/purge-cache
+          keep_minimum_runs: 0
+          delete_run_by_conclusion_pattern: All
+      - name: Purge cache
+        uses: MyAlbum/purge-cache@v1
         with:
-          max-age: 604800
+          max-age: 604800 # Cache max 7 days since last use

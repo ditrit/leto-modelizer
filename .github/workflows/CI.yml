@@ -37,7 +37,7 @@ jobs:
         with:
           node-version: 18.14
       - name: Setup npm
-        run: npm install -g npm@9.4.2
+        run: npm install -g npm@8.19.3
       - uses: actions/cache/restore@v3
         with:
           path: node_modules
@@ -62,7 +62,7 @@ jobs:
         with:
           node-version: 18.14
       - name: Setup npm
-        run: npm install -g npm@9.4.2
+        run: npm install -g npm@8.19.3
       - uses: actions/cache/restore@v3
         with:
           path: node_modules
@@ -81,7 +81,7 @@ jobs:
         with:
           node-version: 18.14
       - name: Setup npm
-        run: npm install -g npm@9.4.2
+        run: npm install -g npm@8.19.3
       - uses: actions/cache/restore@v3
         with:
           path: node_modules
@@ -105,7 +105,7 @@ jobs:
         with:
           node-version: 18.14
       - name: Setup npm
-        run: npm install -g npm@9.4.2
+        run: npm install -g npm@8.19.3
       - uses: actions/cache/restore@v3
         with:
           path: node_modules
