@@ -40,7 +40,7 @@ async function createProject(projectId) {
 
   await initProject(project).then(() => {
     DialogEvent.next({ type: 'close', key: 'CreateProject' });
-    router.push(`/modelizer/${projectId}/models`);
+    router.push(`/${projectId}/models`);
     Notify.create({
       type: 'positive',
       message: t('actions.home.createdProject'),

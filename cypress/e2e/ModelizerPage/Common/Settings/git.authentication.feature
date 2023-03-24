@@ -8,9 +8,10 @@ Feature: Test git authentication dialog
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
-    Then I expect current url is '/modelizer/projectName/model'
+    Then I expect current url is 'projectName/models'
 
-    When I visit the '/#/modelizer/projectName/text'
+    When I wait 1 second
+    When I visit the '/#/projectName/modelizer/text'
 
   Scenario: Set git authentication in the project should send positive toast
     When I click on '[data-cy="modelizer-settings-button"]'

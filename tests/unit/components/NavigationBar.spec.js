@@ -1,25 +1,30 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import ModelizerNavigationBar from 'src/components/ModelizerNavigationBar.vue';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
+import NavigationBar from 'src/components/NavigationBar.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import { Notify } from 'quasar';
 import Project from 'src/composables/Project';
+import { useRouter } from 'vue-router';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
+jest.mock('vue-router', () => ({
+  useRoute: jest.fn(() => ({
+    params: {
+      viewType: 'draw',
+    },
+  })),
+  useRouter: jest.fn(),
+}));
+
 jest.mock('vue-i18n', () => ({
   useI18n: () => ({
     t: (t) => t,
   }),
-}));
-
-jest.mock('src/composables/events/ViewSwitchEvent', () => ({
-  next: jest.fn(),
 }));
 
 jest.mock('src/composables/events/PluginEvent', () => ({
@@ -53,18 +58,17 @@ jest.mock('src/composables/Project', () => ({
   }),
 }));
 
-describe('Test component: ModelizerNavigationBar', () => {
+describe('Test component: NavigationBar', () => {
   let wrapper;
   let addRemoteSubscribe;
   let addRemoteUnsubscribe;
   let authenticationSubscribe;
   let authenticationUnsubscribe;
+  let mockPush;
 
-  const viewSwitchEvent = jest.fn();
   const parseEvent = jest.fn();
   const globalUploadFilesEvent = jest.fn();
 
-  ViewSwitchEvent.next.mockImplementation(viewSwitchEvent);
   PluginEvent.ParseEvent.next.mockImplementation(parseEvent);
   FileEvent.GlobalUploadFilesEvent.next.mockImplementation(globalUploadFilesEvent);
   Project.gitGlobalUpload.mockImplementation(
@@ -76,6 +80,7 @@ describe('Test component: ModelizerNavigationBar', () => {
     addRemoteUnsubscribe = jest.fn();
     authenticationSubscribe = jest.fn();
     authenticationUnsubscribe = jest.fn();
+    mockPush = jest.fn();
 
     GitEvent.AddRemoteEvent.subscribe.mockImplementation(() => {
       addRemoteSubscribe();
@@ -85,10 +90,12 @@ describe('Test component: ModelizerNavigationBar', () => {
       authenticationSubscribe();
       return { unsubscribe: authenticationUnsubscribe };
     });
+    useRouter.mockImplementation(() => ({
+      push: mockPush,
+    }));
 
-    wrapper = shallowMount(ModelizerNavigationBar, {
+    wrapper = shallowMount(NavigationBar, {
       props: {
-        viewType: 'model',
         projectName: 'projectTest',
       },
       global: {
@@ -100,12 +107,6 @@ describe('Test component: ModelizerNavigationBar', () => {
   });
 
   describe('Test variables initialization', () => {
-    describe('Test prop: viewType', () => {
-      it('should match "model"', () => {
-        expect(wrapper.vm.props.viewType).toEqual('model');
-      });
-    });
-
     describe('Test prop: projectName', () => {
       it('should match "projectTest"', () => {
         expect(wrapper.vm.props.projectName).toEqual('projectTest');
@@ -113,8 +114,8 @@ describe('Test component: ModelizerNavigationBar', () => {
     });
 
     describe('Test ref: buttonToggleValue', () => {
-      it('should match "model"', () => {
-        expect(wrapper.vm.props.viewType).toEqual('model');
+      it('should match "draw"', () => {
+        expect(wrapper.vm.buttonToggleValue).toEqual('draw');
       });
     });
   });
@@ -122,8 +123,8 @@ describe('Test component: ModelizerNavigationBar', () => {
   describe('Test computed: buttonToggleOptions', () => {
     it('should equal buttonToggleOpitons array ', () => {
       const buttonToggleOptions = [{
-        label: 'page.modelizer.header.switch.model',
-        value: 'model',
+        label: 'page.modelizer.header.switch.draw',
+        value: 'draw',
         slot: 'content',
       }, {
         label: 'page.modelizer.header.switch.text',
@@ -230,25 +231,18 @@ describe('Test component: ModelizerNavigationBar', () => {
     });
   });
 
-  describe('Test funtion: onViewSwitchUpdate', () => {
-    it('should not emit ViewSwitchEvent without viewSwitch changed', () => {
-      wrapper.vm.onViewSwitchUpdate('model');
-      expect(viewSwitchEvent).toHaveBeenCalledTimes(0);
-    });
-
-    it('should emit ViewSwitchEvent on viewSwitch change', () => {
-      wrapper.vm.onViewSwitchUpdate('changed');
-      expect(viewSwitchEvent).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('Test watcher: props.viewType', () => {
-    it('should be triggered when props.viewType is updated with a different value', async () => {
-      await wrapper.setProps({
-        viewType: 'text',
-        projectName: 'projectTest',
+  describe('Test funtion: onViewTypeUpdate', () => {
+    it('should call router.push with newViewType', () => {
+      wrapper.vm.onViewTypeUpdate('changed');
+      expect(mockPush).toHaveBeenCalledTimes(1);
+      expect(mockPush).toHaveBeenCalledWith({
+        name: 'modelizer',
+        params: {
+          viewType: 'changed',
+          projectName: wrapper.vm.props.projectName,
+        },
+        query: wrapper.vm.query,
       });
-      expect(wrapper.vm.buttonToggleValue).toEqual('text');
     });
   });
 

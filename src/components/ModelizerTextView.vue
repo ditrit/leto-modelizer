@@ -51,12 +51,9 @@ import {
 } from 'src/composables/Project';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import { FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
-import PluginEvent from 'src/composables/events/PluginEvent';
 import { useRoute, useRouter } from 'vue-router';
-import { getPluginByName, renderModel } from 'src/composables/PluginManager';
 
 const router = useRouter();
 const route = useRoute();
@@ -84,7 +81,6 @@ let pushSubscription;
 let addFileSubscription;
 let commitFilesSubscription;
 let selectFileTabSubscription;
-let viewSwitchSubscription;
 
 /**
  * Get the new status of the updated file, then update localFileInformations accordingly.
@@ -191,35 +187,6 @@ function onDeleteFile(file) {
 }
 
 /**
- * Render components and update files accordingly.
- * @return {Promise<void>} Promise with an object containing the created files list
- * and the updated files list on success otherwise an error.
- */
-// TODO: Remove when ModelView refacto will be done.
-async function renderPluginFiles(pluginName) {
-  const plugin = await getPluginByName(pluginName);
-
-  const modelpath = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${process.env.MODELS_DEFAULT_FOLDER}/${query.value.path}`
-    : `${query.value.path}`;
-
-  return renderModel(props.projectName, modelpath, plugin)
-    .then((allResults) => {
-      PluginEvent.RenderEvent.next(allResults);
-
-      return allResults.reduce((acc, file) => {
-        if (localFileInformations.value.find(({ path }) => file.path === path)) {
-          acc.updatedFiles.push(file);
-        } else {
-          acc.createdFiles.push(file);
-        }
-
-        return acc;
-      }, { createdFiles: [], updatedFiles: [] });
-    });
-}
-
-/**
  * Get model corresponding to the active file.
  * @return {Promise<Object>} Promise with the model or null on success otherwise an error.
  */
@@ -240,48 +207,29 @@ async function getModel() {
 }
 
 /**
- * On switch to 'text' view, update project files and send CreateFileNode event for each
- * files created after calling renderPluginFiles.
- * Also send UpdateFileContent event if renderPluginFiles returns any updated files.
- * @param {String} newViewType - Updated view type.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * Update the path of the selected file tab.
+ * Update the path of the query if necessary.
+ * @param {Sting} event - Path of the selected file tab.
+ * @return {Promise<Object>} Promise with nothing on success otherwise an error.
  */
-async function onSwitchView(viewType) {
-  if (viewType === 'model') {
+async function onSelectFileTab(event) {
+  selectedFileTabPath.value = event;
+
+  if (selectedFileTabPath.value
+    && !selectedFileTabPath.value.startsWith(`${query.value.path}/`)) {
     const model = await getModel();
     const modelPath = model ? `${model.plugin}/${model.name}` : query.value.path;
 
     router.push({
       name: 'modelizer',
       params: {
-        viewType,
+        viewType: 'text',
         projectName: props.projectName,
       },
       query: {
         path: modelPath,
       },
     });
-
-    return;
-  }
-
-  // TODO: Refactor to delete renderPluginFiles(), because not needed.
-  const { createdFiles, updatedFiles } = await renderPluginFiles(query.value.path.split('/')[0]);
-  await updateProjectFiles();
-
-  createdFiles.forEach((file) => {
-    const parentNodePath = file.path
-      .substring(0, file.path.lastIndexOf('/')) || props.projectName;
-
-    FileEvent.CreateFileNodeEvent.next({
-      parentNodePath,
-      node: { id: file.path, label: file.path.split('/').at(-1) },
-      isFolder: false,
-    });
-  });
-
-  if (updatedFiles.length >= 1) {
-    FileEvent.UpdateFileContentEvent.next();
   }
 }
 
@@ -301,11 +249,7 @@ onMounted(() => {
   addFileSubscription = GitEvent.AddEvent.subscribe(updateFileStatus);
   commitFilesSubscription = GitEvent.CommitEvent.subscribe(onCommitFiles);
 
-  selectFileTabSubscription = FileEvent.SelectFileTabEvent.subscribe((event) => {
-    selectedFileTabPath.value = event;
-  });
-
-  viewSwitchSubscription = ViewSwitchEvent.subscribe(onSwitchView);
+  selectFileTabSubscription = FileEvent.SelectFileTabEvent.subscribe(onSelectFileTab);
 });
 
 onUnmounted(() => {
@@ -322,8 +266,6 @@ onUnmounted(() => {
   commitFilesSubscription.unsubscribe();
 
   selectFileTabSubscription.unsubscribe();
-
-  viewSwitchSubscription.unsubscribe();
 });
 </script>
 

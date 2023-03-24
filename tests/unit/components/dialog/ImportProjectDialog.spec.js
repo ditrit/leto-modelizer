@@ -35,7 +35,7 @@ describe('Test component: ImportProjectDialog', () => {
     describe('Test function: importProject', () => {
       it('should redirect to project model page', async () => {
         await wrapper.vm.importProject('test');
-        expect(push).toBeCalledWith('/modelizer/test/models');
+        expect(push).toBeCalledWith('/test/models');
       });
     });
   });

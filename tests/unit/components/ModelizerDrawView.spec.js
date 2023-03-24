@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import ModelizerModelView from 'src/components/ModelizerModelView.vue';
+import ModelizerDrawView from 'src/components/ModelizerDrawView.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import PluginManager from 'src/composables/PluginManager';
 import Project from 'src/composables/Project';
@@ -74,7 +74,7 @@ jest.mock('src/composables/Project', () => ({
   readDir: jest.fn(),
 }));
 
-describe('Test component: ModelizerModelView', () => {
+describe('Test component: ModelizerDrawView', () => {
   let wrapper;
   let initSubscribe;
   let initUnsubscribe;
@@ -179,7 +179,7 @@ describe('Test component: ModelizerModelView', () => {
     PluginManager.getPluginByName.mockImplementation(() => testPlugin);
     PluginManager.getFileInputs.mockImplementation(() => []);
 
-    wrapper = shallowMount(ModelizerModelView, {
+    wrapper = shallowMount(ModelizerDrawView, {
       props: {
         projectName: 'project-00000000',
       },
@@ -324,24 +324,6 @@ describe('Test component: ModelizerModelView', () => {
       const result = await wrapper.vm.getDirFiles('dir');
 
       expect(result).toEqual([]);
-    });
-  });
-
-  describe('Test function: onSwitchView', () => {
-    it('should redirect to text view when viewType is "text"', async () => {
-      wrapper.vm.onSwitchView('text');
-      expect(useRouterPush).toHaveBeenCalledWith(expect.objectContaining({
-        name: 'modelizer',
-        params: {
-          viewType: 'text',
-          projectName: 'project-00000000',
-        },
-      }));
-    });
-
-    it('should do nothing otherwise', async () => {
-      wrapper.vm.onSwitchView('notText');
-      expect(useRouterPush).toHaveBeenCalledTimes(0);
     });
   });
 

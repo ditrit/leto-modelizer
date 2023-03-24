@@ -1,16 +1,17 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import ModelizerModelsView from 'src/components/ModelizerModelsView.vue';
+import ModelsView from 'src/components/ModelsView.vue';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 installQuasarPlugin();
 
 jest.mock('vue-router', () => ({
   useRoute: jest.fn(),
+  useRouter: jest.fn(),
 }));
 
 jest.mock('src/composables/events/ModelEvent', () => ({
@@ -25,10 +26,11 @@ jest.mock('src/composables/TemplateManager', () => ({
   getTemplatesByType: jest.fn(() => Promise.resolve(['models'])),
 }));
 
-describe('Test component: ModelizerModelsView', () => {
+describe('Test component: ModelsView', () => {
   let wrapper;
   let updateModelSubscribe;
   let updateModelUnsubscribe;
+  const useRouterPush = jest.fn();
 
   beforeEach(() => {
     updateModelSubscribe = jest.fn();
@@ -41,12 +43,16 @@ describe('Test component: ModelizerModelsView', () => {
       },
     }));
 
+    useRouter.mockImplementation(() => ({
+      push: useRouterPush,
+    }));
+
     UpdateModelEvent.subscribe.mockImplementation(() => {
       updateModelSubscribe();
       return { unsubscribe: updateModelUnsubscribe };
     });
 
-    wrapper = shallowMount(ModelizerModelsView, {
+    wrapper = shallowMount(ModelsView, {
       props: {
         projectName: 'projectName',
       },
@@ -73,6 +79,28 @@ describe('Test component: ModelizerModelsView', () => {
   describe('Test computed: viewType', () => {
     it('should match route.params.viewType', () => {
       expect(wrapper.vm.viewType).toEqual('models');
+    });
+  });
+
+  describe('Test function: onModelCardClick', () => {
+    it('should call router.push with the given model parameters', () => {
+      const model = {
+        plugin: 'pluginName',
+        name: 'modelName',
+      };
+
+      wrapper.vm.onModelCardClick(model);
+
+      expect(useRouterPush).toBeCalledWith({
+        name: 'modelizer',
+        params: {
+          viewType: 'draw',
+          projectName: 'projectName',
+        },
+        query: {
+          path: 'pluginName/modelName',
+        },
+      });
     });
   });
 

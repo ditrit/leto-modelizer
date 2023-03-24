@@ -45,7 +45,7 @@
         </template>
       </q-btn>
       <q-btn-toggle
-        v-show="viewType !== 'models'"
+        v-if="buttonToggleValue"
         v-model="buttonToggleValue"
         :options="buttonToggleOptions"
         class="view-selector q-mr-md"
@@ -55,7 +55,7 @@
         no-caps
         rounded
         data-cy="modelizer-switch-button"
-        @update:model-value="onViewSwitchUpdate"
+        @update:model-value="onViewTypeUpdate"
       />
       <modelizer-settings-menu :project-name="projectName" />
     </div>
@@ -66,12 +66,10 @@
 import {
   computed,
   ref,
-  watch,
   onMounted,
   onUnmounted,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import ModelizerSettingsMenu from 'components/menu/ModelizerSettingsMenu.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import { Notify } from 'quasar';
@@ -80,13 +78,12 @@ import {
   gitGlobalUpload,
 } from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
+import { useRoute, useRouter } from 'vue-router';
 
+const router = useRouter();
+const route = useRoute();
 const { t } = useI18n();
 const props = defineProps({
-  viewType: {
-    type: String,
-    required: true,
-  },
   projectName: {
     type: String,
     required: true,
@@ -96,12 +93,13 @@ const props = defineProps({
 let addRemoteSubscription;
 let authenticationSubscription;
 
+const query = computed(() => route.query);
 const isLoading = ref(false);
 const project = ref(getProjectById(props.projectName));
-const buttonToggleValue = ref(props.viewType);
+const buttonToggleValue = ref(route.params.viewType);
 const buttonToggleOptions = computed(() => [{
-  label: t('page.modelizer.header.switch.model'),
-  value: 'model',
+  label: t('page.modelizer.header.switch.draw'),
+  value: 'draw',
   slot: 'content',
 }, {
   label: t('page.modelizer.header.switch.text'),
@@ -146,14 +144,19 @@ async function upload() {
 }
 
 /**
- * Emit event with the new view type.
+ * Update url with the new view type.
  *
- * @param {string} newViewType
+ * @param {string} newViewType - 'draw' or 'text'.
  */
-function onViewSwitchUpdate(newViewType) {
-  if (newViewType === props.viewType) return;
-
-  ViewSwitchEvent.next(newViewType);
+function onViewTypeUpdate(newViewType) {
+  router.push({
+    name: 'modelizer',
+    params: {
+      viewType: newViewType,
+      projectName: props.projectName,
+    },
+    query: query.value,
+  });
 }
 
 /**
@@ -162,10 +165,6 @@ function onViewSwitchUpdate(newViewType) {
 function setProject() {
   project.value = getProjectById(props.projectName);
 }
-
-watch(() => props.viewType, (newViewType) => {
-  buttonToggleValue.value = newViewType;
-});
 
 onMounted(() => {
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(setProject);

@@ -11,7 +11,7 @@ Feature: Test roundtrip of the application : rename project
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectTest'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
-    And  I expect current url is 'modelizer/projectTest/models'
+    And  I expect current url is 'projectTest/models'
 
     # Create model
     When I click on '[data-cy="create-model-button"]'
@@ -20,19 +20,19 @@ Feature: Test roundtrip of the application : rename project
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{modelName}}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
-    And  I expect current url is 'modelizer/projectTest/model\?path=terrator-plugin/{{modelName}}'
+    And  I expect current url is 'projectTest/modelizer/draw\?path=terrator-plugin/{{modelName}}'
 
     # Check project files and folders are created in Text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is 'modelizer/projectTest/text\?path=terrator-plugin/{{modelName}}'
+    And  I wait 1 second
+    Then I expect current url is 'projectTest/modelizer/text\?path=terrator-plugin/{{modelName}}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_projectTest"]' is 'projectTest'
 
     When I click on '[data-cy="file-explorer"] [data-cy="folder_projectTest"]'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
+    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
 
     When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/{{modelName}}/leto-modelizer.config.json"]' exists
+    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
 
     # Create file
     When I hover '[data-cy="file-explorer"] [data-cy="folder-button_projectTest"]' to make it visible
@@ -58,12 +58,13 @@ Feature: Test roundtrip of the application : rename project
     # Check project name is updated in Model view
     When I click on '[data-cy="project-card_renamedProject"]'
     And  I click on '[data-cy="model-card_terrator-plugin-modelTest"]'
-    Then I expect current url is 'modelizer/renamedProject/model\?path=terrator-plugin/{{modelName}}'
+    Then I expect current url is 'renamedProject/modelizer/draw\?path=terrator-plugin/{{modelName}}'
 
     # Check project name is updated in Text view
     When I wait 1 second
     And  I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is 'modelizer/renamedProject/text\?path=terrator-plugin/{{modelName}}'
+    And  I wait 1 second
+    Then I expect current url is 'renamedProject/modelizer/text\?path=terrator-plugin/{{modelName}}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_renamedProject"]' is 'renamedProject'
 
     # Check model and files are still here
@@ -75,7 +76,6 @@ Feature: Test roundtrip of the application : rename project
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
 
     When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]'
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/{{modelName}}/leto-modelizer.config.json"]' exists
 
     # Check project name is displayed in home page
     When I visit the '/'

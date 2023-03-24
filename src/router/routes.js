@@ -1,3 +1,4 @@
+import ModelsRoute from 'src/router/routes/ModelsRoute';
 import ModelizerRoute from 'src/router/routes/ModelizerRoute';
 
 const routes = [
@@ -7,6 +8,7 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/HomePage.vue') },
       { path: '/about', name: 'About', component: () => import('pages/AboutPage.vue') },
+      ModelsRoute,
       ModelizerRoute,
     ],
   },

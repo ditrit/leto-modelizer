@@ -30,17 +30,12 @@
         v-else
         class="q-pa-md row items-start q-gutter-md"
       >
-        <router-link
+        <model-card
           v-for="model in data.models"
           :key="`${model.plugin}/${model.name}`"
-          :to="{
-            path: `/modelizer/${projectName}/model`,
-            query: { path: `${model.plugin}/${model.name}` }}"
-        >
-          <model-card
-            :model="model"
-          />
-        </router-link>
+          :model="model"
+          @click="onModelCardClick(model)"
+        />
       </div>
       <template-grid
         class="col-md-8"
@@ -72,9 +67,10 @@ import ModelCard from 'src/components/card/ModelCard.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import TemplateGrid from 'src/components/grid/TemplateGrid';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
+const router = useRouter();
 const props = defineProps({
   projectName: {
     type: String,
@@ -89,6 +85,23 @@ const templates = ref([]);
 const viewType = computed(() => route.params.viewType);
 
 let updateModelSubscription;
+
+/**
+ * Redirect to ModelizerDrawView corresponding to the given model.
+ * @param {Object} model - Model to open.
+ */
+function onModelCardClick(model) {
+  router.push({
+    name: 'modelizer',
+    params: {
+      viewType: 'draw',
+      projectName: props.projectName,
+    },
+    query: {
+      path: `${model.plugin}/${model.name}`,
+    },
+  });
+}
 
 /**
  * Update models list.

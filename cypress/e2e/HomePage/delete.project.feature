@@ -11,7 +11,7 @@ Feature: Test home page: project deletion
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
-    And  I expect current url is 'modelizer/projectName/models'
+    And  I expect current url is 'projectName/models'
 
     When I visit the '/'
     Then I expect '[data-cy="project-card_projectName"]' exists

@@ -13,10 +13,18 @@ Feature: Test modelizer text view: delete file and folder
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
     And  I expect '[data-cy="import-project-form"]' is closed
-    And  I expect current url is '/modelizer/{{ projectName }}/model'
+    And  I expect current url is '{{ projectName }}/models'
     And  I expect '[data-cy="project-name"]' is '{{ projectName }}'
 
-    When I visit the '/#/modelizer/{{projectName}}/text'
+    # Model creation
+    When I click on '[data-cy="create-model-button"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/modelName'
+
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
     And  I wait 2 seconds
 
@@ -74,13 +82,16 @@ Feature: Test modelizer text view: delete file and folder
 
   Scenario: Open two files and delete the selected file should close corresponding active tab and select another active tab
     When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
+    And  I wait 1 second
     And  I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    And  I wait 1 second
     And  I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'README.md'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'branch.txt'
 
     When I hover '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]' to make it visible
+    And  I wait 1 second
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 

@@ -1,5 +1,3 @@
-@skip
-# TODO: update/fix test 
 Feature: Test modelizer model view: add plugin component
 
   Background:
@@ -10,19 +8,29 @@ Feature: Test modelizer model view: add plugin component
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
-    Then I expect current url is '/modelizer/projectName/model'
+    Then I expect current url is 'projectName/models'
+
+    # Model creation
+    When I click on '[data-cy="create-model-button"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
     And  I expect '[data-cy="component-defnitions-item_terrator-plugin"]' appear 1 time on screen
     And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
     When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
-    Then I expect '[class*="component-definition-card"]' appear 18 times on screen
+    And  I wait 1 second
+    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 18 times on screen
 
   Scenario Outline: Click on the <element> component should display it on the page
-    Then I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>"]' not exists
+    Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' not exists
 
     When I click on '[data-cy="component-definition_<element>"]'
-    Then I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>"]' exists
-    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>"]' appear 1 time on screen
+    And  I wait 1 second
+    Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' exists
+    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' appear 1 time on screen
 
     Examples:
       | element               |
@@ -44,12 +52,15 @@ Feature: Test modelizer model view: add plugin component
       | aws_db_instance       |
       | aws_key_pair          |
 
+  @skip
+  # TODO: update/fix test 
   Scenario Outline: Dragging the <element> component should display it on the page
-    Then I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>_"]' not exists
+    Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>_"]' not exists
 
-    When I drag '[data-cy="component-definition_<element>"]' onto '[data-cy="modelizer-model-view"] [data-cy="draw-container"]'
-    Then I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>"]' exists
-    And  I expect '[data-cy="modelizer-model-view"] [data-cy="draw-container"] [id^="<element>"]' appear 1 time on screen
+    When I drag '[data-cy="component-definition_<element>"]' onto '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]'
+    And  I wait 1 second
+    Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' exists
+    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' appear 1 time on screen
 
     Examples:
       | element               |

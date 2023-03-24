@@ -235,7 +235,7 @@ export default {
     modelizer: {
       header: {
         switch: {
-          model: 'Model',
+          draw: 'Draw',
           text: 'Text',
         },
         button: {

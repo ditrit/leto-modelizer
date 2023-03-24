@@ -1,4 +1,4 @@
-import ModelizerRoute from 'src/router/routes/ModelizerRoute';
+import ModelsRoute from 'src/router/routes/ModelsRoute';
 
 jest.mock('src/composables/Project', () => ({
   getProjectById: (id) => {
@@ -11,20 +11,17 @@ jest.mock('src/composables/Project', () => ({
   },
 }));
 
-describe('Test routes: ModelizerRoutes', () => {
-  describe('Test route: ModelizerLongRoute', () => {
-    const ModelizerLongRoute = ModelizerRoute.children[0];
-
+describe('Test route: ModelsRoute', () => {
+  describe('Test function: beforeEnter', () => {
     it('should succeed and call next without paramaters', () => {
       const next = jest.fn();
       const to = {
         params: {
           projectName: 'projectNameTest',
-          viewType: 'draw',
         },
       };
 
-      ModelizerLongRoute.beforeEnter(to, null, next);
+      ModelsRoute.beforeEnter(to, null, next);
       expect(next).toHaveBeenCalledTimes(1);
       expect(next).toHaveBeenLastCalledWith();
     });
@@ -34,25 +31,10 @@ describe('Test routes: ModelizerRoutes', () => {
       const to = {
         params: {
           projectName: 'badProject',
-          viewType: 'draw',
         },
       };
 
-      ModelizerLongRoute.beforeEnter(to, null, next);
-      expect(next).toHaveBeenCalledTimes(1);
-      expect(next).toHaveBeenLastCalledWith({ name: 'Error' });
-    });
-
-    it('should fail when viewType is not valid and call next with error page', () => {
-      const next = jest.fn();
-      const to = {
-        params: {
-          projectName: 'projectNameTest',
-          viewType: 'test',
-        },
-      };
-
-      ModelizerLongRoute.beforeEnter(to, null, next);
+      ModelsRoute.beforeEnter(to, null, next);
       expect(next).toHaveBeenCalledTimes(1);
       expect(next).toHaveBeenLastCalledWith({ name: 'Error' });
     });

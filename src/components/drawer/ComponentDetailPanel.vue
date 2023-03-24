@@ -102,7 +102,6 @@ import {
   onUnmounted,
 } from 'vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 import { renderModel } from 'src/composables/PluginManager';
 import { ComponentAttribute } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
@@ -128,7 +127,6 @@ const originalComponent = ref(null);
 const attributesUpdated = ref([]);
 
 let pluginEditSubscription;
-let viewSwitchSubscription;
 
 /**
  * Return the array of attributes with only needed attributes.
@@ -274,16 +272,6 @@ function updateAttributes(event) {
 }
 
 /**
- * Close component detail panel if route is updated with a new view type.
- * @param {String} newViewType - Updated view type.
- */
-function onViewSwitchUpdate(newViewType) {
-  if (newViewType !== route.params.viewType) {
-    isVisible.value = false;
-  }
-}
-
-/**
  * Set currentError to full-name attribute value of field in error.
  * @param {Object} event - Form event.
  */
@@ -300,11 +288,9 @@ function clearError() {
 
 onMounted(() => {
   pluginEditSubscription = PluginEvent.EditEvent.subscribe(onEdit);
-  viewSwitchSubscription = ViewSwitchEvent.subscribe(onViewSwitchUpdate);
 });
 
 onUnmounted(() => {
   pluginEditSubscription.unsubscribe();
-  viewSwitchSubscription.unsubscribe();
 });
 </script>

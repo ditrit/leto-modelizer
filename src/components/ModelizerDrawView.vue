@@ -1,8 +1,8 @@
 <template>
   <q-layout
     container
-    class="modelizer-model-view"
-    data-cy="modelizer-model-view"
+    class="modelizer-draw-view"
+    data-cy="modelizer-draw-view"
   >
     <component-definitions-drawer
       v-if="data.plugin"
@@ -36,7 +36,6 @@ import {
   reactive,
   ref,
   computed,
-  watch,
 } from 'vue';
 import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer';
 import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
@@ -54,8 +53,7 @@ import {
   appendProjectFile,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
-import { useRoute, useRouter } from 'vue-router';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
+import { useRoute } from 'vue-router';
 import {
   generateTemplate,
   getTemplateFileByPath,
@@ -63,7 +61,6 @@ import {
 } from 'src/composables/TemplateManager';
 import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay';
 
-const router = useRouter();
 const route = useRoute();
 const query = computed(() => route.query);
 
@@ -72,7 +69,6 @@ let pluginParseSubscription;
 let pluginDrawSubscription;
 let pluginRenderSubscription;
 let pluginUpdateSubscription;
-let viewSwitchSubscription;
 
 const { t } = useI18n();
 const props = defineProps({
@@ -81,7 +77,6 @@ const props = defineProps({
     required: true,
   },
 });
-const viewType = computed(() => route.params.viewType);
 
 const data = reactive({
   plugin: null,
@@ -213,29 +208,6 @@ async function dropHandler(event) {
   PluginEvent.RenderEvent.next(files);
 }
 
-/**
- * Redirect to text view with model path.
- * @param {String} newViewType - New viewType.
- */
-async function onSwitchView(newViewType) {
-  if (newViewType === 'text') {
-    router.push({
-      name: 'modelizer',
-      params: {
-        viewType: newViewType,
-        projectName: props.projectName,
-      },
-      query: query.value,
-    });
-  }
-}
-
-watch(() => viewType.value, () => {
-  if (viewType.value === 'model') {
-    updatePluginsAndTemplates();
-  }
-});
-
 onMounted(() => {
   updatePluginsAndTemplates();
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePluginsAndTemplates);
@@ -243,8 +215,6 @@ onMounted(() => {
   pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePluginsAndTemplates);
   pluginUpdateSubscription = PluginEvent.UpdateEvent.subscribe(renderModelComponents);
   pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updatePluginsAndTemplates);
-
-  viewSwitchSubscription = ViewSwitchEvent.subscribe(onSwitchView);
 });
 
 onUnmounted(() => {
@@ -253,8 +223,6 @@ onUnmounted(() => {
   pluginDrawSubscription.unsubscribe();
   pluginRenderSubscription.unsubscribe();
   pluginUpdateSubscription.unsubscribe();
-
-  viewSwitchSubscription.unsubscribe();
 });
 </script>
 
@@ -263,7 +231,7 @@ onUnmounted(() => {
     height: calc(100vh - 74px);
     width: 100%;
   }
-  .modelizer-model-view {
+  .modelizer-draw-view {
     height: calc(100vh - 64px)
   }
 </style>

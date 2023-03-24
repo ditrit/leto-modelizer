@@ -17,7 +17,7 @@ Feature: Test home page: project creation
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
-    And  I expect current url is 'modelizer/{{projectName}}/models'
+    And  I expect current url is '{{projectName}}/models'
 
   Scenario: Create project should add the project in Home page
     Given I click on '[data-cy="create-project-button"]'
@@ -49,7 +49,7 @@ Feature: Test home page: project creation
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{projectName}}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
-    And  I expect current url is 'modelizer/{{projectName}}/models'
+    And  I expect current url is '{{projectName}}/models'
 
   Scenario: Create project from a template should add the project in Home page
     Then I expect '[data-cy="template-card_project_template"]' exists

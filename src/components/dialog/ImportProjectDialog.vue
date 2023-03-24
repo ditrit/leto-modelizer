@@ -32,6 +32,6 @@ const router = useRouter();
  */
 function importProject(projectId) {
   DialogEvent.next({ type: 'close', key: 'ImportProject' });
-  router.push(`/modelizer/${projectId}/models`);
+  router.push(`/${projectId}/models`);
 }
 </script>

@@ -2,7 +2,6 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import { useRouter, useRoute } from 'vue-router';
 import ModelizerPage from 'src/pages/ModelizerPage.vue';
-import ViewSwitchEvent from 'src/composables/events/ViewSwitchEvent';
 
 installQuasarPlugin();
 
@@ -13,17 +12,11 @@ jest.mock('vue-router', () => ({
   })),
 }));
 
-jest.mock('src/composables/events/ViewSwitchEvent', () => ({
-  subscribe: jest.fn(),
-}));
-
 jest.mock('components/dialog/GitAuthenticationDialog', () => {});
 jest.mock('components/card/GitBranchCard', () => {});
 
 describe('Test page component: ModelizerPage', () => {
   let wrapper;
-  let subscribe;
-  let unsubscribe;
   const push = jest.fn();
 
   useRoute.mockImplementation(() => ({
@@ -37,28 +30,19 @@ describe('Test page component: ModelizerPage', () => {
   }));
 
   beforeEach(() => {
-    subscribe = jest.fn();
-    unsubscribe = jest.fn();
-    ViewSwitchEvent.subscribe.mockImplementation(() => {
-      subscribe();
-      return { unsubscribe };
-    });
     wrapper = shallowMount(ModelizerPage, {
       global: {
         stubs: [
           'router-link',
           'router-view',
           'modelizer-navigation-bar',
-          'modelizer-model-view',
+          'modelizer-draw-view',
           'modelizer-text-view',
         ],
       },
       stubs: {
         GitSettingsDialog: true,
         GitBranchCard: true,
-      },
-      mocks: {
-        ViewSwitchEvent,
       },
     });
   });
