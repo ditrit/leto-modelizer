@@ -7,12 +7,6 @@ import { Subject } from 'rxjs';
 const InitEvent = new Subject();
 
 /**
- * Represent a rxjs Event object to emit and to receive events about plugin component selection.
- * @typedef {Subject} SelectEvent
- */
-const SelectEvent = new Subject();
-
-/**
  * Represent a rxjs Event object to emit and to receive events about plugin component edition.
  * @typedef {Subject} EditEvent
  */
@@ -38,18 +32,10 @@ const ParseEvent = new Subject();
  */
 const RenderEvent = new Subject();
 
-/**
- * Represent a rxjs Event object to emit and to receive events about plugin components drawing.
- * @typedef {Subject} DrawEvent
- */
-const DrawEvent = new Subject();
-
 export default {
   InitEvent,
-  SelectEvent,
   EditEvent,
   UpdateEvent,
   ParseEvent,
   RenderEvent,
-  DrawEvent,
 };
