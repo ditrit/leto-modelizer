@@ -11,7 +11,7 @@
       :project-name="projectName"
     />
     <q-page-container>
-      <q-page>
+      <q-page class="modelizer-model-draw-page">
         <div
           id="root"
           data-cy="draw-container"
@@ -233,6 +233,10 @@ onUnmounted(() => {
   }
   .modelizer-draw-view {
     height: calc(100vh - 64px)
+  }
+
+  .modelizer-model-draw-page {
+    background: #eee;
   }
 </style>
 
