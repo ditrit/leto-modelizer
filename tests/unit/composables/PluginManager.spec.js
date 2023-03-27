@@ -48,12 +48,6 @@ jest.mock('src/composables/TemplateManager', () => ({
   getTemplateFiles: jest.fn(() => []),
 }));
 
-jest.mock('src/composables/events/PluginEvent', () => ({
-  RenderEvent: {
-    next: jest.fn(),
-  },
-}));
-
 jest.mock('src/composables/Files', () => ({
   readTextFile: () => Promise.resolve('content'),
 }));

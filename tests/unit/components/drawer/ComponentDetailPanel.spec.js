@@ -21,9 +21,6 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   EditEvent: {
     subscribe: jest.fn(),
   },
-  DrawEvent: {
-    next: jest.fn(),
-  },
 }));
 
 jest.mock('src/composables/PluginManager', () => ({

@@ -64,7 +64,7 @@ describe('Test component: DeleteFileForm', () => {
   });
 
   describe('Test function: onSubmit', () => {
-    it('should emit "file:delete" event, emit RenderEvent and a positive notification on success', async () => {
+    it('should emit "file:delete" event, emit DeleteFileEvent and a positive notification on success', async () => {
       Notify.create = jest.fn();
       wrapper.vm.confirmDelete = true;
 

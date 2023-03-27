@@ -1,7 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import NavigationBar from 'src/components/NavigationBar.vue';
-import PluginEvent from 'src/composables/events/PluginEvent';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import { Notify } from 'quasar';
@@ -25,12 +24,6 @@ jest.mock('vue-i18n', () => ({
   useI18n: () => ({
     t: (t) => t,
   }),
-}));
-
-jest.mock('src/composables/events/PluginEvent', () => ({
-  ParseEvent: {
-    next: jest.fn(),
-  },
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
@@ -66,10 +59,8 @@ describe('Test component: NavigationBar', () => {
   let authenticationUnsubscribe;
   let mockPush;
 
-  const parseEvent = jest.fn();
   const globalUploadFilesEvent = jest.fn();
 
-  PluginEvent.ParseEvent.next.mockImplementation(parseEvent);
   FileEvent.GlobalUploadFilesEvent.next.mockImplementation(globalUploadFilesEvent);
   Project.gitGlobalUpload.mockImplementation(
     (project) => (project.git ? Promise.resolve() : Promise.reject()),
