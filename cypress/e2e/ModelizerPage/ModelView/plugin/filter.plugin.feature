@@ -1,4 +1,4 @@
-Feature: Test modelizer model view: plugin initialization
+Feature: Test modelizer model view: plugin filter
 
   Background:
     Given I clear cache
@@ -17,15 +17,68 @@ Feature: Test modelizer model view: plugin initialization
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"]' exists
 
-    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
-    And  I wait 1 second
-    Then I expect '[class*="plugin-definitions"]' appear 1 time on screen
-    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 18 times on screen
-
-  Scenario Outline: Set text as '<filter>' should display only one element
+  Scenario Outline: Set text as '<filter>' should display only one element inside plugin title
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
-    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 1 time on screen
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (1)'
+
+    Examples:
+      | filter                |
+      | aws_ami               |
+      | server                |
+      | aws_security_group    |
+      | aws_instance          |
+      | aws_volume_attachment |
+      | aws_ebs_volume        |
+      | aws_elb               |
+      | aws_vpc               |
+      | aws_internet_gateway  |
+      | aws_subnet            |
+      | aws_db_subnet_group   |
+      | aws_route53_zone      |
+      | aws_route53_record    |
+      | aws_db_instance       |
+      | aws_key_pair          |
+
+  Scenario Outline: Set text as '<filter>' should display two elements inside plugin title
+    When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (2)'
+
+    Examples:
+      | filter       |
+      | ami server   |
+      | security elb |
+      | vpc internet |
+      | instance     |
+      | volume       |
+      | subnet       |
+      | route53      |
+  
+  Scenario Outline: Set text as '<filter>' should not display plugin.
+    When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 0 time on screen
+    But  I expect '[data-cy="library-empty-message"]' exists
+    And  I expect '[data-cy="library-empty-message"]' is 'Nothing to display'
+
+    Examples:
+      | filter    |
+      | bad       |
+      | amiserver |
+
+  Scenario Outline: Select plugin and set text as '<filter>' should display only one element
+    # Select 'terrator-plugin' library
+    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    And  I wait 1 second
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    And  I expect '[data-cy="component-definition-grid"]' exists
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+
+    When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
+    Then I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected [data-cy="title"]' is 'terrator-plugin (1)'
     And  I expect '[data-cy="component-definition_<filter>"]' exists
 
     Examples:
@@ -46,9 +99,17 @@ Feature: Test modelizer model view: plugin initialization
       | aws_db_instance       |
       | aws_key_pair          |
 
-  Scenario Outline: Set text as '<filter>' should display only two elements
+  Scenario Outline: Select plugin and set text as '<filter>' should display only two elements
+    # Select 'terrator-plugin' library
+    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    And  I wait 1 second
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    And  I expect '[data-cy="component-definition-grid"]' exists
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
-    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 2 times on screen
+    Then I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 2 times on screen
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected [data-cy="title"]' is 'terrator-plugin (2)'
     And  I expect '[data-cy="component-definition_<element1>"]' exists
     And  I expect '[data-cy="component-definition_<element2>"]' exists
 
@@ -62,11 +123,52 @@ Feature: Test modelizer model view: plugin initialization
       | subnet       | aws_subnet            | aws_db_subnet_group  |
       | route53      | aws_route53_zone      | aws_route53_record   |
 
-  Scenario Outline: Set text as '<filter>' should not display any elements.
+  Scenario Outline: Select plugin and set text as '<filter>' should not display any elements.
+    # Select 'terrator-plugin' library
+    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    And  I wait 1 second
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    And  I expect '[data-cy="component-definition-grid"]' exists
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
-    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 0 time on screen
+    Then I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 0 time on screen
+    And  I expect '[data-cy="library-empty-message"]' exists
+    And  I expect '[data-cy="library-empty-message"]' is 'Nothing to display'
 
     Examples:
       | filter    |
       | bad       |
       | amiserver |
+
+  Scenario Outline: Set text as '<filter>' then select plugin should display only one element
+    When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (1)'
+
+    # Select 'terrator-plugin' library
+    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    And  I wait 1 second
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected [data-cy="title"]' is 'terrator-plugin (1)'
+    And  I expect '[data-cy="component-definition-grid"]' exists
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definition_<filter>"]' exists
+
+    Examples:
+      | filter                |
+      | aws_ami               |
+      | server                |
+      | aws_security_group    |
+      | aws_instance          |
+      | aws_volume_attachment |
+      | aws_ebs_volume        |
+      | aws_elb               |
+      | aws_vpc               |
+      | aws_internet_gateway  |
+      | aws_subnet            |
+      | aws_db_subnet_group   |
+      | aws_route53_zone      |
+      | aws_route53_record    |
+      | aws_db_instance       |
+      | aws_key_pair          |

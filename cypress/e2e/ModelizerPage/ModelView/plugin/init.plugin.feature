@@ -18,14 +18,15 @@ Feature: Test modelizer model view: plugin initialization
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
 
-  Scenario: Plugin test should appear in component definitions list
-    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"]' exists
-    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+  Scenario: Terrator plugin should appear in component definitions list
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' exists
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
   Scenario: Should have only one plugin installed with all these definitions
-    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
-    Then I expect '[class*="plugin-definitions"]' appear 1 time on screen
-    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 18 times on screen
+    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected [data-cy="title"]' is 'terrator-plugin (18)'
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
     And  I expect '[data-cy="component-definition_<element>"]' exists
 
     Examples:

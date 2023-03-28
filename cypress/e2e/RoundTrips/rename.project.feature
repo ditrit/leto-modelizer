@@ -69,13 +69,11 @@ Feature: Test roundtrip of the application : rename project
 
     # Check model and files are still here
     When I click on '[data-cy="file-explorer"] [data-cy="folder_renamedProject"]'
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' exists
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
 
     When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]'
 
     # Check project name is displayed in home page
     When I visit the '/'
