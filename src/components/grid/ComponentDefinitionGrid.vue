@@ -1,26 +1,23 @@
 <template>
-  <q-table
-    grid
-    :rows="definitions"
-    row-key="name"
-    hide-header
-    hide-bottom
-    :pagination="disablePagination"
-    class="component-definition-grid"
+  <div
+    class="full-width row q-col-gutter-sm"
+    data-cy="component-definition-grid"
   >
-    <template #item="props">
-      <div class="q-pa-xs col-4 text-primary">
-        <component-definition-card
-          :definition="props.row"
-          :plugin-name="pluginName"
-        />
-      </div>
-    </template>
-  </q-table>
+    <div
+      v-for="(definition, index) in definitions"
+      :key="`definition-card_${index}`"
+      class="col-4"
+    >
+      <component-definition-card
+        :definition="definition"
+        :plugin-name="pluginName"
+        class="full-height"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import ComponentDefinitionCard from 'src/components/card/ComponentDefinitionCard';
 
 defineProps({
@@ -33,5 +30,4 @@ defineProps({
     default: '',
   },
 });
-const disablePagination = ref({ rowsPerPage: 0 });
 </script>
