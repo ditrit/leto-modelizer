@@ -32,7 +32,7 @@ Feature: Test models page: rename model
     When I click on '[data-cy="model-card_terrator-plugin-{{modelName}}"]'
     Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelName}}'
     And  I expect '[data-cy="components-definitions-drawer"]' exists
-    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
