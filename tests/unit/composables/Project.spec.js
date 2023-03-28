@@ -34,6 +34,7 @@ import {
   getAllModels,
   getModelFiles,
   renameProject,
+  isMatching,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -668,6 +669,20 @@ describe('Test composable: Project', () => {
 
       expect(projects.foo).not.toBeDefined();
       expect(projects.bar).toStrictEqual({ id: 'bar' });
+    });
+  });
+
+  describe('Test function: isMatching', () => {
+    it('should return true when filter is null or empty', () => {
+      expect(isMatching(null, 'test')).toBeTruthy();
+      expect(isMatching('', 'test')).toBeTruthy();
+    });
+    it('should return true when filter is contained in value', () => {
+      expect(isMatching('t', 'test')).toBeTruthy();
+      expect(isMatching('t      est', 'test')).toBeTruthy();
+    });
+    it('should return false when filter is not contained in value', () => {
+      expect(isMatching('a', 'test')).toBeFalsy();
     });
   });
 });

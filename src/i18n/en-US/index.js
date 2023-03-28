@@ -261,10 +261,10 @@ export default {
             title: 'Open models page',
           },
           title: '{name} ({length})',
+          empty: 'Nothing to display',
         },
         templates: {
           title: 'Templates',
-          emptyMessage: 'Nothing to display',
         },
         documentationLink: 'Link to the documentation',
       },
