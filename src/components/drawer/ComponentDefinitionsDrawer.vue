@@ -1,5 +1,6 @@
 <template>
   <default-drawer
+    :has-close-btn="false"
     class="components-definitions-drawer"
     data-cy="components-definitions-drawer"
   >

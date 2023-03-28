@@ -17,7 +17,10 @@
             <slot name="drawerName" />
           </q-item-label>
         </q-item-section>
-        <q-item-section avatar>
+        <q-item-section
+          v-if="hasCloseBtn"
+          avatar
+        >
           <q-btn
             round
             flat
@@ -34,7 +37,14 @@
 <script setup>
 import { ref } from 'vue';
 
-const componentsDrawer = ref(false);
+defineProps({
+  hasCloseBtn: {
+    type: Boolean,
+    default: true,
+  },
+});
+
+const componentsDrawer = ref(true);
 const drawerMiniState = ref(false);
 /**
  * Opens the drawer.
