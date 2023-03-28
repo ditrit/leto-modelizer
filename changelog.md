@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Update e2e test plugin to terrator-plugin.
+* New display of libraries components inside ComponentDefinitionsDrawer..
 
 ### Fixed
 
