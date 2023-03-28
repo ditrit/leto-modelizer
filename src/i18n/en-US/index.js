@@ -260,6 +260,7 @@ export default {
             label: 'Back to models',
             title: 'Open models page',
           },
+          title: '{name} ({length})',
         },
         templates: {
           title: 'Templates',
