@@ -179,6 +179,30 @@ export async function getFileInputs(plugin, fileInformations, projectName) {
 }
 
 /**
+ * Init components.
+ * @param {String} projectName - Name of the project.
+ * @param {Object} plugin - Plugin corresponding to the model.
+ * @param {String} path - Model path (Plugin name & model name).
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function initComponents(projectName, plugin, path) {
+  const dir = path;
+  const files = await readDir(`${projectName}/${dir}`);
+  const fileInformations = files.map((file) => new FileInformation({ path: `${dir}/${file}` }));
+
+  const fileInputs = await getFileInputs(plugin, fileInformations, projectName);
+
+  const config = await readProjectFile(
+    projectName,
+    new FileInformation({
+      path: `${dir}/leto-modelizer.config.json`,
+    }),
+  );
+
+  plugin.parse(config, fileInputs);
+}
+
+/**
  * Add a new component and render model.
  * @param {String} projectName - Name of the project.
  * @param {Object} plugin - Plugin corresponding to the model.

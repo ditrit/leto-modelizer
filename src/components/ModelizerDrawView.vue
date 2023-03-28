@@ -41,19 +41,14 @@ import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitio
 import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
 import {
   getPluginByName,
-  getFileInputs,
   renderModel,
   addNewComponent,
   addNewTemplateComponent,
+  initComponents,
 } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import {
-  readDir,
-  readProjectFile,
-} from 'src/composables/Project';
-import { FileInformation } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
 import { getTemplatesByType } from 'src/composables/TemplateManager';
 import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay';
@@ -93,36 +88,6 @@ async function renderModelComponents() {
 }
 
 /**
- * Get all files of a folder.
- * @param {String} dir - Folder to check.
- * @return {Promise<FileInputs>} Promise with an array of files on success otherwise an error.
- */
-async function getDirFiles(dir) {
-  const files = await readDir(`${props.projectName}/${dir}`);
-  const fileInformations = files.map((file) => new FileInformation({ path: `${dir}/${file}` }));
-
-  return getFileInputs(data.plugin, fileInformations, props.projectName);
-}
-
-/**
- * Draw components.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
- */
-async function drawComponents() {
-  const fileInputs = await getDirFiles(`${defaultFolder.value}${query.value.path}`);
-
-  const config = await readProjectFile(
-    props.projectName,
-    new FileInformation({
-      path: `${defaultFolder.value}${query.value.path}/leto-modelizer.config.json`,
-    }),
-  );
-
-  data.plugin.parse(config, fileInputs);
-  data.plugin.draw('root');
-}
-
-/**
  * Update plugin, draw components and update component templates array.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
@@ -138,19 +103,27 @@ async function initView() {
     return;
   }
 
-  drawComponents();
-
-  await getTemplatesByType('component', data.plugin.data.name)
-    .then((response) => {
+  await Promise.allSettled([
+    initComponents(
+      route.params.projectName,
+      data.plugin,
+      `${defaultFolder.value}${route.query.path}`,
+    ).then(() => {
+      data.plugin.draw('root');
+    }),
+    getTemplatesByType(
+      'component',
+      data.plugin.data.name,
+    ).then((response) => {
       templates.value = response;
-    })
-    .catch(() => {
+    }).catch(() => {
       Notify.create({
         type: 'negative',
         message: t('errors.templates.getData'),
         html: true,
       });
-    });
+    }),
+  ]);
 }
 
 /**

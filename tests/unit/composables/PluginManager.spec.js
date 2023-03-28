@@ -226,6 +226,20 @@ describe('Test composable: PluginManager', () => {
     });
   });
 
+  describe('Test function: initComponents', () => {
+    it('should call parse', async () => {
+      const plugin = {
+        parse: jest.fn(),
+      };
+
+      expect(plugin.parse).toHaveBeenCalledTimes(0);
+
+      await PluginManager.initComponents('projectName', plugin, 'plugin/model');
+
+      expect(plugin.parse).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('Test function: addNewComponent', () => {
     it('should call addComponent and render', async () => {
       const plugin = {

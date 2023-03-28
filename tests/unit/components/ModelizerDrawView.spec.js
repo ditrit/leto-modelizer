@@ -3,7 +3,6 @@ import { shallowMount } from '@vue/test-utils';
 import ModelizerDrawView from 'src/components/ModelizerDrawView.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import PluginManager from 'src/composables/PluginManager';
-import Project from 'src/composables/Project';
 import TemplateManager from 'src/composables/TemplateManager';
 import { Notify } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
@@ -40,9 +39,9 @@ jest.mock('src/composables/PluginManager', () => ({
   getPlugins: jest.fn(),
   deleteComponent: jest.fn(),
   getPluginByName: jest.fn(),
-  getFileInputs: jest.fn(),
   renderModel: jest.fn(() => [{ path: 'path' }]),
   renderPlugin: jest.fn(() => Promise.resolve([])),
+  initComponents: jest.fn(() => Promise.resolve()),
   addNewComponent: jest.fn(),
   addNewTemplateComponent: jest.fn(),
 }));
@@ -59,13 +58,6 @@ jest.mock('src/composables/TemplateManager', () => ({
   generateTemplate: jest.fn((text) => text),
 }));
 
-jest.mock('src/composables/Project', () => ({
-  getProjectFiles: jest.fn(),
-  readProjectFile: jest.fn(),
-  appendProjectFile: jest.fn(),
-  readDir: jest.fn(),
-}));
-
 describe('Test component: ModelizerDrawView', () => {
   let wrapper;
   let initSubscribe;
@@ -75,7 +67,6 @@ describe('Test component: ModelizerDrawView', () => {
   let pluginParse;
   let pluginDraw;
   let useRouterPush;
-  let appendProjectFileMock;
   let testPlugin;
 
   beforeEach(() => {
@@ -86,7 +77,6 @@ describe('Test component: ModelizerDrawView', () => {
     pluginParse = jest.fn();
     pluginDraw = jest.fn();
     useRouterPush = jest.fn();
-    appendProjectFileMock = jest.fn();
 
     useRoute.mockImplementation(() => ({
       params: {
@@ -101,7 +91,6 @@ describe('Test component: ModelizerDrawView', () => {
       push: useRouterPush,
     }));
 
-    Project.appendProjectFile.mockImplementation(() => Promise.resolve(appendProjectFileMock()));
     TemplateManager.getTemplateFileByPath.mockImplementation(() => Promise.resolve({ data: 'template file content' }));
 
     PluginEvent.InitEvent.subscribe.mockImplementation(() => {
@@ -127,10 +116,6 @@ describe('Test component: ModelizerDrawView', () => {
       draw: pluginDraw,
     };
 
-    Project.getProjectFiles.mockImplementation(() => Promise.resolve([{}]));
-    Project.readProjectFile.mockImplementation(() => Promise.resolve({ id: 'TEST' }));
-    Project.readDir.mockImplementation(() => Promise.resolve([]));
-
     PluginManager.getPlugins.mockImplementation(() => [{ data: { name: 'pluginName' } }]);
     PluginManager.deleteComponent.mockImplementation((componentId, components) => {
       const index = components.findIndex(({ id }) => id === componentId);
@@ -142,7 +127,6 @@ describe('Test component: ModelizerDrawView', () => {
     });
     PluginManager.getPlugins.mockImplementation(() => []);
     PluginManager.getPluginByName.mockImplementation(() => testPlugin);
-    PluginManager.getFileInputs.mockImplementation(() => []);
 
     wrapper = shallowMount(ModelizerDrawView, {
       props: {
@@ -246,28 +230,6 @@ describe('Test component: ModelizerDrawView', () => {
         html: true,
         type: 'negative',
       });
-    });
-  });
-
-  describe('Test function: drawComponents', () => {
-    it('should call parse() & draw() function', async () => {
-      wrapper.vm.data.plugin = {
-        parse: jest.fn(),
-        draw: jest.fn(),
-      };
-
-      await wrapper.vm.drawComponents();
-
-      expect(wrapper.vm.data.plugin.parse).toHaveBeenCalledTimes(1);
-      expect(wrapper.vm.data.plugin.draw).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('Test function: getDirFiles', () => {
-    it('should return an array', async () => {
-      const result = await wrapper.vm.getDirFiles('dir');
-
-      expect(result).toEqual([]);
     });
   });
 
