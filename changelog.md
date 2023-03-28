@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Update e2e test plugin to terrator-plugin.
 * Internal optimization of plugin usage.
+* New display for library list & component grid.
 
 ### Fixed
 
