@@ -771,3 +771,15 @@ export async function renameProject(projectId, newProjectName) {
   delete projects[projectId];
   localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
 }
+
+/**
+ * Indicate if searched text is found.
+ * @param {String} filter - Searched text.
+ * @param {String} value - Value to match with.
+ * @return {Boolean} true if it is matching otherwise false.
+ */
+export function isMatching(filter, value) {
+  return !filter || !filter.trim() || filter.toLowerCase().split(' ')
+    .filter((searchedText) => searchedText)
+    .some((searchedText) => value.toLowerCase().includes(searchedText));
+}
