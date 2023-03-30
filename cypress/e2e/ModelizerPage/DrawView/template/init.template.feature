@@ -1,4 +1,4 @@
-Feature: Test modelizer model view: template initialization
+Feature: Test modelizer draw view: template initialization
 
   Background:
     Given I clear cache

@@ -1,4 +1,4 @@
-Feature: Test modelizer model view: plugin filter
+Feature: Test modelizer draw view: plugin filter
 
   Background:
     Given I clear cache

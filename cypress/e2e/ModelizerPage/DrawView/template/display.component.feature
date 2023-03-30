@@ -1,4 +1,4 @@
-Feature: Test modelizer model view: add template component
+Feature: Test modelizer draw view: add template component
 
   Background:
     Given I clear cache

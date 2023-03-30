@@ -1,4 +1,4 @@
-Feature: Test modelizer model view: plugin initialization
+Feature: Test modelizer draw view: plugin initialization
 
   Background:
     Given I clear cache

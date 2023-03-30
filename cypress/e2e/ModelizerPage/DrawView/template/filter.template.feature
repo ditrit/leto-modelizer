@@ -1,4 +1,4 @@
-Feature: Test modelizer model view: template filter
+Feature: Test modelizer draw view: template filter
 
   Background:
     Given I clear cache

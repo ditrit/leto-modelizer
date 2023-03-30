@@ -1,4 +1,4 @@
-Feature: Test modelizer model view: add plugin component
+Feature: Test modelizer draw view: add plugin component
 
   Background:
     Given I clear cache
