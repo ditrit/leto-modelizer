@@ -28,5 +28,11 @@ describe('Test component: ComponentDefinitionGrid', () => {
         ]);
       });
     });
+
+    describe('Test prop: pluginName', () => {
+      it('should match "plugin"', () => {
+        expect(wrapper.vm.pluginName).toStrictEqual('plugin');
+      });
+    });
   });
 });

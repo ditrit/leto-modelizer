@@ -35,17 +35,17 @@ jest.mock('src/plugins', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  getProjectFiles: jest.fn(() => Promise.resolve([{ path: 'path', content: 'content' }])),
   getModelFiles: jest.fn(() => Promise.resolve([{ path: 'path', content: 'content' }])),
   writeProjectFile: jest.fn(() => Promise.resolve()),
   deleteProjectFile: jest.fn(() => Promise.resolve()),
   readProjectFile: jest.fn(() => Promise.resolve({ id: 'TEST' })),
+  appendProjectFile: jest.fn(() => Promise.resolve()),
+  readDir: jest.fn(() => Promise.resolve([])),
 }));
 
-jest.mock('src/composables/events/PluginEvent', () => ({
-  RenderEvent: {
-    next: jest.fn(),
-  },
+jest.mock('src/composables/TemplateManager', () => ({
+  getTemplateFileByPath: jest.fn(() => Promise.resolve({ data: 'template file content' })),
+  getTemplateFiles: jest.fn(() => []),
 }));
 
 jest.mock('src/composables/Files', () => ({
@@ -162,21 +162,6 @@ describe('Test composable: PluginManager', () => {
     });
   });
 
-  describe('Test function: renderPlugin', () => {
-    it('should return updated file and emit a RenderEvent', async () => {
-      await PluginManager.initPlugins();
-
-      const plugin = PluginManager.getPluginByName('test');
-
-      plugin.render = jest.fn(() => [{ path: 'path', content: 'content' }]);
-      plugin.isParsable = jest.fn(() => true);
-
-      const files = await PluginManager.renderPlugin('test', 'projectId');
-
-      expect(files).toEqual([{ path: 'path', content: 'content' }]);
-    });
-  });
-
   describe('Test function: renderModel', () => {
     it('should return an array', async () => {
       const plugin = {
@@ -241,21 +226,52 @@ describe('Test composable: PluginManager', () => {
     });
   });
 
-  describe('Test function: drawComponents', () => {
-    it('should call parse() then draw() functions', async () => {
+  describe('Test function: initComponents', () => {
+    it('should call parse', async () => {
       const plugin = {
-        data: {
-          components: [],
-        },
-        draw: jest.fn(),
-        isParsable: () => true,
         parse: jest.fn(),
       };
 
-      await PluginManager.drawComponents(plugin);
+      expect(plugin.parse).toHaveBeenCalledTimes(0);
+
+      await PluginManager.initComponents('projectName', plugin, 'plugin/model');
 
       expect(plugin.parse).toHaveBeenCalledTimes(1);
-      expect(plugin.draw).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test function: addNewComponent', () => {
+    it('should call addComponent and render', async () => {
+      const plugin = {
+        data: {
+          addComponent: jest.fn(),
+        },
+        isParsable: () => true,
+        render: jest.fn(() => []),
+      };
+
+      expect(plugin.render).toHaveBeenCalledTimes(0);
+
+      await PluginManager.addNewComponent('projectName', plugin, 'plugin/model', {});
+
+      expect(plugin.data.addComponent).toHaveBeenCalledTimes(1);
+      expect(plugin.render).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test function: addNewTemplateComponent', () => {
+    it('should call parse', async () => {
+      const definition = {
+        files: ['app.tf'],
+        key: 'template key',
+      };
+      const plugin = {
+        parse: jest.fn(),
+      };
+
+      await PluginManager.addNewTemplateComponent('projectName', plugin, 'plugin/model', definition);
+
+      expect(plugin.parse).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -41,33 +41,22 @@ import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitio
 import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
 import {
   getPluginByName,
-  getFileInputs,
   renderModel,
+  addNewComponent,
+  addNewTemplateComponent,
+  initComponents,
 } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import {
-  readDir,
-  readProjectFile,
-  appendProjectFile,
-} from 'src/composables/Project';
-import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
-import {
-  generateTemplate,
-  getTemplateFileByPath,
-  getTemplatesByType,
-} from 'src/composables/TemplateManager';
+import { getTemplatesByType } from 'src/composables/TemplateManager';
 import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay';
 
 const route = useRoute();
 const query = computed(() => route.query);
 
 let pluginInitSubscription;
-let pluginParseSubscription;
-let pluginDrawSubscription;
-let pluginRenderSubscription;
 let pluginUpdateSubscription;
 
 const { t } = useI18n();
@@ -91,61 +80,18 @@ const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function renderModelComponents() {
-  const files = await renderModel(
+  await renderModel(
     props.projectName,
     `${defaultFolder.value}${query.value.path}`,
     data.plugin,
   );
-
-  PluginEvent.RenderEvent.next(files);
 }
 
 /**
- * Get all files of a folder.
- * @param {String} dir - Folder to check.
- * @return {Promise<FileInputs>} Promise with an array of files on success otherwise an error.
- */
-async function getDirFiles(dir) {
-  const files = await readDir(`${props.projectName}/${dir}`);
-  const fileInformations = files.map((file) => new FileInformation({ path: `${dir}/${file}` }));
-
-  return getFileInputs(data.plugin, fileInformations, props.projectName);
-}
-
-/**
- * Draw components.
+ * Update plugin, draw components and update component templates array.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-async function drawComponents() {
-  const fileInputs = await getDirFiles(`${defaultFolder.value}${query.value.path}`);
-
-  const config = await readProjectFile(
-    props.projectName,
-    new FileInformation({
-      path: `${defaultFolder.value}${query.value.path}/leto-modelizer.config.json`,
-    }),
-  );
-
-  data.plugin.parse(config, fileInputs);
-  data.plugin.draw('root');
-}
-
-/**
- * Display an error message to the user.
- */
-function notifyError() {
-  Notify.create({
-    type: 'negative',
-    message: t('errors.templates.getData'),
-    html: true,
-  });
-}
-
-/**
- * Update plugins array and related component templates array.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
- */
-async function updatePluginsAndTemplates() {
+async function initView() {
   if (!query.value || !query.value.path) {
     return;
   }
@@ -157,15 +103,27 @@ async function updatePluginsAndTemplates() {
     return;
   }
 
-  drawComponents();
-
-  await getTemplatesByType('component', data.plugin.data.name)
-    .then((response) => {
+  await Promise.allSettled([
+    initComponents(
+      route.params.projectName,
+      data.plugin,
+      `${defaultFolder.value}${route.query.path}`,
+    ).then(() => {
+      data.plugin.draw('root');
+    }),
+    getTemplatesByType(
+      'component',
+      data.plugin.data.name,
+    ).then((response) => {
       templates.value = response;
-    })
-    .catch(() => {
-      notifyError();
-    });
+    }).catch(() => {
+      Notify.create({
+        type: 'negative',
+        message: t('errors.templates.getData'),
+        html: true,
+      });
+    }),
+  ]);
 }
 
 /**
@@ -175,53 +133,48 @@ async function updatePluginsAndTemplates() {
  */
 async function dropHandler(event) {
   const dropData = JSON.parse(event.dataTransfer.getData('text/plain'));
-  const modelFolder = process.env.MODELS_DEFAULT_FOLDER
-    ? `${process.env.MODELS_DEFAULT_FOLDER}/${route.query.path}`
-    : `${route.query.path}`;
 
-  let files;
+  if (!dropData.isTemplate) {
+    const componentDefinition = data.plugin.data.definitions.components
+      .find(({ type }) => type === dropData.definitionType);
 
-  if (dropData.isTemplate) {
-    const activeTemplate = templates.value.find(
+    await addNewComponent(
+      route.params.projectName,
+      data.plugin,
+      `${defaultFolder.value}${route.query.path}`,
+      componentDefinition,
+    );
+    data.plugin.draw('root');
+  } else {
+    const templateDefinition = templates.value.find(
       ({ key }) => key === dropData.definitionType,
     );
 
-    files = await renderModel(route.params.projectName, modelFolder, data.plugin);
-
-    await Promise.all(activeTemplate.files
-      .map((file) => getTemplateFileByPath(`templates/${activeTemplate.key}/${file}`)
-        .then(({ data: fileContent }) => appendProjectFile(route.params.projectName, new FileInput({
-          path: `${modelFolder}/${file}`,
-          content: generateTemplate(fileContent),
-        })))
-        .catch(() => {
-          notifyError();
-        })));
-  } else {
-    const newComponentDefinition = data.plugin.data.definitions.components
-      .find(({ type }) => type === dropData.definitionType);
-
-    data.plugin.data.addComponent(newComponentDefinition, `${modelFolder}/`);
-    files = await renderModel(route.params.projectName, modelFolder, data.plugin);
+    await addNewTemplateComponent(
+      route.params.projectName,
+      data.plugin,
+      `${defaultFolder.value}${route.query.path}`,
+      templateDefinition,
+    ).then(() => {
+      data.plugin.draw('root');
+    }).catch(() => {
+      Notify.create({
+        type: 'negative',
+        message: t('errors.templates.getData'),
+        html: true,
+      });
+    });
   }
-
-  PluginEvent.RenderEvent.next(files);
 }
 
 onMounted(() => {
-  updatePluginsAndTemplates();
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(updatePluginsAndTemplates);
-  pluginParseSubscription = PluginEvent.ParseEvent.subscribe(updatePluginsAndTemplates);
-  pluginDrawSubscription = PluginEvent.DrawEvent.subscribe(updatePluginsAndTemplates);
+  initView();
+  pluginInitSubscription = PluginEvent.InitEvent.subscribe(initView);
   pluginUpdateSubscription = PluginEvent.UpdateEvent.subscribe(renderModelComponents);
-  pluginRenderSubscription = PluginEvent.RenderEvent.subscribe(updatePluginsAndTemplates);
 });
 
 onUnmounted(() => {
   pluginInitSubscription.unsubscribe();
-  pluginParseSubscription.unsubscribe();
-  pluginDrawSubscription.unsubscribe();
-  pluginRenderSubscription.unsubscribe();
   pluginUpdateSubscription.unsubscribe();
 });
 </script>

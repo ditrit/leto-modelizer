@@ -9,13 +9,6 @@ describe('Test composable: PluginEvent', () => {
     });
   });
 
-  describe('Test event: SelectEvent', () => {
-    it('should export a Subject', () => {
-      expect(PluginEvent.SelectEvent).toBeDefined();
-      expect(PluginEvent.SelectEvent).toEqual(new Subject());
-    });
-  });
-
   describe('Test event: EditEvent', () => {
     it('should export a Subject', () => {
       expect(PluginEvent.EditEvent).toBeDefined();
@@ -34,13 +27,6 @@ describe('Test composable: PluginEvent', () => {
     it('should export a Subject', () => {
       expect(PluginEvent.ParseEvent).toBeDefined();
       expect(PluginEvent.ParseEvent).toEqual(new Subject());
-    });
-  });
-
-  describe('Test event: DrawEvent', () => {
-    it('should export a Subject', () => {
-      expect(PluginEvent.DrawEvent).toBeDefined();
-      expect(PluginEvent.DrawEvent).toEqual(new Subject());
     });
   });
 

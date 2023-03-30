@@ -2,13 +2,15 @@ import { readTextFile } from 'src/composables/Files';
 import plugins from 'src/plugins';
 import { FileInput, FileInformation } from 'leto-modelizer-plugin-core';
 import {
-  getProjectFiles,
   writeProjectFile,
   readProjectFile,
   getModelFiles,
   deleteProjectFile,
+  readDir,
+  appendProjectFile,
 } from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import { getTemplateFiles } from 'src/composables/TemplateManager';
 
 let instanciatePlugins = [];
 
@@ -127,28 +129,6 @@ export function isParsableFile(file) {
 }
 
 /**
- * Call render from selected plugin for specific project.
- *
- * @param {String} pluginName - Plugin name.
- * @param {String} projectId - Id of project.
- * @return {Promise<FileInput[]>} Promise with updated files by render on success otherwise
- * an error.
- */
-export async function renderPlugin(pluginName, projectId) {
-  const plugin = getPluginByName(pluginName);
-  const config = new FileInput({
-    path: 'leto-modelizer.config.json',
-    content: '{}',
-  });
-  const files = await getProjectFiles(projectId);
-
-  return Promise.allSettled(
-    plugin.render(config, files.filter((file) => plugin.isParsable(file)))
-      .map((file) => writeProjectFile(projectId, file).then(() => file)),
-  ).then((allResults) => allResults.map((item) => item.value));
-}
-
-/**
  * Render the given model with the corresponding pugin.
  * Return rendered files.
  * @param {String} projectId - ID of the project.
@@ -199,19 +179,85 @@ export async function getFileInputs(plugin, fileInformations, projectName) {
 }
 
 /**
- * Update and draw new components.
- *
- * @param {Object} plugin - Contens components to update and draw.
- * @param {String} projectName - Project name.
+ * Init components.
+ * @param {String} projectName - Name of the project.
+ * @param {Object} plugin - Plugin corresponding to the model.
+ * @param {String} path - Model path (Plugin name & model name).
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function drawComponents(plugin, projectName) {
-  const fileInformations = await getProjectFiles(projectName);
+export async function initComponents(projectName, plugin, path) {
+  const dir = path;
+  const files = await readDir(`${projectName}/${dir}`);
+  const fileInformations = files.map((file) => new FileInformation({ path: `${dir}/${file}` }));
+
   const fileInputs = await getFileInputs(plugin, fileInformations, projectName);
+
   const config = await readProjectFile(
     projectName,
-    new FileInformation({ path: 'leto-modelizer.config.json' }),
+    new FileInformation({
+      path: `${dir}/leto-modelizer.config.json`,
+    }),
   );
 
   plugin.parse(config, fileInputs);
-  plugin.draw('root');
+}
+
+/**
+ * Add a new component and render model.
+ * @param {String} projectName - Name of the project.
+ * @param {Object} plugin - Plugin corresponding to the model.
+ * @param {String} path - Model path (Plugin name & model name).
+ * @param {Object} definition - Definition of the component.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function addNewComponent(
+  projectName,
+  plugin,
+  path,
+  definition,
+) {
+  plugin.data.addComponent(definition, `${path}/`);
+  await renderModel(projectName, path, plugin);
+}
+
+/**
+ * Add a new component from template.
+ * Add the template files to the model folder
+ * then parse all model files.
+ * @param {String} projectName - Name of the project.
+ * @param {Object} plugin - Plugin corresponding to the model.
+ * @param {String} path - Model path (Plugin name & model name).
+ * @param {Object} templateDefinition - Definition of the template.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function addNewTemplateComponent(
+  projectName,
+  plugin,
+  path,
+  templateDefinition,
+) {
+  const templateFiles = await getTemplateFiles(path, templateDefinition);
+
+  await Promise.allSettled(
+    templateFiles.map(
+      (file) => appendProjectFile(
+        projectName,
+        file,
+      ),
+    ),
+  );
+
+  const files = await readDir(`${projectName}/${path}`);
+  const fileInformations = files.map(
+    (file) => new FileInformation({ path: `${path}/${file}` }),
+  );
+  const fileInputs = await getFileInputs(plugin, fileInformations, projectName);
+  const config = await readProjectFile(
+    projectName,
+    new FileInformation({
+      path: `${path}/leto-modelizer.config.json`,
+    }),
+  );
+
+  plugin.parse(config, fileInputs);
 }
