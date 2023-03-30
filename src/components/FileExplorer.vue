@@ -56,6 +56,7 @@
 <script setup>
 import FileEvent from 'src/composables/events/FileEvent';
 import {
+  computed,
   ref,
   onMounted,
   onUnmounted,
@@ -67,6 +68,11 @@ import { getTree } from 'src/composables/FileExplorer';
 import { getProjectFiles, getStatus } from 'src/composables/Project';
 import { FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
+import { useRoute } from 'vue-router';
+import { getPluginByName } from 'src/composables/PluginManager';
+
+const route = useRoute();
+const query = computed(() => route.query);
 
 const props = defineProps({
   projectName: {
@@ -248,7 +254,72 @@ async function updateAllFilesStatus() {
 }
 
 /**
+ * Expand folder tree node.
+ * @param {string} folder - Path of the folder.
+ */
+function expandFolder(folder) {
+  const node = fileExplorerRef.value.getNodeByKey(folder);
+
+  if (node) {
+    fileExplorerRef.value.setExpanded(folder, true);
+  }
+}
+
+/**
+ * Open file tree node.
+ * @param {string} file - Path of the file.
+ */
+function openFile(file) {
+  const node = fileExplorerRef.value.getNodeByKey(file);
+
+  if (node) {
+    activeFileId.value = node.id;
+    FileEvent.SelectFileNodeEvent.next(node);
+  }
+}
+
+/**
+ * Expand folder tree nodes corresponding to the selected model.
+ * Only expand the ones containing parsable file tree nodes.
+ * Then, open those file tree nodes.
+ */
+function openModelFiles() {
+  const [pluginName, modelName] = query.value.path.split('/');
+
+  expandFolder(props.projectName);
+
+  if (pluginName?.length > 0) {
+    expandFolder(pluginName);
+
+    if (modelName?.length > 0) {
+      expandFolder(`${pluginName}/${modelName}`);
+
+      const plugin = getPluginByName(pluginName);
+      const allPaths = localFileInformations.value
+        .filter(({ path }) => path.startsWith(`${pluginName}/${modelName}/`))
+        .filter(({ path }) => plugin.isParsable({ path: path.split('/').pop() }))
+        .map(({ path }) => path);
+
+      allPaths.forEach((path) => {
+        path.split('/').reduce((acc, value) => {
+          acc = acc ? `${acc}/${value}` : value;
+
+          if (acc !== path) {
+            expandFolder(acc);
+          }
+
+          return acc;
+        }, null);
+
+        openFile(path);
+      });
+    }
+  }
+}
+
+/**
  * Update localFileInformations and nodes of the tree then update all status.
+ * Also, expand model folders and open parsable files.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function initTreeNodes() {
@@ -257,6 +328,11 @@ async function initTreeNodes() {
   nodes.value = getTree(props.projectName, localFileInformations.value);
 
   await updateAllFilesStatus();
+
+  // TODO: Find a better way to stub it on shallowMount.
+  if (fileExplorerRef.value.getNodeByKey && query.value.path) {
+    openModelFiles();
+  }
 }
 
 onMounted(async () => {

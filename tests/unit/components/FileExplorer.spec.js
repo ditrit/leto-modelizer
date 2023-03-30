@@ -6,12 +6,23 @@ import FileExplorer from 'src/components/FileExplorer.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import * as Project from 'src/composables/Project';
+import * as PluginManager from 'src/composables/PluginManager';
 
 installQuasarPlugin();
 
 jest.mock('src/composables/Project', () => ({
   getProjectFiles: jest.fn(() => Promise.resolve([])),
   getStatus: jest.fn(() => Promise.resolve([])),
+}));
+
+jest.mock('vue-router', () => ({
+  useRoute: jest.fn(() => ({
+    query: { path: 'pluginName/modelName' },
+  })),
+}));
+
+jest.mock('src/composables/PluginManager', () => ({
+  getPluginByName: jest.fn(),
 }));
 
 jest.mock('src/composables/FileExplorer', () => ({
@@ -450,6 +461,79 @@ describe('Test component: FileExplorer', () => {
 
       expect(wrapper.vm.activeFileId).toEqual('terraform/app.tf');
       expect(selectFileNodeEventNext).toBeCalled();
+    });
+  });
+
+  describe('Test function: expandFolder', () => {
+    it('should call fileExplorerRef.setExpanded() when folder tree node exists', () => {
+      wrapper.vm.fileExplorerRef = {
+        getNodeByKey: jest.fn(() => ({ children: [] })),
+        setExpanded: jest.fn(),
+      };
+
+      wrapper.vm.expandFolder('foder');
+
+      expect(wrapper.vm.fileExplorerRef.setExpanded).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test function: openFile', () => {
+    it('should update activeFileId & send SelectFileNodeEvent when file tree node exists', () => {
+      wrapper.vm.activeFileId = null;
+      wrapper.vm.fileExplorerRef = {
+        getNodeByKey: jest.fn(() => ({ id: 'fileId' })),
+      };
+
+      expect(selectFileNodeEventNext).toHaveBeenCalledTimes(0);
+
+      wrapper.vm.openFile('file');
+
+      expect(wrapper.vm.activeFileId).toEqual('fileId');
+      expect(selectFileNodeEventNext).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test function: openModelFiles', () => {
+    it('should call getPluginByName()', () => {
+      const mock = jest.fn(() => ({
+        isParsable: () => true,
+      }));
+      PluginManager.getPluginByName.mockImplementation(mock);
+
+      wrapper.vm.fileExplorerRef = {
+        getNodeByKey: jest.fn(() => ({ children: [] })),
+        setExpanded: jest.fn(),
+      };
+      wrapper.vm.query.path = 'pluginName/modelName';
+      wrapper.vm.localFileInformations = [{ path: 'pluginName/modelName/file.ext' }];
+      wrapper.vm.openModelFiles();
+
+      expect(mock).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test function: initTreeNodes', () => {
+    it('should update nodes', () => {
+      wrapper.vm.fileExplorerRef.getNodeByKey = () => null;
+      wrapper.vm.query.path = 'pluginName/modelNamecoucou';
+
+      wrapper.vm.initTreeNodes();
+
+      expect(wrapper.vm.nodes).toEqual([{
+        id: 'projectName',
+        label: 'projectName',
+        isFolder: true,
+        children: [{
+          id: 'terraform',
+          label: 'terraform',
+          isFolder: true,
+          children: [{
+            id: 'terraform/app.tf',
+            label: 'app.tf',
+            isFolder: false,
+          }],
+        }],
+      }]);
     });
   });
 
