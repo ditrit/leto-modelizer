@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Allowed to have a predefined list of values for Array attribute.
 * Text editor feature:
   * Integrate syntax colorization.
+  * On open text editor, open all related files of the current model.
 * Modelization feature:
   * Allow to use the mouse coordinates when placing new component on drag and drop feature.
 * Add new environment variable `KEEP_CYPRESS_ATTRIBUTE` to keep all cypress attribute in html.
@@ -40,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix duplication attribute on creation.
 * Fix attribute error management.
 * Fix bug on nested object in attribute edition, see [this issue](https://github.com/ditrit/leto-modelizer/issues/203).
+* Fix bug on model files opening when switching on TextView, see [this issue](https://github.com/ditrit/leto-modelizer/issues/202).
 
 ## [1.0.0] - 2023/02/16
 
