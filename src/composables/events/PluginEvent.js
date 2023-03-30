@@ -19,23 +19,8 @@ const EditEvent = new Subject();
  */
 const UpdateEvent = new Subject();
 
-/**
- * Represent a rxjs Event object to emit and to receive events about plugin parsing.
- * @typedef {Subject} ParseEvent
- */
-const ParseEvent = new Subject();
-
-/**
- * Represent a rxjs Event object to emit and to receive events about plugin components rendering.
- * Subject contains a FileInput[] of all rendered files.
- * @typedef {Subject} ParseEvent
- */
-const RenderEvent = new Subject();
-
 export default {
   InitEvent,
   EditEvent,
   UpdateEvent,
-  ParseEvent,
-  RenderEvent,
 };
