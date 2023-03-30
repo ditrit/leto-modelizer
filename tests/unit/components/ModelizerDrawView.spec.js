@@ -11,10 +11,6 @@ installQuasarPlugin({
   plugins: [Notify],
 });
 
-jest.mock('vue-router', () => ({
-  useRoute: jest.fn(),
-}));
-
 jest.mock('vue-i18n', () => ({
   useI18n: () => ({
     t: (t) => t,
