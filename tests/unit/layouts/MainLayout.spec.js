@@ -43,7 +43,7 @@ describe('Test page component: MainLayout', () => {
   });
 
   describe('Test computed: show', () => {
-    it('should be true when viewType is different from "text" and from "model"', () => {
+    it('should be true when viewType is different from "text" and from "draw"', () => {
       useRoute.mockImplementation(() => ({
         params: {
           viewType: '',
@@ -72,10 +72,10 @@ describe('Test page component: MainLayout', () => {
       expect(wrapper.vm.show).toEqual(false);
     });
 
-    it('should be false when viewType is equal "model"', () => {
+    it('should be false when viewType is equal "draw"', () => {
       useRoute.mockImplementation(() => ({
         params: {
-          viewType: 'model',
+          viewType: 'draw',
         },
       }));
 

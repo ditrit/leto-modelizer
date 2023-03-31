@@ -11,7 +11,7 @@
       :project-name="projectName"
     />
     <q-page-container>
-      <q-page>
+      <q-page class="bg-grey-3">
         <div
           id="root"
           data-cy="draw-container"

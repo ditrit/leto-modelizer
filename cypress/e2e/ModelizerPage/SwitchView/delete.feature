@@ -17,23 +17,30 @@ Feature: Test switch model to text view: delete component/link
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
-    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
-    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
+    # Select 'terrator-plugin' library
+    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I wait 1 second
-    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 18 times on screen
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    Then I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
 
-  @skip
-  # TODO: Remove @skip tag when https://github.com/ditrit/leto-modelizer/issues/128 is done
   Scenario: Delete a component (Draw view) should remove plugin file (Text view)
     When I click on '[data-cy="component-definition_aws"]'
     Then I expect '[id^="aws"]' exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
     And  I expect '[data-cy="modelizer-text-view"]' exists
-    And  I expect '[data-cy="file_new_file.tf"]' appear 2 times on screen
+
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_projectName"]'
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]'
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/modelName"]'
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/modelName/new_file.tf"]' exists
+
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/modelName/new_file.tf"]'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
 

@@ -1,19 +1,20 @@
 <template>
   <q-card
     :id="`component-definition-${definition.type}`"
+    v-ripple
     flat
     bordered
-    class="component-definition-card"
+    class="component-definition-card cursor-pointer q-hoverable"
     draggable="true"
     :title="definition.description"
     :data-cy="`component-definition_${definition.type}`"
+    @click="onClickItem"
     @dragstart="dragStartHandler"
     @dragend="dragEndHandler"
   >
+    <span class="q-focus-helper" />
     <q-item
-      clickable
       class="column q-pl-xs q-pr-xs items-center"
-      @click="onClickItem"
     >
       <q-item-section
         v-if="definition.icon"

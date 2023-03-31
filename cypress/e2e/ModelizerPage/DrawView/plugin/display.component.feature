@@ -1,4 +1,4 @@
-Feature: Test modelizer model view: add plugin component
+Feature: Test modelizer draw view: add plugin component
 
   Background:
     Given I clear cache
@@ -17,12 +17,15 @@ Feature: Test modelizer model view: add plugin component
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
-    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-defnitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
-    When I click on '[data-cy="component-defnitions-item_terrator-plugin"]'
+    # Select 'terrator-plugin' library
+    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I wait 1 second
-    Then I expect '[data-cy="component-defnitions-item_terrator-plugin"] [class*="component-definition-card"]' appear 18 times on screen
+    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    And  I expect '[data-cy="component-definition-grid"]' exists
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
 
   Scenario Outline: Click on the <element> component should display it on the page
     Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' not exists

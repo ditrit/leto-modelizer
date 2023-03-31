@@ -37,5 +37,5 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const version = ref(process.env.VERSION);
 const viewType = computed(() => route.params.viewType);
-const show = computed(() => (viewType.value !== 'text' && viewType.value !== 'model'));
+const show = computed(() => (viewType.value !== 'text' && viewType.value !== 'draw'));
 </script>
