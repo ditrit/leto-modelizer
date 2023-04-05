@@ -1,3 +1,5 @@
-// Currently empty but should be filled by CLI (cf. README)
+import terratorPlugin from 'terrator-plugin';
 
-export default {};
+export default {
+terratorPlugin,
+};
