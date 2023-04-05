@@ -19,6 +19,10 @@ describe('Test component: ObjectInput', () => {
   });
 
   describe('Test function: getSubAttributes', () => {
+    it('should return an empty array on attribute without value', () => {
+      expect(wrapper.vm.getSubAttributes({})).toEqual([]);
+    });
+
     it('should return an array of sub-attributes', () => {
       const attribute = {
         value: [{
