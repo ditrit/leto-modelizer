@@ -126,7 +126,7 @@ const query = computed(() => route.query);
 const originalComponent = ref(null);
 const attributesUpdated = ref([]);
 
-let pluginEditSubscription;
+let pluginDefaultSubscription;
 
 /**
  * Return the array of attributes with only needed attributes.
@@ -248,17 +248,19 @@ function reset() {
  * Display panel and init local values according to the received id.
  * @param {Object} id - Id of the component to display.
  */
-function onEdit({ id }) {
-  isVisible.value = true;
+function setComponentData({ event }) {
+  if (event.action === 'select' && event.type === 'Drawer') {
+    isVisible.value = true;
 
-  originalComponent.value = props.plugin.data.getComponentById(id);
+    originalComponent.value = props.plugin.data.getComponentById(event.components[0]);
 
-  selectedComponentId.value = originalComponent.value.id;
-  selectedComponentAttributes.value = JSON.parse(JSON.stringify(
-    getReferencedAttributes(originalComponent.value)
-      .concat(getUnreferencedAttributes(originalComponent.value)),
-  ));
-  attributesUpdated.value = [...selectedComponentAttributes.value];
+    selectedComponentId.value = originalComponent.value.id;
+    selectedComponentAttributes.value = JSON.parse(JSON.stringify(
+      getReferencedAttributes(originalComponent.value)
+        .concat(getUnreferencedAttributes(originalComponent.value)),
+    ));
+    attributesUpdated.value = [...selectedComponentAttributes.value];
+  }
 }
 
 /**
@@ -289,10 +291,10 @@ function clearError() {
 }
 
 onMounted(() => {
-  pluginEditSubscription = PluginEvent.EditEvent.subscribe(onEdit);
+  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(setComponentData);
 });
 
 onUnmounted(() => {
-  pluginEditSubscription.unsubscribe();
+  pluginDefaultSubscription.unsubscribe();
 });
 </script>

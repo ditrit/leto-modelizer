@@ -71,12 +71,11 @@ export async function createPluginResources(plugin) {
  * @return {Promise<Plugin>} Promise with instanciated plugin on success otherwise an error.
  */
 export async function instantiatePlugin(pluginName) {
-  const plugin = new plugins[pluginName]();
-
-  plugin.init({
-    SelectEvent: PluginEvent.EditEvent,
-    UpdateEvent: PluginEvent.UpdateEvent,
+  const plugin = new plugins[pluginName]({
+    event: PluginEvent.DefaultEvent,
   });
+
+  plugin.init();
 
   await createPluginResources(plugin).then((resources) => {
     plugin.initResources(resources);
@@ -158,6 +157,26 @@ export async function renderModel(projectId, modelPath, plugin) {
       return deleteProjectFile(projectId, file.path);
     }),
   ).then(() => renderFiles);
+}
+
+/**
+ * Render the configuration file.
+ * @param {String} projectId - ID of the project.
+ * @param {String} modelPath - Path of the models folder.
+ * @param {Object} plugin - Plugin to render.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function renderConfiguration(projectId, modelPath, plugin) {
+  const config = new FileInput({
+    path: `${modelPath}/leto-modelizer.config.json`,
+    content: '{}',
+  });
+
+  // TODO : replace by appropriate function when it's done in plugin-core
+  // eslint-disable-next-line no-underscore-dangle
+  plugin.__renderer.renderConfiguration(config);
+
+  return writeProjectFile(projectId, config);
 }
 
 /**

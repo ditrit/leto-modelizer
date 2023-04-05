@@ -42,6 +42,7 @@ import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel';
 import {
   getPluginByName,
   renderModel,
+  renderConfiguration,
   addNewComponent,
   addNewTemplateComponent,
   initComponents,
@@ -57,7 +58,7 @@ const route = useRoute();
 const query = computed(() => route.query);
 
 let pluginInitSubscription;
-let pluginUpdateSubscription;
+let pluginDefaultSubscription;
 
 const { t } = useI18n();
 const props = defineProps({
@@ -76,15 +77,26 @@ const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
   : '');
 
 /**
- * Render the model.
+ * On update event, call renderModel.
+ * On move event, call renderConfiguration.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
-async function renderModelComponents() {
-  await renderModel(
-    props.projectName,
-    `${defaultFolder.value}${query.value.path}`,
-    data.plugin,
-  );
+async function onDefaultEvent({ event }) {
+  if (event.type === 'Drawer') {
+    if (event.action === 'update') {
+      await renderModel(
+        props.projectName,
+        `${defaultFolder.value}${query.value.path}`,
+        data.plugin,
+      );
+    } else if (event.action === 'move') {
+      await renderConfiguration(
+        props.projectName,
+        `${defaultFolder.value}${query.value.path}`,
+        data.plugin,
+      );
+    }
+  }
 }
 
 /**
@@ -170,12 +182,12 @@ async function dropHandler(event) {
 onMounted(() => {
   initView();
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(initView);
-  pluginUpdateSubscription = PluginEvent.UpdateEvent.subscribe(renderModelComponents);
+  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(onDefaultEvent);
 });
 
 onUnmounted(() => {
   pluginInitSubscription.unsubscribe();
-  pluginUpdateSubscription.unsubscribe();
+  pluginDefaultSubscription.unsubscribe();
 });
 </script>
 
