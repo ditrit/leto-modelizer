@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix attribute focus.
 * Fix duplication attribute on creation.
 * Fix attribute error management.
+* Fix bug on nested object in attribute edition, see [this issue](https://github.com/ditrit/leto-modelizer/issues/203).
 
 ## [1.0.0] - 2023/02/16
 
