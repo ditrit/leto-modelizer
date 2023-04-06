@@ -18,7 +18,7 @@ jest.mock('vue-router', () => ({
 }));
 
 jest.mock('src/composables/events/PluginEvent', () => ({
-  EditEvent: {
+  DefaultEvent: {
     subscribe: jest.fn(),
   },
 }));
@@ -31,8 +31,8 @@ jest.mock('src/composables/PluginManager', () => ({
 
 describe('test component: Plugin Component Detail Panel', () => {
   let wrapper;
-  let pluginEditSubscription;
-  let pluginEditUnsubscription;
+  let pluginDefaultSubscription;
+  let pluginDefaultUnsubscription;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -58,12 +58,12 @@ describe('test component: Plugin Component Detail Panel', () => {
   renderModel.mockImplementation(() => {});
 
   beforeEach(() => {
-    pluginEditSubscription = jest.fn();
-    pluginEditUnsubscription = jest.fn();
+    pluginDefaultSubscription = jest.fn();
+    pluginDefaultUnsubscription = jest.fn();
 
-    PluginEvent.EditEvent.subscribe.mockImplementation(() => {
-      pluginEditSubscription();
-      return { unsubscribe: pluginEditUnsubscription };
+    PluginEvent.DefaultEvent.subscribe.mockImplementation(() => {
+      pluginDefaultSubscription();
+      return { unsubscribe: pluginDefaultUnsubscription };
     });
 
     wrapper = shallowMount(ComponentDetailPanel, {
@@ -244,7 +244,7 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
-  describe('Test function: onEdit', () => {
+  describe('Test function: setLocalValues', () => {
     it('should set isVisible to true and set local values', () => {
       expect(wrapper.vm.isVisible).toBeFalsy();
 
@@ -255,11 +255,33 @@ describe('test component: Plugin Component Detail Panel', () => {
       });
 
       wrapper.vm.props.plugin.data.getComponentById = () => component;
-      wrapper.vm.onEdit({ id: 'id' });
+      wrapper.vm.setLocalValues({ event: { action: 'select', type: 'Drawer', components: ['id'] } });
 
       expect(wrapper.vm.isVisible).toBeTruthy();
       expect(wrapper.vm.originalComponent).toEqual(component);
       expect(wrapper.vm.selectedComponentId).toEqual('componentId');
+      expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
+    });
+
+    it('should not set local values if event.components is not defined', () => {
+      expect(wrapper.vm.isVisible).toBeFalsy();
+
+      wrapper.vm.setLocalValues({ event: { } });
+
+      expect(wrapper.vm.isVisible).toBeFalsy();
+      expect(wrapper.vm.originalComponent).toEqual(null);
+      expect(wrapper.vm.selectedComponentId).toEqual('');
+      expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
+    });
+
+    it('should not set local values if event.components array is empty', () => {
+      expect(wrapper.vm.isVisible).toBeFalsy();
+
+      wrapper.vm.setLocalValues({ event: { components: [] } });
+
+      expect(wrapper.vm.isVisible).toBeFalsy();
+      expect(wrapper.vm.originalComponent).toEqual(null);
+      expect(wrapper.vm.selectedComponentId).toEqual('');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
     });
   });
@@ -343,16 +365,16 @@ describe('test component: Plugin Component Detail Panel', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe to EditEvent', () => {
-      expect(pluginEditSubscription).toHaveBeenCalledTimes(1);
+    it('should subscribe to DefaultEvent', () => {
+      expect(pluginDefaultSubscription).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to EditEvent', () => {
-      expect(pluginEditUnsubscription).toHaveBeenCalledTimes(0);
+    it('should unsubscribe to DefaultEvent', () => {
+      expect(pluginDefaultUnsubscription).toHaveBeenCalledTimes(0);
       wrapper.unmount();
-      expect(pluginEditUnsubscription).toHaveBeenCalledTimes(1);
+      expect(pluginDefaultUnsubscription).toHaveBeenCalledTimes(1);
     });
   });
 });
