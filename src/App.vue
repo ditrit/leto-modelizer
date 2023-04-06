@@ -15,7 +15,7 @@ onMounted(() => {
   });
 
   setInterval(() => {
-    getPlugins.forEach((plugin) => {
+    getPlugins().forEach((plugin) => {
       plugin.data.deleteAllEventLogsBefore(Date.now() - intervalTime);
     });
   }, intervalTime);
