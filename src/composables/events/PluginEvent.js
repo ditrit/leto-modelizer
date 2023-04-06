@@ -19,8 +19,15 @@ const EditEvent = new Subject();
  */
 const UpdateEvent = new Subject();
 
+/**
+ * Represent a rxjs Event object to emit and to receive events about plugins.
+ * @typedef {Subject} DefaultEvent
+ */
+const DefaultEvent = new Subject();
+
 export default {
   InitEvent,
   EditEvent,
   UpdateEvent,
+  DefaultEvent,
 };

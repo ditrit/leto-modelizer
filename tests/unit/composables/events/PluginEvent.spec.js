@@ -22,4 +22,11 @@ describe('Test composable: PluginEvent', () => {
       expect(PluginEvent.UpdateEvent).toEqual(new Subject());
     });
   });
+
+  describe('Test event: DefaultEvent', () => {
+    it('should export a Subject', () => {
+      expect(PluginEvent.DefaultEvent).toBeDefined();
+      expect(PluginEvent.DefaultEvent).toEqual(new Subject());
+    });
+  });
 });
