@@ -13,12 +13,6 @@ const AddRemoteEvent = new Subject();
 const PullEvent = new Subject();
 
 /**
- * Represent a rxjs Event object to emit and to receive events when a push is done on git.
- * @typedef {Subject} PushEvent
- */
-const PushEvent = new Subject();
-
-/**
  * Represent a rxjs Event object to emit and to receive events when a checkout is done on git.
  * The event should contain the name of the branch to checkout.
  * @typedef {Subject} CheckoutEvent
@@ -56,7 +50,6 @@ export default {
   AddRemoteEvent,
   NewBranchEvent,
   PullEvent,
-  PushEvent,
   AddEvent,
   CommitEvent,
   AuthenticationEvent,
