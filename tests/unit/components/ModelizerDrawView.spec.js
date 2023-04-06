@@ -30,7 +30,7 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   InitEvent: {
     subscribe: jest.fn(),
   },
-  UpdateEvent: {
+  DefaultEvent: {
     subscribe: jest.fn(),
   },
 }));
@@ -40,6 +40,7 @@ jest.mock('src/composables/PluginManager', () => ({
   deleteComponent: jest.fn(),
   getPluginByName: jest.fn(),
   renderModel: jest.fn(() => [{ path: 'path' }]),
+  renderConfiguration: jest.fn(() => [{ path: 'path' }]),
   renderPlugin: jest.fn(() => Promise.resolve([])),
   initComponents: jest.fn(() => Promise.resolve()),
   addNewComponent: jest.fn(),
@@ -62,8 +63,8 @@ describe('Test component: ModelizerDrawView', () => {
   let wrapper;
   let initSubscribe;
   let initUnsubscribe;
-  let updateSubscribe;
-  let updateUnsubscribe;
+  let defaultSubscribe;
+  let defaultUnsubscribe;
   let pluginParse;
   let pluginDraw;
   let useRouterPush;
@@ -72,8 +73,8 @@ describe('Test component: ModelizerDrawView', () => {
   beforeEach(() => {
     initSubscribe = jest.fn();
     initUnsubscribe = jest.fn();
-    updateSubscribe = jest.fn();
-    updateUnsubscribe = jest.fn();
+    defaultSubscribe = jest.fn();
+    defaultUnsubscribe = jest.fn();
     pluginParse = jest.fn();
     pluginDraw = jest.fn();
     useRouterPush = jest.fn();
@@ -97,9 +98,9 @@ describe('Test component: ModelizerDrawView', () => {
       initSubscribe();
       return { unsubscribe: initUnsubscribe };
     });
-    PluginEvent.UpdateEvent.subscribe.mockImplementation(() => {
-      updateSubscribe();
-      return { unsubscribe: updateUnsubscribe };
+    PluginEvent.DefaultEvent.subscribe.mockImplementation(() => {
+      defaultSubscribe();
+      return { unsubscribe: defaultUnsubscribe };
     });
 
     testPlugin = {
@@ -135,13 +136,21 @@ describe('Test component: ModelizerDrawView', () => {
     });
   });
 
-  describe('Test function: renderModelComponents', () => {
+  describe('Test function: onDefaultEvent', () => {
     it('should call PluginManager.renderModel()', async () => {
       expect(PluginManager.renderModel).toHaveBeenCalledTimes(0);
 
-      await wrapper.vm.renderModelComponents();
+      await wrapper.vm.onDefaultEvent({ event: { type: 'Drawer', action: 'update' } });
 
       expect(PluginManager.renderModel).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call PluginManager.renderConfiguration()', async () => {
+      expect(PluginManager.renderConfiguration).toHaveBeenCalledTimes(0);
+
+      await wrapper.vm.onDefaultEvent({ event: { type: 'Drawer', action: 'move' } });
+
+      expect(PluginManager.renderConfiguration).toHaveBeenCalledTimes(1);
     });
   });
 

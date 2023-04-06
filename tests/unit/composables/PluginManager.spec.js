@@ -214,6 +214,23 @@ describe('Test composable: PluginManager', () => {
     });
   });
 
+  describe('Test function: renderConfiguration', () => {
+    it('should return an array', async () => {
+      const plugin = {
+        __renderer: {
+          renderConfiguration: () => {},
+        },
+      };
+      await PluginManager.renderConfiguration(
+        'projectId',
+        'modelPath',
+        plugin,
+      );
+
+      expect(writeProjectFile).toBeCalled();
+    });
+  });
+
   describe('Test function: getFileInputs', () => {
     it('should return an array with 1 element', async () => {
       const plugin = {

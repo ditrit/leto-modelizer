@@ -160,6 +160,26 @@ export async function renderModel(projectId, modelPath, plugin) {
 }
 
 /**
+ * Render the configuration file.
+ * @param {String} projectId - ID of the project.
+ * @param {String} modelPath - Path of the models folder.
+ * @param {Object} plugin - Plugin to render.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function renderConfiguration(projectId, modelPath, plugin) {
+  const config = new FileInput({
+    path: `${modelPath}/leto-modelizer.config.json`,
+    content: '{}',
+  });
+
+  // TODO : replace by appropriate function when it's done in plugin-core
+  // eslint-disable-next-line no-underscore-dangle
+  plugin.__renderer.renderConfiguration(config);
+
+  return writeProjectFile(projectId, config);
+}
+
+/**
  * Get array of FileInput from array of FileInformation if parsable by plugin.
  *
  * @param {Object} plugin - Used to parse if possible.
