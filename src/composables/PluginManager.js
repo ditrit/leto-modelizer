@@ -71,12 +71,11 @@ export async function createPluginResources(plugin) {
  * @return {Promise<Plugin>} Promise with instanciated plugin on success otherwise an error.
  */
 export async function instantiatePlugin(pluginName) {
-  const plugin = new plugins[pluginName]();
-
-  plugin.init({
-    SelectEvent: PluginEvent.EditEvent,
-    UpdateEvent: PluginEvent.UpdateEvent,
+  const plugin = new plugins[pluginName]({
+    event: PluginEvent.DefaultEvent,
   });
+
+  plugin.init();
 
   await createPluginResources(plugin).then((resources) => {
     plugin.initResources(resources);
