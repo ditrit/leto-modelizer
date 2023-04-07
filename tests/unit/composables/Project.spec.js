@@ -35,6 +35,7 @@ import {
   getModelFiles,
   renameProject,
   isMatching,
+  exists,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -152,6 +153,7 @@ jest.mock('browserfs', () => ({
       }
       return cb();
     }),
+    exists: jest.fn((path, cb) => cb(true)),
   })),
 }));
 
@@ -683,6 +685,14 @@ describe('Test composable: Project', () => {
     });
     it('should return false when filter is not contained in value', () => {
       expect(isMatching('a', 'test')).toBeFalsy();
+    });
+  });
+
+  describe('Test function: exists', () => {
+    it('should return true', async () => {
+      const result = await exists();
+
+      expect(result).toEqual(true);
     });
   });
 });

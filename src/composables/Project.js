@@ -782,3 +782,17 @@ export function isMatching(filter, value) {
   return !filter || filter.toLowerCase().trim().split(/\s+/)
     .some((searchedText) => value.toLowerCase().includes(searchedText));
 }
+
+/**
+ * Check if the file at the given path exist.
+ * @param {String} path - path to check.
+ * @returns {Promise<boolean>} Promise with a boolean on success otherwise an error.
+ */
+export async function exists(path) {
+  return new Promise((resolve) => {
+    fs.exists(
+      path,
+      resolve,
+    );
+  });
+}

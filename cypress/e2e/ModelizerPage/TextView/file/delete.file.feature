@@ -158,7 +158,6 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="file_terraform"]' not exists
     And  I expect '[data-cy="file_app.tf"]' not exists
 
-
   Scenario: Delete folder that contains opened files should remove all the corresponding tabs
     When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
     And  I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'

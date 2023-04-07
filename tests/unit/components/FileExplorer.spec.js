@@ -1,12 +1,18 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
-import { shallowMount, flushPromises } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import FileExplorer from 'src/components/FileExplorer.vue';
 import FileEvent from 'src/composables/events/FileEvent';
-import FileExplorerComposable from 'src/composables/FileExplorer';
+import GitEvent from 'src/composables/events/GitEvent';
+import * as Project from 'src/composables/Project';
 
 installQuasarPlugin();
+
+jest.mock('src/composables/Project', () => ({
+  getProjectFiles: jest.fn(() => Promise.resolve([])),
+  getStatus: jest.fn(() => Promise.resolve([])),
+}));
 
 jest.mock('src/composables/FileExplorer', () => ({
   getTree: jest.fn(() => (
@@ -29,44 +35,164 @@ jest.mock('src/composables/FileExplorer', () => ({
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
-  SelectFileTabEvent: {
-    next: jest.fn(),
+  CreateFileEvent: {
     subscribe: jest.fn(),
   },
   CreateFileNodeEvent: {
     subscribe: jest.fn(),
   },
+  DeleteFileEvent: {
+    subscribe: jest.fn(),
+  },
+  GlobalUploadFilesEvent: {
+    subscribe: jest.fn(),
+  },
   SelectFileNodeEvent: {
     next: jest.fn(),
+  },
+  SelectFileTabEvent: {
+    next: jest.fn(),
+    subscribe: jest.fn(),
+  },
+  UpdateEditorContentEvent: {
+    subscribe: jest.fn(),
+  },
+}));
+
+jest.mock('src/composables/events/GitEvent', () => ({
+  AddEvent: {
+    subscribe: jest.fn(),
+  },
+  AddRemoteEvent: {
+    subscribe: jest.fn(),
+  },
+  CheckoutEvent: {
+    subscribe: jest.fn(),
+  },
+  CommitEvent: {
+    subscribe: jest.fn(),
+  },
+  PullEvent: {
+    subscribe: jest.fn(),
   },
 }));
 
 describe('Test component: FileExplorer', () => {
   let wrapper;
-  let selectFileTabEventSubscribe;
-  let selectFileTabEventUnsubscribe;
+
+  // FileEvent
+  let createFileEventSubscribe;
   let createFileNodeEventSubscribe;
+  let deleteFileSubscribe;
+  let globalUploadFilesEventSubscribe;
+  let selectFileTabEventSubscribe;
+  let updateEditorContentSubscribe;
+
+  let createFileEventUnsubscribe;
   let createFileNodeEventUnsubscribe;
+  let deleteFileUnsubscribe;
+  let globalUploadFilesEventUnsubscribe;
+  let selectFileTabEventUnsubscribe;
+  let updateEditorContentUnsubscribe;
+
   let selectFileNodeEventNext;
+  let selectFileTabNext;
+
+  // GitEvent
+  let addSubscribe;
+  let addRemoteSubscribe;
+  let checkoutSubscribe;
+  let commitFilesSubscribe;
+  let pullSubscribe;
+
+  let addUnsubscribe;
+  let addRemoteUnsubscribe;
+  let checkoutUnsubscribe;
+  let commitFilesUnsubscribe;
+  let pullUnsubscribe;
 
   beforeEach(() => {
-    selectFileTabEventSubscribe = jest.fn();
-    selectFileTabEventUnsubscribe = jest.fn();
+    // FileEvent
+    createFileEventSubscribe = jest.fn();
     createFileNodeEventSubscribe = jest.fn();
+    deleteFileSubscribe = jest.fn();
+    globalUploadFilesEventSubscribe = jest.fn();
+    selectFileTabEventSubscribe = jest.fn();
+    updateEditorContentSubscribe = jest.fn();
+
+    createFileEventUnsubscribe = jest.fn();
     createFileNodeEventUnsubscribe = jest.fn();
+    deleteFileUnsubscribe = jest.fn();
+    globalUploadFilesEventUnsubscribe = jest.fn();
+    selectFileTabEventUnsubscribe = jest.fn();
+    updateEditorContentUnsubscribe = jest.fn();
+
     selectFileNodeEventNext = jest.fn();
+    selectFileTabNext = jest.fn();
 
-    FileEvent.SelectFileTabEvent.subscribe.mockImplementation(() => {
-      selectFileTabEventSubscribe();
-      return { unsubscribe: selectFileTabEventUnsubscribe };
+    // GitEvent
+    addSubscribe = jest.fn();
+    addRemoteSubscribe = jest.fn();
+    checkoutSubscribe = jest.fn();
+    commitFilesSubscribe = jest.fn();
+    pullSubscribe = jest.fn();
+
+    addUnsubscribe = jest.fn();
+    addRemoteUnsubscribe = jest.fn();
+    checkoutUnsubscribe = jest.fn();
+    commitFilesUnsubscribe = jest.fn();
+    pullUnsubscribe = jest.fn();
+
+    // FileEvent
+    FileEvent.CreateFileEvent.subscribe.mockImplementation(() => {
+      createFileEventSubscribe();
+      return { unsubscribe: createFileEventUnsubscribe };
     });
-
     FileEvent.CreateFileNodeEvent.subscribe.mockImplementation(() => {
       createFileNodeEventSubscribe();
       return { unsubscribe: createFileNodeEventUnsubscribe };
     });
+    FileEvent.DeleteFileEvent.subscribe.mockImplementation(() => {
+      deleteFileSubscribe();
+      return { unsubscribe: deleteFileUnsubscribe };
+    });
+    FileEvent.GlobalUploadFilesEvent.subscribe.mockImplementation(() => {
+      globalUploadFilesEventSubscribe();
+      return { unsubscribe: globalUploadFilesEventUnsubscribe };
+    });
+    FileEvent.SelectFileTabEvent.subscribe.mockImplementation(() => {
+      selectFileTabEventSubscribe();
+      return { unsubscribe: selectFileTabEventUnsubscribe };
+    });
+    FileEvent.UpdateEditorContentEvent.subscribe.mockImplementation(() => {
+      updateEditorContentSubscribe();
+      return { unsubscribe: updateEditorContentUnsubscribe };
+    });
 
     FileEvent.SelectFileNodeEvent.next.mockImplementation(selectFileNodeEventNext);
+    FileEvent.SelectFileTabEvent.next.mockImplementation(selectFileTabNext);
+
+    // GitEvent
+    GitEvent.AddEvent.subscribe.mockImplementation(() => {
+      addSubscribe();
+      return { unsubscribe: addUnsubscribe };
+    });
+    GitEvent.AddRemoteEvent.subscribe.mockImplementation(() => {
+      addRemoteSubscribe();
+      return { unsubscribe: addRemoteUnsubscribe };
+    });
+    GitEvent.CheckoutEvent.subscribe.mockImplementation(() => {
+      checkoutSubscribe();
+      return { unsubscribe: checkoutUnsubscribe };
+    });
+    GitEvent.CommitEvent.subscribe.mockImplementation(() => {
+      commitFilesSubscribe();
+      return { unsubscribe: commitFilesUnsubscribe };
+    });
+    GitEvent.PullEvent.subscribe.mockImplementation(() => {
+      pullSubscribe();
+      return { unsubscribe: pullUnsubscribe };
+    });
 
     wrapper = shallowMount(FileExplorer, {
       global: {
@@ -78,11 +204,6 @@ describe('Test component: FileExplorer', () => {
         ],
       },
       props: {
-        fileInformations: [
-          {
-            path: 'terraform/app.tf',
-          },
-        ],
         projectName: 'project-00000000',
         showParsableFiles: false,
       },
@@ -90,12 +211,6 @@ describe('Test component: FileExplorer', () => {
   });
 
   describe('Test variables initialization', () => {
-    describe('Test prop: fileInformations', () => {
-      it('should match fileInformations', () => {
-        expect(wrapper.vm.props.fileInformations).toEqual([{ path: 'terraform/app.tf' }]);
-      });
-    });
-
     describe('Test prop: projectName', () => {
       it('should match "project-00000000"', () => {
         expect(wrapper.vm.props.projectName).toEqual('project-00000000');
@@ -254,6 +369,74 @@ describe('Test component: FileExplorer', () => {
     });
   });
 
+  describe('Test function: onCreateFile', () => {
+    it('should add an "__empty__" file when isFolder is true', async () => {
+      const folder = {
+        name: 'folderName',
+        isFolder: true,
+        path: 'folderName',
+      };
+      wrapper.vm.fileExplorerRef = {
+        getNodeByKey: jest.fn(() => true),
+        isExpanded: jest.fn(() => true),
+        setExpanded: jest.fn(),
+      };
+      wrapper.vm.localFileInformations = [];
+
+      await wrapper.vm.onCreateFile(folder);
+
+      expect(wrapper.vm.localFileInformations[0]).toEqual(expect.objectContaining({ path: 'folderName/__empty__' }));
+    });
+
+    it('should add a file otherwise', async () => {
+      const file = {
+        name: 'fileName',
+        isFolder: false,
+        path: 'fileName',
+      };
+      wrapper.vm.fileExplorerRef = {
+        getNodeByKey: jest.fn(() => true),
+        isExpanded: jest.fn(() => true),
+        setExpanded: jest.fn(),
+      };
+      wrapper.vm.localFileInformations = [];
+      Project.getStatus.mockImplementation(() => [{ path: 'fileName' }]);
+
+      await wrapper.vm.onCreateFile(file);
+
+      expect(wrapper.vm.localFileInformations[0]).toEqual(expect.objectContaining({ path: 'fileName' }));
+    });
+  });
+
+  describe('Test function: onDeleteFile', () => {
+    it('should update delete the file and leave an __empty__ file', () => {
+      const file = {
+        id: 'fileName',
+        isFolder: false,
+      };
+      wrapper.vm.localFileInformations = [{
+        path: 'fileName',
+      }];
+
+      wrapper.vm.onDeleteFile(file);
+
+      expect(wrapper.vm.localFileInformations[0]).toEqual(expect.objectContaining({ path: '__empty__' }));
+    });
+  });
+
+  describe('Test function: updateFileStatus', () => {
+    it('should', async () => {
+      wrapper.vm.localFileInformations = [{
+        path: 'fileName',
+      }];
+      Project.getStatus.mockImplementation(() => [{ path: 'fileName', status: true }]);
+
+      await wrapper.vm.updateFileStatus('fileName');
+
+      expect(wrapper.vm.localFileInformations[0]).toEqual(expect.objectContaining({ path: 'fileName', status: true }));
+    });
+  });
+
   describe('Test function: onNodeDoubleClicked', () => {
     it('should not update activeFileId nor send SelectFileNode event when isFolder is true', async () => {
       await wrapper.vm.onNodeDoubleClicked({ isFolder: true });
@@ -270,94 +453,95 @@ describe('Test component: FileExplorer', () => {
     });
   });
 
-  describe('Test function: updateFileExplorer', () => {
-    it('should update nodes', () => {
-      wrapper.vm.updateFileExplorer();
-
-      expect(wrapper.vm.nodes).toEqual([{
-        id: 'projectName',
-        label: 'projectName',
-        isFolder: true,
-        children: [{
-          id: 'terraform',
-          label: 'terraform',
-          isFolder: true,
-          children: [{
-            id: 'terraform/app.tf',
-            label: 'app.tf',
-            isFolder: false,
-          }],
-        }],
-      }]);
-    });
-  });
-
-  describe('Test watcher: props.fileInformations', () => {
-    it('should be triggered and update nodes when props.fileInformations is updated', async () => {
-      await wrapper.setProps({
-        fileInformations: [
-          {
-            path: 'terraform/app.tf',
-          },
-          {
-            path: 'README.md',
-          },
-        ],
-      });
-
-      const newNodes = [{
-        id: 'projectName',
-        label: 'projectName',
-        isFolder: true,
-        children: [
-          {
-            id: 'terraform',
-            label: 'terraform',
-            children: [{
-              id: 'terraform/app.tf',
-              label: 'app.tf',
-              isFolder: false,
-            }],
-            isFolder: true,
-          },
-          {
-            id: 'README.md',
-            label: 'README.md',
-            isFolder: false,
-          },
-        ],
-      }];
-
-      FileExplorerComposable.getTree.mockImplementation(jest.fn(() => newNodes));
-
-      await wrapper.vm.updateFileExplorer();
-      await flushPromises();
-
-      expect(wrapper.vm.nodes).toEqual(newNodes);
-    });
-  });
-
   describe('Test hook function: onMounted', () => {
+    // FileEvent
+    it('should subscribe to CreateFileEvent', () => {
+      expect(createFileEventSubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should subscribe to DeleteFileEvent', () => {
+      expect(deleteFileSubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should subscribe to GlobalUploadFilesEvent', () => {
+      expect(globalUploadFilesEventSubscribe).toHaveBeenCalledTimes(1);
+    });
     it('should subscribe to SelectFileTabEvent', () => {
       expect(selectFileTabEventSubscribe).toHaveBeenCalledTimes(1);
     });
+    it('should subscribe to UpdateEditorContentEvent', () => {
+      expect(updateEditorContentSubscribe).toHaveBeenCalledTimes(1);
+    });
 
-    it('should subscribe to CreateFileNodeEvent', () => {
-      expect(createFileNodeEventSubscribe).toHaveBeenCalledTimes(1);
+    // GitEvent
+    it('should subscribe to AddEvent', () => {
+      expect(addSubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should subscribe to AddRemoteEvent', () => {
+      expect(addRemoteSubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should subscribe to CheckoutEvent', () => {
+      expect(checkoutSubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should subscribe to CommitEvent', () => {
+      expect(commitFilesSubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should subscribe to PullEvent', () => {
+      expect(pullSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to SelectFileTabEvent', () => {
-      expect(createFileNodeEventUnsubscribe).toHaveBeenCalledTimes(0);
+    // FileEvent
+    it('should unsubscribe to CreateFileEvent', () => {
+      expect(createFileEventUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
-      expect(createFileNodeEventUnsubscribe).toHaveBeenCalledTimes(1);
+      expect(createFileEventUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe to DeleteFileEvent', () => {
+      expect(deleteFileUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(deleteFileUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe to GlobalUploadFilesEvent', () => {
+      expect(globalUploadFilesEventUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(globalUploadFilesEventUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe to SelectFileTabEvent', () => {
+      expect(selectFileTabEventUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(selectFileTabEventUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe to UpdateEditorContentEvent', () => {
+      expect(updateEditorContentUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(updateEditorContentUnsubscribe).toHaveBeenCalledTimes(1);
     });
 
-    it('should unsubscribe to CreateFileNodeEvent', () => {
-      expect(createFileNodeEventUnsubscribe).toHaveBeenCalledTimes(0);
+    // GitEvent
+    it('should unsubscribe to AddEvent', () => {
+      expect(addUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
-      expect(createFileNodeEventUnsubscribe).toHaveBeenCalledTimes(1);
+      expect(addUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe to AddRemoteEvent', () => {
+      expect(addRemoteUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(addRemoteUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe to CheckoutEvent', () => {
+      expect(checkoutUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(checkoutUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe to CommitEvent', () => {
+      expect(commitFilesUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(commitFilesUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe to PullEvent', () => {
+      expect(pullUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(pullUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

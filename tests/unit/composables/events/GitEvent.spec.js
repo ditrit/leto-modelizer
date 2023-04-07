@@ -30,13 +30,6 @@ describe('Test composable: GitEvent', () => {
     });
   });
 
-  describe('Test event: PushEvent', () => {
-    it('should export a Subject', () => {
-      expect(GitEvent.PushEvent).toBeDefined();
-      expect(GitEvent.PushEvent).toEqual(new Subject());
-    });
-  });
-
   describe('Test event: AddEvent', () => {
     it('should export a Subject', () => {
       expect(GitEvent.AddEvent).toBeDefined();

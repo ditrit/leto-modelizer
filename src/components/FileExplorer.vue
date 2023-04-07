@@ -57,19 +57,18 @@
 import FileEvent from 'src/composables/events/FileEvent';
 import {
   ref,
-  watch,
   onMounted,
   onUnmounted,
 } from 'vue';
+import GitEvent from 'src/composables/events/GitEvent';
 import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
 import FileName from 'src/components/FileName.vue';
 import { getTree } from 'src/composables/FileExplorer';
+import { getProjectFiles, getStatus } from 'src/composables/Project';
+import { FileInformation } from 'leto-modelizer-plugin-core';
+import FileStatus from 'src/models/git/FileStatus';
 
 const props = defineProps({
-  fileInformations: {
-    type: Array,
-    required: true,
-  },
   projectName: {
     type: String,
     required: true,
@@ -80,13 +79,23 @@ const props = defineProps({
   },
 });
 
+const localFileInformations = ref([]);
 const fileExplorerRef = ref(null);
 const nodes = ref([]);
 const activeFileId = ref(null);
-const filterTrigger = ref(props.showParsableFiles.toString()); // must be a String according to https://quasar.dev/vue-components/tree
+// Must be a String according to https://quasar.dev/vue-components/tree
+const filterTrigger = ref(props.showParsableFiles.toString());
 
 let selectFileTabSubscription;
-let createFileNodeSubscription;
+let createFileSubscription;
+let deleteFileSubscription;
+let updateEditorContentSubscription;
+let addRemoteSubscription;
+let checkoutSubscription;
+let pullSubscription;
+let addFileSubscription;
+let commitFilesSubscription;
+let globalUploadFilesEventSubscription;
 
 /**
  * Filter tree nodes to only display parsable files and folders if showParsableFiles is true.
@@ -138,6 +147,77 @@ function onCreateFileNode({ parentNodePath, node, isFolder }) {
 }
 
 /**
+ * Add a new file or folder node to the tree.
+ * @param {Object} event - Event containing related information.
+ * @param {String} event.name - Name of the created file.
+ * @param {Boolean} event.isFolder - True if it's a folder otherwise false.
+ * @param {String} event.path - Complete path of created file.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function onCreateFile({ name, isFolder, path }) {
+  const parentNodePath = path.substring(0, path.lastIndexOf('/')) || props.projectName;
+
+  if (isFolder) {
+    // Make empty folder visible by the FileExplorer.
+    // TODO: Refacto when FileInformation have isFolder property.
+    localFileInformations.value.push(new FileInformation({ path: `${path}/__empty__` }));
+    nodes.value = getTree(props.projectName, localFileInformations.value);
+
+    onCreateFileNode({ parentNodePath, node: null, isFolder });
+  } else {
+    const [fileStatus] = await getStatus(
+      props.projectName,
+      [path],
+      (filePath) => filePath === path,
+    );
+
+    localFileInformations.value.push(fileStatus);
+    nodes.value = getTree(props.projectName, localFileInformations.value);
+
+    onCreateFileNode({
+      parentNodePath,
+      node: { id: path, label: name, information: fileStatus },
+      isFolder,
+    });
+  }
+}
+
+/**
+ * Delete the node corresponding to the file parameter.
+ * If this is the last node of the parent node (folder),
+ * add a fake '__empty__' node to keep the parent node visible.
+ * @param {Object} file - File to delete.
+ */
+function onDeleteFile(file) {
+  const fileInformations = localFileInformations.value
+    .filter(({ path }) => (file.isFolder ? !path.startsWith(`${file.id}/`) : path !== file.id));
+  const parentPath = file.id.slice(0, file.id.lastIndexOf('/') + 1);
+
+  if (!fileInformations.some(({ path }) => path.startsWith(parentPath))) {
+    // Make empty folder visible by the FileExplorer.
+    // TODO: Refacto when FileInformation have isFolder property.
+    fileInformations.push(new FileInformation({ path: `${parentPath}__empty__` }));
+  }
+
+  localFileInformations.value = fileInformations;
+  nodes.value = getTree(props.projectName, localFileInformations.value);
+}
+
+/**
+ * Update status of the node corresponding to the given parameter.
+ * @param {String} filePath - Path of the file which status should be update.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function updateFileStatus(filePath) {
+  const [fileStatus] = await getStatus(props.projectName, [filePath], (path) => path === filePath);
+  const index = localFileInformations.value
+    .findIndex((fileInformation) => fileInformation.path === filePath);
+
+  localFileInformations.value[index] = fileStatus;
+  nodes.value = getTree(props.projectName, localFileInformations.value);
+}
+
+/**
  * If node doubleclicked is a file, set activeFileId value to the file's id and
  * send SelectFileNode event.
  * @param {Object} node - Tree node.
@@ -153,27 +233,60 @@ function onNodeDoubleClicked(node) {
 }
 
 /**
- * Update file explorer tree nodes.
+ * Update status of all nodes.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-function updateFileExplorer() {
-  nodes.value = getTree(props.projectName, props.fileInformations);
+async function updateAllFilesStatus() {
+  const allStatus = await getStatus(props.projectName);
+
+  localFileInformations.value = localFileInformations.value.map(
+    (file) => allStatus.find(({ path }) => file.path === path)
+      || new FileStatus({ path: file.path }),
+  );
+
+  nodes.value = getTree(props.projectName, localFileInformations.value);
 }
 
-watch(() => props.fileInformations, () => {
-  updateFileExplorer();
-}, { deep: true });
+/**
+ * Update localFileInformations and nodes of the tree then update all status.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function initTreeNodes() {
+  localFileInformations.value = await getProjectFiles(props.projectName);
 
-onMounted(() => {
-  updateFileExplorer();
+  nodes.value = getTree(props.projectName, localFileInformations.value);
+
+  await updateAllFilesStatus();
+}
+
+onMounted(async () => {
   selectFileTabSubscription = FileEvent.SelectFileTabEvent.subscribe((id) => {
     activeFileId.value = id;
   });
-  createFileNodeSubscription = FileEvent.CreateFileNodeEvent.subscribe(onCreateFileNode);
+  createFileSubscription = FileEvent.CreateFileEvent.subscribe(onCreateFile);
+  deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(onDeleteFile);
+  updateEditorContentSubscription = FileEvent.UpdateEditorContentEvent.subscribe(updateFileStatus);
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(initTreeNodes);
+  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(initTreeNodes);
+  pullSubscription = GitEvent.PullEvent.subscribe(initTreeNodes);
+  addFileSubscription = GitEvent.AddEvent.subscribe(updateFileStatus);
+  commitFilesSubscription = GitEvent.CommitEvent.subscribe(updateAllFilesStatus);
+  globalUploadFilesEventSubscription = FileEvent.GlobalUploadFilesEvent.subscribe(initTreeNodes);
+
+  await initTreeNodes();
 });
 
 onUnmounted(() => {
   selectFileTabSubscription.unsubscribe();
-  createFileNodeSubscription.unsubscribe();
+  createFileSubscription.unsubscribe();
+  deleteFileSubscription.unsubscribe();
+  updateEditorContentSubscription.unsubscribe();
+  addRemoteSubscription.unsubscribe();
+  checkoutSubscription.unsubscribe();
+  pullSubscription.unsubscribe();
+  addFileSubscription.unsubscribe();
+  commitFilesSubscription.unsubscribe();
+  globalUploadFilesEventSubscription.unsubscribe();
 });
 </script>
 
