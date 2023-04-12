@@ -151,8 +151,6 @@ async function updateAllFilesStatus(allFilePaths) {
     return;
   }
 
-  // update return of GitEvent.CommitEvent
-  // const allFilePaths = event.map(({ path }) => path);
   const allFileStatus = await getStatus(
     props.projectName,
     allFilePaths,
@@ -169,7 +167,7 @@ async function updateAllFilesStatus(allFilePaths) {
 }
 
 /**
- * Update fileTab array and all there status.
+ * Update fileTab array and all their status.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateAllFileTabs() {
