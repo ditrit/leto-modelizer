@@ -216,6 +216,27 @@ describe('Test component: FileTabs', () => {
     });
   });
 
+  describe('Test function: onDeleteFile', () => {
+    it('should remove file of the deleted folder from fileTabArray', () => {
+      wrapper.vm.fileTabArray = [{ id: 'terraform/app.tf' }, { id: 'README.md' }];
+
+      wrapper.vm.onDeleteFile({
+        id: 'terraform',
+        isFolder: true,
+      });
+
+      expect(wrapper.vm.fileTabArray).toEqual([{ id: 'README.md' }]);
+    });
+
+    it('should remove deleted file from fileTabArray', () => {
+      wrapper.vm.fileTabArray = [{ id: 'terraform/app.tf' }, { id: 'README.md' }];
+
+      wrapper.vm.onDeleteFile({ id: 'README.md' });
+
+      expect(wrapper.vm.fileTabArray).toEqual([{ id: 'terraform/app.tf' }]);
+    });
+  });
+
   describe('Test function: onSelectFileNode', () => {
     it('should add selected file to fileTabArray and update activeFileId', () => {
       wrapper.vm.activeFileId = 'terraform/app.tf';

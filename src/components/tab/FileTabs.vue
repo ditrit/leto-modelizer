@@ -85,10 +85,29 @@ function setLastFileActive() {
  * @param {String} fileId - Id of closed file.
  */
 function deleteFileTab(fileId) {
-  fileTabArray.value = fileTabArray.value.filter(({ id }) => !id.startsWith(fileId));
+  const index = fileTabArray.value.findIndex(({ id }) => id === fileId);
 
-  if (activeFileId.value && activeFileId.value.startsWith(fileId)) {
-    setLastFileActive();
+  if (index !== -1) {
+    fileTabArray.value.splice(index, 1);
+
+    if (activeFileId.value && activeFileId.value === fileId) {
+      setLastFileActive();
+    }
+  }
+}
+
+/**
+ * Delete one FileTab if isFolder is false.
+ * Delete all the FileTabs of the folder otherwise.
+ * @param {Object} file - Deleted file or folder.
+ */
+function onDeleteFile(file) {
+  if (file.isFolder) {
+    fileTabArray.value
+      .filter(({ id }) => id.startsWith(`${file.id}/`))
+      .forEach(({ id }) => deleteFileTab(id));
+  } else {
+    deleteFileTab(file.id);
   }
 }
 
@@ -179,7 +198,7 @@ watch(activeFileId, () => {
 
 onMounted(() => {
   selectFileNodeSubscription = FileEvent.SelectFileNodeEvent.subscribe(onSelectFileNode);
-  deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(({ id }) => deleteFileTab(id));
+  deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(onDeleteFile);
   updateEditorContentSubscription = FileEvent.UpdateEditorContentEvent.subscribe(updateFileStatus);
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateAllFileTabs);
   checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateAllFileTabs);
