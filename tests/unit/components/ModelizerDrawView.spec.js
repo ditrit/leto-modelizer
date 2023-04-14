@@ -113,6 +113,14 @@ describe('Test component: ModelizerDrawView', () => {
           ],
         },
       },
+      __drawer: {
+        actions: {
+          zoom: {
+            scale: 1,
+            translate: { x: 0, y: 0 },
+          },
+        },
+      },
       parse: pluginParse,
       draw: pluginDraw,
     };
@@ -189,6 +197,10 @@ describe('Test component: ModelizerDrawView', () => {
   });
 
   describe('Test function: dropHandler', () => {
+    const mockGetBoundingClientRect = jest.fn(() => ({ left: 0, top: 0 }));
+    const mockElement = { getBoundingClientRect: mockGetBoundingClientRect };
+    jest.spyOn(document, 'querySelector').mockReturnValue(mockElement);
+
     it('should call addNewComponent() when isTemplate is false', async () => {
       const event = {
         dataTransfer: {
@@ -201,6 +213,7 @@ describe('Test component: ModelizerDrawView', () => {
 
       await wrapper.vm.dropHandler(event);
 
+      expect(mockGetBoundingClientRect).toHaveBeenCalledTimes(1);
       expect(addNewComponent).toHaveBeenCalledTimes(1);
     });
 
@@ -216,6 +229,7 @@ describe('Test component: ModelizerDrawView', () => {
 
       await wrapper.vm.dropHandler(event);
 
+      expect(mockGetBoundingClientRect).toHaveBeenCalledTimes(1);
       expect(addNewTemplateComponent).toHaveBeenCalledTimes(1);
     });
 
@@ -233,6 +247,7 @@ describe('Test component: ModelizerDrawView', () => {
 
       await wrapper.vm.dropHandler(event);
 
+      expect(mockGetBoundingClientRect).toHaveBeenCalledTimes(1);
       expect(addNewTemplateComponent).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith({
         message: 'errors.templates.getData',

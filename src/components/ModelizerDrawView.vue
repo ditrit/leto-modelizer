@@ -53,6 +53,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { getTemplatesByType } from 'src/composables/TemplateManager';
 import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay';
+import { ComponentDrawOption } from 'leto-modelizer-plugin-core';
 
 const route = useRoute();
 const query = computed(() => route.query);
@@ -143,6 +144,24 @@ async function initView() {
 }
 
 /**
+ * Get the coordinates to use for component draw options.
+ * @param {Object} event - Cursor event when dropping a new component.
+ * @param {Number} event.clientX - Position X of the cursor.
+ * @param {Number} event.clientY - Position Y of the cursor.
+ * @return {Object} The coordinates for new component.
+ */
+function getComponentPosition({ clientX, clientY }) {
+  const { __drawer: drawer } = data.plugin;
+  const { scale, translate } = drawer.actions.zoom;
+  const { left: rootX, top: rootY } = document.querySelector('#root').getBoundingClientRect();
+
+  return {
+    x: ((clientX - rootX) - translate.x) / scale,
+    y: ((clientY - rootY) - translate.y) / scale,
+  };
+}
+
+/**
  * Instantiate from a dragged component definition or template.
  * @param {DragEvent} event - The drag event.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
@@ -159,6 +178,7 @@ async function dropHandler(event) {
       data.plugin,
       `${defaultFolder.value}${route.query.path}`,
       componentDefinition,
+      new ComponentDrawOption({ ...getComponentPosition(event) }),
     );
     data.plugin.draw('root');
   } else {
