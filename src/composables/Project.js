@@ -784,7 +784,7 @@ export function isMatching(filter, value) {
 }
 
 /**
- * Check if the file at the given path exist.
+ * Check if the file at the given path exists.
  * @param {String} path - path to check.
  * @returns {Promise<boolean>} Promise with a boolean on success otherwise an error.
  */

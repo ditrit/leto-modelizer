@@ -104,6 +104,53 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'README.md'
 
+  Scenario: Create two files with similar names and delete the selected file should only close its active tab and select the other tab
+    # Create 1st file
+    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]'
+    Then I expect '[data-cy="file-explorer-action-menu"]' exists
+
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
+    Then I expect '[data-cy="create-file-dialog"]' exists
+
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'newFile'
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
+    Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
+    And  I expect '[data-cy="create-file-form"]' is closed
+    #  New active tab is open with created file's label
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'newFile'
+
+    # Create 2nd file
+    When I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]'
+    Then I expect '[data-cy="file-explorer-action-menu"]' exists
+
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
+    Then I expect '[data-cy="create-file-dialog"]' exists
+
+    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'newFileTwo'
+    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
+    Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
+    And  I expect '[data-cy="create-file-form"]' is closed
+    #  New active tab is open with created file's label
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'newFileTwo'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'newFile'
+
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_newFile"]' to make it visible
+    And  I wait 1 second
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_newFile"]'
+    Then I expect '[data-cy="file-explorer-action-menu"]' exists
+
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
+    Then I expect '[data-cy="delete-file-dialog"]' exists
+
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
+    Then I expect 'positive' toast to appear with text 'File is deleted.'
+    And  I expect '[data-cy="delete-file-form"]' is closed
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'newFileTwo'
+
   Scenario: Delete empty folder of the root folder should remove it from file explorer
     #  Create empty folder
     When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]' to make it visible

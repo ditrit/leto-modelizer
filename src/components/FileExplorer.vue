@@ -205,7 +205,7 @@ function onDeleteFile(file) {
 
 /**
  * Update status of the node corresponding to the given parameter.
- * @param {String} filePath - Path of the file which status should be update.
+ * @param {String} filePath - Path of the file which status should be updated.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateFileStatus(filePath) {
