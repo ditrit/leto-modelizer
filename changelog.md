@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Update e2e test plugin to terrator-plugin.
 * Internal optimization of plugin usage.
 * New display for library list & component grid.
+* Plugin management:
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.2.0) version 0.2.0.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.15.2) version 0.15.2.
 
 ### Fixed
 

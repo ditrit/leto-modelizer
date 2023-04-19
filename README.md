@@ -55,7 +55,7 @@ Options `repository-name` and `repository-url` can be added with the `npm run pl
 
 ```bash
 # Example with terraform plugin
-npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.1.12"
+npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.2.0"
 ```
 
 Now your plugin is installed, you can continue to install other plugins with the same command if you want.
@@ -147,7 +147,7 @@ Plugin to manage terraform files, by default it comes with aws provider definiti
 Option to use it in command `install`:
 
 - plugin name: `terrator-plugin`
-- repository url: `https://github.com/ditrit/terrator-plugin.git#0.1.12`
+- repository url: `https://github.com/ditrit/terrator-plugin.git#0.2.0`
 
 ## Compatibility versions table
 
@@ -165,8 +165,13 @@ Option to use it in command `install`:
   <tbody>
     <tr>
       <td>1.0.0</td>
-      <td>= 0.13.0</td>
+      <td>= 0.13.0<br>= 0.14.0</br></td>
       <td>= 0.1.12</td>
+    </tr>
+     <tr>
+      <td>next version</td>
+      <td>= 0.15.2</td>
+      <td>= 0.2.0</td>
     </tr>
   </tbody>
 </table>
