@@ -69,7 +69,7 @@
               <q-btn
                 icon="fa-solid fa-floppy-disk"
                 :label="$t('plugin.component.attribute.save')"
-                type="submit"
+                type="button"
                 color="positive"
                 :loading="submitting"
                 data-cy="save-button"
@@ -137,15 +137,15 @@ function sanitizeAttributes(attributes) {
   return attributes.reduce((acc, attribute) => {
     if (attribute.value && attribute.value !== '') {
       if (attribute.type !== 'Object') {
-        acc.push(attribute);
+        acc.push(new ComponentAttribute(attribute));
       } else {
         const sanitizedValue = sanitizeAttributes(attribute.value);
 
         if (sanitizedValue.length !== 0) {
-          acc.push({
+          acc.push(new ComponentAttribute({
             ...attribute,
             value: sanitizedValue,
-          });
+          }));
         }
       }
     }

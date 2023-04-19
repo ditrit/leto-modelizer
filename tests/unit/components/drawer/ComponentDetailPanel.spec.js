@@ -110,17 +110,17 @@ describe('test component: Plugin Component Detail Panel', () => {
         }],
       }];
 
-      expect(wrapper.vm.sanitizeAttributes(attributes)).toEqual([{
+      expect(wrapper.vm.sanitizeAttributes(attributes)).toEqual([new ComponentAttribute({
         name: 'attribute',
         value: 'value',
-      }, {
+      }), new ComponentAttribute({
         name: 'object',
         type: 'Object',
-        value: [{
+        value: [new ComponentAttribute({
           name: 'attribute_in_object',
           value: 'value',
-        }],
-      }]);
+        })],
+      })]);
     });
   });
 
