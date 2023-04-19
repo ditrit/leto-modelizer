@@ -11,6 +11,7 @@ import {
 } from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getTemplateFiles } from 'src/composables/TemplateManager';
+import languages from 'assets/editor/languages';
 
 let instanciatePlugins = [];
 
@@ -279,4 +280,14 @@ export async function addNewTemplateComponent(
   );
 
   plugin.parse(config, fileInputs);
+}
+
+export function getLanguage(path) {
+  const plugin = getPlugins().find((p) => p.isParsable({ path }));
+
+  if (plugin?.configuration.editor.syntax) {
+    return plugin.configuration.editor.syntax.name;
+  }
+
+  return languages.find(({ regex }) => new RegExp(regex).test(path))?.name;
 }

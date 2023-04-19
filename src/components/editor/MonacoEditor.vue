@@ -25,6 +25,7 @@ import {
 } from 'vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
+import { getLanguage, getPlugins } from 'src/composables/PluginManager';
 
 const monaco = require('monaco-editor');
 
@@ -69,15 +70,35 @@ async function getFileContent() {
     .then((fileInput) => fileInput.content);
 }
 
+function initLanguages() {
+  getPlugins()
+    .filter((plugin) => plugin.configuration.editor.syntax !== null)
+    .forEach((plugin) => {
+      const language = plugin.configuration.editor.syntax.name;
+      monaco.languages.register(plugin.configuration.editor.syntax.languageSettings);
+      monaco.languages.setLanguageConfiguration(
+        language,
+        plugin.configuration.editor.syntax.languageConfiguration,
+      );
+      monaco.languages.setMonarchTokensProvider(
+        language,
+        plugin.configuration.editor.syntax.tokenProvider,
+      );
+    });
+}
+
 /**
  * Setup monaco editor.
+ * Register terraform language syntax colorizer
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function createEditor() {
+  initLanguages();
   const value = await getFileContent();
+
   editor = monaco.editor.create(container.value, {
     value,
-    language: 'text',
+    language: getLanguage(props.file.id),
   });
 
   editor.onDidChangeModelContent(updateFile);
