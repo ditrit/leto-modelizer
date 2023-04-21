@@ -37,6 +37,11 @@ If your company take care only of terraform files, you just have to install terr
 
 If you only want your own language component (maybe based on existing plugins), you can implement/override existing plugin and just install your plugin definition.
 
+## Requirements
+
+* node - [v18.4](https://nodejs.org/en/blog/release/v18.4.0)
+* npm - [v8.19.3](https://www.npmjs.com/package/npm/v/8.19.3)
+
 ## How to install plugin
 
 Make an `npm install` to let npm retrieve all dependencies and specially our cli to install easily your plugins 😉.

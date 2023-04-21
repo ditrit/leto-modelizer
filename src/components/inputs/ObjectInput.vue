@@ -100,10 +100,11 @@ const hasError = computed(() => props.currentError !== null
  */
 function getSubAttributes(attribute) {
   const attributes = [];
+  const attributeValue = attribute.value || [];
 
   attribute.definition?.definedAttributes
     ?.forEach((definition) => {
-      const attr = attribute.value.find(({ name }) => name === definition.name);
+      const attr = attributeValue.find(({ name }) => name === definition.name);
 
       if (attr) {
         attributes.push(attr);
@@ -118,7 +119,7 @@ function getSubAttributes(attribute) {
 
   return [
     ...attributes,
-    ...attribute.value.filter(({ definition }) => !definition),
+    ...attributeValue.filter(({ definition }) => !definition),
   ];
 }
 
