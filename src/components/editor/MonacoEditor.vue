@@ -25,6 +25,8 @@ import {
 } from 'vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
+import { getPlugins } from 'src/composables/PluginManager';
+import Languages from 'assets/editor/languages';
 
 const monaco = require('monaco-editor');
 
@@ -70,15 +72,39 @@ async function getFileContent() {
 }
 
 /**
+ * Retrieve language from file path for Monaco editor.
+ * If language configuration comes from a plugin, set the Monaco configuration.
+ * Otherwise, use default language configuration if it exists.
+ *
+ * @param {String} path - File path.
+ * @return {String|null} Associated language.
+ */
+function initMonacoLanguages(path) {
+  const plugin = getPlugins().find((p) => p.isParsable({ path }));
+
+  if (plugin && plugin.configuration.editor.syntax !== null) {
+    const { syntax } = plugin.configuration.editor;
+
+    monaco.languages.register(syntax.languageSettings);
+    monaco.languages.setLanguageConfiguration(syntax.name, syntax.languageConfiguration);
+    monaco.languages.setMonarchTokensProvider(syntax.name, syntax.tokenProvider);
+
+    return syntax.name;
+  }
+
+  return Languages.find(({ regex }) => new RegExp(regex).test(path))?.name || null;
+}
+
+/**
  * Setup monaco editor.
+ * Register plugin language syntax colorizer.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function createEditor() {
   const value = await getFileContent();
-  editor = monaco.editor.create(container.value, {
-    value,
-    language: 'text',
-  });
+  const language = initMonacoLanguages(props.file.id);
+
+  editor = monaco.editor.create(container.value, { value, language });
 
   editor.onDidChangeModelContent(updateFile);
 }

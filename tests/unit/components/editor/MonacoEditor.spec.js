@@ -13,11 +13,57 @@ jest.mock('monaco-editor', () => ({
   editor: {
     create: jest.fn(),
   },
+  languages: {
+    register: jest.fn(),
+    setLanguageConfiguration: jest.fn(),
+    setMonarchTokensProvider: jest.fn(),
+  },
 }));
 
 jest.mock('src/composables/Project', () => ({
   writeProjectFile: jest.fn(),
   readProjectFile: jest.fn(() => Promise.resolve('fileContent')),
+}));
+
+jest.mock('src/composables/PluginManager', () => ({
+  initMonacoLanguages: jest.fn(() => 'test'),
+  getPlugins: jest.fn(() => [{
+    data: {
+      name: 'test1',
+      definitions: {
+        components: [],
+        links: [],
+      },
+      components: [],
+    },
+    configuration: {
+      editor: {
+        syntax: {
+          name: 'test1',
+        },
+      },
+    },
+    isParsable({ path }) {
+      return path === 'parsable1';
+    },
+  }, {
+    data: {
+      name: 'test2',
+      definitions: {
+        components: [],
+        links: [],
+      },
+      components: [],
+    },
+    configuration: {
+      editor: {
+        syntax: null,
+      },
+    },
+    isParsable({ path }) {
+      return path === 'parsable2';
+    },
+  }]),
 }));
 
 jest.mock('src/composables/events/GitEvent', () => ({
@@ -211,6 +257,30 @@ describe('Tess component: MonacoEditor', () => {
       expect(updateFileContentUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(updateFileContentUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test function: initMonacoLanguages', () => {
+    it('should return null on path related to none of the languages', () => {
+      expect(wrapper.vm.initMonacoLanguages('a.toto')).toBeNull();
+      expect(wrapper.vm.initMonacoLanguages('parsable2')).toBeNull();
+    });
+
+    it('should return valid language on a path associated to one of the default languages', () => {
+      expect(wrapper.vm.initMonacoLanguages('a.cs')).toEqual('csharp');
+      expect(wrapper.vm.initMonacoLanguages('a.css')).toEqual('css');
+      expect(wrapper.vm.initMonacoLanguages('a.html')).toEqual('html');
+      expect(wrapper.vm.initMonacoLanguages('a.java')).toEqual('java');
+      expect(wrapper.vm.initMonacoLanguages('a.js')).toEqual('javascript');
+      expect(wrapper.vm.initMonacoLanguages('a.json')).toEqual('json');
+      expect(wrapper.vm.initMonacoLanguages('a.md')).toEqual('markdown');
+      expect(wrapper.vm.initMonacoLanguages('a.python')).toEqual('python');
+      expect(wrapper.vm.initMonacoLanguages('a.ruby')).toEqual('ruby');
+      expect(wrapper.vm.initMonacoLanguages('a.ts')).toEqual('typescript');
+    });
+
+    it('should return valid language on a path associated to one of the plugins language', () => {
+      expect(wrapper.vm.initMonacoLanguages('parsable1')).toEqual('test1');
     });
   });
 });
