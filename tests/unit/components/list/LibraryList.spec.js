@@ -118,21 +118,21 @@ describe('Test component: LibraryList', () => {
 
   describe('Test function: onItemClick', () => {
     it('should invert isSelected value and set selectedItemId equals to the given parameter', () => {
+      expect(wrapper.vm.isSelected).toBeTruthy();
+
+      wrapper.vm.onItemClick();
+
       expect(wrapper.vm.isSelected).toBeFalsy();
+      expect(wrapper.vm.selectedItemId).toBeNull();
+    });
+
+    it('should invert isSelected value and set selectedItemId to null', () => {
+      wrapper.vm.isSelected = false;
 
       wrapper.vm.onItemClick('pluginName');
 
       expect(wrapper.vm.isSelected).toBeTruthy();
       expect(wrapper.vm.selectedItemId).toEqual('pluginName');
-    });
-
-    it('should invert isSelected value and set selectedItemId to null', () => {
-      wrapper.vm.isSelected = true;
-
-      wrapper.vm.onItemClick();
-
-      expect(wrapper.vm.isSelected).toBeFalsy();
-      expect(wrapper.vm.selectedItemId).toEqual(null);
     });
   });
 });
