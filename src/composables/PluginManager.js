@@ -227,6 +227,7 @@ export async function initComponents(projectName, plugin, path) {
  * @param {Object} plugin - Plugin corresponding to the model.
  * @param {String} path - Model path (Plugin name & model name).
  * @param {Object} definition - Definition of the component.
+ * @param {ComponentDrawOption} [drawOption=null] - drawOption of the component.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function addNewComponent(
@@ -234,8 +235,15 @@ export async function addNewComponent(
   plugin,
   path,
   definition,
+  drawOption = null,
 ) {
-  plugin.data.addComponent(definition, `${path}/`);
+  const componentId = plugin.data.addComponent(definition, `${path}/`);
+
+  if (drawOption) {
+    const component = plugin.data.getComponentById(componentId);
+    component.drawOption = drawOption;
+  }
+
   await renderModel(projectName, path, plugin);
 }
 

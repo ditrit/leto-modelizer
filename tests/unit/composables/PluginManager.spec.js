@@ -258,20 +258,44 @@ describe('Test composable: PluginManager', () => {
   });
 
   describe('Test function: addNewComponent', () => {
-    it('should call addComponent and render', async () => {
-      const plugin = {
+    let plugin;
+
+    beforeEach(() => {
+      plugin = {
         data: {
           addComponent: jest.fn(),
+          getComponentById: jest.fn(),
         },
         isParsable: () => true,
         render: jest.fn(() => []),
       };
 
+      plugin.data.getComponentById.mockReturnValue({ drawOption: null });
+    });
+
+    it('should call addComponent and render but not call getComponentById without position', async () => {
       expect(plugin.render).toHaveBeenCalledTimes(0);
 
       await PluginManager.addNewComponent('projectName', plugin, 'plugin/model', {});
 
       expect(plugin.data.addComponent).toHaveBeenCalledTimes(1);
+      expect(plugin.data.getComponentById).toHaveBeenCalledTimes(0);
+      expect(plugin.render).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call addComponent, getComponentById and render with position', async () => {
+      expect(plugin.render).toHaveBeenCalledTimes(0);
+
+      await PluginManager.addNewComponent(
+        'projectName',
+        plugin,
+        'plugin/model',
+        {},
+        { x: 0, y: 0 },
+      );
+
+      expect(plugin.data.addComponent).toHaveBeenCalledTimes(1);
+      expect(plugin.data.getComponentById).toHaveBeenCalledTimes(1);
       expect(plugin.render).toHaveBeenCalledTimes(1);
     });
   });

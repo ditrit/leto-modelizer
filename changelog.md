@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Allowed to have a predefined list of values for Array attribute.
 * Text editor feature:
   * Integrate syntax colorization.
+* Modelization feature:
+  * Allow to use the mouse coordinates when placing new component on drag and drop feature.
 * Add new environment variable `KEEP_CYPRESS_ATTRIBUTE` to keep all cypress attribute in html.
 
 ### Changed
