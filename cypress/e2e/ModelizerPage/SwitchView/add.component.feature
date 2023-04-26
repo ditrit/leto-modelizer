@@ -19,11 +19,7 @@ Feature: Test switch model to text view: add component/link
     Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
-
-    # Select 'terrator-plugin' library
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    And  I wait 1 second
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
 
@@ -99,7 +95,8 @@ Feature: Test switch model to text view: add component/link
     But  I expect '[id^="aws"]' not exists
 
   Scenario: Link two components (Draw view) should update plugin file content with new attributes properties (Text view)
-    When I click on '[data-cy="component-definition_aws_subnet"]'
+    When I wait 1 second
+    And  I click on '[data-cy="component-definition_aws_subnet"]'
     And  I wait 1 second
     And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
     And  I wait 1 second
@@ -133,7 +130,8 @@ Feature: Test switch model to text view: add component/link
     And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
 
   Scenario: Add link attributes inside plugin file content (Text view) should display link between two components (Draw view)
-    When I click on '[data-cy="component-definition_aws_subnet"]'
+    When I wait 1 second
+    And  I click on '[data-cy="component-definition_aws_subnet"]'
     And  I wait 1 second
     And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
 

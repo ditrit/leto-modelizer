@@ -67,10 +67,9 @@ const props = defineProps({
     default: () => [],
   },
 });
-
 const definitionFilter = ref('');
-const selectedItemId = ref(null);
-const isSelected = ref(false);
+const selectedItemId = ref(props.plugin.data.name);
+const isSelected = ref(true);
 // TODO : remove this const
 // when @quasar/quasar-app-extension-testing-unit-jest@3.0.0 is officially released
 const inputLabel = computed(() => t('page.modelizer.drawer.components.filterLabel'));

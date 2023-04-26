@@ -17,17 +17,20 @@ Feature: Test modelizer draw view: add template component
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
-    And  I expect '[data-cy="component-definitions-item_Templates"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definitions-item_Templates"] [data-cy="title"]' is 'Templates'
 
     # Select 'Templates' library
+    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    And  I wait 1 second
+    Then I expect '[data-cy="component-definitions-item_Templates"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_Templates"] [data-cy="title"]' is 'Templates'
+
     When I click on '[data-cy="component-definitions-item_Templates"]'
     And  I wait 1 second
     Then I expect '[data-cy="component-definitions-item_Templates"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 2 times on screen
 
-  Scenario Outline: Click on the Test application component should display it on the page
+  Scenario: Click on the Test application component should display it on the page
     Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="SecurityGroup_"]' not exists
     And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="InternetGateway_"]' not exists
     And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="VPC_"]' not exists
@@ -40,9 +43,9 @@ Feature: Test modelizer draw view: add template component
     And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="VPC_"]' exists
     And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="VPC_"]' exists
     And  I expect '[class="link"]' exists
-      
+
   @skip
-  # TODO: update/fix test 
+  # TODO: update/fix test
   Scenario Outline: Dragging the <element> component should display it on the page
     Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>_"]' not exists
 

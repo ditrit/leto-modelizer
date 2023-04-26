@@ -56,7 +56,7 @@ Feature: Test modelizer draw view: plugin filter
       | volume       |
       | subnet       |
       | route53      |
-  
+
   Scenario Outline: Set text as '<filter>' should not display plugin.
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 0 time on screen
@@ -70,8 +70,7 @@ Feature: Test modelizer draw view: plugin filter
 
   Scenario Outline: Select plugin and set text as '<filter>' should display only one element
     # Select 'terrator-plugin' library
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    And  I wait 1 second
+    When I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
@@ -101,8 +100,7 @@ Feature: Test modelizer draw view: plugin filter
 
   Scenario Outline: Select plugin and set text as '<filter>' should display only two elements
     # Select 'terrator-plugin' library
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    And  I wait 1 second
+    When I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
@@ -125,8 +123,7 @@ Feature: Test modelizer draw view: plugin filter
 
   Scenario Outline: Select plugin and set text as '<filter>' should not display any elements.
     # Select 'terrator-plugin' library
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    And  I wait 1 second
+    When I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
@@ -147,8 +144,7 @@ Feature: Test modelizer draw view: plugin filter
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (1)'
 
     # Select 'terrator-plugin' library
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    And  I wait 1 second
+    When I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected [data-cy="title"]' is 'terrator-plugin (1)'
     And  I expect '[data-cy="component-definition-grid"]' exists

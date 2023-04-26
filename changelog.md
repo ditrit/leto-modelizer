@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Integrate syntax colorization.
 * Modelization feature:
   * Allow to use the mouse coordinates when placing new component on drag and drop feature.
+  * The components list is now open by default.
 * Add new environment variable `KEEP_CYPRESS_ATTRIBUTE` to keep all cypress attribute in html.
 
 ### Changed
