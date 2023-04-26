@@ -17,7 +17,11 @@ Feature: Test modelizer draw view: template filter
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
-    And  I expect '[data-cy="component-definitions-item_Templates"]' exists
+
+    When I wait 1 second
+    And  I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    And  I wait 1 second
+    Then I expect '[data-cy="component-definitions-item_Templates"]' exists
 
   Scenario Outline: Set text as '<filter>' should display only one element inside template title
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
@@ -28,7 +32,7 @@ Feature: Test modelizer draw view: template filter
       | filter           |
       | Aws provider     |
       | Test application |
-  
+
   Scenario Outline: Set text as '<filter>' should not display template
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
     Then I expect '[data-cy="component-definitions-item_Templates"]' appear 0 time on screen

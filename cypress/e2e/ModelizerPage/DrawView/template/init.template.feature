@@ -18,11 +18,15 @@ Feature: Test modelizer draw view: template initialization
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
 
+    When I wait 1 second
+    And  I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    And  I wait 1 second
+
   Scenario: Template should appear in component definitions list
     Then I expect '[data-cy="component-definitions-item_Templates"]' exists
     And  I expect '[data-cy="component-definitions-item_Templates"] [data-cy="title"]' is 'Templates'
 
-  Scenario: Should have only one plugin installed with all these definitions
+  Scenario Outline: Should have only one plugin installed with all these definitions
     When I click on '[data-cy="component-definitions-item_Templates"]'
     Then I expect '[data-cy="component-definitions-item_Templates"].selected' exists
     And  I expect '[data-cy="component-definitions-item_Templates"].selected [data-cy="title"]' is 'Templates (2)'

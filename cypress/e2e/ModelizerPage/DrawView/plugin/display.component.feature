@@ -19,13 +19,10 @@ Feature: Test modelizer draw view: add plugin component
     Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
-
-    # Select 'terrator-plugin' library
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    And  I wait 1 second
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+    And  I wait 1 second
 
   Scenario Outline: Click on the <element> component should display it on the page
     Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' not exists
@@ -56,7 +53,7 @@ Feature: Test modelizer draw view: add plugin component
       | aws_key_pair          |
 
   @skip
-  # TODO: update/fix test 
+  # TODO: update/fix test
   Scenario Outline: Dragging the <element> component should display it on the page
     Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>_"]' not exists
 
