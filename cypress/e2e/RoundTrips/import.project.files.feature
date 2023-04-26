@@ -30,9 +30,7 @@ Feature: Test roundtrip of the application : import project files
     And  I wait 1 second
     Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelName}}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terraform"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_branch.txt"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_README.md"]' exists
@@ -44,9 +42,7 @@ Feature: Test roundtrip of the application : import project files
     When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
     Then I expect '[data-cy="active-tab"] [data-cy="file_branch.txt"]' exists
     And  I expect active file content to contain 'main'
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
 
     When I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="file_terraform/app.tf"]' exists

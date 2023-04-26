@@ -26,20 +26,10 @@ Feature: Test models page: model creation from template
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelName}}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
-    And  I wait 2 seconds
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/{{modelName}}/main.tf"]' exists
-
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/{{modelName}}/main.tf"]'
-    And  I wait 1 second
-    Then I expect '[data-cy="active-tab"] [data-cy="file_terrator-plugin/{{modelName}}/main.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/{{modelName}}/main.tf"]' exists
+    And  I expect '[data-cy="active-tab"] [data-cy="file_terrator-plugin/{{modelName}}/main.tf"]' exists
     And  I expect active file content to be equal to "cypress/resources/main.tf"
 
   Scenario: Create two template models with same parameters should not be possible

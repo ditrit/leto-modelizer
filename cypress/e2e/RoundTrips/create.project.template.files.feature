@@ -30,20 +30,11 @@ Feature: Test roundtrip of the application : create project with template files
     And  I wait 1 second
     Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/infra2'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
-
-    When I wait 2 seconds
-    And  I click on '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra2"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra2"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra1"]' exists
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra2"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/infra2/main.tf"]' exists
-
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/infra2/main.tf"]'
-    Then I expect '[data-cy="active-tab"] [data-cy="file_terrator-plugin/infra2/main.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/infra2/main.tf"]' exists
+    And  I expect '[data-cy="active-tab"] [data-cy="file_terrator-plugin/infra2/main.tf"]' exists
     And  I expect active file content to be equal to 'cypress/resources/infra2/main.tf'
 
     When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra1"]'

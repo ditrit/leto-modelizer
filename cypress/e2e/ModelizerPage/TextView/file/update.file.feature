@@ -29,8 +29,6 @@ Feature: Test modelizer text view: update file content
     And  I wait 1 second
 
   Scenario: Check if the file content is set after being updated
-    Given I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-
     When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
     Then I expect '[data-cy="file_branch.txt"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
@@ -41,8 +39,6 @@ Feature: Test modelizer text view: update file content
     Then I expect active file content to contain 'updated.*content'
 
   Scenario: Check if the file updated content is still set after switching tab
-    Given I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-
     When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
     And  I wait 1 second
     And  I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
@@ -65,8 +61,7 @@ Feature: Test modelizer text view: update file content
     And  I expect active file content to contain 'updated.*content'
 
   Scenario: Open a file in root folder and update its content should change the file's class
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
     Then I expect '[data-cy="file_branch.txt"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'branch.txt'
@@ -78,8 +73,7 @@ Feature: Test modelizer text view: update file content
     And  I expect '[data-cy="file_branch.txt"].file-status-modified' exists
 
   Scenario: Open a file in sub-folder and update its content should change the file's class
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
     And  I double click on '[data-cy="file-explorer"] [data-cy="file_terraform/app.tf"]'
     Then I expect '[data-cy="file_terraform/app.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
@@ -92,8 +86,7 @@ Feature: Test modelizer text view: update file content
     And  I expect active file content to contain 'updated.*content'
 
   Scenario: Update a file's content should make the 'add' action available inside file explorer menu
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]' to make it visible
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
     And  I expect '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]' not exists
