@@ -4,6 +4,17 @@
     data-cy="modelizer-text-view"
   >
     <div class="col-md-2 bg-grey-2 file-explorer-container">
+      <div class="row justify-center q-my-sm">
+        <q-btn
+          :label="$t('page.modelizer.button.back.label')"
+          :title="$t('page.modelizer.button.back.title')"
+          color="positive"
+          class="q-mr-md"
+          no-caps
+          data-cy="models-page-link-button"
+          @click="router.push(`/${projectName}/models`)"
+        />
+      </div>
       <git-branch-card />
       <q-checkbox
         v-model="showParsableFiles"
@@ -38,6 +49,7 @@ import FileExplorer from 'components/FileExplorer.vue';
 import GitBranchCard from 'components/card/GitBranchCard';
 import FileTabs from 'components/tab/FileTabs.vue';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 defineProps({
   projectName: {
@@ -46,6 +58,7 @@ defineProps({
   },
 });
 
+const router = useRouter();
 const showParsableFiles = ref(false);
 </script>
 

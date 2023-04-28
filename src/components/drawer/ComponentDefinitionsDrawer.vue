@@ -10,8 +10,8 @@
     <template #content>
       <div class="row justify-center">
         <q-btn
-          :label="$t('page.modelizer.drawer.components.button.label')"
-          :title="$t('page.modelizer.drawer.components.button.title')"
+          :label="$t('page.modelizer.button.back.label')"
+          :title="$t('page.modelizer.button.back.title')"
           color="positive"
           class="q-mr-md"
           no-caps
