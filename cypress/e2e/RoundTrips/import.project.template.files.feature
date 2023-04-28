@@ -32,7 +32,6 @@ Feature: Test roundtrip of the application : import project with template files
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
 
     When I wait 2 seconds
-    And  I click on '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_terraform"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_branch.txt"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_README.md"]' exists
@@ -56,11 +55,8 @@ Feature: Test roundtrip of the application : import project with template files
     And  I expect active file content to be equal to 'cypress/resources/project-test/app.tf'
 
     # Check content of plugin and template files
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra1"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra2"]' exists
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra2"]'
     And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/infra2/main.tf"]' exists
 
     When I double click on '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/infra2/main.tf"]'

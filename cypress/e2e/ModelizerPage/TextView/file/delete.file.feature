@@ -29,8 +29,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I wait 2 seconds
 
   Scenario: Delete a file of the root folder should remove it from file explorer
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]' to make it visible
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
@@ -43,10 +42,8 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="file-explorer"] [data-cy="file_branch.txt.js"]' not exists
 
   Scenario: Delete last file of a sub-folder should not expand sub-folder
-    Given I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And   I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
-
-    When I hover '[data-cy="file-explorer"] [data-cy="file-button_terraform/app.tf"]' to make it visible
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
+    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_terraform/app.tf"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_terraform/app.tf"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
@@ -60,10 +57,8 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="folder-icon_terraform"].fa-folder' exists
   
   Scenario: Delete last file of a sub-folder should close active tab
-    Given I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And   I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
-
-    When I double click on '[data-cy="file_terraform/app.tf"]'
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
+    And  I double click on '[data-cy="file_terraform/app.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'app.tf'
 
@@ -81,9 +76,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' not exists
 
   Scenario: Open two files and delete the selected file should close corresponding active tab and select another active tab
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I wait 1 second
-    And  I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
     And  I wait 1 second
     And  I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
@@ -178,8 +171,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="folder_folder"]' not exists
 
   Scenario: Delete non-empty folder should display the checkox to confirm deletion of folder and its content (& keep selected tab open)
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I double click on '[data-cy="file_README.md"]'
+    When I double click on '[data-cy="file_README.md"]'
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'README.md'
 
@@ -206,8 +198,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="file_app.tf"]' not exists
 
   Scenario: Delete folder that contains opened files should remove all the corresponding tabs
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="file_terraform/app.tf"]' exists
 
     When I double click on '[data-cy="file_terraform/app.tf"]'
@@ -269,8 +260,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="folder_terraform/folder"]' not exists
 
   Scenario: Delete folder that contains opened files should remove all the corresponding tabs and select another active tab
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
     And  I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
     Then I expect '[data-cy="file_terraform/app.tf"]' exists
 

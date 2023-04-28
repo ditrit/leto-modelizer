@@ -29,8 +29,7 @@ Feature: Test modelizer text view: add file
     And  I wait 2 seconds
 
   Scenario: An unmodified file should not have the 'add' action inside file explorer menu
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_README.md"]' to make it visible
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_README.md"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_README.md"]'
     Then I expect '[data-cy="file_README.md"].file-status-unmodified' exists
     And  I expect '[data-cy="file-explorer-action-menu"]' exists
@@ -60,8 +59,7 @@ Feature: Test modelizer text view: add file
     And  I expect '[data-cy="file_newFile.js"].file-status-staged' exists
 
   Scenario: Create a file inside sub-folder and add it on git should change the file's status
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]' to make it visible
+    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 

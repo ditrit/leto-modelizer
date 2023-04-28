@@ -38,9 +38,5 @@ Feature: Test models page: rename model
     And  I wait 1 second
     Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelName}}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists

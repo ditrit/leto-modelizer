@@ -52,8 +52,7 @@ Feature: Test modelizer text view: create file and folder
     And  I expect '[data-cy="folder-icon_{{ projectName }}"].fa-folder-open' exists
 
   Scenario: Create a file inside sub-folder should open corresponding active tab and expand the parent folder
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]' to make it visible
+    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
@@ -96,8 +95,7 @@ Feature: Test modelizer text view: create file and folder
     And  I expect '[data-cy="folder-icon_newFolder"].fa-folder' exists
 
   Scenario: Create a folder inside folder should expand parent folder
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    And  I hover '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]' to make it visible
+    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 

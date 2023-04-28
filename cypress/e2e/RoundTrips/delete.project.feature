@@ -35,7 +35,6 @@ Feature: Test homepage: project deletion
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
 
     # Delete file
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
     And  I hover '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
@@ -80,5 +79,4 @@ Feature: Test homepage: project deletion
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
 
     # Check previously deleted file is created after project import
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="file_branch.txt"]' exists

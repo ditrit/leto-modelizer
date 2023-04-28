@@ -29,10 +29,7 @@ Feature: Test modelizer text view: open file
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelName}}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
-    And  I wait 2 seconds
-
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_README.md"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_README.md"]' exists
 
   Scenario: Double click on a file should open a tab
     When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
