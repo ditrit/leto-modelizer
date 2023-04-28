@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * On open text editor, open all related files of the current model.
 * Modelization feature:
   * Allow to use the mouse coordinates when placing new component on drag and drop feature.
+  * Add button to redirect to the project page.
 * Add new environment variable `KEEP_CYPRESS_ATTRIBUTE` to keep all cypress attribute in html.
 
 ### Changed
