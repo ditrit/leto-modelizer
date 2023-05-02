@@ -48,18 +48,81 @@ import MonacoEditor from 'components/editor/MonacoEditor.vue';
 import FileExplorer from 'components/FileExplorer.vue';
 import GitBranchCard from 'components/card/GitBranchCard';
 import FileTabs from 'components/tab/FileTabs.vue';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  ref,
+} from 'vue';
+import FileEvent from 'src/composables/events/FileEvent';
+import { getAllModels } from 'src/composables/Project';
+import { useRoute, useRouter } from 'vue-router';
 
-defineProps({
+const router = useRouter();
+const route = useRoute();
+const query = computed(() => route.query);
+
+const props = defineProps({
   projectName: {
     type: String,
     required: true,
   },
 });
 
-const router = useRouter();
 const showParsableFiles = ref(false);
+
+let selectFileTabSubscription;
+
+/**
+ * Get model corresponding to the selected file tab.
+ * @param {String} selectedFileTabPath - Path of the selected file tab.
+ * @return {Promise<Object>} Promise with the model or undefined on success otherwise an error.
+ */
+async function getModel(selectedFileTabPath) {
+  if (!selectedFileTabPath) {
+    return undefined;
+  }
+
+  const models = await getAllModels(props.projectName);
+  const defaultFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
+    ? `${process.env.MODELS_DEFAULT_FOLDER}/`
+    : '';
+
+  return models.find(
+    ({ name, plugin }) => selectedFileTabPath.startsWith(`${defaultFolder}${plugin}/${name}/`),
+  );
+}
+
+/**
+ * Update the path of the query if necessary.
+ * @param {String} event - Path of the selected file tab.
+ * @return {Promise<Object>} Promise with nothing on success otherwise an error.
+ */
+async function onSelectFileTab(event) {
+  if (event && !event.startsWith(`${query.value.path}/`)) {
+    const model = await getModel(event);
+    const modelPath = model ? `${model.plugin}/${model.name}` : query.value.path;
+
+    router.push({
+      name: 'modelizer',
+      params: {
+        viewType: 'text',
+        projectName: props.projectName,
+      },
+      query: {
+        path: modelPath,
+      },
+    });
+  }
+}
+
+onMounted(() => {
+  selectFileTabSubscription = FileEvent.SelectFileTabEvent.subscribe(onSelectFileTab);
+});
+
+onUnmounted(() => {
+  selectFileTabSubscription.unsubscribe();
+});
 </script>
 
 <style lang="scss" scoped>

@@ -69,6 +69,7 @@ Feature: Test roundtrip of the application : rename project
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
 
     # Check project name is displayed in home page
-    When I visit the '/'
-    Then I expect '[data-cy="project-card_renamedProject"]' appear 1 time on screen
+    When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
+    Then I expect current url is '/'
+    And  I expect '[data-cy="project-card_renamedProject"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_renamedProject"] [data-cy="title-container"]' is 'renamedProject'

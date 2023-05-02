@@ -74,8 +74,8 @@ Feature: Test switch model to text view: add component/link
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'new_file.tf'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'leto-modelizer.config.json'
 
-    When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_terrator-plugin/modelName/new_file.tf"]'
+    When I click on '[data-cy="file-tabs-container"] [data-cy="file_terrator-plugin/modelName/new_file.tf"]'
+    And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
     When I set active file content to 'module "server" {}'
