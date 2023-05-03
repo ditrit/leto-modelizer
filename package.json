@@ -65,7 +65,7 @@
     "jest-environment-jsdom": "=29.4.2",
     "jest-serializer-vue": "=3.1.0",
     "jest-sonar-reporter": "=2.0.0",
-    "leto-modelizer-plugin-cli": "github:ditrit/leto-modelizer-plugin-cli#0.2.1",
+    "leto-modelizer-plugin-cli": "github:ditrit/leto-modelizer-plugin-cli#1.0.0",
     "nunjucks": "=3.2.3",
     "vue-loader": "=17.0.1"
   },
