@@ -297,7 +297,7 @@ function openModelFiles() {
       const plugin = getPluginByName(pluginName);
       const allPaths = localFileInformations.value
         .filter(({ path }) => path.startsWith(`${pluginName}/${modelName}/`))
-        .filter(({ path }) => plugin.isParsable({ path: path.split('/').pop() }))
+        .filter(({ path }) => plugin.isParsable({ path }))
         .map(({ path }) => path);
 
       allPaths.forEach((path) => {
