@@ -42,28 +42,101 @@ If you only want your own language component (maybe based on existing plugins), 
 * node - [v18.4](https://nodejs.org/en/blog/release/v18.4.0)
 * npm - [v8.19.3](https://www.npmjs.com/package/npm/v/8.19.3)
 
+## Official plugins
+
+For now, we don't have many plugins to offer you, but follow us and in the next (few) months you will see new plugins (like Jenkins or Kubernetes).
+
+### Terraform plugin
+
+Plugin to manage terraform files, by default it comes with aws provider definition.
+
+[GitHub url](https://github.com/ditrit/terrator-plugin#0.2.0)
+
+### Github plugin
+
+Plugin to manage github action files.
+
+[GitHub url](https://github.com/ditrit/githubator-plugin#0.1.1)
+
+## Compatibility versions table
+
+<table>
+  <thead>
+    <tr>
+      <th rowspan="2">Leto-modelizer</th>
+      <th colspan="3">Supported version</th>
+    </tr>
+    <tr>
+      <th>Plugin-core</th>
+      <th>Terrator-plugin</th>
+      <th>Githubator-plugin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1.0.0</td>
+      <td>= 0.13.0<br>= 0.14.0</br></td>
+      <td>= 0.1.12</td>
+      <td>🚫</td>
+    </tr>
+    <tr>
+      <td>next version</td>
+      <td>= 0.15.2</td>
+      <td>= 0.2.0</td>
+      <td>= 0.1.1</td>
+    </tr>
+  </tbody>
+</table>
+
 ## How to install plugin
 
-Make an `npm install` to let npm retrieve all dependencies and specially our cli to install easily your plugins 😉.
+Run `npm install` to let npm retrieve all dependencies and especially our cli to easily install your plugins 😉.
 
 Then you just have to know two things about your plugins:
 - it's name
 - it's repository url
 
-Let us show you how our cli works with TerraformPlugin:
+To install plugin, run this command `npm run plugin:install`.
+You can choose between installing __official__ or __custom__ plugins.
 
-run this command: `npm run plugin:install`
+### Install official plugins
 
-![](docs/plugin-install.png)
+The `leto-modelizer-plugin-cli.json` file, at the root of Leto Modelizer, contains the list of official plugins provided by the team. Each plugin is represented by an object containing the name, repository URL and version of the plugin.
+
+Choose __Official plugins__ to select from the list of official plugins, one or more plugin(s) to install.
+
+![](docs/plugin-install-official.gif)
+
+### Install custom plugin
+
+Choose __Custom plugin__ to install a specific plugin not referenced as an official plugin.
+
+![](docs/plugin-install-custom.gif)
+
+Examples with official plugins:
+- terrator-plugin: 
+  - plugin name: `terrator-plugin`
+  - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.2.0`
+- githubator-plugin: 
+  - plugin name: `githubator-plugin`
+  - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.1.1`
+
+### Install custom plugin in command line
 
 Options `repository-name` and `repository-url` can be added with the `npm run plugin:install` command to bypass cli prompts.
 
 ```bash
 # Example with terraform plugin
 npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.2.0"
+
+# Example with github action plugin
+npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.1.1"
 ```
 
-Now your plugin is installed, you can continue to install other plugins with the same command if you want.
+Now that your plugin is installed, you can continue to install other plugins with the same command if you want.
+
+### Initialize plugins
+
 
 When you have installed all the desired plugins, please run this commands `npm run plugin:init` to complete all plugins' installation.
 
@@ -138,45 +211,3 @@ http {
 ```bash
 KEEP_CYPRESS_ATTRIBUTE=true npm run build
 ```
-
-## Official plugins
-
-For now, we don't have many plugins to offer you, but follow us and in the next (few) months you will see new plugins (like Jenkins or Kubernetes).
-
-### Terraform plugin
-
-Plugin to manage terraform files, by default it comes with aws provider definition.
-
-[GitHub url](https://github.com/ditrit/terrator-plugin)
-
-Option to use it in command `install`:
-
-- plugin name: `terrator-plugin`
-- repository url: `https://github.com/ditrit/terrator-plugin.git#0.2.0`
-
-## Compatibility versions table
-
-<table>
-  <thead>
-    <tr>
-      <th rowspan="2">Leto-modelizer</th>
-      <th colspan="2">Supported version</th>
-    </tr>
-    <tr>
-      <th>Plugin-core</th>
-      <th>Terrator-plugin</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1.0.0</td>
-      <td>= 0.13.0<br>= 0.14.0</br></td>
-      <td>= 0.1.12</td>
-    </tr>
-     <tr>
-      <td>next version</td>
-      <td>= 0.15.2</td>
-      <td>= 0.2.0</td>
-    </tr>
-  </tbody>
-</table>
