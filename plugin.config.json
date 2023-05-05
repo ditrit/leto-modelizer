@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "terrator-plugin",
+    "githubator-plugin"
+  ]
+}
