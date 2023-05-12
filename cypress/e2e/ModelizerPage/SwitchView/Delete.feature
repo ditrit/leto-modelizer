@@ -24,7 +24,7 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
-    Then I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
 
   Scenario: Delete a component (Draw view) should remove plugin file (Text view)
     When I click on '[data-cy="component-definition_aws"]'
@@ -39,8 +39,7 @@ Feature: Test switch model to text view: delete component/link
     When I double click on '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/modelName/new_file.tf"]'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
-
-    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
     And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
 

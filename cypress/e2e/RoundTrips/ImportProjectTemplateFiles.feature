@@ -54,7 +54,7 @@ Feature: Test roundtrip of the application : import project with template files
     And  I expect active file content to be equal to 'cypress/resources/project-test/app.tf'
 
     # Check content of plugin and template files
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra1"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra1"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra2"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/infra2/main.tf"]' exists
 

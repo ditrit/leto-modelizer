@@ -68,7 +68,7 @@ Feature: Test modelizer text view: git status display
     When I set active file content to 'updated content'
 
     #  Check file status
-    When I click on '[data-cy="git-current-branch-button"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
     Then I expect '[data-cy="git-status-dialog"]' exists
     And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen

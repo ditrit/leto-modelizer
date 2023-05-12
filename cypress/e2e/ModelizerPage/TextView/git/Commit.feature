@@ -52,9 +52,8 @@ Feature: Test modelizer text view: git commit
     When I hover '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]'
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
-
     #  Commit
-    When I click on '[data-cy="git-current-branch-button"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="git-commit-item"]' exists
 
     When I click on '[data-cy="git-branch-menu"] [data-cy="git-commit-item"]'
@@ -99,9 +98,8 @@ Feature: Test modelizer text view: git commit
     When I hover '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]'
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
-
     #  Commit
-    When I click on '[data-cy="git-current-branch-button"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="git-commit-item"]' exists
 
     When I click on '[data-cy="git-branch-menu"] [data-cy="git-commit-item"]'

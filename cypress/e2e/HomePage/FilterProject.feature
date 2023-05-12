@@ -69,21 +69,21 @@ Feature: Test home page: project filter
     And  I expect '[data-cy="project-card_{{localProjectName}}"]' appear 1 time on screen
 
     # Set 'leto' as searched text and expect only projects that contains 'leto' to be displayed
-    When I set on '[data-cy="search-project-input"]' text 'leto'
+    And  I set on '[data-cy="search-project-input"]' text 'leto'
     And  I expect '[data-cy="project-card_{{localProjectName}}"]' not exists
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' appear 1 time on screen
 
     # Set 'none' as searched text and expect no project is displayed
-    When I set on '[data-cy="search-project-input"]' text 'none'
+    And  I set on '[data-cy="search-project-input"]' text 'none'
     And  I expect '[data-cy="project-card_{{localProjectName}}"]' not exists
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' not exists
 
     # Set 'leto local' as searched text and expect all projects are displayed
-    When I set on '[data-cy="search-project-input"]' text 'leto local'
+    And  I set on '[data-cy="search-project-input"]' text 'leto local'
     And  I expect '[data-cy="project-card_{{localProjectName}}"]' exists
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' exists
 
     # Unset searched text and expect all projects are displayed
-    When I set on '[data-cy="search-project-input"]' text ' '
+    And  I set on '[data-cy="search-project-input"]' text ' '
     And  I expect '[data-cy="project-card_{{localProjectName}}"]' exists
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' exists

@@ -11,7 +11,7 @@ Feature: Test git add remote repository dialog
     Then I expect current url is 'projectName/models'
 
     When I wait 1 second
-    When I visit the '/#/projectName/modelizer/text'
+    And  I visit the '/#/projectName/modelizer/text'
 
   Scenario: Set valid git remote repository in the project should send positive toast
     When I click on '[data-cy="modelizer-settings-button"]'

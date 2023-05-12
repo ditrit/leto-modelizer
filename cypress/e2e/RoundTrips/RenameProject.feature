@@ -63,7 +63,7 @@ Feature: Test roundtrip of the application : rename project
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_renamedProject"]' is 'renamedProject'
 
     # Check model and files are still here
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
 
