@@ -40,9 +40,9 @@ Feature: Test modelizer draw view: add template component
     And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="VPC_"]' exists
     And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="VPC_"]' exists
     And  I expect '[class="link"]' exists
-      
+
   @skip
-  # TODO: update/fix test 
+  # TODO: update/fix test
   Scenario Outline: Dragging the <element> component template should display it on the page
     Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>_"]' not exists
 

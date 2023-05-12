@@ -1,6 +1,6 @@
 Feature: Test modelizer text view: switch model file
 
-  Scenario: Select the file of another model should update url    
+  Scenario: Select the file of another model should update url
     Given I clear cache
     And   I set viewport size to '1536' px for width and '960' px for height
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'

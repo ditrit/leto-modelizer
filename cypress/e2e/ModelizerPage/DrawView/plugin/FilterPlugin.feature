@@ -56,7 +56,7 @@ Feature: Test modelizer draw view: plugin filter
       | volume       |
       | subnet       |
       | route53      |
-  
+
   Scenario Outline: Set text as '<filter>' should not display plugin.
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 0 time on screen

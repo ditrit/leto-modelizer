@@ -74,7 +74,7 @@ Feature: Test modelizer text view: create file and folder
     And  I expect '[data-cy="file_terraform/newFile.js"].file-status-untracked' exists
     #  Parent folder is expanded
     And  I expect '[data-cy="file-explorer"] [data-cy="folder-icon_terraform"].fa-folder-open' exists
-  
+
   Scenario: Create a folder inside the root folder should expand root folder
     When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]'
