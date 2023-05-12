@@ -29,4 +29,3 @@ Feature: Test modelizer text view: git branch display
     When I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_master"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_master"] [data-cy="git-menu-current-branch"]' exists
-

@@ -81,4 +81,3 @@ Feature: Test modelizer text view: add file
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     Then I expect 'positive' toast to appear with text 'File is added &#129395;!'
     And  I expect '[data-cy="file_terraform/newFile.js"].file-status-staged' exists
-    
