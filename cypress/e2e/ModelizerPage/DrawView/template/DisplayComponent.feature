@@ -27,7 +27,7 @@ Feature: Test modelizer draw view: add template component
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 2 times on screen
 
-  Scenario Outline: Click on the Test application component should display it on the page
+  Scenario: Click on the Test application component should display it on the page
     Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="SecurityGroup_"]' not exists
     And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="InternetGateway_"]' not exists
     And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="VPC_"]' not exists
