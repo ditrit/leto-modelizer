@@ -1,6 +1,6 @@
 Feature: Test roundtrip of the application : import project with template files
 
-  Background:
+  Scenario: Import project with a template redirect to models page with template models and create project files and folders
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'modelName' with 'modelTest'
@@ -8,7 +8,6 @@ Feature: Test roundtrip of the application : import project with template files
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I visit the '/'
 
-  Scenario: Import project with a template redirect to models page with template models and create project files and folders
     # Import project with a template and check template models are displayed
     Then I expect '[data-cy="template-card_project_template"]' exists
 

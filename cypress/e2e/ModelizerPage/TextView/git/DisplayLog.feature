@@ -1,6 +1,6 @@
 Feature: Test modelizer text view: git log display
 
-  Background:
+  Scenario: Display dialog containing the list of logs
     Given I clear cache
     And   I set viewport size to '1536' px for width and '960' px for height
 
@@ -23,7 +23,6 @@ Feature: Test modelizer text view: git log display
     And  I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="git-log-item"]' exists
 
-  Scenario: Display dialog containing the list of logs
     When I wait 1 second
     And  I click on '[data-cy="git-branch-menu"] [data-cy="git-log-item"]'
     Then I expect '[data-cy="git-log-dialog"]' exists

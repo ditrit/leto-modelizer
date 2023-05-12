@@ -1,13 +1,11 @@
 Feature: Test homepage: project deletion
 
-  Background:
+  Scenario: Delete project should remove it from database
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I visit the '/'
-
-  Scenario: Delete project should remove it from database
-    Given I set context field 'projectName' with 'leto-modelizer-project-test'
+    And   I set context field 'projectName' with 'leto-modelizer-project-test'
     And   I set context field 'modelName' with 'model-name'
 
     # Import project

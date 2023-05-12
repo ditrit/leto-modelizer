@@ -1,6 +1,6 @@
 Feature: Test roundtrip of the application : import project files
 
-  Background:
+  Scenario: Import project redirect to models page with correct plugin and import project files and folders
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'modelName' with 'modelTest'
@@ -8,7 +8,6 @@ Feature: Test roundtrip of the application : import project files
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I visit the '/'
 
-  Scenario: Import project redirect to models page with correct plugin and import project files and folders
     # Import project
     When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'

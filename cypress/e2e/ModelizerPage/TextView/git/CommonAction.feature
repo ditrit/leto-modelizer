@@ -1,6 +1,6 @@
 Feature: Test modelizer text view: common action of git branch menu
 
-  Background:
+  Scenario: Should check the text of expand branches button
     Given I clear cache
     And   I set viewport size to '1536' px for width and '960' px for height
     And   I visit the '/'
@@ -22,7 +22,6 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I wait 1 second
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_projectName"]' exists
 
-  Scenario: Should check the text of expand branches button
     When I click on '[data-cy="git-current-branch-button"]'
     And  I wait 2 seconds
     # Create new branch test 1
