@@ -76,7 +76,7 @@ Feature: Test modelizer draw view: template filter
       | bad       |
       | amiserver |
 
-  Scenario Outline: Set text as '<filter>' then select plugin should display only one element
+  Scenario Outline: Set text as '<filter>' then select templates library should display only one element
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
     Then I expect '[data-cy="component-definitions-item_Templates"]' appear 1 time on screen
     And  I expect '[data-cy="component-definitions-item_Templates"] [data-cy="title"]' is 'Templates (1)'

@@ -43,7 +43,7 @@ Feature: Test modelizer draw view: add template component
       
   @skip
   # TODO: update/fix test 
-  Scenario Outline: Dragging the <element> component should display it on the page
+  Scenario Outline: Dragging the <element> component template should display it on the page
     Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>_"]' not exists
 
     When I drag '[data-cy="component-definition_<element>"]' onto '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]'
