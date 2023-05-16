@@ -41,7 +41,8 @@ Then('I set on {string} text {string}', (templateSelector, templateValue) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   const value = nunjucks.renderString(templateValue, cy.context);
 
-  cy.get(selector).clear().type(value);
+  cy.get(selector).clear();
+  cy.get(selector).type(value);
 });
 
 Then('I expect {string} is closed', (selector) => {
@@ -75,15 +76,14 @@ Then('I expect {string} to be enabled', (selector) => {
   cy.get(selector).should('not.be.disabled');
 });
 
-Then('I set active file content to {string}', async (value) => {
-  await cy.get('[data-cy="monaco-editor"]')
-    .click()
-    .focused()
-    .type('{ctrl}a')
-    .clear()
-    .type(value, {
-      parseSpecialCharSequences: false,
-    });
+Then('I set active file content to {string}', (value) => {
+  cy.get('[data-cy="monaco-editor"]').click();
+  cy.get('[data-cy="monaco-editor"]').focused();
+  cy.get('[data-cy="monaco-editor"]').type('{ctrl}a');
+  cy.get('[data-cy="monaco-editor"]').clear();
+  cy.get('[data-cy="monaco-editor"]').type(value, {
+    parseSpecialCharSequences: false,
+  });
 });
 
 Then('I expect active file content to contain {string}', async (value) => {
