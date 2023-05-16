@@ -52,10 +52,15 @@ const projects = ref({});
 let updateProjectSubscription;
 
 /**
- * Set projects.
+ * Update project list, sorted by creation date from newest to oldest.
  */
 function setProjects() {
-  projects.value = getProjects();
+  projects.value = Object.entries(getProjects())
+    .sort(([, projectA], [, projectB]) => projectB.creationDate - projectA.creationDate)
+    .reduce((acc, [key, value]) => {
+      acc[key] = value;
+      return acc;
+    }, {});
 }
 
 /**
