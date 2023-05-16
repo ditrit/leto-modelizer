@@ -42,7 +42,7 @@ describe('Test page component: MainLayout', () => {
     });
   });
 
-  describe('Test computed: show', () => {
+  describe('Test computed: showFooter', () => {
     it('should be true when viewType is different from "text" and from "draw"', () => {
       useRoute.mockImplementation(() => ({
         params: {
@@ -54,7 +54,7 @@ describe('Test page component: MainLayout', () => {
         global,
       });
 
-      expect(wrapper.vm.show).toEqual(true);
+      expect(wrapper.vm.showFooter).toBeTruthy();
     });
 
     it('should be false when viewType is equal "text"', () => {
@@ -69,7 +69,7 @@ describe('Test page component: MainLayout', () => {
       });
 
       expect(wrapper.vm.viewType).toEqual('text');
-      expect(wrapper.vm.show).toEqual(false);
+      expect(wrapper.vm.showFooter).toBeFalsy();
     });
 
     it('should be false when viewType is equal "draw"', () => {
@@ -83,7 +83,33 @@ describe('Test page component: MainLayout', () => {
         global,
       });
 
-      expect(wrapper.vm.show).toEqual(false);
+      expect(wrapper.vm.showFooter).toBeFalsy();
+    });
+  });
+
+  describe('Test computed: showHeader', () => {
+    it('should be true when route path is "/"', () => {
+      useRoute.mockImplementation(() => ({
+        path: '/',
+      }));
+
+      wrapper = shallowMount(MainLayout, {
+        global,
+      });
+
+      expect(wrapper.vm.showHeader).toBeTruthy();
+    });
+
+    it('should be false when route path is not "/"', () => {
+      useRoute.mockImplementation(() => ({
+        path: '/test',
+      }));
+
+      wrapper = shallowMount(MainLayout, {
+        global,
+      });
+
+      expect(wrapper.vm.showHeader).toBeFalsy();
     });
   });
 });
