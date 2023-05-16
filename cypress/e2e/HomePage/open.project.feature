@@ -2,6 +2,7 @@ Feature: Test home page: open project
 
   Scenario: Open existing project should redirect to 'models' page
     Given I clear cache
+    And   I set viewport size to '1920' px for width and '1080' px for height
     And   I visit the '/'
     And   I click on '[data-cy="create-project-button"]'
     And   I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'

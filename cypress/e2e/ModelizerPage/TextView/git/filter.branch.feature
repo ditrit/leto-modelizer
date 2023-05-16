@@ -2,6 +2,7 @@ Feature: Test modelizer text view: filter git branch
 
   Background:
     Given I clear cache
+    And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I set context field 'projectName' with 'leto-modelizer-project-test'
     And   I visit the '/'
@@ -62,14 +63,12 @@ Feature: Test modelizer text view: filter git branch
     And  I expect 'positive' toast to appear with text 'Branch is created 🥳!'
 
     When I click on '[data-cy="git-current-branch-button"]'
-    And  I scroll to 'bottom' into '[data-cy="git-branch-menu"]'
     Then I expect '[data-cy="git-current-branch-button"]' is 'testNewBranch'
     And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_testNewBranch"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' exists
 
-    When I scroll to 'top' into '[data-cy="git-branch-menu"]'
-    And  I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text 'not_main'
+    When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text 'not_main'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' not exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_test-testNewBranch"]' not exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' not exists
@@ -80,7 +79,6 @@ Feature: Test modelizer text view: filter git branch
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' exists
 
     When I set on '[data-cy="git-branch-menu"] [data-cy="search-branch-input"]' text 'no_main main testNewBranch'
-    And  I scroll to 'bottom' into '[data-cy="git-branch-menu"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_main"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_testNewBranch"]' exists
     And  I expect '[data-cy="git-branch-menu"] [data-cy="remote-branch_main"]' exists

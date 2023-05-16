@@ -2,6 +2,7 @@ Feature: Test roundtrip of the application
 
   Scenario: Create project, switch and go back to homepage
     Given I clear cache
+    And   I set viewport size to '1920' px for width and '1080' px for height
     And   I visit the '/'
 
     When I click on '[data-cy="create-project-button"]'
