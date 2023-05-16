@@ -92,7 +92,7 @@ const props = defineProps({
   },
 });
 
-const expanded = ref(false);
+const expanded = ref(props.attribute.definition?.expanded);
 const hasError = computed(() => props.currentError?.startsWith(`${props.fullName}.`));
 
 /**
