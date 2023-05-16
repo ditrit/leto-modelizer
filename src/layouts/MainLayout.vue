@@ -1,10 +1,11 @@
 <template>
   <q-layout view="lHh Lpr lff">
+    <default-navigation-bar v-if="showHeader" />
     <q-page-container>
       <router-view />
     </q-page-container>
     <q-footer
-      v-if="show"
+      v-if="showFooter"
       class="bg-primary col"
     >
       <q-toolbar class="row justify-center footer">
@@ -33,9 +34,11 @@ import {
   computed,
 } from 'vue';
 import { useRoute } from 'vue-router';
+import DefaultNavigationBar from 'components/DefaultNavigationBar.vue';
 
 const route = useRoute();
 const version = ref(process.env.VERSION);
 const viewType = computed(() => route.params.viewType);
-const show = computed(() => (viewType.value !== 'text' && viewType.value !== 'draw'));
+const showFooter = computed(() => (viewType.value !== 'text' && viewType.value !== 'draw'));
+const showHeader = computed(() => route.path === '/');
 </script>

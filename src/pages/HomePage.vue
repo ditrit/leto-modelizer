@@ -1,15 +1,5 @@
 <template>
-  <q-page class="flex column justify-between home-page">
-    <div class="fit flex justify-center items-center home-banner">
-      <q-img
-        src="icons/logo_modelizer.svg"
-        class="home-logo"
-        :ratio="1"
-      />
-      <h2 class="text-white">
-        {{ $t('application.name') }}
-      </h2>
-    </div>
+  <q-page class="home-page">
     <div class="column items-center home-content">
       <div class="fit row justify-center">
         <project-grid
@@ -90,22 +80,3 @@ onUnmounted(() => {
   updateProjectSubscription.unsubscribe();
 });
 </script>
-
-<style lang="scss" scoped>
-.home-page {
-  .home-banner {
-    background-color: $primary;
-    min-height: 30vh;
-    max-height: 50vh;
-    flex: 1;
-  }
-  .home-logo {
-    width: 144px;
-    height: 174px;
-  }
-  .home-content {
-    margin: 5vh;
-    flex: 2;
-  }
-}
-</style>
