@@ -59,6 +59,7 @@ export function getProjectName(projectId) {
 export function saveProject(project) {
   const projects = getProjects();
   projects[project.id] = project;
+  projects[project.id].creationDate = Date.now();
   localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
 }
 
