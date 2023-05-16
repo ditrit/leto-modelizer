@@ -87,7 +87,7 @@ describe('Test page component: MainLayout', () => {
     });
   });
 
-  describe('Test computed: showHeader', () => {
+  describe('Test computed: isHomePage', () => {
     it('should be true when route path is "/"', () => {
       useRoute.mockImplementation(() => ({
         path: '/',
@@ -97,7 +97,7 @@ describe('Test page component: MainLayout', () => {
         global,
       });
 
-      expect(wrapper.vm.showHeader).toBeTruthy();
+      expect(wrapper.vm.isHomePage).toBeTruthy();
     });
 
     it('should be false when route path is not "/"', () => {
@@ -109,7 +109,7 @@ describe('Test page component: MainLayout', () => {
         global,
       });
 
-      expect(wrapper.vm.showHeader).toBeFalsy();
+      expect(wrapper.vm.isHomePage).toBeFalsy();
     });
   });
 });
