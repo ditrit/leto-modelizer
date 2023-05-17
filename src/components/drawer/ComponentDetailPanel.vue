@@ -135,7 +135,7 @@ let pluginDefaultSubscription;
  */
 function sanitizeAttributes(attributes) {
   return attributes.reduce((acc, attribute) => {
-    if (attribute.value && attribute.value !== '') {
+    if (attribute.value !== undefined && attribute.value !== null && attribute.value !== '') {
       if (attribute.type !== 'Object') {
         acc.push(new ComponentAttribute(attribute));
       } else {

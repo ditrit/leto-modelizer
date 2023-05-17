@@ -98,6 +98,10 @@ describe('test component: Plugin Component Detail Panel', () => {
         name: 'attribute',
         value: 'value',
       }, {
+        name: 'attribute_false',
+        type: 'Boolean',
+        value: false,
+      }, {
         name: 'object_empty',
         type: 'Object',
         value: [],
@@ -113,6 +117,10 @@ describe('test component: Plugin Component Detail Panel', () => {
       expect(wrapper.vm.sanitizeAttributes(attributes)).toEqual([new ComponentAttribute({
         name: 'attribute',
         value: 'value',
+      }), new ComponentAttribute({
+        name: 'attribute_false',
+        type: 'Boolean',
+        value: false,
       }), new ComponentAttribute({
         name: 'object',
         type: 'Object',
