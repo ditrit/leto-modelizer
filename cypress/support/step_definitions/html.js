@@ -41,7 +41,7 @@ Then('I set on {string} text {string}', (templateSelector, templateValue) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   const value = nunjucks.renderString(templateValue, cy.context);
 
-  cy.get(selector).clear();
+  cy.get(selector).type('{selectall}{backspace}');
   cy.get(selector).type(value);
 });
 
@@ -79,8 +79,7 @@ Then('I expect {string} to be enabled', (selector) => {
 Then('I set active file content to {string}', (value) => {
   cy.get('[data-cy="monaco-editor"]').click();
   cy.get('[data-cy="monaco-editor"]').focused();
-  cy.get('[data-cy="monaco-editor"]').type('{ctrl}a');
-  cy.get('[data-cy="monaco-editor"]').clear();
+  cy.get('[data-cy="monaco-editor"]').type('{selectall}{backspace}');
   cy.get('[data-cy="monaco-editor"]').type(value, {
     parseSpecialCharSequences: false,
   });
