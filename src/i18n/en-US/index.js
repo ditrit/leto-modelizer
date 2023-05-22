@@ -208,6 +208,7 @@ export default {
     home: {
       project: {
         title: 'Recent projects',
+        recent: 'Recent projects',
         import: 'Import new project',
         create: 'Create new project',
         rename: 'Rename project',
