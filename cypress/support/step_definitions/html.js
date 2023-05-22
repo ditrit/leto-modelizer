@@ -85,14 +85,14 @@ Then('I set active file content to {string}', (value) => {
   });
 });
 
-Then('I expect active file content to contain {string}', async (value) => {
+Then('I expect active file content to contain {string}', (value) => {
   cy.get('[data-cy="monaco-editor"]').should(($div) => {
     const text = $div.text();
     expect(text).to.match(new RegExp(value));
   });
 });
 
-Then('I expect active file content to be equal to {string}', async (TemplateFilePath) => {
+Then('I expect active file content to be equal to {string}', (TemplateFilePath) => {
   const filePath = nunjucks.renderString(TemplateFilePath, cy.context);
   let fileContent;
 
@@ -111,6 +111,6 @@ Then('I expect active file content to be equal to {string}', async (TemplateFile
   });
 });
 
-Then('I expect active file content to not contain {string}', async (value) => {
+Then('I expect active file content to not contain {string}', (value) => {
   cy.get('[data-cy="monaco-editor"]').should('not.contain', value);
 });
