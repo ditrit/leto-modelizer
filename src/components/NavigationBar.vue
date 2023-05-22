@@ -15,7 +15,7 @@
           name="img:icons/logo_modelizer.svg"
           :left="true"
         />
-        <label class="icon-label vertical-middle">
+        <label class="icon-label vertical-middle text-subtitle1">
           {{ $t('application.name') }}
         </label>
       </router-link>
