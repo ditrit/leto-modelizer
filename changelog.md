@@ -52,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix attribute error management.
 * Fix bug on nested object in attribute edition, see [this issue](https://github.com/ditrit/leto-modelizer/issues/203).
 * Fix bug on model files opening when switching on TextView, see [this issue](https://github.com/ditrit/leto-modelizer/issues/202).
+* Fix bug on loosing boolean attributes defined to `false`, see [this issue](https://github.com/ditrit/leto-modelizer/issues/261).
 
 ## [1.0.0] - 2023/02/16
 
