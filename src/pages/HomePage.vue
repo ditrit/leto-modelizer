@@ -1,13 +1,13 @@
 <template>
   <q-page class="home-page">
     <div class="column items-center home-content">
-      <div class="fit row justify-center">
+      <div class="fit row">
         <project-grid
           class="col-md-8"
           :projects="projects"
         />
       </div>
-      <div class="fit row justify-center q-mt-lg">
+      <div class="fit row q-mt-lg">
         <template-grid
           class="col-md-8"
           :templates="templates"
