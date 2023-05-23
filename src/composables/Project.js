@@ -22,7 +22,7 @@ export const PROJECT_STORAGE_KEY = 'projects';
 /**
  * Add a date to the project that does not contain one.
  * @param {Object} projects - All projects.
- * @todo Remove this function when leto-modelizer 1.3.0 is released.
+ * @todo Remove this function when leto-modelizer 1.2.0 is released.
  */
 function addDateToProjects(projects) {
   let save = false;
@@ -46,7 +46,7 @@ function addDateToProjects(projects) {
 export function getProjects() {
   const allProjects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY) || '{}');
 
-  // TODO: Remove this function when leto-modelizer 1.3.0 is released.
+  // TODO: Remove this function when leto-modelizer 1.2.0 is released.
   addDateToProjects(allProjects);
 
   return allProjects;
