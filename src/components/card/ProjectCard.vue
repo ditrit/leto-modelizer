@@ -82,6 +82,11 @@ function getProjectImage() {
   width: 150px;
   height: 150px;
 }
+
+.q-img__content > div {
+  padding: unset;
+}
+
 .card-link {
   text-decoration: none;
   color: inherit;
