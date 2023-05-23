@@ -48,7 +48,7 @@ import RenameProjectDialog from 'components/dialog/RenameProjectDialog';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 const templates = ref([]);
-const projects = ref({});
+const projects = ref([]);
 let updateProjectSubscription;
 
 /**
@@ -56,11 +56,8 @@ let updateProjectSubscription;
  */
 function setProjects() {
   projects.value = Object.entries(getProjects())
-    .sort(([, projectA], [, projectB]) => projectB.creationDate - projectA.creationDate)
-    .reduce((acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    }, {});
+    .map(([, project]) => project)
+    .sort((projectA, projectB) => projectB.creationDate - projectA.creationDate);
 }
 
 /**
