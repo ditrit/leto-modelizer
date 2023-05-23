@@ -41,7 +41,8 @@ Then('I set on {string} text {string}', (templateSelector, templateValue) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   const value = nunjucks.renderString(templateValue, cy.context);
 
-  cy.get(selector).clear().type(value);
+  cy.get(selector).type('{selectall}{backspace}');
+  cy.get(selector).type(value);
 });
 
 Then('I expect {string} is closed', (selector) => {
@@ -75,25 +76,23 @@ Then('I expect {string} to be enabled', (selector) => {
   cy.get(selector).should('not.be.disabled');
 });
 
-Then('I set active file content to {string}', async (value) => {
-  await cy.get('[data-cy="monaco-editor"]')
-    .click()
-    .focused()
-    .type('{ctrl}a')
-    .clear()
-    .type(value, {
-      parseSpecialCharSequences: false,
-    });
+Then('I set active file content to {string}', (value) => {
+  cy.get('[data-cy="monaco-editor"]').click();
+  cy.get('[data-cy="monaco-editor"]').focused();
+  cy.get('[data-cy="monaco-editor"]').type('{selectall}{backspace}');
+  cy.get('[data-cy="monaco-editor"]').type(value, {
+    parseSpecialCharSequences: false,
+  });
 });
 
-Then('I expect active file content to contain {string}', async (value) => {
+Then('I expect active file content to contain {string}', (value) => {
   cy.get('[data-cy="monaco-editor"]').should(($div) => {
     const text = $div.text();
     expect(text).to.match(new RegExp(value));
   });
 });
 
-Then('I expect active file content to be equal to {string}', async (TemplateFilePath) => {
+Then('I expect active file content to be equal to {string}', (TemplateFilePath) => {
   const filePath = nunjucks.renderString(TemplateFilePath, cy.context);
   let fileContent;
 
@@ -112,6 +111,6 @@ Then('I expect active file content to be equal to {string}', async (TemplateFile
   });
 });
 
-Then('I expect active file content to not contain {string}', async (value) => {
+Then('I expect active file content to not contain {string}', (value) => {
   cy.get('[data-cy="monaco-editor"]').should('not.contain', value);
 });

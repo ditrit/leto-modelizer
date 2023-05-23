@@ -22,8 +22,9 @@ jest.mock('src/composables/TemplateManager', () => ({
 
 jest.mock('src/composables/Project', () => ({
   getProjects: jest.fn(() => ({
-    foo: { id: 'foo' },
-    bar: { id: 'bar' },
+    foobar: { id: 'foobar', creationDate: 1684168529274 },
+    foo: { id: 'foo', creationDate: 1684168572473 },
+    bar: { id: 'bar', creationDate: 1684168591636 },
   })),
 }));
 
@@ -46,12 +47,14 @@ describe('Test page component: HomePage', () => {
 
   describe('Test function: setProjects', () => {
     it('should update projects list', () => {
-      wrapper.vm.projects = {};
+      wrapper.vm.projects = [];
       wrapper.vm.setProjects();
-      expect(wrapper.vm.projects).toEqual({
-        foo: { id: 'foo' },
-        bar: { id: 'bar' },
-      });
+
+      expect(wrapper.vm.projects).toStrictEqual([
+        { id: 'bar', creationDate: 1684168591636 },
+        { id: 'foo', creationDate: 1684168572473 },
+        { id: 'foobar', creationDate: 1684168529274 },
+      ]);
     });
   });
 

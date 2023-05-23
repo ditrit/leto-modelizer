@@ -1,6 +1,7 @@
 <template>
-  <q-layout view="lHh Lpr lff">
-    <default-navigation-bar v-if="showHeader" />
+  <q-layout view="HHh Lpr Fff">
+    <default-navigation-bar v-if="isHomePage" />
+    <home-drawer v-if="isHomePage" />
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -29,6 +30,7 @@
 </template>
 
 <script setup>
+import HomeDrawer from 'src/components/drawer/HomeDrawer';
 import {
   ref,
   computed,
@@ -40,5 +42,5 @@ const route = useRoute();
 const version = ref(process.env.VERSION);
 const viewType = computed(() => route.params.viewType);
 const showFooter = computed(() => (viewType.value !== 'text' && viewType.value !== 'draw'));
-const showHeader = computed(() => route.path === '/');
+const isHomePage = computed(() => route.path === '/');
 </script>

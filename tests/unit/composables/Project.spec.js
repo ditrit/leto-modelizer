@@ -186,11 +186,17 @@ describe('Test composable: Project', () => {
     });
 
     it('should return saved projects', () => {
+      const mockDate = Date.now();
+
+      jest
+        .spyOn(Date, 'now')
+        .mockImplementation(() => mockDate);
+
       const projects = {
-        foo: { id: 'foo' },
-        bar: { id: 'bar' },
-        qaz: { id: 'qaz' },
-        quz: { id: 'quz' },
+        foo: { id: 'foo', creationDate: mockDate },
+        bar: { id: 'bar', creationDate: mockDate },
+        qaz: { id: 'qaz', creationDate: mockDate },
+        quz: { id: 'quz', creationDate: mockDate },
       };
 
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
@@ -206,13 +212,13 @@ describe('Test composable: Project', () => {
     });
 
     it('should return saved project', () => {
-      const projects = { foo: { id: 'foo' } };
+      const projects = { foo: { id: 'foo', creationDate: 1 } };
 
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
 
       const project = getProjectById('foo');
 
-      expect(project).toStrictEqual({ id: 'foo' });
+      expect(project).toStrictEqual({ id: 'foo', creationDate: 1 });
     });
   });
 
@@ -241,6 +247,16 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: saveProject', () => {
+    let mockDate;
+
+    beforeEach(() => {
+      mockDate = Date.now();
+
+      jest
+        .spyOn(Date, 'now')
+        .mockImplementation(() => mockDate);
+    });
+
     it('should save projects', () => {
       saveProject({ id: 'foo' });
       saveProject({ id: 'bar' });
@@ -248,8 +264,8 @@ describe('Test composable: Project', () => {
       const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
 
       expect(projects).toStrictEqual({
-        foo: { id: 'foo' },
-        bar: { id: 'bar' },
+        foo: { id: 'foo', creationDate: mockDate },
+        bar: { id: 'bar', creationDate: mockDate },
       });
     });
 
@@ -258,10 +274,10 @@ describe('Test composable: Project', () => {
 
       let projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
 
-      expect(projects.foo).toStrictEqual({ id: 'foo', text: 'qaz' });
+      expect(projects.foo).toStrictEqual({ id: 'foo', text: 'qaz', creationDate: mockDate });
       saveProject({ id: 'foo', text: 'quz' });
       projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
-      expect(projects.foo).toStrictEqual({ id: 'foo', text: 'quz' });
+      expect(projects.foo).toStrictEqual({ id: 'foo', text: 'quz', creationDate: mockDate });
     });
   });
 
@@ -291,13 +307,15 @@ describe('Test composable: Project', () => {
   describe('Test function: deleteProjectById', () => {
     it('should delete one project', async () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
-        foo: { id: 'foo' },
-        bar: { id: 'bar' },
+        foo: { id: 'foo', creationDate: 1 },
+        bar: { id: 'bar', creationDate: 1 },
       }));
+
       await deleteProjectById('foo');
+
       const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
 
-      expect(projects.bar).toStrictEqual({ id: 'bar' });
+      expect(projects.bar).toStrictEqual({ id: 'bar', creationDate: 1 });
       expect(projects.foo).not.toBeDefined();
     });
   });
@@ -663,14 +681,15 @@ describe('Test composable: Project', () => {
   describe('Test function: renameProject', () => {
     it('should rename a project', async () => {
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
-        foo: { id: 'foo' },
+        foo: { id: 'foo', creationDate: 1 },
       }));
+
       await renameProject('foo', 'bar');
 
       const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
 
       expect(projects.foo).not.toBeDefined();
-      expect(projects.bar).toStrictEqual({ id: 'bar' });
+      expect(projects.bar).toStrictEqual({ id: 'bar', creationDate: 1 });
     });
   });
 

@@ -2,6 +2,7 @@ Feature: Test modelizer text view: common action of git branch menu
 
   Background:
     Given I clear cache
+    And   I set viewport size to '1536' px for width and '960' px for height
     And   I visit the '/'
 
     When I click on '[data-cy="create-project-button"]'
@@ -66,7 +67,6 @@ Feature: Test modelizer text view: common action of git branch menu
 
     When I click on '[data-cy="git-current-branch-button"]'
     And  I wait 2 seconds
-    And  I scroll to 'bottom' into '[data-cy="git-branch-menu"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="expand-local-branch-menu"] [data-cy="expand-list-text"]' is 'Show 1 more...'
 
     When I click on '[data-cy="git-branch-menu"] [data-cy="expand-local-branch-menu"]'

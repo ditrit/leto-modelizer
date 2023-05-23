@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Homepage:
+  * Display left drawer.
+  * Sort projects by creating date from newest to oldest.
+
 ### Changed
 
 * Homepage:

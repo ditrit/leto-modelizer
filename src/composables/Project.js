@@ -20,12 +20,36 @@ export const PROJECT_STORAGE_KEY = 'projects';
  */
 
 /**
+ * Add a date to the project that does not contain one.
+ * @param {Object} projects - All projects.
+ * @todo Remove this function when leto-modelizer 1.3.0 is released.
+ */
+function addDateToProjects(projects) {
+  let save = false;
+
+  Object.entries(projects).forEach(([, projectValue]) => {
+    if (!projectValue.creationDate) {
+      projectValue.creationDate = Date.now();
+      save = true;
+    }
+  });
+
+  if (save) {
+    localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
+  }
+}
+
+/**
  * Get a map of all projects.
  * @return {Object} Object that contains all project ids as keys and associated projects as values.
  */
 export function getProjects() {
-  const lsProjects = localStorage.getItem(PROJECT_STORAGE_KEY);
-  return JSON.parse(lsProjects || '{}');
+  const allProjects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY) || '{}');
+
+  // TODO: Remove this function when leto-modelizer 1.3.0 is released.
+  addDateToProjects(allProjects);
+
+  return allProjects;
 }
 
 /**
@@ -59,6 +83,7 @@ export function getProjectName(projectId) {
 export function saveProject(project) {
   const projects = getProjects();
   projects[project.id] = project;
+  projects[project.id].creationDate = Date.now();
   localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
 }
 

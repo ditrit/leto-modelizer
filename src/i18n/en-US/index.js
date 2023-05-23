@@ -19,6 +19,7 @@ export default {
     home: {
       newProject: 'New project',
       importProject: 'Import project',
+      createProject: 'Create project',
       importedProject: 'Project has been imported &#129395;!',
       createdProject: 'Project has been created &#129395;!',
       deleteProject: {
@@ -208,6 +209,7 @@ export default {
     home: {
       project: {
         title: 'Recent projects',
+        recent: 'Recent projects',
         import: 'Import new project',
         create: 'Create new project',
         rename: 'Rename project',

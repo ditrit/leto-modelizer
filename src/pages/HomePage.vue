@@ -1,13 +1,13 @@
 <template>
   <q-page class="home-page">
     <div class="column items-center home-content">
-      <div class="fit row justify-center">
+      <div class="fit row">
         <project-grid
           class="col-md-8"
           :projects="projects"
         />
       </div>
-      <div class="fit row justify-center q-mt-lg">
+      <div class="fit row q-mt-lg">
         <template-grid
           class="col-md-8"
           :templates="templates"
@@ -48,14 +48,16 @@ import RenameProjectDialog from 'components/dialog/RenameProjectDialog';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 const templates = ref([]);
-const projects = ref({});
+const projects = ref([]);
 let updateProjectSubscription;
 
 /**
- * Set projects.
+ * Update project list, sorted by creation date from newest to oldest.
  */
 function setProjects() {
-  projects.value = getProjects();
+  projects.value = Object.entries(getProjects())
+    .map(([, project]) => project)
+    .sort((projectA, projectB) => projectB.creationDate - projectA.creationDate);
 }
 
 /**

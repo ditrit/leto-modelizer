@@ -68,7 +68,7 @@ async function updateFile() {
  */
 async function getFileContent() {
   return readProjectFile(props.projectName, { path: props.file.id })
-    .then((fileInput) => fileInput.content);
+    .then((fileInput) => fileInput.content || '');
 }
 
 /**
