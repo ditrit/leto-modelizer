@@ -14,11 +14,11 @@ export default {
       },
       create: 'Create',
       update: 'Update',
+      cancel: 'Cancel',
     },
     home: {
       newProject: 'New project',
       importProject: 'Import project',
-      createProject: 'Create project',
       importedProject: 'Project has been imported &#129395;!',
       createdProject: 'Project has been created &#129395;!',
       deleteProject: {
@@ -216,11 +216,16 @@ export default {
         delete: 'Delete project',
       },
       template: {
-        createProject: 'Create a project from a template',
+        createProject: 'Create a project with {name}',
         importProject: 'Import project with template',
         selected: 'Selected template: {template}',
         empty: 'No templates available',
-        import: 'In existing project',
+        import: 'In existing project (save your project in a repository)',
+        rename: 'Rename this template for your project',
+        description: 'Content',
+      },
+      plugins: {
+        title: 'Plugins',
       },
     },
     models: {
