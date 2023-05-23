@@ -61,6 +61,7 @@ export async function getTemplatesByType(type, pluginName = '') {
       ...definition,
       isTemplate: true,
       plugin: template.plugin,
+      plugins: template.plugins,
       files: template.files,
       key: template.key,
       url: template.url,
