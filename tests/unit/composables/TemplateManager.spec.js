@@ -87,6 +87,7 @@ describe('Test composable: TemplateManager', () => {
           key: 'project_template',
           name: 'Project template',
           type: 'project',
+          plugins: ['a', 'b'],
           description: 'Project template example.',
           url: null,
           models: ['plugin/infra1', 'plugin/infra2'],
@@ -155,6 +156,7 @@ describe('Test composable: TemplateManager', () => {
         files: ['plugin/infra1/main.tf', 'plugin/infra1/provider.tf', 'plugin/infra2/main.tf'],
         key: 'project_template',
         url: null,
+        plugins: ['a', 'b'],
         models: ['plugin/infra1', 'plugin/infra2'],
         description: 'Project template example.',
       };
