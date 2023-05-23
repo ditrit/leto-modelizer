@@ -1,28 +1,51 @@
 <template>
   <q-form
-    class="q-gutter-md create-project-template-form"
+    class="create-project-template-form"
     data-cy="create-project-template-form"
     @submit="onSubmit"
   >
-    <q-input
-      v-model="projectName"
-      :label="$t('page.home.project.name')"
-      :rules="[
-        v => notEmpty($t, v),
-        v => isUniqueProjectName($t, projectNames, v)
-      ]"
-      filled
-      lazy-rules
-      data-cy="name-input"
-    />
+    <div class="row q-gutter-md">
+      <div class="flex-2">
+        <div class="text-subtitle2">
+          {{ $t('page.home.template.rename') }}
+        </div>
+        <q-input
+          v-model="projectName"
+          :label="$t('page.home.project.name')"
+          :rules="[
+            v => notEmpty($t, v),
+            v => isUniqueProjectName($t, projectNames, v)
+          ]"
+          outlined
+          lazy-rules
+          data-cy="name-input"
+        />
+        <div class="text-subtitle2 q-mb-md">
+          {{ $t('page.home.template.description') }}
+        </div>
+        <q-input
+          v-model="templateDescription"
+          filled
+          disable
+          data-cy="content-input"
+        />
+      </div>
+      <div class="flex-1">
+        <plugins-card
+          :plugins="template.plugins"
+          class="bg-grey-3 text-grey-8 no-shadow"
+        />
+      </div>
+    </div>
     <q-checkbox
       v-model="localIsChecked"
       class="q-mb-sm"
       :label="$t('page.home.template.import')"
       data-cy="import-project-checkbox"
     />
-    <template
+    <div
       v-if="isChecked"
+      class="column q-gutter-md"
     >
       <q-input
         v-model="repository"
@@ -47,10 +70,18 @@
         lazy-rules
         data-cy="token-input"
       />
-    </template>
-    <div class="flex row items-center justify-center">
+    </div>
+    <div class="row items-center justify-between q-mt-md">
       <q-btn
-        :label="$t(`actions.home.createProject`)"
+        v-close-popup
+        :label="$t(`actions.default.cancel`)"
+        flat
+        type="reset"
+        color="negative"
+        data-cy="cancel-button"
+      />
+      <q-btn
+        :label="$t(`actions.default.create`)"
         :loading="submitting"
         icon="fa-solid fa-save"
         type="submit"
@@ -82,9 +113,9 @@ import {
 } from 'src/composables/Project';
 import { getTemplateFileByPath } from 'src/composables/TemplateManager';
 import { FileInput } from 'leto-modelizer-plugin-core';
+import PluginsCard from 'src/components/card/PluginsCard.vue';
 
 const emit = defineEmits(['project:add', 'update:checked']);
-
 const props = defineProps({
   template: {
     type: Object,
@@ -95,11 +126,11 @@ const props = defineProps({
     default: false,
   },
 });
-
 const { t } = useI18n();
 const project = {};
 const projectName = ref('');
 const projectNames = ref(Object.keys(getProjects()));
+const templateDescription = ref(props.template.description);
 const localIsChecked = ref(props.isChecked);
 const repository = ref();
 const username = ref();
@@ -174,5 +205,11 @@ watch(() => props.isChecked, () => {
 <style lang="scss" scoped>
 .create-project-template-form {
   min-width: 400px;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex-2 {
+  flex: 2;
 }
 </style>

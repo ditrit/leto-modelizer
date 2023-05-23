@@ -4,11 +4,12 @@
     data-cy="create-project-template-dialog"
   >
     <template #title>
-      <q-icon
-        color="primary"
-        :name="`${isChecked ? 'fa-brands fa-git-alt' : 'fa-solid fa-square-plus'}`"
-      />
-      {{ $t(`page.home.template.${isChecked ? 'import': 'create'}Project`) }}
+      {{
+        $t(
+          `page.home.template.${isChecked ? 'import': 'create'}Project`,
+          { name: templateName },
+        )
+      }}
     </template>
     <template #default>
       <div v-if="projectTemplate?.models.length">
@@ -22,7 +23,7 @@
           padding
           arrows
           height="200px"
-          class="text-primary rounded-borders"
+          class="text-primary rounded-borders carousel"
         >
           <q-carousel-slide
             v-for="(model, index) in projectTemplate?.models"
@@ -37,16 +38,11 @@
                 class="carousel-img"
               >
             </div>
-            <div class="q-mt-md text-center text-black">
-              {{ model }}
-            </div>
           </q-carousel-slide>
         </q-carousel>
       </div>
-      <div class="text-subtitle2 q-pb-md">
-        {{ $t('page.home.template.selected', { template: templateName }) }}
-      </div>
       <create-project-template-form
+        class="q-mt-lg"
         :template="projectTemplate"
         :is-checked="isChecked"
         @project:add="addProject"
@@ -104,6 +100,10 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
+.carousel {
+  border: 2px solid #ccc;
+  background: rgba(0, 0, 0, 0.05);
+}
 .carousel-img {
   cursor: zoom-in;
   height: 100px;
