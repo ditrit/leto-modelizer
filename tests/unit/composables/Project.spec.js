@@ -41,6 +41,7 @@ import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
 import git from 'isomorphic-git';
 import FileStatus from 'src/models/git/FileStatus';
+import Project from 'src/models/Project';
 
 jest.mock('isomorphic-git', () => ({
   init: jest.fn(() => Promise.resolve('init')),
@@ -193,10 +194,10 @@ describe('Test composable: Project', () => {
         .mockImplementation(() => mockDate);
 
       const projects = {
-        foo: { id: 'foo', creationDate: mockDate },
-        bar: { id: 'bar', creationDate: mockDate },
-        qaz: { id: 'qaz', creationDate: mockDate },
-        quz: { id: 'quz', creationDate: mockDate },
+        foo: new Project({ id: 'foo', creationDate: mockDate }),
+        bar: new Project({ id: 'bar', creationDate: mockDate }),
+        qaz: new Project({ id: 'qaz', creationDate: mockDate }),
+        quz: new Project({ id: 'quz', creationDate: mockDate }),
       };
 
       localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
@@ -218,7 +219,7 @@ describe('Test composable: Project', () => {
 
       const project = getProjectById('foo');
 
-      expect(project).toStrictEqual({ id: 'foo', creationDate: 1 });
+      expect(project).toStrictEqual(new Project({ id: 'foo', creationDate: 1 }));
     });
   });
 
@@ -261,11 +262,11 @@ describe('Test composable: Project', () => {
       saveProject({ id: 'foo' });
       saveProject({ id: 'bar' });
 
-      const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
+      const projects = getProjects();
 
       expect(projects).toStrictEqual({
-        foo: { id: 'foo', creationDate: mockDate },
-        bar: { id: 'bar', creationDate: mockDate },
+        foo: new Project({ id: 'foo', creationDate: mockDate }),
+        bar: new Project({ id: 'bar', creationDate: mockDate }),
       });
     });
 
@@ -313,9 +314,9 @@ describe('Test composable: Project', () => {
 
       await deleteProjectById('foo');
 
-      const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
+      const projects = getProjects();
 
-      expect(projects.bar).toStrictEqual({ id: 'bar', creationDate: 1 });
+      expect(projects.bar).toStrictEqual(new Project({ id: 'bar', creationDate: 1 }));
       expect(projects.foo).not.toBeDefined();
     });
   });
@@ -686,10 +687,10 @@ describe('Test composable: Project', () => {
 
       await renameProject('foo', 'bar');
 
-      const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
+      const projects = getProjects();
 
       expect(projects.foo).not.toBeDefined();
-      expect(projects.bar).toStrictEqual({ id: 'bar', creationDate: 1 });
+      expect(projects.bar).toStrictEqual(new Project({ id: 'bar', creationDate: 1 }));
     });
   });
 

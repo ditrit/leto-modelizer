@@ -69,10 +69,12 @@ export function getProjectById(projectId) {
  */
 export function getProjectName(projectId) {
   const projects = getProjects();
-  if (projects[projectId]?.git) {
-    const { repository } = projects[projectId].git;
+  const { repository } = projects[projectId].git;
+
+  if (repository) {
     return repository.split('/').at(-1);
   }
+
   return projectId;
 }
 
