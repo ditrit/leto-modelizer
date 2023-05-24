@@ -407,4 +407,8 @@ export default {
       },
     },
   },
+  tag: {
+    local: 'Local',
+    remote: 'Remote',
+  },
 };
