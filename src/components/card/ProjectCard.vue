@@ -17,7 +17,7 @@
           class="absolute-bottom text-subtitle2 text-center"
           data-cy="title-container"
         >
-          <div>
+          <div class="ellipsis-2-lines">
             {{ project.id }}
           </div>
           <q-btn
