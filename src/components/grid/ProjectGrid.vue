@@ -55,13 +55,13 @@
           />
         </div>
       </div>
-    </div>
-    <div
-      v-if="projects.length === 0"
-      class="row text-center text-h6 text-grey empty-grid"
-      data-cy="project-grid-empty"
-    >
-      {{ $t('page.home.project.empty') }}
+      <div
+        v-if="projects.length === 0"
+        class="row text-center text-h6 text-grey q-ml-md items-center"
+        data-cy="project-grid-empty"
+      >
+        {{ $t('page.home.project.empty') }}
+      </div>
     </div>
   </div>
 </template>
@@ -79,9 +79,6 @@ defineProps({
 </script>
 
 <style scoped>
-.empty-grid {
-  margin-top: 5vh;
-}
 .create-project-button {
   width: 150px;
   height: 150px;
