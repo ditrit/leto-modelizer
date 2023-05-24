@@ -208,10 +208,10 @@ export default {
   page: {
     home: {
       project: {
-        title: 'Recent projects',
         recent: 'Recent projects',
+        title: 'Choose your project',
         import: 'Import new project',
-        create: 'Create new project',
+        create: 'Create a project',
         rename: 'Rename project',
         name: 'Project name',
         empty: 'No projects, please create a new project to have one here 😉',

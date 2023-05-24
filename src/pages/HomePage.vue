@@ -3,8 +3,8 @@
     <div class="column items-center home-content">
       <div class="fit row">
         <project-grid
-          class="col-md-8"
-          :projects="projects"
+          class="col-md-8 full-width"
+          :projects="projects.slice(0, 12)"
         />
       </div>
       <div class="fit row q-mt-lg">
@@ -82,3 +82,9 @@ onUnmounted(() => {
   updateProjectSubscription.unsubscribe();
 });
 </script>
+
+<style lang="scss" scoped>
+.project-grid {
+  max-width: 1275px;
+}
+</style>
