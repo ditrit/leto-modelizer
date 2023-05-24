@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * A button to display recent projects.
     * A short projects list access.
   * Sort projects by creating date from newest to oldest.
+  * Add tags list to filter project.
 
 ### Changed
 
