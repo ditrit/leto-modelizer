@@ -29,4 +29,28 @@ describe('Test component: ProjectGrid', () => {
       });
     });
   });
+
+  describe('Test function: onToggleTag', () => {
+    it('should toggle wanted tag', () => {
+      expect(wrapper.vm.tags.length).toEqual(2);
+      expect(wrapper.vm.tags[0].active).toEqual(false);
+      expect(wrapper.vm.tags[1].active).toEqual(false);
+
+      wrapper.vm.onToggleTag(wrapper.vm.tags[0].key);
+      expect(wrapper.vm.tags[0].active).toEqual(true);
+      expect(wrapper.vm.tags[1].active).toEqual(false);
+
+      wrapper.vm.onToggleTag(wrapper.vm.tags[1].key);
+      expect(wrapper.vm.tags[0].active).toEqual(true);
+      expect(wrapper.vm.tags[1].active).toEqual(true);
+
+      wrapper.vm.onToggleTag(wrapper.vm.tags[0].key);
+      expect(wrapper.vm.tags[0].active).toEqual(false);
+      expect(wrapper.vm.tags[1].active).toEqual(true);
+
+      wrapper.vm.onToggleTag(wrapper.vm.tags[1].key);
+      expect(wrapper.vm.tags[0].active).toEqual(false);
+      expect(wrapper.vm.tags[1].active).toEqual(false);
+    });
+  });
 });
