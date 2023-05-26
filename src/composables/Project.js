@@ -8,6 +8,7 @@ import {
 import Branch from 'src/models/git/Branch';
 import FileStatus from 'src/models/git/FileStatus';
 import { getFileInputs, getPlugins } from 'src/composables/PluginManager';
+import Project from 'src/models/Project';
 
 const fs = BrowserFS.BFSRequire('fs');
 
@@ -46,6 +47,10 @@ function addDateToProjects(projects) {
 export function getProjects() {
   const allProjects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY) || '{}');
 
+  Object.keys(allProjects).forEach((key) => {
+    allProjects[key] = new Project(allProjects[key]);
+  });
+
   // TODO: Remove this function when leto-modelizer 1.2.0 is released.
   addDateToProjects(allProjects);
 
@@ -69,10 +74,12 @@ export function getProjectById(projectId) {
  */
 export function getProjectName(projectId) {
   const projects = getProjects();
-  if (projects[projectId]?.git) {
-    const { repository } = projects[projectId].git;
+  const { repository } = projects[projectId].git;
+
+  if (repository) {
     return repository.split('/').at(-1);
   }
+
   return projectId;
 }
 

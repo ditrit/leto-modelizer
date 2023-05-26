@@ -15,10 +15,14 @@
         @click="DialogEvent.next({ type: 'open', key: 'ImportProject' })"
       />
     </div>
-    <div class="row">
+    <div class="row items-center">
       <h5 class="text-primary q-ma-md">
         {{ $t('page.home.project.recent') }}
       </h5>
+      <tag-list
+        :tags="tags"
+        @toggle:tag="onToggleTag"
+      />
     </div>
     <div class="row no-wrap">
       <div class="row">
@@ -46,7 +50,7 @@
       </div>
       <div class="row items-center">
         <div
-          v-for="project in projects"
+          v-for="project in filteredProjects"
           :key="project.id"
           class="project-card-container row q-mb-lg justify-center items-center col-2"
         >
@@ -55,13 +59,13 @@
           />
         </div>
       </div>
-    </div>
-    <div
-      v-if="projects.length === 0"
-      class="row text-center text-h6 text-grey empty-grid"
-      data-cy="project-grid-empty"
-    >
-      {{ $t('page.home.project.empty') }}
+      <div
+        v-if="filteredProjects.length === 0"
+        class="row text-center text-h6 text-grey q-ml-md items-center"
+        data-cy="project-grid-empty"
+      >
+        {{ $t('page.home.project.empty') }}
+      </div>
     </div>
   </div>
 </template>
@@ -69,19 +73,44 @@
 <script setup>
 import ProjectCard from 'src/components/card/ProjectCard.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
+import TagList from 'components/list/TagList.vue';
+import { computed, ref } from 'vue';
 
-defineProps({
+const props = defineProps({
   projects: {
     type: Array,
     required: true,
   },
 });
+
+const tags = ref([{
+  key: 'local',
+  active: false,
+}, {
+  key: 'remote',
+  active: false,
+}]);
+const tagFilters = {
+  local: (project) => project.isLocal,
+  remote: (project) => project.isRemote,
+};
+const filteredProjects = computed(() => tags.value
+  .filter(({ active }) => active)
+  .reduce((allProjects, { key }) => allProjects.filter(tagFilters[key]), props.projects)
+  .slice(0, 12));
+
+/**
+ * Toggle tag activation.
+ * @param {String} key - Tag key.
+ */
+function onToggleTag(key) {
+  const tag = tags.value.find(({ key: tagKey }) => tagKey === key);
+
+  tag.active = !tag.active;
+}
 </script>
 
 <style scoped>
-.empty-grid {
-  margin-top: 5vh;
-}
 .create-project-button {
   width: 150px;
   height: 150px;

@@ -4,7 +4,7 @@
       <div class="fit row">
         <project-grid
           class="col-md-8 full-width"
-          :projects="projects.slice(0, 12)"
+          :projects="projects"
         />
       </div>
       <div class="fit row q-mt-lg">
