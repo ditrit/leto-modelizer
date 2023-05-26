@@ -225,7 +225,7 @@ export default {
         delete: 'Delete project',
       },
       template: {
-        createProject: 'Create a project with {name}',
+        createProject: 'Create a project from a template',
         importProject: 'Import project with template',
         selected: 'Selected template: {template}',
         empty: 'No templates available',
