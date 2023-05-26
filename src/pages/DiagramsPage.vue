@@ -8,6 +8,7 @@
       >
         <div
           :id="`diagram_${diagram.name}`"
+          :data-cy="`diagram_${diagram.name}`"
           @dragover.prevent
           @drop.prevent="dropHandler"
         />
