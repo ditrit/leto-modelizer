@@ -6,10 +6,15 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/HomePage.vue') },
+      { path: '', name: 'Home', component: () => import('pages/HomePage.vue') },
       { path: '/about', name: 'About', component: () => import('pages/AboutPage.vue') },
       ModelsRoute,
       ModelizerRoute,
+      {
+        path: '/:projectName/diagrams',
+        name: 'Diagrams',
+        component: () => import('pages/DiagramsPage.vue'),
+      },
     ],
   },
   // Always leave this as last one,

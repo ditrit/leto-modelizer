@@ -1,6 +1,6 @@
 <template>
   <q-layout view="HHh Lpr Fff">
-    <default-navigation-bar v-if="isHomePage" />
+    <default-navigation-bar v-if="showDefaultNavBar" />
     <home-drawer v-if="isHomePage" />
     <q-page-container>
       <router-view />
@@ -33,7 +33,9 @@ import DefaultNavigationBar from 'components/DefaultNavigationBar.vue';
 
 const route = useRoute();
 const version = ref(process.env.VERSION);
+const routeName = computed(() => route.name);
 const viewType = computed(() => route.params.viewType);
-const showFooter = computed(() => (viewType.value !== 'text' && viewType.value !== 'draw'));
+const showFooter = computed(() => (routeName.value !== 'Diagrams' && viewType.value !== 'text' && viewType.value !== 'draw'));
 const isHomePage = computed(() => route.path === '/');
+const showDefaultNavBar = computed(() => (routeName.value === 'Home' || routeName.value === 'Diagrams'));
 </script>
