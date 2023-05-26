@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Add tags list to filter project.
   * Add search bar for projects.
   * Add search bar for templates.
+* Multi diagrams page:
+  * Display all diagrams of a project.
+  * Zoom centered on all diagrams.
 
 ### Changed
 
@@ -27,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Redesign template grid.
   * Redesign template card.
   * Remove "About" button.
+* Plugin management:
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.3.0) version 0.3.0.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.16.0) version 0.16.0.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.2.0) version 0.2.0.
 
 ## [1.1.0] - 2023/05/04
 
@@ -56,7 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Plugin management:
   * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.2.0) version 0.2.0.
   * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.15.2) version 0.15.2.
-  * Work with [githubator-core](https://github.com/ditrit/githubator-plugin/tree/0.1.1) version 0.1.1.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.1.1) version 0.1.1.
 * Update [plugin-cli](https://github.com/ditrit/leto-modelizer-plugin-cli/tree/1.0.0) version 1.0.0.
 
 ### Fixed
