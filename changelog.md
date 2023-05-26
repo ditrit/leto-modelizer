@@ -10,7 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Homepage:
-  * Display left drawer.
+  * Add a left drawer that contains:
+    * A button to display recent projects.
+    * A short projects list access.
   * Sort projects by creating date from newest to oldest.
 
 ### Changed

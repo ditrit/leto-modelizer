@@ -19,7 +19,7 @@ Feature: Test home page: project creation
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
     And  I expect current url is '{{projectName}}/models'
 
-  Scenario: Create project should add the project in Home page
+  Scenario: Create project should add it in the projects list
     Given I click on '[data-cy="create-project-button"]'
     And   I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'
     And   I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
@@ -27,6 +27,21 @@ Feature: Test home page: project creation
     When I visit the '/'
     Then I expect '[data-cy="project-card_{{projectName}}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{projectName}}"] [data-cy="title-container"]' is '{{projectName}}'
+
+  Scenario: Create project should add it in the left drawer
+    Then I expect '[data-cy="home-drawer"] [data-cy="project-expansion-item"]' exists
+
+    When I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
+    Then I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' exists
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' is 'Nothing to display'
+
+    When I click on '[data-cy="create-project-button"]'
+    And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'
+    And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
+    And  I visit the '/'
+    And  I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
+    Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' exists
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' is '{{projectName}}'
 
   Scenario: Create project with empty name should display an error
     When I click on '[data-cy="create-project-button"]'
@@ -51,7 +66,7 @@ Feature: Test home page: project creation
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
     And  I expect current url is '{{projectName}}/models'
 
-  Scenario: Create project from a template should add the project in Home page
+  Scenario: Create project from a template should add it in the projects list
     Then I expect '[data-cy="template-card_project_template"]' exists
 
     When I click on '[data-cy="template-card_project_template"]'
@@ -60,6 +75,22 @@ Feature: Test home page: project creation
     And  I visit the '/'
     Then I expect '[data-cy="project-card_{{projectName}}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{projectName}}"] [data-cy="title-container"]' is '{{projectName}}'
+
+  Scenario: Create project from a template should add it in the left drawer
+    Then I expect '[data-cy="template-card_project_template"]' exists
+    And  I expect '[data-cy="home-drawer"] [data-cy="project-expansion-item"]' exists
+
+    When I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
+    Then I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' exists
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' is 'Nothing to display'
+
+    When I click on '[data-cy="template-card_project_template"]'
+    And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{projectName}}'
+    And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
+    And  I visit the '/'
+    And  I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
+    Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' exists
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' is '{{projectName}}'
 
   Scenario: Create project from a template with empty name should display an error
     Then I expect '[data-cy="template-card_project_template"]' exists

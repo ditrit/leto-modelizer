@@ -16,7 +16,7 @@
       />
     </div>
     <div class="row">
-      <h5 class="text-secondary q-ma-md">
+      <h5 class="text-primary q-ma-md">
         {{ $t('page.home.project.recent') }}
       </h5>
     </div>

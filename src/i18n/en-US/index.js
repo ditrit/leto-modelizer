@@ -207,6 +207,13 @@ export default {
   },
   page: {
     home: {
+      drawer: {
+        empty: 'Nothing to display',
+        projects: {
+          title: 'Projects',
+          recent: 'Recent projects',
+        },
+      },
       project: {
         recent: 'Recent projects',
         title: 'Choose your project',

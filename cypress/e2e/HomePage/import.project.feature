@@ -15,7 +15,7 @@ Feature: Test home page: project import
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
     And  I expect current url is '{{projectName}}/models'
 
-  Scenario: Import project should add the project in Home page
+  Scenario: Import project should add it in the projects list
     When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
@@ -24,6 +24,17 @@ Feature: Test home page: project import
     When I visit the '/'
     Then I expect '[data-cy="project-card_{{projectName}}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{projectName}}"] [data-cy="title-container"]' is '{{projectName}}'
+
+  Scenario: Import project should add it in the left drawer
+    When I click on '[data-cy="import-project-button"]'
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
+    And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
+    Then I expect current url is '{{projectName}}/models'
+
+    When I visit the '/'
+    And  I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
+    Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' appear 1 time on screen
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' is '{{projectName}}'
 
   Scenario: Import project with empty repository should display an error
     When I click on '[data-cy="import-project-button"]'
@@ -77,7 +88,7 @@ Feature: Test home page: project import
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
     And  I expect current url is '{{projectName}}/models'
 
-  Scenario: Import project with a template should add the project in Home page
+  Scenario: Import project with a template should add it in the projects list
     Then I expect '[data-cy="template-card_project_template"]' exists
 
     When I click on '[data-cy="template-card_project_template"]'
@@ -90,6 +101,26 @@ Feature: Test home page: project import
     When I visit the '/'
     Then I expect '[data-cy="project-card_{{projectName}}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{projectName}}"] [data-cy="title-container"]' is '{{projectName}}'
+
+  Scenario: Import project with a template should add it in the left drawer
+    Then I expect '[data-cy="template-card_project_template"]' exists
+    And  I expect '[data-cy="home-drawer"] [data-cy="project-expansion-item"]' exists
+
+    When I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
+    Then I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' exists
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' is 'Nothing to display'
+
+    When I click on '[data-cy="template-card_project_template"]'
+    And  I click on '[data-cy="create-project-template-form"] [data-cy="import-project-checkbox"]'
+    And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{projectName}}'
+    And  I set on '[data-cy="create-project-template-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
+    And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
+    Then I expect current url is '{{projectName}}/models'
+
+    When I visit the '/'
+    And  I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
+    Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' appear 1 time on screen
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' is '{{projectName}}'
 
   Scenario: Import project with a template with an already existing project name should display an error
     Then I expect '[data-cy="template-card_project_template"]' exists
