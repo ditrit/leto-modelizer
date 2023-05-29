@@ -24,7 +24,7 @@
         @toggle:tag="onToggleTag"
       />
     </div>
-    <div class="row no-wrap">
+    <div class="row no-wrap q-ml-md">
       <div class="row">
         <q-btn
           outline
