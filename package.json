@@ -23,7 +23,7 @@
     "axios": "=1.4.0",
     "browserfs": "=1.4.3",
     "core-js": "=3.30.2",
-    "isomorphic-git": "=1.23.0",
+    "isomorphic-git": "=1.24.0",
     "leto-modelizer-plugin-core": "github:ditrit/leto-modelizer-plugin-core#0.15.2",
     "monaco-editor": "=0.38.0",
     "monaco-editor-webpack-plugin": "=7.0.1",
@@ -33,13 +33,13 @@
     "vue": "=3.3.4",
     "vue-3-sanitize": "=0.1.4",
     "vue-i18n": "=9.2.2",
-    "vue-router": "=4.2.1"
+    "vue-router": "=4.2.2"
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "=2.2.3",
-    "@babel/core": "=7.22.0",
+    "@babel/core": "=7.22.1",
     "@babel/eslint-parser": "=7.21.8",
-    "@babel/preset-env": "=7.22.0",
+    "@babel/preset-env": "=7.22.4",
     "@badeball/cypress-cucumber-preprocessor": "=17.2.0",
     "@cypress/browserify-preprocessor": "=3.0.2",
     "@quasar/app-webpack": "=3.9.2",
@@ -67,7 +67,7 @@
     "jest-sonar-reporter": "=2.0.0",
     "leto-modelizer-plugin-cli": "github:ditrit/leto-modelizer-plugin-cli#1.0.0",
     "nunjucks": "=3.2.4",
-    "vue-loader": "=17.1.1"
+    "vue-loader": "=17.1.2"
   },
   "browserslist": [
     "last 10 Chrome versions",
