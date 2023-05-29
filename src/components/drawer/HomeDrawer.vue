@@ -2,7 +2,7 @@
   <default-drawer
     :has-close-btn="false"
     :bordered="false"
-    class="column no-wrap"
+    class="column no-wrap bg-grey-2"
     data-cy="home-drawer"
   >
     <template #content>
