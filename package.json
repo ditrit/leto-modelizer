@@ -67,7 +67,7 @@
     "jest-sonar-reporter": "=2.0.0",
     "leto-modelizer-plugin-cli": "github:ditrit/leto-modelizer-plugin-cli#1.0.0",
     "nunjucks": "=3.2.4",
-    "vue-loader": "=17.1.2"
+    "vue-loader": "=17.2.1"
   },
   "browserslist": [
     "last 10 Chrome versions",
