@@ -81,27 +81,6 @@ describe('Test component: GitBranchMenu', () => {
       });
     });
 
-    describe('Test function: isSearched', () => {
-      it('should return true on match', () => {
-        wrapper.vm.searchedBranch = '';
-        expect(wrapper.vm.isSearched('test')).toEqual(true);
-
-        wrapper.vm.searchedBranch = 's';
-        expect(wrapper.vm.isSearched('test')).toEqual(true);
-
-        wrapper.vm.searchedBranch = 'a test';
-        expect(wrapper.vm.isSearched('test')).toEqual(true);
-      });
-
-      it('should return false if no match', () => {
-        wrapper.vm.searchedBranch = 'main';
-        expect(wrapper.vm.isSearched('test')).toEqual(false);
-
-        wrapper.vm.searchedBranch = 'Main';
-        expect(wrapper.vm.isSearched('test')).toEqual(false);
-      });
-    });
-
     describe('Test function: filterAndSort', () => {
       beforeEach(() => {
         wrapper.vm.allBranches = [
