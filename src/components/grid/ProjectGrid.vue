@@ -30,6 +30,7 @@
         clearable
         class="search-bar"
         :label="$t('actions.default.search')"
+        data-cy="search-project-input"
         @update:model-value="updateProjects"
       >
         <template #prepend>
