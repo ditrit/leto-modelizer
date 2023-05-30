@@ -1,11 +1,12 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import LinkInput from 'src/components/inputs/LinkInput';
+import { createI18n } from 'vue-i18n';
+import i18nConfiguration from 'src/i18n';
 
 installQuasarPlugin();
 
-// TODO : shallowMount and Quasar test not working due to some property error (prefix)
-describe.skip('Test component: LinkInput', () => {
+describe('Test component: LinkInput', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -32,7 +33,22 @@ describe.skip('Test component: LinkInput', () => {
           },
         },
       },
+      global: {
+        stubs: {
+          qSelect: true,
+        },
+        plugins: [
+          createI18n({
+            locale: 'en-US',
+            allowComposition: true,
+            messages: i18nConfiguration,
+          }),
+        ],
+      },
     });
+    wrapper.vm.linkInput = {
+      validate: jest.fn(() => Promise.resolve(true)),
+    };
   });
 
   describe('Test variables initialization', () => {
@@ -68,7 +84,8 @@ describe.skip('Test component: LinkInput', () => {
     });
   });
 
-  describe('Test watcher: props.plugin.components', () => {
+  // TODO: REF.value.validate is not a function
+  describe.skip('Test watcher: props.plugin.components', () => {
     it('should update options', async () => {
       await wrapper.setProps({
         attribute: {

@@ -1,11 +1,13 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import ArrayInput from 'src/components/inputs/ArrayInput';
+import { createI18n } from 'vue-i18n';
+import i18nConfiguration from 'src/i18n';
+import { ComponentAttributeDefinition } from 'leto-modelizer-plugin-core';
 
 installQuasarPlugin();
 
-// TODO : shallowMount and Quasar test not working due to some property error (prefix)
-describe.skip('Test component: ArrayInput', () => {
+describe('Test component: ArrayInput', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -13,10 +15,25 @@ describe.skip('Test component: ArrayInput', () => {
       props: {
         attribute: {
           value: ['test'],
-          definition: {},
+          definition: new ComponentAttributeDefinition(),
         },
       },
+      global: {
+        stubs: {
+          qSelect: true,
+        },
+        plugins: [
+          createI18n({
+            locale: 'en-US',
+            allowComposition: true,
+            messages: i18nConfiguration,
+          }),
+        ],
+      },
     });
+    wrapper.vm.arrayInput = {
+      validate: jest.fn(() => Promise.resolve(true)),
+    };
   });
 
   describe('Test variables initialization', () => {
