@@ -1,22 +1,20 @@
 <template>
-  <q-page class="home-page">
+  <q-page class="home-page bg-grey-2">
     <div class="column items-center home-content">
-      <div class="fit row">
+      <div class="row full-width">
         <project-grid
           class="col-md-8 full-width"
           :projects="projects"
         />
       </div>
-      <div class="fit row q-mt-lg">
+      <div class="row full-width q-my-md">
         <template-grid
-          class="col-md-8"
+          class="q-mx-md"
           :templates="templates"
           @add:template="openCreateProjectTemplateDialog"
         >
           <template #header>
-            <h4>
-              {{ $t('page.home.template.createProject') }}
-            </h4>
+            {{ $t('page.home.template.createProject') }}
           </template>
         </template-grid>
       </div>
@@ -85,6 +83,10 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .project-grid {
+  max-width: 1275px;
+}
+.template-grid {
+  width: 100%;
   max-width: 1275px;
 }
 </style>
