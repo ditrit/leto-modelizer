@@ -15,6 +15,7 @@ export default {
       create: 'Create',
       update: 'Update',
       cancel: 'Cancel',
+      search: 'Search',
     },
     home: {
       newProject: 'New project',

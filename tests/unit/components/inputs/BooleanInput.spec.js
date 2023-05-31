@@ -1,11 +1,12 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import BooleanInput from 'src/components/inputs/BooleanInput';
+import { createI18n } from 'vue-i18n';
+import i18nConfiguration from 'src/i18n';
 
 installQuasarPlugin();
 
-// TODO : shallowMount and Quasar test not working due to some property error (prefix)
-describe.skip('Test component: BooleanInput', () => {
+describe('Test component: BooleanInput', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -15,6 +16,18 @@ describe.skip('Test component: BooleanInput', () => {
           name: 'attributeName',
           value: true,
         },
+      },
+      global: {
+        stubs: {
+          qToggle: true,
+        },
+        plugins: [
+          createI18n({
+            locale: 'en-US',
+            allowComposition: true,
+            messages: i18nConfiguration,
+          }),
+        ],
       },
     });
   });

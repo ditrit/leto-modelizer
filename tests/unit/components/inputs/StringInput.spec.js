@@ -1,11 +1,12 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import StringInput from 'src/components/inputs/StringInput';
+import { createI18n } from 'vue-i18n';
+import i18nConfiguration from 'src/i18n';
 
 installQuasarPlugin();
 
-// TODO : shallowMount and Quasar test not working due to some property error (prefix)
-describe.skip('Test component: StringInput', () => {
+describe('Test component: StringInput', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -16,7 +17,22 @@ describe.skip('Test component: StringInput', () => {
           name: 'attributeName',
         },
       },
+      global: {
+        stubs: {
+          qInput: true,
+        },
+        plugins: [
+          createI18n({
+            locale: 'en-US',
+            allowComposition: true,
+            messages: i18nConfiguration,
+          }),
+        ],
+      },
     });
+    wrapper.vm.stringInput = {
+      validate: jest.fn(() => Promise.resolve(true)),
+    };
   });
 
   describe('Test variables initialization', () => {

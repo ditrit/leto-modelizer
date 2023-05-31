@@ -15,7 +15,7 @@
         @click="DialogEvent.next({ type: 'open', key: 'ImportProject' })"
       />
     </div>
-    <div class="row items-center">
+    <div class="row items-center q-mr-md">
       <h5 class="text-primary q-ma-md">
         {{ $t('page.home.project.recent') }}
       </h5>
@@ -23,6 +23,23 @@
         :tags="tags"
         @toggle:tag="onToggleTag"
       />
+      <q-input
+        v-model="searchProjectText"
+        outlined
+        dense
+        clearable
+        class="search-bar"
+        :label="$t('actions.default.search')"
+        data-cy="search-project-input"
+        @update:model-value="updateProjects"
+      >
+        <template #prepend>
+          <q-icon
+            name="fa-solid fa-magnifying-glass"
+            size="xs"
+          />
+        </template>
+      </q-input>
     </div>
     <div class="row no-wrap q-ml-md">
       <div class="row">
@@ -74,7 +91,8 @@
 import ProjectCard from 'src/components/card/ProjectCard.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import TagList from 'components/list/TagList.vue';
-import { computed, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { searchText } from 'src/composables/Filter';
 
 const props = defineProps({
   projects: {
@@ -94,10 +112,20 @@ const tagFilters = {
   local: (project) => project.isLocal,
   remote: (project) => project.isRemote,
 };
-const filteredProjects = computed(() => tags.value
-  .filter(({ active }) => active)
-  .reduce((allProjects, { key }) => allProjects.filter(tagFilters[key]), props.projects)
-  .slice(0, 12));
+const filteredProjects = ref([]);
+const searchProjectText = ref('');
+
+/**
+ * Update projects list according to tags and input search.
+ */
+function updateProjects() {
+  filteredProjects.value = props.projects
+    .filter(({ id }) => searchText(id, searchProjectText.value))
+    .filter((project) => tags.value
+      .filter(({ active }) => active)
+      .every(({ key }) => tagFilters[key](project)))
+    .slice(0, 12);
+}
 
 /**
  * Toggle tag activation.
@@ -107,7 +135,16 @@ function onToggleTag(key) {
   const tag = tags.value.find(({ key: tagKey }) => tagKey === key);
 
   tag.active = !tag.active;
+  updateProjects();
 }
+
+watch(() => props.projects, () => {
+  updateProjects();
+});
+
+onMounted(() => {
+  updateProjects();
+});
 </script>
 
 <style scoped>
@@ -117,5 +154,9 @@ function onToggleTag(key) {
 }
 .project-card-container {
   min-width: 175px;
+}
+.search-bar {
+  margin-left: auto;
+  min-width: 300px;
 }
 </style>

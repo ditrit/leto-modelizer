@@ -6,7 +6,10 @@ import i18nConfiguration from 'src/i18n';
 
 installQuasarPlugin();
 
-const i18nPlugin = {
+const global = {
+  stubs: {
+    qInput: true,
+  },
   plugins: [
     createI18n({
       locale: 'en-US',
@@ -16,8 +19,7 @@ const i18nPlugin = {
   ],
 };
 
-// TODO : shallowMount and Quasar test not working due to some property error (prefix)
-describe.skip('Test component: InputWrapper', () => {
+describe('Test component: InputWrapper', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -34,7 +36,7 @@ describe.skip('Test component: InputWrapper', () => {
         plugin: {},
         fullName: 'test',
       },
-      global: i18nPlugin,
+      global,
     });
   });
 
@@ -73,7 +75,7 @@ describe.skip('Test component: InputWrapper', () => {
             plugin: {},
             fullName: 'test',
           },
-          global: i18nPlugin,
+          global,
         });
         expect(wrapper.vm.name).toEqual('referenceTest');
       });

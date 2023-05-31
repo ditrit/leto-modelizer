@@ -159,6 +159,7 @@ import {
 } from 'src/composables/Project';
 import GitBranchExpandListMenu from 'components/menu/GitBranchExpandListMenu';
 import DialogEvent from 'src/composables/events/DialogEvent';
+import { searchText } from 'src/composables/Filter';
 
 const props = defineProps({
   currentBranchName: {
@@ -179,21 +180,6 @@ const hasNoBranches = computed(() => allBranches.value.length === 0);
 const loading = ref(false);
 
 /**
- * Indicate if branch name contains searched text.
- * @param {String} branch - Branch name.
- * @return {Boolean} Return true if branch contains searched text otherwise return false.
- */
-function isSearched(branch) {
-  if (!searchedBranch.value || searchedBranch.value.trim().length === 0) {
-    return true;
-  }
-
-  return searchedBranch.value.toLowerCase().split(' ')
-    .filter((searchedText) => searchedText !== '')
-    .some((searchedText) => branch.toLowerCase().includes(searchedText));
-}
-
-/**
  * Filter all branches with searched text, then display current branch at the top
  * and sort the remaining branches alphabetically.
  * @param {Array} branches - Array of branches.
@@ -203,7 +189,8 @@ function isSearched(branch) {
 function filterAndSort(branches, branchType) {
   return branches
     .filter((branch) => branch[branchType])
-    .filter((branch) => isSearched(branch.name) || isSearched(branch.fullName))
+    .filter((branch) => searchText(branch.name, searchedBranch.value)
+        || searchText(branch.fullName, searchedBranch.value))
     .sort((a, b) => {
       if (a.name === props.currentBranchName) {
         return -1;

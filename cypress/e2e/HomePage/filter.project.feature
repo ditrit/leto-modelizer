@@ -1,9 +1,9 @@
 Feature: Test home page: project filter
 
-  Scenario: Select/unselect tag should filter the projects list
+  Background:
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
-    And   I set context field 'localProjectName' with 'projectTest'
+    And   I set context field 'localProjectName' with 'projectLocal'
     And   I set context field 'remoteProjectName' with 'leto-modelizer-project-test'
     And   I set context field 'remoteProjectUrl' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I visit the '/'
@@ -30,6 +30,7 @@ Feature: Test home page: project filter
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is '/'
 
+  Scenario: Select/unselect tag should filter the projects list
     # Verify all project tags are inactive
     And  I expect '[data-cy="inactive-tag_local"]' exists
     And  I expect '[data-cy="inactive-tag_remote"]' exists
@@ -54,3 +55,33 @@ Feature: Test home page: project filter
     And  I expect '[data-cy="inactive-tag_local"]' exists
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{localProjectName}}"]' not exists
+
+  Scenario: Set/unset searched text should filter the projects list
+    # Verify all project tags are inactive
+    And  I expect '[data-cy="inactive-tag_local"]' exists
+    And  I expect '[data-cy="inactive-tag_remote"]' exists
+
+    # Set 'local' as searched text and expect only projects that contains 'local' to be displayed
+    When I set on '[data-cy="search-project-input"]' text 'local'
+    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' not exists
+    And  I expect '[data-cy="project-card_{{localProjectName}}"]' appear 1 time on screen
+
+    # Set 'leto' as searched text and expect only projects that contains 'leto' to be displayed
+    When I set on '[data-cy="search-project-input"]' text 'leto'
+    And  I expect '[data-cy="project-card_{{localProjectName}}"]' not exists
+    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' appear 1 time on screen
+
+    # Set 'none' as searched text and expect no project is displayed
+    When I set on '[data-cy="search-project-input"]' text 'none'
+    And  I expect '[data-cy="project-card_{{localProjectName}}"]' not exists
+    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' not exists
+
+    # Set 'leto local' as searched text and expect all projects are displayed
+    When I set on '[data-cy="search-project-input"]' text 'leto local'
+    And  I expect '[data-cy="project-card_{{localProjectName}}"]' exists
+    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' exists
+
+    # Unset searched text and expect all projects are displayed
+    When I set on '[data-cy="search-project-input"]' text ' '
+    And  I expect '[data-cy="project-card_{{localProjectName}}"]' exists
+    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' exists

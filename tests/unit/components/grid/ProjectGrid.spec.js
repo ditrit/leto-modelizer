@@ -3,6 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import ProjectGrid from 'src/components/grid/ProjectGrid.vue';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
+import Project from 'src/models/Project';
 
 installQuasarPlugin();
 
@@ -12,12 +13,19 @@ describe('Test component: ProjectGrid', () => {
   beforeEach(() => {
     wrapper = shallowMount(ProjectGrid, {
       props: {
-        projects: [{ id: 'test' }],
+        projects: [new Project({ id: 'test' })],
       },
       global: {
         plugins: [
-          createI18n({ locale: 'en-US', messages: i18nConfiguration }),
+          createI18n({
+            locale: 'en-US',
+            allowComposition: true,
+            messages: i18nConfiguration,
+          }),
         ],
+        stubs: {
+          qInput: true,
+        },
       },
     });
   });
@@ -25,7 +33,7 @@ describe('Test component: ProjectGrid', () => {
   describe('Test props initialization', () => {
     describe('Test prop: definitions', () => {
       it('should match array of projects', () => {
-        expect(wrapper.vm.projects).toStrictEqual([{ id: 'test' }]);
+        expect(wrapper.vm.projects).toStrictEqual([new Project({ id: 'test' })]);
       });
     });
   });
@@ -51,6 +59,18 @@ describe('Test component: ProjectGrid', () => {
       wrapper.vm.onToggleTag(wrapper.vm.tags[1].key);
       expect(wrapper.vm.tags[0].active).toEqual(false);
       expect(wrapper.vm.tags[1].active).toEqual(false);
+    });
+  });
+
+  describe('Test watcher: props.projects', () => {
+    it('should be triggered when props.projects is updated', async () => {
+      expect(wrapper.vm.filteredProjects).toEqual([new Project({ id: 'test' })]);
+
+      await wrapper.setProps({
+        projects: [new Project({ id: 'test2' })],
+      });
+
+      expect(wrapper.vm.filteredProjects).toEqual([new Project({ id: 'test2' })]);
     });
   });
 });
