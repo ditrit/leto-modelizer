@@ -82,7 +82,7 @@ async function getFileContent() {
 function initMonacoLanguages(path) {
   const plugin = getPlugins().find((p) => p.isParsable({ path }));
 
-  if (plugin && plugin.configuration.editor.syntax !== null) {
+  if (plugin?.configuration.editor.syntax) {
     const { syntax } = plugin.configuration.editor;
 
     monaco.languages.register(syntax.languageSettings);

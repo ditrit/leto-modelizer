@@ -106,9 +106,9 @@ const buttonToggleOptions = computed(() => [{
   value: 'text',
   slot: 'content',
 }]);
-const isUploadButtonVisible = computed(() => !!project.value.git && !!project.value.git.repository);
-const isUploadButtonDisable = computed(() => !project.value.git || !project.value.git.username
-  || !project.value.git.token);
+const isUploadButtonVisible = computed(() => !!project.value.git?.repository);
+const isUploadButtonDisable = computed(() => !project.value.git?.username
+  || !project.value.git?.token);
 const uploadButtonTitle = computed(() => {
   if (isUploadButtonDisable.value) {
     return 'page.modelizer.header.button.upload.disable.title';
