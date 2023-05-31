@@ -21,9 +21,7 @@ Feature: Test home page: open project
 
   Scenario: Click on project item in left drawer should redirect to 'models' page
     Then I expect '[data-cy="home-drawer"]' exists
-
-    When I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
-    Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' exists
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' exists
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' is '{{projectName}}'
 
     When I click on '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]'

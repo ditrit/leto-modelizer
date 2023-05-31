@@ -30,9 +30,7 @@ Feature: Test home page: project rename
     # Check project is displayed in left drawer
     When I visit the '/'
     Then I expect '[data-cy="home-drawer"] [data-cy="project-expansion-item"]' appear 1 time on screen
-
-    When I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
-    Then I expect '[data-cy="project-expansion-item"] [data-cy="item_projectTest"]' exists
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_projectTest"]' exists
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item_projectTest"]' is 'projectTest'
 
     # Rename project and check project name is updated

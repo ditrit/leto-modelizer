@@ -1,5 +1,6 @@
 <template>
   <q-expansion-item
+    default-opened
     :label="$t('page.home.drawer.projects.title')"
     expand-icon="fa-solid fa-plus"
     expanded-icon="fa-solid fa-minus"
