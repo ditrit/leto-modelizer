@@ -84,7 +84,7 @@ function getProjectImage() {
 }
 
 .q-img__content > div {
-  padding: unset;
+  padding: 0 0 4px 0;
 }
 
 .card-link {
