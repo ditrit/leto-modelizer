@@ -231,10 +231,10 @@ async function setBranches() {
 /**
  * On open menu, call setBranches and close expand menu for both local and remote.
  */
-function onOpen() {
+async function onOpen() {
   showLocal.value = false;
   showRemote.value = false;
-  setBranches();
+  await setBranches();
 }
 
 /**

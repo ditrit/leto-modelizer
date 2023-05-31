@@ -136,9 +136,9 @@ async function updateEditorContent() {
   editor.setValue(value);
 }
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (!editor) {
-    nextTick(createEditor);
+    await nextTick(createEditor);
   }
 });
 
@@ -149,8 +149,8 @@ onMounted(() => {
   updateFileContentSubscription = FileEvent.UpdateFileContentEvent.subscribe(updateEditorContent);
 });
 
-onUpdated(() => {
-  nextTick(updateEditorLayout);
+onUpdated(async () => {
+  await nextTick(updateEditorLayout);
 });
 
 onUnmounted(() => {

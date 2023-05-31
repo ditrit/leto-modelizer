@@ -103,7 +103,7 @@ async function onSelectFileTab(event) {
     const model = await getModel(event);
     const modelPath = model ? `${model.plugin}/${model.name}` : query.value.path;
 
-    router.push({
+    await router.push({
       name: 'modelizer',
       params: {
         viewType: 'text',

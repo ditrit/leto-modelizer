@@ -148,8 +148,8 @@ async function upload() {
  *
  * @param {string} newViewType - 'draw' or 'text'.
  */
-function onViewTypeUpdate(newViewType) {
-  router.push({
+async function onViewTypeUpdate(newViewType) {
+  await router.push({
     name: 'modelizer',
     params: {
       viewType: newViewType,

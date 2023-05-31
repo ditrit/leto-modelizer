@@ -93,7 +93,7 @@ async function onSubmit() {
         html: true,
       });
 
-      router.push({
+      return router.push({
         name: 'modelizer',
         params: {
           viewType: 'draw',

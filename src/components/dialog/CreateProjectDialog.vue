@@ -40,12 +40,13 @@ async function createProject(projectId) {
 
   await initProject(project).then(() => {
     DialogEvent.next({ type: 'close', key: 'CreateProject' });
-    router.push(`/${projectId}/models`);
     Notify.create({
       type: 'positive',
       message: t('actions.home.createdProject'),
       html: true,
     });
+
+    return router.push(`/${projectId}/models`);
   }).catch(() => {
     Notify.create({
       type: 'warning',

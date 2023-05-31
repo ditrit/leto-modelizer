@@ -75,9 +75,9 @@ let dialogEventSubscription;
  * Close CreateProjectTemplate and redirect to project model page.
  * @param {String} projectId - Id of the new project.
  */
-function addProject(projectId) {
+async function addProject(projectId) {
   DialogEvent.next({ type: 'close', key: 'CreateProjectTemplate' });
-  router.push(`/${projectId}/models`);
+  await router.push(`/${projectId}/models`);
 }
 
 /**

@@ -203,10 +203,10 @@ async function dropHandler(event) {
   }
 }
 
-onMounted(() => {
-  initView();
+onMounted(async () => {
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(initView);
   pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(onDefaultEvent);
+  await initView();
 });
 
 onUnmounted(() => {
