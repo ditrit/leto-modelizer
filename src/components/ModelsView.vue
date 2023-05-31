@@ -37,17 +37,17 @@
           @click="onModelCardClick(model)"
         />
       </div>
-      <template-grid
-        class="col-md-8"
-        :templates="templates"
-        @add:template="openImportModelTemplateDialog"
-      >
-        <template #header>
-          <h4>
+      <div class="row q-mt-lg">
+        <template-grid
+          :templates="templates"
+          class="full-width"
+          @add:template="openImportModelTemplateDialog"
+        >
+          <template #header>
             {{ $t('page.models.template.create') }}
-          </h4>
-        </template>
-      </template-grid>
+          </template>
+        </template-grid>
+      </div>
     </div>
   </div>
 </template>
