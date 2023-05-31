@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Sort projects by creating date from newest to oldest.
   * Add tags list to filter project.
   * Add search bar for projects.
+  * Add search bar for templates.
 
 ### Changed
 
