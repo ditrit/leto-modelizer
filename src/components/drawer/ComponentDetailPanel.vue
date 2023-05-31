@@ -250,7 +250,7 @@ function reset() {
  * @param {Object} eventManager.event - The triggered event.
  */
 function setLocalValues({ event }) {
-  if (!event.components || !event.components[0]) {
+  if (!event.components?.[0]) {
     return;
   }
 

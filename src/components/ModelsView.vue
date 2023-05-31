@@ -90,8 +90,8 @@ let updateModelSubscription;
  * Redirect to ModelizerDrawView corresponding to the given model.
  * @param {Object} model - Model to open.
  */
-function onModelCardClick(model) {
-  router.push({
+async function onModelCardClick(model) {
+  await router.push({
     name: 'modelizer',
     params: {
       viewType: 'draw',
@@ -123,14 +123,14 @@ async function openImportModelTemplateDialog(template) {
   });
 }
 
-watch(() => viewType.value, () => {
+watch(() => viewType.value, async () => {
   if (viewType.value === 'models') {
-    updateModels();
+    await updateModels();
   }
 });
 
 onMounted(async () => {
-  updateModels();
+  await updateModels();
   templates.value = await getTemplatesByType('model');
   updateModelSubscription = UpdateModelEvent.subscribe(updateModels);
 });

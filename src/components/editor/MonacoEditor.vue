@@ -82,7 +82,7 @@ async function getFileContent() {
 function initMonacoLanguages(path) {
   const plugin = getPlugins().find((p) => p.isParsable({ path }));
 
-  if (plugin && plugin.configuration.editor.syntax !== null) {
+  if (plugin?.configuration.editor.syntax) {
     const { syntax } = plugin.configuration.editor;
 
     monaco.languages.register(syntax.languageSettings);
@@ -136,9 +136,9 @@ async function updateEditorContent() {
   editor.setValue(value);
 }
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (!editor) {
-    nextTick(createEditor);
+    await nextTick(createEditor);
   }
 });
 
@@ -149,8 +149,8 @@ onMounted(() => {
   updateFileContentSubscription = FileEvent.UpdateFileContentEvent.subscribe(updateEditorContent);
 });
 
-onUpdated(() => {
-  nextTick(updateEditorLayout);
+onUpdated(async () => {
+  await nextTick(updateEditorLayout);
 });
 
 onUnmounted(() => {

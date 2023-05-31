@@ -30,8 +30,8 @@ const router = useRouter();
  * Close importProjectDialog and redirect to project model page.
  * @param {String} projectId - Id of project.
  */
-function importProject(projectId) {
+async function importProject(projectId) {
   DialogEvent.next({ type: 'close', key: 'ImportProject' });
-  router.push(`/${projectId}/models`);
+  await router.push(`/${projectId}/models`);
 }
 </script>

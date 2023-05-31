@@ -89,8 +89,7 @@ const props = defineProps({
 });
 
 const expanded = ref(false);
-const hasError = computed(() => props.currentError !== null
-  && props.currentError.startsWith(`${props.fullName}.`));
+const hasError = computed(() => props.currentError?.startsWith(`${props.fullName}.`));
 
 /**
  * Get all sub-attributes of the provided attribute. Retrieve a list that contains instantiated
