@@ -1,6 +1,9 @@
 <template>
   <q-page>
-    <div class="row q-gutter-md q-ma-md">
+    <div
+      id="diagrams-container"
+      class="row q-gutter-md q-ma-md"
+    >
       <q-card
         v-for="diagram in diagrams"
         :key="`diagram_${diagram.name}`"
@@ -14,6 +17,24 @@
         />
       </q-card>
     </div>
+    <q-page-sticky :offset="[20, 20]">
+      <q-btn-group>
+        <q-btn
+          icon="fa-solid fa-magnifying-glass-plus"
+          :label="$t('page.diagrams.actions.zoomPlus')"
+          stack
+          no-caps
+          @click="zoom(true)"
+        />
+        <q-btn
+          icon="fa-solid fa-magnifying-glass-minus"
+          :label="$t('page.diagrams.actions.zoomMinus')"
+          stack
+          no-caps
+          @click="zoom(false)"
+        />
+      </q-btn-group>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -33,6 +54,27 @@ const diagrams = ref([]);
 const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
   ? `${process.env.MODELS_DEFAULT_FOLDER}/`
   : '');
+const scale = ref(1);
+
+/**
+ * Zoom on diagrams container.
+ * @param {Boolean} plus - Zoom in on true otherwise zoom out.
+ */
+function zoom(plus) {
+  const div = document.getElementById('diagrams-container');
+
+  if (plus && scale.value < 1) {
+    scale.value *= 2;
+  } else if (plus && scale.value >= 1) {
+    scale.value += 0.5;
+  } else if (scale.value >= 1) {
+    scale.value -= 0.5;
+  } else {
+    scale.value /= 2;
+  }
+
+  div.style.scale = scale.value;
+}
 
 /**
  * Update diagrams list.

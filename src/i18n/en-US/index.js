@@ -239,6 +239,12 @@ export default {
         title: 'Plugins',
       },
     },
+    diagrams: {
+      actions: {
+        zoomPlus: 'Zoom+',
+        zoomMinus: 'Zoom-',
+      },
+    },
     models: {
       name: 'List of Models',
       empty: 'No models available',

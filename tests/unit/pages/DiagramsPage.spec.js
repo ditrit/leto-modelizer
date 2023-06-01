@@ -34,6 +34,29 @@ describe('Test page component: DiagramsPage', () => {
     });
   });
 
+  describe('Test function: zoom', () => {
+    it('should update scale value', () => {
+      document.getElementById = jest.fn(() => ({ style: {} }));
+
+      expect(wrapper.vm.scale).toEqual(1);
+
+      wrapper.vm.zoom(false);
+      expect(wrapper.vm.scale).toEqual(0.5);
+
+      wrapper.vm.zoom(false);
+      expect(wrapper.vm.scale).toEqual(0.25);
+
+      wrapper.vm.zoom(true);
+      expect(wrapper.vm.scale).toEqual(0.5);
+
+      wrapper.vm.zoom(true);
+      expect(wrapper.vm.scale).toEqual(1);
+
+      wrapper.vm.zoom(true);
+      expect(wrapper.vm.scale).toEqual(1.5);
+    });
+  });
+
   describe('Test function: drawDiagrams', () => {
     it('should draw all diagrams', async () => {
       const plugins = {
