@@ -1,7 +1,7 @@
 <template>
   <div class="project-grid">
     <div class="row items-center">
-      <h4 class="q-ma-md q-mr-xl">
+      <h4 class="q-mr-xl q-my-md">
         {{ $t('page.home.project.title') }}
       </h4>
       <q-btn
@@ -15,8 +15,8 @@
         @click="DialogEvent.next({ type: 'open', key: 'ImportProject' })"
       />
     </div>
-    <div class="row items-center q-mr-md">
-      <h5 class="text-primary q-ma-md">
+    <div class="row items-center">
+      <h5 class="text-primary q-mr-md">
         {{ $t('page.home.project.recent') }}
       </h5>
       <tag-list
@@ -28,7 +28,7 @@
         outlined
         dense
         clearable
-        class="search-bar"
+        class="search-bar q-mr-md"
         :label="$t('actions.default.search')"
         data-cy="search-project-input"
         @update:model-value="updateProjects"
@@ -41,7 +41,7 @@
         </template>
       </q-input>
     </div>
-    <div class="row no-wrap q-ml-md">
+    <div class="row no-wrap">
       <div class="row">
         <q-btn
           outline
@@ -78,7 +78,7 @@
       </div>
       <div
         v-if="filteredProjects.length === 0"
-        class="row text-center text-h6 text-grey q-ml-md items-center"
+        class="row text-center text-h6 text-grey items-center"
         data-cy="project-grid-empty"
       >
         {{ $t('page.home.project.empty') }}
