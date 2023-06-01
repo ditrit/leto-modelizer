@@ -62,23 +62,20 @@ const props = defineProps({
 
 const searchTemplateText = ref('');
 const filteredTemplates = computed(() => props.templates
-  .filter(({ type }) => searchText(type, searchTemplateText.value)));
+  .filter(({ type }) => searchText(type, searchTemplateText.value))
+  .slice(0, 32));
 </script>
 
 <style scoped>
 .template-card-container {
   overflow-y: auto;
-  max-height: 275px;
+  max-height: 350px;
   box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 .template-card-item {
   flex-basis: calc(100% / 8);
   min-width: 125px;
-}
-.template-card {
-  width: 100px;
-  height: 100px;
 }
 .search-bar {
   min-width: 300px;

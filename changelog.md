@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Redesign create project from template popup.
   * Redesign project grid.
   * Redesign template grid.
+  * Redesign template card.
 
 ## [1.1.0] - 2023/05/04
 
