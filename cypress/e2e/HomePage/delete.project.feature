@@ -27,9 +27,7 @@ Feature: Test home page: project deletion
 
   Scenario: Delete project should remove it from the left drawer
     Then I expect '[data-cy="home-drawer"] [data-cy="project-expansion-item"]' exists
-
-    When I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
-    Then I expect '[data-cy="project-expansion-item"] [data-cy="item_projectName"]' exists
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_projectName"]' exists
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item_projectName"]' is 'projectName'
 
     When I click on '[data-cy="project-card_projectName"] [data-cy="delete-button"]'

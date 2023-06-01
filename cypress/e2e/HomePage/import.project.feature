@@ -32,7 +32,6 @@ Feature: Test home page: project import
     Then I expect current url is '{{projectName}}/models'
 
     When I visit the '/'
-    And  I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
     Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' appear 1 time on screen
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' is '{{projectName}}'
 
@@ -77,7 +76,7 @@ Feature: Test home page: project import
 
   Scenario: Import project with a template should redirect to models page and send positive toast
     Then I expect '[data-cy="template-card_project_template"]' exists
-    
+
     When I click on '[data-cy="template-card_project_template"]'
     Then I expect checkbox '[data-cy="create-project-template-form"] [data-cy="import-project-checkbox"]' is not checked
 
@@ -105,9 +104,7 @@ Feature: Test home page: project import
   Scenario: Import project with a template should add it in the left drawer
     Then I expect '[data-cy="template-card_project_template"]' exists
     And  I expect '[data-cy="home-drawer"] [data-cy="project-expansion-item"]' exists
-
-    When I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
-    Then I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' exists
+    And  I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' exists
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' is 'Nothing to display'
 
     When I click on '[data-cy="template-card_project_template"]'
@@ -118,7 +115,6 @@ Feature: Test home page: project import
     Then I expect current url is '{{projectName}}/models'
 
     When I visit the '/'
-    And  I click on '[data-cy="home-drawer"] [data-cy="project-expansion-item"]'
     Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' appear 1 time on screen
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' is '{{projectName}}'
 
@@ -150,7 +146,7 @@ Feature: Test home page: project import
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{projectName}}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="create-project-template-form"] [role="alert"]' is 'Please type something'
-    
+
   Scenario: Import project with a template with non valid repository should display an error
     Then I expect '[data-cy="template-card_project_template"]' exists
 
@@ -160,7 +156,7 @@ Feature: Test home page: project import
     And  I set on '[data-cy="create-project-template-form"] [data-cy="repository-input"]' text 'invalidUrl'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="create-project-template-form"] [role="alert"]' is 'Invalid repository url'
-  
+
   Scenario: Import project with a template with non existant repository should display an error
     Then I expect '[data-cy="template-card_project_template"]' exists
 
