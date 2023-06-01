@@ -233,6 +233,7 @@ export default {
         import: 'In existing project (save your project in a repository)',
         rename: 'Rename this template for your project',
         description: 'Content',
+        search: 'Search a template',
       },
       plugins: {
         title: 'Plugins',

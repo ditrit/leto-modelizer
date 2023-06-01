@@ -2,16 +2,31 @@
   <q-card
     class="template-grid bg-white"
   >
-    <q-card-section>
+    <q-card-section class="row justify-between">
       <div class="text-h6 text-secondary">
         <slot name="header" />
       </div>
+      <q-input
+        v-model="searchTemplateText"
+        outlined
+        dense
+        clearable
+        class="search-bar"
+        :label="$t('page.home.template.search')"
+      >
+        <template #prepend>
+          <q-icon
+            name="fa-solid fa-magnifying-glass"
+            size="xs"
+          />
+        </template>
+      </q-input>
     </q-card-section>
     <q-card-section
       class="q-ma-md bg-grey-1 q-pb-none template-card-container row items-center wrap"
     >
       <div
-        v-for="template in templates"
+        v-for="template in filteredTemplates"
         :key="template.key"
         class="template-card-item row q-mb-md justify-center items-center"
       >
@@ -22,7 +37,7 @@
         />
       </div>
       <div
-        v-if="templates.length === 0"
+        v-if="filteredTemplates.length === 0"
         class="row text-center text-subtitle2 text-grey q-mb-md"
       >
         {{ $t('page.home.template.empty') }}
@@ -32,16 +47,22 @@
 </template>
 
 <script setup>
+import { ref, computed } from 'vue';
+import { searchText } from 'src/composables/Filter';
 import TemplateCard from 'src/components/card/TemplateCard';
 
 defineEmits(['add:template']);
 
-defineProps({
+const props = defineProps({
   templates: {
     type: Array,
     required: true,
   },
 });
+
+const searchTemplateText = ref('');
+const filteredTemplates = computed(() => props.templates
+  .filter(({ type }) => searchText(type, searchTemplateText.value)));
 </script>
 
 <style scoped>
@@ -58,5 +79,8 @@ defineProps({
 .template-card {
   width: 100px;
   height: 100px;
+}
+.search-bar {
+  min-width: 300px;
 }
 </style>
