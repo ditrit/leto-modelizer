@@ -114,3 +114,19 @@ Then('I expect active file content to be equal to {string}', (TemplateFilePath) 
 Then('I expect active file content to not contain {string}', (value) => {
   cy.get('[data-cy="monaco-editor"]').should('not.contain', value);
 });
+
+Then('I expect {string} width is {int}', (templateSelector, width) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+
+  cy.get(selector).should((element) => {
+    expect(Math.trunc(element.width())).eq(width);
+  });
+});
+
+Then('I expect {string} height is {int}', (templateSelector, height) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+
+  cy.get(selector).should((element) => {
+    expect(Math.trunc(element.height())).eq(height);
+  });
+});

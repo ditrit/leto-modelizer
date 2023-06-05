@@ -24,6 +24,7 @@
           :label="$t('page.diagrams.actions.zoomPlus')"
           stack
           no-caps
+          data-cy="zoom-plus-button"
           @click="zoom(true)"
         />
         <q-btn
@@ -31,6 +32,7 @@
           :label="$t('page.diagrams.actions.zoomMinus')"
           stack
           no-caps
+          data-cy="zoom-minus-button"
           @click="zoom(false)"
         />
       </q-btn-group>
