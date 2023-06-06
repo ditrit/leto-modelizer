@@ -158,7 +158,7 @@ jobs:
       - name: Install terrator-plugin
         run: |
           npm ci && \
-          npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.2.0" && \
+          npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.3.0" && \
           npm run plugin:init
       - name: Build application
         run: docker build -t leto-modelizer -f DockerfileE2E .
