@@ -10,13 +10,6 @@
       class="bg-primary col"
     >
       <q-toolbar class="row justify-center footer">
-        <router-link
-          :to="{ name: 'About' }"
-          class="about-page-link text-white q-mr-md"
-        >
-          {{ $t('footer.about') }}
-        </router-link>
-        |
         <a
           :href="$sanitize(`https://github.com/ditrit/leto-modelizer/releases/tag/${version}`)"
           class="text-white q-ml-md"
