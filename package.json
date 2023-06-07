@@ -24,8 +24,8 @@
     "browserfs": "=1.4.3",
     "core-js": "=3.30.2",
     "isomorphic-git": "=1.24.0",
-    "leto-modelizer-plugin-core": "github:ditrit/leto-modelizer-plugin-core#0.15.2",
-    "monaco-editor": "=0.38.0",
+    "leto-modelizer-plugin-core": "github:ditrit/leto-modelizer-plugin-core#0.16.0",
+    "monaco-editor": "=0.39.0",
     "monaco-editor-webpack-plugin": "=7.0.1",
     "quasar": "=2.12.0",
     "rxjs": "=7.8.1",
@@ -36,11 +36,11 @@
     "vue-router": "=4.2.2"
   },
   "devDependencies": {
-    "@4tw/cypress-drag-drop": "=2.2.3",
+    "@4tw/cypress-drag-drop": "=2.2.4",
     "@babel/core": "=7.22.1",
     "@babel/eslint-parser": "=7.21.8",
     "@babel/preset-env": "=7.22.4",
-    "@badeball/cypress-cucumber-preprocessor": "=17.2.0",
+    "@badeball/cypress-cucumber-preprocessor": "=17.2.1",
     "@cypress/browserify-preprocessor": "=3.0.2",
     "@quasar/app-webpack": "=3.9.2",
     "@quasar/quasar-app-extension-testing": "=2.1.0",
@@ -53,7 +53,7 @@
     "cypress-real-events": "=1.8.1",
     "esdoc": "=1.1.0",
     "esdoc-standard-plugin": "=1.0.0",
-    "eslint": "=8.41.0",
+    "eslint": "=8.42.0",
     "eslint-config-airbnb-base": "=15.0.0",
     "eslint-formatter-json-relative": "=0.1.0",
     "eslint-plugin-cypress": "=2.13.3",
@@ -67,7 +67,7 @@
     "jest-sonar-reporter": "=2.0.0",
     "leto-modelizer-plugin-cli": "github:ditrit/leto-modelizer-plugin-cli#1.0.0",
     "nunjucks": "=3.2.4",
-    "vue-loader": "=17.2.1"
+    "vue-loader": "=17.2.2"
   },
   "browserslist": [
     "last 10 Chrome versions",

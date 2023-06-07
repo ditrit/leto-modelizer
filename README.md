@@ -50,13 +50,13 @@ For now, we don't have many plugins to offer you, but follow us and in the next 
 
 Plugin to manage terraform files, by default it comes with aws provider definition.
 
-[GitHub url](https://github.com/ditrit/terrator-plugin#0.2.0)
+[GitHub url](https://github.com/ditrit/terrator-plugin#0.3.0)
 
 ### Github plugin
 
 Plugin to manage github action files.
 
-[GitHub url](https://github.com/ditrit/githubator-plugin#0.1.1)
+[GitHub url](https://github.com/ditrit/githubator-plugin#0.2.0)
 
 ## Compatibility versions table
 
@@ -80,10 +80,16 @@ Plugin to manage github action files.
       <td>🚫</td>
     </tr>
     <tr>
-      <td>next version</td>
+      <td>1.1.0</td>
       <td>= 0.15.2</td>
       <td>= 0.2.0</td>
       <td>= 0.1.1</td>
+    </tr>
+    <tr>
+      <td>next version</td>
+      <td>= 0.16.0</td>
+      <td>= 0.3.0</td>
+      <td>= 0.2.0</td>
     </tr>
   </tbody>
 </table>
@@ -116,10 +122,10 @@ Choose __Custom plugin__ to install a specific plugin not referenced as an offic
 Examples with official plugins:
 - terrator-plugin: 
   - plugin name: `terrator-plugin`
-  - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.2.0`
+  - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.3.0`
 - githubator-plugin: 
   - plugin name: `githubator-plugin`
-  - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.1.1`
+  - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.2.0`
 
 ### Install custom plugin in command line
 
@@ -127,10 +133,10 @@ Options `repository-name` and `repository-url` can be added with the `npm run pl
 
 ```bash
 # Example with terraform plugin
-npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.2.0"
+npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.3.0"
 
 # Example with github action plugin
-npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.1.1"
+npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.2.0"
 ```
 
 Now that your plugin is installed, you can continue to install other plugins with the same command if you want.
