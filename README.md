@@ -86,7 +86,7 @@ Plugin to manage github action files.
       <td>= 0.1.1</td>
     </tr>
     <tr>
-      <td>next version</td>
+      <td>1.2.0</td>
       <td>= 0.16.0</td>
       <td>= 0.3.0</td>
       <td>= 0.2.0</td>
