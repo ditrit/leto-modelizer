@@ -20,7 +20,7 @@
           })"
         />
       </div>
-      <diagram-grid
+      <diagram-table
         :diagrams="data.models"
         @click:diagram="onDiagramClick"
       />
@@ -50,7 +50,7 @@ import {
 } from 'vue';
 import { getAllModels } from 'src/composables/Project';
 import { getTemplatesByType } from 'src/composables/TemplateManager';
-import DiagramGrid from 'src/components/grid/DiagramGrid.vue';
+import DiagramTable from 'src/components/table/DiagramTable';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import TemplateGrid from 'src/components/grid/TemplateGrid';
