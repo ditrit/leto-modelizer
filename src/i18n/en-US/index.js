@@ -16,6 +16,7 @@ export default {
       update: 'Update',
       cancel: 'Cancel',
       search: 'Search',
+      modify: 'Modify',
     },
     home: {
       newProject: 'New project',
@@ -252,6 +253,12 @@ export default {
         create: 'Create a model from a template',
         selectedPlugin: 'Selected plugin: {plugin}',
         selectedTemplate: 'Selected template: {template}',
+      },
+      table: {
+        categories: 'Categories',
+        diagramPath: 'Diagram path',
+        plugin: 'Plugin',
+        actionsTitle: 'Tools',
       },
     },
     modelizer: {
