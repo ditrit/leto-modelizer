@@ -32,7 +32,7 @@ Feature: Test diagrams page: display all diagrams
 
     # Back to the models page
     When I visit the 'localhost:8080/#/{{ projectName }}/models'
-    Then I expect '[data-cy="model-card_terrator-plugin-{{ firstModelName }}"]' exists
+    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{firstModelName}}"]' exists
 
     # Second model creation
     When I click on '[data-cy="create-model-button"]'

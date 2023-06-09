@@ -18,10 +18,10 @@ Feature: Test roundtrip of the application : create project with template files
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
     And  I expect current url is '{{projectName}}/models'
-    And  I expect '[data-cy="model-card_terrator-plugin-infra1"]' appear 1 time on screen
-    And  I expect '[data-cy="model-card_terrator-plugin-infra2"]' appear 1 time on screen
+    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/infra1"]' appear 1 time on screen
+    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/infra2"]' appear 1 time on screen
 
-    When I click on '[data-cy="model-card_terrator-plugin-infra2"]'
+    When I click on '[data-cy="diagram-path_{{projectName}}/terrator-plugin/infra2"]'
     And  I wait 1 second
     Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/infra2'
 

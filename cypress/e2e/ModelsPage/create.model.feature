@@ -42,7 +42,8 @@ Feature: Test models page: model creation
 
     When I click on '[data-cy="models-page-link-button"]'
     Then I expect current url is '{{projectName}}/models'
-    And  I expect '[data-cy="model-card_terrator-plugin-{{modelName}}"]' exists
+    And  I expect '[data-cy="diagram-table"]' exists
+    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
 
     # Create same model and check error
     When I click on '[data-cy="create-model-button"]'

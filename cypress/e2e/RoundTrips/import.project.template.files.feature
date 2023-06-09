@@ -19,10 +19,10 @@ Feature: Test roundtrip of the application : import project with template files
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
     And  I expect current url is '{{projectName}}/models'
-    And  I expect '[data-cy="model-card_terrator-plugin-infra1"]' appear 1 time on screen
-    And  I expect '[data-cy="model-card_terrator-plugin-infra2"]' appear 1 time on screen
+    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/infra1"]' appear 1 time on screen
+    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/infra2"]' appear 1 time on screen
 
-    When I click on '[data-cy="model-card_terrator-plugin-infra2"]'
+    When I click on '[data-cy="diagram-path_{{projectName}}/terrator-plugin/infra2"]'
     Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/infra2'
 
     # Check project files and folders are created in Text view

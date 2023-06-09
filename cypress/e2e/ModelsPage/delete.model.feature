@@ -6,6 +6,7 @@ Feature: Test models page: model deletion
     And   I visit the '/'
     And   I set context field 'projectName' with 'projectTest'
     And   I set context field 'modelName' with 'modelTest'
+    And   I set context field 'modelName2' with 'modelTest2'
 
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'
@@ -21,17 +22,22 @@ Feature: Test models page: model deletion
 
     When I click on '[data-cy="models-page-link-button"]'
     Then I expect current url is '{{projectName}}/models'
-    And  I expect '[data-cy="model-card_terrator-plugin-{{modelName}}"] [data-cy="delete-button"]' exists
+    And  I expect '[data-cy="diagram-table"]' exists
+    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
+    And  I expect '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
 
   Scenario: Delete model, create another model to check previous model files are deleted
     # Delete model
-    When I click on '[data-cy="model-card_terrator-plugin-{{modelName}}"] [data-cy="delete-button"]'
-    And  I click on '[data-cy="delete-model-form"] [data-cy="submit-button"]'
-    Then I expect '[data-cy="model-card_terrator-plugin-{{modelName}}"]' not exists
+    When I click on '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelName}}"]'
+    Then I expect '[data-cy="diagrams-table-action-menu"]' exists
+
+    When I click on '[data-cy="diagrams-table-action-menu"] [data-cy="delete-diagram-action-item"]'
+    Then I expect '[data-cy="delete-model-dialog"]' exists
+
+    When I click on '[data-cy="delete-model-form"] [data-cy="submit-button"]'
+    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelName}}"]' not exists
 
     # Second model creation
-    Given I set context field 'modelName2' with 'modelTest2'
-
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 

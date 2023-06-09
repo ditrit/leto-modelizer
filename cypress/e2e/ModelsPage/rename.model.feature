@@ -6,6 +6,7 @@ Feature: Test models page: rename model
     And   I visit the '/'
     And   I set context field 'projectName' with 'projectTest'
     And   I set context field 'modelName' with 'modelTest'
+    And   I set context field 'modelRenamed' with 'newModelTest'
 
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'
@@ -15,28 +16,33 @@ Feature: Test models page: rename model
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I click on '[data-cy="models-page-link-button"]'
     Then I expect current url is '{{projectName}}/models'
-    And  I expect '[data-cy="model-card_terrator-plugin-{{modelName}}"] [data-cy="rename-button"]' exists
+    And  I expect '[data-cy="diagram-table"]' exists
+    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
+    And  I expect '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
 
   Scenario: Rename model and verify the new name
     # Rename model
-    When I click on '[data-cy="model-card_terrator-plugin-{{modelName}}"] [data-cy="rename-button"]'
-    Then I expect field '[data-cy="rename-model-form"] [data-cy="name-input"]' is '{{modelName}}'
+    When I click on '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelName}}"]'
+    Then I expect '[data-cy="diagrams-table-action-menu"]' exists
 
-    Given I set context field 'modelName' with 'newModelTest'
+    When I click on '[data-cy="diagrams-table-action-menu"] [data-cy="rename-diagram-action-item"]'
+    Then I expect '[data-cy="rename-model-dialog"]' exists
+    And  I expect field '[data-cy="rename-model-form"] [data-cy="name-input"]' is '{{modelName}}'
 
-    When I set on '[data-cy="rename-model-form"] [data-cy="name-input"]' text '{{modelName}}'
+    When I set on '[data-cy="rename-model-form"] [data-cy="name-input"]' text '{{modelRenamed}}'
     And  I click on '[data-cy="rename-model-form"] [data-cy="submit-button"]'
-    Then I expect '[data-cy="model-card_terrator-plugin-{{modelName}}"]' exists
+    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelRenamed}}"]' exists
+    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelName}}"]' not exists
 
     # Click on model and go to text view and check files
-    When I click on '[data-cy="model-card_terrator-plugin-{{modelName}}"]'
-    Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelName}}'
+    When I click on '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelRenamed}}"]'
+    Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelRenamed}}'
     And  I expect '[data-cy="components-definitions-drawer"]' exists
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelName}}'
+    Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelRenamed}}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelRenamed}}"]' exists
