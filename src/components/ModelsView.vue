@@ -20,23 +20,10 @@
           })"
         />
       </div>
-      <div
-        v-if="data.models?.length === 0"
-        class="row text-center text-h6 text-grey empty-grid"
-      >
-        {{ $t('page.models.empty') }}
-      </div>
-      <div
-        v-else
-        class="q-pa-md row items-start q-gutter-md"
-      >
-        <model-card
-          v-for="model in data.models"
-          :key="`${model.plugin}/${model.name}`"
-          :model="model"
-          @click="onModelCardClick(model)"
-        />
-      </div>
+      <diagram-grid
+        :diagrams="data.models"
+        @click:diagram="onDiagramClick"
+      />
       <div class="row q-mt-lg">
         <template-grid
           :templates="templates"
@@ -63,7 +50,7 @@ import {
 } from 'vue';
 import { getAllModels } from 'src/composables/Project';
 import { getTemplatesByType } from 'src/composables/TemplateManager';
-import ModelCard from 'src/components/card/ModelCard.vue';
+import DiagramGrid from 'src/components/grid/DiagramGrid.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import TemplateGrid from 'src/components/grid/TemplateGrid';
@@ -87,10 +74,10 @@ const viewType = computed(() => route.params.viewType);
 let updateModelSubscription;
 
 /**
- * Redirect to ModelizerDrawView corresponding to the given model.
- * @param {Object} model - Model to open.
+ * Redirect to ModelizerDrawView corresponding to the given diagram.
+ * @param {Object} diagram - Diagram to open.
  */
-async function onModelCardClick(model) {
+async function onDiagramClick(diagram) {
   await router.push({
     name: 'modelizer',
     params: {
@@ -98,7 +85,7 @@ async function onModelCardClick(model) {
       projectName: props.projectName,
     },
     query: {
-      path: `${model.plugin}/${model.name}`,
+      path: `${diagram.plugin}/${diagram.name}`,
     },
   });
 }
