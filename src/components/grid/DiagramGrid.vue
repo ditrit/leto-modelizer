@@ -1,0 +1,31 @@
+<template>
+  <div
+    v-if="diagrams?.length === 0"
+    class="row text-center text-h6 text-grey empty-grid diagram-grid"
+  >
+    {{ $t('page.models.empty') }}
+  </div>
+  <div
+    v-else
+    class="q-pa-md row items-start q-gutter-md"
+  >
+    <model-card
+      v-for="diagram in diagrams"
+      :key="`${diagram.plugin}/${diagram.name}`"
+      :model="diagram"
+      @click="$emit('click:diagram', diagram)"
+    />
+  </div>
+</template>
+
+<script setup>
+import ModelCard from 'src/components/card/ModelCard';
+
+defineEmits(['click:diagram']);
+defineProps({
+  diagrams: {
+    type: Object,
+    required: true,
+  },
+});
+</script>
