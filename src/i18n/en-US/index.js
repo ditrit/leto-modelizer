@@ -97,6 +97,10 @@ export default {
           error: 'An error occured while creating model.',
         },
       },
+      search: 'Search a diagram',
+      tag: {
+        select: 'Filter by categories',
+      },
     },
     git: {
       repository: {

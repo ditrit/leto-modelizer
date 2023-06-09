@@ -20,6 +20,13 @@
           })"
         />
       </div>
+      <diagram-filter-card
+        v-model:selected-tags="selectedTags"
+        v-model:search-text="searchDiagramText"
+        :tags="allTags"
+        @update:search-text="updateModels"
+        @update:selected-tags="updateModels"
+      />
       <diagram-table
         :diagrams="data.models"
         @click:diagram="onDiagramClick"
@@ -55,6 +62,9 @@ import DialogEvent from 'src/composables/events/DialogEvent';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import TemplateGrid from 'src/components/grid/TemplateGrid';
 import { useRoute, useRouter } from 'vue-router';
+import { getAllTags } from 'src/composables/PluginManager';
+import { searchText } from 'src/composables/Filter';
+import DiagramFilterCard from 'components/card/DiagramFilterCard.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -69,7 +79,10 @@ const data = reactive({
   models: [],
 });
 const templates = ref([]);
+const searchDiagramText = ref('');
 const viewType = computed(() => route.params.viewType);
+const selectedTags = ref([]);
+const allTags = ref(getAllTags());
 
 let updateModelSubscription;
 
@@ -95,7 +108,14 @@ async function onDiagramClick(diagram) {
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateModels() {
-  data.models = await getAllModels(props.projectName);
+  data.models = (await getAllModels(props.projectName))
+    .filter(({ name }) => searchText(name, searchDiagramText.value))
+    .filter(({ tags }) => {
+      if (selectedTags.value.length === 0) {
+        return true;
+      }
+      return tags.some((tag) => selectedTags.value.includes(tag));
+    });
 }
 
 /**

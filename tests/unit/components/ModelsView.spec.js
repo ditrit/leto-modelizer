@@ -19,7 +19,10 @@ jest.mock('src/composables/events/ModelEvent', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  getAllModels: jest.fn(() => Promise.resolve([{}])),
+  getAllModels: jest.fn(() => Promise.resolve([{
+    name: 'Model',
+    tags: ['a'],
+  }])),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
@@ -109,6 +112,24 @@ describe('Test component: ModelsView', () => {
       await wrapper.vm.updateModels();
 
       expect(wrapper.vm.data.models.length).toEqual(1);
+    });
+
+    it('should filter and return an array with selected element on valid filter', async () => {
+      wrapper.vm.searchDiagramText = 'mode';
+      wrapper.vm.selectedTags = ['a'];
+
+      await wrapper.vm.updateModels();
+
+      expect(wrapper.vm.data.models.length).toEqual(1);
+    });
+
+    it('should filter and return an array without element on invalid filter', async () => {
+      wrapper.vm.searchDiagramText = 'test';
+      wrapper.vm.selectedTags = ['c'];
+
+      await wrapper.vm.updateModels();
+
+      expect(wrapper.vm.data.models.length).toEqual(0);
     });
   });
 
