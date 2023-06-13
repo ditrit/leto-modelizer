@@ -111,10 +111,29 @@ export function getPlugins() {
  * Get instantiated plugin corresponding to the given name.
  *
  * @param {String} name - Name of the plugin to retrieve.
- * @return {Object} Return an array of plugin.
+ * @return {Object} Return a plugin otherwise undefined.
  */
 export function getPluginByName(name) {
   return instanciatePlugins.find((plugin) => plugin.data.name === name);
+}
+
+/**
+ * Get the list of tags related to a given plugin.
+ *
+ * @param {String} name - Name of the given plugin.
+ * @return {Object} Return an array of tags otherwise an empty array.
+ */
+export function getPluginTags(name) {
+  return getPluginByName(name)?.configuration.tags || [];
+}
+
+/**
+ * Get all tags from all plugins.
+ *
+ * @return {Object} Return an array of tags.
+ */
+export function getAllTags() {
+  return [...new Set(getPlugins().flatMap(({ configuration }) => configuration.tags))].sort();
 }
 
 /**

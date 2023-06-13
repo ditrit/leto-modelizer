@@ -7,7 +7,7 @@ import {
 } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
 import FileStatus from 'src/models/git/FileStatus';
-import { getFileInputs, getPlugins } from 'src/composables/PluginManager';
+import { getFileInputs, getPlugins, getPluginTags } from 'src/composables/PluginManager';
 import Project from 'src/models/Project';
 
 const fs = BrowserFS.BFSRequire('fs');
@@ -730,7 +730,13 @@ export async function getPluginModels(modelsdefaultFolder, pluginName) {
   return Promise.allSettled(dirEntries.map(
     (entry) => (async () => {
       const isDir = await isDirectory(`${modelsdefaultFolder}/${pluginName}/${entry}`);
-      return isDir ? { name: entry, plugin: pluginName } : null;
+
+      return isDir ? {
+        name: entry,
+        plugin: pluginName,
+        tags: getPluginTags(pluginName),
+        path: `${modelsdefaultFolder}/${pluginName}/${entry}`,
+      } : null;
     })(),
   )).then((allResults) => allResults
     .filter((result) => result.status === 'fulfilled' && result.value)

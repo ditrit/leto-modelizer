@@ -53,7 +53,7 @@ Feature: Test roundtrip of the application : rename project
 
     # Check project name is updated in Model view
     When I click on '[data-cy="project-card_renamedProject"]'
-    And  I click on '[data-cy="model-card_terrator-plugin-modelTest"]'
+    And  I click on '[data-cy="diagram-path_renamedProject/terrator-plugin/{{modelName}}"]'
     Then I expect current url is 'renamedProject/modelizer/draw\?path=terrator-plugin/{{modelName}}'
 
     # Check project name is updated in Text view

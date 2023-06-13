@@ -658,9 +658,13 @@ describe('Test composable: Project', () => {
       expect(await getPluginModels('test', 'container')).toEqual([{
         name: 'parent',
         plugin: 'container',
+        path: 'test/container/parent',
+        tags: [],
       }, {
         name: 'emptyParent',
         plugin: 'container',
+        path: 'test/container/emptyParent',
+        tags: [],
       }]);
     });
   });

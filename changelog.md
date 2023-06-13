@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Redesign template grid.
   * Redesign template card.
   * Remove "About" button.
+* Index page:
+  * Redesign diagram list.
 * Plugin management:
   * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.3.0) version 0.3.0.
   * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.16.0) version 0.16.0.

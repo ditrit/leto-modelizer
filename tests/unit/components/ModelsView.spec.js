@@ -82,14 +82,14 @@ describe('Test component: ModelsView', () => {
     });
   });
 
-  describe('Test function: onModelCardClick', () => {
-    it('should call router.push with the given model parameters', () => {
-      const model = {
+  describe('Test function: onDiagramClick', () => {
+    it('should call router.push with the given diagram parameters', () => {
+      const diagram = {
         plugin: 'pluginName',
-        name: 'modelName',
+        name: 'diagramName',
       };
 
-      wrapper.vm.onModelCardClick(model);
+      wrapper.vm.onDiagramClick(diagram);
 
       expect(useRouterPush).toBeCalledWith({
         name: 'modelizer',
@@ -98,7 +98,7 @@ describe('Test component: ModelsView', () => {
           projectName: 'projectName',
         },
         query: {
-          path: 'pluginName/modelName',
+          path: 'pluginName/diagramName',
         },
       });
     });

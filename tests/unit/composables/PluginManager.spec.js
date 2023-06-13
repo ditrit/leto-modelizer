@@ -12,6 +12,42 @@ jest.mock('src/plugins', () => ({
         },
         components: [],
       };
+      this.configuration = {
+        tags: ['a', 'b', 'c'],
+      };
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    init() {}
+
+    // eslint-disable-next-line class-methods-use-this
+    initResources() {}
+
+    // eslint-disable-next-line class-methods-use-this
+    isParsable(file) {
+      return file !== 'notParsable';
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    render() {
+      return [
+        { path: 'path', content: 'content' },
+      ];
+    }
+  },
+  test2: class {
+    constructor() {
+      this.data = {
+        name: 'test2',
+        definitions: {
+          components: [],
+          links: [],
+        },
+        components: [],
+      };
+      this.configuration = {
+        tags: ['a', 'd', 'e'],
+      };
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -133,6 +169,21 @@ describe('Test composable: PluginManager', () => {
           },
           components: [],
         },
+        configuration: {
+          tags: ['a', 'b', 'c'],
+        },
+      }, {
+        data: {
+          name: 'test2',
+          definitions: {
+            links: [],
+            components: [],
+          },
+          components: [],
+        },
+        configuration: {
+          tags: ['a', 'd', 'e'],
+        },
       }]);
     });
   });
@@ -148,7 +199,27 @@ describe('Test composable: PluginManager', () => {
           },
           components: [],
         },
+        configuration: {
+          tags: ['a', 'b', 'c'],
+        },
       });
+    });
+  });
+
+  describe('Test function: getPluginTags', () => {
+    it('should return empty array without good plugin name', () => {
+      expect(PluginManager.getPluginTags('bad')).toEqual([]);
+    });
+
+    it('should return all tags of the plugin according to the given name', () => {
+      expect(PluginManager.getPluginTags('test')).toEqual(['a', 'b', 'c']);
+    });
+  });
+
+  describe('Test function: getAllTags', () => {
+    it('should return all tags of all plugins', async () => {
+      await PluginManager.initPlugins();
+      expect(PluginManager.getAllTags()).toEqual(['a', 'b', 'c', 'd', 'e']);
     });
   });
 
