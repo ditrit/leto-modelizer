@@ -33,3 +33,9 @@ When('I drag {string} onto {string}', (templateOriginSelector, templateDestinati
 
   cy.get(originSelector).drag(destinationSelector, { force: true });
 });
+
+When('I move {string} of {int},{int}', (templateSelector, x, y) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+
+  cy.get(selector).move({ deltaX: x, deltaY: y, force: true });
+});

@@ -33,43 +33,43 @@ Feature: Test diagrams page: zoom on all diagrams
     Then I expect '[data-cy="diagram_{{ firstModelName }}"]' exists
 
   Scenario: Should zoom +.5 on all diagrams
-    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 276
-    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 210
+    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 278
+    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 212
 
     When I click on '[data-cy="zoom-plus-button"]'
-    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 414
-    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 316
+    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 417
+    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 318
 
   Scenario: Should zoom -.5 on all diagrams
-    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 276
-    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 210
+    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 278
+    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 212
 
     When I click on '[data-cy="zoom-minus-button"]'
-    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 138
-    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 105
+    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 139
+    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 106
 
   Scenario: Should zoom /2 on all diagrams
-    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 276
-    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 210
+    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 278
+    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 212
 
     When I click on '[data-cy="zoom-minus-button"]'
-    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 138
-    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 105
+    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 139
+    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 106
 
     When I click on '[data-cy="zoom-minus-button"]'
     Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 69
-    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 52
+    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 53
 
   Scenario: Should zoom x2 on all diagrams
-    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 276
-    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 210
+    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 278
+    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 212
 
     When I click on '[data-cy="zoom-minus-button"]'
     And  I click on '[data-cy="zoom-minus-button"]'
     Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 69
-    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 52
+    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 53
 
     When I click on '[data-cy="zoom-plus-button"]'
-    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 138
-    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 105
+    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 139
+    And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 106
 
