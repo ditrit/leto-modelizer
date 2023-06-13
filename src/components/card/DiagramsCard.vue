@@ -36,6 +36,16 @@
             key: 'CreateModel',
           })"
         />
+        <q-btn
+          outline
+          no-caps
+          class="q-ml-xl"
+          color="primary"
+          icon="fa-solid fa-map"
+          label="Diagrams map"
+          title="[Feature preview] This is a temporary button"
+          @click="router.push(`/projects/${projectName}/diagrams`)"
+        />
       </div>
     </q-card-section>
     <q-card-section class="row justify-end">

@@ -5,6 +5,14 @@
     data-cy="diagrams-page"
     @click="selectDiagram()"
   >
+    <q-btn
+      :label="$t('page.modelizer.button.back.label')"
+      :title="$t('page.modelizer.button.back.title')"
+      color="positive"
+      class="q-mt-lg q-ml-lg"
+      no-caps
+      @click="router.push(`/projects/${projectName}/models`)"
+    />
     <div
       id="diagrams-container"
       class="row q-gutter-md q-ma-md"
@@ -95,11 +103,12 @@ import {
   reactive,
   ref,
 } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import CreateModelDialog from 'components/dialog/CreateModelDialog';
 
 const route = useRoute();
+const router = useRouter();
 const projectName = computed(() => route.params.projectName);
 const diagrams = ref([]);
 const scale = ref(1);
