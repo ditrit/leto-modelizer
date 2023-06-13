@@ -24,7 +24,19 @@
         (v) => notEmpty($t, v),
       ]"
       data-cy="plugin-select"
-    />
+    >
+      <template #option="{ selected, opt, toggleOption }">
+        <q-item
+          :active="selected"
+          clickable
+          @click="toggleOption(opt)"
+        >
+          <q-item-section :data-cy="`item_${opt}`">
+            {{ opt }}
+          </q-item-section>
+        </q-item>
+      </template>
+    </q-select>
     <div class="flex row items-center justify-center">
       <q-btn
         icon="fa-solid fa-save"
