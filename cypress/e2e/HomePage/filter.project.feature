@@ -14,6 +14,7 @@ Feature: Test home page: project filter
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
     And  I expect current url is '{{localProjectName}}/models'
+    And  I wait 1 second
 
     # Go back to HomePage
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
@@ -25,6 +26,7 @@ Feature: Test home page: project filter
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
     And  I expect current url is '{{remoteProjectName}}/models'
+    And  I wait 1 second
 
     # Go back to HomePage
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
