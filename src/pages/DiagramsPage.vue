@@ -1,5 +1,9 @@
 <template>
-  <q-page>
+  <q-page
+    id="diagrams-page"
+    v-touch-pan.mouse="handlePan"
+    data-cy="diagrams-page"
+  >
     <div
       id="diagrams-container"
       class="row q-gutter-md q-ma-md"
@@ -8,12 +12,11 @@
         v-for="diagram in diagrams"
         :key="`diagram_${diagram.name}`"
         class="diagram-container col-2 no-shadow q-pa-md bg-grey-3"
+        :data-cy="`diagram-card_${diagram.name}`"
       >
         <div
           :id="`diagram_${diagram.name}`"
           :data-cy="`diagram_${diagram.name}`"
-          @dragover.prevent
-          @drop.prevent="dropHandler"
         />
       </q-card>
     </div>
@@ -24,6 +27,8 @@
           :label="$t('page.diagrams.actions.zoomPlus')"
           stack
           no-caps
+          color="white"
+          text-color="black"
           data-cy="zoom-plus-button"
           @click="zoom(true)"
         />
@@ -32,6 +37,8 @@
           :label="$t('page.diagrams.actions.zoomMinus')"
           stack
           no-caps
+          color="white"
+          text-color="black"
           data-cy="zoom-minus-button"
           @click="zoom(false)"
         />
@@ -46,6 +53,7 @@ import { getAllModels } from 'src/composables/Project';
 import {
   computed,
   onMounted,
+  reactive,
   ref,
 } from 'vue';
 import { useRoute } from 'vue-router';
@@ -57,6 +65,10 @@ const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
   ? `${process.env.MODELS_DEFAULT_FOLDER}/`
   : '');
 const scale = ref(1);
+const translate = reactive({
+  x: 0,
+  y: 0,
+});
 
 /**
  * Zoom on diagrams container.
@@ -76,6 +88,20 @@ function zoom(plus) {
   }
 
   div.style.scale = scale.value;
+}
+
+/**
+ * Pan on diagrams container according on the delta.
+ * @param {Object} delta - Delta of distance (in pixels) since handler was called last time.
+ * @see https://quasar.dev/vue-directives/touch-pan#handling-mouse-events
+ */
+function handlePan({ delta }) {
+  const div = document.getElementById('diagrams-container');
+
+  translate.x += delta.x;
+  translate.y += delta.y;
+
+  div.style.translate = `${translate.x}px ${translate.y}px`;
 }
 
 /**
@@ -113,18 +139,23 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+#diagrams-page {
+  max-height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
 .diagram-container {
-  display: inline-block;
   border: 2px dashed $primary;
+  height: min-content;
 }
 </style>
 <style lang="scss">
 // Quasar sets overflow to 'hidden' on all svg.
 // In our case, it needs to be set to 'visible' to manage position with % in plugin models.
 .diagram-container div svg {
-    overflow: visible !important;
-    display: unset;
-    height: 100%;
-    width: 100%;
-  }
+  overflow: visible !important;
+  display: unset;
+  height: 100%;
+  width: 100%;
+}
 </style>

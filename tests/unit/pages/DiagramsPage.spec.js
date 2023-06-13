@@ -57,6 +57,17 @@ describe('Test page component: DiagramsPage', () => {
     });
   });
 
+  describe('Test function: handlePan', () => {
+    it('should update translate value', () => {
+      document.getElementById = jest.fn(() => ({ style: {} }));
+
+      expect(wrapper.vm.translate).toEqual({ x: 0, y: 0 });
+
+      wrapper.vm.handlePan({ delta: { x: 1, y: 2 } });
+      expect(wrapper.vm.translate).toEqual({ x: 1, y: 2 });
+    });
+  });
+
   describe('Test function: drawDiagrams', () => {
     it('should draw all diagrams', async () => {
       const plugins = {
