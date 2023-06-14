@@ -154,7 +154,21 @@ export function isNumberTooBig(t, value, max) {
  */
 export function isUniqueProjectName(t, projects, value) {
   return projects.every((project) => project !== value)
-    || t('errors.projects.duplicate');
+    || t('errors.projects.duplicate.name');
+}
+
+/**
+ * Check if a value is unique in array.
+ * @param {Function} t - I18n translate function.
+ * @param {String[]} texts - List of texts.
+ * @param {String} value - Value to check.
+ * @param {String} message - Error message.
+ * @returns {boolean|String} Return true if the value is unique in the list,
+ * otherwise the translated error message.
+ */
+export function isUnique(t, texts, value, message) {
+  return texts.every((text) => text !== value)
+    || t(message);
 }
 
 /**
