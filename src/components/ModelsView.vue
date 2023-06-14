@@ -20,6 +20,29 @@
           })"
         />
       </div>
+      <div class="row justify-end q-mb-md">
+        <div class="row items-center">
+          <q-btn
+            outline
+            color="primary"
+            dense
+            :disable="isDiagramGrid"
+            class="q-mr-md"
+            icon="fa-solid fa-grip"
+            data-cy="diagram-grid-button"
+            @click="switchDiagramType"
+          />
+          <q-btn
+            outline
+            color="primary"
+            :disable="!isDiagramGrid"
+            dense
+            icon="fa-solid fa-bars"
+            data-cy="diagram-table-button"
+            @click="switchDiagramType"
+          />
+        </div>
+      </div>
       <diagram-filter-card
         v-model:selected-tags="selectedTags"
         v-model:search-text="searchDiagramText"
@@ -27,8 +50,15 @@
         @update:search-text="updateModels"
         @update:selected-tags="updateModels"
       />
-      <diagram-table
+      <diagram-grid
+        v-if="isDiagramGrid"
         :diagrams="data.models"
+        @click:diagram="onDiagramClick"
+      />
+      <diagram-table
+        v-else
+        :diagrams="data.models"
+        class="q-mt-md"
         @click:diagram="onDiagramClick"
       />
       <div class="row q-mt-lg">
@@ -58,6 +88,7 @@ import {
 import { getAllModels } from 'src/composables/Project';
 import { getTemplatesByType } from 'src/composables/TemplateManager';
 import DiagramTable from 'src/components/table/DiagramTable';
+import DiagramGrid from 'src/components/grid/DiagramGrid';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import TemplateGrid from 'src/components/grid/TemplateGrid';
@@ -66,6 +97,7 @@ import { getAllTags } from 'src/composables/PluginManager';
 import { searchText } from 'src/composables/Filter';
 import DiagramFilterCard from 'components/card/DiagramFilterCard.vue';
 
+const DIAGRAM_STORAGE_KEY = 'diagramType';
 const route = useRoute();
 const router = useRouter();
 const props = defineProps({
@@ -80,11 +112,21 @@ const data = reactive({
 });
 const templates = ref([]);
 const searchDiagramText = ref('');
-const viewType = computed(() => route.params.viewType);
 const selectedTags = ref([]);
 const allTags = ref(getAllTags());
+const isDiagramGrid = ref(localStorage.getItem(DIAGRAM_STORAGE_KEY) === 'grid');
+const viewType = computed(() => route.params.viewType);
 
 let updateModelSubscription;
+
+/**
+ * Update diagram type and local storage values.
+ * @param {String} type - Diagram type.
+ */
+function switchDiagramType() {
+  isDiagramGrid.value = !isDiagramGrid.value;
+  localStorage.setItem(DIAGRAM_STORAGE_KEY, isDiagramGrid.value ? 'grid' : 'table');
+}
 
 /**
  * Redirect to ModelizerDrawView corresponding to the given diagram.
