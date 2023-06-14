@@ -18,8 +18,27 @@ jest.mock('src/composables/Project', () => ({
     if (project.id === 'error') {
       return Promise.reject({ name: 'error' });
     }
+
     return Promise.resolve();
   }),
+  getProjects: jest.fn(() => ({
+    foo: {
+      id: 'foo',
+      git: { repository: '/foo' },
+    },
+    bar: {
+      id: 'bar',
+      git: { repository: '/bar' },
+    },
+  })),
+  deleteProjectById: jest.fn((projectId) => {
+    if (projectId === 'error') {
+      return Promise.reject({ name: 'error' });
+    }
+
+    return Promise.resolve();
+  }),
+  extractProjectName: jest.fn(() => 'foo'),
 }));
 
 describe('Test component: ImportProjectForm', () => {
@@ -53,6 +72,47 @@ describe('Test component: ImportProjectForm', () => {
       await wrapper.vm.onSubmit();
 
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'warning' }));
+    });
+
+    it('should delete existing project if overwrite is set to true', async () => {
+      wrapper.vm.repository = '/foo';
+      wrapper.vm.project.id = 'foo';
+      wrapper.vm.overwrite = true;
+
+      await wrapper.vm.onSubmit();
+
+      expect(wrapper.vm.deleteProjectById).toHaveBeenCalled();
+    });
+  });
+
+  describe('Test watcher: repository', () => {
+    it('should be triggered when repository value is updated', async () => {
+      expect(wrapper.vm.isDuplicate).toBeFalsy();
+
+      wrapper.vm.repository = 'foo';
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.vm.isDuplicate).toBeTruthy();
+    });
+  });
+
+  describe('Test watcher: overwrite', () => {
+    it('should be triggered when overwrite value is updated', async () => {
+      expect(wrapper.vm.overwrite).toBeFalsy();
+      expect(wrapper.vm.isUniqueRuleEnabled).toBeTruthy();
+
+      wrapper.vm.overwrite = true;
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.vm.isUniqueRuleEnabled).toBeFalsy();
+
+      wrapper.vm.overwrite = false;
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.vm.isUniqueRuleEnabled).toBeTruthy();
     });
   });
 });

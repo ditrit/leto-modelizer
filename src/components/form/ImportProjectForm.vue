@@ -7,11 +7,29 @@
     <q-input
       v-model="repository"
       :label="$t('page.modelizer.settings.gitAddRemote.repository')"
-      :hint="$t('page.modelizer.settings.gitAddRemote.repositoryExample')"
-      :rules="[v => notEmpty($t, v), v => isGitRepositoryUrl($t, v)]"
+      :rules="[
+        (value) => notEmpty($t, value),
+        (value) => isGitRepositoryUrl($t, value),
+        isUniqueRuleEnabled ?
+          (value) => isUnique(
+            $t,
+            projectNames,
+            extractProjectName(value),
+            'errors.projects.duplicate.import'
+          )
+          : () => true,
+      ]"
       filled
-      lazy-rules
+      reactive-rules
       data-cy="repository-input"
+    />
+    <q-checkbox
+      v-if="isDuplicate"
+      v-model="overwrite"
+      class="q-mt-none"
+      :label="$t('page.home.project.overwrite')"
+      :disable="!isDuplicate"
+      data-cy="overwrite-project-checkbox"
     />
     <q-input
       v-model="username"
@@ -47,9 +65,21 @@
 <script setup>
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
-import { notEmpty, isGitRepositoryUrl } from 'src/composables/QuasarFieldRule';
-import { importProject } from 'src/composables/Project';
+import {
+  ref,
+  watch,
+} from 'vue';
+import {
+  notEmpty,
+  isGitRepositoryUrl,
+  isUnique,
+} from 'src/composables/QuasarFieldRule';
+import {
+  importProject,
+  getProjects,
+  deleteProjectById,
+  extractProjectName,
+} from 'src/composables/Project';
 
 const emit = defineEmits(['project:import']);
 
@@ -59,11 +89,15 @@ const repository = ref();
 const username = ref();
 const token = ref();
 const submitting = ref(false);
+const projectNames = ref(Object.keys(getProjects()));
+const isDuplicate = ref(false);
+const overwrite = ref(false);
+const isUniqueRuleEnabled = ref(true);
 
 /**
  * Import project, manage toast and loader.
  */
-function onSubmit() {
+async function onSubmit() {
   submitting.value = true;
   project.id = repository.value.split('/').at(-1);
   project.git = {
@@ -71,6 +105,10 @@ function onSubmit() {
     username: username.value,
     token: token.value,
   };
+
+  if (overwrite.value) {
+    await deleteProjectById(project.id);
+  }
 
   return importProject(project)
     .then(() => {
@@ -92,6 +130,14 @@ function onSubmit() {
       submitting.value = false;
     });
 }
+
+watch(repository, (value) => {
+  isDuplicate.value = projectNames.value.includes(extractProjectName(value));
+});
+
+watch(overwrite, (value) => {
+  isUniqueRuleEnabled.value = !value;
+});
 </script>
 
 <style lang="scss" scoped>
