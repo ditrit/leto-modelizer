@@ -130,3 +130,12 @@ Then('I expect {string} height is {int}', (templateSelector, height) => {
     expect(Math.trunc(element.height())).eq(height);
   });
 });
+
+Then('I expect {string} to be at position {int},{int}', (templateSelector, x, y) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+
+  cy.get(selector).should((element) => {
+    expect(Math.trunc(element.position().left)).eq(x);
+    expect(Math.trunc(element.position().top)).eq(y);
+  });
+});

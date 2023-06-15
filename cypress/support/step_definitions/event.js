@@ -43,3 +43,9 @@ When('I select {string} in {string}', (option, templateSelector) => {
   cy.get(selector)
     .click();
 });
+
+When('I move {string} of {int},{int}', (templateSelector, x, y) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+
+  cy.get(selector).move({ deltaX: x, deltaY: y, force: true });
+});
