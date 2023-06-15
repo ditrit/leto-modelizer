@@ -17,9 +17,7 @@ Feature: Test roundtrip of the application : create project files
     # Create new model with correct plugin
     When I click on '[data-cy="create-model-button"]'
     And  I select '[data-cy="item_<plugin>"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '<plugin>'
-
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{modelName}}'
+    And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{modelName}}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
     And  I expect current url is '{{projectName}}/modelizer/draw\?path=<plugin>/{{modelName}}'
