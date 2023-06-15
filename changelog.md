@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Remove "About" button.
 * Index page:
   * Redesign diagram list.
+  * Add buttons to change diagram display (table or grid).
 
 ## [1.2.0] - 2023/06/07
 
