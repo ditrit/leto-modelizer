@@ -150,18 +150,19 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 18.14
       - uses: actions/cache/restore@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('./package-lock.json') }}
-      - name: Install terrator-plugin
-        run: |
-          npm ci && \
-          npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.3.0" && \
-          npm run plugin:init
       - name: Build application
-        run: docker build -t leto-modelizer -f DockerfileE2E .
+        run: |
+          npm install -g npm@8.19.3 &&  \
+          npm ci && \
+          npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.2.0" && \
+          npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.3.0" && \
+          npm run plugin:init && \
+          docker build -t leto-modelizer -f DockerfileE2E .
       - name: Run application
         run: docker run -p 8080:80 -d leto-modelizer
       - name: Run functional tests

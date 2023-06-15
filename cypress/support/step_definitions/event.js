@@ -33,3 +33,13 @@ When('I drag {string} onto {string}', (templateOriginSelector, templateDestinati
 
   cy.get(originSelector).drag(destinationSelector, { force: true });
 });
+
+When('I select {string} in {string}', (option, templateSelector) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+  cy.get(selector)
+    .click();
+  cy.get(option)
+    .click();
+  cy.get(selector)
+    .click();
+});
