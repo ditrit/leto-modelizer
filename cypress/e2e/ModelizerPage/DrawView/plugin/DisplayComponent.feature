@@ -56,7 +56,7 @@ Feature: Test modelizer draw view: add plugin component
       | aws_key_pair          |
 
   @skip
-  # TODO: update/fix test 
+  # TODO: update/fix test
   Scenario Outline: Dragging the <element> component should display it on the page
     Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>_"]' not exists
 

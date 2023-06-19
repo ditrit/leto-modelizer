@@ -1,13 +1,12 @@
 Feature: Test roundtrip of the application : create project with template files
 
-  Background:
+  Scenario: Create project from a template redirect to models page with template models and create project files and folders
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'projectName' with 'projectTest'
     And   I set context field 'modelName' with 'modelTest'
     And   I visit the '/'
 
-  Scenario: Create project from a template redirect to models page with template models and create project files and folders
     # Create project from a template and check template models are displayed
     When I wait 1 second
     Then I expect '[data-cy="template-card_project_template"]' exists

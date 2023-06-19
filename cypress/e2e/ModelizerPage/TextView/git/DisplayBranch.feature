@@ -1,11 +1,11 @@
-Feature: Test modelizer text view: git log display
+Feature: Test modelizer text view: git branch display
 
   Background:
     Given I clear cache
     And   I set viewport size to '1536' px for width and '960' px for height
+    And   I visit the '/'
 
-    When I visit the '/'
-    And  I click on '[data-cy="create-project-button"]'
+    When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/models'
@@ -20,13 +20,12 @@ Feature: Test modelizer text view: git log display
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    And  I click on '[data-cy="git-current-branch-button"]'
-    Then I expect '[data-cy="git-branch-menu"] [data-cy="git-log-item"]' exists
+    Then I expect '[data-cy="file-explorer"] [data-cy="folder_projectName"]' exists
 
-  Scenario: Display dialog containing the list of logs
-    When I wait 1 second
-    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-log-item"]'
-    Then I expect '[data-cy="git-log-dialog"]' exists
-    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"]' exists
-    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]' appear 1 time on screen
-    And  I expect '[data-cy="git-log-dialog"] [data-cy="log-list"] [data-cy="item"]' is 'Initial commit.'
+  Scenario: Default branch should be master
+    Then I expect '[data-cy="git-current-branch-button"]' is 'master'
+
+  Scenario: Expect to have master in local branches section
+    When I click on '[data-cy="git-current-branch-button"]'
+    Then I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_master"]' exists
+    And  I expect '[data-cy="git-branch-menu"] [data-cy="local-branch_master"] [data-cy="git-menu-current-branch"]' exists

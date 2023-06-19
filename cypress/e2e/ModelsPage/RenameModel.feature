@@ -1,6 +1,6 @@
 Feature: Test models page: rename model
 
-  Background:
+  Scenario: Rename model and verify the new name
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I visit the '/'
@@ -20,7 +20,6 @@ Feature: Test models page: rename model
     And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
     And  I expect '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
 
-  Scenario: Rename model and verify the new name
     # Rename model
     When I click on '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelName}}"]'
     Then I expect '[data-cy="diagrams-table-action-menu"]' exists

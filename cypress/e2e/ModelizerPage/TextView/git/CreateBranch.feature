@@ -41,7 +41,6 @@ Feature: Test modelizer text view: create git branch
     And  I expect 'positive' toast to appear with text 'Branch is created 🥳!'
     And  I expect '[data-cy="git-current-branch-button"]' is 'test-new-branch'
 
-
   Scenario: Create new branch action without checkout option should create a new branch and not checkout on it
     When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'

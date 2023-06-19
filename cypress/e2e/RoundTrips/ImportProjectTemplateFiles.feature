@@ -1,6 +1,6 @@
 Feature: Test roundtrip of the application : import project with template files
 
-  Background:
+  Scenario: Import project with a template redirect to models page with template models and create project files and folders
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'modelName' with 'modelTest'
@@ -8,7 +8,6 @@ Feature: Test roundtrip of the application : import project with template files
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I visit the '/'
 
-  Scenario: Import project with a template redirect to models page with template models and create project files and folders
     # Import project with a template and check template models are displayed
     Then I expect '[data-cy="template-card_project_template"]' exists
 
@@ -55,7 +54,7 @@ Feature: Test roundtrip of the application : import project with template files
     And  I expect active file content to be equal to 'cypress/resources/project-test/app.tf'
 
     # Check content of plugin and template files
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra1"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra1"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/infra2"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/infra2/main.tf"]' exists
 

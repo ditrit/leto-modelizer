@@ -72,4 +72,3 @@ Feature: Test diagrams page: zoom on all diagrams
     When I click on '[data-cy="zoom-plus-button"]'
     Then I expect '[data-cy="diagram_{{ firstModelName }}"]' width is 139
     And  I expect '[data-cy="diagram_{{ firstModelName }}"]' height is 106
-

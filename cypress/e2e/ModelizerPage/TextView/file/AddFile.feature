@@ -50,7 +50,7 @@ Feature: Test modelizer text view: add file
     And  I expect '[data-cy="create-file-form"]' is closed
     And  I expect '.file-status-untracked' appear 2 times on screen
     And  I expect '[data-cy="file_newFile.js"].file-status-untracked' exists
- 
+
     When I hover '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
@@ -73,7 +73,7 @@ Feature: Test modelizer text view: add file
     And  I expect '[data-cy="create-file-form"]' is closed
     And  I expect '.file-status-untracked' appear 2 times on screen
     And  I expect '[data-cy="file_terraform/newFile.js"].file-status-untracked' exists
- 
+
     When I hover '[data-cy="file-explorer"] [data-cy="file-button_terraform/newFile.js"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_terraform/newFile.js"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
@@ -81,4 +81,3 @@ Feature: Test modelizer text view: add file
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     Then I expect 'positive' toast to appear with text 'File is added &#129395;!'
     And  I expect '[data-cy="file_terraform/newFile.js"].file-status-staged' exists
-    

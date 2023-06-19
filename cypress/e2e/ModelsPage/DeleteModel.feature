@@ -1,6 +1,6 @@
 Feature: Test models page: model deletion
 
-  Background:
+  Scenario: Delete model, create another model to check previous model files are deleted
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I visit the '/'
@@ -26,7 +26,6 @@ Feature: Test models page: model deletion
     And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
     And  I expect '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
 
-  Scenario: Delete model, create another model to check previous model files are deleted
     # Delete model
     When I click on '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelName}}"]'
     Then I expect '[data-cy="diagrams-table-action-menu"]' exists

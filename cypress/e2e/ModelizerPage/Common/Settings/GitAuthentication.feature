@@ -11,7 +11,7 @@ Feature: Test git authentication dialog
     Then I expect current url is 'projectName/models'
 
     When I wait 1 second
-    When I visit the '/#/projectName/modelizer/text'
+    And  I visit the '/#/projectName/modelizer/text'
 
   Scenario: Set git authentication in the project should send positive toast
     When I click on '[data-cy="modelizer-settings-button"]'
@@ -43,7 +43,7 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="git-add-remote-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'We have access to your repository 🥳!'
     And  I expect '[data-cy="git-add-remote-form"]' is closed
-    
+
     When I click on '[data-cy="modelizer-settings-button"]'
     And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAuthentication"]'
     Then I expect field '[data-cy="git-authentication-form"] [data-cy="username-input"]' is 'test'
@@ -73,7 +73,7 @@ Feature: Test git authentication dialog
     Then I expect 'positive' toast to appear with text 'Git authentication updated &#129395;!'
     And  I expect '[data-cy="git-authentication-form"]' is closed
     And  I expect '[data-cy="upload-to-git-button"]' to be enabled
-  
+
   Scenario: Set git add remote repository then set empty git username should keep the 'Upload to git' button disabled.
     Given I expect '[data-cy="upload-to-git-button"]' not exists
 

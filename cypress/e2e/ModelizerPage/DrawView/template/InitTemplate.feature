@@ -22,7 +22,7 @@ Feature: Test modelizer draw view: template initialization
     Then I expect '[data-cy="component-definitions-item_Templates"]' exists
     And  I expect '[data-cy="component-definitions-item_Templates"] [data-cy="title"]' is 'Templates'
 
-  Scenario: Should have only one plugin installed with all these definitions
+  Scenario Outline: Should have only one templates library installed with all these definitions
     When I click on '[data-cy="component-definitions-item_Templates"]'
     Then I expect '[data-cy="component-definitions-item_Templates"].selected' exists
     And  I expect '[data-cy="component-definitions-item_Templates"].selected [data-cy="title"]' is 'Templates (2)'

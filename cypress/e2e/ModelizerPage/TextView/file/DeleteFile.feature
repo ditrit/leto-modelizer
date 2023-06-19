@@ -56,7 +56,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="folder-icon_{{ projectName }}"].fa-folder-open' exists
     And  I expect '[data-cy="folder-icon_terraform"].fa-folder' exists
-  
+
   Scenario: Delete last file of a sub-folder should close active tab
     When I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
     And  I double click on '[data-cy="file_terraform/app.tf"]'
@@ -316,7 +316,7 @@ Feature: Test modelizer text view: delete file and folder
 
     When I click on '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]'
     Then I expect checkbox '[data-cy="delete-file-form"] [data-cy="confirm-delete-checkbox"]' is checked
-    
+
     When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Folder is deleted.'
     And  I expect '[data-cy="delete-file-form"]' is closed

@@ -1,11 +1,10 @@
 Feature: Test roundtrip of the application : rename project
-  Background:
+  Scenario: Creating project then renaming it should only rename project root folder and keep created model and files
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'modelName' with 'modelTest'
     And   I visit the '/'
 
-  Scenario: Creating project then renaming it should only rename project root folder and keep created model and files
     # Create project
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectTest'
@@ -64,7 +63,7 @@ Feature: Test roundtrip of the application : rename project
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_renamedProject"]' is 'renamedProject'
 
     # Check model and files are still here
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' exists
 

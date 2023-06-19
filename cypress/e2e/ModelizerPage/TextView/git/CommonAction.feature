@@ -1,6 +1,6 @@
 Feature: Test modelizer text view: common action of git branch menu
 
-  Background:
+  Scenario: Should check the text of expand branches button
     Given I clear cache
     And   I set viewport size to '1536' px for width and '960' px for height
     And   I visit the '/'
@@ -22,7 +22,6 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I wait 1 second
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_projectName"]' exists
 
-  Scenario: Should check the text of expand branches button
     When I click on '[data-cy="git-current-branch-button"]'
     And  I wait 2 seconds
     # Create new branch test 1
@@ -33,7 +32,7 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="submit-button"]'
     And  I expect '[data-cy="git-new-branch-form"]' is closed
     # Create new branch test 2
-    When I click on '[data-cy="git-current-branch-button"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     And  I expect '[data-cy="git-new-branch-form"]' exists
     And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text 'test2'
@@ -41,7 +40,7 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="submit-button"]'
     And  I expect '[data-cy="git-new-branch-form"]' is closed
     # Create new branch test 3
-    When I click on '[data-cy="git-current-branch-button"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     And  I expect '[data-cy="git-new-branch-form"]' exists
     And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text 'test3'
@@ -49,7 +48,7 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="submit-button"]'
     And  I expect '[data-cy="git-new-branch-form"]' is closed
     # Create new branch test 4
-    When I click on '[data-cy="git-current-branch-button"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     And  I expect '[data-cy="git-new-branch-form"]' exists
     And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text 'test4'
@@ -57,7 +56,7 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="submit-button"]'
     And  I expect '[data-cy="git-new-branch-form"]' is closed
     # Create new branch test 5
-    When I click on '[data-cy="git-current-branch-button"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-branch-menu"] [data-cy="git-new-branch-item"]'
     And  I expect '[data-cy="git-new-branch-form"]' exists
     And  I set on '[data-cy="git-new-branch-form"] [data-cy="branch-name-input"]' text 'test5'
@@ -65,7 +64,7 @@ Feature: Test modelizer text view: common action of git branch menu
     And  I click on '[data-cy="git-new-branch-form"] [data-cy="submit-button"]'
     And  I expect '[data-cy="git-new-branch-form"]' is closed
 
-    When I click on '[data-cy="git-current-branch-button"]'
+    And  I click on '[data-cy="git-current-branch-button"]'
     And  I wait 2 seconds
     Then I expect '[data-cy="git-branch-menu"] [data-cy="expand-local-branch-menu"] [data-cy="expand-list-text"]' is 'Show 1 more...'
 

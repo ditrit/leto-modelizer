@@ -1,6 +1,6 @@
 Feature: Test modelizer text view: switch model file
 
-  Background:
+  Scenario: Select the file of another model should update url
     Given I clear cache
     And   I set viewport size to '1536' px for width and '960' px for height
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
@@ -47,7 +47,6 @@ Feature: Test modelizer text view: switch model file
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ pluginName }}/{{ modelName }}"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ pluginName }}/{{ model2Name }}"]' exists
 
-  Scenario: Select the file of another model should update url    
     When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ pluginName }}/{{ modelName }}"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ pluginName }}/{{ modelName }}"]'
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'

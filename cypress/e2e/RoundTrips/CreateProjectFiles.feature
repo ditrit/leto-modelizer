@@ -1,13 +1,12 @@
 Feature: Test roundtrip of the application : create project files
 
-  Background:
+  Scenario Outline: Create project redirect to models page with correct plugin and create project files and folders
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'projectName' with 'projectTest'
     And   I set context field 'modelName' with 'modelTest'
     And   I visit the '/'
 
-  Scenario Outline: Create project redirect to models page with <plugin> and create project files and folders
     # Create new project
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'

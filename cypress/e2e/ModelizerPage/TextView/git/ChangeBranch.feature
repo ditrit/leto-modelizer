@@ -1,6 +1,6 @@
 Feature: Test modelizer text view: change git branch
 
-  Background:
+  Scenario: Checkout action should change current branch
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
@@ -26,7 +26,6 @@ Feature: Test modelizer text view: change git branch
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect current url is '{{ projectName }}/modelizer/text\?path=terrator-plugin/modelName'
 
-  Scenario: Checkout action should change current branch
     When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-branch-menu"] [data-cy="remote-branch_test/remote1"]'
     And  I click on '[data-cy="git-branch-action-menu"] [data-cy="checkout_test/remote1"]'
