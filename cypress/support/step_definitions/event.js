@@ -38,10 +38,12 @@ When('I select {string} in {string}', (option, templateSelector) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   cy.get(selector)
     .click();
+
   cy.get(option)
     .click();
-  cy.get(selector)
-    .click();
+
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(500);
 });
 
 When('I move {string} of {int},{int}', (templateSelector, x, y) => {

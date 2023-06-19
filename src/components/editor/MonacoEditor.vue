@@ -137,8 +137,9 @@ async function updateEditorContent() {
 }
 
 onBeforeMount(async () => {
+  await nextTick();
   if (!editor) {
-    await nextTick(createEditor);
+    await createEditor();
   }
 });
 
@@ -150,7 +151,8 @@ onMounted(() => {
 });
 
 onUpdated(async () => {
-  await nextTick(updateEditorLayout);
+  await nextTick();
+  await updateEditorLayout();
 });
 
 onUnmounted(() => {
