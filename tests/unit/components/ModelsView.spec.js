@@ -75,13 +75,29 @@ describe('Test component: ModelsView', () => {
 
   describe('Test props: projectName', () => {
     it('should match "projectName"', () => {
-      expect(wrapper.vm.projectName).toEqual('projectName');
+      expect(wrapper.vm.props.projectName).toEqual('projectName');
     });
   });
 
-  describe('Test computed: viewType', () => {
-    it('should match route.params.viewType', () => {
-      expect(wrapper.vm.viewType).toEqual('models');
+  describe('Test computed', () => {
+    describe('Test computed: viewType', () => {
+      it('should match route.params.viewType', () => {
+        expect(wrapper.vm.viewType).toEqual('models');
+      });
+    });
+  });
+
+  describe('Test function: switchDiagramType', () => {
+    it('should toggle isDiagramGrid value', () => {
+      expect(wrapper.vm.isDiagramGrid).toBeFalsy();
+
+      wrapper.vm.switchDiagramType();
+
+      expect(wrapper.vm.isDiagramGrid).toBeTruthy();
+
+      wrapper.vm.switchDiagramType();
+
+      expect(wrapper.vm.isDiagramGrid).toBeFalsy();
     });
   });
 
