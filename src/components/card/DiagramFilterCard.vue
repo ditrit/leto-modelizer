@@ -1,5 +1,8 @@
 <template>
-  <q-card>
+  <q-card
+    flat
+    bordered
+  >
     <q-card-section class="row justify-end">
       <tag-select-input
         :model-value="selectedTags"
