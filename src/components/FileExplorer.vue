@@ -91,6 +91,9 @@ const nodes = ref([]);
 const activeFileId = ref(null);
 // Must be a String according to https://quasar.dev/vue-components/tree
 const filterTrigger = ref(props.showParsableFiles.toString());
+const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
+  ? `${process.env.MODELS_DEFAULT_FOLDER}/`
+  : '');
 
 let selectFileTabSubscription;
 let createFileSubscription;
@@ -288,15 +291,19 @@ function openModelFiles() {
 
   expandFolder(props.projectName);
 
+  if (defaultFolder.value !== '') {
+    expandFolder(defaultFolder.value);
+  }
+
   if (pluginName?.length > 0) {
-    expandFolder(pluginName);
+    expandFolder(`${defaultFolder.value}${pluginName}`);
 
     if (modelName?.length > 0) {
-      expandFolder(`${pluginName}/${modelName}`);
+      expandFolder(`${defaultFolder.value}${pluginName}/${modelName}`);
 
       const plugin = getPluginByName(pluginName);
       const allPaths = localFileInformations.value
-        .filter(({ path }) => path.startsWith(`${pluginName}/${modelName}/`))
+        .filter(({ path }) => path.startsWith(`${defaultFolder.value}${pluginName}/${modelName}/`))
         .filter(({ path }) => plugin.isParsable({ path }))
         .map(({ path }) => path);
 
