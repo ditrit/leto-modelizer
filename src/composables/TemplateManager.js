@@ -37,7 +37,7 @@ export function getRemoteTemplates() {
  * PluginName is only required if type equals `component`.
  * @param {String} type - Type of template.
  * @param {String} [pluginName=''] - Name of plugin.
- * @return {Array<Object>} Filtered templates.
+ * @return {Promise<Object[]>} Promise with Filtered templates on success otherwise an error.
  */
 export async function getTemplatesByType(type, pluginName = '') {
   const templates = await getRemoteTemplates();
