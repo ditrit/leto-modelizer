@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Focus movement on all diagrams.
 * Index page:
   * Add a search bar to filter diagrams.
+  * Add drawer to create diagram from a template.
 
 ### Changed
 
@@ -25,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Fix bug on models default folder opening, see [this issue](https://github.com/ditrit/leto-modelizer/issues/303).
+
+### Removed
+
+* Index page:
+  * Template grid.
 
 ## [1.2.0] - 2023/06/07
 
