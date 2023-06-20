@@ -36,6 +36,7 @@ import {
   renameProject,
   isMatching,
   exists,
+  extractProjectName,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -717,6 +718,22 @@ describe('Test composable: Project', () => {
       const result = await exists();
 
       expect(result).toEqual(true);
+    });
+  });
+
+  describe('Test function: extractProjectName', () => {
+    it('should extract project name from the given url', () => {
+      const url = 'https://github.com/ditrit/leto-modelizer';
+
+      expect(extractProjectName(url)).toEqual('leto-modelizer');
+    });
+
+    it('should return null for invalid url format', () => {
+      expect(extractProjectName('example.com')).toBeNull();
+    });
+
+    it('should return null when url is empty', () => {
+      expect(extractProjectName('')).toBeNull();
     });
   });
 });
