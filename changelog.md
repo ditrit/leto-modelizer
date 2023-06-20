@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Redesign diagram list.
   * Add buttons to change diagram display (table or grid).
 
+### Fixed
+
+* Fix bug on models default folder opening, see [this issue](https://github.com/ditrit/leto-modelizer/issues/303).
+
 ## [1.2.0] - 2023/06/07
 
 ### Added

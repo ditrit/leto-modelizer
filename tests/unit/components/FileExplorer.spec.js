@@ -500,6 +500,8 @@ describe('Test component: FileExplorer', () => {
       }));
       PluginManager.getPluginByName.mockImplementation(mock);
 
+      process.env.MODELS_DEFAULT_FOLDER = 'default';
+
       wrapper.vm.fileExplorerRef = {
         getNodeByKey: jest.fn(() => ({ children: [] })),
         setExpanded: jest.fn(),
