@@ -10,8 +10,13 @@
       :label="$t('actions.models.create.form.name')"
       lazy-rules
       :rules="[
-        (v) => notEmpty($t, v),
-        v => isUniqueModel($t, models, modelPlugin, v)
+        (value) => notEmpty($t, value),
+        (value) => isUnique(
+          $t,
+          models.map((model) => `${model.plugin}/${model.name}`),
+          `${modelPlugin}/${value}`,
+          'errors.models.duplicate',
+        )
       ]"
       data-cy="name-input"
     />
@@ -21,7 +26,7 @@
       :label="$t('actions.models.create.form.plugin')"
       :options="plugins.map(({ data }) => data.name)"
       :rules="[
-        (v) => notEmpty($t, v),
+        (value) => notEmpty($t, value),
       ]"
       data-cy="plugin-select"
     >
@@ -58,7 +63,7 @@
 import { Notify } from 'quasar';
 import { getPlugins } from 'src/composables/PluginManager';
 import { onMounted, reactive, ref } from 'vue';
-import { isUniqueModel, notEmpty } from 'src/composables/QuasarFieldRule';
+import { isUnique, notEmpty } from 'src/composables/QuasarFieldRule';
 import { useI18n } from 'vue-i18n';
 import { createProjectFolder, getAllModels } from 'src/composables/Project';
 import { useRouter } from 'vue-router';

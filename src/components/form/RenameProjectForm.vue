@@ -8,8 +8,13 @@
       v-model="projectName"
       :label="$t('page.home.project.name')"
       :rules="[
-        v => notEmpty($t, v),
-        v => isUniqueProjectName($t, Object.keys(getProjects()), v)
+        (value) => notEmpty($t, value),
+        (value) => isUnique(
+          $t,
+          Object.keys(getProjects()),
+          value,
+          'errors.projects.duplicate.name',
+        ),
       ]"
       filled
       lazy-rules
@@ -35,7 +40,7 @@
 <script setup>
 import { Notify } from 'quasar';
 import { ref } from 'vue';
-import { notEmpty, isUniqueProjectName } from 'src/composables/QuasarFieldRule';
+import { notEmpty, isUnique } from 'src/composables/QuasarFieldRule';
 import { renameProject, getProjects } from 'src/composables/Project';
 import { useI18n } from 'vue-i18n';
 import ProjectEvent from 'src/composables/events/ProjectEvent';

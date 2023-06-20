@@ -13,8 +13,13 @@
           v-model="projectName"
           :label="$t('page.home.project.name')"
           :rules="[
-            v => notEmpty($t, v),
-            v => isUniqueProjectName($t, projectNames, v)
+            (value) => notEmpty($t, value),
+            (value) => isUnique(
+              $t,
+              projectNames,
+              value,
+              'errors.projects.duplicate.name',
+            ),
           ]"
           outlined
           lazy-rules
@@ -51,7 +56,10 @@
         v-model="repository"
         :label="$t('page.modelizer.settings.gitAddRemote.repository')"
         :hint="$t('page.modelizer.settings.gitAddRemote.repositoryExample')"
-        :rules="[v => notEmpty($t, v), v => isGitRepositoryUrl($t, v)]"
+        :rules="[
+          (value) => notEmpty($t, value),
+          (value) => isGitRepositoryUrl($t, value)
+        ]"
         filled
         lazy-rules
         data-cy="repository-input"
@@ -103,7 +111,7 @@ import { ref, watch } from 'vue';
 import {
   notEmpty,
   isGitRepositoryUrl,
-  isUniqueProjectName,
+  isUnique,
 } from 'src/composables/QuasarFieldRule';
 import {
   importProject,

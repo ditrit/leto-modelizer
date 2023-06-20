@@ -10,7 +10,15 @@
       filled
       :label="$t('page.modelizer.git.newBranch.branch')"
       lazy-rules
-      :rules="[(v) => notEmpty(t, v), (v) => isUniqueBranchName(t, branches, v)]"
+      :rules="[
+        (value) => notEmpty(t, value),
+        (value) => isUnique(
+          $t,
+          branches.map(({ name }) => name),
+          value,
+          'errors.git.branch.duplicate',
+        ),
+      ]"
       data-cy="branch-name-input"
     />
     <q-checkbox
@@ -37,7 +45,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { notEmpty, isUniqueBranchName } from 'src/composables/QuasarFieldRule';
+import { notEmpty, isUnique } from 'src/composables/QuasarFieldRule';
 import {
   getBranches,
   createBranchFrom,

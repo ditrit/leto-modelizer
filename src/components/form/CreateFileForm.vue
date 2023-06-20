@@ -10,9 +10,14 @@
       :label="$t(`page.modelizer.fileExplorer.create.${isFolder ? 'folder' : 'file'}.input`)"
       lazy-rules
       :rules="[
-        (v) => notEmpty(t, v),
-        (v) => isValidFileLabel($t, v),
-        (v) => isUniqueFileLabel($t, file.children, v),
+        (value) => notEmpty(t, value),
+        (value) => isValidFileLabel($t, value),
+        (value) => isUnique(
+          $t,
+          file.children.map(({ label }) => label),
+          value,
+          'errors.fileExplorer.label.duplicate',
+        ),
       ]"
       data-cy="name-input"
     />
@@ -37,7 +42,7 @@
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
-import { notEmpty, isValidFileLabel, isUniqueFileLabel } from 'src/composables/QuasarFieldRule';
+import { notEmpty, isValidFileLabel, isUnique } from 'src/composables/QuasarFieldRule';
 import { createProjectFolder, writeProjectFile } from 'src/composables/Project';
 import { FileInput } from 'leto-modelizer-plugin-core';
 import FileEvent from 'src/composables/events/FileEvent';
