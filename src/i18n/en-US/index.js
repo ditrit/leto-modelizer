@@ -158,7 +158,10 @@ export default {
       },
     },
     projects: {
-      duplicate: 'Project name already exists.',
+      duplicate: {
+        import: 'Project already imported.',
+        name: 'Project name already exists.',
+      },
       delete: 'An error occured while deleting project.',
       create: 'An error occured while creating project.',
     },
@@ -236,6 +239,7 @@ export default {
         name: 'Project name',
         empty: 'No projects, please create a new project to have one here 😉',
         delete: 'Delete project',
+        overwrite: 'Overwrite existing project',
       },
       template: {
         createProject: 'Create a project from a template',
