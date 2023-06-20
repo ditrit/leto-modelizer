@@ -1,9 +1,7 @@
 import {
   notEmpty,
   isGitRepositoryUrl,
-  isUniqueBranchName,
   isValidFileLabel,
-  isUniqueFileLabel,
   isRequired,
   isStringTooShort,
   isStringTooLong,
@@ -11,8 +9,6 @@ import {
   isNumber,
   isNumberTooSmall,
   isNumberTooBig,
-  isUniqueProjectName,
-  isUniqueModel,
   isUnique,
 } from 'src/composables/QuasarFieldRule';
 
@@ -53,19 +49,6 @@ describe('Test composable: InputRule', () => {
     });
   });
 
-  describe('Test function: isUniqueBranchName', () => {
-    it('should return true without duplicated branch', () => {
-      expect(isUniqueBranchName(t, [], 'test')).toBe(true);
-      expect(isUniqueBranchName(t, [{ name: 'test2' }], 'test')).toBe(true);
-    });
-
-    it('should return string error message with duplicated branch', () => {
-      const key = 'errors.git.branch.duplicate';
-
-      expect(isUniqueBranchName(t, [{ name: 'test' }], 'test')).toEqual(key);
-    });
-  });
-
   describe('Test function: isValidFileLabel', () => {
     it('should return true on valid tree node label', () => {
       expect(isValidFileLabel(t, 'folderName')).toBe(true);
@@ -79,20 +62,6 @@ describe('Test composable: InputRule', () => {
       expect(isValidFileLabel(t, '/folderName')).toEqual(key);
       expect(isValidFileLabel(t, 'app/file.tf')).toEqual(key);
       expect(isValidFileLabel(t, 'folder/app.tf')).toEqual(key);
-    });
-  });
-
-  describe('Test function: isUniqueFileLabel', () => {
-    it('should return true without duplicated node label', () => {
-      expect(isUniqueFileLabel(t, [], 'fileName')).toBe(true);
-      expect(isUniqueFileLabel(t, [{ label: 'app.tf' }], 'fileName')).toBe(true);
-      expect(isUniqueFileLabel(t, [{ label: 'folderA' }], 'folderB')).toBe(true);
-    });
-
-    it('should return string error message with duplicated node label', () => {
-      const key = 'errors.fileExplorer.label.duplicate';
-
-      expect(isUniqueFileLabel(t, [{ label: 'test' }], 'test')).toEqual(key);
     });
   });
 
@@ -199,42 +168,6 @@ describe('Test composable: InputRule', () => {
       const key = 'errors.rules.number.max';
 
       expect(isNumberTooBig(t, 4, 3)).toEqual(key);
-    });
-  });
-
-  describe('Test function: isUniqueProjectName', () => {
-    it('should return true when value does not exist in given project names array', () => {
-      expect(isUniqueProjectName(t, ['projectId'], 'test')).toBe(true);
-    });
-
-    it('should return the error message when value already exists in given project names array', () => {
-      const key = 'errors.projects.duplicate.name';
-
-      expect(isUniqueProjectName(t, ['duplicate'], 'duplicate')).toEqual(key);
-    });
-  });
-
-  describe('Test function: isUniqueModel', () => {
-    it('should return true when value does not exist in given model names array', () => {
-      expect(isUniqueModel(t, [{
-        name: 'test1',
-        plugin: 'plugin2',
-      }, {
-        name: 'test2',
-        plugin: 'plugin1',
-      }, {
-        name: 'test2',
-        plugin: 'plugin2',
-      }], 'plugin1', 'test1')).toBe(true);
-    });
-
-    it('should return the error message when value already exists in given model names array', () => {
-      const key = 'errors.models.duplicate';
-
-      expect(isUniqueModel(t, [{
-        name: 'test1',
-        plugin: 'plugin1',
-      }], 'plugin1', 'test1')).toEqual(key);
     });
   });
 
