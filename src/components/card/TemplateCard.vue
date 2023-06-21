@@ -1,6 +1,5 @@
 <template>
   <q-card
-    v-ripple
     tabindex="0"
     class="cursor-pointer template-card transparent"
     :data-cy="`template-card_${template.key}`"

@@ -65,25 +65,25 @@ Feature: Test home page: project filter
 
     # Set 'local' as searched text and expect only projects that contains 'local' to be displayed
     When I set on '[data-cy="search-project-input"]' text 'local'
-    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' not exists
+    Then I expect '[data-cy="project-card_{{remoteProjectName}}"]' not exists
     And  I expect '[data-cy="project-card_{{localProjectName}}"]' appear 1 time on screen
 
     # Set 'leto' as searched text and expect only projects that contains 'leto' to be displayed
-    And  I set on '[data-cy="search-project-input"]' text 'leto'
-    And  I expect '[data-cy="project-card_{{localProjectName}}"]' not exists
+    When I set on '[data-cy="search-project-input"]' text 'leto'
+    Then I expect '[data-cy="project-card_{{localProjectName}}"]' not exists
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' appear 1 time on screen
 
     # Set 'none' as searched text and expect no project is displayed
-    And  I set on '[data-cy="search-project-input"]' text 'none'
-    And  I expect '[data-cy="project-card_{{localProjectName}}"]' not exists
+    When I set on '[data-cy="search-project-input"]' text 'none'
+    Then I expect '[data-cy="project-card_{{localProjectName}}"]' not exists
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' not exists
 
     # Set 'leto local' as searched text and expect all projects are displayed
-    And  I set on '[data-cy="search-project-input"]' text 'leto local'
-    And  I expect '[data-cy="project-card_{{localProjectName}}"]' exists
+    When I set on '[data-cy="search-project-input"]' text 'leto local'
+    Then I expect '[data-cy="project-card_{{localProjectName}}"]' exists
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' exists
 
     # Unset searched text and expect all projects are displayed
-    And  I set on '[data-cy="search-project-input"]' text ' '
-    And  I expect '[data-cy="project-card_{{localProjectName}}"]' exists
+    When I set on '[data-cy="search-project-input"]' text ' '
+    Then I expect '[data-cy="project-card_{{localProjectName}}"]' exists
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' exists

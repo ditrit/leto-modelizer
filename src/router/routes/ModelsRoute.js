@@ -1,10 +1,11 @@
-import ModelsPage from 'src/pages/ModelsPage.vue';
 import { getProjectById } from 'src/composables/Project';
 
 const ModelsRoute = {
-  name: 'models',
-  path: '/:projectName/models',
-  component: ModelsPage,
+  path: '/:projectName',
+  component: () => import('layouts/ProjectLayout.vue'),
+  children: [
+    { name: 'models', path: '/:projectName/models', component: () => import('pages/ModelsPage.vue') },
+  ],
   beforeEnter: (to, _from, next) => {
     const project = getProjectById(to.params.projectName);
 

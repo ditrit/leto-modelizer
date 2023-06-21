@@ -14,8 +14,15 @@ Feature: Test models page: model creation from template
 
   Scenario: Create template model should redirect to draw page with correct plugin and create model folders
     # Model creation
+    When I click on '[data-cy="add-model-button"]'
+    Then I expect '[data-cy="create-diagram-drawer"]' exists
+    And  I expect '[data-cy="template-card_terraform_webapp"]' exists
+
     When I click on '[data-cy="template-card_terraform_webapp"]'
-    And  I set on '[data-cy="import-model-template-form"] [data-cy="name-input"]' text '{{modelName}}'
+    And  I click on '[data-cy="submit-button"]'
+    Then I expect '[data-cy="import-model-template-dialog"]' exists
+
+    When I set on '[data-cy="import-model-template-form"] [data-cy="name-input"]' text '{{modelName}}'
     And  I click on '[data-cy="import-model-template-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelName}}'
     And  I expect '[data-cy="components-definitions-drawer"]' exists
@@ -47,12 +54,26 @@ Feature: Test models page: model creation from template
     And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
 
     # Create same model and check error
+    When I click on '[data-cy="add-model-button"]'
+    Then I expect '[data-cy="create-diagram-drawer"]' exists
+    And  I expect '[data-cy="template-card_terraform_webapp"]' exists
+
     When I click on '[data-cy="template-card_terraform_webapp"]'
-    And  I set on '[data-cy="import-model-template-form"] [data-cy="name-input"]' text '{{modelName}}'
+    And  I click on '[data-cy="submit-button"]'
+    Then I expect '[data-cy="import-model-template-dialog"]' exists
+
+    When I set on '[data-cy="import-model-template-form"] [data-cy="name-input"]' text '{{modelName}}'
     And  I click on '[data-cy="import-model-template-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="import-model-template-form"] [role="alert"]' is "Model name already exists for this plugin."
 
   Scenario: Try to create template model without name should not be possible
+    When I click on '[data-cy="add-model-button"]'
+    Then I expect '[data-cy="create-diagram-drawer"]' exists
+    And  I expect '[data-cy="template-card_terraform_webapp"]' exists
+
     When I click on '[data-cy="template-card_terraform_webapp"]'
-    And  I click on '[data-cy="import-model-template-form"] [data-cy="submit-button"]'
+    And  I click on '[data-cy="submit-button"]'
+    Then I expect '[data-cy="import-model-template-dialog"]' exists
+
+    When  I click on '[data-cy="import-model-template-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="import-model-template-form"] [role="alert"]' is 'Please type something'

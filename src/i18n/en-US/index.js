@@ -17,6 +17,7 @@ export default {
       cancel: 'Cancel',
       search: 'Search',
       modify: 'Modify',
+      ok: 'Ok',
     },
     home: {
       newProject: 'New project',
@@ -35,6 +36,12 @@ export default {
       },
     },
     models: {
+      add: {
+        button: {
+          name: 'Add a diagram',
+          title: 'Add a diagram from a template',
+        },
+      },
       create: {
         button: {
           name: 'New model',
@@ -234,7 +241,7 @@ export default {
         createProject: 'Create a project from a template',
         importProject: 'Import project with template',
         selected: 'Selected template: {template}',
-        empty: 'No templates available',
+        empty: 'No template available',
         import: 'In existing project (save your project in a repository)',
         rename: 'Rename this template for your project',
         description: 'Content',
@@ -263,6 +270,13 @@ export default {
         diagramPath: 'Diagram path',
         plugin: 'Plugin',
         actionsTitle: 'Tools',
+      },
+      drawer: {
+        title: 'Add a template of a model',
+        search: 'Search a template of a model',
+        list: 'Models templates',
+        select: 'Plugins...',
+        empty: 'No template available',
       },
     },
     modelizer: {
