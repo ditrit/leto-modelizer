@@ -1,7 +1,10 @@
 <template>
   <q-layout view="HHr Lpr fFr">
     <navigation-bar :project-name="projectName" />
-    <q-page-container style="padding-top: 0!important;">
+    <q-page-container
+      class="bg-grey-2"
+      style="padding-top: 0!important;"
+    >
       <router-view />
     </q-page-container>
     <create-diagram-drawer
