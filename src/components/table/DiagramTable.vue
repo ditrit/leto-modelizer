@@ -6,7 +6,7 @@
     class="diagram-table"
     :rows="diagrams"
     :columns="columns"
-    row-key="name"
+    row-key="path"
     data-cy="diagram-table"
     @row-click="(_, row) => emit('click:diagram', row)"
   >
