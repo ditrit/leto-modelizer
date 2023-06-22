@@ -17,7 +17,10 @@
       :label="$t('page.modelizer.settings.gitAddRemote.repository')"
       lazy-rules
       :hint="$t('page.modelizer.settings.gitAddRemote.repositoryExample')"
-      :rules="[v => notEmpty($t, v), v => isGitRepositoryUrl($t, v)]"
+      :rules="[
+        (value) => notEmpty($t, value),
+        (value) => isGitRepositoryUrl($t, value)
+      ]"
       data-cy="repository-input"
     />
     <div class="flex row items-center justify-center">

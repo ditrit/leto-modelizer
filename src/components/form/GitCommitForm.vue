@@ -10,7 +10,7 @@
       filled
       :label="$t('page.modelizer.git.commit.message')"
       lazy-rules
-      :rules="[(v) => notEmpty(t, v)]"
+      :rules="[(value) => notEmpty(t, value)]"
       data-cy="message-input"
     />
     <div class="flex row items-center justify-center">
