@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import ModelsView from 'src/components/ModelsView.vue';
+import DiagramsCard from 'src/components/card/DiagramsCard.vue';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
@@ -24,7 +24,7 @@ jest.mock('src/composables/Project', () => ({
   }])),
 }));
 
-describe('Test component: ModelsView', () => {
+describe('Test component: DiagramsCard', () => {
   let wrapper;
   let updateModelSubscribe;
   let updateModelUnsubscribe;
@@ -50,7 +50,7 @@ describe('Test component: ModelsView', () => {
       return { unsubscribe: updateModelUnsubscribe };
     });
 
-    wrapper = shallowMount(ModelsView, {
+    wrapper = shallowMount(DiagramsCard, {
       props: {
         projectName: 'projectName',
       },

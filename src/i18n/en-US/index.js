@@ -44,7 +44,7 @@ export default {
       },
       create: {
         button: {
-          name: 'New model',
+          name: 'Create a diagram',
           title: 'Open dialog to create new model',
         },
         dialog: {
@@ -258,7 +258,7 @@ export default {
       },
     },
     models: {
-      name: 'List of Models',
+      name: 'Detail - List of diagrams from the project',
       empty: 'No models available',
       template: {
         create: 'Create a model from a template',

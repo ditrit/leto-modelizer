@@ -78,7 +78,7 @@
       </div>
       <div
         v-if="filteredProjects.length === 0"
-        class="row text-center text-h6 text-grey items-center"
+        class="row text-center text-subtitle1 q-ml-md text-grey items-center"
         data-cy="project-grid-empty"
       >
         {{ $t('page.home.project.empty') }}
