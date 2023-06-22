@@ -52,7 +52,7 @@ Feature: Test home page: project import
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect 'warning' toast to appear with text 'Can\'t access the repository.'
 
-  Scenario: Import project with same repository url should not duplicate the project
+  Scenario: Import project with duplicate repository should display an error
     # Import project
     When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
@@ -67,7 +67,41 @@ Feature: Test home page: project import
     When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
+    Then I expect '[data-cy="import-project-form"] [role="alert"]' is 'Project already imported.'
+
+  Scenario: Import project with same repository url with overwrite option should overwrite existing project and send positive toast
+    # Import project
+    When I click on '[data-cy="import-project-button"]'
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
+    And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
+
+    # Modify project
+    And  I click on '[data-cy="create-model-button"]'
+    And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{modelName}}'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    And  I click on '[data-cy="models-page-link-button"]'
+    And  I expect current url is '{{projectName}}/models'
+    And  I expect '[data-cy="diagram-table"]' exists
+    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
+    And  I expect '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelName}}"]' exists
+
+    When I visit the '/'
+    Then I expect '[data-cy="project-card_{{projectName}}"]' appear 1 time on screen
+    And  I expect '[data-cy="project-card_{{projectName}}"] [data-cy="title-container"]' is '{{projectName}}'
+
+    # Import another project with same repository url
+    When I click on '[data-cy="import-project-button"]'
+    And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
+    And  I click on '[data-cy="import-project-form"] [data-cy="overwrite-project-checkbox"]'
+    And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
+    Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
+
+    # Check the project has been overwritten
+    And  I expect current url is '{{projectName}}/models'
+    And  I expect '[data-cy="diagram-table"]' exists
+    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelName}}"]' not exists
+    And  I expect '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelName}}"]' not exists
 
     # Check the imported project is only displayed once
     When I visit the '/'

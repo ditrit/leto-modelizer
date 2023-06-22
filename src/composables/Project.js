@@ -68,6 +68,18 @@ export function getProjectById(projectId) {
 }
 
 /**
+ * Extract project name from repository url.
+ * @param {String} repositoryUrl - Repository url.
+ * @returns {String|null} Project name.
+ */
+export function extractProjectName(repositoryUrl) {
+  const regex = /\/([^/]+)\/?$/;
+  const match = regex.exec(repositoryUrl);
+
+  return match?.[1] || null;
+}
+
+/**
  * Get name of remote repository or local project if it is not based upon a remote repository.
  * @param {String} projectId - Id of project.
  * @return {String} Project Name.
@@ -77,7 +89,7 @@ export function getProjectName(projectId) {
   const { repository } = projects[projectId].git;
 
   if (repository) {
-    return repository.split('/').at(-1);
+    return extractProjectName(repository);
   }
 
   return projectId;

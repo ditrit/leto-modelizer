@@ -22,19 +22,6 @@ export function isGitRepositoryUrl(t, value) {
 }
 
 /**
- * Check if the branch name does not already exist.
- * @param {Function} t - I18n translate function.
- * @param {Branch[]} branches - All branches of project.
- * @param {String} value - Value to check.
- * @return {boolean|String} Return true if the branch doesn't already exist otherwise the translated
- * error message.
- */
-export function isUniqueBranchName(t, branches, value) {
-  return branches.every((branch) => branch.name !== value)
-    || t('errors.git.branch.duplicate');
-}
-
-/**
  * Check if value is a valid file label.
  * @param {Function} t - I18n translate function.
  * @param {String} value - Value to check.
@@ -43,20 +30,6 @@ export function isUniqueBranchName(t, branches, value) {
 export function isValidFileLabel(t, value) {
   return !value.includes('/')
     || t('errors.invalid.fileExplorer.label');
-}
-
-/**
- * Check if a file's label does not already exist.
- * @param {Function} t - I18n translate function.
- * @param {Object[]} tree - Tree Object.
- * @param {String} tree.label - Label of a file.
- * @param {String} value - Value to check.
- * @return {boolean|String} Return true if the node label doesn't already exist,
- * otherwise the translated error message.
- */
-export function isUniqueFileLabel(t, tree, value) {
-  return tree.every(({ label }) => label !== value)
-    || t('errors.fileExplorer.label.duplicate');
 }
 
 /**
@@ -145,28 +118,15 @@ export function isNumberTooBig(t, value, max) {
 }
 
 /**
- * Check if a project name does not already exist.
+ * Check if a value is unique in array.
  * @param {Function} t - I18n translate function.
- * @param {Array} projects - List of project names.
+ * @param {String[]} texts - List of texts.
  * @param {String} value - Value to check.
- * @return {boolean|String} Return true if the project name doesn't already exist,
+ * @param {String} message - Error message.
+ * @returns {boolean|String} Return true if the value is unique in the list,
  * otherwise the translated error message.
  */
-export function isUniqueProjectName(t, projects, value) {
-  return projects.every((project) => project !== value)
-    || t('errors.projects.duplicate');
-}
-
-/**
- * Check if a model name for a plugin does not already exist.
- * @param {Function} t - I18n translate function.
- * @param {Array} models - List of model names.
- * @param {String} plugin - Selected plugin.
- * @param {String} value - Value to check.
- * @return {boolean|String} Return true if the model name doesn't already exist,
- * otherwise the translated error message.
- */
-export function isUniqueModel(t, models, plugin, value) {
-  return models.every((model) => !(model.name === value && model.plugin === plugin))
-    || t('errors.models.duplicate');
+export function isUnique(t, texts, value, message) {
+  return texts.every((text) => text !== value)
+    || t(message);
 }

@@ -10,8 +10,13 @@
       :label="$t('actions.models.import.form.name')"
       lazy-rules
       :rules="[
-        (v) => notEmpty($t, v),
-        v => isUniqueModel($t, models, template.plugin, v)
+        (value) => notEmpty($t, value),
+        (value) => isUnique(
+          $t,
+          models.map((model) => `${model.plugin}/${model.name}`),
+          `${template.plugin}/${value}`,
+          'errors.models.duplicate',
+        )
       ]"
       data-cy="name-input"
     />
@@ -35,7 +40,7 @@
 <script setup>
 import { Notify } from 'quasar';
 import { onMounted, ref } from 'vue';
-import { isUniqueModel, notEmpty } from 'src/composables/QuasarFieldRule';
+import { isUnique, notEmpty } from 'src/composables/QuasarFieldRule';
 import { useI18n } from 'vue-i18n';
 import {
   createProjectFolder,

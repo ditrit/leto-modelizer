@@ -10,7 +10,7 @@
       :label="$t('actions.models.rename.form.name')"
       lazy-rules
       :rules="[
-        (v) => notEmpty($t, v),
+        (value) => notEmpty($t, value),
       ]"
       data-cy="name-input"
     />
