@@ -30,7 +30,7 @@
     </template>
     <q-item
       v-if="selectedItemId && !isEmptyList"
-      style="overflow-y: auto !important;"
+      style="overflow-y: auto !important; overflow-x: hidden;"
       class="q-pa-none q-mb-sm"
     >
       <component-definition-grid
