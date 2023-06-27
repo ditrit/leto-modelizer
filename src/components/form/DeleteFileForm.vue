@@ -58,18 +58,19 @@ const submitting = ref(false);
 /**
  * Emit new fileName if form is valid and manage toast.
  */
-function onSubmit() {
+async function onSubmit() {
   if (isFolderWithChildren.value && !confirmDelete.value) {
-    return Notify.create({
+    Notify.create({
       type: 'negative',
       message: t('errors.fileExplorer.folder.delete'),
       html: true,
     });
+    return;
   }
 
   submitting.value = true;
 
-  return deleteProjectFile(props.projectName, props.file.id, props.file.isFolder)
+  await deleteProjectFile(props.projectName, props.file.id, props.file.isFolder)
     .then(() => {
       emit('file:delete');
       FileEvent.DeleteFileEvent.next(props.file);
