@@ -197,16 +197,27 @@ watch(activeFileId, () => {
 onMounted(() => {
   selectFileNodeSubscription = FileEvent.SelectFileNodeEvent.subscribe(onSelectFileNode);
   deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(onDeleteFile);
-  updateEditorContentSubscription = FileEvent.UpdateEditorContentEvent.subscribe(updateFileStatus);
-  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateAllFileTabs);
-  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateAllFileTabs);
-  pullSubscription = GitEvent.PullEvent.subscribe(updateAllFileTabs);
-  addFileSubscription = GitEvent.AddEvent.subscribe(updateFileStatus);
-  commitFilesSubscription = GitEvent.CommitEvent.subscribe(
-    (event) => updateAllFilesStatus(event.map(({ path }) => path)),
-  );
-  globalUploadFilesEventSubscription = FileEvent.GlobalUploadFilesEvent
-    .subscribe(updateAllFileTabs);
+  updateEditorContentSubscription = FileEvent.UpdateEditorContentEvent.subscribe((event) => {
+    updateFileStatus(event);
+  });
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(() => {
+    updateAllFileTabs();
+  });
+  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(() => {
+    updateAllFileTabs();
+  });
+  pullSubscription = GitEvent.PullEvent.subscribe(() => {
+    updateAllFileTabs();
+  });
+  addFileSubscription = GitEvent.AddEvent.subscribe((event) => {
+    updateFileStatus(event);
+  });
+  commitFilesSubscription = GitEvent.CommitEvent.subscribe((event) => {
+    updateAllFilesStatus(event.map(({ path }) => path));
+  });
+  globalUploadFilesEventSubscription = FileEvent.GlobalUploadFilesEvent.subscribe(() => {
+    updateAllFileTabs();
+  });
 });
 
 onUnmounted(() => {

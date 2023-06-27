@@ -204,8 +204,13 @@ async function dropHandler(event) {
 }
 
 onMounted(async () => {
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(initView);
-  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(onDefaultEvent);
+  pluginInitSubscription = PluginEvent.InitEvent.subscribe(() => {
+    initView();
+  });
+  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe((event) => {
+    onDefaultEvent(event);
+  });
+
   await initView();
 });
 
