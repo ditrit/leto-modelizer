@@ -1,0 +1,109 @@
+<template>
+  <q-layout view="hHh LpR fFf">
+    <navigation-bar
+      :project-name="projectName"
+    />
+    <component-definitions-drawer
+      v-if="data.plugin"
+      :plugin="data.plugin"
+      :templates="templates"
+      :project-name="projectName"
+    />
+    <component-detail-panel
+      v-if="data.plugin"
+      :plugin="data.plugin"
+    />
+    <q-page-container>
+      <modelizer-draw-page />
+    </q-page-container>
+  </q-layout>
+</template>
+
+<script setup>
+import NavigationBar from 'src/components/NavigationBar.vue';
+import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer.vue';
+import ComponentDetailPanel from 'src/components/drawer/ComponentDetailPanel.vue';
+import ModelizerDrawPage from 'src/pages/ModelizerDrawPage.vue';
+import { getPluginByName, initComponents } from 'src/composables/PluginManager';
+import { getTemplatesByType } from 'src/composables/TemplateManager';
+import PluginEvent from 'src/composables/events/PluginEvent';
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+} from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
+import { Notify } from 'quasar';
+
+const { t } = useI18n();
+const route = useRoute();
+
+const projectName = computed(() => route.params.projectName);
+const query = computed(() => route.query);
+
+const data = reactive({
+  plugin: null,
+});
+const templates = ref([]);
+const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
+  ? `${process.env.MODELS_DEFAULT_FOLDER}/`
+  : '');
+
+let pluginInitSubscription;
+
+/**
+ * Update plugin, draw components and update component templates array.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function initView() {
+  if (!query.value?.path) {
+    return;
+  }
+
+  data.plugin = getPluginByName(query.value.path.split('/')[0]);
+
+  if (!data.plugin) {
+    return;
+  }
+
+  await Promise.allSettled([
+    initComponents(
+      route.params.projectName,
+      data.plugin,
+      `${defaultFolder.value}${route.query.path}`,
+    ).then(() => {
+      data.plugin.draw('root');
+    }),
+    getTemplatesByType(
+      'component',
+      data.plugin.data.name,
+    ).then((response) => {
+      templates.value = response;
+    }).catch(() => {
+      Notify.create({
+        type: 'negative',
+        message: t('errors.templates.getData'),
+        html: true,
+      });
+    }),
+  ]);
+}
+
+onMounted(async () => {
+  pluginInitSubscription = PluginEvent.InitEvent.subscribe(initView);
+  await initView();
+});
+
+onUnmounted(() => {
+  pluginInitSubscription.unsubscribe();
+});
+</script>
+
+<style scoped>
+.q-page-container {
+  padding-top: 0 !important;
+}
+</style>

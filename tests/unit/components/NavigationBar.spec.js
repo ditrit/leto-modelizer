@@ -13,9 +13,7 @@ installQuasarPlugin({
 
 jest.mock('vue-router', () => ({
   useRoute: jest.fn(() => ({
-    params: {
-      viewType: 'draw',
-    },
+    name: 'Draw',
   })),
   useRouter: jest.fn(),
 }));
@@ -105,8 +103,8 @@ describe('Test component: NavigationBar', () => {
     });
 
     describe('Test ref: buttonToggleValue', () => {
-      it('should match "draw"', () => {
-        expect(wrapper.vm.buttonToggleValue).toEqual('draw');
+      it('should match "Draw"', () => {
+        expect(wrapper.vm.buttonToggleValue).toEqual('Draw');
       });
     });
   });
@@ -115,11 +113,11 @@ describe('Test component: NavigationBar', () => {
     it('should equal buttonToggleOpitons array ', () => {
       const buttonToggleOptions = [{
         label: 'page.modelizer.header.switch.draw',
-        value: 'draw',
+        value: 'Draw',
         slot: 'content',
       }, {
         label: 'page.modelizer.header.switch.text',
-        value: 'text',
+        value: 'Text',
         slot: 'content',
       }];
 
@@ -227,9 +225,8 @@ describe('Test component: NavigationBar', () => {
       wrapper.vm.onViewTypeUpdate('changed');
       expect(mockPush).toHaveBeenCalledTimes(1);
       expect(mockPush).toHaveBeenCalledWith({
-        name: 'modelizer',
+        name: 'changed',
         params: {
-          viewType: 'changed',
           projectName: wrapper.vm.props.projectName,
         },
         query: wrapper.vm.query,

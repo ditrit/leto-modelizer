@@ -70,6 +70,7 @@ import { FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
 import { useRoute } from 'vue-router';
 import { getPluginByName } from 'src/composables/PluginManager';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 const route = useRoute();
 const query = computed(() => route.query);
@@ -105,6 +106,8 @@ let pullSubscription;
 let addFileSubscription;
 let commitFilesSubscription;
 let globalUploadFilesEventSubscription;
+
+let pluginInitSubscription;
 
 /**
  * Filter tree nodes to only display parsable files and folders if showParsableFiles is true.
@@ -288,6 +291,12 @@ function openFile(file) {
  */
 function openModelFiles() {
   const [pluginName, modelName] = query.value.path.split('/');
+  const plugin = getPluginByName(pluginName);
+
+  // TODO: Find a better way to stub it on shallowMount.
+  if (!plugin || !fileExplorerRef.value.getNodeByKey || !query.value.path) {
+    return;
+  }
 
   expandFolder(props.projectName);
 
@@ -301,7 +310,6 @@ function openModelFiles() {
     if (modelName?.length > 0) {
       expandFolder(`${defaultFolder.value}${pluginName}/${modelName}`);
 
-      const plugin = getPluginByName(pluginName);
       const allPaths = localFileInformations.value
         .filter(({ path }) => path.startsWith(`${defaultFolder.value}${pluginName}/${modelName}/`))
         .filter(({ path }) => plugin.isParsable({ path }))
@@ -335,11 +343,7 @@ async function initTreeNodes() {
   nodes.value = getTree(props.projectName, localFileInformations.value);
 
   await updateAllFilesStatus();
-
-  // TODO: Find a better way to stub it on shallowMount.
-  if (fileExplorerRef.value.getNodeByKey && query.value.path) {
-    openModelFiles();
-  }
+  openModelFiles();
 }
 
 onMounted(async () => {
@@ -372,7 +376,10 @@ onMounted(async () => {
     initTreeNodes();
   });
 
+  pluginInitSubscription = PluginEvent.InitEvent.subscribe(openModelFiles);
+
   await initTreeNodes();
+  openModelFiles();
 });
 
 onUnmounted(() => {
@@ -386,6 +393,8 @@ onUnmounted(() => {
   addFileSubscription.unsubscribe();
   commitFilesSubscription.unsubscribe();
   globalUploadFilesEventSubscription.unsubscribe();
+
+  pluginInitSubscription.unsubscribe();
 });
 </script>
 
