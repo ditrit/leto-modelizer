@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Fix bug on models default folder opening, see [this issue](https://github.com/ditrit/leto-modelizer/issues/303).
+* Fix Sonar new bugs/code smell due to quality profil change, see [this issue](https://github.com/ditrit/leto-modelizer/issues/322).
 
 ### Removed
 
