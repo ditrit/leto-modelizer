@@ -58,7 +58,7 @@ describe('Test component: CreateProjectDialog', () => {
         await wrapper.vm.createProject('test');
 
         expect(DialogEvent.next).toBeCalledWith({ type: 'close', key: 'CreateProject' });
-        expect(push).toBeCalledWith('/test/models');
+        expect(push).toBeCalledWith('/projects/test/models');
         expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
       });
 

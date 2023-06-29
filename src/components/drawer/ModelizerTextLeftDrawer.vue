@@ -16,7 +16,7 @@
           class="q-mr-md"
           no-caps
           data-cy="models-page-link-button"
-          @click="router.push(`/${projectName}/models`)"
+          @click="router.push(`/projects/${projectName}/models`)"
         />
       </div>
       <git-branch-card />

@@ -1,6 +1,6 @@
-import ModelsRoute from 'src/router/routes/ModelsRoute';
 import ModelizerDrawLayout from 'src/layouts/ModelizerDrawLayout.vue';
 import ModelizerTextLayout from 'src/layouts/ModelizerTextLayout.vue';
+import ProjectLayout from 'src/layouts/ProjectLayout.vue';
 import { getProjectById } from 'src/composables/Project';
 
 const routes = [
@@ -17,7 +17,6 @@ const routes = [
       },
     ],
   },
-  ModelsRoute,
   {
     path: '/projects/:projectName',
     beforeEnter: (to, _from, next) => {
@@ -39,6 +38,11 @@ const routes = [
         path: 'modelizer/text',
         name: 'Text',
         component: ModelizerTextLayout,
+      },
+      {
+        path: 'models',
+        name: 'Models',
+        component: ProjectLayout,
       },
     ],
   },

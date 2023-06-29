@@ -1,7 +1,7 @@
 <template>
   <router-link
     class="card-link"
-    :to="`/${project.id}/models`"
+    :to="`projects/${project.id}/models`"
   >
     <q-card
       v-ripple

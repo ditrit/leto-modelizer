@@ -46,7 +46,7 @@ async function createProject(projectId) {
       html: true,
     });
 
-    return router.push(`/${projectId}/models`);
+    return router.push(`/projects/${projectId}/models`);
   }).catch(() => {
     Notify.create({
       type: 'warning',
