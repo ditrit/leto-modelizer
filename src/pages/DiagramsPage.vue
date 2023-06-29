@@ -50,9 +50,11 @@
 <script setup>
 import { getPluginByName, initComponents } from 'src/composables/PluginManager';
 import { getAllModels } from 'src/composables/Project';
+import PluginEvent from 'src/composables/events/PluginEvent';
 import {
   computed,
   onMounted,
+  onUnmounted,
   reactive,
   ref,
 } from 'vue';
@@ -69,6 +71,8 @@ const translate = reactive({
   x: 0,
   y: 0,
 });
+
+let pluginInitSubscription;
 
 /**
  * Zoom on diagrams container.
@@ -133,8 +137,16 @@ async function drawDiagrams() {
 }
 
 onMounted(async () => {
+  pluginInitSubscription = PluginEvent.InitEvent.subscribe(() => {
+    updateDiagrams().then(() => { drawDiagrams(); });
+  });
+
   await updateDiagrams();
   await drawDiagrams();
+});
+
+onUnmounted(() => {
+  pluginInitSubscription.unsubscribe();
 });
 </script>
 
