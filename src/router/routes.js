@@ -3,15 +3,14 @@ import ModelizerTextLayout from 'src/layouts/ModelizerTextLayout.vue';
 import ProjectLayout from 'src/layouts/ProjectLayout.vue';
 import DiagramsLayout from 'src/layouts/DiagramsLayout.vue';
 import AboutLayout from 'src/layouts/AboutLayout.vue';
+import HomeLayout from 'src/layouts/HomeLayout.vue';
 import { getProjectById } from 'src/composables/Project';
 
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: '', name: 'Home', component: () => import('pages/HomePage.vue') },
-    ],
+    name: 'Home',
+    component: HomeLayout,
   },
   {
     path: '/projects/:projectName',
