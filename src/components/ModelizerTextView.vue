@@ -117,7 +117,9 @@ async function onSelectFileTab(event) {
 }
 
 onMounted(() => {
-  selectFileTabSubscription = FileEvent.SelectFileTabEvent.subscribe(onSelectFileTab);
+  selectFileTabSubscription = FileEvent.SelectFileTabEvent.subscribe((event) => {
+    onSelectFileTab(event);
+  });
 });
 
 onUnmounted(() => {

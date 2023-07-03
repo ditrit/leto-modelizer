@@ -144,10 +144,18 @@ onBeforeMount(async () => {
 });
 
 onMounted(() => {
-  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateEditorContent);
-  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateEditorContent);
-  pullSubscription = GitEvent.PullEvent.subscribe(updateEditorContent);
-  updateFileContentSubscription = FileEvent.UpdateFileContentEvent.subscribe(updateEditorContent);
+  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(() => {
+    updateEditorContent();
+  });
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(() => {
+    updateEditorContent();
+  });
+  pullSubscription = GitEvent.PullEvent.subscribe(() => {
+    updateEditorContent();
+  });
+  updateFileContentSubscription = FileEvent.UpdateFileContentEvent.subscribe(() => {
+    updateEditorContent();
+  });
 });
 
 onUpdated(async () => {

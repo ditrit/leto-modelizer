@@ -172,7 +172,9 @@ watch(() => viewType.value, async () => {
 onMounted(async () => {
   await updateModels();
 
-  updateModelSubscription = UpdateModelEvent.subscribe(updateModels);
+  updateModelSubscription = UpdateModelEvent.subscribe(() => {
+    updateModels();
+  });
 });
 
 onUnmounted(() => {
