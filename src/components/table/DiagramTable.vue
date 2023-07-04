@@ -10,7 +10,7 @@
     data-cy="diagram-table"
     @row-click="(_, row) => emit('click:diagram', row)"
   >
-    <template #body-cell-categories="{ row: { tags }}">
+    <template #body-cell-categories="{ row: { tags } }">
       <q-td data-cy="diagram-categories">
         <q-chip
           v-for="(tag, index) in tags"
@@ -23,12 +23,17 @@
         />
       </q-td>
     </template>
-    <template #body-cell-diagramPath="{ row: { path }}">
+    <template #body-cell-diagramPath="{ row: { name, path } }">
       <q-td :data-cy="`diagram-path_${path}`">
-        {{ path }}
+        <div>
+          {{ name }}
+        </div>
+        <div class="text-grey">
+          {{ path }}
+        </div>
       </q-td>
     </template>
-    <template #body-cell-pluginIcon="{ row: { plugin }}">
+    <template #body-cell-pluginIcon="{ row: { plugin } }">
       <q-td>
         <q-img
           :src="`/plugins/${plugin}/icons/${plugin}.svg`"
