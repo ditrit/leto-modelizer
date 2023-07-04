@@ -27,11 +27,11 @@ Feature: Test diagrams page: display all diagrams
 
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
-    Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
+    Then I expect '[data-cy="draw-container"]' exists
     And  I expect '[id^="aws"]' exists
 
     # Back to the models page
-    When I visit the 'localhost:8080/#/{{ projectName }}/models'
+    When I visit the 'localhost:8080/#/projects/{{ projectName }}/models'
     Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{firstModelName}}"]' exists
 
     # Second model creation
@@ -46,10 +46,10 @@ Feature: Test diagrams page: display all diagrams
 
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
-    Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
+    Then I expect '[data-cy="draw-container"]' exists
     And  I expect '[id^="aws"]' exists
 
     # Back to the models page
-    When I visit the 'localhost:8080/#/{{ projectName }}/diagrams'
+    When I visit the 'localhost:8080/#/projects/{{ projectName }}/diagrams'
     Then I expect '[data-cy="diagram_{{ firstModelName }}"]' exists
     And  I expect '[data-cy="diagram_{{ secondModelName }}"]' exists

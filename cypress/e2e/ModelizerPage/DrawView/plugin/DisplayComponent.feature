@@ -28,12 +28,12 @@ Feature: Test modelizer draw view: add plugin component
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
 
   Scenario Outline: Click on the <element> component should display it on the page
-    Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' not exists
+    Then I expect '[data-cy="draw-container"] [id^="<element>"]' not exists
 
     When I click on '[data-cy="component-definition_<element>"]'
     And  I wait 1 second
-    Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' exists
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' appear 1 time on screen
+    Then I expect '[data-cy="draw-container"] [id^="<element>"]' exists
+    And  I expect '[data-cy="draw-container"] [id^="<element>"]' appear 1 time on screen
 
     Examples:
       | element               |
@@ -58,12 +58,12 @@ Feature: Test modelizer draw view: add plugin component
   @skip
   # TODO: update/fix test
   Scenario Outline: Dragging the <element> component should display it on the page
-    Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>_"]' not exists
+    Then I expect '[data-cy="draw-container"] [id^="<element>_"]' not exists
 
-    When I drag '[data-cy="component-definition_<element>"]' onto '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]'
+    When I drag '[data-cy="component-definition_<element>"]' onto '[data-cy="draw-container"]'
     And  I wait 1 second
-    Then I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' exists
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"] [id^="<element>"]' appear 1 time on screen
+    Then I expect '[data-cy="draw-container"] [id^="<element>"]' exists
+    And  I expect '[data-cy="draw-container"] [id^="<element>"]' appear 1 time on screen
 
     Examples:
       | element               |

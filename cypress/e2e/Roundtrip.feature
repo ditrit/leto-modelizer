@@ -23,15 +23,13 @@ Feature: Test roundtrip of the application
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-explorer"]' exists
-    And  I expect '[data-cy="file-tabs"]' exists
     And  I expect current url is 'projectName/modelizer/text\?path=terrator-plugin/modelName'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
+    And  I expect '[data-cy="draw-container"]' exists
     And  I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'

@@ -31,7 +31,6 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file_new_file.tf"]' not exists
     And  I expect '[data-cy="file_leto-modelizer.config.json"]' not exists
 
@@ -41,7 +40,6 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file_terrator-plugin/modelName/new_file.tf"]' appear 2 time on screen
     And  I expect '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]' appear 1 time on screen
 
@@ -61,7 +59,6 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file_terrator-plugin/modelName/new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]' appear 1 time on screen
 
@@ -83,7 +80,6 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
     And  I expect '[id^="server"]' exists
     But  I expect '[id^="aws"]' not exists
 
@@ -100,7 +96,6 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file_terrator-plugin/modelName/new_file.tf"]' appear 2 time on screen
     And  I expect '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]' appear 1 time on screen
 
@@ -124,7 +119,6 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file_terrator-plugin/modelName/new_file.tf"]' appear 2 time on screen
     And  I expect '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]' appear 1 time on screen
 
@@ -146,7 +140,6 @@ Feature: Test switch model to text view: add component/link
     And  I wait 2 seconds
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
     And  I wait 1 second
     And  I expect '[id^="aws_subnet"]' exists
     And  I expect '[id^="aws_internet_gateway"]' exists
