@@ -69,7 +69,7 @@ describe('Test component: CreateProjectTemplateDialog', () => {
         wrapper.vm.addProject('test');
 
         expect(DialogEvent.next).toBeCalledWith({ type: 'close', key: 'CreateProjectTemplate' });
-        expect(push).toBeCalledWith('/test/models');
+        expect(push).toBeCalledWith('/projects/test/models');
       });
     });
 

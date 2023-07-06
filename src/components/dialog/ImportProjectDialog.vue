@@ -32,6 +32,6 @@ const router = useRouter();
  */
 async function importProject(projectId) {
   DialogEvent.next({ type: 'close', key: 'ImportProject' });
-  await router.push(`/${projectId}/models`);
+  await router.push(`/projects/${projectId}/models`);
 }
 </script>

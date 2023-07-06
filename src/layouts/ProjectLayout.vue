@@ -5,7 +5,7 @@
       class="bg-grey-2"
       style="padding-top: 0!important;"
     >
-      <router-view />
+      <models-page />
     </q-page-container>
     <create-diagram-drawer
       v-model="isVisible"
@@ -23,6 +23,7 @@
 <script setup>
 import CreateDiagramDrawer from 'components/drawer/CreateDiagramDrawer.vue';
 import NavigationBar from 'components/NavigationBar.vue';
+import ModelsPage from 'src/pages/ModelsPage.vue';
 import { useRoute } from 'vue-router';
 import { computed, ref } from 'vue';
 

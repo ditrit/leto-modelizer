@@ -5,6 +5,7 @@ import i18nConfiguration from 'src/i18n';
 import FileExplorer from 'src/components/FileExplorer.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
+import PluginEvent from 'src/composables/events/PluginEvent';
 import * as Project from 'src/composables/Project';
 import * as PluginManager from 'src/composables/PluginManager';
 
@@ -88,6 +89,12 @@ jest.mock('src/composables/events/GitEvent', () => ({
   },
 }));
 
+jest.mock('src/composables/events/PluginEvent', () => ({
+  InitEvent: {
+    subscribe: jest.fn(),
+  },
+}));
+
 describe('Test component: FileExplorer', () => {
   let wrapper;
 
@@ -122,6 +129,10 @@ describe('Test component: FileExplorer', () => {
   let commitFilesUnsubscribe;
   let pullUnsubscribe;
 
+  // PluginEvent
+  let initSubscribe;
+  let initUnsubscribe;
+
   beforeEach(() => {
     // FileEvent
     createFileEventSubscribe = jest.fn();
@@ -153,6 +164,10 @@ describe('Test component: FileExplorer', () => {
     checkoutUnsubscribe = jest.fn();
     commitFilesUnsubscribe = jest.fn();
     pullUnsubscribe = jest.fn();
+
+    // PluginEvent
+    initSubscribe = jest.fn();
+    initUnsubscribe = jest.fn();
 
     // FileEvent
     FileEvent.CreateFileEvent.subscribe.mockImplementation(() => {
@@ -203,6 +218,12 @@ describe('Test component: FileExplorer', () => {
     GitEvent.PullEvent.subscribe.mockImplementation(() => {
       pullSubscribe();
       return { unsubscribe: pullUnsubscribe };
+    });
+
+    // PluginEvent
+    PluginEvent.InitEvent.subscribe.mockImplementation(() => {
+      initSubscribe();
+      return { unsubscribe: initUnsubscribe };
     });
 
     wrapper = shallowMount(FileExplorer, {
@@ -573,6 +594,11 @@ describe('Test component: FileExplorer', () => {
     it('should subscribe to PullEvent', () => {
       expect(pullSubscribe).toHaveBeenCalledTimes(1);
     });
+
+    // PluginEvent
+    it('should subscribe to InitEvent', () => {
+      expect(initSubscribe).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('Test hook function: onUnmounted', () => {
@@ -628,6 +654,13 @@ describe('Test component: FileExplorer', () => {
       expect(pullUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(pullUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    // PluginEvent
+    it('should unsubscribe to InitEvent', () => {
+      expect(initUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(initUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

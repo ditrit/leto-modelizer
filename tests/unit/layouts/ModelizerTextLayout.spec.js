@@ -1,22 +1,25 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import ModelizerTextView from 'src/components/ModelizerTextView.vue';
-import { createI18n } from 'vue-i18n';
-import i18nConfiguration from 'src/i18n';
 import FileEvent from 'src/composables/events/FileEvent';
+import ModelizerTextLayout from 'src/layouts/ModelizerTextLayout.vue';
 import { useRouter } from 'vue-router';
 
 installQuasarPlugin();
+
+jest.mock('vue-router', () => ({
+  useRoute: () => ({
+    params: {
+      projectName: 'project-00000000',
+    },
+    query: { path: 'pluginName/modelName' },
+  }),
+  useRouter: jest.fn(),
+}));
 
 jest.mock('src/composables/events/FileEvent', () => ({
   SelectFileTabEvent: {
     subscribe: jest.fn(),
   },
-}));
-
-jest.mock('vue-router', () => ({
-  useRoute: () => ({ query: { path: 'pluginName/modelName' } }),
-  useRouter: jest.fn(),
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -26,7 +29,7 @@ jest.mock('src/composables/Project', () => ({
   }],
 }));
 
-describe('Test component: ModelizerTextView', () => {
+describe('Test page component: ModelizerTextLayout', () => {
   let wrapper;
   let selectFileTabEventSubscribe;
   let selectFileTabEventUnsubscribe;
@@ -46,31 +49,13 @@ describe('Test component: ModelizerTextView', () => {
       return { unsubscribe: selectFileTabEventUnsubscribe };
     });
 
-    wrapper = shallowMount(ModelizerTextView, {
-      props: {
-        projectName: 'project-00000000',
-      },
-      global: {
-        plugins: [
-          createI18n({
-            locale: 'en-US',
-            messages: i18nConfiguration,
-          }),
-        ],
-      },
-    });
+    wrapper = shallowMount(ModelizerTextLayout, {});
   });
 
   describe('Test variables initialization', () => {
-    describe('Test prop: projectName', () => {
+    describe('Test computed: projectName', () => {
       it('should match "project-00000000"', () => {
         expect(wrapper.vm.projectName).toEqual('project-00000000');
-      });
-    });
-
-    describe('Test variable: showParsableFiles', () => {
-      it('should be false', () => {
-        expect(wrapper.vm.showParsableFiles).toEqual(false);
       });
     });
   });
@@ -118,10 +103,9 @@ describe('Test component: ModelizerTextView', () => {
 
       expect(useRouterPush).toHaveBeenCalledTimes(1);
       expect(useRouterPush).toHaveBeenCalledWith({
-        name: 'modelizer',
+        name: 'Text',
         params: {
-          viewType: 'text',
-          projectName: wrapper.vm.props.projectName,
+          projectName: wrapper.vm.projectName,
         },
         query: {
           path: 'pluginName/modelName',
@@ -132,10 +116,9 @@ describe('Test component: ModelizerTextView', () => {
 
       expect(useRouterPush).toHaveBeenCalledTimes(2);
       expect(useRouterPush).toHaveBeenCalledWith({
-        name: 'modelizer',
+        name: 'Text',
         params: {
-          viewType: 'text',
-          projectName: wrapper.vm.props.projectName,
+          projectName: wrapper.vm.projectName,
         },
         query: {
           path: 'plugin/name',

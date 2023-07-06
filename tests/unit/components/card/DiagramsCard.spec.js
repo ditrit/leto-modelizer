@@ -106,9 +106,8 @@ describe('Test component: DiagramsCard', () => {
       wrapper.vm.onDiagramClick(diagram);
 
       expect(useRouterPush).toBeCalledWith({
-        name: 'modelizer',
+        name: 'Draw',
         params: {
-          viewType: 'draw',
           projectName: 'projectName',
         },
         query: {

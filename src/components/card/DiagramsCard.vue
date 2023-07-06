@@ -141,9 +141,8 @@ function switchDiagramType() {
  */
 async function onDiagramClick(diagram) {
   await router.push({
-    name: 'modelizer',
+    name: 'Draw',
     params: {
-      viewType: 'draw',
       projectName: props.projectName,
     },
     query: {

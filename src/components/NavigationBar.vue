@@ -96,14 +96,14 @@ let authenticationSubscription;
 const query = computed(() => route.query);
 const isLoading = ref(false);
 const project = ref(getProjectById(props.projectName));
-const buttonToggleValue = ref(route.params.viewType);
+const buttonToggleValue = ref(['Draw', 'Text'].includes(route.name) ? route.name : null);
 const buttonToggleOptions = computed(() => [{
   label: t('page.modelizer.header.switch.draw'),
-  value: 'draw',
+  value: 'Draw',
   slot: 'content',
 }, {
   label: t('page.modelizer.header.switch.text'),
-  value: 'text',
+  value: 'Text',
   slot: 'content',
 }]);
 const isUploadButtonVisible = computed(() => !!project.value.git?.repository);
@@ -150,9 +150,8 @@ async function upload() {
  */
 async function onViewTypeUpdate(newViewType) {
   await router.push({
-    name: 'modelizer',
+    name: newViewType,
     params: {
-      viewType: newViewType,
       projectName: props.projectName,
     },
     query: query.value,

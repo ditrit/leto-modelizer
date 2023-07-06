@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Redesign diagram list.
   * Redesign global page.
   * Add buttons to change diagram display (table or grid).
+* Rework and clean all layouts and pages.
 
 ### Fixed
 

@@ -77,7 +77,7 @@ let dialogEventSubscription;
  */
 async function addProject(projectId) {
   DialogEvent.next({ type: 'close', key: 'CreateProjectTemplate' });
-  await router.push(`/${projectId}/models`);
+  await router.push(`/projects/${projectId}/models`);
 }
 
 /**

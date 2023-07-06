@@ -33,7 +33,6 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/modelName/new_file.tf"]' exists
 
     When I double click on '[data-cy="file-explorer"] [data-cy="file_terrator-plugin/modelName/new_file.tf"]'
@@ -41,7 +40,6 @@ Feature: Test switch model to text view: delete component/link
     And  I expect active file content to contain 'provider.*"aws".*{}'
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
 
     When I click on '[id^="aws"]'
     And  I click on '[id="remove-component"]'
@@ -49,7 +47,6 @@ Feature: Test switch model to text view: delete component/link
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
     But  I expect '[data-cy="file_new_file.tf"]' not exists
 
   Scenario: Delete one of two components (Draw view) should remove corresponding object inside plugin file content (Text view)
@@ -62,7 +59,6 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
 
     When I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
     And  I wait 1 second
@@ -81,7 +77,6 @@ Feature: Test switch model to text view: delete component/link
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
 
     When I wait 1 second
     And  I click on '[id^="aws"]'
@@ -93,7 +88,6 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
 
     When I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
     And  I wait 1 second
@@ -106,7 +100,6 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
 
     When I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
     And  I wait 1 second
@@ -124,7 +117,6 @@ Feature: Test switch model to text view: delete component/link
     When I set active file content to '[]'
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
     But  I expect '[id^="aws"]' not exists
 
   Scenario: Remove one of the two objects inside plugin file content (Text view) should only display the remaining component
@@ -134,7 +126,6 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
 
     When I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
     And  I wait 1 second
@@ -154,7 +145,6 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
     And  I expect '[id^="aws"]' exists
     But  I expect '[id^="server"]' not exists
 
@@ -163,7 +153,6 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
 
     When I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
     And  I wait 1 second
@@ -194,7 +183,6 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
     And  I expect '[id^="aws"]' not exists
 
   Scenario: Delete a link between two components (Draw view) should remove corresponding attribute in object inside plugin file content (Text view)
@@ -210,7 +198,6 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
 
     When I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
     And  I wait 1 second
@@ -230,7 +217,6 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
     And  I expect '[class="link"]' appear 1 time on screen
 
     #  NOTE: must force click because the following two elements are covered by an overflowing svg element
@@ -243,7 +229,6 @@ Feature: Test switch model to text view: delete component/link
     And  I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
     And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{}'
     And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
     But  I expect active file content to not contain 'gateway_id.*=.*\["aws_internet_gateway_1"\]'
@@ -261,7 +246,6 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
 
     When I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
     And  I wait 1 second
@@ -283,7 +267,6 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
     And  I expect '[class="link"]' not exists
     And  I expect '[id^="aws_subnet"]' exists
     And  I expect '[id^="aws_internet_gateway"]' exists
