@@ -50,8 +50,10 @@ import {
   onUnmounted,
   ref,
 } from 'vue';
+import { getPluginByName } from 'src/composables/PluginManager';
+import { getProjectFiles } from 'src/composables/Project';
 
-defineProps({
+const props = defineProps({
   projectName: {
     type: String,
     required: true,
@@ -59,8 +61,16 @@ defineProps({
 });
 
 const modelTemplate = ref(null);
+const allProjectFiles = ref([]);
+const allProjectDiagrams = ref([]);
 
 let dialogEventSubscription;
+
+async function init() {
+  allProjectFiles.value = await getProjectFiles(props.projectName);
+  const plugin = getPluginByName(modelTemplate.value.plugin);
+  allProjectDiagrams.value = plugin.getModels(allProjectFiles.value);
+}
 
 /**
  * Set model template on valid event.
@@ -70,6 +80,7 @@ let dialogEventSubscription;
 function setModelTemplate({ key, template }) {
   if (key === 'ImportModelTemplate') {
     modelTemplate.value = template;
+    init();
   }
 }
 

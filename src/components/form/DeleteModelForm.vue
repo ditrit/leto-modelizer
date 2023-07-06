@@ -27,7 +27,7 @@
 <script setup>
 import { Notify } from 'quasar';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import { deleteProjectDir } from 'src/composables/Project';
+import { deleteProjectDir, deleteProjectFile, isDirectory } from 'src/composables/Project';
 import { ref } from 'vue';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import { useI18n } from 'vue-i18n';
@@ -55,11 +55,11 @@ const submitting = ref(false);
  */
 async function onSubmit() {
   submitting.value = true;
-  const pluginFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${props.projectName}/${process.env.MODELS_DEFAULT_FOLDER}/${props.model.plugin}`
-    : `${props.projectName}/${props.model.plugin}`;
+  const result = await isDirectory(props.model.path)
+    ? deleteProjectDir(props.model.path)
+    : deleteProjectFile(props.projectName, props.model.path);
 
-  return deleteProjectDir(`${pluginFolder}/${props.model.name}`)
+  return result
     .then(() => {
       Notify.create({
         type: 'positive',

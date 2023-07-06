@@ -1,5 +1,6 @@
 import * as PluginManager from 'src/composables/PluginManager';
 import { deleteProjectFile, writeProjectFile } from 'src/composables/Project';
+import { FileInformation } from 'leto-modelizer-plugin-core';
 
 jest.mock('src/plugins', () => ({
   test: class {
@@ -33,6 +34,11 @@ jest.mock('src/plugins', () => ({
       return [
         { path: 'path', content: 'content' },
       ];
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    getModels(files) {
+      return files;
     }
   },
   test2: class {
@@ -77,6 +83,7 @@ jest.mock('src/composables/Project', () => ({
   readProjectFile: jest.fn(() => Promise.resolve({ id: 'TEST' })),
   appendProjectFile: jest.fn(() => Promise.resolve()),
   readDir: jest.fn(() => Promise.resolve([])),
+  isDirectory: jest.fn((path) => path === 'modelPath'),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
@@ -258,7 +265,7 @@ describe('Test composable: PluginManager', () => {
       };
       const array = await PluginManager.renderModel(
         'projectId',
-        'modelPath',
+        'test',
         plugin,
       );
 
@@ -344,19 +351,7 @@ describe('Test composable: PluginManager', () => {
       plugin.data.getComponentById.mockReturnValue({ drawOption: null });
     });
 
-    it('should call addComponent and render but not call getComponentById without position', async () => {
-      expect(plugin.render).toHaveBeenCalledTimes(0);
-
-      await PluginManager.addNewComponent('projectName', plugin, 'plugin/model', {});
-
-      expect(plugin.data.addComponent).toHaveBeenCalledTimes(1);
-      expect(plugin.data.getComponentById).toHaveBeenCalledTimes(0);
-      expect(plugin.render).toHaveBeenCalledTimes(1);
-    });
-
-    it('should call addComponent, getComponentById and render with position', async () => {
-      expect(plugin.render).toHaveBeenCalledTimes(0);
-
+    it('should call addComponent and getComponentById', async () => {
       await PluginManager.addNewComponent(
         'projectName',
         plugin,
@@ -367,7 +362,6 @@ describe('Test composable: PluginManager', () => {
 
       expect(plugin.data.addComponent).toHaveBeenCalledTimes(1);
       expect(plugin.data.getComponentById).toHaveBeenCalledTimes(1);
-      expect(plugin.render).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -384,6 +378,14 @@ describe('Test composable: PluginManager', () => {
       await PluginManager.addNewTemplateComponent('projectName', plugin, 'plugin/model', definition);
 
       expect(plugin.parse).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test function: getModelPath', () => {
+    it('should return first file', async () => {
+      await PluginManager.initPlugins();
+
+      expect(PluginManager.getModelPath('test', 'test1')).toEqual(new FileInformation({ path: 'test1' }));
     });
   });
 });

@@ -145,8 +145,6 @@ describe('test component: Plugin Component Detail Panel', () => {
         .toEqual(wrapper.vm.selectedComponentAttributes);
       expect(wrapper.vm.isVisible).toEqual(false);
 
-      process.env.MODELS_DEFAULT_FOLDER = '';
-
       wrapper.vm.submit();
 
       expect(wrapper.vm.originalComponent.id).toEqual(wrapper.vm.selectedComponentId);

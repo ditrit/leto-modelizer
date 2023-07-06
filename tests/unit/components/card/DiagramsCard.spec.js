@@ -101,6 +101,7 @@ describe('Test component: DiagramsCard', () => {
       const diagram = {
         plugin: 'pluginName',
         name: 'diagramName',
+        path: 'diagramPath',
       };
 
       wrapper.vm.onDiagramClick(diagram);
@@ -111,7 +112,8 @@ describe('Test component: DiagramsCard', () => {
           projectName: 'projectName',
         },
         query: {
-          path: 'pluginName/diagramName',
+          path: 'diagramPath',
+          plugin: 'pluginName',
         },
       });
     });

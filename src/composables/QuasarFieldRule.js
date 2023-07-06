@@ -1,3 +1,6 @@
+import { getPluginByName } from 'src/composables/PluginManager';
+import { FileInformation } from 'leto-modelizer-plugin-core';
+
 /**
  * Check if value is not empty.
  * @param {Function} t - I18n translate function.
@@ -129,4 +132,23 @@ export function isNumberTooBig(t, value, max) {
 export function isUnique(t, texts, value, message) {
   return texts.every((text) => text !== value)
     || t(message);
+}
+
+/**
+ * Check if model is unique.
+ * @param {Function} t - I18n translate function.
+ * @param {String} pluginName - Name of plugin.
+ * @param {String[]} models - All project models.
+ * @param {String} path - Model path to check.
+ * @param {String} message - Error message.
+ * @returns {boolean|String} Return true if the model is unique, otherwise the translated
+ * error message.
+ */
+export function isUniqueModel(t, pluginName, models, path, message) {
+  const plugin = getPluginByName(pluginName);
+  const model = plugin.getModels([new FileInformation({
+    path,
+  })]).find(() => true);
+
+  return isUnique(t, models, model, message);
 }

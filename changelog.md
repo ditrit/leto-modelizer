@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Add drawer to create diagram from a template.
 * Homepage:
   * Display a warning message when importing a previously imported project.
+* Integrate new diagram management.
 
 ### Changed
 
@@ -36,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Index page:
   * Template grid.
+* Configuration for default path for models.
 
 ## [1.2.0] - 2023/06/07
 
@@ -159,3 +161,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [1.1.0]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#1.1.0
 [1.0.0]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#1.0.0
+

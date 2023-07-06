@@ -90,7 +90,7 @@ describe('Test composable: TemplateManager', () => {
           plugins: ['a', 'b'],
           description: 'Project template example.',
           url: null,
-          models: ['plugin/infra1', 'plugin/infra2'],
+          schemas: ['plugin/infra1', 'plugin/infra2'],
           files: ['plugin/infra1/main.tf', 'plugin/infra1/provider.tf', 'plugin/infra2/main.tf'],
         },
       ];
@@ -113,6 +113,8 @@ describe('Test composable: TemplateManager', () => {
         key: 'terraform_test_application',
         url: null,
         models: undefined,
+        schemas: [],
+        plugins: undefined,
         description: 'Initialized test application.',
       };
 
@@ -135,6 +137,8 @@ describe('Test composable: TemplateManager', () => {
         key: 'terraform_webapp',
         url: null,
         models: undefined,
+        schemas: [],
+        plugins: undefined,
         description: 'Schema of web application.',
       };
 
@@ -157,7 +161,7 @@ describe('Test composable: TemplateManager', () => {
         key: 'project_template',
         url: null,
         plugins: ['a', 'b'],
-        models: ['plugin/infra1', 'plugin/infra2'],
+        schemas: ['plugin/infra1', 'plugin/infra2'],
         description: 'Project template example.',
       };
 

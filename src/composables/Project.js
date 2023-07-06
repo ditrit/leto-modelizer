@@ -155,7 +155,7 @@ export async function gitFetch(project) {
  * @param {String} path - Path to check.
  * @return {Promise<Boolean>} Promise with boolean on success otherwise an error.
  */
-async function isDirectory(path) {
+export async function isDirectory(path) {
   const stat = await new Promise((resolve) => {
     fs.stat(
       path,
@@ -218,6 +218,44 @@ async function setFiles(files, projectId, filename) {
 export async function getProjectFiles(projectId) {
   const files = [];
   await setFiles(files, projectId);
+  return files;
+}
+
+/**
+ * Get the list directory found in path location.
+ * @param {String[]} files - Array of file to fill.
+ * @param {String} projectId - ID of the project.
+ * @param {String} filename - Path of file or directory. Null for root location.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function setFolders(files, projectId, filename) {
+  const path = filename ? `${projectId}/${filename}` : projectId;
+  const isDir = await isDirectory(path);
+
+  if (isDir) {
+    const dirFiles = await readDir(path);
+
+    if (filename) {
+      files.push(new FileInformation({ path: filename }));
+    }
+
+    await Promise.allSettled(dirFiles.filter((file) => file !== '.git').map((file) => setFolders(
+      files,
+      projectId,
+      filename ? `${filename}/${file}` : file,
+    )));
+  }
+}
+
+/**
+ * Retrieve list of project folder name.
+ * @param {String} projectId - Id of project.
+ * @return {Promise<FileInformation[]>} Promise with file names array on success,
+ * otherwise error.
+ */
+export async function getProjectFolders(projectId) {
+  const files = [];
+  await setFolders(files, projectId);
   return files;
 }
 
@@ -386,7 +424,7 @@ export async function appendProjectFile(projectId, file) {
   return new Promise((resolve, reject) => {
     fs.appendFile(
       `${projectId}/${file.path}`,
-      file.content,
+      file.content || '',
       'utf8',
       (error) => {
         if (error) {
@@ -761,17 +799,21 @@ export async function getPluginModels(modelsdefaultFolder, pluginName) {
  * @return {Promise<Array>} Promise with an array of models on success otherwise an error.
  */
 export async function getAllModels(projectId) {
-  const path = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${projectId}/${process.env.MODELS_DEFAULT_FOLDER}`
-    : `${projectId}`;
   const plugins = getPlugins();
+  const files = await getProjectFiles(projectId);
+  const models = [];
 
-  return Promise.allSettled(
-    plugins.map(({ data }) => getPluginModels(path, data.name)),
-  ).then((results) => results
-    .filter((result) => result.status === 'fulfilled')
-    .map((result) => result.value)
-    .flat());
+  plugins.forEach((plugin) => {
+    plugin.getModels(files).forEach((path, index) => {
+      models.push({
+        id: `diagram_${index}`,
+        plugin: plugin.data.name,
+        path,
+      });
+    });
+  });
+
+  return models;
 }
 
 /**

@@ -29,7 +29,17 @@ jest.mock('src/composables/Project', () => ({
   }],
 }));
 
-describe('Test page component: ModelizerTextLayout', () => {
+jest.mock('src/composables/PluginManager', () => ({
+  getPlugins: () => [{
+    isParsable: () => true,
+    getModels: ([{ path }]) => [path],
+    data: {
+      name: 'test',
+    },
+  }],
+}));
+
+describe('Test component: ModelizerTextLayout', () => {
   let wrapper;
   let selectFileTabEventSubscribe;
   let selectFileTabEventUnsubscribe;
@@ -60,31 +70,6 @@ describe('Test page component: ModelizerTextLayout', () => {
     });
   });
 
-  describe('Test function: getModel', () => {
-    it('should return model corresponding to the selected file', async () => {
-      process.env.MODELS_DEFAULT_FOLDER = '';
-      const model = await wrapper.vm.getModel('plugin/name/filename');
-
-      expect(model).toEqual({
-        plugin: 'plugin',
-        name: 'name',
-      });
-    });
-
-    it('should return undefined if MODELS_DEFAULT_FOLDER is defined', async () => {
-      process.env.MODELS_DEFAULT_FOLDER = 'test';
-      const model = await wrapper.vm.getModel('plugin/name/filename');
-
-      expect(model).toEqual(undefined);
-    });
-
-    it('should return undefined otherwise', async () => {
-      const model = await wrapper.vm.getModel(null);
-
-      expect(model).toEqual(undefined);
-    });
-  });
-
   describe('Test function: onSelectFileTab', () => {
     it('should only set selectedFileTabPath', async () => {
       await wrapper.vm.onSelectFileTab('pluginName/modelName/fileName');
@@ -97,9 +82,7 @@ describe('Test page component: ModelizerTextLayout', () => {
     });
 
     it('should also call router.push()', async () => {
-      process.env.MODELS_DEFAULT_FOLDER = '';
-
-      await wrapper.vm.onSelectFileTab('notPlugin/fileName');
+      await wrapper.vm.onSelectFileTab('plugin/fileName');
 
       expect(useRouterPush).toHaveBeenCalledTimes(1);
       expect(useRouterPush).toHaveBeenCalledWith({
@@ -108,7 +91,8 @@ describe('Test page component: ModelizerTextLayout', () => {
           projectName: wrapper.vm.projectName,
         },
         query: {
-          path: 'pluginName/modelName',
+          path: 'plugin/fileName',
+          plugin: 'test',
         },
       });
 
@@ -121,7 +105,8 @@ describe('Test page component: ModelizerTextLayout', () => {
           projectName: wrapper.vm.projectName,
         },
         query: {
-          path: 'plugin/name',
+          path: 'plugin/fileName',
+          plugin: 'test',
         },
       });
     });

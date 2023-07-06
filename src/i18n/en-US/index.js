@@ -53,11 +53,10 @@ export default {
         form: {
           name: 'Model name',
           plugin: 'Model plugin',
+          location: 'File location',
         },
         notify: {
           success: 'Model has been created &#129395;!',
-          eexist: 'Model with the same name and plugin already exist.',
-          error: 'An error occured while creating model.',
         },
       },
       rename: {

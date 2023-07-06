@@ -67,6 +67,7 @@ export async function getTemplatesByType(type, pluginName = '') {
       url: template.url,
       description: template.description,
       models: template.models,
+      schemas: template.schemas || [],
     };
   });
 }

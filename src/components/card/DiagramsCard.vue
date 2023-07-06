@@ -146,7 +146,8 @@ async function onDiagramClick(diagram) {
       projectName: props.projectName,
     },
     query: {
-      path: `${diagram.plugin}/${diagram.name}`,
+      plugin: diagram.plugin,
+      path: diagram.path,
     },
   });
 }

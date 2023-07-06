@@ -92,9 +92,6 @@ const nodes = ref([]);
 const activeFileId = ref(null);
 // Must be a String according to https://quasar.dev/vue-components/tree
 const filterTrigger = ref(props.showParsableFiles.toString());
-const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
-  ? `${process.env.MODELS_DEFAULT_FOLDER}/`
-  : '');
 
 let selectFileTabSubscription;
 let createFileSubscription;
@@ -290,46 +287,34 @@ function openFile(file) {
  * Then, open those file tree nodes.
  */
 function openModelFiles() {
-  const [pluginName, modelName] = query.value.path.split('/');
-  const plugin = getPluginByName(pluginName);
-
-  // TODO: Find a better way to stub it on shallowMount.
-  if (!plugin || !fileExplorerRef.value.getNodeByKey || !query.value.path) {
-    return;
-  }
+  const pluginName = query.value.plugin;
+  const modelPath = query.value.path;
 
   expandFolder(props.projectName);
 
-  if (defaultFolder.value !== '') {
-    expandFolder(defaultFolder.value);
+  if (pluginName.length === 0 || modelPath.length === 0) {
+    return;
   }
 
-  if (pluginName?.length > 0) {
-    expandFolder(`${defaultFolder.value}${pluginName}`);
+  const plugin = getPluginByName(pluginName);
+  const allPaths = localFileInformations.value
+    .filter(({ path }) => path.startsWith(modelPath))
+    .filter(({ path }) => plugin.isParsable({ path }))
+    .map(({ path }) => path);
 
-    if (modelName?.length > 0) {
-      expandFolder(`${defaultFolder.value}${pluginName}/${modelName}`);
+  allPaths.forEach((path) => {
+    path.split('/').reduce((acc, value) => {
+      acc = acc ? `${acc}/${value}` : value;
 
-      const allPaths = localFileInformations.value
-        .filter(({ path }) => path.startsWith(`${defaultFolder.value}${pluginName}/${modelName}/`))
-        .filter(({ path }) => plugin.isParsable({ path }))
-        .map(({ path }) => path);
+      if (acc !== path) {
+        expandFolder(acc);
+      }
 
-      allPaths.forEach((path) => {
-        path.split('/').reduce((acc, value) => {
-          acc = acc ? `${acc}/${value}` : value;
+      return acc;
+    }, null);
 
-          if (acc !== path) {
-            expandFolder(acc);
-          }
-
-          return acc;
-        }, null);
-
-        openFile(path);
-      });
-    }
-  }
+    openFile(path);
+  });
 }
 
 /**
@@ -343,7 +328,11 @@ async function initTreeNodes() {
   nodes.value = getTree(props.projectName, localFileInformations.value);
 
   await updateAllFilesStatus();
-  openModelFiles();
+
+  // TODO: Find a better way to stub it on shallowMount.
+  if (fileExplorerRef.value.getNodeByKey && query.value.path) {
+    openModelFiles();
+  }
 }
 
 onMounted(async () => {
@@ -379,7 +368,6 @@ onMounted(async () => {
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(openModelFiles);
 
   await initTreeNodes();
-  openModelFiles();
 });
 
 onUnmounted(() => {

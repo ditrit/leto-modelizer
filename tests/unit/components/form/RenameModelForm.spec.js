@@ -57,21 +57,12 @@ describe('Test component: RenameModelForm', () => {
   describe('Test function: onSubmit', () => {
     it('should emit a positive notification and UpdateModel event on success', async () => {
       Notify.create = jest.fn();
-      process.env.MODELS_DEFAULT_FOLDER = '';
 
       await wrapper.vm.onSubmit();
 
       expect(Notify.create).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
       expect(UpdateModelEvent.next).toHaveBeenCalledTimes(1);
-
-      process.env.MODELS_DEFAULT_FOLDER = 'test';
-
-      await wrapper.vm.onSubmit();
-
-      expect(Notify.create).toHaveBeenCalledTimes(2);
-      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
-      expect(UpdateModelEvent.next).toHaveBeenCalledTimes(2);
     });
 
     it('should emit a negative notification on EPERM error', async () => {

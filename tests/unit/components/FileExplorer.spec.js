@@ -515,19 +515,54 @@ describe('Test component: FileExplorer', () => {
   });
 
   describe('Test function: openModelFiles', () => {
-    it('should call getPluginByName()', () => {
+    it('should do nothing without plugin', () => {
       const mock = jest.fn(() => ({
         isParsable: () => true,
       }));
       PluginManager.getPluginByName.mockImplementation(mock);
-
-      process.env.MODELS_DEFAULT_FOLDER = 'default';
 
       wrapper.vm.fileExplorerRef = {
         getNodeByKey: jest.fn(() => ({ children: [] })),
         setExpanded: jest.fn(),
       };
       wrapper.vm.query.path = 'pluginName/modelName';
+      wrapper.vm.query.plugin = '';
+      wrapper.vm.localFileInformations = [{ path: 'pluginName/modelName/file.ext' }];
+      wrapper.vm.openModelFiles();
+
+      expect(mock).toHaveBeenCalledTimes(0);
+    });
+
+    it('should do nothing without model', () => {
+      const mock = jest.fn(() => ({
+        isParsable: () => true,
+      }));
+      PluginManager.getPluginByName.mockImplementation(mock);
+
+      wrapper.vm.fileExplorerRef = {
+        getNodeByKey: jest.fn(() => ({ children: [] })),
+        setExpanded: jest.fn(),
+      };
+      wrapper.vm.query.path = '';
+      wrapper.vm.query.plugin = 'test';
+      wrapper.vm.localFileInformations = [{ path: 'pluginName/modelName/file.ext' }];
+      wrapper.vm.openModelFiles();
+
+      expect(mock).toHaveBeenCalledTimes(0);
+    });
+
+    it('should call getPluginByName()', () => {
+      const mock = jest.fn(() => ({
+        isParsable: () => true,
+      }));
+      PluginManager.getPluginByName.mockImplementation(mock);
+
+      wrapper.vm.fileExplorerRef = {
+        getNodeByKey: jest.fn(() => ({ children: [] })),
+        setExpanded: jest.fn(),
+      };
+      wrapper.vm.query.path = 'pluginName/modelName';
+      wrapper.vm.query.plugin = 'test';
       wrapper.vm.localFileInformations = [{ path: 'pluginName/modelName/file.ext' }];
       wrapper.vm.openModelFiles();
 
@@ -539,6 +574,7 @@ describe('Test component: FileExplorer', () => {
     it('should update nodes', () => {
       wrapper.vm.fileExplorerRef.getNodeByKey = () => null;
       wrapper.vm.query.path = 'pluginName/modelNamecoucou';
+      wrapper.vm.query.plugin = 'test';
 
       wrapper.vm.initTreeNodes();
 

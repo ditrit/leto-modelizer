@@ -54,7 +54,7 @@ import { computed, ref } from 'vue';
 import {
   addNewComponent,
   addNewTemplateComponent,
-  getPluginByName,
+  getPluginByName, renderModel,
 } from 'src/composables/PluginManager';
 import { useRoute } from 'vue-router';
 import { Notify } from 'quasar';
@@ -118,15 +118,11 @@ const componentIcon = computed(() => {
  * On template definition click, get all related remote files and append them to existing files.
  */
 async function onClickItem() {
-  const defaultFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${process.env.MODELS_DEFAULT_FOLDER}/`
-    : '';
-
   if (!props.definition.isTemplate) {
     await addNewComponent(
       projectName.value,
       plugin.value,
-      `${defaultFolder}${query.value.path}`,
+      query.value.path,
       props.definition,
     );
     plugin.value.draw('root');
@@ -134,7 +130,7 @@ async function onClickItem() {
     addNewTemplateComponent(
       projectName.value,
       plugin.value,
-      `${defaultFolder}${query.value.path}`,
+      query.value.path,
       props.definition,
     ).then(() => {
       plugin.value.draw('root');
@@ -146,6 +142,12 @@ async function onClickItem() {
       });
     });
   }
+
+  await renderModel(
+    projectName.value,
+    query.value.path,
+    plugin.value,
+  );
 }
 </script>
 

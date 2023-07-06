@@ -36,7 +36,7 @@ import {
   renameProject,
   isMatching,
   exists,
-  extractProjectName,
+  extractProjectName, getProjectFolders,
 } from 'src/composables/Project';
 import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
@@ -437,6 +437,21 @@ describe('Test composable: Project', () => {
         new FileInformation({ path: 'file.txt' }),
         new FileInformation({ path: 'emptyParent/__empty__' }),
         new FileInformation({ path: 'parent/file.txt' }),
+      ]);
+    });
+  });
+
+  describe('Test function: getProjectFolders', () => {
+    it('should return file information array', async () => {
+      localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
+        test: { id: 'test', git: {} },
+      }));
+
+      const result = await getProjectFolders('test');
+
+      expect(result).toEqual([
+        new FileInformation({ path: 'parent' }),
+        new FileInformation({ path: 'emptyParent' }),
       ]);
     });
   });
