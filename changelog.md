@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Focus movement on all diagrams.
   * Delete diagrams.
   * Diagram selection.
+  * Create empty diagram button.
 * Index page:
   * Add a search bar to filter diagrams.
   * Add drawer to create diagram from a template.
