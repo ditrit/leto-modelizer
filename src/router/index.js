@@ -3,6 +3,7 @@ import {
   createRouter, createMemoryHistory, createWebHistory, createWebHashHistory,
 } from 'vue-router';
 import routes from 'src/router/routes';
+import { userManagerExists, getUser } from 'src/composables/UserAuthentication';
 
 /*
  * If not building with SSR mode, you can
@@ -26,6 +27,21 @@ export default route((/* { store, ssrContext } */) => {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE),
+  });
+
+  Router.beforeEach(async (to, from, next) => {
+    const authRoutes = ['SilentRefresh', 'Redirect', 'Login'];
+    const oidcProviderList = process.env.AUTHENTICATION
+      ? JSON.parse(process.env.AUTHENTICATION)
+      : [];
+
+    if (!authRoutes.includes(to.name)
+      && oidcProviderList.length > 0
+      && (!userManagerExists() || !await getUser())) {
+      next({ name: 'Login' });
+    } else {
+      next();
+    }
   });
 
   return Router;
