@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Homepage:
   * Display a warning message when importing a previously imported project.
 * Integrate new diagram management.
+* Login page:
+  * Display buttons for each OIDC provider and perform user authentication if the global configuration file is declared.
 
 ### Changed
 
