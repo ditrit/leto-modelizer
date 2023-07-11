@@ -3,8 +3,13 @@ import { shallowMount } from '@vue/test-utils';
 import App from 'src/App.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import PluginManager from 'src/composables/PluginManager';
+import UserAuthentication from 'src/composables/UserAuthentication';
 
 installQuasarPlugin();
+
+jest.mock('src/composables/UserAuthentication', () => ({
+  setUserManager: jest.fn(),
+}));
 
 jest.mock('src/composables/PluginManager', () => ({
   initPlugins: () => Promise.resolve(),
@@ -53,6 +58,10 @@ describe('Test component: App', () => {
     it('should call setInterval', () => {
       expect(setInterval).toHaveBeenCalled();
       expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), 5 * 60 * 1000);
+    });
+
+    it('should call setUserManager', () => {
+      expect(UserAuthentication.setUserManager).toHaveBeenCalled();
     });
   });
 });

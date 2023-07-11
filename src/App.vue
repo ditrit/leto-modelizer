@@ -5,6 +5,7 @@
 <script setup>
 import { getPlugins, initPlugins } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import { setUserManager } from 'src/composables/UserAuthentication';
 import { onMounted } from 'vue';
 
 const intervalTime = 5 * 60 * 1000; // 5 min
@@ -23,5 +24,6 @@ onMounted(() => {
     PluginEvent.InitEvent.next();
   });
   setInterval(deleteOldEvents, intervalTime);
+  setUserManager(localStorage.getItem('provider'));
 });
 </script>
