@@ -6,7 +6,8 @@ Feature: Test homepage: project deletion
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I visit the '/'
     And   I set context field 'projectName' with 'leto-modelizer-project-test'
-    And   I set context field 'modelName' with 'model-name'
+    And   I set context field 'modelFile' with 'model1/main.tf'
+    And   I set context field 'modelFolder' with 'model1'
 
     # Import project
     When I click on '[data-cy="import-project-button"]'
@@ -16,20 +17,20 @@ Feature: Test homepage: project deletion
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
     And  I expect '[data-cy="import-project-form"]' is closed
-    And  I expect current url is '{{projectName}}/models'
+    And  I expect current url is '{{ projectName }}/models'
 
     # Model creation
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{modelName}}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFile }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelName}}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelFolder }}'
 
     # Check project root folder is created in Text view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelName}}'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ modelFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
 
     # Delete file
@@ -68,9 +69,9 @@ Feature: Test homepage: project deletion
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{modelName}}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFile }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelName}}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelFolder }}'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second

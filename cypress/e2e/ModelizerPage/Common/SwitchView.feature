@@ -14,11 +14,11 @@ Feature: Test modelizer page: switch view (text/model)
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
 
   Scenario: Default modelizer page mode should be 'draw'
-    Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
+    Then I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infra'
 
   Scenario: Modelizer 'draw' page should load the correct content
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
