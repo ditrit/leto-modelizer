@@ -19,12 +19,12 @@ Feature: Test modelizer text view: change git branch
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/modelName'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is '{{ projectName }}/modelizer/text\?path=terrator-plugin/modelName'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=infra'
 
     When I click on '[data-cy="git-current-branch-button"]'
     And  I click on '[data-cy="git-branch-menu"] [data-cy="remote-branch_test/remote1"]'

@@ -10,7 +10,14 @@ import {
   isNumberTooSmall,
   isNumberTooBig,
   isUnique,
+  isUniqueModel,
 } from 'src/composables/QuasarFieldRule';
+
+jest.mock('src/composables/PluginManager', () => ({
+  getPluginByName: () => ({
+    getModels: ([{ path }]) => [path],
+  }),
+}));
 
 describe('Test composable: InputRule', () => {
   const t = (key) => key;
@@ -180,6 +187,18 @@ describe('Test composable: InputRule', () => {
       const key = 'errors.projects.duplicate.import';
 
       expect(isUnique(t, ['duplicate'], 'duplicate', key)).toEqual(key);
+    });
+  });
+
+  describe('Test function: isUniqueModel', () => {
+    it('should return true when value does not exist in given array', () => {
+      expect(isUniqueModel(t, 'pluginName', ['model1'], 'model2', 'message')).toBeTruthy();
+    });
+
+    it('should return given error message when value already exists in given project names array', () => {
+      const key = 'errors.projects.duplicate.import';
+
+      expect(isUniqueModel(t, 'pluginName', ['model1'], 'model1', key)).toEqual(key);
     });
   });
 });

@@ -1,5 +1,6 @@
 import * as PluginManager from 'src/composables/PluginManager';
 import { deleteProjectFile, writeProjectFile } from 'src/composables/Project';
+import { FileInformation } from 'leto-modelizer-plugin-core';
 
 jest.mock('src/plugins', () => ({
   test: class {
@@ -13,7 +14,16 @@ jest.mock('src/plugins', () => ({
         components: [],
       };
       this.configuration = {
-        tags: ['a', 'b', 'c'],
+        tags: [{
+          type: 'category',
+          value: 'a',
+        }, {
+          type: 'category',
+          value: 'd',
+        }, {
+          type: 'category',
+          value: 'e',
+        }],
       };
     }
 
@@ -34,6 +44,11 @@ jest.mock('src/plugins', () => ({
         { path: 'path', content: 'content' },
       ];
     }
+
+    // eslint-disable-next-line class-methods-use-this
+    getModels(files) {
+      return files;
+    }
   },
   test2: class {
     constructor() {
@@ -46,7 +61,16 @@ jest.mock('src/plugins', () => ({
         components: [],
       };
       this.configuration = {
-        tags: ['a', 'd', 'e'],
+        tags: [{
+          type: 'category',
+          value: 'a',
+        }, {
+          type: 'category',
+          value: 'd',
+        }, {
+          type: 'category',
+          value: 'e',
+        }],
       };
     }
 
@@ -77,6 +101,7 @@ jest.mock('src/composables/Project', () => ({
   readProjectFile: jest.fn(() => Promise.resolve({ id: 'TEST' })),
   appendProjectFile: jest.fn(() => Promise.resolve()),
   readDir: jest.fn(() => Promise.resolve([])),
+  isDirectory: jest.fn((path) => path === 'modelPath' || path === 'projectId/modelPath'),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
@@ -170,7 +195,16 @@ describe('Test composable: PluginManager', () => {
           components: [],
         },
         configuration: {
-          tags: ['a', 'b', 'c'],
+          tags: [{
+            type: 'category',
+            value: 'a',
+          }, {
+            type: 'category',
+            value: 'd',
+          }, {
+            type: 'category',
+            value: 'e',
+          }],
         },
       }, {
         data: {
@@ -182,7 +216,16 @@ describe('Test composable: PluginManager', () => {
           components: [],
         },
         configuration: {
-          tags: ['a', 'd', 'e'],
+          tags: [{
+            type: 'category',
+            value: 'a',
+          }, {
+            type: 'category',
+            value: 'd',
+          }, {
+            type: 'category',
+            value: 'e',
+          }],
         },
       }]);
     });
@@ -200,7 +243,16 @@ describe('Test composable: PluginManager', () => {
           components: [],
         },
         configuration: {
-          tags: ['a', 'b', 'c'],
+          tags: [{
+            type: 'category',
+            value: 'a',
+          }, {
+            type: 'category',
+            value: 'd',
+          }, {
+            type: 'category',
+            value: 'e',
+          }],
         },
       });
     });
@@ -212,14 +264,24 @@ describe('Test composable: PluginManager', () => {
     });
 
     it('should return all tags of the plugin according to the given name', () => {
-      expect(PluginManager.getPluginTags('test')).toEqual(['a', 'b', 'c']);
+      expect(PluginManager.getPluginTags('test')).toEqual([{
+        type: 'category',
+        value: 'a',
+      }, {
+        type: 'category',
+        value: 'd',
+      }, {
+        type: 'category',
+        value: 'e',
+      }]);
     });
   });
 
   describe('Test function: getAllTags', () => {
     it('should return all tags of all plugins', async () => {
       await PluginManager.initPlugins();
-      expect(PluginManager.getAllTags()).toEqual(['a', 'b', 'c', 'd', 'e']);
+
+      expect(PluginManager.getAllTags()).toEqual(['a', 'd', 'e']);
     });
   });
 
@@ -234,7 +296,21 @@ describe('Test composable: PluginManager', () => {
   });
 
   describe('Test function: renderModel', () => {
-    it('should return an array', async () => {
+    it('should return an array with a file', async () => {
+      const plugin = {
+        render: () => [],
+        isParsable: () => false,
+      };
+      const array = await PluginManager.renderModel(
+        'projectId',
+        'file',
+        plugin,
+      );
+
+      expect(Array.isArray(array)).toBeTruthy();
+    });
+
+    it('should return an array with a folder', async () => {
       const plugin = {
         render: () => [],
         isParsable: () => false,
@@ -318,6 +394,7 @@ describe('Test composable: PluginManager', () => {
     it('should call parse', async () => {
       const plugin = {
         parse: jest.fn(),
+        isParsable: () => true,
       };
 
       expect(plugin.parse).toHaveBeenCalledTimes(0);
@@ -344,19 +421,7 @@ describe('Test composable: PluginManager', () => {
       plugin.data.getComponentById.mockReturnValue({ drawOption: null });
     });
 
-    it('should call addComponent and render but not call getComponentById without position', async () => {
-      expect(plugin.render).toHaveBeenCalledTimes(0);
-
-      await PluginManager.addNewComponent('projectName', plugin, 'plugin/model', {});
-
-      expect(plugin.data.addComponent).toHaveBeenCalledTimes(1);
-      expect(plugin.data.getComponentById).toHaveBeenCalledTimes(0);
-      expect(plugin.render).toHaveBeenCalledTimes(1);
-    });
-
-    it('should call addComponent, getComponentById and render with position', async () => {
-      expect(plugin.render).toHaveBeenCalledTimes(0);
-
+    it('should call addComponent and getComponentById', async () => {
       await PluginManager.addNewComponent(
         'projectName',
         plugin,
@@ -367,7 +432,6 @@ describe('Test composable: PluginManager', () => {
 
       expect(plugin.data.addComponent).toHaveBeenCalledTimes(1);
       expect(plugin.data.getComponentById).toHaveBeenCalledTimes(1);
-      expect(plugin.render).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -384,6 +448,14 @@ describe('Test composable: PluginManager', () => {
       await PluginManager.addNewTemplateComponent('projectName', plugin, 'plugin/model', definition);
 
       expect(plugin.parse).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test function: getModelPath', () => {
+    it('should return first file', async () => {
+      await PluginManager.initPlugins();
+
+      expect(PluginManager.getModelPath('test', 'test1')).toEqual(new FileInformation({ path: 'test1' }));
     });
   });
 });

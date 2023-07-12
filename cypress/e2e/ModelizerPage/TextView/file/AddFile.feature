@@ -21,9 +21,9 @@ Feature: Test modelizer text view: add file
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/modelName'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
@@ -48,7 +48,7 @@ Feature: Test modelizer text view: add file
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
     And  I expect '[data-cy="create-file-form"]' is closed
-    And  I expect '.file-status-untracked' appear 2 times on screen
+    And  I expect '.file-status-untracked' appear 4 times on screen
     And  I expect '[data-cy="file_newFile.js"].file-status-untracked' exists
 
     When I hover '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]' to make it visible
@@ -71,7 +71,7 @@ Feature: Test modelizer text view: add file
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
     And  I expect '[data-cy="create-file-form"]' is closed
-    And  I expect '.file-status-untracked' appear 2 times on screen
+    And  I expect '.file-status-untracked' appear 4 times on screen
     And  I expect '[data-cy="file_terraform/newFile.js"].file-status-untracked' exists
 
     When I hover '[data-cy="file-explorer"] [data-cy="file-button_terraform/newFile.js"]' to make it visible

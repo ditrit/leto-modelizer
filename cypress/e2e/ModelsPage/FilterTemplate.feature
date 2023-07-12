@@ -8,9 +8,9 @@ Feature: Test models page: filter template in drawer
     And   I set context field 'modelName' with 'modelTest'
 
     When I click on '[data-cy="create-project-button"]'
-    And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'
+    And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{ projectName }}'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{projectName}}/models'
+    Then I expect current url is '{{ projectName }}/models'
 
     # Open drawer and verify all templates are present
     When I click on '[data-cy="add-model-button"]'

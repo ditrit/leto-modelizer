@@ -21,15 +21,20 @@ Feature: Test modelizer text view: open file
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/modelName'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
 
     # Go to text view and check files
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelName}}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=infra'
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="file_README.md"]' exists
+
+    When I wait 2 second
+    And  I click on '[data-cy="active-tab"] [data-cy="close-button"]'
+    And  I wait 1 second
+    Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 0 time on screen
 
   Scenario: Double click on a file should open a tab
     When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'

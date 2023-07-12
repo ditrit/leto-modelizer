@@ -21,9 +21,9 @@ Feature: Test modelizer text view: create file and folder
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/modelName'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
@@ -42,12 +42,12 @@ Feature: Test modelizer text view: create file and folder
     Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
     And  I expect '[data-cy="create-file-form"]' is closed
     #  New active tab is open with created file's label
-    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'newFile.js'
     #  Created file is added inside file explorer and file tabs
     And  I expect '[data-cy="file_newFile.js"]' appear 2 times on screen
     #  Created file's label is red
-    And  I expect '.file-status-untracked' appear 2 times on screen
+    And  I expect '.file-status-untracked' appear 4 times on screen
     And  I expect '[data-cy="file_newFile.js"].file-status-untracked' exists
     #  Root folder is expanded
     And  I expect '[data-cy="folder-icon_{{ projectName }}"].fa-folder-open' exists
@@ -65,12 +65,12 @@ Feature: Test modelizer text view: create file and folder
     Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
     And  I expect '[data-cy="create-file-form"]' is closed
     #  New tab is open with created file's label
-    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'newFile.js'
     #  Created file is added inside file explorer and file tabs
     And  I expect '[data-cy="file_terraform/newFile.js"]' appear 2 times on screen
     #  Created file's label is red
-    And  I expect '.file-status-untracked' appear 2 times on screen
+    And  I expect '.file-status-untracked' appear 4 times on screen
     And  I expect '[data-cy="file_terraform/newFile.js"].file-status-untracked' exists
     #  Parent folder is expanded
     And  I expect '[data-cy="file-explorer"] [data-cy="folder-icon_terraform"].fa-folder-open' exists
@@ -88,7 +88,7 @@ Feature: Test modelizer text view: create file and folder
     Then I expect 'positive' toast to appear with text 'Folder is created &#129395;!'
     And  I expect '[data-cy="create-file-form"]' is closed
     #  No tab open
-    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 0 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     #  Created folder is added inside file explorer
     And  I expect '[data-cy="folder_newFolder"]' appear 1 time on screen
     #  Root folder is expanded, created folder is not expanded
@@ -108,7 +108,7 @@ Feature: Test modelizer text view: create file and folder
     Then I expect 'positive' toast to appear with text 'Folder is created &#129395;!'
     And  I expect '[data-cy="create-file-form"]' is closed
     #  No tab open
-    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 0 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
     #  Created folder is added inside file explorer
     And  I expect '[data-cy="folder_terraform/newFolder"]' appear 1 time on screen
     #  Root and parent folder are expanded, created folder is not expanded

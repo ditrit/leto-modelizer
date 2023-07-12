@@ -55,13 +55,11 @@ import {
   addNewComponent,
   addNewTemplateComponent,
   getPluginByName,
+  renderModel,
 } from 'src/composables/PluginManager';
 import { useRoute } from 'vue-router';
-import { Notify } from 'quasar';
-import { useI18n } from 'vue-i18n';
 import DefinitionMenu from 'components/menu/DefinitionMenu.vue';
 
-const { t } = useI18n();
 const route = useRoute();
 const props = defineProps({
   definition: {
@@ -118,34 +116,29 @@ const componentIcon = computed(() => {
  * On template definition click, get all related remote files and append them to existing files.
  */
 async function onClickItem() {
-  const defaultFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${process.env.MODELS_DEFAULT_FOLDER}/`
-    : '';
-
   if (!props.definition.isTemplate) {
     await addNewComponent(
       projectName.value,
       plugin.value,
-      `${defaultFolder}${query.value.path}`,
+      query.value.path,
       props.definition,
     );
-    plugin.value.draw('root');
   } else {
-    addNewTemplateComponent(
+    await addNewTemplateComponent(
       projectName.value,
       plugin.value,
-      `${defaultFolder}${query.value.path}`,
+      query.value.path,
       props.definition,
-    ).then(() => {
-      plugin.value.draw('root');
-    }).catch(() => {
-      Notify.create({
-        type: 'negative',
-        message: t('errors.templates.getData'),
-        html: true,
-      });
-    });
+    );
   }
+
+  plugin.value.draw('root');
+
+  await renderModel(
+    projectName.value,
+    query.value.path,
+    plugin.value,
+  );
 }
 </script>
 

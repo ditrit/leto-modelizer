@@ -2,7 +2,7 @@
   <q-card
     v-ripple
     class="model-card cursor-pointer"
-    :data-cy="`model-card_${model.plugin}-${model.name}`"
+    :data-cy="`model-card_${model.plugin}-${model.path}`"
   >
     <q-img
       :src="getModelImage()"
@@ -13,7 +13,7 @@
         data-cy="title-container"
       >
         <div class="text-bold">
-          {{ model.name }}
+          {{ model.path }}
         </div>
         <div class="text-italic">
           {{ model.plugin }}
@@ -67,7 +67,7 @@ const props = defineProps({
  * @return {String} Image path.
  */
 function getModelImage() {
-  const number = props.model.name.split('')
+  const number = props.model.path.split('')
     .map((char) => char.charCodeAt(0))
     .reduce((acc, value) => acc + value) % 5;
   return `images/project${number}.png`;

@@ -12,7 +12,7 @@
       }}
     </template>
     <template #default>
-      <div v-if="projectTemplate?.models.length">
+      <div v-if="projectTemplate?.schemas.length">
         <q-carousel
           v-model="slide"
           swipeable
@@ -26,15 +26,15 @@
           class="text-primary rounded-borders carousel"
         >
           <q-carousel-slide
-            v-for="(model, index) in projectTemplate?.models"
+            v-for="(schema, index) in projectTemplate?.schemas"
             :key="index"
             :name="index+1"
             class="column no-wrap flex-center"
           >
             <div v-viewer>
               <img
-                :src="`template-library/templates/${projectTemplate.key}/${model}/schema.svg`"
-                :alt="`${projectTemplate.key}/${model}/schema.svg`"
+                :src="`template-library/templates/${projectTemplate.key}/${schema}`"
+                :alt="`${projectTemplate.key}/${schema}`"
                 class="carousel-img"
               >
             </div>

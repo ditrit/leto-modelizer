@@ -19,7 +19,8 @@ jest.mock('vue-i18n', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  createProjectFolder: jest.fn((id) => {
+  createProjectFolder: jest.fn(() => Promise.resolve()),
+  appendProjectFile: jest.fn((id) => {
     if (id === 'error') {
       return Promise.reject();
     }
@@ -29,10 +30,20 @@ jest.mock('src/composables/Project', () => ({
     return Promise.resolve();
   }),
   getAllModels: jest.fn(() => Promise.resolve([])),
+  getProjectFolders: jest.fn(() => Promise.resolve([])),
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
-  getPlugins: jest.fn(() => [{ data: { name: 'pluginName' } }]),
+  getPlugins: jest.fn(() => [{
+    data: { name: 'pluginName' },
+    configuration: { defaultFileName: 'test' },
+    getModels: jest.fn(() => []),
+  }]),
+  getPluginByName: jest.fn(() => ({
+    data: { name: 'pluginName' },
+    configuration: { defaultFileName: 'test' },
+    getModels: jest.fn(() => []),
+  })),
 }));
 
 describe('Test component: CreateModelForm', () => {
@@ -59,22 +70,24 @@ describe('Test component: CreateModelForm', () => {
     });
   });
 
+  describe('Test funtion: onPluginChange', () => {
+    it('should set modelName', () => {
+      wrapper.vm.modelName = null;
+
+      wrapper.vm.onPluginChange();
+
+      expect(wrapper.vm.modelName).toEqual('test');
+    });
+  });
+
   describe('Test function: onSubmit', () => {
     it('should emit a positive notification on success and redirect', async () => {
-      process.env.MODELS_DEFAULT_FOLDER = '';
       Notify.create = jest.fn();
 
       await wrapper.vm.onSubmit();
 
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
       expect(useRouterPush).toHaveBeenCalledTimes(1);
-
-      process.env.MODELS_DEFAULT_FOLDER = 'test';
-
-      await wrapper.vm.onSubmit();
-
-      expect(Notify.create).toHaveBeenLastCalledWith(expect.objectContaining({ type: 'positive' }));
-      expect(useRouterPush).toHaveBeenCalledTimes(2);
     });
 
     it('should emit a negative notification on EEXIST error', async () => {

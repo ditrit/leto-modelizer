@@ -10,13 +10,13 @@
     >
       <q-card
         v-for="diagram in diagrams"
-        :key="`diagram_${diagram.name}`"
+        :key="`diagram_${diagram.path}`"
         class="diagram-container col-2 no-shadow q-pa-md bg-grey-3"
-        :data-cy="`diagram-card_${diagram.name}`"
+        :data-cy="`diagram-card_${diagram.path}`"
       >
         <div
-          :id="`diagram_${diagram.name}`"
-          :data-cy="`diagram_${diagram.name}`"
+          :id="diagram.id"
+          :data-cy="`diagram_${diagram.path}`"
         />
       </q-card>
     </div>
@@ -63,9 +63,6 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const projectName = computed(() => route.params.projectName);
 const diagrams = ref([]);
-const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
-  ? `${process.env.MODELS_DEFAULT_FOLDER}/`
-  : '');
 const scale = ref(1);
 const translate = reactive({
   x: 0,
@@ -124,13 +121,12 @@ async function drawDiagrams() {
   return Promise.allSettled(
     diagrams.value.map(async (diagram) => {
       const plugin = getPluginByName(diagram.plugin);
-
       return initComponents(
         projectName.value,
         plugin,
-        `${defaultFolder.value}${diagram.plugin}/${diagram.name}`,
+        diagram.path,
       ).then(() => {
-        plugin.draw(`diagram_${diagram.name}`, true);
+        plugin.draw(diagram.id, true);
       });
     }),
   );

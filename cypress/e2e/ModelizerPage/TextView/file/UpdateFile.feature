@@ -21,9 +21,9 @@ Feature: Test modelizer text view: update file content
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/modelName'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
@@ -32,8 +32,9 @@ Feature: Test modelizer text view: update file content
   Scenario: Check if the file content is set after being updated
     When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
     Then I expect '[data-cy="file_branch.txt"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'branch.txt'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'main.tf'
     And  I expect active file content to contain 'main'
 
     When I set active file content to 'updated content'
@@ -46,9 +47,10 @@ Feature: Test modelizer text view: update file content
     And  I wait 1 second
     Then I expect '[data-cy="file_branch.txt"]' appear 2 times on screen
     And  I expect '[data-cy="file_README.md"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 3 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'README.md'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'branch.txt'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'main.tf'
     And  I expect active file content to contain 'main'
 
     When I set active file content to 'updated content'
@@ -64,8 +66,9 @@ Feature: Test modelizer text view: update file content
   Scenario: Open a file in root folder and update its content should change the file's class
     When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
     Then I expect '[data-cy="file_branch.txt"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'branch.txt'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'main.tf'
     And  I expect '[data-cy="file_branch.txt"].file-status-unmodified' exists
     And  I expect active file content to contain 'main'
 
@@ -77,8 +80,9 @@ Feature: Test modelizer text view: update file content
     When I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
     And  I double click on '[data-cy="file-explorer"] [data-cy="file_terraform/app.tf"]'
     Then I expect '[data-cy="file_terraform/app.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'app.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'main.tf'
     And  I expect '[data-cy="file_terraform/app.tf"].file-status-unmodified' exists
     And  I expect active file content to contain 'main'
 

@@ -53,7 +53,7 @@ const props = defineProps({
   },
 });
 
-const modelName = ref(props.model.name);
+const modelName = ref(props.model.path);
 const submitting = ref(false);
 
 /**
@@ -65,13 +65,9 @@ const submitting = ref(false);
 async function onSubmit() {
   submitting.value = true;
 
-  const pluginFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${props.projectName}/${process.env.MODELS_DEFAULT_FOLDER}/${props.model.plugin}`
-    : `${props.projectName}/${props.model.plugin}`;
-
   return rename(
-    `${pluginFolder}/${props.model.name}`,
-    `${pluginFolder}/${modelName.value}`,
+    `${props.projectName}/${props.model.path}`,
+    `${props.projectName}/${modelName.value}`,
   ).then(() => {
     Notify.create({
       type: 'positive',

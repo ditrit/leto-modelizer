@@ -106,7 +106,6 @@ module.exports = configure((ctx) => ({
     // Options below are automatically set depending on the env, set them if you want to override
     env: {
       TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL || '',
-      MODELS_DEFAULT_FOLDER: process.env.MODELS_DEFAULT_FOLDER || '',
       VERSION: version,
     },
     // extractCSS: false,

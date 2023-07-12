@@ -24,6 +24,7 @@ jest.mock('vue-router', () => ({
     },
     query: {
       path: 'path',
+      plugin: 'plugin',
     },
   }),
 }));
@@ -97,6 +98,7 @@ describe('Test page component: ModelizerDrawLayout', () => {
       it('should be an object', () => {
         expect(wrapper.vm.query).toEqual({
           path: 'path',
+          plugin: 'plugin',
         });
       });
     });

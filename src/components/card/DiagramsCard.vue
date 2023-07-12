@@ -146,7 +146,8 @@ async function onDiagramClick(diagram) {
       projectName: props.projectName,
     },
     query: {
-      path: `${diagram.plugin}/${diagram.name}`,
+      plugin: diagram.plugin,
+      path: diagram.path,
     },
   });
 }
@@ -157,9 +158,9 @@ async function onDiagramClick(diagram) {
  */
 async function updateModels() {
   data.models = (await getAllModels(props.projectName))
-    .filter(({ name }) => searchText(name, searchDiagramText.value))
+    .filter(({ path }) => searchText(path, searchDiagramText.value))
     .filter(({ tags }) => selectedTags.value.length === 0
-      || tags.some((tag) => selectedTags.value.includes(tag)));
+      || tags.some(({ value }) => selectedTags.value.includes(value)));
 }
 
 watch(() => viewType.value, async () => {

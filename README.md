@@ -50,13 +50,13 @@ For now, we don't have many plugins to offer you, but follow us and in the next 
 
 Plugin to manage terraform files, by default it comes with aws provider definition.
 
-[GitHub url](https://github.com/ditrit/terrator-plugin#0.3.0)
+[GitHub url](https://github.com/ditrit/terrator-plugin#0.3.1)
 
 ### Github plugin
 
 Plugin to manage github action files.
 
-[GitHub url](https://github.com/ditrit/githubator-plugin#0.2.0)
+[GitHub url](https://github.com/ditrit/githubator-plugin#0.2.1)
 
 ## Compatibility versions table
 
@@ -91,6 +91,12 @@ Plugin to manage github action files.
       <td>= 0.3.0</td>
       <td>= 0.2.0</td>
     </tr>
+    <tr>
+      <td>Next</td>
+      <td>= 0.17.0</td>
+      <td>= 0.3.1</td>
+      <td>= 0.2.1</td>
+    </tr>
   </tbody>
 </table>
 
@@ -122,10 +128,10 @@ Choose __Custom plugin__ to install a specific plugin not referenced as an offic
 Examples with official plugins:
 - terrator-plugin: 
   - plugin name: `terrator-plugin`
-  - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.3.0`
+  - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.3.1`
 - githubator-plugin: 
   - plugin name: `githubator-plugin`
-  - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.2.0`
+  - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.2.1`
 
 ### Install custom plugin in command line
 
@@ -133,10 +139,10 @@ Options `repository-name` and `repository-url` can be added with the `npm run pl
 
 ```bash
 # Example with terraform plugin
-npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.3.0"
+npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.3.1"
 
 # Example with github action plugin
-npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.2.0"
+npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.2.1"
 ```
 
 Now that your plugin is installed, you can continue to install other plugins with the same command if you want.
@@ -172,20 +178,6 @@ docker build . --build-arg proxy_url=http://localhost:9999 -t leto-modelizer
 See [nginx configuration](nginx.conf).
 
 ### Environment variables
-
-* Define the default path for your models
-
-`MODELS_DEFAULT_FOLDER` is used to define the path of the default folder in which the different plugins and models folders will be located.
-By default, the path will be `[root_project]/[plugin]/[model]/[file]`.
-
-For example, if you want the default models folder to be `YOUR_FOLDER`, the path will be `[root_project]/YOUR_FOLDER/[plugin]/[model]/[file]`.
-You can also have multiple level by adding a `/` between each name like `YOUR_FOLDER/test/example`. (Warning: Do not add any `/` at the beginning or the end).
-
-To define it :
-
-```bash
-MODELS_DEFAULT_FOLDER="YOUR_FOLDER" npm run build
-```
 
 * Using templates from a remote repository
 

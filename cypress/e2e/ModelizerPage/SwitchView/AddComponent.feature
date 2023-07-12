@@ -14,9 +14,9 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/new_file.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
+    Then I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infra'
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
@@ -40,16 +40,11 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_terrator-plugin/modelName/new_file.tf"]' appear 2 time on screen
-    And  I expect '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]' appear 1 time on screen
+    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 time on screen
 
-    When I double click on '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]'
+    When I double click on '[data-cy="file_infra/new_file.tf"]'
     And  I wait 1 second
-    And  I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
-    And  I wait 1 second
-    Then I expect '[data-cy="file_terrator-plugin/modelName/new_file.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'leto-modelizer.config.json'
+    Then I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
 
@@ -59,19 +54,13 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_terrator-plugin/modelName/new_file.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]' appear 1 time on screen
+    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
 
-    When I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
+    When I double click on '[data-cy="file_infra/new_file.tf"]'
     And  I wait 1 second
-    And  I double click on '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]'
-    And  I wait 1 second
-    Then I expect '[data-cy="file_terrator-plugin/modelName/new_file.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'new_file.tf'
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'leto-modelizer.config.json'
+    Then I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
 
-    When I click on '[data-cy="file-tabs-container"] [data-cy="file_terrator-plugin/modelName/new_file.tf"]'
+    When I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
     And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
@@ -96,18 +85,11 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_terrator-plugin/modelName/new_file.tf"]' appear 2 time on screen
-    And  I expect '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]' appear 1 time on screen
-
-    When I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
-    And  I wait 1 second
-    And  I double click on '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]'
-    And  I wait 1 second
-    Then I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'new_file.tf'
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'leto-modelizer.config.json'
+    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 time on screen
+    And  I expect '[data-cy="file_leto-modelizer.config.json"]' appear 1 time on screen
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_terrator-plugin/modelName/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{.*gateway_id.*=.*\["aws_internet_gateway_1"\]}'
     And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
@@ -119,18 +101,10 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_terrator-plugin/modelName/new_file.tf"]' appear 2 time on screen
-    And  I expect '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]' appear 1 time on screen
-
-    When I double click on '[data-cy="file_terrator-plugin/modelName/new_file.tf"]'
-    And  I wait 1 second
-    And  I double click on '[data-cy="file_terrator-plugin/modelName/leto-modelizer.config.json"]'
-    And  I wait 1 second
-    Then I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'new_file.tf'
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'leto-modelizer.config.json'
+    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 time on screen
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_terrator-plugin/modelName/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{}'
     And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'

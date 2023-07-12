@@ -5,22 +5,23 @@ Feature: Test models page: switch from table to grid display type
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I visit the '/'
     And   I set context field 'projectName' with 'projectTest'
-    And   I set context field 'modelName' with 'modelTest'
+    And   I set context field 'modelFile' with 'model1/main.tf'
+    And   I set context field 'modelFolder' with 'model1'
 
     When I click on '[data-cy="create-project-button"]'
-    And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'
+    And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{ projectName }}'
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{projectName}}/models'
+    Then I expect current url is '{{ projectName }}/models'
 
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{modelName}}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFile }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelName}}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelFolder }}'
 
     When I click on '[data-cy="models-page-link-button"]'
-    Then I expect current url is '{{projectName}}/models'
+    Then I expect current url is '{{ projectName }}/models'
 
     And  I expect '[data-cy="diagram-table"]' exists
     And  I expect '[data-cy="diagram-grid"]' not exists

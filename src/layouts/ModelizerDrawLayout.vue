@@ -16,6 +16,8 @@
     <q-page-container>
       <modelizer-draw-page />
     </q-page-container>
+    <git-authentication-dialog :project-name="projectName" />
+    <git-add-remote-dialog :project-name="projectName" />
   </q-layout>
 </template>
 
@@ -37,6 +39,8 @@ import {
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { Notify } from 'quasar';
+import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog.vue';
+import GitAddRemoteDialog from 'components/dialog/GitAddRemoteDialog.vue';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -48,9 +52,6 @@ const data = reactive({
   plugin: null,
 });
 const templates = ref([]);
-const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
-  ? `${process.env.MODELS_DEFAULT_FOLDER}/`
-  : '');
 
 let pluginInitSubscription;
 
@@ -63,7 +64,7 @@ async function initView() {
     return;
   }
 
-  data.plugin = getPluginByName(query.value.path.split('/')[0]);
+  data.plugin = getPluginByName(query.value.plugin);
 
   if (!data.plugin) {
     return;
@@ -73,7 +74,7 @@ async function initView() {
     initComponents(
       route.params.projectName,
       data.plugin,
-      `${defaultFolder.value}${route.query.path}`,
+      query.value.path,
     ).then(() => {
       data.plugin.draw('root');
     }),
@@ -92,9 +93,11 @@ async function initView() {
   ]);
 }
 
-onMounted(async () => {
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(initView);
-  await initView();
+onMounted(() => {
+  pluginInitSubscription = PluginEvent.InitEvent.subscribe(() => {
+    initView();
+  });
+  initView();
 });
 
 onUnmounted(() => {

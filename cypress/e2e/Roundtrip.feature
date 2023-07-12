@@ -14,23 +14,23 @@ Feature: Test roundtrip of the application
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'modelName'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
-    And  I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
+    And  I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infra'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
     And  I expect '[data-cy="file-explorer"]' exists
-    And  I expect current url is 'projectName/modelizer/text\?path=terrator-plugin/modelName'
+    And  I expect current url is 'projectName/modelizer/text\?plugin=terrator-plugin&path=infra'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
     And  I expect '[data-cy="draw-container"]' exists
-    And  I expect current url is 'projectName/modelizer/draw\?path=terrator-plugin/modelName'
+    And  I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infra'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     And  I wait 1 second

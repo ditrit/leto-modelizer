@@ -12,6 +12,16 @@ jest.mock('src/composables/events/DialogEvent', () => ({
   subscribe: jest.fn(),
 }));
 
+jest.mock('src/composables/Project', () => ({
+  getProjectFiles: jest.fn(() => ([])),
+}));
+
+jest.mock('src/composables/PluginManager', () => ({
+  getPluginByName: jest.fn(() => ({
+    getModels: () => [],
+  })),
+}));
+
 describe('Test component: ImportModelTemplateDialog', () => {
   let wrapper;
   let subscribe;

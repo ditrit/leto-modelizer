@@ -38,7 +38,7 @@ import GitLogDialog from 'src/components/dialog/GitLogDialog';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import FileEvent from 'src/composables/events/FileEvent';
-import { getAllModels } from 'src/composables/Project';
+import { getPlugins } from 'src/composables/PluginManager';
 
 const route = useRoute();
 const router = useRouter();
@@ -49,34 +49,14 @@ const projectName = computed(() => route.params.projectName);
 let selectFileTabSubscription;
 
 /**
- * Get model corresponding to the selected file tab.
- * @param {String} selectedFileTabPath - Path of the selected file tab.
- * @return {Promise<Object>} Promise with the model or undefined on success otherwise an error.
- */
-async function getModel(selectedFileTabPath) {
-  if (!selectedFileTabPath) {
-    return undefined;
-  }
-
-  const models = await getAllModels(projectName.value);
-  const defaultFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${process.env.MODELS_DEFAULT_FOLDER}/`
-    : '';
-
-  return models.find(
-    ({ name, plugin }) => selectedFileTabPath.startsWith(`${defaultFolder}${plugin}/${name}/`),
-  );
-}
-
-/**
  * Update the path of the query if necessary.
  * @param {String} event - Path of the selected file tab.
  * @return {Promise<Object>} Promise with nothing on success otherwise an error.
  */
 async function onSelectFileTab(event) {
   if (event && !event.startsWith(`${query.value.path}/`)) {
-    const model = await getModel(event);
-    const modelPath = model ? `${model.plugin}/${model.name}` : query.value.path;
+    const plugin = getPlugins().find((p) => p.isParsable({ path: event }));
+    const modelPath = plugin?.getModels([{ path: event }]).find(() => true);
 
     await router.push({
       name: 'Text',
@@ -84,6 +64,7 @@ async function onSelectFileTab(event) {
         projectName: projectName.value,
       },
       query: {
+        plugin: plugin?.data.name,
         path: modelPath,
       },
     });

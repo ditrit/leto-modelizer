@@ -21,22 +21,22 @@ describe('Test component: ModelCard', () => {
 
   describe('Test function: getModelImage', () => {
     it('should return corresponding image name', async () => {
-      await wrapper.setProps({ model: { name: 'A' } });
+      await wrapper.setProps({ model: { name: 'A', path: 'A' } });
       expect(wrapper.vm.getModelImage()).toEqual('images/project0.png');
 
-      await wrapper.setProps({ model: { name: 'B' } });
+      await wrapper.setProps({ model: { name: 'B', path: 'B' } });
       expect(wrapper.vm.getModelImage()).toEqual('images/project1.png');
 
-      await wrapper.setProps({ model: { name: 'C' } });
+      await wrapper.setProps({ model: { name: 'C', path: 'C' } });
       expect(wrapper.vm.getModelImage()).toEqual('images/project2.png');
 
-      await wrapper.setProps({ model: { name: 'D' } });
+      await wrapper.setProps({ model: { name: 'D', path: 'D' } });
       expect(wrapper.vm.getModelImage()).toEqual('images/project3.png');
 
-      await wrapper.setProps({ model: { name: 'E' } });
+      await wrapper.setProps({ model: { name: 'E', path: 'E' } });
       expect(wrapper.vm.getModelImage()).toEqual('images/project4.png');
 
-      await wrapper.setProps({ model: { name: 'F' } });
+      await wrapper.setProps({ model: { name: 'F', path: 'F' } });
       expect(wrapper.vm.getModelImage()).toEqual('images/project0.png');
     });
   });
