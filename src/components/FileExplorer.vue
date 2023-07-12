@@ -65,7 +65,7 @@ import GitEvent from 'src/composables/events/GitEvent';
 import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
 import FileName from 'src/components/FileName.vue';
 import { getTree } from 'src/composables/FileExplorer';
-import { getProjectFiles, getStatus } from 'src/composables/Project';
+import { getProjectFiles, getStatus, isDirectory } from 'src/composables/Project';
 import { FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
 import { useRoute } from 'vue-router';
@@ -92,9 +92,6 @@ const nodes = ref([]);
 const activeFileId = ref(null);
 // Must be a String according to https://quasar.dev/vue-components/tree
 const filterTrigger = ref(props.showParsableFiles.toString());
-const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
-  ? `${process.env.MODELS_DEFAULT_FOLDER}/`
-  : '');
 
 let selectFileTabSubscription;
 let createFileSubscription;
@@ -289,47 +286,39 @@ function openFile(file) {
  * Only expand the ones containing parsable file tree nodes.
  * Then, open those file tree nodes.
  */
-function openModelFiles() {
-  const [pluginName, modelName] = query.value.path.split('/');
-  const plugin = getPluginByName(pluginName);
-
-  // TODO: Find a better way to stub it on shallowMount.
-  if (!plugin || !fileExplorerRef.value.getNodeByKey || !query.value.path) {
-    return;
-  }
+async function openModelFiles() {
+  const pluginName = query.value.plugin || '';
+  let modelPath = query.value.path || '';
 
   expandFolder(props.projectName);
 
-  if (defaultFolder.value !== '') {
-    expandFolder(defaultFolder.value);
+  if (pluginName.length === 0 || modelPath.length === 0) {
+    return;
   }
 
-  if (pluginName?.length > 0) {
-    expandFolder(`${defaultFolder.value}${pluginName}`);
-
-    if (modelName?.length > 0) {
-      expandFolder(`${defaultFolder.value}${pluginName}/${modelName}`);
-
-      const allPaths = localFileInformations.value
-        .filter(({ path }) => path.startsWith(`${defaultFolder.value}${pluginName}/${modelName}/`))
-        .filter(({ path }) => plugin.isParsable({ path }))
-        .map(({ path }) => path);
-
-      allPaths.forEach((path) => {
-        path.split('/').reduce((acc, value) => {
-          acc = acc ? `${acc}/${value}` : value;
-
-          if (acc !== path) {
-            expandFolder(acc);
-          }
-
-          return acc;
-        }, null);
-
-        openFile(path);
-      });
-    }
+  if (await isDirectory(modelPath)) {
+    modelPath += '/';
   }
+
+  const plugin = getPluginByName(pluginName);
+  const allPaths = localFileInformations.value
+    .filter(({ path }) => path.startsWith(modelPath))
+    .filter(({ path }) => plugin.isParsable({ path }))
+    .map(({ path }) => path);
+
+  allPaths.forEach((path) => {
+    path.split('/').reduce((acc, value) => {
+      acc = acc ? `${acc}/${value}` : value;
+
+      if (acc !== path) {
+        expandFolder(acc);
+      }
+
+      return acc;
+    }, null);
+
+    openFile(path);
+  });
 }
 
 /**
@@ -343,7 +332,11 @@ async function initTreeNodes() {
   nodes.value = getTree(props.projectName, localFileInformations.value);
 
   await updateAllFilesStatus();
-  openModelFiles();
+
+  // TODO: Find a better way to stub it on shallowMount.
+  if (fileExplorerRef.value.getNodeByKey && query.value.path) {
+    openModelFiles();
+  }
 }
 
 onMounted(async () => {
@@ -379,7 +372,6 @@ onMounted(async () => {
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(openModelFiles);
 
   await initTreeNodes();
-  openModelFiles();
 });
 
 onUnmounted(() => {
