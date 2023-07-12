@@ -165,13 +165,9 @@ async function submit() {
 
   props.plugin.draw('root');
 
-  const path = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${process.env.MODELS_DEFAULT_FOLDER}/${query.value.path}`
-    : `${query.value.path}`;
-
   await renderModel(
     route.params.projectName,
-    path,
+    query.value.path,
     props.plugin,
   );
 
