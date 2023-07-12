@@ -38,6 +38,16 @@ jest.mock('src/composables/TemplateManager', () => ({
   getTemplateFileByPath: jest.fn(() => Promise.resolve()),
 }));
 
+jest.mock('src/composables/PluginManager', () => ({
+  getPluginByName: jest.fn(() => ({
+    configuration: {
+      restrictiveFolder: null,
+    },
+    getModels: () => [],
+  })),
+  getModelPath: jest.fn((_, model) => model),
+}));
+
 describe('Test component: ImportModelTemplateForm', () => {
   let wrapper;
   const push = jest.fn();
@@ -59,7 +69,6 @@ describe('Test component: ImportModelTemplateForm', () => {
 
   describe('Test function: onSubmit', () => {
     it('should emit an event on success and a notification', async () => {
-      process.env.MODELS_DEFAULT_FOLDER = 'model';
       wrapper.vm.modelName = 'modelName';
 
       Notify.create = jest.fn();
@@ -67,7 +76,7 @@ describe('Test component: ImportModelTemplateForm', () => {
       await wrapper.vm.onSubmit();
 
       expect(wrapper.vm.submitting).toEqual(false);
-      expect(push).toHaveBeenCalledWith(expect.objectContaining({ query: { path: 'plugin/modelName' } }));
+      expect(push).toHaveBeenCalledWith(expect.objectContaining({ query: { path: 'modelNamefile', plugin: 'plugin' } }));
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
     });
 
@@ -89,8 +98,6 @@ describe('Test component: ImportModelTemplateForm', () => {
     });
 
     it('should emit a notification on "EEXIST" error', async () => {
-      process.env.MODELS_DEFAULT_FOLDER = '';
-
       await wrapper.setProps({
         projectName: 'eexist',
         template: {

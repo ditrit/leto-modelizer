@@ -10,16 +10,24 @@
       :label="$t('actions.models.import.form.name')"
       lazy-rules
       :rules="[
-        (value) => notEmpty($t, value),
-        (value) => isUnique(
+        (value) => isUniqueModel(
           $t,
-          models.map((model) => `${model.plugin}/${model.name}`),
-          `${template.plugin}/${value}`,
+          template.plugin,
+          models,
+          `${baseFolder}${value || ''}${template.files[0]}`,
           'errors.models.duplicate',
         )
       ]"
       data-cy="name-input"
     />
+    <div>
+      <div
+        v-for="file in template.files"
+        :key="file"
+      >
+        {{ baseFolder }}{{ modelName }}{{ file }}
+      </div>
+    </div>
     <div class="flex row items-center justify-center">
       <q-btn
         icon="fa-solid fa-save"
@@ -40,16 +48,16 @@
 <script setup>
 import { Notify } from 'quasar';
 import { onMounted, ref } from 'vue';
-import { isUnique, notEmpty } from 'src/composables/QuasarFieldRule';
+import { isUniqueModel } from 'src/composables/QuasarFieldRule';
 import { useI18n } from 'vue-i18n';
 import {
-  createProjectFolder,
   appendProjectFile,
   getAllModels,
 } from 'src/composables/Project';
 import { useRouter } from 'vue-router';
 import { FileInput } from 'leto-modelizer-plugin-core';
 import { getTemplateFileByPath } from 'src/composables/TemplateManager';
+import { getModelPath, getPluginByName } from 'src/composables/PluginManager';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -63,35 +71,55 @@ const props = defineProps({
     required: true,
   },
 });
-const modelName = ref(null);
+const plugin = ref(getPluginByName(props.template.plugin));
+const baseFolder = ref(getPluginByName(props.template.plugin).configuration.restrictiveFolder || '');
+const modelName = ref(plugin.value.getModels(
+  props.template.files.map((file) => `${baseFolder.value || ''}${file}`),
+)[0]);
 const submitting = ref(false);
 const models = ref([]);
 
+/**
+ * Init all models.
+ */
+async function initAllModels() {
+  models.value = (await getAllModels(props.projectName))
+    .filter((model) => model.plugin === props.template.plugin)
+    .map(({ path }) => path);
+}
 /**
  * Create a new model folder and its parent folders if necessary.
  * Emit a positive notification on success and redirect to model page.
  * Otherwise, emit a negative notification.
  */
 async function onSubmit() {
-  const pluginFolder = process.env.MODELS_DEFAULT_FOLDER !== ''
-    ? `${process.env.MODELS_DEFAULT_FOLDER}/${props.template.plugin}`
-    : `${props.template.plugin}`;
+  const model = getModelPath(
+    props.template.plugin,
+    `${baseFolder.value}${modelName.value || ''}${props.template.files[0]}`,
+  );
 
-  return createProjectFolder(props.projectName, `${pluginFolder}/${modelName.value}`)
-    .then(async () => Promise.allSettled(props.template.files
-      .map((file) => getTemplateFileByPath(`templates/${props.template.key}/${file}`, 'text')
-        .then((result) => appendProjectFile(props.projectName, new FileInput({
-          path: `${pluginFolder}/${modelName.value}/${file}`,
+  return Promise.allSettled(props.template.files.map(
+    (file) => getTemplateFileByPath(
+      `templates/${props.template.key}/${file}`,
+      'text',
+    )
+      .then((result) => appendProjectFile(
+        props.projectName,
+        new FileInput({
+          path: `${baseFolder.value}${modelName.value || ''}${file}`,
           content: result.data,
-        })))
-        .catch(() => {
-          Notify.create({
-            type: 'negative',
-            message: t('errors.templates.getData'),
-            html: true,
-          });
-        }))))
+        }),
+      ))
+      .catch(() => {
+        Notify.create({
+          type: 'negative',
+          message: t('errors.templates.getData'),
+          html: true,
+        });
+      }),
+  ))
     .then(() => {
+      submitting.value = false;
       Notify.create({
         type: 'positive',
         message: t('actions.models.import.notify.success'),
@@ -103,32 +131,15 @@ async function onSubmit() {
         params: {
           projectName: props.projectName,
         },
-        query: { path: `${props.template.plugin}/${modelName.value}` },
+        query: {
+          plugin: props.template.plugin,
+          path: model,
+        },
       });
-    })
-    .catch((error) => {
-      if (error?.name === 'EEXIST') {
-        Notify.create({
-          type: 'negative',
-          message: t('actions.models.import.notify.eexist'),
-          html: true,
-        });
-      } else {
-        Notify.create({
-          type: 'negative',
-          message: t('actions.models.import.notify.error'),
-          html: true,
-        });
-      }
-    })
-    .finally(() => {
-      submitting.value = false;
     });
 }
 
 onMounted(() => {
-  getAllModels(props.projectName).then((array) => {
-    models.value = array;
-  });
+  initAllModels();
 });
 </script>
