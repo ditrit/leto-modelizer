@@ -315,6 +315,10 @@ export default {
           text: 'Text',
         },
         button: {
+          feedbacks: {
+            label: 'Feedbacks',
+            title: 'Send feedbacks by email',
+          },
           upload: {
             label: 'Upload to Git',
             disable: {

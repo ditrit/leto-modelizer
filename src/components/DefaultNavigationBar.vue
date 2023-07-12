@@ -13,9 +13,25 @@
       >
         {{ $t('application.name') }}
       </label>
+      <a :href="getFeedbacksUrl()" target="_blank">
+        <q-btn
+          outline
+          no-caps
+          class="q-ml-xl"
+          color="primary"
+          icon="fa-solid fa-envelope"
+          :label="$t('page.modelizer.header.button.feedbacks.label')"
+          :title="$t('page.modelizer.header.button.feedbacks.title')"
+          data-cy="feedbacks-button"
+        />
+      </a>
     </div>
   </q-header>
 </template>
+
+<script setup>
+import { getFeedbacksUrl } from 'src/composables/Project';
+</script>
 
 <style lang="scss" scoped>
 .bg-primary {

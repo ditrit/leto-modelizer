@@ -111,6 +111,7 @@ module.exports = configure((ctx) => ({
       AUTHENTICATION: configuration?.authentication?.OIDC
         ? JSON.stringify(configuration.authentication.OIDC)
         : '',
+      FEEDBACKS_URL: process.env.FEEDBACKS_URL || '',
     },
     // extractCSS: false,
 

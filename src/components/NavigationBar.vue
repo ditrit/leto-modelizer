@@ -14,6 +14,18 @@
           {{ $t('application.name') }}
         </label>
       </router-link>
+      <a :href="getFeedbacksUrl()" target="_blank">
+        <q-btn
+          outline
+          no-caps
+          class="q-ml-xl"
+          color="primary"
+          icon="fa-solid fa-envelope"
+          :label="$t('page.modelizer.header.button.feedbacks.label')"
+          :title="$t('page.modelizer.header.button.feedbacks.title')"
+          data-cy="feedbacks-button"
+        />
+      </a>
     </div>
     <div class="project-info">
       <span
@@ -88,6 +100,7 @@ import {
   getProjectById,
   getCurrentBranch,
   gitGlobalUpload,
+  getFeedbacksUrl,
   jenkinsCascApplyAll,
 } from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';

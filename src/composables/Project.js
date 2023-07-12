@@ -988,6 +988,14 @@ export async function exists(path) {
   });
 }
 
+/**
+ * Return the feedback page URL.
+ * @returns {String} Feedback page URL.
+ */
+export function getFeedbacksUrl() {
+  return process.env.FEEDBACKS_URL;
+}
+
 export async function jenkinsCascApplyAll(project) {
   await Promise.all((await getProjectFiles(project.id)).map(async (fileInformation) => {
     if (/^jenkins-casc.*\.ya?ml$/.test(fileInformation.path.split('/').at(-1))) {
