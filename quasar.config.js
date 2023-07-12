@@ -16,6 +16,7 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const { configure } = require('quasar/wrappers');
 const { version } = require('./package.json');
+const configuration = require('./global.config.json');
 
 const removeAttribute = (node) => {
   if (process.env.KEEP_CYPRESS_ATTRIBUTE === 'true' || process.env.NODE_ENV === 'development') {
@@ -105,8 +106,11 @@ module.exports = configure((ctx) => ({
 
     // Options below are automatically set depending on the env, set them if you want to override
     env: {
-      TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL || '',
+      TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL || configuration?.templateLibrary || '',
       VERSION: version,
+      AUTHENTICATION: configuration?.authentication?.OIDC
+        ? JSON.stringify(configuration.authentication.OIDC)
+        : '',
     },
     // extractCSS: false,
 
