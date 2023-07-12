@@ -19,6 +19,7 @@ export default {
       modify: 'Modify',
       ok: 'Ok',
       close: 'Close',
+      closeForever: 'Don\'t show again',
     },
     home: {
       newProject: 'New project',
@@ -237,6 +238,7 @@ export default {
       info: 'We are loading the project\'s needs!',
     },
     home: {
+      welcome: '<b>Welcome to Leto-Modelizer</b><br />Documentation is available on <a href="https://go/leto-doc" style="color: white;">go/leto-doc</a>.',
       drawer: {
         empty: 'Nothing to display',
         projects: {

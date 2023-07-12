@@ -28,11 +28,39 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { Notify } from 'quasar';
 import { initPlugins } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
+
+function createWelcomeNotify() {
+  if (route.query.from === '/' && localStorage.getItem('hideWelcomeMessage') !== 'true') {
+    Notify.create({
+      type: 'info',
+      icon: 'fa-solid fa-door-open',
+      message: t('page.home.welcome'),
+      multiLine: true,
+      html: true,
+      actions: [
+        {
+          label: t('actions.default.closeForever'),
+          color: 'white',
+          handler: () => {
+            localStorage.setItem('hideWelcomeMessage', 'true');
+          },
+        },
+        {
+          label: t('actions.default.close'),
+          color: 'white',
+        },
+      ],
+    });
+  }
+}
 
 onMounted(async () => {
   await initPlugins();
@@ -43,6 +71,7 @@ onMounted(async () => {
   await new Promise((res) => setTimeout(res, 2000));
 
   router.push(route.query.from === route.path ? { name: 'Home' } : route.query.from || { name: 'Home' });
+  createWelcomeNotify();
 });
 </script>
 
