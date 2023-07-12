@@ -17,6 +17,7 @@ import {
   addNewComponent,
   addNewTemplateComponent,
   getPluginByName,
+  initComponents,
   renderConfiguration,
   renderModel,
 } from 'src/composables/PluginManager';
@@ -32,6 +33,7 @@ import { useRoute } from 'vue-router';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import { getTemplatesByType } from 'src/composables/TemplateManager';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -43,9 +45,6 @@ const data = reactive({
   plugin: null,
 });
 const templates = ref([]);
-const defaultFolder = ref(process.env.MODELS_DEFAULT_FOLDER !== ''
-  ? `${process.env.MODELS_DEFAULT_FOLDER}/`
-  : '');
 
 let pluginDefaultSubscription;
 let pluginInitSubscription;
@@ -64,17 +63,55 @@ async function onDefaultEvent({ event }) {
     if (event.action === 'move') {
       await renderConfiguration(
         projectName.value,
-        `${defaultFolder.value}${query.value.path}`,
+        query.value.path,
         data.plugin,
       );
     } else if (renderModelActions.includes(event.action)) {
       await renderModel(
         projectName.value,
-        `${defaultFolder.value}${query.value.path}`,
+        query.value.path,
         data.plugin,
       );
     }
   }
+}
+
+/**
+ * Update plugin, draw components and update component templates array.
+ * @return {Promise<void>} Promise with nothing on success.
+ */
+async function initView() {
+  if (!query.value?.path) {
+    return;
+  }
+
+  data.plugin = getPluginByName(query.value.plugin);
+
+  if (!data.plugin) {
+    return;
+  }
+
+  await Promise.allSettled([
+    initComponents(
+      route.params.projectName,
+      data.plugin,
+      `${query.value.path}`,
+    ).then(() => {
+      data.plugin.draw('root');
+    }),
+    getTemplatesByType(
+      'component',
+      data.plugin.data.name,
+    ).then((response) => {
+      templates.value = response;
+    }).catch(() => {
+      Notify.create({
+        type: 'negative',
+        message: t('errors.templates.getData'),
+        html: true,
+      });
+    }),
+  ]);
 }
 
 /**
@@ -110,7 +147,7 @@ async function dropHandler(event) {
     await addNewComponent(
       route.params.projectName,
       data.plugin,
-      `${defaultFolder.value}${route.query.path}`,
+      query.value.path,
       componentDefinition,
       new ComponentDrawOption({ ...getComponentPosition(event) }),
     );
@@ -123,7 +160,7 @@ async function dropHandler(event) {
     await addNewTemplateComponent(
       route.params.projectName,
       data.plugin,
-      `${defaultFolder.value}${route.query.path}`,
+      query.value.path,
       templateDefinition,
     ).then(() => {
       data.plugin.draw('root');
@@ -135,16 +172,21 @@ async function dropHandler(event) {
       });
     });
   }
+  await renderModel(
+    projectName.value,
+    query.value.path,
+    data.plugin,
+  );
 }
 
-onMounted(async () => {
+onMounted(() => {
   pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe((event) => {
     onDefaultEvent(event);
   });
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(() => {
-    data.plugin = getPluginByName(query.value.path.split('/')[0]);
+    initView();
   });
-  data.plugin = getPluginByName(query.value.path.split('/')[0]);
+  initView();
 });
 
 onUnmounted(() => {
