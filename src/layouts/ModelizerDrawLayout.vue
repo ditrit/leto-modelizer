@@ -16,6 +16,9 @@
     <q-page-container>
       <modelizer-draw-page />
     </q-page-container>
+
+    <git-authentication-dialog :project-name="projectName" />
+    <git-add-remote-dialog :project-name="projectName" />
   </q-layout>
 </template>
 
@@ -37,6 +40,8 @@ import {
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { Notify } from 'quasar';
+import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog.vue';
+import GitAddRemoteDialog from 'components/dialog/GitAddRemoteDialog.vue';
 
 const { t } = useI18n();
 const route = useRoute();

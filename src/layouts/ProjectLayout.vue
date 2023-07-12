@@ -17,6 +17,8 @@
       class="overlay"
       @click="isVisible = false"
     />
+    <git-authentication-dialog :project-name="projectName" />
+    <git-add-remote-dialog :project-name="projectName" />
   </q-layout>
 </template>
 
@@ -26,6 +28,8 @@ import NavigationBar from 'components/NavigationBar.vue';
 import ModelsPage from 'src/pages/ModelsPage.vue';
 import { useRoute } from 'vue-router';
 import { computed, ref } from 'vue';
+import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog.vue';
+import GitAddRemoteDialog from 'components/dialog/GitAddRemoteDialog.vue';
 
 const route = useRoute();
 const projectName = computed(() => route.params.projectName);
