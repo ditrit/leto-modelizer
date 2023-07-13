@@ -80,6 +80,7 @@ import DiagramTableActionMenu from 'src/components/menu/DiagramTableActionMenu.v
 
 const { t } = useI18n();
 const emit = defineEmits(['click:diagram']);
+
 defineProps({
   diagrams: {
     type: Object,
