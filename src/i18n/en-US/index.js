@@ -215,6 +215,11 @@ export default {
         max: 'It should be less than or equal to {max}',
       },
     },
+    authentication: {
+      login: 'An error occured while login. Please check your provider configuration.',
+      completeLogin: 'An error occured while completing login',
+      completeSilentLogin: 'An error occured while completing silent login',
+    },
   },
   error404: {
     title: '404',
@@ -253,6 +258,12 @@ export default {
       plugins: {
         title: 'Plugins',
       },
+    },
+    login: {
+      message: 'You must be logged in to use the application.',
+      provider: 'Login with {name}',
+      completeLogin: 'Login redirection...',
+      completeSilentLogin: 'Silent login redirection...',
     },
     diagrams: {
       actions: {
@@ -408,6 +419,9 @@ export default {
       sponsors: {
         title: 'Sponsors',
       },
+    },
+    redirect: {
+      login: 'You have been successfully logged in 🥳!',
     },
   },
   footer: {
