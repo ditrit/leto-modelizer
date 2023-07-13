@@ -38,9 +38,9 @@
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "=2.2.4",
-    "@babel/core": "=7.22.8",
-    "@babel/eslint-parser": "=7.22.7",
-    "@babel/preset-env": "=7.22.7",
+    "@babel/core": "=7.22.9",
+    "@babel/eslint-parser": "=7.22.9",
+    "@babel/preset-env": "=7.22.9",
     "@badeball/cypress-cucumber-preprocessor": "=18.0.1",
     "@cypress/browserify-preprocessor": "=3.0.2",
     "@quasar/app-webpack": "=3.9.2",
