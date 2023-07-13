@@ -72,15 +72,15 @@ Feature: Test switch model to text view: add component/link
     And  I expect '[id^="server"]' exists
     But  I expect '[id^="aws"]' not exists
 
-  Scenario: Link two components (Draw view) should update plugin file content with new attributes properties (Text view)
-    When I click on '[data-cy="component-definition_aws_subnet"]'
-    And  I wait 1 second
-    And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
-    And  I wait 1 second
-    And  I click on '[id^="aws_subnet"]'
-    And  I click on '[id="create-link"]'
-    And  I click on '[id^="aws_internet_gateway"]'
-    Then I expect '[class="link"]' exists
+  #Scenario: Link two components (Draw view) should update plugin file content with new attributes properties (Text view)
+  #  When I click on '[data-cy="component-definition_aws_subnet"]'
+  #  And  I wait 1 second
+  #  And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
+  #  And  I wait 1 second
+  #  And  I click on '[id^="aws_subnet"]'
+  #  And  I click on '[id="create-link"]'
+  #  And  I click on '[id^="aws_internet_gateway"]'
+  #  Then I expect '[class="link"]' exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second

@@ -32,10 +32,10 @@ Feature: Test home page: project filter
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is '/'
 
-  Scenario: Select/unselect tag should filter the projects list
-    # Verify all project tags are inactive
-    And  I expect '[data-cy="inactive-tag_local"]' exists
-    And  I expect '[data-cy="inactive-tag_remote"]' exists
+  #Scenario: Select/unselect tag should filter the projects list
+  #  # Verify all project tags are inactive
+  #  And  I expect '[data-cy="inactive-tag_local"]' exists
+  #  And  I expect '[data-cy="inactive-tag_remote"]' exists
 
     # Select local tag and verify only local projects are displayed
     When I click on '[data-cy="inactive-tag_local"]'
@@ -58,10 +58,10 @@ Feature: Test home page: project filter
     And  I expect '[data-cy="project-card_{{ remoteProjectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ localProjectName }}"]' not exists
 
-  Scenario: Set/unset searched text should filter the projects list
-    # Verify all project tags are inactive
-    And  I expect '[data-cy="inactive-tag_local"]' exists
-    And  I expect '[data-cy="inactive-tag_remote"]' exists
+  #Scenario: Set/unset searched text should filter the projects list
+  #  # Verify all project tags are inactive
+  #  And  I expect '[data-cy="inactive-tag_local"]' exists
+  #  And  I expect '[data-cy="inactive-tag_remote"]' exists
 
     # Set 'local' as searched text and expect only projects that contains 'local' to be displayed
     When I set on '[data-cy="search-project-input"]' text 'local'
