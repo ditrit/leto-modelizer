@@ -27,6 +27,7 @@
     "leto-modelizer-plugin-core": "github:ditrit/leto-modelizer-plugin-core#0.17.0",
     "monaco-editor": "=0.40.0",
     "monaco-editor-webpack-plugin": "=7.1.0",
+    "oidc-client-ts": "^2.2.4",
     "quasar": "=2.12.2",
     "rxjs": "=7.8.1",
     "v-viewer": "=3.0.11",
