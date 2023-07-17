@@ -3,6 +3,7 @@
     id="diagrams-page"
     v-touch-pan.mouse="handlePan"
     data-cy="diagrams-page"
+    @click="selectDiagram()"
   >
     <div
       id="diagrams-container"
@@ -11,13 +12,33 @@
       <q-card
         v-for="diagram in diagrams"
         :key="`diagram_${diagram.path}`"
-        class="diagram-container col-2 no-shadow q-pa-md bg-grey-3"
+        :class="[
+          'diagram-container',
+          { selected: diagram.name === selectedDiagram },
+          'col-2',
+          'no-shadow',
+          'q-pa-md',
+          'bg-grey-3',
+        ]"
         :data-cy="`diagram-card_${diagram.path}`"
+        @click.stop="selectDiagram(diagram.name)"
       >
         <div
           :id="diagram.id"
           :data-cy="`diagram_${diagram.path}`"
         />
+        <q-popup-proxy>
+          <q-btn-group>
+            <q-btn
+              stack
+              size="sm"
+              icon="fa-solid fa-trash"
+              :label="$t('page.diagrams.actions.delete')"
+              data-cy="delete-button"
+              @click="deleteDiagram(diagram)"
+            />
+          </q-btn-group>
+        </q-popup-proxy>
       </q-card>
     </div>
     <q-page-sticky :offset="[20, 20]">
@@ -44,12 +65,15 @@
         />
       </q-btn-group>
     </q-page-sticky>
+    <delete-model-dialog :project-name="projectName" />
   </q-page>
 </template>
 
 <script setup>
 import { getPluginByName, initComponents } from 'src/composables/PluginManager';
 import { getAllModels } from 'src/composables/Project';
+import DeleteModelDialog from 'src/components/dialog/DeleteModelDialog.vue';
+import DialogEvent from 'src/composables/events/DialogEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import {
   computed,
@@ -59,6 +83,7 @@ import {
   ref,
 } from 'vue';
 import { useRoute } from 'vue-router';
+import UpdateModelEvent from 'src/composables/events/ModelEvent';
 
 const route = useRoute();
 const projectName = computed(() => route.params.projectName);
@@ -68,8 +93,33 @@ const translate = reactive({
   x: 0,
   y: 0,
 });
+const selectedDiagram = ref(null);
 
 let pluginInitSubscription;
+let updateModelSubscription;
+
+/**
+ * Toggle diagram selection.
+ * @param {string} diagramName - Selected diagram name otherwise null.
+ */
+function selectDiagram(diagramName) {
+  if (!diagramName || selectedDiagram.value === diagramName) {
+    selectedDiagram.value = null;
+  } else {
+    selectedDiagram.value = diagramName;
+  }
+}
+
+/**
+ * Open DeleteModel dialog and close menu.
+ */
+function deleteDiagram(diagram) {
+  DialogEvent.next({
+    type: 'open',
+    key: 'DeleteModel',
+    model: diagram,
+  });
+}
 
 /**
  * Zoom on diagrams container.
@@ -136,6 +186,9 @@ onMounted(async () => {
   pluginInitSubscription = PluginEvent.InitEvent.subscribe(() => {
     updateDiagrams().then(() => { drawDiagrams(); });
   });
+  updateModelSubscription = UpdateModelEvent.subscribe(() => {
+    updateDiagrams().then(() => { drawDiagrams(); });
+  });
 
   await updateDiagrams();
   await drawDiagrams();
@@ -143,6 +196,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   pluginInitSubscription.unsubscribe();
+  updateModelSubscription.unsubscribe();
 });
 </script>
 
@@ -155,6 +209,10 @@ onUnmounted(() => {
 .diagram-container {
   border: 2px dashed $primary;
   height: min-content;
+
+  &.selected {
+    border-color: $accent;
+  }
 }
 </style>
 <style lang="scss">

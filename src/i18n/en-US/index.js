@@ -269,6 +269,7 @@ export default {
       actions: {
         zoomPlus: 'Zoom+',
         zoomMinus: 'Zoom-',
+        delete: 'Trash',
       },
     },
     models: {
