@@ -31,7 +31,8 @@ Feature: Test diagrams page: zoom on all diagrams
 
     # Back to the diagrams page
     When I visit the 'localhost:8080/#/projects/{{ projectName }}/diagrams'
-    And I wait 2 seconds
+    And  I wait 2 seconds
+    And  I expect '[id="svg-aws_1"]' exists
     Then I expect '[data-cy="diagram_{{ modelFolder }}"]' exists
 
   Scenario: Should zoom +.5 on all diagrams
