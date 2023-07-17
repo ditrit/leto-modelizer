@@ -1,6 +1,8 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import * as PluginManager from 'src/composables/PluginManager';
+import DialogEvent from 'src/composables/events/DialogEvent';
+import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import DiagramsPage from 'src/pages/DiagramsPage';
 
@@ -26,18 +28,37 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   },
 }));
 
+jest.mock('src/composables/events/ModelEvent', () => ({
+  subscribe: jest.fn(),
+}));
+
+jest.mock('src/composables/events/DialogEvent', () => ({
+  DialogEvent: {
+    next: jest.fn(),
+  },
+}));
+
 describe('Test page component: DiagramsPage', () => {
   let wrapper;
   let pluginInitSubscribe;
   let pluginInitUnsubscribe;
+  let updateModelSubscribe;
+  let updateModelUnsubscribe;
 
   beforeEach(() => {
     pluginInitSubscribe = jest.fn();
     pluginInitUnsubscribe = jest.fn();
+    updateModelSubscribe = jest.fn();
+    updateModelUnsubscribe = jest.fn();
 
     PluginEvent.InitEvent.subscribe.mockImplementation(() => {
       pluginInitSubscribe();
       return { unsubscribe: pluginInitUnsubscribe };
+    });
+
+    UpdateModelEvent.subscribe.mockImplementation(() => {
+      updateModelSubscribe();
+      return { unsubscribe: updateModelUnsubscribe };
     });
 
     wrapper = shallowMount(DiagramsPage);
@@ -48,6 +69,46 @@ describe('Test page component: DiagramsPage', () => {
       it('should match "project-00000000"', () => {
         expect(wrapper.vm.projectName).toEqual('project-00000000');
       });
+    });
+  });
+
+  describe('Test function: selectDiagram', () => {
+    it('should set "selectedDiagram" to null without parameter', () => {
+      wrapper.vm.selectedDiagram = 'test';
+
+      wrapper.vm.selectDiagram();
+
+      expect(wrapper.vm.selectedDiagram).toBeNull();
+    });
+
+    it('should set "selectedDiagram" to null when parameter is same as the selected diagram name', () => {
+      wrapper.vm.selectedDiagram = 'test';
+
+      wrapper.vm.selectDiagram('test');
+
+      expect(wrapper.vm.selectedDiagram).toBeNull();
+    });
+
+    it('should set "selectedDiagram" to diagram name passed as parameter', () => {
+      wrapper.vm.selectedDiagram = null;
+
+      wrapper.vm.selectDiagram('test');
+
+      expect(wrapper.vm.selectedDiagram).toEqual('test');
+    });
+  });
+
+  describe('Test function: deleteDiagram', () => {
+    it('should call dialog event and menu.hide function', () => {
+      DialogEvent.next = jest.fn(() => Promise.resolve({
+        type: 'open',
+        key: 'DeleteModel',
+        model: wrapper.vm.diagram,
+      }));
+
+      wrapper.vm.deleteDiagram();
+
+      expect(DialogEvent.next).toBeCalled();
     });
   });
 
@@ -108,6 +169,10 @@ describe('Test page component: DiagramsPage', () => {
     it('should subscribe InitEvent', () => {
       expect(pluginInitSubscribe).toHaveBeenCalledTimes(1);
     });
+
+    it('should subscribe UpdateModelEvent', () => {
+      expect(updateModelSubscribe).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('Test hook function: onUnmounted', () => {
@@ -115,6 +180,12 @@ describe('Test page component: DiagramsPage', () => {
       expect(pluginInitUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(pluginInitUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe UpdateModelEvent', () => {
+      expect(updateModelUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(updateModelUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });
