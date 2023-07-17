@@ -898,8 +898,9 @@ export async function getAllModels(projectId) {
   const models = [];
   let index = 0;
 
-  plugins.forEach((plugin) => {
-    plugin.getModels(files).forEach((path) => {
+  await Promise.all(plugins.map(async (plugin) => {
+    const fileInputs = await getFileInputs(plugin, files, projectId);
+    plugin.getModels(fileInputs).forEach((path) => {
       models.push({
         id: `diagram_${index}`,
         plugin: plugin.data.name,
@@ -908,7 +909,7 @@ export async function getAllModels(projectId) {
       });
       index += 1;
     });
-  });
+  }));
 
   return models;
 }
