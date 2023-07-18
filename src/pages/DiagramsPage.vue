@@ -14,14 +14,14 @@
         :key="`diagram_${diagram.path}`"
         :class="[
           'diagram-container',
-          { selected: diagram.name === selectedDiagram },
+          { selected: diagram.path === selectedDiagram?.path },
           'col-2',
           'no-shadow',
           'q-pa-md',
           'bg-grey-3',
         ]"
         :data-cy="`diagram-card_${diagram.path}`"
-        @click.stop="selectDiagram(diagram.name)"
+        @click.stop="selectDiagram(diagram)"
       >
         <div
           :id="diagram.id"
@@ -115,13 +115,13 @@ let updateModelSubscription;
 
 /**
  * Toggle diagram selection.
- * @param {string} diagramName - Selected diagram name otherwise null.
+ * @param {string} diagram - Selected diagram otherwise null.
  */
-function selectDiagram(diagramName) {
-  if (!diagramName || selectedDiagram.value === diagramName) {
+function selectDiagram(diagram) {
+  if (!diagram?.path || selectedDiagram.value?.path === diagram.path) {
     selectedDiagram.value = null;
   } else {
-    selectedDiagram.value = diagramName;
+    selectedDiagram.value = diagram;
   }
 }
 

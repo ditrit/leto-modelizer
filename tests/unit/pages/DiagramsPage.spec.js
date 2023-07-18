@@ -74,7 +74,7 @@ describe('Test page component: DiagramsPage', () => {
 
   describe('Test function: selectDiagram', () => {
     it('should set "selectedDiagram" to null without parameter', () => {
-      wrapper.vm.selectedDiagram = 'test';
+      wrapper.vm.selectedDiagram = { path: 'test' };
 
       wrapper.vm.selectDiagram();
 
@@ -82,9 +82,9 @@ describe('Test page component: DiagramsPage', () => {
     });
 
     it('should set "selectedDiagram" to null when parameter is same as the selected diagram name', () => {
-      wrapper.vm.selectedDiagram = 'test';
+      wrapper.vm.selectedDiagram = { path: 'test' };
 
-      wrapper.vm.selectDiagram('test');
+      wrapper.vm.selectDiagram({ path: 'test' });
 
       expect(wrapper.vm.selectedDiagram).toBeNull();
     });
@@ -92,9 +92,9 @@ describe('Test page component: DiagramsPage', () => {
     it('should set "selectedDiagram" to diagram name passed as parameter', () => {
       wrapper.vm.selectedDiagram = null;
 
-      wrapper.vm.selectDiagram('test');
+      wrapper.vm.selectDiagram({ path: 'test' });
 
-      expect(wrapper.vm.selectedDiagram).toEqual('test');
+      expect(wrapper.vm.selectedDiagram).toEqual({ path: 'test' });
     });
   });
 
