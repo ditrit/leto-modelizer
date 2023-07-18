@@ -86,4 +86,4 @@ Feature: Test home page: project filter
     # Unset searched text and expect all projects are displayed
     When I set on '[data-cy="search-project-input"]' text ' '
     Then I expect '[data-cy="project-card_{{ localProjectName }}"]' exists
-    And  I expect '[data-cy="project-card_{{ remoteProjectName }}"]' exists
+   & And  I expect '[data-cy="project-card_{{ remoteProjectName }}"]' exists

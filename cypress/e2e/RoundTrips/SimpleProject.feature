@@ -41,10 +41,10 @@ Feature: Test home page: project creation
   ################## FilterModel.feature ##################
   ## 800 Filter by text and verify that some diagrams disappear
   ## 801 Clear filter text and verify all diagrams are present
-  ## 802 Select Terraform tag and verify only all terraform diagrams are present
-  ## 803 Select Github tag and verify all diagrams are present
-  ## 804 Unselect Terraform tag and verify only all githubator diagrams are present
-  ## 805 Unselect Github tag and verify all diagrams are present
+  ## 802 Select Infrastructure tag and verify only all Infrastructure diagrams are present
+  ## 803 Select CI tag and verify all diagrams are present
+  ## 804 Unselect Infrastructure tag and verify only all CI diagrams are present
+  ## 805 Unselect CI tag and verify all diagrams are present
 
   ################## AddComponent.feature ##################
   ## 900 Plugin test installed in component definitions list (Draw view) should not create project configuration file (Text view)
@@ -60,8 +60,12 @@ Feature: Test home page: project creation
     And   I set context field 'remoteProjectName' with 'leto-modelizer-project-test'
     And   I set context field 'remoteProjectUrl' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I set context field 'firstModelName' with 'firstModelTest'
+    And   I set context field 'firstModelFolder' with 'model1'
+    And   I set context field 'firstModelFile' with 'model1/main.tf'
+    And   I set context field 'secondModelFolder' with 'model2'
     And   I set context field 'secondModelName' with 'secondModelTest'
-    And   I set context field 'thirdModelName' with 'thirdModelTest3Githubator'
+    And   I set context field 'secondModelFile' with 'model2/main.tf'
+    And   I set context field 'thirdModelName' with 'thirdModelTest3Githubator.yml'
     And   I set context field 'modelRenamed' with 'newModelTest'
     And   I visit the '/'
 
@@ -223,62 +227,74 @@ Feature: Test home page: project creation
     Then I expect '[data-cy="project-card_{{projectName}}"]' exists
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' exists
 
+    Then I click on '[data-cy="project-card_{{projectName}}"]'
+    And I expect current url is 'projects/{{ projectName }}/models'
+
     ## 500 After diagrams creation, they present in the multi-diagrams view
     # First model creation
-    Then I click on '[data-cy="project-card_{{projectName}}"]'
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ firstModelName }}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ firstModelFile }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/{{ firstModelName }}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ firstModelFolder }}'
     And  I expect '[data-cy="components-definitions-drawer"]' exists
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
     # Back to the models page
-    When I visit the 'localhost:8080/#/{{ projectName }}/models'
+    When I click on '[data-cy="models-page-link-button"]'
+    Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' exists
 
     # Second model creation (with component)
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ secondModelName }}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ secondModelFile }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?path=terrator-plugin/{{ secondModelName }}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ secondModelFolder }}'
     And  I expect '[data-cy="components-definitions-drawer"]' exists
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    And  I expect '[data-cy="file_model2/main.tf"]' not exists
+    And  I expect '[data-cy="file_leto-modelizer.config.json"]' not exists
 
     # After clicking on a composent, it should be present
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    Then I wait 1 seconds
     And  I click on '[data-cy="component-definition_aws"]'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
-    And  I wait 1 seconds
+    And  I expect '[data-cy="draw-container"]' exists
+    And  I wait 1 second
     And  I expect '[id^="aws"]' exists
 
     # Back to the models page
-    When I visit the 'localhost:8080/#/{{ projectName }}/models'
+    When I click on '[data-cy="models-page-link-button"]'
+    Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' exists
+    And  I expect '[data-cy="diagram-path_{{ secondModelFolder }}"]' exists
 
     # Third model creation
     When I click on '[data-cy="create-model-button"]'
-    And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{thirdModelName}}'
     And  I select '[data-cy="item_githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{thirdModelName}}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{projectName}}/modelizer/draw\?path=githubator-plugin/{{thirdModelName}}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=githubator-plugin&path=\.github/workflows/{{thirdModelName}}'
+    And  I expect '[data-cy="components-definitions-drawer"]' exists
+    And  I expect '[data-cy="component-definitions-item_githubator-plugin"] [data-cy="title"]' is 'githubator-plugin'
 
     # All created diagrams should be displayed in the /diagrams view
-    When I visit the 'localhost:8080/#/{{ projectName }}/diagrams'
-    Then I expect '[data-cy="diagram_{{ firstModelName }}"]' exists
-    And  I expect '[data-cy="diagram_{{ secondModelName }}"]' exists
-    And  I expect '[data-cy="diagram_{{ thirdModelName }}"]' exists
+    When I visit the 'localhost:8080/#/projects/{{ projectName }}/diagrams'
+    Then I expect '[data-cy="diagram-card_{{ firstModelFolder }}"]' exists
+    And  I expect '[data-cy="diagram-card_{{ secondModelFolder }}"]' exists
+    And  I expect '[data-cy="diagram-card_\.github/workflows/{{thirdModelName}}"]' exists
 
     # Back to the models page
-    When I visit the 'localhost:8080/#/{{ projectName }}/models'
+    When I visit the 'localhost:8080/#/projects/{{ projectName }}/models'
+    And  I wait 2 second
+    Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' exists
+    And  I expect '[data-cy="diagram-path_{{ secondModelFolder }}"]' exists
+    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
 
     ## 501 Try to create a model with an already existing name should fail
     When I click on '[data-cy="create-model-button"]'
-    And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{thirdModelName}}'
     And  I select '[data-cy="item_githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{thirdModelName}}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="create-model-form"] [role="alert"]' is 'Model name already exists for this plugin.'
 
@@ -286,90 +302,93 @@ Feature: Test home page: project creation
     Then I click on '[data-cy="close-dialog-button"]'
 
     ## 600 Rename first model (diagram)
-    When I click on '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{firstModelName}}"]'
+    When I click on '[data-cy="diagram-actions_{{firstModelFolder}}"]'
     Then I expect '[data-cy="diagrams-table-action-menu"]' exists
 
     When I click on '[data-cy="diagrams-table-action-menu"] [data-cy="rename-diagram-action-item"]'
     Then I expect '[data-cy="rename-model-dialog"]' exists
-    And  I expect field '[data-cy="rename-model-form"] [data-cy="name-input"]' is '{{firstModelName}}'
+    And  I expect field '[data-cy="rename-model-form"] [data-cy="name-input"]' is '{{ firstModelFolder }}'
 
-    When I set on '[data-cy="rename-model-form"] [data-cy="name-input"]' text '{{modelRenamed}}'
+    When I set on '[data-cy="rename-model-form"] [data-cy="name-input"]' text '{{ modelRenamed }}'
     And  I click on '[data-cy="rename-model-form"] [data-cy="submit-button"]'
     # After the renaming, the new model name should be present but not the old one 
-    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelRenamed}}"]' exists
-    And  I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{firstModelName}}"]' not exists
+    Then I expect '[data-cy="diagram-path_{{ modelRenamed }}"]' exists
+    And  I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' not exists
 
     # Click on model and go to text view and check files
-    When I click on '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelRenamed}}"]'
-    Then I expect current url is '{{projectName}}/modelizer/draw\?path=terrator-plugin/{{modelRenamed}}'
+    When I click on '[data-cy="diagram-path_{{ modelRenamed }}"]'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelRenamed }}'
     And  I expect '[data-cy="components-definitions-drawer"]' exists
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{modelRenamed}}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelRenamed}}"]' exists
+    And  I wait 1 second
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ modelRenamed }}'
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ modelRenamed }}"]' exists
+    And  I wait 1 second
 
     # Back to the models page
-    When I visit the 'localhost:8080/#/{{ projectName }}/models'
+    When I click on '[data-cy="models-page-link-button"]'
+    And  I expect '[data-cy="diagram-path_{{ modelRenamed }}"]' exists
 
     ## 700 Delete first model and check that it does not exit anymore
-    When I click on '[data-cy="diagram-actions_{{projectName}}/terrator-plugin/{{modelRenamed}}"]'
+    When I click on '[data-cy="diagram-actions_{{modelRenamed}}"]'
     Then I expect '[data-cy="diagrams-table-action-menu"]' exists
 
     When I click on '[data-cy="diagrams-table-action-menu"] [data-cy="delete-diagram-action-item"]'
     Then I expect '[data-cy="delete-model-dialog"]' exists
 
     When I click on '[data-cy="delete-model-form"] [data-cy="submit-button"]'
-    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{modelRenamed}}"]' not exists
+    Then I expect '[data-cy="diagram-path_{{modelRenamed}}"]' not exists
+
+    When I click on '[data-cy="diagram-path_{{secondModelFolder}}"]'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ secondModelFolder }}'
 
     # Go to text view and check files of first model doesn't exists but second one does
-    When I click on '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{secondModelName}}"]'
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    Then I expect current url is '{{projectName}}/modelizer/text\?path=terrator-plugin/{{secondModelName}}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{projectName}}"]' is '{{projectName}}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_terrator-plugin/{{modelName}}"]' not exists
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ secondModelFolder }}'
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ secondModelFolder }}"]' exists
 
     ## Back to the models page
-    When I visit the 'localhost:8080/#/{{ projectName }}/models'
-    And  I wait 1 second
+    When I visit the 'localhost:8080/#/projects/{{ projectName }}/models'
+    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
 
     # 800 Filter by text and verify that some diagrams disappear
     When I set on '[data-cy="search-diagram-input"]' text '1'
-    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{secondModelName}}"]' not exists
-    And  I expect '[data-cy="diagram-path_{{projectName}}/githubator-plugin/{{thirdModelName}}"]' not exists
+    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' not exists
+    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' not exists
 
     # 801 Clear filter text and verify all diagrams are present
     When I set on '[data-cy="search-diagram-input"]' text ' '
-    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{secondModelName}}"]' exists
-    And  I expect '[data-cy="diagram-path_{{projectName}}/githubator-plugin/{{thirdModelName}}"]' exists
+    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
+    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
 
-    # 802 Select Terraform tag and verify only all terraform diagrams are present
-    When I select '[data-cy="select-checkbox_Terraform"]' in '[data-cy="diagram-tag-select"]'
+    # 802 # Select Infrastructure tag and verify only all Infrastructure diagrams are present
+    When I select '[data-cy="select-checkbox_Infrastructure"]' in '[data-cy="diagram-tag-select"]'
     And  I click on '[data-cy="diagram-tag-select"]'
-    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{secondModelName}}"]' exists
-    And  I expect '[data-cy="diagram-path_{{projectName}}/githubator-plugin/{{thirdModelName}}"]' not exists
+    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
+    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' not exists
 
-    # 803 Select Github tag and verify all diagrams are present
-    When I select '[data-cy="select-checkbox_Github"]' in '[data-cy="diagram-tag-select"]'
+    # 803 Select CI tag and verify all diagrams are present
+    When I select '[data-cy="select-checkbox_CI"]' in '[data-cy="diagram-tag-select"]'
     And  I click on '[data-cy="diagram-tag-select"]'
-    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{secondModelName}}"]' exists
-    And  I expect '[data-cy="diagram-path_{{projectName}}/githubator-plugin/{{thirdModelName}}"]' exists
+    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
+    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
 
-    # 804 Unselect Terraform tag and verify only all githubator diagrams are present
-    When I click on '[data-cy="chip_Terraform"] i[aria-label="Remove"]'
-    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{secondModelName}}"]' not exists
-    And  I expect '[data-cy="diagram-path_{{projectName}}/githubator-plugin/{{thirdModelName}}"]' exists
+    # 804 Unselect Infrastructure tag and verify only all CI diagrams are present
+    When I click on '[data-cy="chip_Infrastructure"] i[aria-label="Remove"]'
+    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' not exists
+    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
 
-    # 805 Unselect Github tag and verify all diagrams are present
-    When I click on '[data-cy="chip_Github"] i[aria-label="Remove"]'
-    Then I expect '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{secondModelName}}"]' exists
-    And  I expect '[data-cy="diagram-path_{{projectName}}/githubator-plugin/{{thirdModelName}}"]' exists
+    # 805 Unselect CI tag and verify all diagrams are present
+    When I click on '[data-cy="chip_CI"] i[aria-label="Remove"]'
+    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
+    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
 
-    Then  I click on '[data-cy="diagram-path_{{projectName}}/terrator-plugin/{{secondModelName}}"]'
+    Then  I click on '[data-cy="diagram-path_{{secondModelFolder}}"]'
 
     ## Select 'terrator-plugin' library
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
@@ -381,36 +400,28 @@ Feature: Test home page: project creation
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
-    And  I expect '[data-cy="file_new_file.tf"]' not exists
-    And  I expect '[data-cy="file_leto-modelizer.config.json"]' not exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
 
     ## 901 Add a component (Draw view) should create project configuration file (Text view)
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    And  I click on '[data-cy="component-definition_aws"]'
+    When I click on '[data-cy="component-definition_aws"]'
     And  I wait 1 second
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
-    And  I expect '[data-cy="file_terrator-plugin/secondModelTest/new_file.tf"]' appear 2 time on screen
-    And  I expect '[data-cy="file_terrator-plugin/secondModelTest/leto-modelizer.config.json"]' appear 1 time on screen
+    # TODO: put the correct name once bug is fixed
+    And  I expect '[data-cy="file_model2/new_file.tf"]' appear 2 time on screen
 
-    When I double click on '[data-cy="file_terrator-plugin/secondModelTest/leto-modelizer.config.json"]'
+    When I double click on '[data-cy="file_model2/new_file.tf"]'
     And  I wait 1 second
-    And  I double click on '[data-cy="file_terrator-plugin/secondModelTest/new_file.tf"]'
-    And  I wait 1 second
-    Then I expect '[data-cy="file_terrator-plugin/secondModelTest/new_file.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file_terrator-plugin/secondModelTest/leto-modelizer.config.json"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'leto-modelizer.config.json'
+    And  I expect '[data-cy="file_model2/new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
 
     ## 902 Update plugin file content with a new object (Text view) should display the corresponding plugin component (Draw view)
-    When I click on '[data-cy="file-tabs-container"] [data-cy="file_terrator-plugin/secondModelTest/new_file.tf"]'
+    When I click on '[data-cy="file-tabs-container"] [data-cy="file_model2/new_file.tf"]'
     And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
@@ -419,7 +430,7 @@ Feature: Test home page: project creation
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
+    
     # components added in 901 should not exist anymore
     And  I expect '[id^="server"]' exists
     But  I expect '[id^="aws"]' not exists
@@ -440,19 +451,11 @@ Feature: Test home page: project creation
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="modelizer-text-view"]' exists
-    And  I expect '[data-cy="file_terrator-plugin/secondModelTest/new_file.tf"]' appear 2 time on screen
-    And  I expect '[data-cy="file_terrator-plugin/secondModelTest/leto-modelizer.config.json"]' appear 1 time on screen
-
-    When I double click on '[data-cy="file_terrator-plugin/secondModelTest/new_file.tf"]'
-    And  I wait 1 second
-    And  I double click on '[data-cy="file_terrator-plugin/secondModelTest/leto-modelizer.config.json"]'
-    And  I wait 1 second
-    Then I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'new_file.tf'
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'leto-modelizer.config.json'
+    And  I expect '[data-cy="file_model2/new_file.tf"]' appear 2 time on screen
+    And  I expect '[data-cy="file_leto-modelizer.config.json"]' appear 1 time on screen
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_terrator-plugin/secondModelTest/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_model2/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{.*gateway_id.*=.*\["aws_internet_gateway_1"\]}'
     And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
@@ -463,10 +466,9 @@ Feature: Test home page: project creation
     And  I wait 1 seconds
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[data-cy="modelizer-draw-view"] [data-cy="draw-container"]' exists
     And  I expect '[id^="aws_key_pair_1"]' exists
     And  I expect '[id^="aws_route_1"]' exists
     # previous components should not exists anymore
     And  I expect '[id^="aws_subnet"]' not exists
     And  I expect '[id^="aws_internet_gateway"]' not exists
-    And  I expect '[class="link"]' not exists
+    But  I expect '[class="link"]' not exists

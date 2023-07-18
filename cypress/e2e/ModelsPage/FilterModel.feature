@@ -64,27 +64,27 @@ Feature: Test models page: diagram filter
     And  I expect '[data-cy="diagram-path_{{ secondModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-path_{{ thirdModel }}"]' exists
 
-    # Select Terraform tag and verify only all terraform diagrams are present
+    # Select Infrastructure tag and verify only all Infrastructure diagrams are present
     When I select '[data-cy="select-checkbox_Infrastructure"]' in '[data-cy="diagram-tag-select"]'
     And  I click on '[data-cy="diagram-tag-select"]'
     Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-path_{{ secondModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-path_{{ thirdModel }}"]' not exists
 
-    # Select Github tag and verify all diagrams are present
+    # Select CI tag and verify all diagrams are present
     When I select '[data-cy="select-checkbox_CI"]' in '[data-cy="diagram-tag-select"]'
     And  I click on '[data-cy="diagram-tag-select"]'
     Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-path_{{ secondModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-path_{{ thirdModel }}"]' exists
 
-    # Unselect Terraform tag and verify only all githubator diagrams are present
+    # Unselect Infrastructure tag and verify only all CI diagrams are present
     When I click on '[data-cy="chip_Infrastructure"] i[aria-label="Remove"]'
     Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' not exists
     And  I expect '[data-cy="diagram-path_{{ secondModelFolder }}"]' not exists
     And  I expect '[data-cy="diagram-path_{{ thirdModel }}"]' exists
 
-    # Unselect Github tag and verify all diagrams are present
+    # Unselect CI tag and verify all diagrams are present
     When I click on '[data-cy="chip_CI"] i[aria-label="Remove"]'
     Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-path_{{ secondModelFolder }}"]' exists
