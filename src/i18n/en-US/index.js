@@ -270,6 +270,7 @@ export default {
         zoomPlus: 'Zoom+',
         zoomMinus: 'Zoom-',
         delete: 'Trash',
+        create: 'Create',
       },
     },
     models: {

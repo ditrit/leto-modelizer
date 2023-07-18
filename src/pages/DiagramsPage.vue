@@ -63,9 +63,23 @@
           data-cy="zoom-minus-button"
           @click="zoom(false)"
         />
+        <q-btn
+          icon="fa-solid fa-plus"
+          :label="$t('page.diagrams.actions.create')"
+          stack
+          no-caps
+          color="white"
+          text-color="black"
+          data-cy="create-model-button"
+          @click="DialogEvent.next({
+            type: 'open',
+            key: 'CreateModel',
+          })"
+        />
       </q-btn-group>
     </q-page-sticky>
     <delete-model-dialog :project-name="projectName" />
+    <create-model-dialog :project-name="projectName" />
   </q-page>
 </template>
 
@@ -84,6 +98,7 @@ import {
 } from 'vue';
 import { useRoute } from 'vue-router';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
+import CreateModelDialog from 'components/dialog/CreateModelDialog';
 
 const route = useRoute();
 const projectName = computed(() => route.params.projectName);
