@@ -76,11 +76,30 @@ const props = defineProps({
 const template = toRef(props, 'template');
 const plugin = ref(getPluginByName(template.value.plugin));
 const baseFolder = ref(getPluginByName(template.value.plugin).configuration.restrictiveFolder || '');
-const modelName = ref(plugin.value.getModels(
-  template.value.files.map((file) => `${baseFolder.value || ''}${file}`),
-)[0]);
 const submitting = ref(false);
 const models = ref([]);
+
+/**
+ * Get the default model name, depending on the selected plugin.
+ * Overrides the plugin's "defaultFileName".
+ * @returns {String} Default model name.
+ */
+function getDefaultModelName() {
+  switch (template.value.plugin) {
+    case 'jenkinator-plugin':
+      return template.value.type.includes('CI') ? 'acid/dev/CI/' : 'acid/dev/CD/';
+    case 'terrator-plugin':
+      return 'acid/dev/IaC/Terraform/';
+    case 'sg-tfvars-plugin':
+      return 'acid/dev/IaC/Terraform/';
+    case 'kubernator-plugin':
+      return 'acid/dev/K8S/';
+    default:
+      return plugin.value.configuration.defaultFileName;
+  }
+}
+
+const modelName = ref(getDefaultModelName());
 
 /**
  * Init all models.

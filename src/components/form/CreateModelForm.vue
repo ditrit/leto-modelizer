@@ -99,12 +99,33 @@ const props = defineProps({
 });
 
 const plugins = reactive(getPlugins());
-const modelName = ref(plugins[0].configuration.defaultFileName);
 const modelPlugin = ref(plugins[0]?.data.name);
 const submitting = ref(false);
 const models = ref([]);
 const allFolders = ref([]);
 const baseFolder = computed(() => getPluginByName(modelPlugin.value).configuration.restrictiveFolder || '');
+
+/**
+ * Get the default model name, depending on the selected plugin.
+ * Overrides the plugin's "defaultFileName".
+ * @returns {String} Default model name.
+ */
+function getDefaultModelName() {
+  switch (modelPlugin.value) {
+    case 'jenkinator-plugin':
+      return 'acid/dev/CI/jenkins-casc.yaml';
+    case 'terrator-plugin':
+      return 'acid/dev/IaC/Terraform/main.tf';
+    case 'sg-tfvars-plugin':
+      return 'acid/dev/IaC/Terraform/terraform.tfvars';
+    case 'kubernator-plugin':
+      return 'acid/dev/K8S/manifest.yaml';
+    default:
+      return getPluginByName(modelPlugin.value).configuration.defaultFileName;
+  }
+}
+
+const modelName = ref(getDefaultModelName());
 
 /**
  * Create a new model folder and its parent folders if necessary.
@@ -163,7 +184,7 @@ async function onSubmit() {
  * Set default model name on plugin name change.
  */
 function onPluginChange() {
-  modelName.value = getPluginByName(modelPlugin.value).configuration.defaultFileName;
+  modelName.value = getDefaultModelName();
 }
 
 onMounted(async () => {
