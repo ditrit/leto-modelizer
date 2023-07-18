@@ -38,7 +38,7 @@ import GitLogDialog from 'src/components/dialog/GitLogDialog';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import FileEvent from 'src/composables/events/FileEvent';
-import { getPlugins } from 'src/composables/PluginManager';
+import { getPluginByName, getPlugins } from 'src/composables/PluginManager';
 
 const route = useRoute();
 const router = useRouter();
@@ -55,8 +55,9 @@ let selectFileTabSubscription;
  */
 async function onSelectFileTab(event) {
   if (event && !event.startsWith(`${query.value.path}/`)) {
-    const plugin = getPlugins().find((p) => p.isParsable({ path: event }));
-    const modelPath = plugin?.getModels([{ path: event }]).find(() => true);
+    const plugin = getPlugins()
+      .find((p) => p.isParsable({ path: event })) || getPluginByName(query.value.plugin);
+    const modelPath = plugin?.getModels([{ path: event }]).find(() => true) || query.value.path;
 
     await router.push({
       name: 'Text',
