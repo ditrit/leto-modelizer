@@ -335,3 +335,39 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'README.md'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'main.tf'
     And  I expect '[data-cy="folder_terraform/folder"]' not exists
+
+  Scenario: Save the component in defaultFileName when diagram doesn't have any file
+    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+
+    # Delete main.tf
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_infra/main.tf"]' to make it visible
+    And  I wait 1 second
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_infra/main.tf"]'
+    Then I expect '[data-cy="file-explorer-action-menu"]' exists
+
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
+    Then I expect '[data-cy="delete-file-dialog"]' exists
+
+    When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
+    Then I expect 'positive' toast to appear with text 'File is deleted.'
+    And  I expect '[data-cy="delete-file-form"]' is closed
+    And  I expect '[data-cy="file_infra/main.tf"]' not exists
+    And  I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=infra'
+
+    # Go back to the draw view
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
+
+    # Add component
+    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    Then I expect '[data-cy="component-definition_aws"]' exists
+
+    When I click on '[data-cy="component-definition_aws"]'
+    Then I expect '[data-cy="draw-container"] [id^="aws"]' exists
+
+    # Go back to the text view
+    When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I wait 2 seconds
+    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
+    And  I expect '[data-cy="file_infra/new_file.tf"]' exists
+    And  I expect active file content to contain 'provider.*"aws".*{}'
