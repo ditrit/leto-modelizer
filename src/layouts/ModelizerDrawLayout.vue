@@ -3,7 +3,7 @@
     <navigation-bar
       :project-name="projectName"
     />
-    <component-definitions-drawer
+    <modelizer-draw-left-drawer
       v-if="data.plugin"
       :plugin="data.plugin"
       :templates="templates"
@@ -23,7 +23,7 @@
 
 <script setup>
 import NavigationBar from 'src/components/NavigationBar.vue';
-import ComponentDefinitionsDrawer from 'src/components/drawer/ComponentDefinitionsDrawer.vue';
+import ModelizerDrawLeftDrawer from 'src/components/drawer/ModelizerDrawLeftDrawer.vue';
 import ComponentDetailPanel from 'src/components/drawer/ComponentDetailPanel.vue';
 import ModelizerDrawPage from 'src/pages/ModelizerDrawPage.vue';
 import { getPluginByName, initComponents } from 'src/composables/PluginManager';
