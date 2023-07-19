@@ -1,0 +1,24 @@
+{
+  "model": {
+    "terrator-plugin": {
+      "aws_1": {
+        "x": 30,
+        "y": 30,
+        "width": 110,
+        "height": 80,
+        "needsResizing": false,
+        "needsPositioning": false,
+        "manuallyResized": false
+      },
+      "nginx": {
+        "x": 180,
+        "y": 30,
+        "width": 110,
+        "height": 80,
+        "needsResizing": false,
+        "needsPositioning": false,
+        "manuallyResized": false
+      }
+    }
+  }
+}
