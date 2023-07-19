@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Integrate new diagram management.
 * Login page:
   * Display buttons for each OIDC provider and perform user authentication if the global configuration file is declared.
+* Draw page:
+  * Add variables panel in left drawer.
 
 ### Changed
 
@@ -37,6 +39,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Models page:
   * Rework on tag display, use tag category for all diagrams in table.
   * Rework on tag display, use tag language for plugin selection on create diagram from template.
+* Draw page:
+  * Rework on left drawer.
+* Plugin management:
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.4.0) version 0.4.0.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.18.0) version 0.18.0.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.2.2) version 0.2.2.
 
 ### Fixed
 
