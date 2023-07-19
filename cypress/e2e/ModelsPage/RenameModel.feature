@@ -37,7 +37,7 @@ Feature: Test models page: rename model
     # Click on model and go to text view and check files
     When I click on '[data-cy="diagram-path_{{ newModelFolder }}"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ newModelFolder }}'
-    And  I expect '[data-cy="components-definitions-drawer"]' exists
+    And  I expect '[data-cy="component-definitions-list"]' exists
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
