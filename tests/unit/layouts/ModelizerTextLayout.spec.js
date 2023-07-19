@@ -3,6 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import FileEvent from 'src/composables/events/FileEvent';
 import ModelizerTextLayout from 'src/layouts/ModelizerTextLayout.vue';
 import { useRouter } from 'vue-router';
+import { getPluginByName, getPlugins } from 'src/composables/PluginManager';
 
 installQuasarPlugin();
 
@@ -11,7 +12,10 @@ jest.mock('vue-router', () => ({
     params: {
       projectName: 'project-00000000',
     },
-    query: { path: 'pluginName/modelName' },
+    query: {
+      plugin: 'test',
+      path: 'pluginName/modelName',
+    },
   }),
   useRouter: jest.fn(),
 }));
@@ -30,13 +34,14 @@ jest.mock('src/composables/Project', () => ({
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
-  getPlugins: () => [{
+  getPlugins: jest.fn(() => [{
     isParsable: () => true,
     getModels: ([{ path }]) => [path],
     data: {
       name: 'test',
     },
-  }],
+  }]),
+  getPluginByName: jest.fn(),
 }));
 
 describe('Test component: ModelizerTextLayout', () => {
@@ -107,6 +112,61 @@ describe('Test component: ModelizerTextLayout', () => {
         query: {
           path: 'plugin/fileName',
           plugin: 'test',
+        },
+      });
+    });
+
+    it('should use query path if there are no models', async () => {
+      getPlugins.mockImplementation(() => ([{
+        isParsable: () => true,
+        getModels: () => ([]),
+        data: {
+          name: wrapper.vm.query.plugin,
+        },
+      }]));
+
+      await wrapper.vm.onSelectFileTab('plugin/fileName');
+
+      expect(useRouterPush).toHaveBeenCalledTimes(1);
+      expect(useRouterPush).toHaveBeenCalledWith({
+        name: 'Text',
+        params: {
+          projectName: wrapper.vm.projectName,
+        },
+        query: {
+          path: wrapper.vm.query.path,
+          plugin: wrapper.vm.query.plugin,
+        },
+      });
+    });
+
+    it('should use query plugin if unparsable file is selected', async () => {
+      getPlugins.mockImplementation(() => ([{
+        isParsable: () => false,
+        getModels: () => ([]),
+        data: {
+          name: 'test',
+        },
+      }]));
+      getPluginByName.mockImplementation((name) => ({
+        isParsable: () => false,
+        getModels: () => ([]),
+        data: {
+          name,
+        },
+      }));
+
+      await wrapper.vm.onSelectFileTab('plugin/fileName');
+
+      expect(useRouterPush).toHaveBeenCalledTimes(1);
+      expect(useRouterPush).toHaveBeenCalledWith({
+        name: 'Text',
+        params: {
+          projectName: wrapper.vm.projectName,
+        },
+        query: {
+          path: wrapper.vm.query.path,
+          plugin: wrapper.vm.query.plugin,
         },
       });
     });
