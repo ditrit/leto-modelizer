@@ -160,6 +160,12 @@ jest.mock('browserfs', () => ({
   })),
 }));
 
+jest.mock('src/composables/PluginManager', () => ({
+  getFileInputs: () => [],
+  getPlugins: () => [],
+  getPluginTags: () => [],
+}));
+
 describe('Test composable: Project', () => {
   let gitAddMock;
   let gitAddRemoteMock;

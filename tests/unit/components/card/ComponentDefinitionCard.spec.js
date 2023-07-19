@@ -3,9 +3,9 @@ import { shallowMount } from '@vue/test-utils';
 import { useRoute } from 'vue-router';
 import ComponentDefinitionCard from 'src/components/card/ComponentDefinitionCard.vue';
 import TemplateManager from 'src/composables/TemplateManager';
-import Project from 'src/composables/Project';
-import PluginManager from 'src/composables/PluginManager';
+import PluginManager, { addNewComponent } from 'src/composables/PluginManager';
 import { Notify } from 'quasar';
+import { appendProjectFile, getModelFiles } from 'src/composables/Project';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -26,6 +26,9 @@ const testPlugin = {
   data: {
     addComponent: null,
   },
+  configuration: {
+    defaultFileName: 'test.tf',
+  },
 };
 
 jest.mock('src/composables/PluginManager', () => ({
@@ -40,6 +43,7 @@ jest.mock('src/composables/Project', () => ({
   appendProjectFile: jest.fn(),
   readDir: jest.fn(() => Promise.resolve([])),
   readProjectFile: jest.fn(() => Promise.resolve({ id: 'TEST' })),
+  getModelFiles: jest.fn(() => Promise.resolve([])),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
@@ -63,7 +67,7 @@ describe('Test component: ComponentDefinitionCard', () => {
   beforeEach(() => {
     appendProjectFileMock = jest.fn();
 
-    Project.appendProjectFile.mockImplementation(() => Promise.resolve(appendProjectFileMock()));
+    appendProjectFile.mockImplementation(() => Promise.resolve(appendProjectFileMock()));
     TemplateManager.getTemplateFileByPath.mockImplementation(() => Promise.resolve({ data: 'template file content' }));
 
     wrapper = shallowMount(ComponentDefinitionCard, {
@@ -135,13 +139,25 @@ describe('Test component: ComponentDefinitionCard', () => {
   });
 
   describe('Test function: onClickItem', () => {
-    it('should call addNewComponent when isTemplate is false', () => {
-      const addNewComponent = jest.fn();
-      PluginManager.addNewComponent.mockImplementation(addNewComponent);
+    it('should call addNewComponent with default path without model files when isTemplate is false', async () => {
+      addNewComponent.mockClear();
+      getModelFiles.mockImplementation(() => Promise.resolve([{}]));
 
-      wrapper.vm.onClickItem();
+      await wrapper.vm.onClickItem();
 
       expect(addNewComponent).toHaveBeenCalledTimes(1);
+      expect(addNewComponent.mock.calls[0][2]).toEqual('path/test.tf');
+    });
+
+    it('should call addNewComponent with provided model path when isTemplate is false', async () => {
+      addNewComponent.mockClear();
+
+      getModelFiles.mockImplementation(() => Promise.resolve([{ path: 'test' }]));
+
+      await wrapper.vm.onClickItem();
+
+      expect(addNewComponent).toHaveBeenCalledTimes(1);
+      expect(addNewComponent.mock.calls[0][2]).toEqual('test');
     });
 
     it('should call addNewTemplateComponent when isTemplate is true', async () => {
@@ -155,7 +171,7 @@ describe('Test component: ComponentDefinitionCard', () => {
       const addNewTemplateComponent = jest.fn(() => Promise.resolve());
       PluginManager.addNewTemplateComponent.mockImplementation(addNewTemplateComponent);
 
-      wrapper.vm.onClickItem();
+      await wrapper.vm.onClickItem();
 
       expect(addNewTemplateComponent).toHaveBeenCalledTimes(1);
     });
