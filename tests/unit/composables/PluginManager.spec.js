@@ -277,11 +277,11 @@ describe('Test composable: PluginManager', () => {
     });
   });
 
-  describe('Test function: getAllTags', () => {
+  describe('Test function: getAllTagsByType', () => {
     it('should return all tags of all plugins', async () => {
       await PluginManager.initPlugins();
 
-      expect(PluginManager.getAllTags()).toEqual(['a', 'd', 'e']);
+      expect(PluginManager.getAllTagsByType('category')).toEqual(['a', 'd', 'e']);
     });
   });
 
