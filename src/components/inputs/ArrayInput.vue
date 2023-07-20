@@ -28,7 +28,7 @@ const props = defineProps({
 });
 
 const arrayInput = ref(null);
-const options = toRef(props, 'attribute').value.definition.rules.values;
+const options = toRef(props, 'attribute').value.definition?.rules.values || null;
 const localValue = ref(toRef(props, 'attribute').value.value);
 
 watch(() => arrayInput.value, () => {
