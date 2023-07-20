@@ -57,14 +57,14 @@
       <q-item class="list-item">
         <q-item-section>
           <q-select
-            v-model="selectedPlugin"
+            v-model="selectedLanguage"
             outlined
             dense
             clearable
-            class="plugin-select"
+            class="language-select"
             :label="$t('page.models.drawer.select')"
-            :options="plugins"
-            data-cy="plugin-select"
+            :options="languages"
+            data-cy="language-select"
             @update:model-value="updateTemplates"
           >
             <template #option="{ selected, opt, toggleOption }">
@@ -154,14 +154,14 @@ import TemplateCard from 'components/card/TemplateCard.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import DrawerEvent from 'src/composables/events/DrawerEvent';
 import { searchText } from 'src/composables/Filter';
-import { getPlugins } from 'src/composables/PluginManager';
+import { getAllTagsByType, getPluginTags } from 'src/composables/PluginManager';
 
 const emit = defineEmits(['update:modelValue']);
 const searchTemplateText = ref(null);
 const templates = ref([]);
 const selectedTemplate = ref(null);
-const selectedPlugin = ref(null);
-const plugins = ref(getPlugins().map(({ data }) => data.name));
+const selectedLanguage = ref(null);
+const languages = ref(getAllTagsByType('language'));
 let drawerEventSubscription;
 let allTemplates = [];
 
@@ -193,9 +193,19 @@ function toggleTemplate(key) {
  * Update templates list.
  */
 function updateTemplates() {
-  templates.value = allTemplates
-    .filter(({ type }) => searchText(type, searchTemplateText.value))
-    .filter(({ plugin }) => !selectedPlugin.value || plugin === selectedPlugin.value);
+  if (!selectedLanguage.value) {
+    templates.value = allTemplates
+      .filter(({ type }) => searchText(type, searchTemplateText.value));
+  } else {
+    templates.value = allTemplates
+      .filter(({ type }) => searchText(type, searchTemplateText.value))
+      .map((template) => ({
+        template,
+        tags: getPluginTags(template.plugin).filter(({ type }) => type === 'language'),
+      }))
+      .filter(({ tags }) => tags.map(({ value }) => value).includes(selectedLanguage.value))
+      .map(({ template }) => template);
+  }
 }
 
 /**
@@ -204,7 +214,7 @@ function updateTemplates() {
 function reset() {
   searchTemplateText.value = null;
   selectedTemplate.value = null;
-  selectedPlugin.value = null;
+  selectedLanguage.value = null;
   templates.value = allTemplates;
 }
 
@@ -266,7 +276,7 @@ onUnmounted(() => {
     border: 1px solid $accent;
   }
 }
-.plugin-select, .search-bar {
+.language-select, .search-bar {
   max-width: 250px;
   width: 250px;
 }
