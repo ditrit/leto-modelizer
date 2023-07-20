@@ -19,7 +19,7 @@
           :outline="false"
           color="accent"
           text-color="white"
-          :label="tag"
+          :label="tag.value"
         />
       </q-td>
     </template>
