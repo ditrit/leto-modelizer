@@ -810,7 +810,7 @@ export async function getAllModels(projectId) {
         id: `diagram_${index}`,
         plugin: plugin.data.name,
         path,
-        tags: plugin.configuration.tags,
+        tags: plugin.configuration.tags.filter(({ type }) => type === 'category'),
       });
       index += 1;
     });
