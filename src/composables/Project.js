@@ -827,6 +827,10 @@ export async function getAllModels(projectId) {
  * @return {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 export async function getModelFiles(projectName, modelPath, plugin) {
+  if (!await isDirectory(`${projectName}/${modelPath}`)) {
+    return getFileInputs(plugin, [new FileInformation({ path: modelPath })], projectName);
+  }
+
   const files = await readDir(`${projectName}/${modelPath}`);
   const fileInformations = files.map((file) => new FileInformation({ path: `${modelPath}/${file}` }));
 

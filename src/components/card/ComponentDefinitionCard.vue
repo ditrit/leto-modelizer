@@ -59,6 +59,7 @@ import {
 } from 'src/composables/PluginManager';
 import { useRoute } from 'vue-router';
 import DefinitionMenu from 'components/menu/DefinitionMenu.vue';
+import { getModelFiles } from 'src/composables/Project';
 
 const route = useRoute();
 const props = defineProps({
@@ -117,10 +118,16 @@ const componentIcon = computed(() => {
  */
 async function onClickItem() {
   if (!props.definition.isTemplate) {
+    let path = (await getModelFiles(projectName.value, query.value.path, plugin.value))[0]?.path;
+
+    if (!path) {
+      path = `${query.value.path}/${plugin.value.configuration.defaultFileName}`;
+    }
+
     await addNewComponent(
       projectName.value,
       plugin.value,
-      query.value.path,
+      path,
       props.definition,
     );
   } else {
