@@ -28,7 +28,7 @@ jest.mock('src/composables/Project', () => ({
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
-  getAllTags: jest.fn(() => Promise.resolve([{
+  getAllTagsByType: jest.fn(() => Promise.resolve([{
     type: 'category',
     value: 'a',
   }])),

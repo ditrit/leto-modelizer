@@ -63,7 +63,7 @@
       <diagram-filter-card
         v-model:selected-tags="selectedTags"
         v-model:search-text="searchDiagramText"
-        :tags="allTags"
+        :tags="categoryTags"
         @update:search-text="updateModels"
         @update:selected-tags="updateModels"
       />
@@ -95,7 +95,7 @@ import {
 } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getAllModels } from 'src/composables/Project';
-import { getAllTags } from 'src/composables/PluginManager';
+import { getAllTagsByType } from 'src/composables/PluginManager';
 import { searchText } from 'src/composables/Filter';
 
 import DiagramTable from 'src/components/table/DiagramTable';
@@ -120,7 +120,7 @@ const data = reactive({
 });
 const searchDiagramText = ref('');
 const selectedTags = ref([]);
-const allTags = ref(getAllTags());
+const categoryTags = ref(getAllTagsByType('category'));
 const isDiagramGrid = ref(localStorage.getItem(DIAGRAM_STORAGE_KEY) === 'grid');
 const viewType = computed(() => route.params.viewType);
 
