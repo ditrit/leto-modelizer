@@ -93,7 +93,7 @@ Feature: Test home page: project creation
     ## 103  Created project should redirect to models page and send positive toast
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
     And  I expect current url is '{{projectName}}/models'
-    
+
     When I visit the '/'
 
     ## 104 Created project should be in the projects list
@@ -103,10 +103,10 @@ Feature: Test home page: project creation
     ## 105 Created project should be in the left drawer
     Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' exists
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' is '{{projectName}}'
-  
+
     When I visit the '/'
     Then I expect '[data-cy="create-project-button"]' exists
-    
+
     ## 106 Create project with an already existing project name should display an error
     And  I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'
@@ -117,7 +117,7 @@ Feature: Test home page: project creation
     Then I expect '[data-cy="project-card_localProjectTest"] [data-cy="rename-button"]' exists
 
     ## 200 Renaming existing project should update the project name in the projects list
-    
+
     # Rename project and check project name is updated
     When I click on '[data-cy="project-card_localProjectTest"] [data-cy="rename-button"]'
     And  I set on '[data-cy="rename-project-form"] [data-cy="name-input"]' text 'renamedProject'
@@ -228,10 +228,11 @@ Feature: Test home page: project creation
     And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' exists
 
     Then I click on '[data-cy="project-card_{{projectName}}"]'
-    And I expect current url is 'projects/{{ projectName }}/models'
+    And  I expect current url is 'projects/{{ projectName }}/models'
 
     ## 500 After diagrams creation, they present in the multi-diagrams view
     # First model creation
+    And  I wait 2 seconds
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
@@ -311,7 +312,7 @@ Feature: Test home page: project creation
 
     When I set on '[data-cy="rename-model-form"] [data-cy="name-input"]' text '{{ modelRenamed }}'
     And  I click on '[data-cy="rename-model-form"] [data-cy="submit-button"]'
-    # After the renaming, the new model name should be present but not the old one 
+    # After the renaming, the new model name should be present but not the old one
     Then I expect '[data-cy="diagram-path_{{ modelRenamed }}"]' exists
     And  I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' not exists
 
@@ -430,7 +431,7 @@ Feature: Test home page: project creation
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    
+
     # components added in 901 should not exist anymore
     And  I expect '[id^="server"]' exists
     But  I expect '[id^="aws"]' not exists

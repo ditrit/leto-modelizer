@@ -1,15 +1,15 @@
 Feature: Test home page: project rename
 
-  Background:
-    Given I clear cache
-    And   I set viewport size to '1920' px for width and '1080' px for height
-    And   I visit the '/'
+  # Background:
+  #   Given I clear cache
+  #   And   I set viewport size to '1920' px for width and '1080' px for height
+  #   And   I visit the '/'
 
-    When I click on '[data-cy="create-project-button"]'
-    And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectTest'
-    And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
-    Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
-    And  I expect current url is 'projectTest/models'
+  #   When I click on '[data-cy="create-project-button"]'
+  #   And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectTest'
+  #   And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
+  #   Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
+  #   And  I expect current url is 'projectTest/models'
 
   #Scenario: Rename existing project should update the project name in the projects list
   #  # Check project is displayed in home page
