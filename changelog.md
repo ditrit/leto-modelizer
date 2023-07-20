@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix bug on models default folder opening, see [this issue](https://github.com/ditrit/leto-modelizer/issues/303).
 * Fix Sonar new bugs/code smell due to quality profil change, see [this issue](https://github.com/ditrit/leto-modelizer/issues/322).
 * Fix bug on using default file name from plugin instead of the file name specified by the user, when adding a component after creating a diagram from scratch.
+* Fix Array attributes to allow missing definition, see [this issue](https://github.com/ditrit/leto-modelizer/issues/344).
 
 ### Removed
 
