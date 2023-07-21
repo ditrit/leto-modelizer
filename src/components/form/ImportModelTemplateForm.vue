@@ -22,7 +22,7 @@
     />
     <div>
       <div
-        v-for="file in template.files"
+        v-for="file in template.files.filter((file) => file !== 'leto-modelizer.config.json')"
         :key="file"
       >
         {{ baseFolder }}{{ modelName }}{{ file }}
@@ -53,6 +53,8 @@ import { useI18n } from 'vue-i18n';
 import {
   appendProjectFile,
   getAllModels,
+  readProjectFile,
+  writeProjectFile,
 } from 'src/composables/Project';
 import { useRouter } from 'vue-router';
 import { FileInput } from 'leto-modelizer-plugin-core';
@@ -87,6 +89,38 @@ async function initAllModels() {
     .filter((model) => model.plugin === props.template.plugin)
     .map(({ path }) => path);
 }
+
+/**
+ * Add template config to global config.
+ * @param {string} realModelName - Model name from plugin.
+ * @param {string} content - Template config file content.
+ */
+async function manageConfigFile(realModelName, content) {
+  const originContent = await readProjectFile(
+    props.projectName,
+    { path: 'leto-modelizer.config.json' },
+  ).then((fileInput) => fileInput.content || '');
+
+  let config = {};
+
+  if (originContent !== '') {
+    config = JSON.parse(originContent);
+  }
+
+  config[realModelName] = {
+    ...config[realModelName],
+    ...JSON.parse(content),
+  };
+
+  return writeProjectFile(
+    props.projectName,
+    new FileInput({
+      path: 'leto-modelizer.config.json',
+      content: JSON.stringify(config, null, 2),
+    }),
+  );
+}
+
 /**
  * Create a new model folder and its parent folders if necessary.
  * Emit a positive notification on success and redirect to model page.
@@ -103,13 +137,19 @@ async function onSubmit() {
       `templates/${props.template.key}/${file}`,
       'text',
     )
-      .then((result) => appendProjectFile(
-        props.projectName,
-        new FileInput({
-          path: `${baseFolder.value}${modelName.value || ''}${file}`,
-          content: result.data,
-        }),
-      ))
+      .then((result) => {
+        if (file === 'leto-modelizer.config.json') {
+          return manageConfigFile(model, result.data);
+        }
+
+        return appendProjectFile(
+          props.projectName,
+          new FileInput({
+            path: `${baseFolder.value}${modelName.value || ''}${file}`,
+            content: result.data,
+          }),
+        );
+      })
       .catch(() => {
         Notify.create({
           type: 'negative',

@@ -3,6 +3,8 @@ import { shallowMount } from '@vue/test-utils';
 import ImportModelTemplateForm from 'src/components/form/ImportModelTemplateForm.vue';
 import { Notify } from 'quasar';
 import { useRouter } from 'vue-router';
+import * as Project from 'src/composables/Project';
+import { FileInput } from 'leto-modelizer-plugin-core';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -32,6 +34,8 @@ jest.mock('src/composables/Project', () => ({
     return Promise.resolve();
   }),
   getAllModels: jest.fn(() => Promise.resolve([])),
+  readProjectFile: jest.fn(),
+  writeProjectFile: jest.fn(),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
@@ -64,6 +68,95 @@ describe('Test component: ImportModelTemplateForm', () => {
           key: 'key',
         },
       },
+    });
+  });
+
+  describe('Test function: manageConfigFile', () => {
+    it('should create "leto-modelizer.config.json" file with one model', async () => {
+      const writeProjectFileMock = jest.fn();
+      const templateConfigContent = {
+        'terrator-plugin': {
+          aws_1: {
+            x: 30,
+            y: 30,
+            width: 110,
+            height: 80,
+            needsResizing: false,
+            needsPositioning: false,
+            manuallyResized: false,
+          },
+          nginx: {
+            x: 180,
+            y: 30,
+            width: 110,
+            height: 80,
+            needsResizing: false,
+            needsPositioning: false,
+            manuallyResized: false,
+          },
+        },
+      };
+      const config = {
+        modelName: templateConfigContent,
+      };
+
+      Project.readProjectFile.mockImplementation(() => Promise.resolve({}));
+      Project.writeProjectFile.mockImplementation(writeProjectFileMock);
+
+      await wrapper.vm.manageConfigFile('modelName', JSON.stringify(templateConfigContent));
+
+      expect(writeProjectFileMock).toHaveBeenCalledWith(
+        wrapper.vm.props.projectName,
+        new FileInput({
+          path: 'leto-modelizer.config.json',
+          content: JSON.stringify(config, null, 2),
+        }),
+      );
+    });
+
+    it('should add another model config to "leto-modelizer.config.json" file', async () => {
+      const writeProjectFileMock = jest.fn();
+      const templateConfigContent = {
+        'terrator-plugin': {
+          aws_1: {
+            x: 30,
+            y: 30,
+            width: 110,
+            height: 80,
+            needsResizing: false,
+            needsPositioning: false,
+            manuallyResized: false,
+          },
+          nginx: {
+            x: 180,
+            y: 30,
+            width: 110,
+            height: 80,
+            needsResizing: false,
+            needsPositioning: false,
+            manuallyResized: false,
+          },
+        },
+      };
+      const config = {
+        firstModel: {},
+        modelName: templateConfigContent,
+      };
+
+      Project.readProjectFile.mockImplementation(
+        () => Promise.resolve({ content: JSON.stringify({ firstModel: {} }) }),
+      );
+      Project.writeProjectFile.mockImplementation(writeProjectFileMock);
+
+      await wrapper.vm.manageConfigFile('modelName', JSON.stringify(templateConfigContent));
+
+      expect(writeProjectFileMock).toHaveBeenCalledWith(
+        wrapper.vm.props.projectName,
+        new FileInput({
+          path: 'leto-modelizer.config.json',
+          content: JSON.stringify(config, null, 2),
+        }),
+      );
     });
   });
 

@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Add buttons to change diagram display (table or grid).
 * Rework and clean all layouts and pages.
 * Have only one configuration file by project to save all diagrams positions.
+* Save diagram template position.
 
 ### Fixed
 
