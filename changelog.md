@@ -34,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Rework and clean all layouts and pages.
 * Have only one configuration file by project to save all diagrams positions.
 * Save diagram template position.
+* Models page:
+  * Rework on tag display, use tag category for all diagrams in table.
+  * Rework on tag display, use tag language for plugin selection on create diagram from template.
 
 ### Fixed
 
