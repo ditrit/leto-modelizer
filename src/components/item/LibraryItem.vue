@@ -8,7 +8,7 @@
     <q-item-section avatar>
       <q-icon
         color="primary"
-        :name="`fa-solid fa-chevron-${isSelected ? 'left' : 'right'}`"
+        :name="`fa-solid fa-chevron-${isSelected ? 'up' : 'down'}`"
       />
     </q-item-section>
     <q-item-section data-cy="title">
