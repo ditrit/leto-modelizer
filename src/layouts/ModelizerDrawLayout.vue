@@ -18,6 +18,7 @@
     </q-page-container>
     <git-authentication-dialog :project-name="projectName" />
     <git-add-remote-dialog :project-name="projectName" />
+    <jenkins-authentication-dialog :project-name="projectName"/>
   </q-layout>
 </template>
 
@@ -39,6 +40,7 @@ import { useRoute } from 'vue-router';
 import { Notify } from 'quasar';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog.vue';
 import GitAddRemoteDialog from 'components/dialog/GitAddRemoteDialog.vue';
+import JenkinsAuthenticationDialog from 'components/dialog/JenkinsAuthenticationDialog.vue';
 
 const { t } = useI18n();
 const route = useRoute();

@@ -18,6 +18,7 @@
     />
     <git-authentication-dialog :project-name="projectName" />
     <git-add-remote-dialog :project-name="projectName" />
+    <jenkins-authentication-dialog :project-name="projectName" />
   </q-layout>
 </template>
 
@@ -29,6 +30,7 @@ import { useRoute } from 'vue-router';
 import { computed, ref } from 'vue';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog.vue';
 import GitAddRemoteDialog from 'components/dialog/GitAddRemoteDialog.vue';
+import JenkinsAuthenticationDialog from 'components/dialog/JenkinsAuthenticationDialog.vue';
 
 const route = useRoute();
 const projectName = computed(() => route.params.projectName);
