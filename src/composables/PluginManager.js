@@ -123,22 +123,23 @@ export function getPluginByName(name) {
  * Get the list of tags related to a given plugin.
  *
  * @param {String} name - Name of the given plugin.
- * @return {Object} Return an array of tags otherwise an empty array.
+ * @return {Array<Tag>} Return an array of tags otherwise an empty array.
  */
 export function getPluginTags(name) {
   return getPluginByName(name)?.configuration.tags || [];
 }
 
 /**
- * Get all tags from all plugins.
+ * Get the list of tags by type from all plugins.
  *
- * @return {Object} Return an array of tags.
+ * @param {String} type - Type of the tag.
+ * @return {Array<Tag>} Return an array of tags.
  */
-export function getAllTags() {
+export function getAllTagsByType(type) {
   return [...new Set(
     getPlugins()
       .flatMap(({ configuration }) => configuration.tags)
-      .filter(({ type }) => type === 'category')
+      .filter((tag) => tag.type === type)
       .map(({ value }) => value),
   )].sort();
 }

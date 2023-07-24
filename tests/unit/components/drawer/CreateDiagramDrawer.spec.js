@@ -25,15 +25,25 @@ jest.mock('src/composables/TemplateManager', () => ({
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
-  getPlugins: jest.fn(() => [{
-    data: {
-      name: 'terrator-plugin',
-    },
+  getAllTagsByType: jest.fn(() => [{
+    type: 'language',
+    value: 'Terraform',
   }, {
-    data: {
-      name: 'githubator-plugin',
-    },
+    type: 'language',
+    value: 'Github',
   }]),
+  getPluginTags: jest.fn((pluginName) => {
+    if (pluginName === 'githubator-plugin') {
+      return [{
+        type: 'language',
+        value: 'Github',
+      }];
+    }
+    return [{
+      type: 'language',
+      value: 'Terraform',
+    }];
+  }),
 }));
 
 describe('Test component: CreateDiagramDrawer', () => {
@@ -80,7 +90,8 @@ describe('Test component: CreateDiagramDrawer', () => {
 
     it('should return only test1 template', () => {
       wrapper.vm.searchTemplateText = 'test1';
-      wrapper.vm.selectedPlugin = null;
+      wrapper.vm.selectedLanguage = null;
+
       wrapper.vm.updateTemplates();
 
       expect(wrapper.vm.templates).toEqual([{
@@ -91,7 +102,8 @@ describe('Test component: CreateDiagramDrawer', () => {
 
     it('should return only githubator template', () => {
       wrapper.vm.searchTemplateText = null;
-      wrapper.vm.selectedPlugin = 'githubator-plugin';
+      wrapper.vm.selectedLanguage = 'Github';
+
       wrapper.vm.updateTemplates();
 
       expect(wrapper.vm.templates).toEqual([{
@@ -105,7 +117,7 @@ describe('Test component: CreateDiagramDrawer', () => {
     it('should clear all inputs', () => {
       wrapper.vm.searchTemplateText = 'test1';
       wrapper.vm.selectedTemplate = 'test1';
-      wrapper.vm.selectedPlugin = 'githubator-plugin';
+      wrapper.vm.selectedLanguage = 'Github';
 
       wrapper.vm.updateTemplates();
       expect(wrapper.vm.templates).toEqual([]);
@@ -113,7 +125,7 @@ describe('Test component: CreateDiagramDrawer', () => {
       wrapper.vm.reset();
       expect(wrapper.vm.searchTemplateText).toBeNull();
       expect(wrapper.vm.selectedTemplate).toBeNull();
-      expect(wrapper.vm.selectedPlugin).toBeNull();
+      expect(wrapper.vm.selectedLanguage).toBeNull();
       expect(wrapper.vm.templates).toEqual([{
         type: 'test1',
         plugin: 'terrator-plugin',
@@ -163,7 +175,7 @@ describe('Test component: CreateDiagramDrawer', () => {
     it('should reset inputs on type "open" and emit an event', () => {
       wrapper.vm.searchTemplateText = 'test1';
       wrapper.vm.selectedTemplate = 'test1';
-      wrapper.vm.selectedPlugin = 'githubator-plugin';
+      wrapper.vm.selectedLanguage = 'Github';
 
       wrapper.vm.updateTemplates();
       expect(wrapper.vm.templates).toEqual([]);
@@ -173,7 +185,7 @@ describe('Test component: CreateDiagramDrawer', () => {
       expect(wrapper.emitted()['update:modelValue']).toBeTruthy();
       expect(wrapper.vm.searchTemplateText).toBeNull();
       expect(wrapper.vm.selectedTemplate).toBeNull();
-      expect(wrapper.vm.selectedPlugin).toBeNull();
+      expect(wrapper.vm.selectedLanguage).toBeNull();
       expect(wrapper.vm.templates).toEqual([{
         type: 'test1',
         plugin: 'terrator-plugin',
@@ -186,7 +198,7 @@ describe('Test component: CreateDiagramDrawer', () => {
     it('should not reset inputs on type "close" and emit an event', () => {
       wrapper.vm.searchTemplateText = 'test1';
       wrapper.vm.selectedTemplate = 'test1';
-      wrapper.vm.selectedPlugin = 'githubator-plugin';
+      wrapper.vm.selectedLanguage = 'Github';
 
       wrapper.vm.updateTemplates();
       expect(wrapper.vm.templates).toEqual([]);
@@ -196,7 +208,7 @@ describe('Test component: CreateDiagramDrawer', () => {
       expect(wrapper.emitted()['update:modelValue']).toBeTruthy();
       expect(wrapper.vm.searchTemplateText).toEqual('test1');
       expect(wrapper.vm.selectedTemplate).toEqual('test1');
-      expect(wrapper.vm.selectedPlugin).toEqual('githubator-plugin');
+      expect(wrapper.vm.selectedLanguage).toEqual('Github');
       expect(wrapper.vm.templates).toEqual([]);
     });
   });

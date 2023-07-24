@@ -291,7 +291,7 @@ export default {
         title: 'Add a template of a model',
         search: 'Search a template of a model',
         list: 'Models templates',
-        select: 'Plugins...',
+        select: 'Languages...',
         empty: 'No template available',
       },
     },

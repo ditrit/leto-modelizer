@@ -16,23 +16,28 @@ Feature: Test models page: filter template in drawer
     When I click on '[data-cy="add-model-button"]'
     Then I expect '[data-cy="template-card_terraform_webapp"]' appear 1 time on screen
     And  I expect '[data-cy="template-card_terraform_java_webapp"]' appear 1 time on screen
+    And  I expect '[data-cy="template-card_github_CI"]' appear 1 time on screen
 
     # Set 'java' as searched text and expect only templates that contains 'java' to be displayed
     When I set on '[data-cy="search-template-input"]' text 'java'
     Then I expect '[data-cy="template-card_terraform_webapp"]' not exists
     And  I expect '[data-cy="template-card_terraform_java_webapp"]' appear 1 time on screen
+    And  I expect '[data-cy="template-card_github_CI"]' not exists
 
     # Clear filter text and verify all templates are present
     When I set on '[data-cy="search-template-input"]' text ' '
     Then I expect '[data-cy="template-card_terraform_webapp"]' appear 1 time on screen
     And  I expect '[data-cy="template-card_terraform_java_webapp"]' appear 1 time on screen
+    And  I expect '[data-cy="template-card_github_CI"]' appear 1 time on screen
 
     # Select Githubator-plugin plugin and verify all templates disappear
-    When I select '[data-cy="item_githubator-plugin"]' in '[data-cy="plugin-select"]'
+    When I select '[data-cy="item_Github"]' in '[data-cy="language-select"]'
     Then I expect '[data-cy="template-card_terraform_webapp"]' not exists
     And  I expect '[data-cy="template-card_terraform_java_webapp"]' not exists
+    And  I expect '[data-cy="template-card_github_CI"]' appear 1 time on screen
 
     # Select Terrator-plugin plugin and verify only all terraform templates are present
-    When I select '[data-cy="item_terrator-plugin"]' in '[data-cy="plugin-select"]'
+    When I select '[data-cy="item_Terraform"]' in '[data-cy="language-select"]'
     Then I expect '[data-cy="template-card_terraform_webapp"]' appear 1 time on screen
     And  I expect '[data-cy="template-card_terraform_java_webapp"]' appear 1 time on screen
+    And  I expect '[data-cy="template-card_github_CI"]' not exists
