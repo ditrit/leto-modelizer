@@ -91,8 +91,7 @@ Feature: Test switch model to text view: add component/link
     When I wait 1 second
     And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/main.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
-    And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{.*gateway_id.*=.*\["aws_internet_gateway_1"\]}'
-    And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
+    And  I expect active file content to be equal to "cypress/resources/project-test/main.tf"
 
   Scenario: Add link attributes inside plugin file content (Text view) should display link between two components (Draw view)
     When I click on '[data-cy="component-definition_aws_subnet"]'
