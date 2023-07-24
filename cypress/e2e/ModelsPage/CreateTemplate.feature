@@ -26,7 +26,7 @@ Feature: Test models page: model creation from template
     When I set on '[data-cy="import-model-template-form"] [data-cy="name-input"]' text 'model/'
     And  I click on '[data-cy="import-model-template-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelFolder }}'
-    And  I expect '[data-cy="components-definitions-drawer"]' exists
+    And  I expect '[data-cy="component-definitions-list"]' exists
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
     And  I wait 2 seconds
 

@@ -166,8 +166,7 @@ Feature: Test switch model to text view: delete component/link
     When I wait 1 second
     And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/main.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
-    And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{.*gateway_id.*=.*\["aws_internet_gateway_1"\]}'
-    And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
+    And  I expect active file content to be equal to "cypress/resources/project-test/main.tf"
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
@@ -205,8 +204,7 @@ Feature: Test switch model to text view: delete component/link
     When I wait 1 second
     And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/main.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
-    And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{.*gateway_id.*=.*\["aws_internet_gateway_1"\]}'
-    And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
+    And  I expect active file content to be equal to "cypress/resources/project-test/main.tf"
 
     When I set active file content to 'resource "aws_subnet" "aws_subnet_1" {} resource "aws_internet_gateway" "aws_internet_gateway_1" {}'
     And  I wait 1 second

@@ -328,6 +328,16 @@ export default {
           title: '{name} ({length})',
           empty: 'Nothing to display',
         },
+        variables: {
+          empty: 'No variables to display.',
+          header: 'Variables',
+          name: 'Name',
+          value: 'Value',
+        },
+        tabs: {
+          components: 'Components',
+          variables: 'Variables',
+        },
         templates: {
           title: 'Templates',
         },
