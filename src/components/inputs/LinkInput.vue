@@ -15,33 +15,20 @@
         :name="`img:/plugins/${plugin.data.name}/icons/${iconName}.svg`"
       />
     </template>
-    <template #option="scope">
-      <q-expansion-item
-        expand-separator
-        header-class="text-weight-bold"
-        :label="scope.opt.category"
-      >
-        <select-expansion-item
-          v-for="child in scope.opt.children"
-          :key="child.category"
-          :category="child.category"
-          :children="child.children"
-          :value="child.value"
-          @update:model-value="updateModelValue()"
-        />
-      </q-expansion-item>
+    <template #option="{ opt }">
+      <select-expansion-item :item="opt" @select-item="console.log"/>
     </template>
   </q-select>
 </template>
 
 <script setup>
 import {
+  onMounted,
   ref,
   watch,
-  computed,
 } from 'vue';
 import { isRequired } from 'src/composables/QuasarFieldRule';
-import SelectExpansionItem from 'src/components/inputs/SelectExpansionItem';
+import SelectExpansionItem from 'components/inputs/SelectExpansionItem.vue';
 
 const props = defineProps({
   attribute: {
@@ -64,47 +51,34 @@ const iconName = ref(props.plugin.data.definitions.components.find(
 const defaultValues = ref(props.plugin.data.getComponentsByType(
   props.attribute.definition.linkRef,
 ).map(({ id }) => id));
-const variables = ref(props.plugin.data.variables);
-const variableValues = computed(() => variables.value
-  .reduce((acc, { category, value }) => {
-    const existingItem = acc.find((item) => item.category === category);
+const variables = ref(props.plugin.data.variables || []);
+const options = ref([]);
 
-    if (existingItem) {
-      existingItem.children.push({ value });
-    } else {
-      acc.push({ category, children: [{ value }] });
-    }
+function initOptions() {
+  const categories = [...new Set(variables.value.map(({ category }) => category))];
+  const children = categories.map((category) => ({
+    type: 'category',
+    name: category,
+    children: variables.value
+      .filter((variable) => variable.category === category)
+      .map((variable) => ({
+        type: 'item',
+        value: variable.value,
+      })),
+  }));
 
-    return acc;
-  }, []));
-const options = computed(() => [
-  {
-    category: 'Default values',
-    children: defaultValues.value.map((value) => ({ value })),
-  },
-  {
-    category: 'Variables',
-    children: variableValues.value,
-  },
-]);
-
-console.log('options', JSON.stringify(options.value, null, 2));
-
-/**
- * Check if the given scope options contains the local value.
- * @param {Object} scope - The given scope.
- * @return {Boolean} true if one of the options equals the local value, otherwise false.
- */
-// function hasChild(scope) {
-//   if (!localValue.value) {
-//     return false;
-//   }
-//   return scope.opt.values
-//     .some((value) => value.name === localValue.value || value.value === localValue.value);
-// }
-
-function updateModelValue() {
-  console.log('updateModelValue');
+  options.value = [{
+    type: 'category',
+    name: 'default',
+    children: defaultValues.value.map((value) => ({
+      type: 'item',
+      value,
+    })),
+  }, {
+    type: 'category',
+    name: 'variable',
+    children,
+  }];
 }
 
 watch(() => props.plugin.data.components, () => {
@@ -133,5 +107,9 @@ watch(() => props.attribute, () => {
 
 watch(() => localValue.value, () => {
   emit('update:model-value', localValue.value);
+});
+
+onMounted(() => {
+  initOptions();
 });
 </script>
