@@ -129,7 +129,7 @@ function updateProjects() {
 
 /**
  * Toggle tag activation.
- * @param {String} key - Tag key.
+ * @param {string} key - Tag key.
  */
 function onToggleTag(key) {
   const tag = tags.value.find(({ key: tagKey }) => tagKey === key);

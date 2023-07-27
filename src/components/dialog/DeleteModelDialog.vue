@@ -42,8 +42,8 @@ let dialogEventSubscription;
 
 /**
  * Set deleted model name on valid event.
- * @param {String} key - Event type.
- * @param {String} model - Name of the model to delete.
+ * @param {string} key - Event type.
+ * @param {string} model - Name of the model to delete.
  */
 function setDeletedModel({ key, model }) {
   if (key === 'DeleteModel') {

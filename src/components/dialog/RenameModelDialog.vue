@@ -42,8 +42,8 @@ let dialogEventSubscription;
 
 /**
  * Set renamed model name on valid event.
- * @param {String} key - Event type.
- * @param {String} model - Name of the model to rename.
+ * @param {string} key - Event type.
+ * @param {string} model - Name of the model to rename.
  */
 function setRenamedModel({ key, model }) {
   if (key === 'RenameModel') {

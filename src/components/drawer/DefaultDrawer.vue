@@ -48,6 +48,7 @@ const componentsDrawer = ref(true);
 const drawerMiniState = ref(false);
 /**
  * Opens the drawer.
+ * @param event
  */
 function openDrawer(event) {
   if (drawerMiniState.value) {

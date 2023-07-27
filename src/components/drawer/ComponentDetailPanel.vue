@@ -131,7 +131,7 @@ let pluginDefaultSubscription;
 /**
  * Return the array of attributes with only needed attributes.
  * @param {Array} attributes - Array of attribute to sanitize.
- * @return {Array} Sanitized array.
+ * @returns {Array} Sanitized array.
  */
 function sanitizeAttributes(attributes) {
   return attributes.reduce((acc, attribute) => {
@@ -155,7 +155,7 @@ function sanitizeAttributes(attributes) {
 
 /**
  * Update component data, redraw model and render files.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function submit() {
   submitting.value = true;
@@ -178,7 +178,7 @@ async function submit() {
 
 /**
  * Handle form validation.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function save() {
   return form.value.validate().then((success) => {
@@ -194,7 +194,7 @@ async function save() {
  * Create one with the given definition if not existing.
  * @param {Component} component - Component containing the available attributes.
  * @param {ComponentAttributeDefinition} definition - Definition of the attribute to get.
- * @return {ComponentAttribute} the wanted attribute if available otherwise a newly created one.
+ * @returns {ComponentAttribute} the wanted attribute if available otherwise a newly created one.
  */
 function getAttributeByDefinition(component, definition) {
   return component.attributes.find((attr) => attr.name === definition.name)
@@ -208,8 +208,8 @@ function getAttributeByDefinition(component, definition) {
 
 /**
  * Get an array of attributes corresponding to the definedAttributes array.
- * @param {Object} component - Component containing the available attributes and all definitions.
- * @return {Array} an array of referenced attributes.
+ * @param {object} component - Component containing the available attributes and all definitions.
+ * @returns {Array} an array of referenced attributes.
  */
 function getReferencedAttributes(component) {
   return component.definition.definedAttributes
@@ -218,8 +218,8 @@ function getReferencedAttributes(component) {
 
 /**
  * Get an array of attributes corresponding to the attributes without definition.
- * @param {Object} component - Component containing the available attributes.
- * @return {Array} an array of unreferenced attributes.
+ * @param {object} component - Component containing the available attributes.
+ * @returns {Array} an array of unreferenced attributes.
  */
 function getUnreferencedAttributes(component) {
   return component.attributes
@@ -242,8 +242,8 @@ function reset() {
 
 /**
  * On 'Drawer' event type and 'select' action, display panel and init local values.
- * @param {Object} eventManager - Object containing event and plugin.
- * @param {Object} eventManager.event - The triggered event.
+ * @param {object} eventManager - Object containing event and plugin.
+ * @param {object} eventManager.event - The triggered event.
  */
 function setLocalValues({ event }) {
   if (!event.components?.[0]) {
@@ -268,8 +268,8 @@ function setLocalValues({ event }) {
  * Update attribute.
  * If provided `event.attribute` is null, this will remove the attribute from the attributes list.
  * And if attribute's name doesn't exist in the list, it will add the attribute.
- * @param {Object} event - Event.
- * @param {String} event.name - Name of updated attribute.
+ * @param {object} event - Event.
+ * @param {string} event.name - Name of updated attribute.
  * @param {ComponentAttribute} event.attribute - New attribute value or null.
  */
 function updateAttributes(event) {
@@ -278,7 +278,7 @@ function updateAttributes(event) {
 
 /**
  * Set currentError to full-name attribute value of field in error.
- * @param {Object} event - Form event.
+ * @param {object} event - Form event.
  */
 function onError(event) {
   currentError.value = event?.nativeEl?.getAttribute('full-name') || null;

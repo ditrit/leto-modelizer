@@ -1,8 +1,8 @@
 /**
  * Indicate if text contains searched text.
- * @param {String} textToFilter - Text to filter.
- * @param {String} textToSearch - Text to search.
- * @return {Boolean} True if `textToFilter` contains `textToSearch` otherwise false.
+ * @param {string} textToFilter - Text to filter.
+ * @param {string} textToSearch - Text to search.
+ * @returns {boolean} True if `textToFilter` contains `textToSearch` otherwise false.
  */
 export function searchText(textToFilter, textToSearch) {
   if (!textToSearch || textToSearch.trim().length === 0) {

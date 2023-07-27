@@ -183,8 +183,8 @@ const loading = ref(false);
  * Filter all branches with searched text, then display current branch at the top
  * and sort the remaining branches alphabetically.
  * @param {Array} branches - Array of branches.
- * @param {String} branchType - Branch type.
- * @return {Array} Return array of filtered and sorted branches.
+ * @param {string} branchType - Branch type.
+ * @returns {Array} Return array of filtered and sorted branches.
  */
 function filterAndSort(branches, branchType) {
   return branches
@@ -207,7 +207,7 @@ const remoteBranches = computed(() => filterAndSort(allBranches.value, 'onRemote
 
 /**
  * Manage opening and closing of expand menu by toggling the state value.
- * @param {Boolean} local - True to manage local branches menu, false for remote branches menu.
+ * @param {boolean} local - True to manage local branches menu, false for remote branches menu.
  */
 function manageExpandMenu(local) {
   if (local) {
@@ -219,7 +219,7 @@ function manageExpandMenu(local) {
 
 /**
  * Initialize all branches (locals and remotes) from git.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function setBranches() {
   loading.value = true;
@@ -246,7 +246,7 @@ function onShow() {
 
 /**
  * Send event to open the dialog corresponding to the key and close the menu.
- * @param {String} key - Event key.
+ * @param {string} key - Event key.
  */
 function openDialog(key) {
   DialogEvent.next({

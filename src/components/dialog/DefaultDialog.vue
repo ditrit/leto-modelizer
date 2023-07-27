@@ -35,6 +35,10 @@ const props = defineProps({
 const show = ref(false);
 let dialogEventSubscription;
 
+/**
+ *
+ * @param event
+ */
 function onDialogEvent(event) {
   if (event.key === props.dialogKey) {
     if (event.type === 'open') {

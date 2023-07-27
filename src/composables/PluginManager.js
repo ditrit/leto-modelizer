@@ -18,10 +18,9 @@ let instanciatePlugins = [];
 
 /**
  * Retrieve files' information.
- *
- * @param {Object} plugin - Instantiate plugin.
- * @param {String} defType - Type of file to retrieve.
- * @return {Array<Object>} Promise with files' information on success otherwise an error.
+ * @param {object} plugin - Instantiate plugin.
+ * @param {string} defType - Type of file to retrieve.
+ * @returns {Array<object>} Promise with files' information on success otherwise an error.
  */
 export function getFilesInfo(plugin, defType) {
   return [...new Set(plugin.data.definitions[defType].reduce((acc, def) => {
@@ -48,9 +47,8 @@ export function getFilesInfo(plugin, defType) {
 // TODO: Remove if svg import is possible
 /**
  * Create plugin resources.
- *
- * @param {Object} plugin - Instantiate plugin.
- * @return {Promise<Object>} Promise with resources on success otherwise an error.
+ * @param {object} plugin - Instantiate plugin.
+ * @returns {Promise<object>} Promise with resources on success otherwise an error.
  */
 export async function createPluginResources(plugin) {
   const files = getFilesInfo(plugin, 'components');
@@ -68,9 +66,8 @@ export async function createPluginResources(plugin) {
 
 /**
  * Instantiate a plugin.
- *
- * @param {String} pluginName - Plugin name.
- * @return {Promise<Plugin>} Promise with instanciated plugin on success otherwise an error.
+ * @param {string} pluginName - Plugin name.
+ * @returns {Promise<Plugin>} Promise with instanciated plugin on success otherwise an error.
  */
 export async function instantiatePlugin(pluginName) {
   const plugin = new plugins[pluginName]({
@@ -88,8 +85,7 @@ export async function instantiatePlugin(pluginName) {
 
 /**
  * Instantiate all plugins available.
- *
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function initPlugins() {
   return Promise.allSettled(Object.keys(plugins).map(instantiatePlugin))
@@ -102,8 +98,7 @@ export async function initPlugins() {
 
 /**
  * Get all the instantiated plugins.
- *
- * @return {Array<Plugin>} Return an array of plugin.
+ * @returns {Array<Plugin>} Return an array of plugin.
  */
 export function getPlugins() {
   return instanciatePlugins;
@@ -111,9 +106,8 @@ export function getPlugins() {
 
 /**
  * Get instantiated plugin corresponding to the given name.
- *
- * @param {String} name - Name of the plugin to retrieve.
- * @return {Object} Return a plugin otherwise undefined.
+ * @param {string} name - Name of the plugin to retrieve.
+ * @returns {object} Return a plugin otherwise undefined.
  */
 export function getPluginByName(name) {
   return instanciatePlugins.find((plugin) => plugin.data.name === name);
@@ -121,9 +115,8 @@ export function getPluginByName(name) {
 
 /**
  * Get the list of tags related to a given plugin.
- *
- * @param {String} name - Name of the given plugin.
- * @return {Array<Tag>} Return an array of tags otherwise an empty array.
+ * @param {string} name - Name of the given plugin.
+ * @returns {Array<Tag>} Return an array of tags otherwise an empty array.
  */
 export function getPluginTags(name) {
   return getPluginByName(name)?.configuration.tags || [];
@@ -131,9 +124,8 @@ export function getPluginTags(name) {
 
 /**
  * Get the list of tags by type from all plugins.
- *
- * @param {String} type - Type of the tag.
- * @return {Array<Tag>} Return an array of tags.
+ * @param {string} type - Type of the tag.
+ * @returns {Array<Tag>} Return an array of tags.
  */
 export function getAllTagsByType(type) {
   return [...new Set(
@@ -146,9 +138,8 @@ export function getAllTagsByType(type) {
 
 /**
  * Check if a file is parsable by plugin.
- *
  * @param {FileInformation} file - File to check.
- * @return {Boolean} Return true if file is parsable, otherwise false.
+ * @returns {boolean} Return true if file is parsable, otherwise false.
  */
 export function isParsableFile(file) {
   return instanciatePlugins.some((plugin) => plugin.isParsable(file));
@@ -157,10 +148,10 @@ export function isParsableFile(file) {
 /**
  * Render the given model with the corresponding pugin.
  * Return rendered files.
- * @param {String} projectId - ID of the project.
- * @param {String} modelPath - Path of the model folder.
- * @param {Object} plugin - Plugin to render.
- * @return {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
+ * @param {string} projectId - ID of the project.
+ * @param {string} modelPath - Path of the model folder.
+ * @param {object} plugin - Plugin to render.
+ * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 export async function renderModel(projectId, modelPath, plugin) {
   const isFolder = await isDirectory(`${projectId}/${modelPath}`);
@@ -195,10 +186,10 @@ export async function renderModel(projectId, modelPath, plugin) {
 
 /**
  * Render the configuration file.
- * @param {String} projectId - ID of the project.
- * @param {String} modelPath - Path of the model.
- * @param {Object} plugin - Plugin to render.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} projectId - ID of the project.
+ * @param {string} modelPath - Path of the model.
+ * @param {object} plugin - Plugin to render.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function renderConfiguration(projectId, modelPath, plugin) {
   const config = await readProjectFile(
@@ -217,11 +208,10 @@ export async function renderConfiguration(projectId, modelPath, plugin) {
 
 /**
  * Get array of FileInput from array of FileInformation if parsable by plugin.
- *
- * @param {Object} plugin - Used to parse if possible.
+ * @param {object} plugin - Used to parse if possible.
  * @param {FileInformation[]} fileInformations - Array to parse.
- * @param {String} projectName - Project name.
- * @return {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
+ * @param {string} projectName - Project name.
+ * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 export async function getFileInputs(plugin, fileInformations, projectName) {
   return Promise.allSettled(
@@ -235,10 +225,10 @@ export async function getFileInputs(plugin, fileInformations, projectName) {
 
 /**
  * Init components.
- * @param {String} projectName - Name of the project.
- * @param {Object} plugin - Plugin corresponding to the model.
- * @param {String} path - Model path (Plugin name & model name).
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} projectName - Name of the project.
+ * @param {object} plugin - Plugin corresponding to the model.
+ * @param {string} path - Model path (Plugin name & model name).
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function initComponents(projectName, plugin, path) {
   let filesInformation;
@@ -265,12 +255,12 @@ export async function initComponents(projectName, plugin, path) {
 
 /**
  * Add a new component.
- * @param {String} projectName - Name of the project.
- * @param {Object} plugin - Plugin corresponding to the model.
- * @param {String} path - Model path (Plugin name & model name).
- * @param {Object} definition - Definition of the component.
- * @param {ComponentDrawOption} [drawOption=null] - drawOption of the component.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} projectName - Name of the project.
+ * @param {object} plugin - Plugin corresponding to the model.
+ * @param {string} path - Model path (Plugin name & model name).
+ * @param {object} definition - Definition of the component.
+ * @param {ComponentDrawOption} [drawOption] - drawOption of the component.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function addNewComponent(
   projectName,
@@ -296,11 +286,11 @@ export async function addNewComponent(
  * Add a new component from template.
  * Add the template files to the model folder
  * then parse all model files.
- * @param {String} projectName - Name of the project.
- * @param {Object} plugin - Plugin corresponding to the model.
- * @param {String} path - Model path (Plugin name & model name).
- * @param {Object} templateDefinition - Definition of the template.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} projectName - Name of the project.
+ * @param {object} plugin - Plugin corresponding to the model.
+ * @param {string} path - Model path (Plugin name & model name).
+ * @param {object} templateDefinition - Definition of the template.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function addNewTemplateComponent(
   projectName,
@@ -336,9 +326,9 @@ export async function addNewTemplateComponent(
 
 /**
  * Get path of model corresponding to the file path.
- * @param {Object} plugin - Plugin corresponding to the model.
- * @param {String} path - File path.
- * @return {String} Model path.
+ * @param {object} plugin - Plugin corresponding to the model.
+ * @param {string} path - File path.
+ * @returns {string} Model path.
  */
 export function getModelPath(plugin, path) {
   return getPluginByName(plugin).getModels([new FileInformation({ path })])[0];

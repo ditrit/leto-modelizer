@@ -33,16 +33,16 @@ const NewBranchEvent = new Subject();
 const AddEvent = new Subject();
 
 /**
-  * Represent a rxjs Event object to emit and to receive events when a commit is done on git.
-  * The event should contain an Array of the staged file(s) path.
-  * @typedef {Subject} CommitEvent
-  */
+ * Represent a rxjs Event object to emit and to receive events when a commit is done on git.
+ * The event should contain an Array of the staged file(s) path.
+ * @typedef {Subject} CommitEvent
+ */
 const CommitEvent = new Subject();
 
 /**
-  * Represent a rxjs Event object to emit and to receive events about git authentication.
-  * @typedef {Subject} AuthenticationEvent
-  */
+ * Represent a rxjs Event object to emit and to receive events about git authentication.
+ * @typedef {Subject} AuthenticationEvent
+ */
 const AuthenticationEvent = new Subject();
 
 export default {

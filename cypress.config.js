@@ -2,6 +2,11 @@ const { defineConfig } = require('cypress');
 const preprocessor = require('@badeball/cypress-cucumber-preprocessor');
 const browserify = require('@badeball/cypress-cucumber-preprocessor/browserify');
 
+/**
+ *
+ * @param on
+ * @param config
+ */
 async function setupNodeEvents(on, config) {
   await preprocessor.addCucumberPreprocessorPlugin(on, config);
 

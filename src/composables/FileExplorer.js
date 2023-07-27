@@ -2,10 +2,10 @@ import { isParsableFile } from 'src/composables/PluginManager';
 
 /**
  * Create and add a new folder.
- * @param {String} id - Absolute path of the new folder.
- * @param {Object} parentFolder - Parent folder.
- * @param {String} name - Name of the new folder.
- * @return {Object} The created folder.
+ * @param {string} id - Absolute path of the new folder.
+ * @param {object} parentFolder - Parent folder.
+ * @param {string} name - Name of the new folder.
+ * @returns {object} The created folder.
  */
 export function createFolder(id, parentFolder, name) {
   const newFolder = {
@@ -25,8 +25,8 @@ export function createFolder(id, parentFolder, name) {
 /**
  * Create and add a new file.
  * @param {FileInformation} fileInformation - Absolute path of the new file.
- * @param {Object} parentFolder - Parent folder.
- * @param {String} name - Name of the new file.
+ * @param {object} parentFolder - Parent folder.
+ * @param {string} name - Name of the new file.
  */
 export function createFile(fileInformation, parentFolder, name) {
   if (name === '__empty__') {
@@ -78,8 +78,9 @@ export function sortTreeElements(elements) {
 /**
  * Create file and folder element to build tree based upon path.
  * @param {FileInformation} fileInformation- Absolute path of tree element.
- * @param {Object} parentFolder - Parent folder of element to create.
- * @param {String} path - Path of the tree element.
+ * @param fileInformation
+ * @param {object} parentFolder - Parent folder of element to create.
+ * @param {string} path - Path of the tree element.
  */
 function createTreeElements(fileInformation, parentFolder, path) {
   const splittedPath = path.split('/').filter(Boolean);
@@ -100,7 +101,7 @@ function createTreeElements(fileInformation, parentFolder, path) {
 
 /**
  * Convert fileInformation inputs to the Object required to display Quasar Tree Component.
- * @param {String} projectId - local project id.
+ * @param {string} projectId - local project id.
  * @param {FileInformation[]} fileInformationArray - Array to convert for Quasar Tree Component.
  * Example: [{path: 'home/folder/file1.tf'}, {path: 'home/file2.tf'}].
  * @returns {Array} - Array of nodes that designates the tree structure of Quasar Tree Component.

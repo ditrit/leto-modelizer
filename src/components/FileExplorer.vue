@@ -109,8 +109,8 @@ let pluginInitSubscription;
 
 /**
  * Filter tree nodes to only display parsable files and folders if showParsableFiles is true.
- * @param {Object} node - Node currently being filtered.
- * @returns {Boolean} Result of tested conditions, otherwise true.
+ * @param {object} node - Node currently being filtered.
+ * @returns {boolean} Result of tested conditions, otherwise true.
  * @see https://quasar.dev/vue-components/tree
  */
 function filterParsableFiles(node) {
@@ -125,8 +125,8 @@ function filterParsableFiles(node) {
 
 /**
  * Check if node is a folder containing no parsable files.
- * @param {Object} node - Current node.
- * @returns {Boolean} Result of tested conditions.
+ * @param {object} node - Current node.
+ * @returns {boolean} Result of tested conditions.
  */
 function isFolderWithoutParsableFiles(node) {
   return node.isFolder && !node.isRootFolder && !node.hasParsableFiles;
@@ -135,9 +135,9 @@ function isFolderWithoutParsableFiles(node) {
 /**
  * Expand a node by its id. If the created node is a file, update activeFileId with the file's id
  * and send SelectFileNode event.
- * @param {String} parentNodePath - The parent node's path of the created file node.
- * @param {Object} node - The created file node.
- * @param {Boolean} isFolder - True if the created file node is a folder, otherwise false.
+ * @param {string} parentNodePath - The parent node's path of the created file node.
+ * @param {object} node - The created file node.
+ * @param {boolean} isFolder - True if the created file node is a folder, otherwise false.
  */
 function onCreateFileNode({ parentNodePath, node, isFolder }) {
   if (fileExplorerRef.value.getNodeByKey(parentNodePath)) {
@@ -158,10 +158,10 @@ function onCreateFileNode({ parentNodePath, node, isFolder }) {
 
 /**
  * Add a new file or folder node to the tree.
- * @param {Object} event - Event containing related information.
- * @param {String} event.name - Name of the created file.
- * @param {Boolean} event.isFolder - True if it's a folder otherwise false.
- * @param {String} event.path - Complete path of created file.
+ * @param {object} event - Event containing related information.
+ * @param {string} event.name - Name of the created file.
+ * @param {boolean} event.isFolder - True if it's a folder otherwise false.
+ * @param {string} event.path - Complete path of created file.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function onCreateFile({ name, isFolder, path }) {
@@ -196,7 +196,7 @@ async function onCreateFile({ name, isFolder, path }) {
  * Delete the node corresponding to the file parameter.
  * If this is the last node of the parent node (folder),
  * add a fake '__empty__' node to keep the parent node visible.
- * @param {Object} file - File to delete.
+ * @param {object} file - File to delete.
  */
 function onDeleteFile(file) {
   const fileInformations = localFileInformations.value
@@ -215,7 +215,7 @@ function onDeleteFile(file) {
 
 /**
  * Update status of the node corresponding to the given parameter.
- * @param {String} filePath - Path of the file which status should be updated.
+ * @param {string} filePath - Path of the file which status should be updated.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateFileStatus(filePath) {
@@ -230,7 +230,7 @@ async function updateFileStatus(filePath) {
 /**
  * If node doubleclicked is a file, set activeFileId value to the file's id and
  * send SelectFileNode event.
- * @param {Object} node - Tree node.
+ * @param {object} node - Tree node.
  * Example { icon: "fa-regular fa-file", id: "terraform/app.tf", isFolder: false, label: "app.tf" }
  */
 function onNodeDoubleClicked(node) {

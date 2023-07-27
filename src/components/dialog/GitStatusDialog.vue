@@ -127,7 +127,7 @@ let dialogEventSubscription;
 
 /**
  * Set files status on valid event.
- * @param {String} key - Event type.
+ * @param {string} key - Event type.
  */
 function setFilesStatus({ key }) {
   if (key === 'GitStatus') {

@@ -127,6 +127,7 @@ function selectDiagram(diagram) {
 
 /**
  * Open DeleteModel dialog and close menu.
+ * @param diagram
  */
 function deleteDiagram(diagram) {
   DialogEvent.next({
@@ -138,7 +139,7 @@ function deleteDiagram(diagram) {
 
 /**
  * Zoom on diagrams container.
- * @param {Boolean} plus - Zoom in on true otherwise zoom out.
+ * @param {boolean} plus - Zoom in on true otherwise zoom out.
  */
 function zoom(plus) {
   const div = document.getElementById('diagrams-container');
@@ -158,7 +159,8 @@ function zoom(plus) {
 
 /**
  * Pan on diagrams container according on the delta.
- * @param {Object} delta - Delta of distance (in pixels) since handler was called last time.
+ * @param delta.delta
+ * @param {object} delta - Delta of distance (in pixels) since handler was called last time.
  * @see https://quasar.dev/vue-directives/touch-pan#handling-mouse-events
  */
 function handlePan({ delta }) {

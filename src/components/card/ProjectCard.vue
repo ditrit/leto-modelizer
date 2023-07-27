@@ -67,7 +67,7 @@ const props = defineProps({
 /**
  * Get image of project.
  * Transform project name to a number between 0 and 4 and return associate image.
- * @return {String} Image path.
+ * @returns {string} Image path.
  */
 function getProjectImage() {
   const number = props.project.id.split('')

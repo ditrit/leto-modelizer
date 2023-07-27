@@ -79,7 +79,6 @@ const query = computed(() => route.query);
 
 /**
  * Setup drag data.
- *
  * @param {DragEvent} event - The starting drag event.
  */
 function dragStartHandler(event) {

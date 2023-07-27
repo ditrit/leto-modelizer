@@ -52,9 +52,9 @@ let pluginInitSubscription;
 /**
  * On 'Drawer' event type, call renderConfiguration if action is 'move',
  * otherwise call renderModel.
- * @param {Object} eventManager - Object containing event and plugin.
- * @param {Object} eventManager.event - The triggered event.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {object} eventManager - Object containing event and plugin.
+ * @param {object} eventManager.event - The triggered event.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function onDefaultEvent({ event }) {
   const renderModelActions = ['update', 'delete', 'add'];
@@ -78,7 +78,7 @@ async function onDefaultEvent({ event }) {
 
 /**
  * Update plugin, draw components and update component templates array.
- * @return {Promise<void>} Promise with nothing on success.
+ * @returns {Promise<void>} Promise with nothing on success.
  */
 async function initView() {
   if (!query.value?.path) {
@@ -116,10 +116,10 @@ async function initView() {
 
 /**
  * Get the coordinates to use for component draw options.
- * @param {Object} event - Cursor event when dropping a new component.
- * @param {Number} event.clientX - Position X of the cursor.
- * @param {Number} event.clientY - Position Y of the cursor.
- * @return {Object} The coordinates for new component.
+ * @param {object} event - Cursor event when dropping a new component.
+ * @param {number} event.clientX - Position X of the cursor.
+ * @param {number} event.clientY - Position Y of the cursor.
+ * @returns {object} The coordinates for new component.
  */
 function getComponentPosition({ clientX, clientY }) {
   const { __drawer: drawer } = data.plugin;
@@ -135,7 +135,7 @@ function getComponentPosition({ clientX, clientY }) {
 /**
  * Instantiate from a dragged component definition or template.
  * @param {DragEvent} event - The drag event.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function dropHandler(event) {
   const dropData = JSON.parse(event.dataTransfer.getData('text/plain'));
