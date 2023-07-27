@@ -13,7 +13,7 @@
       <q-item
         v-for="project in projects"
         :key="project.id"
-        :to="`/${project.id}/models`"
+        :to="`projects/${project.id}/models`"
         :data-cy="`item_${project.id}`"
       >
         <q-item-section>
