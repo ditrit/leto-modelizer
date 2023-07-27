@@ -30,7 +30,8 @@ module.exports = {
 
     'airbnb-base',
 
-    "plugin:cypress/recommended"
+    "plugin:cypress/recommended",
+    "plugin:jsdoc/recommended",
   ],
 
   plugins: [
@@ -85,6 +86,7 @@ module.exports = {
     "vue/no-v-html": 'off',
     "vue/singleline-html-element-content-newline": ["error", {
       "ignoreWhenNoAttributes": false,
-    }]
+    }],
+    'jsdoc/no-undefined-types': 'off'
   }
 }
