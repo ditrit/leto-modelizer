@@ -9,7 +9,7 @@ import { randomHexString } from 'src/composables/Random';
 /**
  * Get a remote file's content.
  * @param {string} filePath - Path of the file.
- * @param responseType
+ * @param {string} responseType - Response type.
  * @returns {Promise<object>} Promise with resources on success otherwise an error.
  */
 export async function getTemplateFileByPath(filePath, responseType = 'json') {

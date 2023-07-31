@@ -77,6 +77,7 @@ const branches = ref([]);
 
 /**
  * Create new branch and manage toast and loader.
+ * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 function onSubmit() {
   submitting.value = true;

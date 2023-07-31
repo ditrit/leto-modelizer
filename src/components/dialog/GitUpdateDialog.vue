@@ -38,8 +38,9 @@ let dialogEventSubscription;
 
 /**
  * Set branch name on valid event.
- * @param {string} key - Event type.
- * @param {string} branch - Branch name.
+ * @param {object} event - Dialog event.
+ * @param {string} event.key - Event type.
+ * @param {string} event.branch - Branch name.
  */
 function setBranchName({ key, branch }) {
   if (key === 'GitUpdate') {

@@ -6,12 +6,12 @@ import { FileInformation } from 'leto-modelizer-plugin-core';
 class FileStatus extends FileInformation {
   /**
    * Default constructor.
-   * @param {number} props.headStatus - The HEAD status is either absent (0) or present (1).
-   * @param {number} props.workdirStatus - The WORKDIR status is either absent (0), identical to
+   * @param {object} [props] - Constructor props.
+   * @param {number} [props.headStatus] - The HEAD status is either absent (0) or present (1).
+   * @param {number} [props.workdirStatus] - The WORKDIR status is either absent (0), identical to
    * HEAD (1), or different from HEAD (2).
-   * @param {number} props.stageStatus - The STAGE status is either absent (0), identical to
+   * @param {number} [props.stageStatus] - The STAGE status is either absent (0), identical to
    * HEAD (1), identical to WORKDIR (2), or different from WORKDIR (3).
-   * @param props
    */
   constructor(props = {
     headStatus: -1,

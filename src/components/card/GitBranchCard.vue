@@ -47,7 +47,7 @@ function updateBranch() {
 
 /**
  * Set currentBranch.
- * @param branch
+ * @param {string} branch - Current branch.
  */
 function setCurrentBranch(branch) {
   currentBranch.value = branch;

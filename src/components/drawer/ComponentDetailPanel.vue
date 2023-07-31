@@ -268,7 +268,7 @@ function setLocalValues({ event }) {
  * Update attribute.
  * If provided `event.attribute` is null, this will remove the attribute from the attributes list.
  * And if attribute's name doesn't exist in the list, it will add the attribute.
- * @param {object} event - Event.
+ * @param {object} event - Form event.
  * @param {string} event.name - Name of updated attribute.
  * @param {ComponentAttribute} event.attribute - New attribute value or null.
  */

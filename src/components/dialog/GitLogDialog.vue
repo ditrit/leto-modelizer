@@ -122,6 +122,7 @@ let dialogEventSubscription;
  * content you load. It takes numeric values starting with 1 and incrementing with each call.
  * @param {Function} done - Function to call when you made all necessary updates.
  * @see https://quasar.dev/vue-components/infinite-scroll
+ * @returns {Promise} Promise with logs after all the necessary updates otherwise an error.
  */
 function onLoad(index, done) {
   let commitRef = branchName.value;
@@ -142,8 +143,9 @@ function onLoad(index, done) {
 
 /**
  * Set branch name and reset logItems on valid event.
- * @param {string} key - Event key.
- * @param {string} branch - Branch name.
+ * @param {object} event - Dialog event.
+ * @param {string} event.key - Event key.
+ * @param {string} event.branch - Branch name.
  */
 function onOpenGitLogDialog({ key, branch }) {
   if (key === 'GitLog') {

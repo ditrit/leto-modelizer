@@ -118,7 +118,7 @@ const allowGitAdd = computed(() => !!props.file.information?.isUntracked
 
 /**
  * Send event to open the CreateFileDialog.
- * @param isFolder
+ * @param {boolean} isFolder - True if creating a folder, otherwise false.
  */
 function createFile(isFolder) {
   DialogEvent.next({
@@ -145,6 +145,7 @@ function deleteFile() {
 /**
  * Add selected file and send AddEvent.
  * @param {object} file - Selected file.
+ * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 function addFile(file) {
   loading.value.add = true;

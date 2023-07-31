@@ -69,6 +69,7 @@ const submitting = ref(false);
 
 /**
  * Emit new fileName and send positive toast.
+ * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 function onSubmit() {
   const parent = props.file.id === props.projectName ? '' : `${props.file.id}/`;

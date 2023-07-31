@@ -135,9 +135,10 @@ function isFolderWithoutParsableFiles(node) {
 /**
  * Expand a node by its id. If the created node is a file, update activeFileId with the file's id
  * and send SelectFileNode event.
- * @param {string} parentNodePath - The parent node's path of the created file node.
- * @param {object} node - The created file node.
- * @param {boolean} isFolder - True if the created file node is a folder, otherwise false.
+ * @param {object} treeNode - Node to analyze.
+ * @param {string} treeNode.parentNodePath - The parent node's path of the created file node.
+ * @param {object} treeNode.node - The created file node.
+ * @param {boolean} treeNode.isFolder - True if the created file node is a folder, otherwise false.
  */
 function onCreateFileNode({ parentNodePath, node, isFolder }) {
   if (fileExplorerRef.value.getNodeByKey(parentNodePath)) {

@@ -36,14 +36,16 @@ const show = ref(false);
 let dialogEventSubscription;
 
 /**
- *
- * @param event
+ * Open or close dialog.
+ * @param {object} event - Dialog event.
+ * @param {string} event.key - Dialog key.
+ * @param {string} event.type - Action type, 'open' or 'close'.
  */
-function onDialogEvent(event) {
-  if (event.key === props.dialogKey) {
-    if (event.type === 'open') {
+function onDialogEvent({ key, type }) {
+  if (key === props.dialogKey) {
+    if (type === 'open') {
       show.value = true;
-    } else if (event.type === 'close') {
+    } else if (type === 'close') {
       show.value = false;
     }
   }

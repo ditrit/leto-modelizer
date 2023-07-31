@@ -76,7 +76,7 @@ async function getFileContent() {
  * If language configuration comes from a plugin, set the Monaco configuration.
  * Otherwise, use default language configuration if it exists.
  * @param {string} path - File path.
- * @returns {string | null} Associated language.
+ * @returns {string} Associated language.
  */
 function initMonacoLanguages(path) {
   const plugin = getPlugins().find((p) => p.isParsable({ path }));

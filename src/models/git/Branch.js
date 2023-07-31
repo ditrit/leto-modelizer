@@ -4,12 +4,12 @@
 class Branch {
   /**
    * Default constructor.
+   * @param {object} props - Constructor props.
    * @param {string} props.name - Branch name.
    * @param {boolean} [props.onLocal] - Indicate if branch is on local.
    * @param {boolean} [props.onRemote] - Indicate if branch is on remote.
    * @param {string} [props.remote] - Remote value.
    * @param {boolean} [props.isCurrentBranch] - Indicates if this branch is the current.
-   * @param props
    */
   constructor(props = {
     name: null,

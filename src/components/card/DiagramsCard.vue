@@ -128,7 +128,6 @@ let updateModelSubscription;
 
 /**
  * Update diagram type and local storage values.
- * @param {string} type - Diagram type.
  */
 function switchDiagramType() {
   isDiagramGrid.value = !isDiagramGrid.value;

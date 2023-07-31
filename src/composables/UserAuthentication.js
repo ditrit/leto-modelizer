@@ -12,7 +12,7 @@ export function userManagerExists() {
 
 /**
  * Initiate the login process by redirecting the user to the authentication provider.
- * @param {string | null} providerName - Name of the provider.
+ * @param {string} providerName - Name of the provider.
  */
 export function setUserManager(providerName) {
   const authentication = process.env.AUTHENTICATION

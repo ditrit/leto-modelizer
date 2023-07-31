@@ -74,6 +74,7 @@ let dialogEventSubscription;
 /**
  * Close CreateProjectTemplate and redirect to project model page.
  * @param {string} projectId - Id of the new project.
+ * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 async function addProject(projectId) {
   DialogEvent.next({ type: 'close', key: 'CreateProjectTemplate' });
@@ -82,8 +83,9 @@ async function addProject(projectId) {
 
 /**
  * Set project template on valid event.
- * @param {string} key - Event type.
- * @param {object} template - Selected template.
+ * @param {object} event - Dialog event.
+ * @param {string} event.key - Event type.
+ * @param {object} event.template - Selected template.
  */
 function setProjectTemplate({ key, template }) {
   if (key === 'CreateProjectTemplate') {

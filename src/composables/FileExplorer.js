@@ -77,8 +77,7 @@ export function sortTreeElements(elements) {
 
 /**
  * Create file and folder element to build tree based upon path.
- * @param {FileInformation} fileInformation- Absolute path of tree element.
- * @param fileInformation
+ * @param {FileInformation} fileInformation - Absolute path of tree element.
  * @param {object} parentFolder - Parent folder of element to create.
  * @param {string} path - Path of the tree element.
  */

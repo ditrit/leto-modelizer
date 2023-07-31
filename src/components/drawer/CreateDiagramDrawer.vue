@@ -220,7 +220,7 @@ function reset() {
 
 /**
  * Open or close drawer on event.
- * @param {object} event - Event.
+ * @param {object} event - Drawer event.
  * @param {string} event.key - Identifier of drawer.
  * @param {string} event.type - Action type, 'open' or 'close'.
  */

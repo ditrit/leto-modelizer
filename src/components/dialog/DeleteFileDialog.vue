@@ -51,8 +51,9 @@ let dialogEventSubscription;
 
 /**
  * Set deletedFile on valid event.
- * @param {string} key - Event key.
- * @param {object} file - Event file.
+ * @param {object} event - Dialog event.
+ * @param {string} event.key - Event key.
+ * @param {object} event.file - Event file.
  */
 function setDeletedFile({ key, file }) {
   if (key === 'DeleteFile') {

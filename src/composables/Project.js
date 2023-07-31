@@ -70,7 +70,7 @@ export function getProjectById(projectId) {
 /**
  * Extract project name from repository url.
  * @param {string} repositoryUrl - Repository url.
- * @returns {string | null} Project name.
+ * @returns {string} Project name.
  */
 export function extractProjectName(repositoryUrl) {
   const regex = /\/([^/]+)\/?$/;
@@ -225,7 +225,7 @@ export async function getProjectFiles(projectId) {
  * Get the list of directory found in path location.
  * @param {string[]} files - Array of file to fill.
  * @param {string} projectId - ID of the project.
- * @param {string | null} filename - Path of file or directory. Null for root location.
+ * @param {string} filename - Path of file or directory. Null for root location.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function setFolders(files, projectId, filename) {
@@ -439,8 +439,7 @@ export async function appendProjectFile(projectId, file) {
 
 /**
  * Get list of all the files in the current staging area.
- * @param {string} project - Id of the project.
- * @param projectId
+ * @param {string} projectId - Id of the project.
  * @returns {Promise<string[]>} Promise with array of filepaths on success otherwise an error.
  */
 export async function gitListFiles(projectId) {
@@ -821,8 +820,7 @@ export async function initProject(project) {
 
 /**
  * Get all models of the plugin.
- * @param {string} modelsDefaultFolder - Path of the models folder.
- * @param modelsdefaultFolder
+ * @param {string} modelsdefaultFolder - Path of the models folder.
  * @param {string} pluginName - Name of the plugin.
  * @returns {Promise<Array>} Promise with an array of models on success otherwise an error.
  */

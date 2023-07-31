@@ -29,4 +29,8 @@
     "opts": {
       "template": "node_modules/better-docs"
     }
+  },
+  "opts": {
+    "template": "node_modules/better-docs"
   }
+}

@@ -71,7 +71,7 @@ const submitting = ref(false);
 
 /**
  * Add git remote to the project, manage toast and loader.
- * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 async function onSubmit() {
   submitting.value = true;

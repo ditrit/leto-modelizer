@@ -56,6 +56,7 @@ const submitting = ref(false);
 
 /**
  * Update branch and manage toast and loader.
+ * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 async function onSubmit() {
   submitting.value = true;

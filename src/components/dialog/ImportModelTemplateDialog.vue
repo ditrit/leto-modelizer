@@ -77,8 +77,9 @@ async function init() {
 
 /**
  * Set model template on valid event.
- * @param {string} key - Event type.
- * @param {object} template - Selected template.
+ * @param {object} event - Dialog event.
+ * @param {string} event.key - Event type.
+ * @param {object} event.template - Selected template.
  */
 function setModelTemplate({ key, template }) {
   if (key === 'ImportModelTemplate') {

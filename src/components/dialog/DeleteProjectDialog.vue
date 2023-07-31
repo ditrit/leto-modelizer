@@ -30,8 +30,9 @@ let dialogEventSubscription;
 
 /**
  * Set projectId on valid event.
- * @param {string} key - Event key.
- * @param {object} id - Project id.
+ * @param {object} event - Dialog event.
+ * @param {string} event.key - Event key.
+ * @param {object} event.id - Project id.
  */
 function setProjectId({ key, id }) {
   if (key === 'DeleteProject') {
