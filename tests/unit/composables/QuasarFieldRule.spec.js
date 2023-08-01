@@ -108,6 +108,7 @@ describe('Test composable: InputRule', () => {
     it('should return string error message', () => {
       const key = 'errors.rules.string.min';
 
+      expect(isStringTooShort(t, null, 1)).toEqual(key);
       expect(isStringTooShort(t, 'no', 3)).toEqual(key);
     });
   });
