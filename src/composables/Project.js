@@ -502,6 +502,20 @@ export async function gitAdd(projectId, filepath) {
 }
 
 /**
+ * Add (stage) deleted files.
+ * @param {String} projectId - Id of project.
+ * @param {String} filepath - Path of the file to add.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function gitRemove(projectId, filepath) {
+  return git.remove({
+    fs,
+    dir: `/${projectId}`,
+    filepath,
+  });
+}
+
+/**
  * Update selected branch with git pull.
  * @param {Project} project - Project to update.
  * @param {String} branchName - Branch name.
@@ -611,9 +625,14 @@ export async function deleteProjectFile(projectId, filePath, deleteParentFolder)
     if (dirFiles.length > 0) {
       await Promise.allSettled(dirFiles.map((fileName) => deleteProjectFile(projectId, `${filePath}/${fileName}`, true)));
     }
+
     await rmDir(`${projectId}/${filePath}`);
+    // gitRemove is used to stage a deleted file (behavior from isomorphic-git)
+    await gitRemove(projectId, `${filePath}`);
   } else {
     await rm(`${projectId}/${filePath}`);
+    // gitRemove is used to stage a deleted file (behavior from isomorphic-git)
+    await gitRemove(projectId, `${filePath}`);
   }
 
   const index = filePath.lastIndexOf('/');
@@ -650,6 +669,7 @@ export async function getStatus(projectId, filepaths, filter) {
       stageStatus: file[3],
     })));
 }
+
 /**
  * Push selected branch on server.
  * @param {Project} project - Project.
@@ -677,13 +697,16 @@ export async function gitPush(project, branchName, force) {
  * Commit all staged files.
  * @param {String} projectId - Id of project.
  * @param {String} message - Commit message.
+ * @param {boolean} noUpdateBranchValue - If true, does not update the branch pointer
+ * after creating the commit.
  * @return {Promise<void>} Promise with the SHA-1 object id of the newly created commit on success
  * otherwise an error.
  */
-export async function gitCommit(projectId, message) {
+export async function gitCommit(projectId, message, noUpdateBranchValue = false) {
   return git.commit({
     fs,
     dir: `/${projectId}`,
+    noUpdateBranch: noUpdateBranchValue,
     // TODO: Change when we have user information.
     author: {
       name: 'LetoModelizer',
@@ -699,30 +722,48 @@ export async function gitCommit(projectId, message) {
  */
 export async function gitGlobalUpload(project) {
   const nowDate = new Date();
-  const currentBranch = await getCurrentBranch(project.id);
   const newBranch = `leto-modelizer_${nowDate.getTime()}`;
+  const files = (await getStatus(project.id));
 
-  await createBranchFrom(
-    project.id,
-    newBranch,
-    currentBranch,
-  );
-
-  await gitCheckout(project.id, newBranch);
-
-  const files = (await getStatus(project.id))
+  const modifiedFiles = files
     .filter((file) => file.hasUnstagedChanged
       || file.isUntracked
       || file.isUnstaged
       || file.isStaged)
     .map((file) => file.path);
 
-  await gitAdd(project.id, files);
+  await gitAdd(project.id, modifiedFiles);
 
-  await gitCommit(
+  /* Special case for deleted files.
+  Unlike usual git, we CAN NOT add (git add) a deleted file,
+  so here, the idea is to use the remove method of isomorphic-git to stage the
+  deleted files.
+  cf: https://github.com/isomorphic-git/isomorphic-git/issues/1099
+  */
+  const deletedfiles = files.filter((file) => file.isDeleted).map((file) => file.path);
+  await gitRemove(project.id, deletedfiles);
+
+  /*
+  Commiting BEFORE creating a new branch.
+  Again, due to some specific behavior in isomorphic-git, the modifications are not
+  transfered (unlike usual git) while creating a new branch or doing a checkout.
+
+  Creating the (orphan) commit before, give the possibility to create a new branch from that commit.
+  Which will contains all modifications AND will be attached to the newly created branch.
+  */
+  const sha1 = await gitCommit(
     project.id,
     `leto-modelizer ${nowDate.toDateString()}`,
+    true,
   );
+
+  await createBranchFrom(
+    project.id,
+    newBranch,
+    sha1,
+  );
+
+  await gitCheckout(project.id, newBranch);
 
   await gitPush(
     project,

@@ -25,6 +25,7 @@ import {
   getStatus,
   gitPush,
   gitAdd,
+  gitRemove,
   gitCommit,
   gitLog,
   gitGlobalUpload,
@@ -89,6 +90,7 @@ jest.mock('isomorphic-git', () => ({
     return Promise.resolve('pull');
   }),
   add: jest.fn(() => Promise.resolve('add')),
+  remove: jest.fn(() => Promise.resolve('remove')),
   commit: jest.fn(() => Promise.resolve('SHA-1')),
   log: jest.fn(() => Promise.resolve(['log'])),
 }));
@@ -168,12 +170,14 @@ jest.mock('src/composables/PluginManager', () => ({
 
 describe('Test composable: Project', () => {
   let gitAddMock;
+  let gitRemoveMock;
   let gitAddRemoteMock;
   let gitFetchMock;
 
   beforeEach(() => {
     localStorage.clear();
     gitAddMock = jest.fn();
+    gitRemoveMock = jest.fn();
     gitAddRemoteMock = jest.fn();
     gitFetchMock = jest.fn(({ onAuth }) => {
       onAuth();
@@ -182,6 +186,7 @@ describe('Test composable: Project', () => {
     });
 
     git.add.mockImplementation(gitAddMock);
+    git.remove.mockImplementation(gitRemoveMock);
     git.fetch.mockImplementation(gitFetchMock);
     git.addRemote.mockImplementation(gitAddRemoteMock);
   });
@@ -633,10 +638,20 @@ describe('Test composable: Project', () => {
     });
   });
 
+  describe('Test function: gitRemove', () => {
+    it('should call git remove', async () => {
+      await gitRemove('projectId', 'filepath');
+
+      expect(gitRemoveMock).toBeCalled();
+    });
+  });
+
   describe('Test function: gitCommit', () => {
     it('should call git commit and return SHA-1', async () => {
-      const result = await gitCommit('test', 'wip');
+      let result = await gitCommit('test', 'wip');
+      expect(result).toEqual('SHA-1');
 
+      result = await gitCommit('test', 'wip', true);
       expect(result).toEqual('SHA-1');
     });
   });
