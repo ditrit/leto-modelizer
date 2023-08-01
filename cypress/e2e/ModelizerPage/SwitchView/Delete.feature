@@ -24,7 +24,7 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
-    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
 
   Scenario: Delete a component (Draw view) should remove plugin file (Text view)
     When I click on '[data-cy="component-definition_aws"]'

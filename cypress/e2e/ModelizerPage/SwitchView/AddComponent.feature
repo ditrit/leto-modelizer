@@ -25,7 +25,7 @@ Feature: Test switch model to text view: add component/link
     And  I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
-    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
 
   Scenario: Plugin test installed in component definitions list (Draw view) should not create project configuration file (Text view)
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
