@@ -107,7 +107,7 @@
 <script setup>
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { ref, watch } from 'vue';
+import { ref, toRef, watch } from 'vue';
 import {
   notEmpty,
   isGitRepositoryUrl,
@@ -138,8 +138,8 @@ const { t } = useI18n();
 const project = {};
 const projectName = ref('');
 const projectNames = ref(Object.keys(getProjects()));
-const templateDescription = ref(props.template.description);
-const localIsChecked = ref(props.isChecked);
+const templateDescription = ref(toRef(props, 'template').value.description);
+const localIsChecked = toRef(props, 'isChecked');
 const repository = ref();
 const username = ref();
 const token = ref();
@@ -147,8 +147,9 @@ const submitting = ref(false);
 
 /**
  * Create a new project, emit new project id, manage toast and loader.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-function onSubmit() {
+async function onSubmit() {
   submitting.value = true;
 
   project.id = projectName.value;
@@ -203,10 +204,6 @@ watch(() => localIsChecked.value, () => {
   if (localIsChecked.value !== props.isChecked) {
     emit('update:checked', localIsChecked.value);
   }
-});
-
-watch(() => props.isChecked, () => {
-  localIsChecked.value = props.isChecked;
 });
 </script>
 

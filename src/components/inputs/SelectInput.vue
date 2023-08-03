@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, toRef, watch } from 'vue';
 import { isRequired } from 'src/composables/QuasarFieldRule';
 
 const props = defineProps({
@@ -22,8 +22,9 @@ const props = defineProps({
 });
 
 const selectInput = ref(null);
-const localValue = ref(props.attribute.value);
-const options = ref(props.attribute.definition.rules.values);
+const attribute = toRef(props, 'attribute');
+const localValue = attribute.value.value;
+const options = ref(attribute.value.definition.rules.values);
 
 watch(() => selectInput.value, () => {
   if (selectInput.value) {

@@ -43,7 +43,7 @@
 <script setup>
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import { ref, toRef } from 'vue';
 import {
   notEmpty,
   isGitRepositoryUrl,
@@ -65,20 +65,22 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const project = getProjectById(props.projectName);
+const project = getProjectById(toRef(props, 'projectName').value);
 const repository = ref(project.git?.repository);
 const submitting = ref(false);
 
 /**
  * Add git remote to the project, manage toast and loader.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-function onSubmit() {
+async function onSubmit() {
   submitting.value = true;
   project.git = {
     repository: repository.value,
     username: project.git?.username,
     token: project.git?.token,
   };
+
   return gitAddRemote(project)
     .then(() => {
       saveProject(project);

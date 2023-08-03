@@ -68,6 +68,7 @@ import {
   ref,
   onMounted,
   onUnmounted,
+  toRef,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ModelizerSettingsMenu from 'components/menu/ModelizerSettingsMenu.vue';
@@ -95,7 +96,7 @@ let authenticationSubscription;
 
 const query = computed(() => route.query);
 const isLoading = ref(false);
-const project = ref(getProjectById(props.projectName));
+const project = ref(getProjectById(toRef(props, 'projectName').value));
 const buttonToggleValue = ref(['Draw', 'Text'].includes(route.name) ? route.name : null);
 const buttonToggleOptions = computed(() => [{
   label: t('page.modelizer.header.switch.draw'),

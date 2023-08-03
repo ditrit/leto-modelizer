@@ -45,7 +45,9 @@ describe('Test component: RenameProjectForm', () => {
   describe('Test function: onSubmit', () => {
     it('should emit an event and a positive notification on success', async () => {
       Notify.create = jest.fn();
-      wrapper.vm.projectName = 'test';
+      await wrapper.setProps({
+        projectId: 'test',
+      });
 
       await wrapper.vm.onSubmit();
 

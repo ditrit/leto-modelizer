@@ -36,7 +36,7 @@
 <script setup>
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import { ref, toRef } from 'vue';
 import {
   getProjectById,
   saveProject,
@@ -53,9 +53,9 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const project = getProjectById(props.projectName);
-const username = ref(project.git?.username);
-const token = ref(project.git?.token);
+const project = ref(getProjectById(toRef(props, 'projectName').value));
+const username = ref(project.value.git?.username);
+const token = ref(project.value.git?.token);
 const submitting = ref(false);
 
 /**
@@ -63,13 +63,13 @@ const submitting = ref(false);
  */
 function onSubmit() {
   submitting.value = true;
-  project.git = {
-    repository: project.git?.repository,
+  project.value.git = {
+    repository: project.value.git?.repository,
     username: username.value,
     token: token.value,
   };
 
-  saveProject(project);
+  saveProject(project.value);
   emit('project-git:save');
   GitEvent.AuthenticationEvent.next();
   Notify.create({

@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, toRef, watch } from 'vue';
 import {
   isRequired,
   isNumber,
@@ -29,7 +29,7 @@ const props = defineProps({
 });
 
 const numberInput = ref(null);
-const localValue = ref(props.attribute.value);
+const localValue = toRef(props, 'attribute').value.value;
 
 watch(() => numberInput.value, () => {
   if (numberInput.value) {

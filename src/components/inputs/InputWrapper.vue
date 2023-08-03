@@ -68,6 +68,7 @@ import {
   ref,
   defineAsyncComponent,
   watch,
+  toRef,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 import DefinitionMenu from 'components/menu/DefinitionMenu.vue';
@@ -98,7 +99,8 @@ const inputList = {
 };
 const { t } = useI18n();
 
-const name = ref(!props.attribute.definition ? props.attribute.name : '');
+const propsAttribute = toRef(props, 'attribute');
+const name = ref(!propsAttribute.value.definition ? propsAttribute.value.name : '');
 
 const emit = defineEmits([
   'update:attribute-name',
