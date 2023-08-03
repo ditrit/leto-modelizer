@@ -9,6 +9,40 @@ installQuasarPlugin();
 describe('Test component: ReferenceInput', () => {
   let wrapper;
 
+  const options = [{
+    name: 'default',
+    type: 'category',
+    children: [{
+      type: 'item',
+      value: 'ref',
+    }],
+  }, {
+    name: 'variable',
+    type: 'category',
+    children: [{
+      name: 'variable',
+      type: 'category',
+      children: [{
+        name: 'variableName',
+        formattedName: 'var.variableName',
+        value: 'variableValue',
+        type: 'item',
+      }],
+    }],
+  }];
+  const qSelectStub = {
+    template: `
+      <div>
+        <slot name="prepend"></slot>
+        <slot></slot>
+      </div>
+    `,
+    props: ['value', 'options', 'rules'],
+    methods: {
+      validate: jest.fn(),
+    },
+  };
+
   beforeEach(() => {
     wrapper = shallowMount(ReferenceInput, {
       props: {
@@ -30,12 +64,18 @@ describe('Test component: ReferenceInput', () => {
               }],
             },
             getComponentsByType: jest.fn(() => [{ id: 'ref' }]),
+            variables: [{
+              category: 'variable',
+              name: 'variableName',
+              formattedName: 'var.variableName',
+              value: 'variableValue',
+            }],
           },
         },
       },
       global: {
         stubs: {
-          qSelect: true,
+          qSelect: qSelectStub,
         },
         plugins: [
           createI18n({
@@ -71,12 +111,6 @@ describe('Test component: ReferenceInput', () => {
       });
     });
 
-    describe('Test variables: options', () => {
-      it('should be an array', () => {
-        expect(wrapper.vm.options).toEqual(['ref']);
-      });
-    });
-
     describe('Test variables: iconName', () => {
       it('should match "referenceIconName"', () => {
         expect(wrapper.vm.iconName).toEqual('referenceIconName');
@@ -84,12 +118,17 @@ describe('Test component: ReferenceInput', () => {
     });
   });
 
-  // TODO: REF.value.validate is not a function
-  describe.skip('Test watcher: props.plugin.components', () => {
+  describe('Test function: initOptions', () => {
+    it('should init options', () => {
+      expect(wrapper.vm.options).toEqual(options);
+    });
+  });
+
+  describe('Test watcher: props.plugin.data.components', () => {
     it('should update options', async () => {
       await wrapper.setProps({
         attribute: {
-          value: 'test',
+          value: ['test'],
           name: 'attributeName',
           definition: {
             containerRef: 'reference',
@@ -114,7 +153,8 @@ describe('Test component: ReferenceInput', () => {
           },
         },
       });
-      expect(wrapper.vm.options).toEqual(['ref']);
+
+      expect(wrapper.vm.options).toEqual(options);
     });
   });
 });
