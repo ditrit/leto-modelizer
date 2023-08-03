@@ -19,8 +19,8 @@
         name="fa-solid fa-circle-info"
         color="info"
         size="xs"
-        class="q-ml-sm self-start"
-        style="cursor: help"
+        class="q-mr-md self-start"
+        style="cursor: help;"
       >
         <definition-menu
           :definition="attribute.definition"
@@ -33,7 +33,8 @@
       :is="inputList[getAttributeType(attribute)]"
       :attribute="attribute"
       :plugin="plugin"
-      class="col q-px-md"
+      class="col"
+      style="max-width: 280px"
       :label="getAttributeLabel(attribute)"
       hide-bottom-space
       :full-name="fullName"
