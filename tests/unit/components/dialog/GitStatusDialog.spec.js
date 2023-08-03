@@ -60,6 +60,17 @@ describe('Test component: GitStatusDialog', () => {
           new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 2 }),
         ]);
       });
+
+      it('should have two staged files', () => {
+        wrapper.vm.filesStatus = [
+          new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 2 }),
+          new FileStatus({ headStatus: 0, workdirStatus: 0, stageStatus: 3 }),
+        ];
+        expect(wrapper.vm.stagedFiles).toEqual([
+          new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 2 }),
+          new FileStatus({ headStatus: 0, workdirStatus: 0, stageStatus: 3 }),
+        ]);
+      });
     });
 
     describe('Test computed: modifiedFiles', () => {

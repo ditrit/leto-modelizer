@@ -8,14 +8,19 @@ import FileStatus from 'src/models/git/FileStatus';
 
 installQuasarPlugin();
 const mockStagedFileStatus = new FileStatus({ headStatus: 0, workdirStatus: 2, stageStatus: 2 });
-const mockNotStagedFileStatus = new FileStatus({ headStatus: 1, workdirStatus: 0, stageStatus: 1 });
+const mockNotStagedFileStatus = new FileStatus({ headStatus: 1, workdirStatus: 1, stageStatus: 1 });
+const mockDeletedFileStatus = new FileStatus({ headStatus: 0, workdirStatus: 0, stageStatus: 3 });
 
 jest.mock('src/composables/events/DialogEvent', () => ({
   subscribe: jest.fn(),
 }));
 
 jest.mock('src/composables/Project', () => ({
-  getStatus: jest.fn(() => Promise.resolve([mockStagedFileStatus, mockNotStagedFileStatus])),
+  getStatus: jest.fn(() => Promise.resolve([
+    mockStagedFileStatus,
+    mockNotStagedFileStatus,
+    mockDeletedFileStatus,
+  ])),
 }));
 
 describe('Test component: GitCommitDialog', () => {
@@ -50,7 +55,10 @@ describe('Test component: GitCommitDialog', () => {
         expect(wrapper.vm.stagedFiles).toEqual([]);
 
         await wrapper.vm.setFilesStatus({ key: 'GitCommit' });
-        expect(wrapper.vm.stagedFiles).toEqual([mockStagedFileStatus]);
+        expect(wrapper.vm.stagedFiles).toEqual([
+          mockStagedFileStatus,
+          mockDeletedFileStatus,
+        ]);
       });
 
       it('should not set files status on invalid event type', async () => {

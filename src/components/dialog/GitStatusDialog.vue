@@ -117,7 +117,7 @@ const props = defineProps({
 
 const loading = ref(true);
 const filesStatus = ref([]);
-const stagedFiles = computed(() => filesStatus.value.filter((f) => f.isStaged));
+const stagedFiles = computed(() => filesStatus.value.filter((f) => f.isStaged || f.isDeleted));
 const modifiedFiles = computed(() => filesStatus.value.filter((f) => f.hasUnstagedChanged));
 const untrackedFiles = computed(() => filesStatus.value.filter((f) => f.isUntracked));
 const noFiles = computed(() => stagedFiles.value.length === 0
