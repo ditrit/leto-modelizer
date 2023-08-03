@@ -438,6 +438,18 @@ export async function appendProjectFile(projectId, file) {
 }
 
 /**
+ * Get list of all the files in the current staging area.
+ * @param {String} project - Id of the project.
+ * @return {Promise<String[]>} Promise with array of filepaths on success otherwise an error.
+ */
+export async function gitListFiles(projectId) {
+  return git.listFiles({
+    fs,
+    dir: `/${projectId}`,
+  });
+}
+
+/**
  * Update remote origin, fetch and checkout the default branch.
  * @param {Project} project - Project to update.
  * @return {Promise<void>} Promise with nothing on success otherwise an error.
@@ -495,6 +507,20 @@ export async function createBranchFrom(projectId, newBranchName, branchName) {
  */
 export async function gitAdd(projectId, filepath) {
   return git.add({
+    fs,
+    dir: `/${projectId}`,
+    filepath,
+  });
+}
+
+/**
+ * Add (stage) deleted files.
+ * @param {String} projectId - Id of project.
+ * @param {String} filepath - Path of the file to add.
+ * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function gitRemove(projectId, filepath) {
+  return git.remove({
     fs,
     dir: `/${projectId}`,
     filepath,
