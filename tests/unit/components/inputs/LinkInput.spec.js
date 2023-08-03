@@ -9,6 +9,40 @@ installQuasarPlugin();
 describe('Test component: LinkInput', () => {
   let wrapper;
 
+  const options = [{
+    name: 'default',
+    type: 'category',
+    children: [{
+      type: 'item',
+      value: 'componentName',
+    }],
+  }, {
+    name: 'variable',
+    type: 'category',
+    children: [{
+      name: 'variable',
+      type: 'category',
+      children: [{
+        name: 'variableName',
+        formattedName: 'var.variableName',
+        value: 'variableValue',
+        type: 'item',
+      }],
+    }],
+  }];
+  const qSelectStub = {
+    template: `
+      <div>
+        <slot name="prepend"></slot>
+        <slot></slot>
+      </div>
+    `,
+    props: ['value', 'options', 'rules'],
+    methods: {
+      validate: jest.fn(),
+    },
+  };
+
   beforeEach(() => {
     wrapper = shallowMount(LinkInput, {
       props: {
@@ -30,12 +64,18 @@ describe('Test component: LinkInput', () => {
               }],
             },
             getComponentsByType: jest.fn(() => [{ id: 'componentName' }]),
+            variables: [{
+              category: 'variable',
+              name: 'variableName',
+              formattedName: 'var.variableName',
+              value: 'variableValue',
+            }],
           },
         },
       },
       global: {
         stubs: {
-          qSelect: true,
+          qSelect: qSelectStub,
         },
         plugins: [
           createI18n({
@@ -71,12 +111,6 @@ describe('Test component: LinkInput', () => {
       });
     });
 
-    describe('Test variable: options', () => {
-      it('should be an array', () => {
-        expect(wrapper.vm.options).toEqual(['componentName']);
-      });
-    });
-
     describe('Test variable: iconName', () => {
       it('should match "linkIconName"', () => {
         expect(wrapper.vm.iconName).toEqual('iconName');
@@ -84,8 +118,13 @@ describe('Test component: LinkInput', () => {
     });
   });
 
-  // TODO: REF.value.validate is not a function
-  describe.skip('Test watcher: props.plugin.components', () => {
+  describe('Test function: initOptions', () => {
+    it('should init options', () => {
+      expect(wrapper.vm.options).toEqual(options);
+    });
+  });
+
+  describe('Test watcher: props.plugin.data.components', () => {
     it('should update options', async () => {
       await wrapper.setProps({
         attribute: {
@@ -114,7 +153,8 @@ describe('Test component: LinkInput', () => {
           },
         },
       });
-      expect(wrapper.vm.options).toEqual(['componentName']);
+
+      expect(wrapper.vm.options).toEqual(options);
     });
   });
 });
