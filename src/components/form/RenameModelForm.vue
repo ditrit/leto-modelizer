@@ -33,7 +33,7 @@
 
 <script setup>
 import { Notify } from 'quasar';
-import { ref } from 'vue';
+import { ref, toRef } from 'vue';
 import { notEmpty } from 'src/composables/QuasarFieldRule';
 import { useI18n } from 'vue-i18n';
 import { rename } from 'src/composables/Project';
@@ -53,7 +53,7 @@ const props = defineProps({
   },
 });
 
-const modelName = ref(props.model.path);
+const modelName = ref(toRef(props, 'model').value.path);
 const submitting = ref(false);
 
 /**

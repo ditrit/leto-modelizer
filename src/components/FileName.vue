@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { toRef } from 'vue';
 
 const props = defineProps({
   path: {
@@ -33,10 +33,5 @@ const props = defineProps({
   },
 });
 
-const fileStatus = ref(props.status);
-
-watch(() => props.status, () => {
-  fileStatus.value = props.status;
-});
-
+const fileStatus = toRef(props, 'status');
 </script>

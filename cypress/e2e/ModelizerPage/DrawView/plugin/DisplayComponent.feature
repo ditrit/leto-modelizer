@@ -25,7 +25,7 @@ Feature: Test modelizer draw view: add plugin component
     And  I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
-    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
 
   Scenario Outline: Click on the <element> component should display it on the page
     Then I expect '[data-cy="draw-container"] [id^="<element>"]' not exists

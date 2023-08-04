@@ -50,7 +50,7 @@ For now, we don't have many plugins to offer you, but follow us and in the next 
 
 Plugin to manage terraform files, by default it comes with aws provider definition.
 
-[GitHub url](https://github.com/ditrit/terrator-plugin#0.4.0)
+[GitHub url](https://github.com/ditrit/terrator-plugin#0.4.1)
 
 ### Github plugin
 
@@ -94,7 +94,7 @@ Plugin to manage github action files.
     <tr>
       <td>Next</td>
       <td>= 0.18.0</td>
-      <td>= 0.4.0</td>
+      <td>>= 0.4.0 && < 0.5.0</td>
       <td>= 0.2.2</td>
     </tr>
   </tbody>
@@ -128,7 +128,7 @@ Choose __Custom plugin__ to install a specific plugin not referenced as an offic
 Examples with official plugins:
 - terrator-plugin: 
   - plugin name: `terrator-plugin`
-  - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.4.0`
+  - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.4.1`
 - githubator-plugin: 
   - plugin name: `githubator-plugin`
   - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.2.2`
@@ -139,7 +139,7 @@ Options `repository-name` and `repository-url` can be added with the `npm run pl
 
 ```bash
 # Example with terraform plugin
-npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.4.0"
+npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.4.1"
 
 # Example with github action plugin
 npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.2.2"

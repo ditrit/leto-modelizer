@@ -25,8 +25,8 @@ Feature: Test modelizer draw view: plugin initialization
   Scenario Outline: Should have only one plugin installed with all these definitions
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected [data-cy="title"]' is 'terrator-plugin (18)'
-    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected [data-cy="title"]' is 'terrator-plugin (35)'
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
     And  I expect '[data-cy="component-definition_<element>"]' exists
 
     Examples:

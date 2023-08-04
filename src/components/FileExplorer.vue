@@ -60,6 +60,7 @@ import {
   ref,
   onMounted,
   onUnmounted,
+  toRef,
 } from 'vue';
 import GitEvent from 'src/composables/events/GitEvent';
 import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
@@ -91,7 +92,7 @@ const fileExplorerRef = ref(null);
 const nodes = ref([]);
 const activeFileId = ref(null);
 // Must be a String according to https://quasar.dev/vue-components/tree
-const filterTrigger = ref(props.showParsableFiles.toString());
+const filterTrigger = ref(toRef(props, 'showParsableFiles').value.toString());
 
 let selectFileTabSubscription;
 let createFileSubscription;

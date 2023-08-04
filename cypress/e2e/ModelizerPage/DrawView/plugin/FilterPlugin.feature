@@ -74,7 +74,7 @@ Feature: Test modelizer draw view: plugin filter
     And  I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
-    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
 
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
     Then I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 1 time on screen
@@ -105,7 +105,7 @@ Feature: Test modelizer draw view: plugin filter
     And  I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
-    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
 
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
     Then I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 2 times on screen
@@ -129,7 +129,7 @@ Feature: Test modelizer draw view: plugin filter
     And  I wait 1 second
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
-    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 18 times on screen
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
 
     When I set on '[data-cy="definitions-filter-input"]' text '<filter>'
     Then I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 0 time on screen

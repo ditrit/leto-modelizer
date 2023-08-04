@@ -3,7 +3,7 @@ import nunjucks from 'nunjucks';
 
 Then('I expect {string} exists', (templateSelector) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
-  cy.get(selector).should('be.visible');
+  cy.get(selector).should('exist');
 });
 
 Then('I expect {string} not exists', (templateSelector) => {

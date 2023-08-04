@@ -39,7 +39,7 @@
 
 <script setup>
 import { Notify } from 'quasar';
-import { ref } from 'vue';
+import { ref, toRef } from 'vue';
 import { notEmpty, isUnique } from 'src/composables/QuasarFieldRule';
 import { renameProject, getProjects } from 'src/composables/Project';
 import { useI18n } from 'vue-i18n';
@@ -54,13 +54,14 @@ const props = defineProps({
   },
 });
 
-const projectName = ref(props.projectId);
+const projectName = ref(toRef(props, 'projectId').value);
 const submitting = ref(false);
 
 /**
  * Rename project, manage toast and loader.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-function onSubmit() {
+async function onSubmit() {
   submitting.value = true;
 
   return renameProject(props.projectId, projectName.value)

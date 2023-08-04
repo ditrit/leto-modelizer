@@ -47,7 +47,7 @@
 
 <script setup>
 import { Notify } from 'quasar';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, toRef } from 'vue';
 import { isUniqueModel } from 'src/composables/QuasarFieldRule';
 import { useI18n } from 'vue-i18n';
 import {
@@ -73,10 +73,11 @@ const props = defineProps({
     required: true,
   },
 });
-const plugin = ref(getPluginByName(props.template.plugin));
-const baseFolder = ref(getPluginByName(props.template.plugin).configuration.restrictiveFolder || '');
+const template = toRef(props, 'template');
+const plugin = ref(getPluginByName(template.value.plugin));
+const baseFolder = ref(getPluginByName(template.value.plugin).configuration.restrictiveFolder || '');
 const modelName = ref(plugin.value.getModels(
-  props.template.files.map((file) => `${baseFolder.value || ''}${file}`),
+  template.value.files.map((file) => `${baseFolder.value || ''}${file}`),
 )[0]);
 const submitting = ref(false);
 const models = ref([]);

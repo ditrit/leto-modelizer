@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { toRef } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -65,7 +65,7 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(['update:modelValue']);
-const selectedTags = ref(props.modelValue);
+const selectedTags = toRef(props, 'modelValue');
 
 /**
  * Emit an update event to remove tag.
@@ -74,10 +74,6 @@ const selectedTags = ref(props.modelValue);
 function unselectTag(tag) {
   emit('update:modelValue', selectedTags.value.filter((selectedTag) => selectedTag !== tag));
 }
-
-watch(() => props.modelValue, (value) => {
-  selectedTags.value = value;
-});
 </script>
 
 <style scoped lang="scss">

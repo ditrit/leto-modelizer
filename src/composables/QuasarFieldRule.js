@@ -58,7 +58,7 @@ export function isRequired(t, value, required) {
  * otherwise the translated error message.
  */
 export function isStringTooShort(t, value, min) {
-  return !min || value.length >= min || t('errors.rules.string.min', { min });
+  return !min || value?.length >= min || t('errors.rules.string.min', { min });
 }
 
 /**

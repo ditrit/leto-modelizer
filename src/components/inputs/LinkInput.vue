@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, toRefs, watch } from 'vue';
 import { isRequired } from 'src/composables/QuasarFieldRule';
 
 const props = defineProps({
@@ -34,12 +34,13 @@ const props = defineProps({
 });
 
 const linkInput = ref(null);
-const localValue = ref(props.attribute.value);
-const options = ref(props.plugin.data.getComponentsByType(
-  props.attribute.definition.linkRef,
+const { attribute, plugin } = toRefs(props);
+const localValue = ref(attribute.value.value);
+const options = ref(plugin.value.data.getComponentsByType(
+  attribute.value.definition.linkRef,
 ).map(({ id }) => id));
-const iconName = ref(props.plugin.data.definitions.components.find(
-  ({ type }) => type === props.attribute.definition.linkRef,
+const iconName = ref(plugin.value.data.definitions.components.find(
+  ({ type }) => type === attribute.value.definition.linkRef,
 ).icon);
 
 watch(() => props.plugin.data.components, () => {

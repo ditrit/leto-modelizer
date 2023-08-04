@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue';
+import { reactive, toRef, watch } from 'vue';
 import InputWrapper from 'components/inputs/InputWrapper';
 import ObjectInput from 'src/components/inputs/ObjectInput.vue';
 
@@ -88,7 +88,7 @@ const props = defineProps({
 });
 
 const data = reactive({
-  localAttributes: [...props.attributes],
+  localAttributes: [...toRef(props, 'attributes').value],
 });
 
 /**

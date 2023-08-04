@@ -364,6 +364,7 @@ Feature: Test modelizer text view: delete file and folder
 
     When I click on '[data-cy="component-definition_aws"]'
     Then I expect '[data-cy="draw-container"] [id^="aws"]' exists
+    And  I wait 2 seconds
 
     # Go back to the text view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'

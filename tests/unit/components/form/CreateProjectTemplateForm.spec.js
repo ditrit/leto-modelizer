@@ -63,7 +63,6 @@ describe('Test component: CreateProjectTemplateForm', () => {
 
   describe('Test function: onSubmit', () => {
     it('should call initProject when localIsChecked is false', async () => {
-      wrapper.vm.localIsChecked = false;
       Notify.create = jest.fn();
 
       await wrapper.vm.onSubmit();
@@ -72,7 +71,13 @@ describe('Test component: CreateProjectTemplateForm', () => {
     });
 
     it('should call importProject when localIsChecked is true', async () => {
-      wrapper.vm.localIsChecked = true;
+      await wrapper.setProps({
+        template: {
+          files: ['test.js'],
+          key: 'key',
+        },
+        isChecked: true,
+      });
 
       Notify.create = jest.fn();
 

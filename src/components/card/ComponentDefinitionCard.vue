@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, toRef } from 'vue';
 import {
   addNewComponent,
   addNewTemplateComponent,
@@ -73,7 +73,7 @@ const props = defineProps({
   },
 });
 
-const plugin = ref(getPluginByName(props.pluginName));
+const plugin = ref(getPluginByName(toRef(props, 'pluginName').value));
 const projectName = computed(() => route.params.projectName);
 const query = computed(() => route.query);
 
