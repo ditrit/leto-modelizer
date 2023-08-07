@@ -96,7 +96,7 @@ function setFilesStatus({ key }) {
   if (key === 'GitCommit') {
     loading.value = true;
     getStatus(props.projectName).then((files) => {
-      stagedFiles.value = files.filter((f) => f.isStaged);
+      stagedFiles.value = files.filter((f) => f.isStaged || f.isDeleted);
     }).finally(() => {
       loading.value = false;
     });
