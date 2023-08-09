@@ -76,6 +76,14 @@ Then('I expect {string} to be enabled', (selector) => {
   cy.get(selector).should('not.be.disabled');
 });
 
+Then('I clear active file', () => {
+  cy.get('[data-cy="monaco-editor"]').click();
+  cy.get('[data-cy="monaco-editor"]').focused();
+  // Need both usage for clearing monaco-editor
+  cy.get('[data-cy="monaco-editor"]').type('{selectall}{backspace}');
+  cy.get('.monaco-editor textarea:first').type('{selectall}{backspace}');
+});
+
 Then('I set active file content to {string}', (value) => {
   cy.get('[data-cy="monaco-editor"]').click();
   cy.get('[data-cy="monaco-editor"]').focused();
