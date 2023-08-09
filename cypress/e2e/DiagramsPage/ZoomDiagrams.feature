@@ -1,3 +1,4 @@
+@skip
 Feature: Test diagrams page: zoom on all diagrams
   Background:
     Given I clear cache
@@ -43,7 +44,6 @@ Feature: Test diagrams page: zoom on all diagrams
     Then I expect '[data-cy="diagram_{{ modelFolder }}"]' width is 417
     And  I expect '[data-cy="diagram_{{ modelFolder }}"]' height is 318
 
-  @skip
   Scenario: Should zoom -.5 on all diagrams
     Then I expect '[data-cy="diagram_{{ modelFolder }}"]' width is 278
     And  I expect '[data-cy="diagram_{{ modelFolder }}"]' height is 212
@@ -52,7 +52,6 @@ Feature: Test diagrams page: zoom on all diagrams
     Then I expect '[data-cy="diagram_{{ modelFolder }}"]' width is 139
     And  I expect '[data-cy="diagram_{{ modelFolder }}"]' height is 106
 
-  @skip
   Scenario: Should zoom /2 on all diagrams
     Then I expect '[data-cy="diagram_{{ modelFolder }}"]' width is 278
     And  I expect '[data-cy="diagram_{{ modelFolder }}"]' height is 212

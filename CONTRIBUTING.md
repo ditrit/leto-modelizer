@@ -46,11 +46,12 @@ Run all the unit tests and generate coverage report of the unit tests for sonar.
 
 ### test:e2e
 
-To run all the e2e tests, you need to run the application with terrator-plugin and use specific url for library of template:
+To run all the e2e tests, you need to run the application with ALL official plugins and use specific url for library of template:
 
 ```bash
 npm ci
 npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.4.1"
+npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.2.2"
 npm run plugin:init
 TEMPLATE_LIBRARY_BASE_URL="https://raw.githubusercontent.com/ditrit/leto-modelizer-templates-library/leto-modelizer/e2e_test" npm run dev
 ```

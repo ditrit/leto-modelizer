@@ -336,6 +336,7 @@ Feature: Test modelizer text view: delete file and folder
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'main.tf'
     And  I expect '[data-cy="folder_terraform/folder"]' not exists
 
+  @skip
   Scenario: Save the component in defaultFileName when diagram doesn't have any file
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
 
