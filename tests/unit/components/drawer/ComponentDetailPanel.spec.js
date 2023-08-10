@@ -114,6 +114,10 @@ describe('test component: Plugin Component Detail Panel', () => {
         }],
       }];
 
+      wrapper.vm.originalComponent = {
+        createAttribute: jest.fn((props) => new ComponentAttribute(props)),
+      };
+
       expect(wrapper.vm.sanitizeAttributes(attributes)).toEqual([new ComponentAttribute({
         name: 'attribute',
         value: 'value',
@@ -204,6 +208,7 @@ describe('test component: Plugin Component Detail Panel', () => {
         definition: {
           definedAttributes: [definition],
         },
+        createAttribute: jest.fn((props) => new ComponentAttribute(props)),
       };
 
       expect(wrapper.vm.getReferencedAttributes(component)).toEqual([{
@@ -337,8 +342,12 @@ describe('test component: Plugin Component Detail Panel', () => {
   });
 
   describe('Test function: getAttributeByDefinition', () => {
+    const component = {
+      ...new Component(),
+      createAttribute: jest.fn((props) => new ComponentAttribute(props)),
+    };
+
     it('should return attribute with null value when type is not Object', () => {
-      const component = new Component();
       const definition = new ComponentAttributeDefinition({
         name: 'test',
         type: 'String',
@@ -354,7 +363,6 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
 
     it('should return attribute with array value when type is Object', () => {
-      const component = new Component();
       const definition = new ComponentAttributeDefinition({
         name: 'test',
         type: 'Object',

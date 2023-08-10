@@ -41,6 +41,7 @@
       >
         <attributes-list
           :attributes="selectedComponentAttributes"
+          :component="originalComponent"
           :plugin="plugin"
           :is-root="true"
           :full-name="'root'"
@@ -103,7 +104,6 @@ import {
 } from 'vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { renderModel } from 'src/composables/PluginManager';
-import { ComponentAttribute } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
 import AttributesList from 'src/components/inputs/AttributesList.vue';
 
@@ -137,12 +137,12 @@ function sanitizeAttributes(attributes) {
   return attributes.reduce((acc, attribute) => {
     if (attribute.value !== undefined && attribute.value !== null && attribute.value !== '') {
       if (attribute.type !== 'Object') {
-        acc.push(new ComponentAttribute(attribute));
+        acc.push(originalComponent.value.createAttribute(attribute));
       } else {
         const sanitizedValue = sanitizeAttributes(attribute.value);
 
         if (sanitizedValue.length !== 0) {
-          acc.push(new ComponentAttribute({
+          acc.push(originalComponent.value.createAttribute({
             ...attribute,
             value: sanitizedValue,
           }));
@@ -198,7 +198,7 @@ async function save() {
  */
 function getAttributeByDefinition(component, definition) {
   return component.attributes.find((attr) => attr.name === definition.name)
-    || new ComponentAttribute({
+    || component.createAttribute({
       name: definition.name,
       type: definition.type,
       definition,

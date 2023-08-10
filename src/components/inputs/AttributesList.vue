@@ -44,6 +44,7 @@
     >
       <object-input
         :attribute="attribute"
+        :component="component"
         :plugin="plugin"
         :is-root="isRoot"
         :full-name="`${fullName}.${attribute.name}`"
@@ -67,6 +68,10 @@ const emit = defineEmits([
 const props = defineProps({
   attributes: {
     type: Array,
+    required: true,
+  },
+  component: {
+    type: Object,
     required: true,
   },
   plugin: {

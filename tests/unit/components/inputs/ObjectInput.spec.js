@@ -14,6 +14,18 @@ describe('Test component: ObjectInput', () => {
         attribute: {},
         plugin: {},
         fullName: 'root',
+        component: {
+          createAttribute: jest.fn(() => ({
+            definition: {
+              definition: {},
+              name: 'definedAttributeMissing',
+              type: 'type',
+            },
+            name: 'definedAttributeMissing',
+            type: 'type',
+            value: null,
+          })),
+        },
       },
     });
   });

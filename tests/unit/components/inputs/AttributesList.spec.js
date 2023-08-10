@@ -13,6 +13,7 @@ describe('Test component: AttributesList', () => {
         attributes: [],
         plugin: {},
         fullName: 'root',
+        component: {},
       },
     });
   });
