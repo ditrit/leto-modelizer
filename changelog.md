@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Models page:
   * Rework on tag display, use tag category for all diagrams in table.
   * Rework on tag display, use tag language for plugin selection on create diagram from template.
+  * Update naviguation bar to display user info.
 * Draw page:
   * Rework on left drawer.
   * Re-design attribute fields.
