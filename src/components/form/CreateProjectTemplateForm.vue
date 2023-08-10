@@ -49,7 +49,7 @@
       data-cy="import-project-checkbox"
     />
     <div
-      v-if="isChecked"
+      v-if="localIsChecked"
       class="column q-gutter-md"
     >
       <q-input
@@ -139,7 +139,7 @@ const project = {};
 const projectName = ref('');
 const projectNames = ref(Object.keys(getProjects()));
 const templateDescription = ref(toRef(props, 'template').value.description);
-const localIsChecked = toRef(props, 'isChecked');
+const localIsChecked = ref(toRef(props, 'isChecked').value);
 const repository = ref();
 const username = ref();
 const token = ref();
@@ -204,6 +204,10 @@ watch(() => localIsChecked.value, () => {
   if (localIsChecked.value !== props.isChecked) {
     emit('update:checked', localIsChecked.value);
   }
+});
+
+watch(() => props.isChecked, () => {
+  localIsChecked.value = props.isChecked;
 });
 </script>
 

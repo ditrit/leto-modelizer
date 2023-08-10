@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { toRef } from 'vue';
+import { ref, toRef } from 'vue';
 import { isRequired } from 'src/composables/QuasarFieldRule';
 
 const props = defineProps({
@@ -18,5 +18,5 @@ const props = defineProps({
   },
 });
 
-const localValue = toRef(props, 'attribute').value.value;
+const localValue = ref(toRef(props, 'attribute').value.value);
 </script>

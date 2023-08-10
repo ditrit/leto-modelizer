@@ -23,7 +23,7 @@ const props = defineProps({
 
 const selectInput = ref(null);
 const attribute = toRef(props, 'attribute');
-const localValue = attribute.value.value;
+const localValue = ref(attribute.value.value);
 const options = ref(attribute.value.definition.rules.values);
 
 watch(() => selectInput.value, () => {

@@ -29,7 +29,7 @@ const props = defineProps({
 });
 
 const stringInput = ref(null);
-const localValue = toRef(props, 'attribute').value.value;
+const localValue = ref(toRef(props, 'attribute').value.value);
 
 watch(() => stringInput.value, () => {
   if (stringInput.value) {

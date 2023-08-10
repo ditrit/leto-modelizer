@@ -117,4 +117,18 @@ describe('Test component: CreateProjectTemplateForm', () => {
       expect(wrapper.vm.localIsChecked).toEqual(true);
     });
   });
+
+  describe('Test watcher: localIsChecked', () => {
+    it('should be triggered when localIsChecked is updated', async () => {
+      expect(wrapper.vm.localIsChecked).toEqual(false);
+
+      await wrapper.setProps({
+        isChecked: true,
+      });
+
+      wrapper.vm.localIsChecked = false;
+
+      expect(wrapper.vm.localIsChecked).toEqual(false);
+    });
+  });
 });
