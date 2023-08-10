@@ -12,6 +12,9 @@ const authentication = [
   {
     name: 'Provider 1',
     config: { a: 'a' },
+    userMapping: {
+      firstname: 'profile.firstname',
+    },
   },
   {
     name: 'Provider 2',
@@ -43,7 +46,10 @@ jest.mock('oidc-client-ts', () => ({
 
     // eslint-disable-next-line class-methods-use-this
     getUser() {
-      return Promise.resolve('getUser successful');
+      // return Promise.resolve('getUser successful');
+      return Promise.resolve(
+        this.providerConfig.a ? { profile: { firstname: 'firstname' } } : null,
+      );
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -152,7 +158,22 @@ describe('User Authentication', () => {
 
       const result = await getUser();
 
-      expect(result).toEqual('getUser successful');
+      expect(result).toEqual({
+        email: null,
+        firstname: 'firstname',
+        id: null,
+        lastname: null,
+      });
+    });
+
+    it('should return null', async () => {
+      process.env.AUTHENTICATION = JSON.stringify(authentication);
+
+      setUserManager('Provider 2');
+
+      const result = await getUser();
+
+      expect(result).toBeNull();
     });
   });
 });

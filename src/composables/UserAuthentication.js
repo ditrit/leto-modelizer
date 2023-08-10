@@ -1,6 +1,9 @@
 import { UserManager, WebStorageStateStore } from 'oidc-client-ts';
+import nunjucks from 'nunjucks';
+import User from 'src/models/User';
 
 let userManager = null;
+let userAuthentication = null;
 
 /**
  * Checks if the user manager exists.
@@ -24,9 +27,11 @@ export function setUserManager(providerName) {
     return;
   }
 
+  userAuthentication = authentication.find(({ name }) => name === providerName);
+
   const providerConfig = {
     userStore: new WebStorageStateStore({ store: window.localStorage }),
-    ...authentication.find(({ name }) => name === providerName).config,
+    ...userAuthentication.config,
   };
 
   userManager = new UserManager(providerConfig);
@@ -45,7 +50,7 @@ export function setUserManager(providerName) {
  * Initiate the login process by redirecting the user to the authentication provider.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export function login() {
+export async function login() {
   return userManager.signinRedirect();
 }
 
@@ -54,7 +59,7 @@ export function login() {
  * is redirected back from the authentication provider.
  * @returns {Promise<object>} Promise with the logged-in user on success otherwise an error.
  */
-export function completeLogin() {
+export async function completeLogin() {
   return userManager.signinRedirectCallback();
 }
 
@@ -64,7 +69,7 @@ export function completeLogin() {
  * @returns {Promise<object>} Promise with the refreshed user information on success,
  * otherwise an error.
  */
-export function completeSilentLogin() {
+export async function completeSilentLogin() {
   return userManager.signinSilentCallback();
 }
 
@@ -73,6 +78,13 @@ export function completeSilentLogin() {
  * to fetch the user's information from the authentication provider.
  * @returns {Promise<object>} Promise with the current user on success otherwise an error.
  */
-export function getUser() {
-  return userManager.getUser();
+export async function getUser() {
+  return userManager?.getUser().then((user) => (user
+    ? new User({
+      firstname: nunjucks.renderString(`{{ ${userAuthentication?.userMapping?.firstname} }}`, user),
+      lastname: nunjucks.renderString(`{{ ${userAuthentication?.userMapping?.lastname} }}`, user),
+      email: nunjucks.renderString(`{{ ${userAuthentication?.userMapping?.email} }}`, user),
+      id: nunjucks.renderString(`{{ ${userAuthentication?.userMapping?.id} }}`, user),
+    })
+    : null));
 }
