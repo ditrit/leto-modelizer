@@ -76,6 +76,7 @@ describe('test component: Plugin Component Detail Panel', () => {
                 type: 'componentType',
               }],
             },
+            renameComponentId: jest.fn(),
           },
           draw: jest.fn(),
         },
@@ -144,14 +145,12 @@ describe('test component: Plugin Component Detail Panel', () => {
 
       wrapper.vm.submit();
 
-      expect(wrapper.vm.originalComponent.id).toEqual(wrapper.vm.selectedComponentId);
       expect(wrapper.vm.originalComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
       expect(wrapper.vm.isVisible).toEqual(false);
 
       wrapper.vm.submit();
 
-      expect(wrapper.vm.originalComponent.id).toEqual(wrapper.vm.selectedComponentId);
       expect(wrapper.vm.originalComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
       expect(wrapper.vm.isVisible).toEqual(false);

@@ -160,7 +160,10 @@ function sanitizeAttributes(attributes) {
 async function submit() {
   submitting.value = true;
 
-  originalComponent.value.id = selectedComponentId.value;
+  if (originalComponent.value.id !== selectedComponentId.value) {
+    props.plugin.data.renameComponentId(originalComponent.value.id, selectedComponentId.value);
+  }
+
   originalComponent.value.attributes = sanitizeAttributes(attributesUpdated.value);
 
   props.plugin.draw('root');
