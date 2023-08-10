@@ -167,11 +167,18 @@ Example with `Google` and `Github` providers.
       {
         "name": "Github",
         "icon": "github.svg",
+        "userMapping": {
+          "firstname": "profile.firstname",
+          "lastname": "profile.lastname",
+          "email": "profile.email",
+          "id": "profile.id"
+        },
         "config": {...}
       },
       {
         "name": "Google",
         "icon": "google.svg",
+        "userMapping": {...},
         "config": {...}
       }
     ]
@@ -181,6 +188,7 @@ Example with `Google` and `Github` providers.
 
 - the `name` is the name of the provider. It is required.
 - the `icon` is the icon of the provider. It is required, must be named `/[OIDC[x].name]/i.svg` and be placed inside `public/provider` folder.
+- the `userMapping` is the map between needed user parameters and where to find them. It is required.
 
 The `config` object might change from one provider to another. Here is an example configuration for `Github` provider:
 
@@ -191,29 +199,24 @@ The `config` object might change from one provider to another. Here is an exampl
       {
         "name": "Github",
         "icon": "provider/github.svg",
+        "userMapping": {
+          "firstname": "profile.firstname",
+          "lastname": "profile.lastname",
+          "email": "profile.email",
+          "id": "profile.id"
+        },
         "config": {
           "authority": "https://token.actions.githubusercontent.com",
+          "automatic_silent_renew": true,
           "client_id": "your-client-id",
+          "client_secret": "your-client-secret",
           "redirect_uri": "https://your-app.com/redirect",
           "response_type": "code",
           "scope": "openid profile email",
-          "automatic_silent_renew": true,
           "silent_redirect_uri": "https://your-app.com/silent-refresh",
-          "token_endpoint": "https://github.com/login/oauth/access_token/",
-          "token_type": "bearer",
-          "client_secret": "your-client-secret",
           "metadata": {
             "authorization_endpoint": "https://github.com/login/oauth/authorize",
-            "authority": "https://token.actions.githubusercontent.com",
-            "client_id": "your-client-id",
-            "redirect_uri": "https://your-app.com/redirect",
-            "response_type": "code",
-            "scope": "openid profile email",
-            "automatic_silent_renew": true,
-            "silent_redirect_uri": "https://your-app.com/silent-refresh",
-            "token_endpoint": "https://github.com/login/oauth/access_token/",
-            "token_type": "bearer",
-            "client_secret": "your-client-secret",
+            "token_endpoint": "https://github.com/login/oauth/access_token/"
           }
         }
       }
@@ -226,7 +229,11 @@ Here's a description of each key in the provided configuration:
 
   `authority`: The URL of the OIDC provider's authority. It represents the base URL of the provider's authentication server.
 
+  `automatic_silent_renew`: A boolean value indicating whether to automatically renew the user's access token silently in the background when it expires.
+
   `client_id`: The client identifier assigned by the OIDC provider for your application. It is used to identify your application when making authentication requests.
+
+  `client_secret`: The client secret assigned by the OIDC provider for your application. It is used to authenticate your application when exchanging the authorization code for an access token.
 
   `redirect_uri`: The URI where the OIDC provider will redirect the user after successful authentication. It should be a URL within your application where you can handle the authentication response.
 
@@ -234,17 +241,13 @@ Here's a description of each key in the provided configuration:
 
   `scope`: The requested scopes for the authentication process. Scopes define the access rights and information that your application requests from the user.
 
-  `automatic_silent_renew`: A boolean value indicating whether to automatically renew the user's access token silently in the background when it expires.
-
   `silent_redirect_uri`: The URI where the OIDC provider will redirect to perform silent token renewals. It should be a URL within your application.
 
+  `metadata`: Additional metadata related to the OIDC provider configuration. It includes properties like authorization_endpoint, token_endpoint, and others.
+
+  `authorization_endpoint`: URL of the OP's OAuth 2.0 Authorization Endpoint.
+
   `token_endpoint`: The URL of the OIDC provider's token endpoint. It is used to exchange the authorization code for an access token.
-
-  `token_type`: The type of token that will be used, typically 'bearer' for OAuth 2.0-based authentication.
-
-  `client_secret`: The client secret assigned by the OIDC provider for your application. It is used to authenticate your application when exchanging the authorization code for an access token.
-
-  `metadata`: Additional metadata related to the OIDC provider configuration. It includes properties like authorization_endpoint, token_endpoint, client_id, redirect_uri, and others.
 
 :warning: Don't forget to update `nginx.conf` with a reverse proxy for your authentication provider.
 
