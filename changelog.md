@@ -53,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix Sonar new bugs/code smell due to quality profil change, see [this issue](https://github.com/ditrit/leto-modelizer/issues/322).
 * Fix bug on using default file name from plugin instead of the file name specified by the user, when adding a component after creating a diagram from scratch.
 * Fix bug on deleted files while pushing a branch or using "upload to git" button, see [this issue](https://github.com/ditrit/leto-modelizer/issues/358).
+* fix broken master
 
 ### Removed
 
