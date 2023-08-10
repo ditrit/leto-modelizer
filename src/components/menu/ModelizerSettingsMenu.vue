@@ -1,41 +1,58 @@
 <template>
-  <q-btn
-    round
+  <q-btn-dropdown
+    rounded
+    auto-close
     color="white"
     text-color="primary"
-    icon="fa-solid fa-gear"
+    class="q-pa-xs"
     data-cy="modelizer-settings-button"
   >
-    <q-menu
-      auto-close
-      data-cy="project-settings-menu"
-    >
-      <q-list>
-        <template
-          v-for="menuItem in menuItems"
-          :key="menuItem.key"
+    <template #label>
+      <q-avatar
+        v-if="user?.firstname && user?.lastname"
+        color="primary"
+        text-color="white"
+        size="md"
+        font-size="12px"
+        :title="`${user.firstname} ${user.lastname}`"
+      >
+        {{ userInitials }}
+      </q-avatar>
+      <q-avatar
+        v-else
+        color="grey"
+        text-color="white"
+        icon="fa-solid fa-user"
+        size="md"
+        font-size="12px"
+        :title="$t('page.modelizer.settings.user.unknown')"
+      />
+    </template>
+    <q-list>
+      <template
+        v-for="menuItem in menuItems"
+        :key="menuItem.key"
+      >
+        <q-item
+          v-if="menuItem.visible"
+          clickable
+          class="settings-item"
+          :data-cy="`item_${menuItem.key}`"
+          @click="onClick(menuItem.key)"
         >
-          <q-item
-            v-if="menuItem.visible"
-            clickable
-            class="settings-item"
-            :data-cy="`item_${menuItem.key}`"
-            @click="onClick(menuItem.key)"
-          >
-            <q-item-section avatar>
-              <q-icon
-                color="primary"
-                :name="menuItem.icon"
-              />
-            </q-item-section>
-            <q-item-section no-wrap>
-              {{ $t(menuItem.title) }}
-            </q-item-section>
-          </q-item>
-        </template>
-      </q-list>
-    </q-menu>
-  </q-btn>
+          <q-item-section avatar>
+            <q-icon
+              color="primary"
+              :name="menuItem.icon"
+            />
+          </q-item-section>
+          <q-item-section no-wrap>
+            {{ $t(menuItem.title) }}
+          </q-item-section>
+        </q-item>
+      </template>
+    </q-list>
+  </q-btn-dropdown>
 </template>
 
 <script setup>
@@ -48,6 +65,7 @@ import {
   onMounted,
   onUnmounted,
 } from 'vue';
+import { getUser } from 'src/composables/UserAuthentication';
 
 const props = defineProps({
   projectName: {
@@ -58,6 +76,7 @@ const props = defineProps({
 
 let addRemoteSubscription;
 const project = ref({});
+const user = ref({});
 const hasRepository = computed(() => !!project.value.git?.repository);
 const menuItems = computed(() => [
   {
@@ -73,6 +92,9 @@ const menuItems = computed(() => [
     visible: true,
   },
 ]);
+const userInitials = computed(
+  () => `${user.value.firstname?.at(0)}${user.value.lastname?.at(0)}`.toUpperCase(),
+);
 
 /**
  * Send event to open the dialog corresponding to the key.
@@ -89,8 +111,11 @@ function setProject() {
   project.value = getProjectById(props.projectName);
 }
 
-onMounted(() => {
+onMounted(async () => {
   setProject();
+
+  user.value = await getUser();
+
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(setProject);
 });
 
