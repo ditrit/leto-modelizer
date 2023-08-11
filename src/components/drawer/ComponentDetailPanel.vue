@@ -55,6 +55,7 @@
                 v-model="selectedComponentId"
                 class="q-px-md q-pb-sm"
                 :label="$t('plugin.component.attribute.id')"
+                data-cy="component-id-input"
               />
             </q-item>
           </template>
