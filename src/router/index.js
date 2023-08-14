@@ -4,6 +4,13 @@ import {
 } from 'vue-router';
 import routes from 'src/router/routes';
 import { userManagerExists, getUser } from 'src/composables/UserAuthentication';
+import PluginEvent from 'src/composables/events/PluginEvent';
+
+let applicationReady = false;
+
+PluginEvent.InitEvent.subscribe(() => {
+  applicationReady = true;
+});
 
 /*
  * If not building with SSR mode, you can
@@ -39,6 +46,8 @@ export default route((/* { store, ssrContext } */) => {
       && oidcProviderList.length > 0
       && (!userManagerExists() || !await getUser())) {
       next({ name: 'Login' });
+    } else if (!applicationReady && to.name !== 'Splash') {
+      next({ name: 'Splash', query: { from: to.fullPath } });
     } else {
       next();
     }
