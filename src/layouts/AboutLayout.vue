@@ -11,11 +11,7 @@
             to="/"
             data-cy="home-page-link"
           >
-            <q-img
-              src="icons/logo_modelizer.svg"
-              class="about-logo"
-              :ratio="1"
-            />
+            <q-img class="logo" />
           </router-link>
           <h2 class="text-white col-auto">
             {{ $t('page.about.title') }}
@@ -40,10 +36,10 @@
               </h4>
               <div class="row">
                 <q-img
-                  src="icons/logo_modelizer.svg"
                   fit="contain"
-                  class="col-3 bg-primary rounded-borders leto-logo"
+                  class="logo col-3 bg-primary rounded-borders"
                 />
+
                 <div class="col column justify-between q-pl-lg text-body1 text-justify">
                   <div>
                     {{ $t('page.about.letoModelizer.description') }}
@@ -265,8 +261,12 @@ const version = ref(process.env.VERSION);
   .about-content {
     margin: 5vh;
   }
-  .leto-logo {
+  .logo {
     max-height: 145px;
+  }
+  .about-banner .logo {
+    height: 8rem;
+    width: 8rem;
   }
 }
 </style>

@@ -4,10 +4,8 @@
     data-cy="navigation-bar"
   >
     <div class="application-name">
-      <q-icon
-        color="primary"
-        size="4rem"
-        name="img:icons/logo_modelizer.svg"
+      <q-img
+        class="logo"
         left
       />
       <label
