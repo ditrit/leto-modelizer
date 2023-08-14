@@ -88,7 +88,6 @@ import { getPluginByName, initComponents } from 'src/composables/PluginManager';
 import { getAllModels } from 'src/composables/Project';
 import DeleteModelDialog from 'src/components/dialog/DeleteModelDialog.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import PluginEvent from 'src/composables/events/PluginEvent';
 import {
   computed,
   onMounted,
@@ -110,7 +109,6 @@ const translate = reactive({
 });
 const selectedDiagram = ref(null);
 
-let pluginInitSubscription;
 let updateModelSubscription;
 
 /**
@@ -200,9 +198,6 @@ async function drawDiagrams() {
 }
 
 onMounted(async () => {
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(() => {
-    updateDiagrams().then(() => { drawDiagrams(); });
-  });
   updateModelSubscription = UpdateModelEvent.subscribe(() => {
     updateDiagrams().then(() => { drawDiagrams(); });
   });
@@ -212,7 +207,6 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  pluginInitSubscription.unsubscribe();
   updateModelSubscription.unsubscribe();
 });
 </script>

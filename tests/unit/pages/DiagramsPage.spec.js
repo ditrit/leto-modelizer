@@ -3,7 +3,6 @@ import { shallowMount } from '@vue/test-utils';
 import * as PluginManager from 'src/composables/PluginManager';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
-import PluginEvent from 'src/composables/events/PluginEvent';
 import DiagramsPage from 'src/pages/DiagramsPage';
 
 installQuasarPlugin();
@@ -22,12 +21,6 @@ jest.mock('src/composables/PluginManager', () => ({
   getPluginByName: jest.fn(() => ({ draw: () => ({}) })),
 }));
 
-jest.mock('src/composables/events/PluginEvent', () => ({
-  InitEvent: {
-    subscribe: jest.fn(),
-  },
-}));
-
 jest.mock('src/composables/events/ModelEvent', () => ({
   subscribe: jest.fn(),
 }));
@@ -40,21 +33,12 @@ jest.mock('src/composables/events/DialogEvent', () => ({
 
 describe('Test page component: DiagramsPage', () => {
   let wrapper;
-  let pluginInitSubscribe;
-  let pluginInitUnsubscribe;
   let updateModelSubscribe;
   let updateModelUnsubscribe;
 
   beforeEach(() => {
-    pluginInitSubscribe = jest.fn();
-    pluginInitUnsubscribe = jest.fn();
     updateModelSubscribe = jest.fn();
     updateModelUnsubscribe = jest.fn();
-
-    PluginEvent.InitEvent.subscribe.mockImplementation(() => {
-      pluginInitSubscribe();
-      return { unsubscribe: pluginInitUnsubscribe };
-    });
 
     UpdateModelEvent.subscribe.mockImplementation(() => {
       updateModelSubscribe();
@@ -166,22 +150,12 @@ describe('Test page component: DiagramsPage', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe InitEvent', () => {
-      expect(pluginInitSubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should subscribe UpdateModelEvent', () => {
       expect(updateModelSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe InitEvent', () => {
-      expect(pluginInitUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(pluginInitUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should unsubscribe UpdateModelEvent', () => {
       expect(updateModelUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();

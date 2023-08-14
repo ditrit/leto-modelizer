@@ -71,7 +71,6 @@ import { FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
 import { useRoute } from 'vue-router';
 import { getPluginByName } from 'src/composables/PluginManager';
-import PluginEvent from 'src/composables/events/PluginEvent';
 
 const route = useRoute();
 const query = computed(() => route.query);
@@ -104,8 +103,6 @@ let pullSubscription;
 let addFileSubscription;
 let commitFilesSubscription;
 let globalUploadFilesEventSubscription;
-
-let pluginInitSubscription;
 
 /**
  * Filter tree nodes to only display parsable files and folders if showParsableFiles is true.
@@ -371,8 +368,6 @@ onMounted(async () => {
     initTreeNodes();
   });
 
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(openModelFiles);
-
   await initTreeNodes();
 });
 
@@ -387,8 +382,6 @@ onUnmounted(() => {
   addFileSubscription.unsubscribe();
   commitFilesSubscription.unsubscribe();
   globalUploadFilesEventSubscription.unsubscribe();
-
-  pluginInitSubscription.unsubscribe();
 });
 </script>
 

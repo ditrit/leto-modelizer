@@ -47,7 +47,6 @@ const data = reactive({
 const templates = ref([]);
 
 let pluginDefaultSubscription;
-let pluginInitSubscription;
 
 /**
  * On 'Drawer' event type, call renderConfiguration if action is 'move',
@@ -183,15 +182,11 @@ onMounted(() => {
   pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe((event) => {
     onDefaultEvent(event);
   });
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(() => {
-    initView();
-  });
   initView();
 });
 
 onUnmounted(() => {
   pluginDefaultSubscription.unsubscribe();
-  pluginInitSubscription.unsubscribe();
 });
 </script>
 

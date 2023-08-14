@@ -2,7 +2,6 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { Notify } from 'quasar';
 import { shallowMount } from '@vue/test-utils';
 import ModelizerDrawLayout from 'src/layouts/ModelizerDrawLayout.vue';
-import PluginEvent from 'src/composables/events/PluginEvent';
 import PluginManager from 'src/composables/PluginManager';
 import TemplateManager from 'src/composables/TemplateManager';
 
@@ -27,12 +26,6 @@ jest.mock('vue-router', () => ({
       plugin: 'plugin',
     },
   }),
-}));
-
-jest.mock('src/composables/events/PluginEvent', () => ({
-  InitEvent: {
-    subscribe: jest.fn(),
-  },
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
@@ -72,18 +65,8 @@ jest.mock('src/composables/TemplateManager', () => ({
 
 describe('Test page component: ModelizerDrawLayout', () => {
   let wrapper;
-  let initSubscribe;
-  let initUnsubscribe;
 
   beforeEach(() => {
-    initSubscribe = jest.fn();
-    initUnsubscribe = jest.fn();
-
-    PluginEvent.InitEvent.subscribe.mockImplementation(() => {
-      initSubscribe();
-      return { unsubscribe: initUnsubscribe };
-    });
-
     wrapper = shallowMount(ModelizerDrawLayout, {});
   });
 
@@ -158,20 +141,6 @@ describe('Test page component: ModelizerDrawLayout', () => {
       await wrapper.vm.initView();
 
       expect(Notify.create).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Test hook function: onMounted', () => {
-    it('should subscribe to InitEvent', () => {
-      expect(initSubscribe).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to InitEvent', () => {
-      expect(initUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(initUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

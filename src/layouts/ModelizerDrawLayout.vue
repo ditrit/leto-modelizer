@@ -28,11 +28,9 @@ import ComponentDetailPanel from 'src/components/drawer/ComponentDetailPanel.vue
 import ModelizerDrawPage from 'src/pages/ModelizerDrawPage.vue';
 import { getPluginByName, initComponents } from 'src/composables/PluginManager';
 import { getTemplatesByType } from 'src/composables/TemplateManager';
-import PluginEvent from 'src/composables/events/PluginEvent';
 import {
   computed,
   onMounted,
-  onUnmounted,
   reactive,
   ref,
 } from 'vue';
@@ -52,8 +50,6 @@ const data = reactive({
   plugin: null,
 });
 const templates = ref([]);
-
-let pluginInitSubscription;
 
 /**
  * Update plugin, draw components and update component templates array.
@@ -94,14 +90,7 @@ async function initView() {
 }
 
 onMounted(() => {
-  pluginInitSubscription = PluginEvent.InitEvent.subscribe(() => {
-    initView();
-  });
   initView();
-});
-
-onUnmounted(() => {
-  pluginInitSubscription.unsubscribe();
 });
 </script>
 
