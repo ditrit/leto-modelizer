@@ -51,7 +51,7 @@ const submitting = ref(false);
  * Delete model (folder).
  * Emit a positive notification on success and emit an UpdateModel event.
  * Otherwise, emit an error notification.
- * @return {Promise<void>} Promise with nothing on success or error.
+ * @returns {Promise<void>} Promise with nothing on success or error.
  */
 async function onSubmit() {
   submitting.value = true;

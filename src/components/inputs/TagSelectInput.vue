@@ -69,7 +69,7 @@ const selectedTags = toRef(props, 'modelValue');
 
 /**
  * Emit an update event to remove tag.
- * @param {String} tag - Tag to remove.
+ * @param {string} tag - Tag to remove.
  */
 function unselectTag(tag) {
   emit('update:modelValue', selectedTags.value.filter((selectedTag) => selectedTag !== tag));

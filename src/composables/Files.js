@@ -1,8 +1,7 @@
 /**
  * Retrieve content of a file.
- *
- * @param {String} path - File path
- * @return {Promise<String>} Promise with file content on success otherwise an error.
+ * @param {string} path - File path
+ * @returns {Promise<string>} Promise with file content on success otherwise an error.
  */
 export async function readTextFile(path) {
   return new Promise((resolve, reject) => {

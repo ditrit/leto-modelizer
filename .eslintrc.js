@@ -30,7 +30,8 @@ module.exports = {
 
     'airbnb-base',
 
-    "plugin:cypress/recommended"
+    'plugin:cypress/recommended',
+    'plugin:jsdoc/recommended',
   ],
 
   plugins: [
@@ -82,9 +83,10 @@ module.exports = {
         'message': 'Use \'src/\' for base of import. Don\'t use \'./\' or \'../\'.',
       }],
     }],
-    "vue/no-v-html": 'off',
-    "vue/singleline-html-element-content-newline": ["error", {
-      "ignoreWhenNoAttributes": false,
-    }]
+    'vue/no-v-html': 'off',
+    'vue/singleline-html-element-content-newline': ['error', {
+      'ignoreWhenNoAttributes': false,
+    }],
+    'jsdoc/no-undefined-types': 'off'
   }
 }

@@ -146,7 +146,6 @@ async function upload() {
 
 /**
  * Update url with the new view type.
- *
  * @param {string} newViewType - 'draw' or 'text'.
  */
 async function onViewTypeUpdate(newViewType) {

@@ -57,7 +57,7 @@ let pluginInitSubscription;
 
 /**
  * Update plugin, draw components and update component templates array.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function initView() {
   if (!query.value?.path) {

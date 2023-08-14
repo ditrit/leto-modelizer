@@ -40,9 +40,10 @@ let dialogEventSubscription;
 
 /**
  * Set newFile and onFolder on valid event.
- * @param {String} key - Event key.
- * @param {Object} file - Event file.
- * @param {Boolean} isFolder - True if file node is a folder, otherwise false.
+ * @param {object} event - Event.
+ * @param {string} event.key - Event key.
+ * @param {object} event.file - Event file.
+ * @param {boolean} event.isFolder - True if file node is a folder, otherwise false.
  */
 function setFileNode({ key, file, isFolder }) {
   if (key === 'CreateFile') {

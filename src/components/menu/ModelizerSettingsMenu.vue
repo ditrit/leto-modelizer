@@ -76,7 +76,7 @@ const menuItems = computed(() => [
 
 /**
  * Send event to open the dialog corresponding to the key.
- * @param {String} key - Event key.
+ * @param {string} key - Event key.
  */
 function onClick(key) {
   DialogEvent.next({ type: 'open', key });

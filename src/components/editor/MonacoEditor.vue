@@ -64,7 +64,7 @@ async function updateFile() {
 
 /**
  * Read file on fs to get its content.
- * @return {Promise<String>} Promise with file's content on success otherwise error.
+ * @returns {Promise<string>} Promise with file's content on success otherwise error.
  */
 async function getFileContent() {
   return readProjectFile(props.projectName, { path: props.file.id })
@@ -75,9 +75,8 @@ async function getFileContent() {
  * Retrieve language from file path for Monaco editor.
  * If language configuration comes from a plugin, set the Monaco configuration.
  * Otherwise, use default language configuration if it exists.
- *
- * @param {String} path - File path.
- * @return {String|null} Associated language.
+ * @param {string} path - File path.
+ * @returns {string} Associated language.
  */
 function initMonacoLanguages(path) {
   const plugin = getPlugins().find((p) => p.isParsable({ path }));
@@ -98,7 +97,7 @@ function initMonacoLanguages(path) {
 /**
  * Setup monaco editor.
  * Register plugin language syntax colorizer.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function createEditor() {
   const value = await getFileContent();
@@ -128,7 +127,7 @@ async function updateEditorLayout() {
 
 /**
  * Get file content and update editor value.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateEditorContent() {
   const value = await getFileContent();

@@ -29,8 +29,9 @@ let dialogEventSubscription;
 
 /**
  * Set projectId on valid event.
- * @param {String} key - Event key.
- * @param {Object} id - Project id.
+ * @param {object} event - Dialog event.
+ * @param {string} event.key - Event key.
+ * @param {object} event.id - Project id.
  */
 function setProjectId({ key, id }) {
   if (key === 'RenameProject') {

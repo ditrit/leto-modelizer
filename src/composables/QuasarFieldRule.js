@@ -4,8 +4,8 @@ import { FileInformation } from 'leto-modelizer-plugin-core';
 /**
  * Check if value is not empty.
  * @param {Function} t - I18n translate function.
- * @param {String} value - Value to check.
- * @return {boolean|String} Return true if the value is not empty otherwise the translated
+ * @param {string} value - Value to check.
+ * @returns {boolean | string} Return true if the value is not empty otherwise the translated
  * error message.
  */
 export function notEmpty(t, value) {
@@ -15,8 +15,8 @@ export function notEmpty(t, value) {
 /**
  * Check if value is a valid git repository url.
  * @param {Function} t - I18n translate function.
- * @param {String} value - Value to check.
- * @return {boolean|String} Return true if the value is a valid git repository url otherwise
+ * @param {string} value - Value to check.
+ * @returns {boolean | string} Return true if the value is a valid git repository url otherwise
  * the translated error message.
  */
 export function isGitRepositoryUrl(t, value) {
@@ -27,8 +27,8 @@ export function isGitRepositoryUrl(t, value) {
 /**
  * Check if value is a valid file label.
  * @param {Function} t - I18n translate function.
- * @param {String} value - Value to check.
- * @return {boolean|String} Return true if valid otherwise the translated error message.
+ * @param {string} value - Value to check.
+ * @returns {boolean | string} Return true if valid otherwise the translated error message.
  */
 export function isValidFileLabel(t, value) {
   return !value.includes('/')
@@ -38,9 +38,9 @@ export function isValidFileLabel(t, value) {
 /**
  * Check if the value is required.
  * @param {Function} t - I18n translate function.
- * @param {String|Number|Boolean} value - Value to check.
- * @param {Boolean} required - Rules value.
- * @return {Boolean|String} Return true if value is required and exist,
+ * @param {string | number | boolean} value - Value to check.
+ * @param {boolean} required - Rules value.
+ * @returns {boolean | string} Return true if value is required and exist,
  * otherwise the translated error message.
  */
 export function isRequired(t, value, required) {
@@ -52,9 +52,9 @@ export function isRequired(t, value, required) {
 /**
  * Check if the value length is greater than or equal to min.
  * @param {Function} t - I18n translate function.
- * @param {String} value - Value to check.
- * @param {Boolean} min - Rules value.
- * @return {Boolean|String} Return true if value is valid,
+ * @param {string} value - Value to check.
+ * @param {boolean} min - Rules value.
+ * @returns {boolean | string} Return true if value is valid,
  * otherwise the translated error message.
  */
 export function isStringTooShort(t, value, min) {
@@ -64,9 +64,9 @@ export function isStringTooShort(t, value, min) {
 /**
  * Check if the value length is less than or equal to max.
  * @param {Function} t - I18n translate function.
- * @param {String} value - Value to check.
- * @param {Boolean} max - Rules value.
- * @return {Boolean|String} Return true if value is valid,
+ * @param {string} value - Value to check.
+ * @param {boolean} max - Rules value.
+ * @returns {boolean | string} Return true if value is valid,
  * otherwise the translated error message.
  */
 export function isStringTooLong(t, value, max) {
@@ -76,9 +76,9 @@ export function isStringTooLong(t, value, max) {
 /**
  * Check if the value matches the RegExp.
  * @param {Function} t - I18n translate function.
- * @param {String} value - Value to check.
- * @param {Boolean} regexp - Rules value.
- * @return {Boolean|String} Return true if value is valid,
+ * @param {string} value - Value to check.
+ * @param {boolean} regexp - Rules value.
+ * @returns {boolean | string} Return true if value is valid,
  * otherwise the translated error message.
  */
 export function isStringMatchingRegExp(t, value, regexp) {
@@ -88,8 +88,8 @@ export function isStringMatchingRegExp(t, value, regexp) {
 /**
  * Check if the value contains only number.
  * @param {Function} t - I18n translate function.
- * @param {String} value - Value to check.
- * @return {Boolean|String} Return true if value is valid,
+ * @param {string} value - Value to check.
+ * @returns {boolean | string} Return true if value is valid,
  * otherwise the translated error message.
  */
 export function isNumber(t, value) {
@@ -99,9 +99,9 @@ export function isNumber(t, value) {
 /**
  * Check if the value is greater than or equal to min.
  * @param {Function} t - I18n translate function.
- * @param {Number} value - Value to check.
- * @param {Boolean} min - Rules value.
- * @return {Boolean|String} Return true if value is valid,
+ * @param {number} value - Value to check.
+ * @param {boolean} min - Rules value.
+ * @returns {boolean | string} Return true if value is valid,
  * otherwise the translated error message.
  */
 export function isNumberTooSmall(t, value, min) {
@@ -111,9 +111,9 @@ export function isNumberTooSmall(t, value, min) {
 /**
  * Check if the value is less than or equal to max.
  * @param {Function} t - I18n translate function.
- * @param {Number} value - Value to check.
- * @param {Boolean} max - Rules value.
- * @return {Boolean|String} Return true if value is valid,
+ * @param {number} value - Value to check.
+ * @param {boolean} max - Rules value.
+ * @returns {boolean | string} Return true if value is valid,
  * otherwise the translated error message.
  */
 export function isNumberTooBig(t, value, max) {
@@ -123,10 +123,10 @@ export function isNumberTooBig(t, value, max) {
 /**
  * Check if a value is unique in array.
  * @param {Function} t - I18n translate function.
- * @param {String[]} texts - List of texts.
- * @param {String} value - Value to check.
- * @param {String} message - Error message.
- * @returns {boolean|String} Return true if the value is unique in the list,
+ * @param {string[]} texts - List of texts.
+ * @param {string} value - Value to check.
+ * @param {string} message - Error message.
+ * @returns {boolean | string} Return true if the value is unique in the list,
  * otherwise the translated error message.
  */
 export function isUnique(t, texts, value, message) {
@@ -137,11 +137,11 @@ export function isUnique(t, texts, value, message) {
 /**
  * Check if model is unique.
  * @param {Function} t - I18n translate function.
- * @param {String} pluginName - Name of plugin.
- * @param {String[]} models - All project models.
- * @param {String} path - Model path to check.
- * @param {String} message - Error message.
- * @returns {boolean|String} Return true if the model is unique, otherwise the translated
+ * @param {string} pluginName - Name of plugin.
+ * @param {string[]} models - All project models.
+ * @param {string} path - Model path to check.
+ * @param {string} message - Error message.
+ * @returns {boolean | string} Return true if the model is unique, otherwise the translated
  * error message.
  */
 export function isUniqueModel(t, pluginName, models, path, message) {

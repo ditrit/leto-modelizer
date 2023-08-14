@@ -64,7 +64,7 @@ const props = defineProps({
 /**
  * Get image of model.
  * Transform model name to a number between 0 and 4 and return associated image.
- * @return {String} Image path.
+ * @returns {string} Image path.
  */
 function getModelImage() {
   const number = props.model.path.split('')

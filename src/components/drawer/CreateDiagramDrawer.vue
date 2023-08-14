@@ -179,7 +179,7 @@ async function openImportModelTemplateDialog() {
 
 /**
  * Toggle selected template.
- * @param {String} key - Key of template to toggle.
+ * @param {string} key - Key of template to toggle.
  */
 function toggleTemplate(key) {
   if (selectedTemplate.value === key) {
@@ -220,9 +220,9 @@ function reset() {
 
 /**
  * Open or close drawer on event.
- * @param {Object} event - Event.
- * @param {String} event.key - Identifier of drawer.
- * @param {String} event.type - Action type, 'open' or 'close'.
+ * @param {object} event - Drawer event.
+ * @param {string} event.key - Identifier of drawer.
+ * @param {string} event.type - Action type, 'open' or 'close'.
  */
 function onDrawerEvent({ key, type }) {
   if (key !== 'CreateDiagram') {

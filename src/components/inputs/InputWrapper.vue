@@ -110,8 +110,8 @@ const emit = defineEmits([
 
 /**
  * Get the type of the given attribute.
- * @param {Object} attribute - The given attribute.
- * @return {String} the corresponding type.
+ * @param {object} attribute - The given attribute.
+ * @returns {string} the corresponding type.
  */
 function getAttributeType(attribute) {
   if (attribute.definition?.rules.values && attribute.definition?.type !== 'Array') {
@@ -123,8 +123,8 @@ function getAttributeType(attribute) {
 
 /**
  * Get the label of the given attribute.
- * @param {Object} attribute - The given attribute.
- * @return {String} the corresponding label.
+ * @param {object} attribute - The given attribute.
+ * @returns {string} the corresponding label.
  */
 function getAttributeLabel(attribute) {
   let label = t('plugin.component.attribute.value');

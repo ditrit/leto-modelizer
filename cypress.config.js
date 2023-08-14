@@ -2,13 +2,20 @@ const { defineConfig } = require('cypress');
 const preprocessor = require('@badeball/cypress-cucumber-preprocessor');
 const browserify = require('@badeball/cypress-cucumber-preprocessor/browserify');
 
-async function setupNodeEvents(on, config) {
-  await preprocessor.addCucumberPreprocessorPlugin(on, config);
+/**
+ * Setup the node events for the cucumber preprocessor.
+ * @param {object} events - Cypress.PluginEvents.
+ * @param {object} configuration - Cypress.PluginConfigOptions.
+ * @returns {Promise} Promise with config as it might have been
+ * modified by the plugin on success otherwise an error.
+ */
+async function setupNodeEvents(events, configuration) {
+  await preprocessor.addCucumberPreprocessorPlugin(events, configuration);
 
-  on('file:preprocessor', browserify.default(config));
+  events('file:preprocessor', browserify.default(configuration));
 
   // Make sure to return the config object as it might have been modified by the plugin.
-  return config;
+  return configuration;
 }
 
 module.exports = defineConfig({

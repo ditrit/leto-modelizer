@@ -90,7 +90,7 @@ let dialogEventSubscription;
 
 /**
  * Set files status on valid event.
- * @param {String} key - Event key.
+ * @param {string} key - Event key.
  */
 function setFilesStatus({ key }) {
   if (key === 'GitCommit') {

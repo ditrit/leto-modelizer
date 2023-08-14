@@ -50,8 +50,8 @@ let selectFileTabSubscription;
 
 /**
  * Update the path of the query if necessary.
- * @param {String} event - Path of the selected file tab.
- * @return {Promise<Object>} Promise with nothing on success otherwise an error.
+ * @param {string} event - Path of the selected file tab.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
  */
 async function onSelectFileTab(event) {
   if (event && !event.startsWith(`${query.value.path}/`)) {

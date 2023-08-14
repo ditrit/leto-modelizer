@@ -16,13 +16,13 @@ export const PROJECT_STORAGE_KEY = 'projects';
 
 /**
  * Represent a project object.
- * @typedef {Object} Project
- * @property {String} id - project id.
+ * @typedef {object} Project
+ * @property {string} id - project id.
  */
 
 /**
  * Add a date to the project that does not contain one.
- * @param {Object} projects - All projects.
+ * @param {object} projects - All projects.
  * @todo Remove this function when leto-modelizer 1.2.0 is released.
  */
 function addDateToProjects(projects) {
@@ -42,7 +42,7 @@ function addDateToProjects(projects) {
 
 /**
  * Get a map of all projects.
- * @return {Object} Object that contains all project ids as keys and associated projects as values.
+ * @returns {object} Object that contains all project ids as keys and associated projects as values.
  */
 export function getProjects() {
   const allProjects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY) || '{}');
@@ -59,8 +59,8 @@ export function getProjects() {
 
 /**
  * Get one project by its ID.
- * @param {String} projectId - Id of project.
- * @return {Project} Wanted project.
+ * @param {string} projectId - Id of project.
+ * @returns {Project} Wanted project.
  */
 export function getProjectById(projectId) {
   const projects = getProjects();
@@ -69,8 +69,8 @@ export function getProjectById(projectId) {
 
 /**
  * Extract project name from repository url.
- * @param {String} repositoryUrl - Repository url.
- * @returns {String|null} Project name.
+ * @param {string} repositoryUrl - Repository url.
+ * @returns {string} Project name.
  */
 export function extractProjectName(repositoryUrl) {
   const regex = /\/([^/]+)\/?$/;
@@ -81,8 +81,8 @@ export function extractProjectName(repositoryUrl) {
 
 /**
  * Get name of remote repository or local project if it is not based upon a remote repository.
- * @param {String} projectId - Id of project.
- * @return {String} Project Name.
+ * @param {string} projectId - Id of project.
+ * @returns {string} Project Name.
  */
 export function getProjectName(projectId) {
   const projects = getProjects();
@@ -109,7 +109,7 @@ export function saveProject(project) {
 /**
  * Clone and save project from git in local storage.
  * @param {Project} project - Project to save.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function importProject(project) {
   return git.clone({
@@ -131,7 +131,7 @@ export async function importProject(project) {
  * Fetch project on git.
  * Warning: It seems that `git.fetch` can throw unexpected error.
  * @param {Project} project - Project to update.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function gitFetch(project) {
   if (project.git?.repository) {
@@ -152,8 +152,8 @@ export async function gitFetch(project) {
 
 /**
  * Check if path is directory or not.
- * @param {String} path - Path to check.
- * @return {Promise<Boolean>} Promise with boolean on success otherwise an error.
+ * @param {string} path - Path to check.
+ * @returns {Promise<boolean>} Promise with boolean on success otherwise an error.
  */
 export async function isDirectory(path) {
   const stat = await new Promise((resolve) => {
@@ -167,8 +167,8 @@ export async function isDirectory(path) {
 
 /**
  * Get the list file/directory found in path location.
- * @param {String} path - Path to check.
- * @return {Promise<String[]>} Promise with array of strings on success otherwise an error.
+ * @param {string} path - Path to check.
+ * @returns {Promise<string[]>} Promise with array of strings on success otherwise an error.
  */
 export async function readDir(path) {
   return new Promise((resolve) => {
@@ -181,10 +181,10 @@ export async function readDir(path) {
 
 /**
  * Get the list of file/directory found in path location.
- * @param {String[]} files - Array of file to fill.
- * @param {String} projectId - ID of the project.
- * @param {String} filename - Path of file or directory. Null for root location.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string[]} files - Array of file to fill.
+ * @param {string} projectId - ID of the project.
+ * @param {string} filename - Path of file or directory. Null for root location.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function setFiles(files, projectId, filename) {
   const path = filename ? `${projectId}/${filename}` : projectId;
@@ -211,8 +211,8 @@ async function setFiles(files, projectId, filename) {
 
 /**
  * Retrieve list of project files name.
- * @param {String} projectId - Id of project.
- * @return {Promise<FileInformation[]>} Promise with file names array on success,
+ * @param {string} projectId - Id of project.
+ * @returns {Promise<FileInformation[]>} Promise with file names array on success,
  * otherwise error.
  */
 export async function getProjectFiles(projectId) {
@@ -223,10 +223,10 @@ export async function getProjectFiles(projectId) {
 
 /**
  * Get the list of directory found in path location.
- * @param {String[]} files - Array of file to fill.
- * @param {String} projectId - ID of the project.
- * @param {String|null} filename - Path of file or directory. Null for root location.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string[]} files - Array of file to fill.
+ * @param {string} projectId - ID of the project.
+ * @param {string} filename - Path of file or directory. Null for root location.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function setFolders(files, projectId, filename) {
   const path = filename ? `${projectId}/${filename}` : projectId;
@@ -249,8 +249,8 @@ async function setFolders(files, projectId, filename) {
 
 /**
  * Retrieve list of project folder names.
- * @param {String} projectId - Id of project.
- * @return {Promise<FileInformation[]>} Promise with folder names array on success,
+ * @param {string} projectId - Id of project.
+ * @returns {Promise<FileInformation[]>} Promise with folder names array on success,
  * otherwise error.
  */
 export async function getProjectFolders(projectId) {
@@ -261,8 +261,8 @@ export async function getProjectFolders(projectId) {
 
 /**
  * Get current branch of git project.
- * @param {String} projectId - Id of project.
- * @return {Promise<String>} Promise with current branch name on success otherwise error.
+ * @param {string} projectId - Id of project.
+ * @returns {Promise<string>} Promise with current branch name on success otherwise error.
  */
 export async function getCurrentBranch(projectId) {
   return git.currentBranch({
@@ -274,9 +274,9 @@ export async function getCurrentBranch(projectId) {
 
 /**
  * Get file content.
- * @param {String} projectId - Id of project.
+ * @param {string} projectId - Id of project.
  * @param {FileInformation} fileInformation - Object that contain file path.
- * @return {Promise<FileInput>} Promise with file content on success otherwise error.
+ * @returns {Promise<FileInput>} Promise with file content on success otherwise error.
  */
 export async function readProjectFile(projectId, fileInformation) {
   const content = await new Promise((resolve) => {
@@ -292,8 +292,8 @@ export async function readProjectFile(projectId, fileInformation) {
 
 /**
  * Get all branches of project.
- * @param {String} projectId - Id of project.
- * @return {Promise<Branch[]>} Promise with array of branches on success otherwise error.
+ * @param {string} projectId - Id of project.
+ * @returns {Promise<Branch[]>} Promise with array of branches on success otherwise error.
  */
 export async function getBranches(projectId) {
   const dir = `/${projectId}`;
@@ -342,8 +342,8 @@ export async function getBranches(projectId) {
 
 /**
  * Create a new directory.
- * @param {String} path - Path of the folder to create.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} path - Path of the folder to create.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function mkdir(path) {
   return new Promise((resolve, reject) => {
@@ -359,9 +359,9 @@ export async function mkdir(path) {
 
 /**
  * Create a new directory and its parents if not existing. Ignore already existing error.
- * @param {String} projectId - Id of project.
- * @param {String} path - Path of the folder to create.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} projectId - Id of project.
+ * @param {string} path - Path of the folder to create.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function createProjectFolder(projectId, path) {
   return Promise.allSettled(path.split('/').reduce((acc, item, index) => {
@@ -386,9 +386,9 @@ export async function createProjectFolder(projectId, path) {
 /**
  * Write new content inside given file.
  * Create the file if not existing.
- * @param {String} projectId - Id of project.
+ * @param {string} projectId - Id of project.
  * @param {FileInput} file - File input.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function writeProjectFile(projectId, file) {
   return new Promise((resolve, reject) => {
@@ -410,9 +410,9 @@ export async function writeProjectFile(projectId, file) {
 /**
  * Append the given content to a file.
  * Create the file and folder if not existing.
- * @param {String} projectId - Id of project.
+ * @param {string} projectId - Id of project.
  * @param {FileInput} file - File input to append.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function appendProjectFile(projectId, file) {
   if (file.path.indexOf('/') > 0) {
@@ -439,8 +439,8 @@ export async function appendProjectFile(projectId, file) {
 
 /**
  * Get list of all the files in the current staging area.
- * @param {String} project - Id of the project.
- * @return {Promise<String[]>} Promise with array of filepaths on success otherwise an error.
+ * @param {string} projectId - Id of the project.
+ * @returns {Promise<string[]>} Promise with array of filepaths on success otherwise an error.
  */
 export async function gitListFiles(projectId) {
   return git.listFiles({
@@ -452,7 +452,7 @@ export async function gitListFiles(projectId) {
 /**
  * Update remote origin, fetch and checkout the default branch.
  * @param {Project} project - Project to update.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function gitAddRemote(project) {
   await git.addRemote({
@@ -466,9 +466,9 @@ export async function gitAddRemote(project) {
 
 /**
  * Checkout branch.
- * @param {String} projectId - Id of project.
- * @param {String} branch - Branch name to checkout.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} projectId - Id of project.
+ * @param {string} branch - Branch name to checkout.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function gitCheckout(projectId, branch) {
   await git.checkout({
@@ -480,10 +480,10 @@ export async function gitCheckout(projectId, branch) {
 
 /**
  * Create branch from another branch.
- * @param {String} projectId - Id of project.
- * @param {String} newBranchName - New branch name.
- * @param {String} branchName - Branch name.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} projectId - Id of project.
+ * @param {string} newBranchName - New branch name.
+ * @param {string} branchName - Branch name.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function createBranchFrom(projectId, newBranchName, branchName) {
   await git.branch({
@@ -501,9 +501,9 @@ export async function createBranchFrom(projectId, newBranchName, branchName) {
 
 /**
  * Add untracked, unstaged or modified files.
- * @param {String} projectId - Id of project.
- * @param {String} filepath - Path of the file to add.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} projectId - Id of project.
+ * @param {string} filepath - Path of the file to add.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function gitAdd(projectId, filepath) {
   return git.add({
@@ -515,9 +515,9 @@ export async function gitAdd(projectId, filepath) {
 
 /**
  * Add (stage) deleted files.
- * @param {String} projectId - Id of project.
- * @param {String} filepath - Path of the file to add.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} projectId - Id of project.
+ * @param {string} filepath - Path of the file to add.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function gitRemove(projectId, filepath) {
   return git.remove({
@@ -530,9 +530,9 @@ export async function gitRemove(projectId, filepath) {
 /**
  * Update selected branch with git pull.
  * @param {Project} project - Project to update.
- * @param {String} branchName - Branch name.
- * @param {Boolean} fastForward - State of fast forward option.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} branchName - Branch name.
+ * @param {boolean} fastForward - State of fast forward option.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function gitUpdate(project, branchName, fastForward) {
   await git.pull({
@@ -557,8 +557,8 @@ export async function gitUpdate(project, branchName, fastForward) {
 
 /**
  * Delete folder on fs.
- * @param {String} path - Path of folder to delete.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} path - Path of folder to delete.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function rmDir(path) {
   return new Promise((resolve, reject) => {
@@ -571,8 +571,8 @@ export async function rmDir(path) {
 
 /**
  * Delete file or link on fs.
- * @param {String} path - Path of file/link to delete.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} path - Path of file/link to delete.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function rm(path) {
   return new Promise((resolve, reject) => {
@@ -585,9 +585,9 @@ export async function rm(path) {
 
 /**
  * Rename file on fs.
- * @param {String} oldPath - Old path of file to rename.
- * @param {String} newPath - New path of file to rename.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} oldPath - Old path of file to rename.
+ * @param {string} newPath - New path of file to rename.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function rename(oldPath, newPath) {
   return new Promise((resolve, reject) => {
@@ -601,8 +601,8 @@ export async function rename(oldPath, newPath) {
 
 /**
  * Delete folder and all its content on fs.
- * @param {String} path - Path of folder to delete.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} path - Path of folder to delete.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function deleteProjectDir(path) {
   const isDir = await isDirectory(path);
@@ -622,11 +622,11 @@ export async function deleteProjectDir(path) {
 
 /**
  * Delete project file or folder.
- * @param {String} projectId - Id of project.
- * @param {String} filePath - File path to delete.
- * @param {Boolean} deleteParentFolder - Indicates if the parent folder should be deleted.
+ * @param {string} projectId - Id of project.
+ * @param {string} filePath - File path to delete.
+ * @param {boolean} deleteParentFolder - Indicates if the parent folder should be deleted.
  * Otherwise create a fake file so that the file explorer will continue to display it.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function deleteProjectFile(projectId, filePath, deleteParentFolder) {
   const isFolder = await isDirectory(`${projectId}/${filePath}`);
@@ -665,10 +665,10 @@ export async function deleteProjectFile(projectId, filePath, deleteParentFolder)
 /**
  * Get the status of all files. If filePaths is defined, get the status of the files
  * that strictly or partially match the given filePaths.
- * @param {String} projectId - Id of project.
- * @param {String[]} filepaths - Limit the query to the given files and directories.
+ * @param {string} projectId - Id of project.
+ * @param {string[]} filepaths - Limit the query to the given files and directories.
  * @param {Function} filter - Filter to only return results whose filepath matches a given function.
- * @return {Promise<FileStatus[]>} All files status.
+ * @returns {Promise<FileStatus[]>} All files status.
  */
 export async function getStatus(projectId, filepaths, filter) {
   return git.statusMatrix({
@@ -688,9 +688,9 @@ export async function getStatus(projectId, filepaths, filter) {
 /**
  * Push selected branch on server.
  * @param {Project} project - Project.
- * @param {String} branchName - Branch name.
- * @param {Boolean} force - State of force option.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @param {string} branchName - Branch name.
+ * @param {boolean} force - State of force option.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function gitPush(project, branchName, force) {
   await git.push({
@@ -710,11 +710,11 @@ export async function gitPush(project, branchName, force) {
 
 /**
  * Commit all staged files.
- * @param {String} projectId - Id of project.
- * @param {String} message - Commit message.
+ * @param {string} projectId - Id of project.
+ * @param {string} message - Commit message.
  * @param {boolean} noUpdateBranchValue - If true, does not update the branch pointer
  * after creating the commit.
- * @return {Promise<void>} Promise with the SHA-1 object id of the newly created commit on success
+ * @returns {Promise<void>} Promise with the SHA-1 object id of the newly created commit on success
  * otherwise an error.
  */
 export async function gitCommit(projectId, message, noUpdateBranchValue = false) {
@@ -733,7 +733,7 @@ export async function gitCommit(projectId, message, noUpdateBranchValue = false)
 
 /**
  * Add and commit all modifications on the new branch and push it.
- * @param {Object} project - Object containing all information about the project.
+ * @param {object} project - Object containing all information about the project.
  */
 export async function gitGlobalUpload(project) {
   const nowDate = new Date();
@@ -787,10 +787,10 @@ export async function gitGlobalUpload(project) {
 
 /**
  * Get all logs from git log.
- * @param {String} projectId - Id of project.
- * @param {String} ref - The commit to begin walking backwards through the history from.
- * @param {Number} [depth=25] - Number of log to retrieve.
- * @return {Promise<ReadCommitResult[]>} Promise with logs on success otherwise an error.
+ * @param {string} projectId - Id of project.
+ * @param {string} ref - The commit to begin walking backwards through the history from.
+ * @param {number} [depth] - Number of log to retrieve.
+ * @returns {Promise<ReadCommitResult[]>} Promise with logs on success otherwise an error.
  * @see https://isomorphic-git.org/docs/en/log
  */
 export async function gitLog(projectId, ref, depth = 25) {
@@ -805,7 +805,7 @@ export async function gitLog(projectId, ref, depth = 25) {
 /**
  * Save project and initialize git in local storage.
  * @param {Project} project - Project to save.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function initProject(project) {
   saveProject(project);
@@ -820,9 +820,9 @@ export async function initProject(project) {
 
 /**
  * Get all models of the plugin.
- * @param {String} modelsDefaultFolder - Path of the models folder.
- * @param {String} pluginName - Name of the plugin.
- * @return {Promise<Array>} Promise with an array of models on success otherwise an error.
+ * @param {string} modelsdefaultFolder - Path of the models folder.
+ * @param {string} pluginName - Name of the plugin.
+ * @returns {Promise<Array>} Promise with an array of models on success otherwise an error.
  */
 export async function getPluginModels(modelsdefaultFolder, pluginName) {
   const dirEntries = await readDir(`${modelsdefaultFolder}/${pluginName}`);
@@ -849,8 +849,8 @@ export async function getPluginModels(modelsdefaultFolder, pluginName) {
 
 /**
  * Get all models of the project.
- * @param {String} projectId - Id of project.
- * @return {Promise<Array>} Promise with an array of models on success otherwise an error.
+ * @param {string} projectId - Id of project.
+ * @returns {Promise<Array>} Promise with an array of models on success otherwise an error.
  */
 export async function getAllModels(projectId) {
   const plugins = getPlugins();
@@ -875,10 +875,10 @@ export async function getAllModels(projectId) {
 
 /**
  * Get model files.
- * @param {String} projectName - ID of the project.
- * @param {String} modelPath - Path of the models folder.
- * @param {Object} plugin - Plugin to render.
- * @return {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
+ * @param {string} projectName - ID of the project.
+ * @param {string} modelPath - Path of the models folder.
+ * @param {object} plugin - Plugin to render.
+ * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 export async function getModelFiles(projectName, modelPath, plugin) {
   if (!await isDirectory(`${projectName}/${modelPath}`)) {
@@ -892,10 +892,10 @@ export async function getModelFiles(projectName, modelPath, plugin) {
 }
 
 /**
-* Delete one project by ID.
-* @param {String} projectId - Id of project.
-* @return {Promise<void>} Promise with nothing on success otherwise an error.
-*/
+ * Delete one project by ID.
+ * @param {string} projectId - Id of project.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
 export async function deleteProjectById(projectId) {
   const projects = getProjects();
   const projectFiles = await readDir(`/${projectId}`);
@@ -910,10 +910,10 @@ export async function deleteProjectById(projectId) {
 }
 
 /**
-* Rename project.
-* @param {String} projectId - Id of project.
-* @param {String} newProjectName - Project new name.
-*/
+ * Rename project.
+ * @param {string} projectId - Id of project.
+ * @param {string} newProjectName - Project new name.
+ */
 export async function renameProject(projectId, newProjectName) {
   await rename(`/${projectId}`, `/${newProjectName}`);
 
@@ -927,9 +927,9 @@ export async function renameProject(projectId, newProjectName) {
 
 /**
  * Indicate if searched text is found.
- * @param {String} filter - Searched text.
- * @param {String} value - Value to match with.
- * @return {Boolean} true if it is matching otherwise false.
+ * @param {string} filter - Searched text.
+ * @param {string} value - Value to match with.
+ * @returns {boolean} true if it is matching otherwise false.
  */
 export function isMatching(filter, value) {
   return !filter || filter.toLowerCase().trim().split(/\s+/)
@@ -938,7 +938,7 @@ export function isMatching(filter, value) {
 
 /**
  * Check if the file at the given path exists.
- * @param {String} path - path to check.
+ * @param {string} path - path to check.
  * @returns {Promise<boolean>} Promise with a boolean on success otherwise an error.
  */
 export async function exists(path) {

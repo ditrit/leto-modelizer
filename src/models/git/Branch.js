@@ -4,11 +4,12 @@
 class Branch {
   /**
    * Default constructor.
-   * @param {String} props.name - Branch name.
-   * @param {Boolean} [props.onLocal=false] - Indicate if branch is on local.
-   * @param {Boolean} [props.onRemote=false] - Indicate if branch is on remote.
-   * @param {String} [props.remote='origin'] - Remote value.
-   * @param {Boolean} [props.isCurrentBranch=false] - Indicates if this branch is the current.
+   * @param {object} props - Constructor props.
+   * @param {string} props.name - Branch name.
+   * @param {boolean} [props.onLocal] - Indicate if branch is on local.
+   * @param {boolean} [props.onRemote] - Indicate if branch is on remote.
+   * @param {string} [props.remote] - Remote value.
+   * @param {boolean} [props.isCurrentBranch] - Indicates if this branch is the current.
    */
   constructor(props = {
     name: null,
@@ -19,34 +20,34 @@ class Branch {
   }) {
     /**
      * Branch name.
-     * @type {String}
+     * @type {string}
      */
     this.name = props.name || null;
     /**
      * Indicate if branch is on local.
-     * @type {Boolean}
+     * @type {boolean}
      */
     this.onLocal = props.onLocal || false;
     /**
      * Indicate if branch is on remote.
-     * @type {Boolean}
+     * @type {boolean}
      */
     this.onRemote = props.onRemote || false;
     /**
      * Remote value.
-     * @type {String}
+     * @type {string}
      */
     this.remote = props.remote || 'origin';
     /**
      * Indicate if this branch is the current.
-     * @type {Boolean}
+     * @type {boolean}
      */
     this.isCurrentBranch = props.isCurrentBranch || false;
   }
 
   /**
    * Get full name of branch, concatenation of remote and name.
-   * @return {String} Concatenation of remote and branch names.
+   * @returns {string} Concatenation of remote and branch names.
    */
   get fullName() {
     return this.onRemote ? `${this.remote}/${this.name}` : '';
@@ -55,7 +56,7 @@ class Branch {
   /**
    * Compare this branch to the provided branch.
    * @param {Branch} branch - The branch to compare.
-   * @return {Number} A negative number if this branch occurs before compared branch; positive if
+   * @returns {number} A negative number if this branch occurs before compared branch; positive if
    * this branch occurs after compared branch; 0 if they are equivalent.
    */
   compare(branch) {

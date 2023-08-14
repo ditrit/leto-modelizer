@@ -118,10 +118,11 @@ let dialogEventSubscription;
  * Load logs.
  * First execution will load 25 logs from current log. The next executions will load 26 logs
  * because the last previous log will be the first one (and will be removed to avoid duplication).
- * @param {Number} index - The index parameter can be used to make some sort of pagination on the
+ * @param {number} index - The index parameter can be used to make some sort of pagination on the
  * content you load. It takes numeric values starting with 1 and incrementing with each call.
  * @param {Function} done - Function to call when you made all necessary updates.
  * @see https://quasar.dev/vue-components/infinite-scroll
+ * @returns {Promise} Promise with logs after all the necessary updates otherwise an error.
  */
 function onLoad(index, done) {
   let commitRef = branchName.value;
@@ -142,8 +143,9 @@ function onLoad(index, done) {
 
 /**
  * Set branch name and reset logItems on valid event.
- * @param {String} key - Event key.
- * @param {String} branch - Branch name.
+ * @param {object} event - Dialog event.
+ * @param {string} event.key - Event key.
+ * @param {string} event.branch - Branch name.
  */
 function onOpenGitLogDialog({ key, branch }) {
   if (key === 'GitLog') {
@@ -154,8 +156,8 @@ function onOpenGitLogDialog({ key, branch }) {
 
 /**
  * Truncate commit message at new line character.
- * @param {String} message - Message to truncate.
- * @returns {String} Truncated message.
+ * @param {string} message - Message to truncate.
+ * @returns {string} Truncated message.
  */
 function truncateCommitMessage(message) {
   const index = message.indexOf('\n');

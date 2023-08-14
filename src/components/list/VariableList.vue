@@ -128,7 +128,7 @@ const columns = computed(() => [
 /**
  * Transform the input variables into the desired formatted object.
  * @param {Variable[]} variables - Variables array.
- * @returns {Object} - The formatted variables object.
+ * @returns {object} - The formatted variables object.
  */
 function getFormattedVariables(variables) {
   const formattedVariables = {};

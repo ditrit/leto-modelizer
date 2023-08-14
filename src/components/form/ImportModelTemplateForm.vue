@@ -95,6 +95,7 @@ async function initAllModels() {
  * Add template config to global config.
  * @param {string} realModelName - Model name from plugin.
  * @param {string} content - Template config file content.
+ * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 async function manageConfigFile(realModelName, content) {
   const originContent = await readProjectFile(
@@ -126,6 +127,7 @@ async function manageConfigFile(realModelName, content) {
  * Create a new model folder and its parent folders if necessary.
  * Emit a positive notification on success and redirect to model page.
  * Otherwise, emit a negative notification.
+ * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 async function onSubmit() {
   const model = getModelPath(

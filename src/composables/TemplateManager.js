@@ -8,8 +8,9 @@ import { randomHexString } from 'src/composables/Random';
 
 /**
  * Get a remote file's content.
- * @param {String} filePath - Path of the file.
- * @return {Promise<Object>} Promise with resources on success otherwise an error.
+ * @param {string} filePath - Path of the file.
+ * @param {string} responseType - Response type.
+ * @returns {Promise<object>} Promise with resources on success otherwise an error.
  */
 export async function getTemplateFileByPath(filePath, responseType = 'json') {
   return templateLibraryApiClient.get(filePath, {
@@ -22,7 +23,7 @@ export async function getTemplateFileByPath(filePath, responseType = 'json') {
 
 /**
  * Get list of templates from a remote file.
- * @return {Promise<Array>} Promise with templates on success otherwise an error.
+ * @returns {Promise<Array>} Promise with templates on success otherwise an error.
  */
 export function getRemoteTemplates() {
   if (process.env.TEMPLATE_LIBRARY_BASE_URL) {
@@ -35,9 +36,9 @@ export function getRemoteTemplates() {
 /**
  * Filter and return only templates related to a provided type.
  * PluginName is only required if type equals `component`.
- * @param {String} type - Type of template.
- * @param {String} [pluginName=''] - Name of plugin.
- * @return {Promise<Object[]>} Promise with Filtered templates on success otherwise an error.
+ * @param {string} type - Type of template.
+ * @param {string} [pluginName] - Name of plugin.
+ * @returns {Promise<object[]>} Promise with Filtered templates on success otherwise an error.
  */
 export async function getTemplatesByType(type, pluginName = '') {
   const templates = await getRemoteTemplates();
@@ -74,8 +75,8 @@ export async function getTemplatesByType(type, pluginName = '') {
 
 /**
  * Generate template content with nunjucks.
- * @param {String} content - Template of content.
- * @return {String} Generated content.
+ * @param {string} content - Template of content.
+ * @returns {string} Generated content.
  */
 export function generateTemplate(content) {
   return nunjucks.renderString(content, {
@@ -85,9 +86,9 @@ export function generateTemplate(content) {
 
 /**
  * Get files of the templates.
- * @param {String} path - Model path (Plugin name & model name).
- * @param {Object} templateDefinition - Definition of the template.
- * @return {Promise<FileInput[]>} Promise with a FileInput array on success otherwise an error.
+ * @param {string} path - Model path (Plugin name & model name).
+ * @param {object} templateDefinition - Definition of the template.
+ * @returns {Promise<FileInput[]>} Promise with a FileInput array on success otherwise an error.
  */
 export async function getTemplateFiles(path, templateDefinition) {
   return Promise.all(

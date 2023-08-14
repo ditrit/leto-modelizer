@@ -95,7 +95,7 @@ const hasError = computed(() => props.currentError?.startsWith(`${props.fullName
  * Get all sub-attributes of the provided attribute. Retrieve a list that contains instantiated
  * attributes from definitions.
  * @param {ComponentAttribute} attribute - Attribute.
- * @return {ComponentAttribute[]} List with all sub-attributes.
+ * @returns {ComponentAttribute[]} List with all sub-attributes.
  */
 function getSubAttributes(attribute) {
   const attributes = [];

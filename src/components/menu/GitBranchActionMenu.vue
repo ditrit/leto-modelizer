@@ -96,7 +96,7 @@ const props = defineProps({
 
 /**
  * Execute checkout action, manage toast and loader.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function onCheckout() {
   loading.value.checkout = true;
@@ -119,7 +119,7 @@ async function onCheckout() {
 
 /**
  * Send event to open the dialog corresponding to the key and emit event.
- * @param {String} key - Event key.
+ * @param {string} key - Event key.
  */
 function openDialog(key) {
   DialogEvent.next({ type: 'open', key, branch: props.branchName });

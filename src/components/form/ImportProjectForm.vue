@@ -96,6 +96,7 @@ const isUniqueRuleEnabled = ref(true);
 
 /**
  * Import project, manage toast and loader.
+ * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 async function onSubmit() {
   submitting.value = true;

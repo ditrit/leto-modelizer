@@ -34,6 +34,8 @@ const { t } = useI18n();
  * Create project on fs, init project on git,
  * close CreateProject and redirect to project page.
  * Manage notification.
+ * @param {number} projectId - Project id.
+ * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 async function createProject(projectId) {
   const project = { id: projectId };

@@ -28,7 +28,7 @@ const router = useRouter();
 
 /**
  * Close importProjectDialog and redirect to project model page.
- * @param {String} projectId - Id of project.
+ * @param {string} projectId - Id of project.
  */
 async function importProject(projectId) {
   DialogEvent.next({ type: 'close', key: 'ImportProject' });

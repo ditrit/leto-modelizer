@@ -104,7 +104,7 @@ const selectedItemDefinitions = computed(() => drawerItems.value
 
 /**
  * Toggle isSelected value and set selectedItemId on library item click.
- * @param {String} id - Id of clicked library item.
+ * @param {string} id - Id of clicked library item.
  */
 function onItemClick(id) {
   isSelected.value = !isSelected.value;

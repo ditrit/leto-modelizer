@@ -110,7 +110,7 @@ const baseFolder = computed(() => getPluginByName(modelPlugin.value).configurati
  * Create a new model folder and its parent folders if necessary.
  * Emit a positive notification on success and redirect to model page.
  * Otherwise, emit a negative notification.
- * @return {Promise<void>} Promise with nothing on success or error.
+ * @returns {Promise<void>} Promise with nothing on success or error.
  */
 async function onSubmit() {
   const diagram = `${baseFolder.value}${modelName.value || ''}`;

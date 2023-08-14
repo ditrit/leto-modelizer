@@ -60,7 +60,7 @@ function setProjects() {
 
 /**
  * Open CreateProjectTemplate dialog.
- * @param {Object} template - Selected project template.
+ * @param {object} template - Selected project template.
  */
 async function openCreateProjectTemplateDialog(template) {
   DialogEvent.next({

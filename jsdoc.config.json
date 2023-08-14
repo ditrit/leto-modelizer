@@ -1,0 +1,36 @@
+{
+    "plugins": [],
+    "recurseDepth": 10,
+    "sourceType": "module",
+    "source": {
+      "includePattern": "\\.(jsx|js|ts|tsx)$"
+    },
+    "tags": {
+      "allowUnknownTags": true,
+      "dictionaries": ["jsdoc","closure"]
+    },
+    "templates": {
+      "cleverLinks": false,
+      "monospaceLinks": false,
+      "search": true,
+      "better-docs": {
+        "name": "leto-modelizer",
+        "css": "style.css",
+        "trackingCode": "tracking-code-which-will-go-to-the-HEAD",
+        "hideGenerator": false,
+        "navLinks": [
+          {
+            "label": "Github",
+            "href": "https://github.com/ditrit/leto-modelizer#README.md"
+          }
+        ]
+      }
+    },
+    "opts": {
+      "template": "node_modules/better-docs"
+    }
+  },
+  "opts": {
+    "template": "node_modules/better-docs"
+  }
+}

@@ -93,8 +93,8 @@ const data = reactive({
 
 /**
  * Get a name for a new attribute.
- * @param {Number} [index=1] - Incrementale number used if not already existing.
- * @return {String} Name for a new attribute.
+ * @param {number} [index] - Incrementale number used if not already existing.
+ * @returns {string} Name for a new attribute.
  */
 function getNewAttributeName(index = 1) {
   const newName = `attribute_${index}`;
@@ -124,7 +124,9 @@ function addAttribute() {
 
 /**
  * Update name of attribute and emit event to update parent attributes list.
- * @param {String} newName - New attribute name.
+ * @param {object} event - Form event.
+ * @param {string} event.newName - New attribute name.
+ * @param {string} event.attributeName - Old attribute name.
  */
 function updateAttributeName(event) {
   const index = data.localAttributes.findIndex(({ name }) => name === event.attributeName);
@@ -145,7 +147,9 @@ function updateAttributeName(event) {
 
 /**
  * Update value of attribute and emit event to update parent attributes list.
- * @param {String} newValue - New attribute value.
+ * @param {object} event - Form event.
+ * @param {string} event.newValue - New attribute value.
+ * @param {string} event.attributeName - Old attribute name.
  */
 function updateAttributeValue(event) {
   const index = data.localAttributes.findIndex(({ name }) => name === event.attributeName);
@@ -166,9 +170,11 @@ function updateAttributeValue(event) {
 
 /**
  * Delete attribute and emit event to update parent attributes list.
+ * @param {object} event - Form event.
+ * @param {object} event.attribute - Attribute to delete.
  */
-function deleteAttribute(event) {
-  data.localAttributes.splice(data.localAttributes.indexOf(event.attribute), 1);
+function deleteAttribute({ attribute }) {
+  data.localAttributes.splice(data.localAttributes.indexOf(attribute), 1);
 
   emit('update:attributes', {
     attributes: data.localAttributes,

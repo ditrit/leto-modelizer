@@ -128,7 +128,6 @@ let updateModelSubscription;
 
 /**
  * Update diagram type and local storage values.
- * @param {String} type - Diagram type.
  */
 function switchDiagramType() {
   isDiagramGrid.value = !isDiagramGrid.value;
@@ -137,7 +136,7 @@ function switchDiagramType() {
 
 /**
  * Redirect to ModelizerDrawView corresponding to the given diagram.
- * @param {Object} diagram - Diagram to open.
+ * @param {object} diagram - Diagram to open.
  */
 async function onDiagramClick(diagram) {
   await router.push({
@@ -154,7 +153,7 @@ async function onDiagramClick(diagram) {
 
 /**
  * Update diagrams list.
- * @return {Promise<void>} Promise with nothing on success otherwise an error.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateModels() {
   data.models = (await getAllModels(props.projectName))

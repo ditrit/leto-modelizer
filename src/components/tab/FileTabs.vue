@@ -82,7 +82,7 @@ function setLastFileActive() {
 /**
  * Close file tab by removing it from fileTabArray array using its id.
  * Update activeFileId if the closed file was the current active file tab.
- * @param {String} fileId - Id of closed file.
+ * @param {string} fileId - Id of closed file.
  */
 function deleteFileTab(fileId) {
   const index = fileTabArray.value.findIndex(({ id }) => id === fileId);
@@ -99,7 +99,7 @@ function deleteFileTab(fileId) {
 /**
  * Delete one FileTab if isFolder is false.
  * Delete all the FileTabs of the folder otherwise.
- * @param {Object} file - Deleted file or folder.
+ * @param {object} file - Deleted file or folder.
  */
 function onDeleteFile(file) {
   if (file.isFolder) {
@@ -113,7 +113,7 @@ function onDeleteFile(file) {
 
 /**
  * When a new file is selected, add it to fileTabArray and update activeFileId.
- * @param {Object} node - Selected node.
+ * @param {object} node - Selected node.
  */
 function onSelectFileNode(node) {
   if (!fileTabArray.value.some(({ id }) => id === node.id)) {
@@ -125,7 +125,7 @@ function onSelectFileNode(node) {
 
 /**
  * Update status of the fileTab corresponding to the given parameter.
- * @param {String} filePath - Path correponding to the fileTab id.
+ * @param {string} filePath - Path correponding to the fileTab id.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateFileStatus(filePath) {
@@ -143,7 +143,7 @@ async function updateFileStatus(filePath) {
 
 /**
  * Update status of all the fileTabs corresponding to the given parameter.
- * @param {String[]} allFilePaths - Array of path correponding to the id of the fileTabs.
+ * @param {string[]} allFilePaths - Array of path correponding to the id of the fileTabs.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateAllFilesStatus(allFilePaths) {
