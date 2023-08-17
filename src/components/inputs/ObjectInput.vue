@@ -41,6 +41,7 @@
     </template>
     <attributes-list
       :attributes="getSubAttributes(attribute)"
+      :component="component"
       :plugin="plugin"
       :full-name="fullName"
       :current-error="currentError"
@@ -58,7 +59,6 @@ import {
   ref,
   watch,
 } from 'vue';
-import { ComponentAttribute } from 'leto-modelizer-plugin-core';
 import AttributesList from 'src/components/inputs/AttributesList.vue';
 
 const emit = defineEmits([
@@ -67,6 +67,10 @@ const emit = defineEmits([
 
 const props = defineProps({
   attribute: {
+    type: Object,
+    required: true,
+  },
+  component: {
     type: Object,
     required: true,
   },
@@ -108,7 +112,7 @@ function getSubAttributes(attribute) {
       if (attr) {
         attributes.push(attr);
       } else {
-        attributes.push(new ComponentAttribute({
+        attributes.push(props.component.createAttribute({
           name: definition.name,
           type: definition.type,
           definition,

@@ -41,7 +41,9 @@ Feature: Test modelizer draw view: add plugin component variable
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
     And  I expect '[data-cy="create-file-form"]' is closed
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'variable.tf'
+
+    When I wait 1 second
+    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'variable.tf'
 
     # Add two variables with different category to infra/variable.tf file
     When I set active file content to 'output "instance_ip" { value = aws_instance.server } variable "instance_test" { value = test }'

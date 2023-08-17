@@ -41,6 +41,7 @@
       >
         <attributes-list
           :attributes="selectedComponentAttributes"
+          :component="originalComponent"
           :plugin="plugin"
           :is-root="true"
           :full-name="'root'"
@@ -54,6 +55,7 @@
                 v-model="selectedComponentId"
                 class="q-px-md q-pb-sm"
                 :label="$t('plugin.component.attribute.id')"
+                data-cy="component-id-input"
               />
             </q-item>
           </template>
@@ -103,7 +105,6 @@ import {
 } from 'vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { renderModel } from 'src/composables/PluginManager';
-import { ComponentAttribute } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
 import AttributesList from 'src/components/inputs/AttributesList.vue';
 
@@ -137,12 +138,12 @@ function sanitizeAttributes(attributes) {
   return attributes.reduce((acc, attribute) => {
     if (attribute.value !== undefined && attribute.value !== null && attribute.value !== '') {
       if (attribute.type !== 'Object') {
-        acc.push(new ComponentAttribute(attribute));
+        acc.push(originalComponent.value.createAttribute(attribute));
       } else {
         const sanitizedValue = sanitizeAttributes(attribute.value);
 
         if (sanitizedValue.length !== 0) {
-          acc.push(new ComponentAttribute({
+          acc.push(originalComponent.value.createAttribute({
             ...attribute,
             value: sanitizedValue,
           }));
@@ -160,7 +161,10 @@ function sanitizeAttributes(attributes) {
 async function submit() {
   submitting.value = true;
 
-  originalComponent.value.id = selectedComponentId.value;
+  if (originalComponent.value.id !== selectedComponentId.value) {
+    props.plugin.data.renameComponentId(originalComponent.value.id, selectedComponentId.value);
+  }
+
   originalComponent.value.attributes = sanitizeAttributes(attributesUpdated.value);
 
   props.plugin.draw('root');
@@ -198,7 +202,7 @@ async function save() {
  */
 function getAttributeByDefinition(component, definition) {
   return component.attributes.find((attr) => attr.name === definition.name)
-    || new ComponentAttribute({
+    || component.createAttribute({
       name: definition.name,
       type: definition.type,
       definition,
