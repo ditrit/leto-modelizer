@@ -375,7 +375,8 @@ Feature: Test roundtrip of the application: project creation
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ secondModelFolder }}"]' exists
 
     ## Back to the models page
-    When I visit the 'localhost:8080/#/projects/{{ projectName }}/models'
+    When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I click on '[data-cy="models-page-link-button"]'
     Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
 
     # 800 Filter by text and verify that some diagrams disappear
