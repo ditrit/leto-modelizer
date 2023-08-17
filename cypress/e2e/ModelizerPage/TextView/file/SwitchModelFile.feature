@@ -10,6 +10,7 @@ Feature: Test modelizer text view: switch model file
     And   I set context field 'secondModelFile' with 'model2/main.tf'
     And   I set context field 'secondModelFolder' with 'model2'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'
@@ -64,6 +65,7 @@ Feature: Test modelizer text view: switch model file
     And   I set context field 'modelFile' with 'model1/main.tf'
     And   I set context field 'modelFolder' with 'model1'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'

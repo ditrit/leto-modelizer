@@ -5,6 +5,7 @@ Feature: Test roundtrip of the application : create project files
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'projectName' with 'projectTest'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     # Create new project
     When I click on '[data-cy="create-project-button"]'
@@ -30,6 +31,7 @@ Feature: Test roundtrip of the application : create project files
 
     # Check project is displayed in home page
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'
 

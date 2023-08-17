@@ -8,6 +8,7 @@ Feature: Test home page: project import
     And   I set context field 'projectName' with 'leto-modelizer-project-test'
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
   Scenario: Import project should redirect to models page and send positive toast
     When I click on '[data-cy="import-project-button"]'
@@ -23,6 +24,7 @@ Feature: Test home page: project import
     Then I expect current url is '{{ projectName }}/models'
 
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'
 
@@ -33,6 +35,7 @@ Feature: Test home page: project import
     Then I expect current url is '{{ projectName }}/models'
 
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' is '{{ projectName }}'
 
@@ -61,6 +64,7 @@ Feature: Test home page: project import
     Then I expect 'positive' toast to appear with text 'Project has been imported 🥳!'
 
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'
 
@@ -88,6 +92,7 @@ Feature: Test home page: project import
     And  I expect '[data-cy="diagram-actions_{{ modelFolder }}"]' exists
 
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'
 
@@ -105,6 +110,7 @@ Feature: Test home page: project import
 
     # Check the imported project is only displayed once
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'
 
@@ -132,6 +138,7 @@ Feature: Test home page: project import
     Then I expect current url is '{{ projectName }}/models'
 
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'
 
@@ -149,6 +156,7 @@ Feature: Test home page: project import
     Then I expect current url is '{{ projectName }}/models'
 
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' is '{{ projectName }}'
 
@@ -165,6 +173,7 @@ Feature: Test home page: project import
 
     # Import another project with the same name
     When I visit the '/'
+    And  I wait until the application is loaded
     And  I click on '[data-cy="template-card_project_template"]'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="import-project-checkbox"]'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{ projectName }}'

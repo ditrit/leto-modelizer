@@ -5,6 +5,7 @@ Feature: Test home page: project creation
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'projectName' with 'projectTest'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
  # Scenario: Home page should display an empty project message and one template project card
  #  Then I expect '[data-cy="project-grid-empty"]' exists
@@ -70,6 +71,7 @@ Feature: Test home page: project creation
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{ projectName }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     And  I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'
 
@@ -83,6 +85,7 @@ Feature: Test home page: project creation
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{ projectName }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     And  I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' exists
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' is '{{ projectName }}'
 
@@ -100,6 +103,7 @@ Feature: Test home page: project creation
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{ projectName }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     And  I visit the '/'
+    And  I wait until the application is loaded
     And  I click on '[data-cy="template-card_project_template"]'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{ projectName }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
