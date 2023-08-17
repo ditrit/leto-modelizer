@@ -226,6 +226,10 @@ export default {
     content: 'Oops. Nothing here...',
   },
   page: {
+    splash: {
+      wait: 'Please wait before using our awesome application!',
+      info: 'We are loading the project\'s needs!',
+    },
     home: {
       drawer: {
         empty: 'Nothing to display',
