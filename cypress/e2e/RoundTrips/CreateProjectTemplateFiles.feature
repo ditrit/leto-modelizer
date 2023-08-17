@@ -5,6 +5,7 @@ Feature: Test roundtrip of the application : create project with template files
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'projectName' with 'projectTest'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     # Create project from a template and check template models are displayed
     When I wait 1 second
@@ -48,5 +49,6 @@ Feature: Test roundtrip of the application : create project with template files
 
     # Check project is displayed in home page
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'

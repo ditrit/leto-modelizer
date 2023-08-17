@@ -14,7 +14,17 @@ import PluginEvent from 'src/composables/events/PluginEvent';
 import { getTemplateFiles } from 'src/composables/TemplateManager';
 
 const configurationFilePath = './leto-modelizer.config.json';
+const intervalTime = 5 * 60 * 1000; // 5 min
 let instanciatePlugins = [];
+
+/**
+ * Delete all event logs before the specified datetime.
+ */
+function deleteOldEvents() {
+  instanciatePlugins.forEach((plugin) => {
+    plugin.data.deleteAllEventLogsBefore(Date.now() - intervalTime);
+  });
+}
 
 /**
  * Retrieve files' information.
@@ -93,6 +103,8 @@ export async function initPlugins() {
       instanciatePlugins = allresults
         .filter((r) => r.status === 'fulfilled')
         .map((r) => r.value);
+
+      setInterval(deleteOldEvents, intervalTime);
     });
 }
 

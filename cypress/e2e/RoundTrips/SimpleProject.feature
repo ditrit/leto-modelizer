@@ -72,6 +72,7 @@ Feature: Test roundtrip of the application: project creation
     And   I set context field 'projectRenamed' with 'renamedProject'
     And   I set context field 'modelRenamed' with 'newModelTest'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     ## 100 Home page should display an empty project message and one template project card
     Then I expect '[data-cy="project-grid-empty"]' exists
@@ -301,12 +302,14 @@ Feature: Test roundtrip of the application: project creation
 
     # All created diagrams should be displayed in the /diagrams view
     When I visit the 'localhost:8080/#/projects/{{ projectName }}/diagrams'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="diagram-card_{{ firstModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-card_{{ secondModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-card_\.github/workflows/{{thirdModelName}}"]' exists
 
     # Back to the models page
     When I visit the 'localhost:8080/#/projects/{{ projectName }}/models'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-path_{{ secondModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
@@ -372,7 +375,8 @@ Feature: Test roundtrip of the application: project creation
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ secondModelFolder }}"]' exists
 
     ## Back to the models page
-    When I visit the 'localhost:8080/#/projects/{{ projectName }}/models'
+    When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I click on '[data-cy="models-page-link-button"]'
     Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
 
     # 800 Filter by text and verify that some diagrams disappear

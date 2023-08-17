@@ -4,6 +4,7 @@ Feature: Test roundtrip of the application
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'

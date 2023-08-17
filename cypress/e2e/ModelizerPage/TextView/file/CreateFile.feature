@@ -6,6 +6,7 @@ Feature: Test modelizer text view: create file and folder
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I set context field 'projectName' with 'leto-modelizer-project-test'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     When I click on '[data-cy="import-project-button"]'
     And  I set on '[data-cy="import-project-form"] [data-cy="repository-input"]' text '{{ repository_url }}'

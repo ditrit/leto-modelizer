@@ -9,12 +9,7 @@
         to="/"
         data-cy="home-page-link"
       >
-        <q-icon
-          color="primary"
-          size="4rem"
-          name="img:icons/logo_modelizer.svg"
-          :left="true"
-        />
+        <q-img class="logo" />
         <label class="icon-label vertical-middle text-subtitle1">
           {{ $t('application.name') }}
         </label>

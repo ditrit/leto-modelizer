@@ -4,6 +4,7 @@ Feature: Test models page: filter template in drawer
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I visit the '/'
+    And   I wait until the application is loaded
     And   I set context field 'projectName' with 'projectTest'
     And   I set context field 'modelName' with 'modelTest'
 

@@ -8,6 +8,7 @@ Feature: Test roundtrip of the application : import project with template files
     And   I set context field 'projectName' with 'leto-modelizer-project-test'
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     # Import project with a template and check template models are displayed
     Then I expect '[data-cy="template-card_project_template"]' exists
@@ -73,5 +74,6 @@ Feature: Test roundtrip of the application : import project with template files
 
     # Check project is displayed in home page
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'

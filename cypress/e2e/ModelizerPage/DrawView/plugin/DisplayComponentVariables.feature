@@ -4,6 +4,7 @@ Feature: Test modelizer draw view: add plugin component variable
     Given I clear cache
     And   I set viewport size to '1536' px for width and '960' px for height
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text 'projectName'

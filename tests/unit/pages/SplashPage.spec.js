@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import App from 'src/App.vue';
+import SplashPage from 'src/pages/SplashPage.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import PluginManager from 'src/composables/PluginManager';
 import UserAuthentication from 'src/composables/UserAuthentication';
@@ -22,10 +22,22 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   },
 }));
 
-jest.useFakeTimers();
-jest.spyOn(global, 'setInterval');
+jest.mock('vue-router', () => ({
+  useRoute: () => ({
+    query: {
+      from: 'test',
+    },
+  }),
+  useRouter: () => ({
+    push: () => {},
+    path: 'test',
+  }),
+}));
 
-describe('Test component: App', () => {
+jest.useFakeTimers();
+jest.spyOn(global, 'setTimeout');
+
+describe('Test component: SplashPage', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -33,34 +45,31 @@ describe('Test component: App', () => {
       { data: { deleteAllEventLogsBefore: jest.fn(() => {}) } },
     ]);
 
-    wrapper = shallowMount(App, {
+    wrapper = shallowMount(SplashPage, {
       global: {
-        stubs: [
-          'router-view',
-        ],
+        stubs: {
+          qIcon: true,
+        },
       },
     });
   });
 
-  describe('Test function: deleteOldEvents', () => {
-    it('should call getPlugins', () => {
-      wrapper.vm.deleteOldEvents();
-
-      expect(PluginManager.getPlugins).toHaveBeenCalled();
-    });
-  });
-
   describe('Test function: onMounted', () => {
-    it('should call PluginEvent.InitEvent', () => {
+    it('should call PluginEvent.InitEvent', async () => {
+      jest.advanceTimersByTime(5000);
+      await wrapper.vm.$nextTick();
+      expect(wrapper.exists()).toBe(true);
       expect(PluginEvent.InitEvent.next).toHaveBeenCalled();
     });
 
-    it('should call setInterval', () => {
-      expect(setInterval).toHaveBeenCalled();
-      expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), 5 * 60 * 1000);
+    it('should call setTimeout', async () => {
+      await wrapper.vm.$nextTick();
+      expect(setTimeout).toHaveBeenCalled();
+      expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 2000);
     });
 
-    it('should call setUserManager', () => {
+    it('should call setUserManager', async () => {
+      await wrapper.vm.$nextTick();
       expect(UserAuthentication.setUserManager).toHaveBeenCalled();
     });
   });

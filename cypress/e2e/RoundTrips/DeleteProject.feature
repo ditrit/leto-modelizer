@@ -5,6 +5,7 @@ Feature: Test homepage: project deletion
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I visit the '/'
+    And   I wait until the application is loaded
     And   I set context field 'projectName' with 'leto-modelizer-project-test'
     And   I set context field 'modelFile' with 'model1/main.tf'
     And   I set context field 'modelFolder' with 'model1'
@@ -48,6 +49,7 @@ Feature: Test homepage: project deletion
 
     # Delete project in Home page
     When I visit the '/'
+    And  I wait until the application is loaded
     And  I click on '[data-cy="project-card_{{ projectName }}"] [data-cy="delete-button"]'
     And  I click on '[data-cy="delete-project-form"] [data-cy="confirm-delete-checkbox"]'
     And  I click on '[data-cy="delete-project-form"] [data-cy="submit-button"]'

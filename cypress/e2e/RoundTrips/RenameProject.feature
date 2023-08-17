@@ -5,6 +5,7 @@ Feature: Test roundtrip of the application : rename project
     And   I set context field 'modelFile' with 'model1/main.tf'
     And   I set context field 'modelFolder' with 'model1'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     # Create project
     When I click on '[data-cy="create-project-button"]'
@@ -39,6 +40,7 @@ Feature: Test roundtrip of the application : rename project
 
     # Check project is displayed in home page
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_projectTest"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_projectTest"] [data-cy="title-container"]' is 'projectTest'
 

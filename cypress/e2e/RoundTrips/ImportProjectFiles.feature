@@ -8,6 +8,7 @@ Feature: Test roundtrip of the application : import project files
     And   I set context field 'projectName' with 'leto-modelizer-project-test'
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I visit the '/'
+    And   I wait until the application is loaded
 
     # Import project
     When I click on '[data-cy="import-project-button"]'
@@ -52,5 +53,6 @@ Feature: Test roundtrip of the application : import project files
 
     # Check project is displayed in home page
     When I visit the '/'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'

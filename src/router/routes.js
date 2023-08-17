@@ -6,6 +6,7 @@ import AboutLayout from 'src/layouts/AboutLayout.vue';
 import HomeLayout from 'src/layouts/HomeLayout.vue';
 import LoginLayout from 'src/layouts/LoginLayout.vue';
 import { getProjectById } from 'src/composables/Project';
+import SplashLayout from 'layouts/SplashLayout.vue';
 
 const routes = [
   {
@@ -56,6 +57,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: LoginLayout,
+  },
+  {
+    path: '/splash',
+    name: 'Splash',
+    component: SplashLayout,
   },
   {
     path: '/redirect',
