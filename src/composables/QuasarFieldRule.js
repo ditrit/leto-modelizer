@@ -13,14 +13,14 @@ export function notEmpty(t, value) {
 }
 
 /**
- * Check if value is a valid git repository url.
+ * Check if value is a valid url.
  * @param {Function} t - I18n translate function.
  * @param {string} value - Value to check.
- * @returns {boolean | string} Return true if the value is a valid git repository url otherwise
+ * @returns {boolean | string} Return true if the value is a valid url otherwise
  * the translated error message.
  */
-export function isGitRepositoryUrl(t, value) {
-  return /^http(s)?:\/\/.+\/.*(?<!\.git)$/.test(value)
+export function isUrl(t, value) {
+  return /^http(s)?:\/\/.+\/.*$/.test(value)
     || t('errors.invalid.gitAddRemote.repository');
 }
 

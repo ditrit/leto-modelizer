@@ -38,7 +38,7 @@ jest.mock('src/composables/Project', () => ({
 
     return Promise.resolve();
   }),
-  extractProjectName: jest.fn(() => 'foo'),
+  extractProjectName: jest.fn((name) => name),
 }));
 
 describe('Test component: ImportProjectForm', () => {
@@ -67,7 +67,7 @@ describe('Test component: ImportProjectForm', () => {
 
     it('should emit a notification on error', async () => {
       Notify.create = jest.fn();
-      wrapper.vm.repository = '/error';
+      wrapper.vm.repository = 'error';
 
       await wrapper.vm.onSubmit();
 
