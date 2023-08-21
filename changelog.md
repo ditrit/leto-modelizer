@@ -49,6 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.19.0) version 0.19.0.
   * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.2.3) version 0.2.3.
 * Improve performance of the automatic functionnal tests.
+* User settings:
+  * Save records by page in ModelsPage.
 
 ### Fixed
 
