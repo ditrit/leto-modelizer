@@ -105,8 +105,8 @@ import DiagramFilterCard from 'components/card/DiagramFilterCard.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import DrawerEvent from 'src/composables/events/DrawerEvent';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
+import { getUserSetting, setUserSetting } from 'src/composables/Settings';
 
-const DIAGRAM_STORAGE_KEY = 'diagramType';
 const route = useRoute();
 const router = useRouter();
 const props = defineProps({
@@ -121,7 +121,7 @@ const data = reactive({
 const searchDiagramText = ref('');
 const selectedTags = ref([]);
 const categoryTags = ref(getAllTagsByType('category'));
-const isDiagramGrid = ref(localStorage.getItem(DIAGRAM_STORAGE_KEY) === 'grid');
+const isDiagramGrid = ref(getUserSetting('displayType') === 'grid');
 const viewType = computed(() => route.params.viewType);
 
 let updateModelSubscription;
@@ -131,7 +131,7 @@ let updateModelSubscription;
  */
 function switchDiagramType() {
   isDiagramGrid.value = !isDiagramGrid.value;
-  localStorage.setItem(DIAGRAM_STORAGE_KEY, isDiagramGrid.value ? 'grid' : 'table');
+  setUserSetting('displayType', isDiagramGrid.value ? 'grid' : 'table');
 }
 
 /**
