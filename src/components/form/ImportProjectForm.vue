@@ -9,7 +9,7 @@
       :label="$t('page.modelizer.settings.gitAddRemote.repository')"
       :rules="[
         (value) => notEmpty($t, value),
-        (value) => isGitRepositoryUrl($t, value),
+        (value) => isUrl($t, value),
         isUniqueRuleEnabled ?
           (value) => isUnique(
             $t,
@@ -71,7 +71,7 @@ import {
 } from 'vue';
 import {
   notEmpty,
-  isGitRepositoryUrl,
+  isUrl,
   isUnique,
 } from 'src/composables/QuasarFieldRule';
 import {

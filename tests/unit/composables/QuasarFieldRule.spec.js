@@ -1,6 +1,6 @@
 import {
   notEmpty,
-  isGitRepositoryUrl,
+  isUrl,
   isValidFileLabel,
   isRequired,
   isStringTooShort,
@@ -40,20 +40,20 @@ describe('Test composable: InputRule', () => {
     });
   });
 
-  describe('Test function: isGitRepositoryUrl', () => {
+  describe('Test function: isUrl', () => {
     it('should return true on valid git url', () => {
-      expect(isGitRepositoryUrl(t, 'http://test.com/test')).toBe(true);
-      expect(isGitRepositoryUrl(t, 'https://test.com/test')).toBe(true);
-      expect(isGitRepositoryUrl(t, 'https://github.com/ditrit/leto-modelizer')).toBe(true);
-      expect(isGitRepositoryUrl(t, 'https://github.com/ditrit/leto-modelizer.git')).toBe(true);
-      expect(isGitRepositoryUrl(t, 'https://github.com/ditrit/leto-modelizer/')).toBe(true);
+      expect(isUrl(t, 'http://test.com/test')).toBe(true);
+      expect(isUrl(t, 'https://test.com/test')).toBe(true);
+      expect(isUrl(t, 'https://github.com/ditrit/leto-modelizer')).toBe(true);
+      expect(isUrl(t, 'https://github.com/ditrit/leto-modelizer.git')).toBe(true);
+      expect(isUrl(t, 'https://github.com/ditrit/leto-modelizer/')).toBe(true);
     });
 
     it('should return error on invalid git url', () => {
       const key = 'errors.invalid.gitAddRemote.repository';
 
-      expect(isGitRepositoryUrl(t, 'git@github.com/ditrit/leto-modelizer.git')).toEqual(key);
-      expect(isGitRepositoryUrl(t, 'ftp://github.com/ditrit/leto-modelizer.git')).toEqual(key);
+      expect(isUrl(t, 'git@github.com/ditrit/leto-modelizer.git')).toEqual(key);
+      expect(isUrl(t, 'ftp://github.com/ditrit/leto-modelizer.git')).toEqual(key);
     });
   });
 

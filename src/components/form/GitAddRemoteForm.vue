@@ -19,7 +19,7 @@
       :hint="$t('page.modelizer.settings.gitAddRemote.repositoryExample')"
       :rules="[
         (value) => notEmpty($t, value),
-        (value) => isGitRepositoryUrl($t, value)
+        (value) => isUrl($t, value)
       ]"
       data-cy="repository-input"
     />
@@ -46,7 +46,7 @@ import { useI18n } from 'vue-i18n';
 import { ref, toRef } from 'vue';
 import {
   notEmpty,
-  isGitRepositoryUrl,
+  isUrl,
 } from 'src/composables/QuasarFieldRule';
 import {
   getProjectById,
