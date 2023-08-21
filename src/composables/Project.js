@@ -73,8 +73,8 @@ export function getProjectById(projectId) {
  * @returns {string} Project name.
  */
 export function extractProjectName(repositoryUrl) {
-  const regex = /\/([^/]+)\/?$/;
-  const match = regex.exec(repositoryUrl);
+  const regex = /.*\/([^.]*)(\.git)?$/;
+  const match = regex.exec(repositoryUrl.replace(/\/$/, ''));
 
   return match?.[1] || null;
 }

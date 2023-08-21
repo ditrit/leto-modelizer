@@ -779,5 +779,17 @@ describe('Test composable: Project', () => {
     it('should return null when url is empty', () => {
       expect(extractProjectName('')).toBeNull();
     });
+
+    it('should return project name when url end by /', () => {
+      expect(extractProjectName('https://github.com/ditrit/leto-modelizer-project-test/')).toEqual('leto-modelizer-project-test');
+    });
+
+    it('should return project name when url end by .git', () => {
+      expect(extractProjectName('https://github.com/ditrit/leto-modelizer-project-test.git')).toEqual('leto-modelizer-project-test');
+    });
+
+    it('should return project name when url end by .git/', () => {
+      expect(extractProjectName('https://github.com/ditrit/leto-modelizer-project-test.git/')).toEqual('leto-modelizer-project-test');
+    });
   });
 });
