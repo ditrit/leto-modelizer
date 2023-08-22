@@ -6,9 +6,11 @@
     class="diagram-table"
     :rows="diagrams"
     :columns="columns"
+    :pagination="pagination"
     row-key="path"
     data-cy="diagram-table"
     @row-click="(_, row) => emit('click:diagram', row)"
+    @update:pagination="onPaginationUpdate"
   >
     <template #body-cell-categories="{ row: { tags } }">
       <q-td data-cy="diagram-categories">
@@ -74,9 +76,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import DiagramTableActionMenu from 'src/components/menu/DiagramTableActionMenu.vue';
+import { getUserSetting, setUserSetting } from 'src/composables/Settings';
 
 const { t } = useI18n();
 const emit = defineEmits(['click:diagram']);
@@ -88,6 +91,9 @@ defineProps({
   },
 });
 
+const pagination = ref({
+  rowsPerPage: getUserSetting('recordsByPage'),
+});
 const columns = computed(() => [
   {
     name: 'categories',
@@ -114,4 +120,13 @@ const columns = computed(() => [
     field: 'actions',
   },
 ]);
+
+/**
+ * Update user settings on pagination changes.
+ * @param {object} newPagination - Updated pagination.
+ */
+function onPaginationUpdate(newPagination) {
+  pagination.value = newPagination;
+  setUserSetting('recordsByPage', newPagination.rowsPerPage);
+}
 </script>
