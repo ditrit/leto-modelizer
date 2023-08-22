@@ -1,9 +1,11 @@
 <template>
   <q-toggle
     v-model="localValue"
+    class="boolean-input"
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
     ]"
+    left-label
   />
 </template>
 
@@ -20,3 +22,9 @@ const props = defineProps({
 
 const localValue = ref(toRef(props, 'attribute').value.value);
 </script>
+
+<style lang="scss" scoped>
+.boolean-input {
+  justify-content: start;
+}
+</style>

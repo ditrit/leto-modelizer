@@ -1,6 +1,6 @@
 <template>
   <div
-    class="row items-baseline"
+    class="row items-center"
   >
     <template v-if="!attribute.definition">
       <q-input
@@ -18,8 +18,8 @@
       <q-icon
         name="fa-solid fa-circle-info"
         color="info"
-        size="sm"
-        class="q-ml-sm"
+        size="xs"
+        class="q-ml-sm self-start"
         style="cursor: help"
       >
         <definition-menu
