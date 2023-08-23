@@ -3,13 +3,8 @@ import { shallowMount } from '@vue/test-utils';
 import SplashPage from 'src/pages/SplashPage.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import PluginManager from 'src/composables/PluginManager';
-import UserAuthentication from 'src/composables/UserAuthentication';
 
 installQuasarPlugin();
-
-jest.mock('src/composables/UserAuthentication', () => ({
-  setUserManager: jest.fn(),
-}));
 
 jest.mock('src/composables/PluginManager', () => ({
   initPlugins: () => Promise.resolve(),
@@ -66,11 +61,6 @@ describe('Test component: SplashPage', () => {
       await wrapper.vm.$nextTick();
       expect(setTimeout).toHaveBeenCalled();
       expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 2000);
-    });
-
-    it('should call setUserManager', async () => {
-      await wrapper.vm.$nextTick();
-      expect(UserAuthentication.setUserManager).toHaveBeenCalled();
     });
   });
 });

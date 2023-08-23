@@ -41,12 +41,14 @@ export default route((/* { store, ssrContext } */) => {
     const oidcProviderList = process.env.AUTHENTICATION
       ? JSON.parse(process.env.AUTHENTICATION)
       : [];
+    const isUserReady = oidcProviderList.length === 0
+      || (userManagerExists() && await getUser());
 
-    if (!authRoutes.includes(to.name)
-      && oidcProviderList.length > 0
-      && (!userManagerExists() || !await getUser())) {
+    if (!authRoutes.includes(to.name) && !isUserReady) {
       next({ name: 'Login' });
-    } else if (!applicationReady && to.name !== 'Splash') {
+    } else if (isUserReady
+      && !applicationReady
+      && to.name !== 'Splash') {
       next({ name: 'Splash', query: { from: to.fullPath } });
     } else {
       next();
