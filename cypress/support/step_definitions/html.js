@@ -147,3 +147,13 @@ Then('I expect {string} to be at position {int},{int}', (templateSelector, x, y)
     expect(Math.trunc(element.position().top)).eq(y);
   });
 });
+
+Then('I expect component {string} to be at position {int},{int}', (templateSelector, x, y) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+
+  // Works only for HTML nodes with x and y fields. (such as some SVG nodes)
+  cy.get(selector).should((element) => {
+    expect(Math.trunc(parseInt(element.attr('x'), 10))).eq(x);
+    expect(Math.trunc(parseInt(element.attr('y'), 10))).eq(y);
+  });
+});
