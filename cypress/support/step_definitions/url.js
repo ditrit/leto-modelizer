@@ -14,7 +14,7 @@ Given('I reload to {string}', (urlTemplate) => {
 });
 
 Given('I wait until the application is loaded', () => {
-  cy.url({ timeout: 30000 }).should('not.match', /\/splash/);
+  cy.url({ timeout: 15000 }).should('not.match', /\/splash/);
 });
 
 Then('I expect current url is {string}', (expectedUrlTemplate) => {
