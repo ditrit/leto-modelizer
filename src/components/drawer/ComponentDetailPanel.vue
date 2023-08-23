@@ -194,6 +194,22 @@ async function save() {
 }
 
 /**
+ * Get type of component value from definition type.
+ * Can be possibly different from component type given in definition.
+ * @param {ComponentAttributeDefinition} definition - Component attribute definition.
+ * @returns {string} Type of attribute.
+ */
+function getComponentValueType(definition) {
+  if (definition.type === 'Link') {
+    return 'Array';
+  }
+  if (definition.type === 'Reference') {
+    return 'String';
+  }
+  return definition.type;
+}
+
+/**
  * Get attribute corresponding to the given definition.
  * Create one with the given definition if not existing.
  * @param {Component} component - Component containing the available attributes.
@@ -204,7 +220,7 @@ function getAttributeByDefinition(component, definition) {
   return component.attributes.find((attr) => attr.name === definition.name)
     || component.createAttribute({
       name: definition.name,
-      type: definition.type,
+      type: getComponentValueType(definition),
       definition,
       value: definition.type === 'Object' ? [] : null,
     });

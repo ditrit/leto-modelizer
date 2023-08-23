@@ -377,6 +377,23 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
+  describe('Test function: getComponentValueType', () => {
+    it('should return Array in case of Link', () => {
+      expect(wrapper.vm.getComponentValueType(new ComponentAttributeDefinition({ type: 'Link' })))
+        .toEqual('Array');
+    });
+
+    it('should return String in case of Reference', () => {
+      expect(wrapper.vm.getComponentValueType(new ComponentAttributeDefinition({ type: 'Reference' })))
+        .toEqual('String');
+    });
+
+    it('should return definition type in case of anything else', () => {
+      expect(wrapper.vm.getComponentValueType(new ComponentAttributeDefinition({ type: 'Number' })))
+        .toEqual('Number');
+    });
+  });
+
   describe('Test hook function: onMounted', () => {
     it('should subscribe to DefaultEvent', () => {
       expect(pluginDefaultSubscription).toHaveBeenCalledTimes(1);
