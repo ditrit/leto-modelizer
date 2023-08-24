@@ -62,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix bug on using default file name from plugin instead of the file name specified by the user, when adding a component after creating a diagram from scratch.
 * Fix bug on deleted files while pushing a branch or using "upload to git" button, see [this issue](https://github.com/ditrit/leto-modelizer/issues/358).
 * Fix bug on import repository with `.git` or `/` at the end, see [this issue](https://github.com/ditrit/leto-modelizer/issues/368).
+* Fix bug on open files of two models with similar names, see [this issue](https://github.com/ditrit/leto-modelizer/issues/370).
 
 ### Removed
 
