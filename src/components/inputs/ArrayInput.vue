@@ -9,6 +9,7 @@
     hide-dropdown-icon
     input-debounce="0"
     new-value-mode="add"
+    :hint="$t('plugin.component.attribute.hint.array')"
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
     ]"

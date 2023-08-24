@@ -470,6 +470,9 @@ export default {
         noAttributes: 'No attributes',
         section: 'Section name',
         url: 'Open documentation',
+        hint: {
+          array: 'Press enter to validate',
+        },
       },
     },
   },

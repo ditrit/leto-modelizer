@@ -44,6 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Rework on tag display, use tag language for plugin selection on create diagram from template.
 * Draw page:
   * Rework on left drawer.
+  * Re-design attribute fields.
+  * Re-design information icon on attribute fields.
 * Plugin management:
   * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.5.0) version 0.5.0.
   * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.19.0) version 0.19.0.
