@@ -295,7 +295,7 @@ async function openModelFiles() {
     return;
   }
 
-  if (await isDirectory(modelPath)) {
+  if (await isDirectory(`${props.projectName}/${modelPath}`)) {
     modelPath += '/';
   }
 
