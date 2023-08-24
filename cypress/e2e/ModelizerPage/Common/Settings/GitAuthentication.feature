@@ -16,7 +16,7 @@ Feature: Test git authentication dialog
 
   Scenario: Set git authentication in the project should send positive toast
     When I click on '[data-cy="modelizer-settings-button"]'
-    And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAuthentication"]'
+    And  I click on '[data-cy="item_GitAuthentication"]'
     Then I expect '[data-cy="git-authentication-form"]' exists
 
     When I set on '[data-cy="git-authentication-form"] [data-cy="username-input"]' text 'test'
@@ -27,7 +27,7 @@ Feature: Test git authentication dialog
 
   Scenario: Set git authentication then set git add remote repository should keep saved authentication values in each corresponding fields
     When I click on '[data-cy="modelizer-settings-button"]'
-    And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAuthentication"]'
+    And  I click on '[data-cy="item_GitAuthentication"]'
     Then I expect '[data-cy="git-authentication-form"]' exists
 
     When I set on '[data-cy="git-authentication-form"] [data-cy="username-input"]' text 'test'
@@ -37,7 +37,7 @@ Feature: Test git authentication dialog
     And  I expect '[data-cy="git-authentication-form"]' is closed
 
     When I click on '[data-cy="modelizer-settings-button"]'
-    And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAddRemote"]'
+    And  I click on '[data-cy="item_GitAddRemote"]'
     Then I expect '[data-cy="git-add-remote-form"]' exists
 
     When I set on '[data-cy="git-add-remote-form"] [data-cy="repository-input"]' text 'https://github.com/ditrit/leto-modelizer-project-test'
@@ -46,7 +46,7 @@ Feature: Test git authentication dialog
     And  I expect '[data-cy="git-add-remote-form"]' is closed
 
     When I click on '[data-cy="modelizer-settings-button"]'
-    And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAuthentication"]'
+    And  I click on '[data-cy="item_GitAuthentication"]'
     Then I expect field '[data-cy="git-authentication-form"] [data-cy="username-input"]' is 'test'
     And  I expect field '[data-cy="git-authentication-form"] [data-cy="token-input"]' is 'test'
 
@@ -54,7 +54,7 @@ Feature: Test git authentication dialog
     Given I expect '[data-cy="upload-to-git-button"]' not exists
 
     When I click on '[data-cy="modelizer-settings-button"]'
-    And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAddRemote"]'
+    And  I click on '[data-cy="item_GitAddRemote"]'
     Then I expect '[data-cy="git-add-remote-form"]' exists
 
     When I set on '[data-cy="git-add-remote-form"] [data-cy="repository-input"]' text 'https://github.com/ditrit/leto-modelizer-project-test'
@@ -65,7 +65,7 @@ Feature: Test git authentication dialog
     And  I expect '[data-cy="upload-to-git-button"]' to be disabled
 
     When I click on '[data-cy="modelizer-settings-button"]'
-    And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAuthentication"]'
+    And  I click on '[data-cy="item_GitAuthentication"]'
     Then I expect '[data-cy="git-authentication-form"]' exists
 
     When I set on '[data-cy="git-authentication-form"] [data-cy="username-input"]' text 'test'
@@ -79,7 +79,7 @@ Feature: Test git authentication dialog
     Given I expect '[data-cy="upload-to-git-button"]' not exists
 
     When I click on '[data-cy="modelizer-settings-button"]'
-    And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAddRemote"]'
+    And  I click on '[data-cy="item_GitAddRemote"]'
     Then I expect '[data-cy="git-add-remote-form"]' exists
 
     When I set on '[data-cy="git-add-remote-form"] [data-cy="repository-input"]' text 'https://github.com/ditrit/leto-modelizer-project-test'
@@ -90,7 +90,7 @@ Feature: Test git authentication dialog
     And  I expect '[data-cy="upload-to-git-button"]' to be disabled
 
     When I click on '[data-cy="modelizer-settings-button"]'
-    And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAuthentication"]'
+    And  I click on '[data-cy="item_GitAuthentication"]'
     Then I expect '[data-cy="git-authentication-form"]' exists
 
     When I set on '[data-cy="git-authentication-form"] [data-cy="token-input"]' text 'test'
@@ -103,7 +103,7 @@ Feature: Test git authentication dialog
     Given I expect '[data-cy="upload-to-git-button"]' not exists
 
     When I click on '[data-cy="modelizer-settings-button"]'
-    And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAddRemote"]'
+    And  I click on '[data-cy="item_GitAddRemote"]'
     Then I expect '[data-cy="git-add-remote-form"]' exists
 
     When I set on '[data-cy="git-add-remote-form"] [data-cy="repository-input"]' text 'https://github.com/ditrit/leto-modelizer-project-test'
@@ -114,7 +114,7 @@ Feature: Test git authentication dialog
     And  I expect '[data-cy="upload-to-git-button"]' to be disabled
 
     When I click on '[data-cy="modelizer-settings-button"]'
-    And  I click on '[data-cy="project-settings-menu"] [data-cy="item_GitAuthentication"]'
+    And  I click on '[data-cy="item_GitAuthentication"]'
     Then I expect '[data-cy="git-authentication-form"]' exists
 
     When I set on '[data-cy="git-authentication-form"] [data-cy="username-input"]' text 'username'

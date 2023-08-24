@@ -345,17 +345,18 @@ Feature: Test roundtrip of the application: project creation
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
 
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I wait 2 seconds
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ modelRenamed }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ modelRenamed }}"]' exists
 
     # Back to the models page
-    When I wait 1 second
-    And  I click on '[data-cy="models-page-link-button"]'
-    And  I expect '[data-cy="diagram-path_{{ modelRenamed }}"]' exists
+    When I click on '[data-cy="models-page-link-button"]'
+    And  I wait 1 second
+    Then I expect '[data-cy="diagram-path_{{ modelRenamed }}"]' exists
 
     ## 700 Delete first model and check that it does not exist anymore
-    And  I click on '[data-cy="diagram-actions_{{modelRenamed}}"]'
+    When I click on '[data-cy="diagram-actions_{{modelRenamed}}"]'
     Then I expect '[data-cy="diagrams-table-action-menu"]' exists
 
     When I click on '[data-cy="diagrams-table-action-menu"] [data-cy="delete-diagram-action-item"]'

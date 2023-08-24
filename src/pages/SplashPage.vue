@@ -29,7 +29,6 @@
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
 import { initPlugins } from 'src/composables/PluginManager';
-import { setUserManager } from 'src/composables/UserAuthentication';
 import PluginEvent from 'src/composables/events/PluginEvent';
 
 const route = useRoute();
@@ -38,7 +37,6 @@ const router = useRouter();
 onMounted(async () => {
   await initPlugins();
   PluginEvent.InitEvent.next();
-  setUserManager(localStorage.getItem('provider'));
 
   // Wait 2s to avoid blinking effect and let user admire our beautiful splash screen.
   // eslint-disable-next-line no-promise-executor-return

@@ -359,6 +359,9 @@ export default {
           repositoryExample: 'Examples: "http://test.com/test" or "https://github.com/test"',
           warningMessage: 'Changing the remote can lead to conflicts and/or data loss',
         },
+        user: {
+          unknown: 'Unknown User',
+        },
       },
       git: {
         newBranch: {

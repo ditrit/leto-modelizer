@@ -32,6 +32,10 @@ jest.mock('src/composables/Project', () => ({
   }),
 }));
 
+jest.mock('src/composables/UserAuthentication', () => ({
+  getUser: jest.fn(() => Promise.resolve({})),
+}));
+
 describe('Test component: ModelizerSettingsMenu', () => {
   let wrapper;
   let subscribe;
@@ -64,6 +68,12 @@ describe('Test component: ModelizerSettingsMenu', () => {
     describe('Test props: projectName', () => {
       it('should match "test"', () => {
         expect(wrapper.vm.props.projectName).toEqual('test');
+      });
+    });
+
+    describe('Test ref: user', () => {
+      it('should match an empty object', () => {
+        expect(wrapper.vm.user).toEqual({});
       });
     });
 

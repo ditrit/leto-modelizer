@@ -162,32 +162,32 @@ build: {
 },
 
 devServer: {
-  server: {
-    type: 'https',
-  },
-  port: 443,
-  '/auth': {
-    target: 'https://token.actions.githubusercontent.com/', // url to the oidc metadata of your provider
-    changeOrigin: true,
-    pathRewrite: {
-      '^/auth': '',
+  ...,
+  proxy: {
+    ...,
+    '/auth': {
+      target: 'https://token.actions.githubusercontent.com/', // url to the oidc metadata of your provider
+      changeOrigin: true,
+      pathRewrite: {
+        '^/auth': '',
+      },
+      secure: true,
+      onProxyRes(proxyRes) {
+        proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+      },
     },
-    secure: true,
-    onProxyRes(proxyRes) {
-      proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+    '/token': {
+      target: 'https://github.com/login/oauth/access_token/', // url to the oidc token of your provider
+      changeOrigin: true,
+      pathRewrite: {
+        '^/token': '',
+      },
+      secure: true,
+      onProxyRes(proxyRes) {
+        proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+      },
     },
-  },
-  '/token': {
-    target: 'https://github.com/login/oauth/access_token/', // url to the oidc token of your provider
-    changeOrigin: true,
-    pathRewrite: {
-      '^/token': '',
-    },
-    secure: true,
-    onProxyRes(proxyRes) {
-      proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-    },
-  },
+  }
 }
 ```
 
@@ -197,13 +197,13 @@ Example with Github provider:
 
 - Create an OAuth Apps by following [this Github documentation](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app). You will retrieve the `CLIENT_ID` and the `CLIENT_SECRET` needed for the configuration file (see below). You also need to fill the required fields like so :
  - `Application name` = YOUR_APP_NAME,
- - `Homepage URL` = `https://localhost:443`,
- - `Authorization callback URL` = `https://localhost/redirect`
+ - `Homepage URL` = `http://localhost:8080`,
+ - `Authorization callback URL` = `http://localhost:8080/redirect`
 
 Then, inside your `global.config.json`, ([see example](README.md)), you can replace all the occurences of the following attributes with the corresponging values :
 - `"client_id"`: YOUR_CLIENT_ID
 - `"client_secret"`: YOUR_CLIENT_SECRET,
 - `"authority"`: `"/auth",`
-- `"redirect_uri"`: `"https://localhost/redirect",`
+- `"redirect_uri"`: `"http://localhost:8080/redirect",`
 - `"token_endpoint"`: `"/token",`
-- `"silent_redirect_uri"`: `"https://localhost/silent-refresh",`
+- `"silent_redirect_uri"`: `"http://localhost:8080/silent-refresh",`
