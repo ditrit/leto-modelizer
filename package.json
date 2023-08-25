@@ -45,7 +45,7 @@
     "@badeball/cypress-cucumber-preprocessor": "=18.0.4",
     "@cypress/browserify-preprocessor": "=3.0.2",
     "@quasar/app-webpack": "=3.9.5",
-    "@quasar/quasar-app-extension-testing": "=2.1.0",
+    "@quasar/quasar-app-extension-testing": "=2.1.1",
     "@quasar/quasar-app-extension-testing-unit-jest": "=3.0.0-alpha.10",
     "@vue/test-utils": "=2.4.1",
     "@vue/vue3-jest": "=29.2.5",
