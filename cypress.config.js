@@ -27,6 +27,7 @@ module.exports = defineConfig({
     screenshotOnRunFailure: false,
     setupNodeEvents,
     experimentalRunAllSpecs: true,
+    reporter: require.resolve('@badeball/cypress-cucumber-preprocessor/pretty-reporter'),
   },
-  retries: 3,
+  defaultCommandTimeout: 10000,
 });
