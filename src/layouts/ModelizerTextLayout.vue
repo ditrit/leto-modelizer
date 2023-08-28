@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh LpR fFf">
+  <q-layout view="hHh lpR fFf">
     <navigation-bar
       :project-name="projectName"
     />
@@ -7,6 +7,8 @@
     <q-page-container>
       <modelizer-text-page />
     </q-page-container>
+
+    <console-footer :errors="parseErrors" />
 
     <git-authentication-dialog :project-name="projectName" />
     <git-add-remote-dialog :project-name="projectName" />
@@ -25,6 +27,7 @@
 import NavigationBar from 'src/components/NavigationBar.vue';
 import ModelizerTextLeftDrawer from 'src/components/drawer/ModelizerTextLeftDrawer.vue';
 import ModelizerTextPage from 'src/pages/ModelizerTextPage.vue';
+import ConsoleFooter from 'src/components/drawer/ConsoleFooter.vue';
 import GitAuthenticationDialog from 'src/components/dialog/GitAuthenticationDialog';
 import GitAddRemoteDialog from 'src/components/dialog/GitAddRemoteDialog';
 import GitNewBranchDialog from 'src/components/dialog/GitNewBranchDialog';
@@ -35,7 +38,12 @@ import GitStatusDialog from 'src/components/dialog/GitStatusDialog';
 import GitPushDialog from 'src/components/dialog/GitPushDialog';
 import GitCommitDialog from 'src/components/dialog/GitCommitDialog';
 import GitLogDialog from 'src/components/dialog/GitLogDialog';
-import { computed, onMounted, onUnmounted } from 'vue';
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  ref,
+} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import FileEvent from 'src/composables/events/FileEvent';
 import { getPluginByName, getPlugins } from 'src/composables/PluginManager';
@@ -45,6 +53,7 @@ const router = useRouter();
 
 const query = computed(() => route.query);
 const projectName = computed(() => route.params.projectName);
+const parseErrors = ref(getPluginByName(query.value.plugin).data.parseErrors);
 
 let selectFileTabSubscription;
 
