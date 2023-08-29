@@ -22,8 +22,8 @@
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DefaultDialog from 'components/dialog/DefaultDialog';
-import GitNewBranchForm from 'components/form/GitNewBranchForm';
+import DefaultDialog from 'components/dialog/DefaultDialog.vue';
+import GitNewBranchForm from 'components/form/GitNewBranchForm.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 defineProps({

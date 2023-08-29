@@ -54,8 +54,8 @@
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DefaultDialog from 'src/components/dialog/DefaultDialog';
-import CreateProjectTemplateForm from 'src/components/form/CreateProjectTemplateForm';
+import DefaultDialog from 'src/components/dialog/DefaultDialog.vue';
+import CreateProjectTemplateForm from 'src/components/form/CreateProjectTemplateForm.vue';
 import { useRouter } from 'vue-router';
 import {
   onMounted,

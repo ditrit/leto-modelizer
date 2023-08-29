@@ -35,8 +35,8 @@ import {
   onUnmounted,
 } from 'vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DefaultDialog from 'components/dialog/DefaultDialog';
-import DeleteFileForm from 'components/form/DeleteFileForm';
+import DefaultDialog from 'components/dialog/DefaultDialog.vue';
+import DeleteFileForm from 'components/form/DeleteFileForm.vue';
 
 defineProps({
   projectName: {

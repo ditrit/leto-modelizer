@@ -145,8 +145,8 @@
 </template>
 
 <script setup>
-import GitBranchItemMenu from 'components/menu/GitBranchItemMenu';
-import GitBranchHeaderMenu from 'components/menu/GitBranchHeaderMenu';
+import GitBranchItemMenu from 'components/menu/GitBranchItemMenu.vue';
+import GitBranchHeaderMenu from 'components/menu/GitBranchHeaderMenu.vue';
 import {
   computed,
   ref,
@@ -157,7 +157,7 @@ import {
   gitFetch,
   getProjectById,
 } from 'src/composables/Project';
-import GitBranchExpandListMenu from 'components/menu/GitBranchExpandListMenu';
+import GitBranchExpandListMenu from 'components/menu/GitBranchExpandListMenu.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { searchText } from 'src/composables/Filter';
 

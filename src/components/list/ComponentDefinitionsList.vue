@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import LibraryList from 'src/components/list/LibraryList';
+import LibraryList from 'src/components/list/LibraryList.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
