@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Add variables panel in left drawer.
   * Rename component id.
 * Splash screen.
+* quasar/app-vite plugin to use vite instead of webpack.
 
 ### Changed
 
