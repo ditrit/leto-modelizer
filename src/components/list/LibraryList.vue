@@ -51,8 +51,8 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import ComponentDefinitionGrid from 'src/components/grid/ComponentDefinitionGrid';
-import LibraryItem from 'src/components/item/LibraryItem';
+import ComponentDefinitionGrid from 'src/components/grid/ComponentDefinitionGrid.vue';
+import LibraryItem from 'src/components/item/LibraryItem.vue';
 import { useI18n } from 'vue-i18n';
 import { isMatching } from 'src/composables/Project';
 

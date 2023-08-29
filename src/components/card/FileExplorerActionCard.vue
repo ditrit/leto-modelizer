@@ -20,7 +20,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import FileExplorerActionMenu from 'components/menu/FileExplorerActionMenu';
+import FileExplorerActionMenu from 'components/menu/FileExplorerActionMenu.vue';
 
 const isActionMenuOpen = ref(false);
 

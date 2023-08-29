@@ -89,13 +89,13 @@ const props = defineProps({
 });
 
 const inputList = {
-  Boolean: defineAsyncComponent(() => import('./BooleanInput')),
-  String: defineAsyncComponent(() => import('./StringInput')),
-  Number: defineAsyncComponent(() => import('./NumberInput')),
-  Reference: defineAsyncComponent(() => import('./ReferenceInput')),
-  Select: defineAsyncComponent(() => import('./SelectInput')),
-  Link: defineAsyncComponent(() => import('./LinkInput')),
-  Array: defineAsyncComponent(() => import('./ArrayInput')),
+  Boolean: defineAsyncComponent(() => import('./BooleanInput.vue')),
+  String: defineAsyncComponent(() => import('./StringInput.vue')),
+  Number: defineAsyncComponent(() => import('./NumberInput.vue')),
+  Reference: defineAsyncComponent(() => import('./ReferenceInput.vue')),
+  Select: defineAsyncComponent(() => import('./SelectInput.vue')),
+  Link: defineAsyncComponent(() => import('./LinkInput.vue')),
+  Array: defineAsyncComponent(() => import('./ArrayInput.vue')),
 };
 const { t } = useI18n();
 
