@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import DefaultDialog from 'components/dialog/DefaultDialog';
+import DefaultDialog from 'components/dialog/DefaultDialog.vue';
 import CreateModelForm from 'components/form/CreateModelForm.vue';
 
 defineProps({

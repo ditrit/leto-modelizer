@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import ModelCard from 'src/components/card/ModelCard';
+import ModelCard from 'src/components/card/ModelCard.vue';
 
 defineEmits(['click:diagram']);
 defineProps({

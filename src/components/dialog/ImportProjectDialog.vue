@@ -20,8 +20,8 @@
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DefaultDialog from 'src/components/dialog/DefaultDialog';
-import ImportProjectForm from 'src/components/form/ImportProjectForm';
+import DefaultDialog from 'src/components/dialog/DefaultDialog.vue';
+import ImportProjectForm from 'src/components/form/ImportProjectForm.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();

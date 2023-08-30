@@ -20,8 +20,8 @@
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DefaultDialog from 'src/components/dialog/DefaultDialog';
-import RenameProjectForm from 'src/components/form/RenameProjectForm';
+import DefaultDialog from 'src/components/dialog/DefaultDialog.vue';
+import RenameProjectForm from 'src/components/form/RenameProjectForm.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const projectId = ref(null);

@@ -98,8 +98,8 @@ import { getAllModels } from 'src/composables/Project';
 import { getAllTagsByType } from 'src/composables/PluginManager';
 import { searchText } from 'src/composables/Filter';
 
-import DiagramTable from 'src/components/table/DiagramTable';
-import DiagramGrid from 'src/components/grid/DiagramGrid';
+import DiagramTable from 'src/components/table/DiagramTable.vue';
+import DiagramGrid from 'src/components/grid/DiagramGrid.vue';
 import DiagramFilterCard from 'components/card/DiagramFilterCard.vue';
 
 import DialogEvent from 'src/composables/events/DialogEvent';

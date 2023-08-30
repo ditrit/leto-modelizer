@@ -51,7 +51,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { searchText } from 'src/composables/Filter';
-import TemplateCard from 'src/components/card/TemplateCard';
+import TemplateCard from 'src/components/card/TemplateCard.vue';
 
 defineEmits(['add:template']);
 

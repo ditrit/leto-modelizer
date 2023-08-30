@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import DefaultDialog from 'components/dialog/DefaultDialog';
+import DefaultDialog from 'components/dialog/DefaultDialog.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ImportModelTemplateForm from 'components/form/ImportModelTemplateForm.vue';
 import {

@@ -20,8 +20,8 @@
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DefaultDialog from 'src/components/dialog/DefaultDialog';
-import CreateProjectForm from 'src/components/form/CreateProjectForm';
+import DefaultDialog from 'src/components/dialog/DefaultDialog.vue';
+import CreateProjectForm from 'src/components/form/CreateProjectForm.vue';
 import { useRouter } from 'vue-router';
 import { initProject } from 'src/composables/Project';
 import { Notify } from 'quasar';

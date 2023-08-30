@@ -22,7 +22,7 @@
 
 <script setup>
 import DefaultNavigationBar from 'components/DefaultNavigationBar.vue';
-import LoginPage from 'src/pages/LoginPage';
+import LoginPage from 'src/pages/LoginPage.vue';
 import {
   ref,
 } from 'vue';
