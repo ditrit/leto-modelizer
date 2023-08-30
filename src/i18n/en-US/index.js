@@ -271,6 +271,7 @@ export default {
     },
     diagrams: {
       actions: {
+        rearrange: 'Rearrange',
         zoomPlus: 'Zoom+',
         zoomMinus: 'Zoom-',
         delete: 'Trash',
