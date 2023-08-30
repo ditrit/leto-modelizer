@@ -21,8 +21,8 @@
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DefaultDialog from 'components/dialog/DefaultDialog';
-import GitAuthenticationForm from 'components/form/GitAuthenticationForm';
+import DefaultDialog from 'components/dialog/DefaultDialog.vue';
+import GitAuthenticationForm from 'components/form/GitAuthenticationForm.vue';
 
 defineProps({
   projectName: {

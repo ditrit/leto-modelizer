@@ -21,15 +21,12 @@ import {
   onMounted,
   onUpdated,
   onUnmounted,
-  nextTick,
   ref,
 } from 'vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import { getPlugins } from 'src/composables/PluginManager';
 import Languages from 'assets/editor/languages';
-
-const monaco = require('monaco-editor');
 
 const props = defineProps({
   projectName: {
@@ -43,6 +40,7 @@ const props = defineProps({
 });
 
 const container = ref(null);
+let monaco;
 let editor;
 let checkoutSubscription;
 let addRemoteSubscription;
@@ -141,7 +139,8 @@ async function updateEditorContent() {
 }
 
 onBeforeMount(async () => {
-  await nextTick();
+  monaco = await import('monaco-editor');
+
   if (!editor) {
     await createEditor();
   }
@@ -163,7 +162,6 @@ onMounted(() => {
 });
 
 onUpdated(async () => {
-  await nextTick();
   await updateEditorLayout();
 });
 

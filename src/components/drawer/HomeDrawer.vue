@@ -31,6 +31,6 @@
 </template>
 
 <script setup>
-import DefaultDrawer from 'src/components/drawer/DefaultDrawer';
-import ShortProjectsItem from 'src/components/item/ShortProjectsItem';
+import DefaultDrawer from 'src/components/drawer/DefaultDrawer.vue';
+import ShortProjectsItem from 'src/components/item/ShortProjectsItem.vue';
 </script>
