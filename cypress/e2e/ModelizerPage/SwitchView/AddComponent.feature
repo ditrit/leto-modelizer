@@ -110,7 +110,7 @@ Feature: Test switch model to text view: add component/link
     And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
     But  I expect active file content to not contain 'gateway_id.*=.*\["aws_internet_gateway_1"\]'
 
-    When I set active file content to 'resource "aws_subnet" "aws_subnet_1" { gateway_id = \["aws_internet_gateway_1"\] } resource "aws_internet_gateway" "aws_internet_gateway_1" {}'
+    When I set active file content to 'resource "aws_subnet" "aws_subnet_1" { gateway_id = [aws_internet_gateway.aws_internet_gateway_1.id] } resource "aws_internet_gateway" "aws_internet_gateway_1" {}'
     And  I wait 2 seconds
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'

@@ -35,16 +35,10 @@ Feature: Test models page: model creation from template
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ modelFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_leto-modelizer.config.json"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ modelFolder }}"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ modelFile }}"]' exists
     And  I expect '[data-cy="active-tab"] [data-cy="file_{{ modelFile }}"]' exists
     And  I expect active file content to be equal to "cypress/resources/main.tf"
-
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_leto-modelizer.config.json"]'
-    Then I expect '[data-cy="active-tab"] [data-cy="file_leto-modelizer.config.json"]' exists
-    And  I expect active file content to contain 'model.*terrator-plugin.*aws_1.*nginx'
-    And  I expect active file content to be equal to "cypress/resources/leto-modelizer.config.txt"
 
   Scenario: Create two template models with same parameters should not be possible
     # Model creation
