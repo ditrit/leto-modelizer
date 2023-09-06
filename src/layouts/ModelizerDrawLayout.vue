@@ -89,9 +89,3 @@ onMounted(() => {
   initView();
 });
 </script>
-
-<style scoped>
-.q-page-container {
-  padding-top: 0 !important;
-}
-</style>

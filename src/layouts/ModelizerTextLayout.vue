@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh LpR fFf">
     <navigation-bar
       :project-name="projectName"
     />
@@ -93,9 +93,3 @@ onUnmounted(() => {
   selectFileTabSubscription.unsubscribe();
 });
 </script>
-
-<style scoped>
-.q-page-container {
-  padding-top: 0 !important;
-}
-</style>

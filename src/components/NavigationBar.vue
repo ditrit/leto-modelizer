@@ -172,9 +172,6 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.q-header {
-  position: relative;
-}
 .home-page-link {
   text-decoration: none;
 

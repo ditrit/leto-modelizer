@@ -171,7 +171,7 @@ onUnmounted(() => {
 
 <style scoped>
 #root {
-  height: calc(100vh - 74px);
+  height: calc(100vh - 76px);
   width: 100%;
 }
 </style>
@@ -191,7 +191,6 @@ div#root svg {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 #viewport {
   -webkit-user-select: none;

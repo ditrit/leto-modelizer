@@ -1,9 +1,8 @@
 <template>
-  <q-layout view="HHr Lpr fFr">
+  <q-layout view="HHr Lr fFr">
     <navigation-bar :project-name="projectName" />
     <q-page-container
       class="bg-grey-2"
-      style="padding-top: 0!important;"
     >
       <models-page />
     </q-page-container>
