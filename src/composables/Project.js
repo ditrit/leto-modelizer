@@ -7,7 +7,12 @@ import {
 } from 'leto-modelizer-plugin-core';
 import Branch from 'src/models/git/Branch';
 import FileStatus from 'src/models/git/FileStatus';
-import { getFileInputs, getPlugins, getPluginTags } from 'src/composables/PluginManager';
+import {
+  getFileInputs,
+  getPlugins,
+  getPluginTags,
+  getPluginByName,
+} from 'src/composables/PluginManager';
 import Project from 'src/models/Project';
 
 const fs = BrowserFS.BFSRequire('fs');
@@ -660,6 +665,40 @@ export async function deleteProjectFile(projectId, filePath, deleteParentFolder)
       await writeProjectFile(projectId, { path: `${parentPath}/__empty__`, content: '' });
     }
   }
+}
+
+/**
+ * Delete diagram parsable file but keep folders.
+ * @param {string} pluginName - Name of the plugin.
+ * @param {string} projectId - Id of project.
+ * @param {string} filePath - File path to delete.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function deleteDiagramFile(pluginName, projectId, filePath) {
+  const plugin = getPluginByName(pluginName);
+  const isFolder = await isDirectory(`${projectId}/${filePath}`);
+  const listFiles = await gitListFiles(projectId);
+
+  let rmFiles;
+
+  if (isFolder) {
+    const dirFiles = await readDir(`${projectId}/${filePath}`);
+
+    rmFiles = dirFiles
+      .filter((fileName) => plugin.isParsable({ path: fileName }))
+      .map((fileName) => `${filePath}/${fileName}`);
+  } else {
+    rmFiles = [filePath];
+  }
+
+  await Promise.allSettled(rmFiles.map(async (fileName) => {
+    await rm(`${projectId}/${fileName}`);
+
+    // gitRemove is used to stage a deleted file (behavior from isomorphic-git)
+    if (listFiles.includes(filePath)) {
+      await gitRemove(projectId, filePath);
+    }
+  }));
 }
 
 /**
