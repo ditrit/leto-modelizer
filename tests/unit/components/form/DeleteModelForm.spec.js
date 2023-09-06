@@ -2,7 +2,6 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import DeleteModelForm from 'src/components/form/DeleteModelForm';
 import { Notify } from 'quasar';
-import { deleteProjectDir, deleteProjectFile } from 'src/composables/Project';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -15,21 +14,13 @@ jest.mock('vue-i18n', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  deleteProjectDir: jest.fn((old) => {
+  deleteDiagramFile: jest.fn((old) => {
     if (old.startsWith('error')) {
       return Promise.reject();
     }
 
     return Promise.resolve();
   }),
-  deleteProjectFile: jest.fn((old) => {
-    if (old.startsWith('error')) {
-      return Promise.reject();
-    }
-
-    return Promise.resolve();
-  }),
-  isDirectory: jest.fn((path) => path.indexOf('folder') >= 0),
 }));
 
 describe('Test component: DeleteModelForm', () => {
@@ -41,6 +32,7 @@ describe('Test component: DeleteModelForm', () => {
         projectName: 'projectName',
         model: {
           path: 'modelName',
+          plugin: 'pluginName',
         },
       },
     });
@@ -56,6 +48,7 @@ describe('Test component: DeleteModelForm', () => {
     it('should be an Object with a name matching "modelName"', () => {
       expect(wrapper.vm.model).toEqual({
         path: 'modelName',
+        plugin: 'pluginName',
       });
     });
   });
@@ -73,35 +66,13 @@ describe('Test component: DeleteModelForm', () => {
     it('should emit a negative notification on error', async () => {
       Notify.create = jest.fn();
 
-      await wrapper.setProps({ projectName: 'error' });
+      await wrapper.setProps({ model: { plugin: 'error' } });
       await wrapper.vm.onSubmit();
 
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({
         type: 'negative',
         message: 'actions.models.delete.notify.error',
       }));
-    });
-
-    it('should delete file if model is a file', async () => {
-      deleteProjectFile.mockClear();
-      deleteProjectDir.mockClear();
-
-      await wrapper.setProps({ model: { path: 'file' } });
-      await wrapper.vm.onSubmit();
-
-      expect(deleteProjectDir).toHaveBeenCalledTimes(0);
-      expect(deleteProjectFile).toHaveBeenCalledTimes(1);
-    });
-
-    it('should delete folder if model is a folder', async () => {
-      deleteProjectFile.mockClear();
-      deleteProjectDir.mockClear();
-
-      await wrapper.setProps({ model: { path: 'folder' } });
-      await wrapper.vm.onSubmit();
-
-      expect(deleteProjectDir).toHaveBeenCalledTimes(1);
-      expect(deleteProjectFile).toHaveBeenCalledTimes(0);
     });
   });
 });
