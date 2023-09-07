@@ -406,22 +406,29 @@ describe('Test composable: PluginManager', () => {
   });
 
   describe('Test function: addNewComponent', () => {
-    let plugin;
+    const plugin = {
+      addComponent: jest.fn(),
+    };
 
-    beforeEach(() => {
-      plugin = {
-        data: {
-          addComponent: jest.fn(),
-          getComponentById: jest.fn(),
-        },
-        isParsable: () => true,
-        render: jest.fn(() => []),
-      };
+    it('should call addComponent with folder when path is a directory', async () => {
+      await PluginManager.addNewComponent(
+        'projectId',
+        plugin,
+        'modelPath',
+        {},
+        { x: 0, y: 0 },
+      );
 
-      plugin.data.getComponentById.mockReturnValue({ drawOption: null });
+      expect(plugin.addComponent).toHaveBeenLastCalledWith(
+        'root',
+        {},
+        'modelPath/',
+        undefined,
+        { x: 0, y: 0 },
+      );
     });
 
-    it('should call addComponent and getComponentById', async () => {
+    it('should call addComponent without folder when path is not a directory', async () => {
       await PluginManager.addNewComponent(
         'projectName',
         plugin,
@@ -430,8 +437,13 @@ describe('Test composable: PluginManager', () => {
         { x: 0, y: 0 },
       );
 
-      expect(plugin.data.addComponent).toHaveBeenCalledTimes(1);
-      expect(plugin.data.getComponentById).toHaveBeenCalledTimes(1);
+      expect(plugin.addComponent).toHaveBeenLastCalledWith(
+        'root',
+        {},
+        '',
+        'plugin/model',
+        { x: 0, y: 0 },
+      );
     });
   });
 

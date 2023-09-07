@@ -286,7 +286,7 @@ export async function initComponents(projectName, plugin, path) {
  * @param {object} plugin - Plugin corresponding to the model.
  * @param {string} path - Model path (Plugin name & model name).
  * @param {object} definition - Definition of the component.
- * @param {ComponentDrawOption} [drawOption] - drawOption of the component.
+ * @param {DragEvent} event - The drag event.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function addNewComponent(
@@ -294,19 +294,25 @@ export async function addNewComponent(
   plugin,
   path,
   definition,
-  drawOption = null,
+  event = null,
 ) {
-  let componentId;
-
   if (await isDirectory(`${projectName}/${path}`)) {
-    componentId = plugin.data.addComponent(definition, `${path}/`);
+    plugin.addComponent(
+      'root',
+      definition,
+      `${path}/`,
+      undefined,
+      event,
+    );
   } else {
-    componentId = plugin.data.addComponent(definition, '', path);
+    plugin.addComponent(
+      'root',
+      definition,
+      '',
+      path,
+      event,
+    );
   }
-
-  const component = plugin.data.getComponentById(componentId);
-
-  component.drawOption = drawOption;
 }
 
 /**

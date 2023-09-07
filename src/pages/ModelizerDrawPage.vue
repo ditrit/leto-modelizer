@@ -21,7 +21,6 @@ import {
   renderConfiguration,
   renderModel,
 } from 'src/composables/PluginManager';
-import { ComponentDrawOption } from 'leto-modelizer-plugin-core';
 import {
   computed,
   onMounted,
@@ -110,24 +109,6 @@ async function initView() {
 }
 
 /**
- * Get the coordinates to use for component draw options.
- * @param {object} event - Cursor event when dropping a new component.
- * @param {number} event.clientX - Position X of the cursor.
- * @param {number} event.clientY - Position Y of the cursor.
- * @returns {object} The coordinates for new component.
- */
-function getComponentPosition({ clientX, clientY }) {
-  const { __drawer: drawer } = data.plugin;
-  const { scale, translate } = drawer.actions.zoom;
-  const { left: rootX, top: rootY } = document.querySelector('#root').getBoundingClientRect();
-
-  return {
-    x: ((clientX - rootX) - translate.x) / scale,
-    y: ((clientY - rootY) - translate.y) / scale,
-  };
-}
-
-/**
  * Instantiate from a dragged component definition or template.
  * @param {DragEvent} event - The drag event.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
@@ -144,7 +125,7 @@ async function dropHandler(event) {
       data.plugin,
       query.value.path,
       componentDefinition,
-      new ComponentDrawOption({ ...getComponentPosition(event) }),
+      event,
     );
     data.plugin.draw('root');
   } else {
