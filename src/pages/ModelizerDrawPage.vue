@@ -85,6 +85,8 @@ async function initView() {
     return;
   }
 
+  data.plugin.resetDrawerActions();
+
   await Promise.allSettled([
     initComponents(
       route.params.projectName,
