@@ -65,6 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix bug on open files of two models with similar names, see [this issue](https://github.com/ditrit/leto-modelizer/issues/370).
 * Fix bug on setting bad type on Link/Reference attribute, see [this issue](https://github.com/ditrit/leto-modelizer-plugin-core/issues/188).
 * Fix bug on deleting diagram to only delete related parsable files, see [this issue](https://github.com/ditrit/leto-modelizer/issues/392).
+* Fix bug on diagram management in root folder, see [this issue](https://github.com/ditrit/leto-modelizer/issues/393).
+* Fix bug while dropping component inside a container, see [this issue](https://github.com/ditrit/leto-modelizer/issues/373).
 
 ### Removed
 
