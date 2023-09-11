@@ -41,7 +41,14 @@ jest.mock('src/composables/PluginManager', () => ({
       name: 'test',
     },
   }]),
-  getPluginByName: jest.fn(),
+  getPluginByName: jest.fn(() => ({
+    isParsable: () => true,
+    getModels: ([{ path }]) => [path],
+    data: {
+      name: 'test',
+      parseErrors: [],
+    },
+  })),
 }));
 
 describe('Test component: ModelizerTextLayout', () => {
@@ -71,6 +78,12 @@ describe('Test component: ModelizerTextLayout', () => {
     describe('Test computed: projectName', () => {
       it('should match "project-00000000"', () => {
         expect(wrapper.vm.projectName).toEqual('project-00000000');
+      });
+    });
+
+    describe('Test ref: parseErrors', () => {
+      it('should match []', () => {
+        expect(wrapper.vm.parseErrors).toEqual([]);
       });
     });
   });

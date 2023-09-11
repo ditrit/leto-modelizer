@@ -446,6 +446,14 @@ export default {
   footer: {
     version: 'Version {version}',
     about: 'About',
+    consoleFooter: {
+      errorsTable: {
+        message: 'Message',
+        line: 'Start/End Line',
+        column: 'Start/End Column',
+        severity: 'Severity',
+      },
+    },
   },
   menu: {
     git: {

@@ -3,6 +3,8 @@ Feature: Test git authentication dialog
   Background:
     Given I clear cache
     And   I set viewport size to '1536' px for width and '960' px for height
+    And   I set context field 'firstModelFile' with 'model1/main.tf'
+    And   I set context field 'firstModelFolder' with 'model1'
     And   I visit the '/'
     And   I wait until the application is loaded
 
@@ -11,8 +13,14 @@ Feature: Test git authentication dialog
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/models'
 
-    When I wait 1 second
-    And  I visit the '/#/projects/projectName/modelizer/text?path=""'
+    When  I click on '[data-cy="create-model-button"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ firstModelFile }}'
+    And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    Then I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path={{ firstModelFolder }}'
+    And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I wait 1 second
 
   Scenario: Set git authentication in the project should send positive toast
     When I click on '[data-cy="modelizer-settings-button"]'
