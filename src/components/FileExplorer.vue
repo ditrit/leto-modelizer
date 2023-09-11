@@ -291,17 +291,20 @@ async function openModelFiles() {
 
   expandFolder(props.projectName);
 
-  if (pluginName.length === 0 || modelPath.length === 0) {
+  if (pluginName.length === 0) {
     return;
   }
 
-  if (await isDirectory(`${props.projectName}/${modelPath}`)) {
+  const isFolder = modelPath === '' ? true : await isDirectory(`${props.projectName}/${modelPath}`);
+
+  if (isFolder && modelPath !== '') {
     modelPath += '/';
   }
 
   const plugin = getPluginByName(pluginName);
-  const allPaths = localFileInformations.value
-    .filter(({ path }) => path.startsWith(modelPath))
+  const regex = new RegExp(`^${modelPath}[^/]+$`);
+  const allPaths = !isFolder ? [modelPath] : localFileInformations.value
+    .filter(({ path }) => regex.test(path))
     .filter(({ path }) => plugin.isParsable({ path }))
     .map(({ path }) => path);
 
@@ -333,7 +336,7 @@ async function initTreeNodes() {
   await updateAllFilesStatus();
 
   // TODO: Find a better way to stub it on shallowMount.
-  if (fileExplorerRef.value.getNodeByKey && query.value.path) {
+  if (fileExplorerRef.value.getNodeByKey) {
     openModelFiles();
   }
 }
