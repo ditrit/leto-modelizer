@@ -1,12 +1,12 @@
 [
   {
     "name": "terrator-plugin",
-    "url": "https://github.com/ditrit/terrator-plugin.git#0.6.0",
-    "version": "0.6.0"
+    "url": "https://github.com/ditrit/terrator-plugin.git#0.7.0",
+    "version": "0.7.0"
   },
   {
     "name": "githubator-plugin",
-    "url": "https://github.com/ditrit/githubator-plugin.git#0.2.4",
-    "version": "0.2.4"
+    "url": "https://github.com/ditrit/githubator-plugin.git#0.2.5",
+    "version": "0.2.5"
   }
 ]

@@ -48,9 +48,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Re-design attribute fields.
   * Re-design information icon on attribute fields.
 * Plugin management:
-  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.6.0) version 0.6.0.
-  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.20.0) version 0.20.0.
-  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.2.4) version 0.2.4.
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.7.0) version 0.7.0.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.21.0) version 0.21.0.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.2.5) version 0.2.5.
 * Improve performance of the automatic functionnal tests.
 * User settings:
   * Save records by page in ModelsPage.

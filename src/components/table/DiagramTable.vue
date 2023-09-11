@@ -25,14 +25,9 @@
         />
       </q-td>
     </template>
-    <template #body-cell-diagramPath="{ row: { name, path } }">
+    <template #body-cell-diagramPath="{ row: { path } }">
       <q-td :data-cy="`diagram-path_${path}`">
-        <div>
-          {{ name }}
-        </div>
-        <div class="text-grey">
-          {{ path }}
-        </div>
+        /{{ path }}
       </q-td>
     </template>
     <template #body-cell-pluginIcon="{ row: { plugin } }">

@@ -80,10 +80,6 @@ async function onDefaultEvent({ event }) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function initView() {
-  if (!query.value?.path) {
-    return;
-  }
-
   data.plugin = getPluginByName(query.value.plugin);
 
   if (!data.plugin) {
@@ -94,7 +90,7 @@ async function initView() {
     initComponents(
       route.params.projectName,
       data.plugin,
-      `${query.value.path}`,
+      query.value.path,
     ).then(() => {
       data.plugin.draw('root');
     }),

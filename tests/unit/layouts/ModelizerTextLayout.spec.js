@@ -14,7 +14,7 @@ jest.mock('vue-router', () => ({
     },
     query: {
       plugin: 'test',
-      path: 'pluginName/modelName',
+      path: 'pluginName/modelName/',
     },
   }),
   useRouter: jest.fn(),
@@ -83,7 +83,7 @@ describe('Test component: ModelizerTextLayout', () => {
 
       await wrapper.vm.onSelectFileTab(null);
 
-      expect(useRouterPush).toHaveBeenCalledTimes(0);
+      expect(useRouterPush).toHaveBeenCalledTimes(1);
     });
 
     it('should also call router.push()', async () => {

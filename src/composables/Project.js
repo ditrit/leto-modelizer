@@ -191,7 +191,7 @@ export async function readDir(path) {
  * @param {string} filename - Path of file or directory. Null for root location.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-async function setFiles(files, projectId, filename) {
+export async function setFiles(files, projectId, filename) {
   const path = filename ? `${projectId}/${filename}` : projectId;
   const isDir = await isDirectory(path);
 
@@ -676,13 +676,14 @@ export async function deleteProjectFile(projectId, filePath, deleteParentFolder)
  */
 export async function deleteDiagramFile(pluginName, projectId, filePath) {
   const plugin = getPluginByName(pluginName);
-  const isFolder = await isDirectory(`${projectId}/${filePath}`);
+  const folder = filePath === '' ? projectId : `${projectId}/${filePath}`;
+  const isFolder = filePath === '' ? true : await isDirectory(folder);
   const listFiles = await gitListFiles(projectId);
 
   let rmFiles;
 
   if (isFolder) {
-    const dirFiles = await readDir(`${projectId}/${filePath}`);
+    const dirFiles = await readDir(folder);
 
     rmFiles = dirFiles
       .filter((fileName) => plugin.isParsable({ path: fileName }))
@@ -920,12 +921,10 @@ export async function getAllModels(projectId) {
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 export async function getModelFiles(projectName, modelPath, plugin) {
-  if (!await isDirectory(`${projectName}/${modelPath}`)) {
-    return getFileInputs(plugin, [new FileInformation({ path: modelPath })], projectName);
-  }
-
-  const files = await readDir(`${projectName}/${modelPath}`);
-  const fileInformations = files.map((file) => new FileInformation({ path: `${modelPath}/${file}` }));
+  const rootPath = modelPath === '' ? projectName : `${projectName}/${modelPath}`;
+  const filePath = modelPath === '' ? modelPath : `${modelPath}/`;
+  const files = await readDir(rootPath);
+  const fileInformations = files.map((file) => new FileInformation({ path: `${filePath}${file}` }));
 
   return getFileInputs(plugin, fileInformations, projectName);
 }

@@ -9,6 +9,7 @@ import {
   readDir,
   appendProjectFile,
   isDirectory,
+  setFiles,
 } from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getTemplateFiles } from 'src/composables/TemplateManager';
@@ -166,7 +167,7 @@ export function isParsableFile(file) {
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 export async function renderModel(projectId, modelPath, plugin) {
-  const isFolder = await isDirectory(`${projectId}/${modelPath}`);
+  const isFolder = modelPath === '' || await isDirectory(`${projectId}/${modelPath}`);
   const modelFolder = isFolder ? modelPath : modelPath.substring(0, modelPath.lastIndexOf('/'));
 
   const config = await readProjectFile(
@@ -179,8 +180,14 @@ export async function renderModel(projectId, modelPath, plugin) {
     ? await getModelFiles(projectId, modelFolder, plugin)
     : [new FileInput({ path: modelPath })];
 
+  const diagramFile = new FileInformation({ path: modelFolder });
+
+  if (!diagramFile.path) {
+    diagramFile.path = '';
+  }
+
   const renderFiles = plugin.render(
-    new FileInformation({ path: modelFolder }),
+    diagramFile,
     config,
     files.filter((file) => plugin.isParsable(file)),
   );
@@ -244,11 +251,14 @@ export async function getFileInputs(plugin, fileInformations, projectName) {
  */
 export async function initComponents(projectName, plugin, path) {
   let filesInformation;
+  const dir = !path ? projectName : `${projectName}/${path}`;
 
-  if (await isDirectory(`${projectName}/${path}`)) {
-    filesInformation = (await readDir(`${projectName}/${path}`))
-      .map((file) => new FileInformation({ path: `${path}/${file}` }))
-      .filter((file) => plugin.isParsable(file));
+  if (await isDirectory(dir)) {
+    filesInformation = [];
+
+    await setFiles(filesInformation, projectName, path);
+
+    filesInformation = filesInformation.filter((file) => plugin.isParsable(file));
   } else {
     filesInformation = [new FileInformation({ path })];
   }
@@ -262,7 +272,12 @@ export async function initComponents(projectName, plugin, path) {
     }),
   );
 
-  plugin.parse(new FileInformation({ path }), config, fileInputs);
+  const diagram = new FileInformation({ path });
+
+  if (!diagram.path) {
+    diagram.path = '';
+  }
+  plugin.parse(diagram, config, fileInputs);
 }
 
 /**

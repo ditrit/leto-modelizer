@@ -515,26 +515,6 @@ describe('Test component: FileExplorer', () => {
       expect(mock).toHaveBeenCalledTimes(0);
     });
 
-    it('should do nothing without model', async () => {
-      const mock = jest.fn(() => ({
-        isParsable: () => true,
-      }));
-
-      PluginManager.getPluginByName.mockImplementation(mock);
-
-      wrapper.vm.fileExplorerRef = {
-        getNodeByKey: jest.fn(() => ({ children: [] })),
-        setExpanded: jest.fn(),
-      };
-      wrapper.vm.query.path = '';
-      wrapper.vm.query.plugin = 'test';
-      wrapper.vm.localFileInformations = [{ path: 'pluginName/modelName/file.ext' }];
-
-      await wrapper.vm.openModelFiles();
-
-      expect(mock).toHaveBeenCalledTimes(0);
-    });
-
     it('should call getPluginByName()', async () => {
       const mock = jest.fn(() => ({
         isParsable: () => true,
