@@ -56,10 +56,6 @@ const templates = ref([]);
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function initView() {
-  if (!query.value?.path) {
-    return;
-  }
-
   data.plugin = getPluginByName(query.value.plugin);
 
   if (!data.plugin) {

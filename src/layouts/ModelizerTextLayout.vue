@@ -54,10 +54,12 @@ let selectFileTabSubscription;
  * @returns {Promise<object>} Promise with nothing on success otherwise an error.
  */
 async function onSelectFileTab(event) {
-  if (event && !event.startsWith(`${query.value.path}/`)) {
+  const regex = new RegExp(`^${query.value.path}[^/]+$`);
+
+  if (!regex.test(event)) {
     const plugin = getPlugins()
       .find((p) => p.isParsable({ path: event })) || getPluginByName(query.value.plugin);
-    const modelPath = plugin?.getModels([{ path: event }]).find(() => true) || query.value.path;
+    const modelPath = plugin?.getModels([{ path: event }]).find(() => true);
 
     await router.push({
       name: 'Text',
@@ -66,7 +68,7 @@ async function onSelectFileTab(event) {
       },
       query: {
         plugin: plugin?.data.name,
-        path: modelPath,
+        path: modelPath !== undefined ? modelPath : query.value.path,
       },
     });
   }
