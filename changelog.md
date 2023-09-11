@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Rename component id.
 * Text editor page:
   * Add panel to display all errors.
+  * Add a button to rearrange all components automatically.
 * Splash screen.
 
 ### Changed

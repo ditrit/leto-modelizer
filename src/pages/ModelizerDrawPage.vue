@@ -8,6 +8,21 @@
     >
       <component-drop-overlay />
     </div>
+
+    <q-page-sticky :offset="[20, 20]">
+      <q-btn-group>
+        <q-btn
+          icon="fa-solid fa-sitemap"
+          :label="$t('page.diagrams.actions.rearrange')"
+          stack
+          no-caps
+          color="white"
+          text-color="black"
+          data-cy="rearrange-button"
+          @click="arrangeComponentsPosition()"
+        />
+      </q-btn-group>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -151,6 +166,19 @@ async function dropHandler(event) {
     });
   }
   await renderModel(
+    projectName.value,
+    query.value.path,
+    data.plugin,
+  );
+}
+
+/**
+ * Rearrange components and then redraw the whole view.
+ */
+async function arrangeComponentsPosition() {
+  await data.plugin.arrangeComponentsPosition();
+  data.plugin.draw('root');
+  await renderConfiguration(
     projectName.value,
     query.value.path,
     data.plugin,
