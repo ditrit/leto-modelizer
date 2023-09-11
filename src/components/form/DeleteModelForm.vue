@@ -27,7 +27,7 @@
 <script setup>
 import { Notify } from 'quasar';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import { deleteProjectDir, deleteProjectFile, isDirectory } from 'src/composables/Project';
+import { deleteDiagramFile } from 'src/composables/Project';
 import { ref } from 'vue';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import { useI18n } from 'vue-i18n';
@@ -48,18 +48,15 @@ const props = defineProps({
 const submitting = ref(false);
 
 /**
- * Delete model (folder).
+ * Delete model file.
  * Emit a positive notification on success and emit an UpdateModel event.
  * Otherwise, emit an error notification.
  * @returns {Promise<void>} Promise with nothing on success or error.
  */
 async function onSubmit() {
   submitting.value = true;
-  const action = await isDirectory(props.model.path)
-    ? deleteProjectDir(props.model.path)
-    : deleteProjectFile(props.projectName, props.model.path);
 
-  return action
+  return deleteDiagramFile(props.model.plugin, props.projectName, props.model.path)
     .then(() => {
       Notify.create({
         type: 'positive',

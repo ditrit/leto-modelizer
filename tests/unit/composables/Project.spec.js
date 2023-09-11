@@ -22,6 +22,7 @@ import {
   rename,
   deleteProjectDir,
   deleteProjectFile,
+  deleteDiagramFile,
   getStatus,
   gitListFiles,
   gitPush,
@@ -167,6 +168,10 @@ jest.mock('src/composables/PluginManager', () => ({
   getFileInputs: () => [],
   getPlugins: () => [],
   getPluginTags: () => [],
+  isParsableFile: () => true,
+  getPluginByName: jest.fn(() => ({
+    isParsable: () => true,
+  })),
 }));
 
 describe('Test composable: Project', () => {
@@ -597,6 +602,14 @@ describe('Test composable: Project', () => {
   describe(' Test function: deleteProjectFile', () => {
     it('should succeed', async () => {
       const result = await deleteProjectFile('test', 'container/parent').then(() => 'success');
+
+      expect(result).toEqual('success');
+    });
+  });
+
+  describe(' Test function: deleteDiagramFile', () => {
+    it('should succeed', async () => {
+      const result = await deleteDiagramFile('test', 'container/parent').then(() => 'success');
 
       expect(result).toEqual('success');
     });
