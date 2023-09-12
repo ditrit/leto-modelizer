@@ -10,14 +10,14 @@ describe('Test component: ReferenceInput', () => {
   let wrapper;
 
   const options = [{
-    name: 'default',
+    name: 'plugin.component.attribute.selectInput.defaultValue',
     type: 'category',
     children: [{
       type: 'item',
       value: 'ref',
     }],
   }, {
-    name: 'variable',
+    name: 'plugin.component.attribute.selectInput.variables',
     type: 'category',
     children: [{
       name: 'variable',
@@ -118,12 +118,6 @@ describe('Test component: ReferenceInput', () => {
     });
   });
 
-  describe('Test function: initOptions', () => {
-    it('should init options', () => {
-      expect(wrapper.vm.options).toEqual(options);
-    });
-  });
-
   describe('Test watcher: props.plugin.data.components', () => {
     it('should update options', async () => {
       await wrapper.setProps({
@@ -154,6 +148,12 @@ describe('Test component: ReferenceInput', () => {
         },
       });
 
+      expect(wrapper.vm.options).toEqual(options);
+    });
+  });
+
+  describe('Test hook function: onMounted', () => {
+    it('should init options', () => {
       expect(wrapper.vm.options).toEqual(options);
     });
   });

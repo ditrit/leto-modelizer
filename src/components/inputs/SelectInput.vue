@@ -26,6 +26,7 @@ import {
 } from 'vue';
 import { isRequired } from 'src/composables/QuasarFieldRule';
 import ItemList from 'components/inputs/ItemList';
+import { initSelectOptions } from 'src/composables/InputManager';
 
 const props = defineProps({
   attribute: {
@@ -46,38 +47,6 @@ const localValue = ref(attribute.value.value);
 const options = ref([]);
 const defaultValues = ref(attribute.value.definition.rules.values);
 const variables = ref(plugin.value.data.variables || []);
-
-/**
- * Initialize the options for the select.
- */
-function initOptions() {
-  const categories = [...new Set(variables.value.map(({ category }) => category))];
-  const children = categories.map((category) => ({
-    type: 'category',
-    name: category,
-    children: variables.value
-      .filter((variable) => variable.category === category)
-      .map((variable) => ({
-        type: 'item',
-        name: variable.name,
-        value: variable.value !== null ? variable.value : variable.defaultValue,
-        formattedName: variable.formattedName,
-      })),
-  }));
-
-  options.value = [{
-    type: 'category',
-    name: 'default',
-    children: defaultValues.value.map((value) => ({
-      type: 'item',
-      value,
-    })),
-  }, {
-    type: 'category',
-    name: 'variable',
-    children,
-  }];
-}
 
 watch(() => props.plugin.data.components, () => {
   defaultValues.value = props.plugin.data.getComponentsByType(
@@ -106,6 +75,6 @@ watch(() => localValue.value, () => {
 });
 
 onMounted(() => {
-  initOptions();
+  options.value = initSelectOptions(variables.value, defaultValues.value);
 });
 </script>

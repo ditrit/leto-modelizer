@@ -2,13 +2,16 @@
   <q-expansion-item
     v-if="item.type === 'category'"
     expand-separator
-    :label="item.name"
+    dense-toggle
+    :header-inset-level="0"
+    :label="$te(item.name) ? $t(item.name) : item.name"
     header-class="text-weight-medium"
     default-closed
   >
     <item-list
       v-for="child in item.children"
       :key="child.name"
+      :header-inset-level="0.2"
       :item="child"
       class="item-list"
       @select-item="(value) => $emit('select-item', value)"
@@ -18,6 +21,7 @@
     v-else
     v-ripple
     clickable
+    class="bg-grey-3"
     @click="$emit('select-item', item.formattedName ? item.formattedName : item.value)"
   >
     <q-item-section

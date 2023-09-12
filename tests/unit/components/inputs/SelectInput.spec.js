@@ -11,7 +11,7 @@ describe('Test component: SelectInput', () => {
   let wrapper;
 
   const options = [{
-    name: 'default',
+    name: 'plugin.component.attribute.selectInput.defaultValue',
     type: 'category',
     children: [{
       type: 'item',
@@ -21,7 +21,7 @@ describe('Test component: SelectInput', () => {
       value: 'value2',
     }],
   }, {
-    name: 'variable',
+    name: 'plugin.component.attribute.selectInput.variables',
     type: 'category',
     children: [{
       name: 'variable',
@@ -105,12 +105,6 @@ describe('Test component: SelectInput', () => {
     });
   });
 
-  describe('Test function: initOptions', () => {
-    it('should init options', () => {
-      expect(wrapper.vm.options).toEqual(options);
-    });
-  });
-
   describe('Test watcher: props.plugin.data.components', () => {
     it('should update options', async () => {
       await wrapper.setProps({
@@ -144,6 +138,12 @@ describe('Test component: SelectInput', () => {
       });
 
       expect(wrapper.vm.localValue).toEqual(['updatedValue']);
+    });
+  });
+
+  describe('Test hook function: onMounted', () => {
+    it('should init options', () => {
+      expect(wrapper.vm.options).toEqual(options);
     });
   });
 });
