@@ -92,7 +92,7 @@ Plugin to manage github action files.
       <td>= 0.2.0</td>
     </tr>
     <tr>
-      <td>Next</td>
+      <td>1.3.0</td>
       <td>= 0.21.0</td>
       <td>= 0.7.0</td>
       <td>= 0.2.5</td>
