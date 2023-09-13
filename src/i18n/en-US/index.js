@@ -485,6 +485,10 @@ export default {
         hint: {
           array: 'Press enter to validate',
         },
+        selectInput: {
+          defaultValue: 'Default values',
+          variables: 'Variables',
+        },
       },
     },
   },

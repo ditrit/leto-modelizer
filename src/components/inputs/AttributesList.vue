@@ -5,7 +5,7 @@
     <q-item
       v-for="attribute in data.localAttributes.filter(({ type }) => type !== 'Object')"
       :key="attribute.name"
-      class="q-px-none"
+      class="q-px-sm column"
     >
       <input-wrapper
         class="col"
