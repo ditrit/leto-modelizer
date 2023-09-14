@@ -10,6 +10,8 @@ import {
   appendProjectFile,
   isDirectory,
   setFiles,
+  getProjectById,
+  getProjectFiles,
 } from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getTemplateFiles } from 'src/composables/TemplateManager';
@@ -277,6 +279,18 @@ export async function initComponents(projectName, plugin, path) {
   if (!diagram.path) {
     diagram.path = '';
   }
+
+  if (plugin.data.name === 'jenkinator-plugin') {
+    plugin.setProject(getProjectById(projectName));
+    const jenkinsfilesInformation = (await getProjectFiles(projectName)).filter((input) => input.path.match(/(^|\/)Jenkinsfile.*$/));
+    const jenkinsfilesInputs = await Promise.allSettled(
+      jenkinsfilesInformation.map((fileInfo) => readProjectFile(projectName, fileInfo)),
+    ).then((allResults) => allResults
+      .filter((result) => result.status === 'fulfilled')
+      .map((result) => result.value));
+    plugin.setJenkinsfiles(jenkinsfilesInputs);
+  }
+
   plugin.parse(diagram, config, fileInputs);
 }
 
