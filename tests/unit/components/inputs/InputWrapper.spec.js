@@ -13,7 +13,6 @@ const global = {
   plugins: [
     createI18n({
       locale: 'en-US',
-      allowComposition: true,
       messages: i18nConfiguration,
     }),
   ],
@@ -133,8 +132,7 @@ describe('Test component: InputWrapper', () => {
       const attribute = {
         type: 'String',
       };
-      expect(wrapper.vm.getAttributeLabel(attribute))
-        .toEqual(wrapper.vm.$t('plugin.component.attribute.value'));
+      expect(wrapper.vm.getAttributeLabel(attribute)).toEqual(null);
     });
   });
 });

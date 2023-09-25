@@ -25,7 +25,6 @@ describe('Test component: ArrayInput', () => {
         plugins: [
           createI18n({
             locale: 'en-US',
-            allowComposition: true,
             messages: i18nConfiguration,
           }),
         ],

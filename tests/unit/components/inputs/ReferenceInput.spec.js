@@ -40,7 +40,6 @@ describe('Test component: ReferenceInput', () => {
         plugins: [
           createI18n({
             locale: 'en-US',
-            allowComposition: true,
             messages: i18nConfiguration,
           }),
         ],

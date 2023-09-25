@@ -24,7 +24,6 @@ describe('Test component: NumberInput', () => {
         plugins: [
           createI18n({
             locale: 'en-US',
-            allowComposition: true,
             messages: i18nConfiguration,
           }),
         ],
