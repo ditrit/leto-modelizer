@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="HHr Lr fFr">
+  <q-layout view="HHr Lpr fFr">
     <navigation-bar :project-name="projectName" />
     <q-page-container
       class="bg-grey-2"
