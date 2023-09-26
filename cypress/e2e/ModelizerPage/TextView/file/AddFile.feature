@@ -30,6 +30,7 @@ Feature: Test modelizer text view: add file
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
     And  I wait 2 seconds
 
+  # Git roundtrip
   Scenario: An unmodified file should not have the 'add' action inside file explorer menu
     When I hover '[data-cy="file-explorer"] [data-cy="file-button_README.md"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="file-button_README.md"]'
@@ -37,6 +38,7 @@ Feature: Test modelizer text view: add file
     And  I expect '[data-cy="file-explorer-action-menu"]' exists
     But  I expect '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]' not exists
 
+  # Git roundtrip
   Scenario: Create a file inside the root folder and add it on git should change the file's status
     When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]'
@@ -60,6 +62,7 @@ Feature: Test modelizer text view: add file
     Then I expect 'positive' toast to appear with text 'File is added &#129395;!'
     And  I expect '[data-cy="file_newFile.js"].file-status-staged' exists
 
+  # Git roundtrip
   Scenario: Create a file inside sub-folder and add it on git should change the file's status
     When I hover '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]' to make it visible
     And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_terraform"]'
