@@ -157,3 +157,9 @@ Then('I expect component {string} to be at position {int},{int}', (templateSelec
     expect(Math.trunc(parseInt(element.attr('y'), 10))).eq(y);
   });
 });
+
+Then('I expect {string} to be hidden', (templateSelector) => {
+  const selector = nunjucks.renderString(templateSelector, cy.context);
+
+  cy.get(selector).should('be.hidden');
+});
