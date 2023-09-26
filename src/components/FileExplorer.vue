@@ -20,6 +20,7 @@
           {'text-bold' : activeFileId === node.id && !node.isFolder},
           {'text-grey text-italic' : showParsableFiles && isFolderWithoutParsableFiles(node)},
         ]"
+        :data-cy="`file-explorer-node_${node.label}`"
         @dblclick="onNodeDoubleClicked(node)"
       >
         <div>
