@@ -32,7 +32,6 @@ describe('Test component: SelectInput', () => {
         plugins: [
           createI18n({
             locale: 'en-US',
-            allowComposition: true,
             messages: i18nConfiguration,
           }),
         ],

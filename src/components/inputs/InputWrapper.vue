@@ -34,7 +34,7 @@
       :attribute="attribute"
       :plugin="plugin"
       class="col q-px-md"
-      :label="getAttributeLabel(attribute)"
+      :label="getAttributeLabel(attribute) || $t('plugin.component.attribute.value')"
       hide-bottom-space
       :full-name="fullName"
       @update:model-value="(event) => emit('update:attribute-value', {
@@ -70,7 +70,6 @@ import {
   watch,
   toRef,
 } from 'vue';
-import { useI18n } from 'vue-i18n';
 import DefinitionMenu from 'components/menu/DefinitionMenu.vue';
 
 const props = defineProps({
@@ -97,7 +96,6 @@ const inputList = {
   Link: defineAsyncComponent(() => import('./LinkInput')),
   Array: defineAsyncComponent(() => import('./ArrayInput')),
 };
-const { t } = useI18n();
 
 const propsAttribute = toRef(props, 'attribute');
 const name = ref(!propsAttribute.value.definition ? propsAttribute.value.name : '');
@@ -127,7 +125,7 @@ function getAttributeType(attribute) {
  * @returns {string} the corresponding label.
  */
 function getAttributeLabel(attribute) {
-  let label = t('plugin.component.attribute.value');
+  let label = null;
 
   if (attribute.definition) {
     label = attribute.definition.displayName || attribute.name;
