@@ -254,7 +254,7 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
-  describe('Test function: setLocalValues', () => {
+  describe('Test function: onDefaultEvent', () => {
     it('should set isVisible to true and set local values', () => {
       expect(wrapper.vm.isVisible).toBeFalsy();
 
@@ -265,7 +265,7 @@ describe('test component: Plugin Component Detail Panel', () => {
       });
 
       wrapper.vm.props.plugin.data.getComponentById = () => component;
-      wrapper.vm.setLocalValues({ event: { action: 'select', type: 'Drawer', components: ['id'] } });
+      wrapper.vm.onDefaultEvent({ event: { action: 'select', type: 'Drawer', components: ['id'] } });
 
       expect(wrapper.vm.isVisible).toBeTruthy();
       expect(wrapper.vm.originalComponent).toEqual(component);
@@ -276,7 +276,7 @@ describe('test component: Plugin Component Detail Panel', () => {
     it('should not set local values if event.components is not defined', () => {
       expect(wrapper.vm.isVisible).toBeFalsy();
 
-      wrapper.vm.setLocalValues({ event: { } });
+      wrapper.vm.onDefaultEvent({ event: { } });
 
       expect(wrapper.vm.isVisible).toBeFalsy();
       expect(wrapper.vm.originalComponent).toEqual(null);
@@ -287,12 +287,20 @@ describe('test component: Plugin Component Detail Panel', () => {
     it('should not set local values if event.components array is empty', () => {
       expect(wrapper.vm.isVisible).toBeFalsy();
 
-      wrapper.vm.setLocalValues({ event: { components: [] } });
+      wrapper.vm.onDefaultEvent({ event: { components: [] } });
 
       expect(wrapper.vm.isVisible).toBeFalsy();
       expect(wrapper.vm.originalComponent).toEqual(null);
       expect(wrapper.vm.selectedComponentId).toEqual('');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
+    });
+
+    it('should set isVisible to false if selected component is deleted', () => {
+      wrapper.vm.isVisible = true;
+      wrapper.vm.originalComponent = { id: 'id' };
+
+      wrapper.vm.onDefaultEvent({ event: { action: 'delete', type: 'Drawer', components: ['id'] } });
+      expect(wrapper.vm.isVisible).toBeFalsy();
     });
   });
 
