@@ -262,25 +262,26 @@ function reset() {
 
 /**
  * On 'Drawer' event type and 'select' action, display panel and init local values.
+ * On 'Drawer' event type and 'delete' action, hide panel if component is corresponding.
  * @param {object} eventManager - Object containing event and plugin.
  * @param {object} eventManager.event - The triggered event.
  */
-function setLocalValues({ event }) {
-  if (!event.components?.[0]) {
-    return;
-  }
+function onDefaultEvent({ event }) {
+  if (event.components?.[0] && event.type === 'Drawer') {
+    if (event.action === 'select') {
+      isVisible.value = true;
 
-  if (event.type === 'Drawer' && event.action === 'select') {
-    isVisible.value = true;
+      originalComponent.value = props.plugin.data.getComponentById(event.components[0]);
 
-    originalComponent.value = props.plugin.data.getComponentById(event.components[0]);
-
-    selectedComponentId.value = originalComponent.value.id;
-    selectedComponentAttributes.value = JSON.parse(JSON.stringify(
-      getReferencedAttributes(originalComponent.value)
-        .concat(getUnreferencedAttributes(originalComponent.value)),
-    ));
-    attributesUpdated.value = [...selectedComponentAttributes.value];
+      selectedComponentId.value = originalComponent.value.id;
+      selectedComponentAttributes.value = JSON.parse(JSON.stringify(
+        getReferencedAttributes(originalComponent.value)
+          .concat(getUnreferencedAttributes(originalComponent.value)),
+      ));
+      attributesUpdated.value = [...selectedComponentAttributes.value];
+    } else if (event.action === 'delete' && event.components?.[0] === originalComponent.value.id) {
+      isVisible.value = false;
+    }
   }
 }
 
@@ -312,7 +313,7 @@ function clearError() {
 }
 
 onMounted(() => {
-  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(setLocalValues);
+  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(onDefaultEvent);
 });
 
 onUnmounted(() => {
