@@ -20,8 +20,8 @@
     "plugin:init": "node node_modules/leto-modelizer-plugin-cli init"
   },
   "dependencies": {
-    "@quasar/extras": "=1.16.6",
-    "axios": "=1.5.0",
+    "@quasar/extras": "=1.16.7",
+    "axios": "=1.5.1",
     "browserfs": "=1.4.3",
     "core-js": "=3.32.2",
     "isomorphic-git": "=1.24.5",
