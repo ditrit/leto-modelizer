@@ -74,11 +74,9 @@ Feature: Test roundtrip of the application: project creation
     And   I visit the '/'
     And   I wait until the application is loaded
 
-    ## 100 Home page should display an empty project message and one template project card
+    ## 100 Home page should display an empty project message
     Then I expect '[data-cy="project-grid-empty"]' exists
     And  I expect '[data-cy="project-grid-empty"]' is 'No projects, please create a new project to have one here 😉'
-    And  I expect '[data-cy="template-card_project_template"]' exists
-    And  I expect '[data-cy="template-card_project_template"] [data-cy="title-container"]' is 'Project template'
 
     ## 101 Creating a project with an empty name should display an error
     When I click on '[data-cy="create-project-button"]'
@@ -91,7 +89,7 @@ Feature: Test roundtrip of the application: project creation
     And I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'
     And I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
 
-    ## 103  Created project should redirect to models page and send positive toast
+    ## 103 Created project should redirect to models page and send positive toast
     Then I expect 'positive' toast to appear with text 'Project has been created 🥳!'
     And  I expect current url is '{{projectName}}/models'
 

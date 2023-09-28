@@ -25,6 +25,7 @@
         class="q-ml-lg"
         left-label
         :label="$t('page.modelizer.fileExplorer.filterParsableFiles')"
+        data-cy="show-parsable-files-checkbox"
       />
       <file-explorer
         class="q-px-md q-py-sm overflow-auto"

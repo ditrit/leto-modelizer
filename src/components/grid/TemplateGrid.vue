@@ -13,6 +13,7 @@
         clearable
         class="search-bar"
         :label="$t('page.home.template.search')"
+        data-cy="search-template-project-input"
       >
         <template #prepend>
           <q-icon
@@ -39,6 +40,7 @@
       <div
         v-if="filteredTemplates.length === 0"
         class="row text-center text-subtitle2 text-grey q-mb-md"
+        data-cy="template-project-grid-empty"
       >
         {{ $t('page.home.template.empty') }}
       </div>

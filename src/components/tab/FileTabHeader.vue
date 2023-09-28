@@ -20,7 +20,7 @@
         :color="isActive? 'primary' : 'gray'"
         icon="fa-solid fa-xmark"
         class="q-ml-sm"
-        data-cy="close-button"
+        :data-cy="`close-button_${file.label}`"
         @click.stop="emit('update:close-file', file.id)"
       />
     </div>
