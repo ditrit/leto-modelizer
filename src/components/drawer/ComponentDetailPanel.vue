@@ -56,37 +56,7 @@
                 class="q-px-md q-pb-sm"
                 :label="$t('plugin.component.attribute.id')"
                 data-cy="component-id-input"
-              />
-            </q-item>
-          </template>
-          <template #footer>
-            <!-- Action SelectedComponent -->
-            <q-item>
-              <q-checkbox
-                v-model="forceSave"
-                :label="$t('plugin.component.attribute.forceSave')"
-              />
-            </q-item>
-            <q-item class="row justify-evenly q-mt-md">
-              <q-btn
-                icon="fa-solid fa-floppy-disk"
-                :label="$t('plugin.component.attribute.save')"
-                type="button"
-                color="positive"
-                :loading="submitting"
-                data-cy="save-button"
-                @click="save"
-              >
-                <template #loading>
-                  <q-spinner-dots />
-                </template>
-              </q-btn>
-              <q-btn
-                icon="fa-solid fa-arrow-rotate-left"
-                :label="$t('plugin.component.attribute.reset')"
-                color="info"
-                data-cy="reset-button"
-                @click="reset"
+                @update:model-value="submit"
               />
             </q-item>
           </template>
@@ -121,7 +91,6 @@ const isVisible = ref(false);
 const submitting = ref(false);
 const currentError = ref(null);
 const form = ref(null);
-const forceSave = ref(false);
 const route = useRoute();
 const query = computed(() => route.query);
 const originalComponent = ref(null);
@@ -176,21 +145,6 @@ async function submit() {
   );
 
   submitting.value = false;
-  isVisible.value = false;
-  forceSave.value = false;
-}
-
-/**
- * Handle form validation.
- * @returns {Promise<void>} Promise with nothing on success otherwise an error.
- */
-async function save() {
-  return form.value.validate().then((success) => {
-    if (forceSave.value || success) {
-      return submit();
-    }
-    return Promise.resolve();
-  });
 }
 
 /**
@@ -247,20 +201,6 @@ function getUnreferencedAttributes(component) {
 }
 
 /**
- * Reset local values of name and attributes.
- */
-function reset() {
-  selectedComponentId.value = originalComponent.value.id;
-  selectedComponentAttributes.value = JSON.parse(JSON.stringify(
-    getReferencedAttributes(originalComponent.value)
-      .concat(getUnreferencedAttributes(originalComponent.value)),
-  ));
-  attributesUpdated.value = [...selectedComponentAttributes.value];
-
-  forceSave.value = false;
-}
-
-/**
  * On 'Drawer' event type and 'select' action, display panel and init local values.
  * On 'Drawer' event type and 'delete' action, hide panel if component is corresponding.
  * @param {object} eventManager - Object containing event and plugin.
@@ -291,10 +231,11 @@ function onDefaultEvent({ event }) {
  * And if attribute's name doesn't exist in the list, it will add the attribute.
  * @param {object} event - Form event.
  * @param {string} event.name - Name of updated attribute.
- * @param {ComponentAttribute} event.attribute - New attribute value or null.
+ * @param {ComponentAttribute} event.attributes - New attribute value or null.
  */
 function updateAttributes(event) {
   attributesUpdated.value = [...event.attributes];
+  submit();
 }
 
 /**

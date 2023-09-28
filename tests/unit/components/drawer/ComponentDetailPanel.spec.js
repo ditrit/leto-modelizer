@@ -154,48 +154,6 @@ describe('test component: Plugin Component Detail Panel', () => {
       expect(wrapper.vm.originalComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
       expect(wrapper.vm.isVisible).toEqual(false);
-      expect(wrapper.vm.forceSave).toEqual(false);
-    });
-  });
-
-  describe('Test function: save', () => {
-    it('should set isVisible to false if form validation is successful', async () => {
-      wrapper.vm.originalComponent = {};
-      wrapper.vm.form = {
-        validate: jest.fn(() => Promise.resolve(true)),
-      };
-      wrapper.vm.isVisible = true;
-
-      await wrapper.vm.save();
-
-      expect(wrapper.vm.isVisible).toEqual(false);
-    });
-
-    it(`should set isVisible to false
-      if form validation is not successful but forceSave is true`, async () => {
-      wrapper.vm.originalComponent = {};
-      wrapper.vm.form = {
-        validate: jest.fn(() => Promise.resolve(false)),
-      };
-      wrapper.vm.isVisible = true;
-      wrapper.vm.forceSave = true;
-
-      await wrapper.vm.save();
-
-      expect(wrapper.vm.isVisible).toEqual(false);
-      expect(wrapper.vm.forceSave).toEqual(false);
-    });
-
-    it(`should not set isVisible to false
-      if form validation is not successful and forceSave is false`, async () => {
-      wrapper.vm.form = {
-        validate: jest.fn(() => Promise.resolve(false)),
-      };
-      wrapper.vm.isVisible = true;
-
-      await wrapper.vm.save();
-
-      expect(wrapper.vm.isVisible).toEqual(true);
     });
   });
 
@@ -232,25 +190,6 @@ describe('test component: Plugin Component Detail Panel', () => {
         type: null,
         value: null,
       }]);
-    });
-  });
-
-  describe('Test function: reset', () => {
-    it('should reset selectedComponentId & selectedComponentAttributes base on selectedComponent', () => {
-      wrapper.vm.originalComponent = {
-        id: 'newId',
-        attributes: [],
-        definition: new ComponentDefinition(),
-      };
-      wrapper.vm.selectedComponentId = 'oldId';
-      wrapper.vm.selectedComponentAttributes = [{}];
-      wrapper.vm.forceSave = true;
-
-      wrapper.vm.reset();
-
-      expect(wrapper.vm.selectedComponentId).toEqual('newId');
-      expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
-      expect(wrapper.vm.forceSave).toEqual(false);
     });
   });
 
@@ -306,6 +245,7 @@ describe('test component: Plugin Component Detail Panel', () => {
 
   describe('Test function: updateAttributes', () => {
     it('should update attributesUpdated', () => {
+      wrapper.vm.originalComponent = { id: 1 };
       wrapper.vm.updateAttributes({
         attributes: [{ name: 'attribut_1' }],
       });
