@@ -37,6 +37,5 @@ Feature: Test modelizer draw view: rename component id
     And  I expect '[id="aws_ami_2"]' not exists
 
     When I set on '[data-cy="component-id-input"]' text 'aws_ami_2'
-    And  I click on '[data-cy="save-button"]'
     Then I expect '[id="aws_ami_2"]' exists
     And  I expect '[id^="aws_ami_1"]' not exists
