@@ -437,15 +437,28 @@ describe('Test component: FileExplorer', () => {
   });
 
   describe('Test function: updateFileStatus', () => {
-    it('should', async () => {
+    it('should update localFileInformations status', async () => {
       wrapper.vm.localFileInformations = [{
         path: 'fileName',
+        status: 'status',
       }];
-      Project.getStatus.mockImplementation(() => [{ path: 'fileName', status: true }]);
+      Project.getStatus.mockImplementation(() => [{ path: 'fileName', status: 'newStatus' }]);
 
       await wrapper.vm.updateFileStatus('fileName');
 
-      expect(wrapper.vm.localFileInformations[0]).toEqual(expect.objectContaining({ path: 'fileName', status: true }));
+      expect(wrapper.vm.localFileInformations[0]).toEqual(expect.objectContaining({ path: 'fileName', status: 'newStatus' }));
+    });
+
+    it('should do nothing if corresponding file status has not changed', async () => {
+      wrapper.vm.localFileInformations = [{
+        path: 'fileName',
+        status: 'status',
+      }];
+      Project.getStatus.mockImplementation(() => [{ path: 'fileName', status: 'status' }]);
+
+      await wrapper.vm.updateFileStatus('fileName');
+
+      expect(wrapper.vm.localFileInformations[0]).toEqual(expect.objectContaining({ path: 'fileName', status: 'status' }));
     });
   });
 
