@@ -10,9 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Hide component detail panel when deleting corresponding component.
-* Improve performance of the automatic functionnal tests about project & diagram templates and text editor.
 * Autosave on component detail panel.
+
+### Changed
+
 * Improve file explorer tree updating when file contents are updated.
+* Improve performance of the automatic functionnal tests about project & diagram templates and text editor.
+* Improve unit tests coverage.
 
 ## [1.3.0] - 2023/09/12
 
