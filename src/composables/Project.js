@@ -923,8 +923,16 @@ export async function getAllModels(projectId) {
 export async function getModelFiles(projectName, modelPath, plugin) {
   const rootPath = modelPath === '' ? projectName : `${projectName}/${modelPath}`;
   const filePath = modelPath === '' ? modelPath : `${modelPath}/`;
-  const files = await readDir(rootPath);
-  const fileInformations = files.map((file) => new FileInformation({ path: `${filePath}${file}` }));
+  const isFolder = await isDirectory(rootPath);
+
+  let fileInformations;
+
+  if (isFolder) {
+    fileInformations = await readDir(rootPath)
+      .then((files) => files.map((file) => new FileInformation({ path: `${filePath}${file}` })));
+  } else {
+    fileInformations = [new FileInformation({ path: modelPath })];
+  }
 
   return getFileInputs(plugin, fileInformations, projectName);
 }
