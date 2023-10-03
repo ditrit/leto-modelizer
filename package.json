@@ -23,7 +23,7 @@
     "@quasar/extras": "=1.16.7",
     "axios": "=1.5.1",
     "browserfs": "=1.4.3",
-    "core-js": "=3.32.2",
+    "core-js": "=3.33.0",
     "isomorphic-git": "=1.24.5",
     "leto-modelizer-plugin-core": "github:ditrit/leto-modelizer-plugin-core#0.21.0",
     "monaco-editor": "=0.43.0",
@@ -34,7 +34,7 @@
     "v-viewer": "=3.0.11",
     "vue": "=3.3.4",
     "vue-3-sanitize": "=0.1.4",
-    "vue-i18n": "=9.4.1",
+    "vue-i18n": "=9.5.0",
     "vue-router": "=4.2.5"
   },
   "devDependencies": {
@@ -59,7 +59,7 @@
     "eslint-formatter-json-relative": "=0.1.0",
     "eslint-plugin-cypress": "=2.15.1",
     "eslint-plugin-import": "=2.28.1",
-    "eslint-plugin-jest": "=27.4.0",
+    "eslint-plugin-jest": "=27.4.2",
     "eslint-plugin-jsdoc": "=46.8.2",
     "eslint-plugin-vue": "=9.17.0",
     "eslint-webpack-plugin": "=4.0.1",

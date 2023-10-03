@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Improve performance of the automatic functionnal tests about project & diagram templates and text editor.
 * Improve unit tests coverage.
 
+### Fixed
+
+* Fix bug on click on component definition from plugins with single file diagrams, see [this issue](https://github.com/ditrit/leto-modelizer/issues/407).
+
 ## [1.3.0] - 2023/09/12
 
 ### Added
