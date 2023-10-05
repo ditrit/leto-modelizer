@@ -4,7 +4,6 @@
       :project-name="projectName"
     />
 
-    <git-authentication-dialog :project-name="projectName" />
     <create-model-dialog :project-name="projectName" />
     <delete-model-dialog :project-name="projectName" />
     <rename-model-dialog :project-name="projectName" />
@@ -16,7 +15,6 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import ModelsView from 'src/components/ModelsView';
-import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog';
 import CreateModelDialog from 'components/dialog/CreateModelDialog';
 import DeleteModelDialog from 'components/dialog/DeleteModelDialog';
 import RenameModelDialog from 'components/dialog/RenameModelDialog';
