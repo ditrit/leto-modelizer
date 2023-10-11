@@ -222,7 +222,7 @@ async function updateFileStatus(filePath) {
   const index = localFileInformations.value
     .findIndex((fileInformation) => fileInformation.path === filePath);
 
-  if (localFileInformations.value[index].status !== fileStatus.status) {
+  if (index !== -1 && localFileInformations.value[index].status !== fileStatus.status) {
     localFileInformations.value[index] = fileStatus;
     nodes.value = getTree(props.projectName, localFileInformations.value);
   }
