@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Improve file explorer tree updating when file contents are updated.
-* Improve performance of the automatic functionnal tests about project & diagram templates and text editor.
+* Improve performance of the automatic functionnal tests.
 * Improve unit tests coverage.
 
 ### Fixed
