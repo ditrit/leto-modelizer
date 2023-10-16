@@ -51,12 +51,13 @@ export default {
           name: 'Create new model',
         },
         form: {
-          name: 'Model name',
+          name: 'Model path',
           plugin: 'Model plugin',
-          location: 'File location',
+          location: 'Model location',
         },
         notify: {
           success: 'Model has been created &#129395;!',
+          error: 'An error occured while creating model.',
         },
       },
       rename: {
@@ -166,6 +167,7 @@ export default {
     },
     models: {
       duplicate: 'Model name already exists for this plugin.',
+      notParsable: 'Model not parsable',
     },
     templates: {
       getData: 'An error occured while fetching remote template data.',
