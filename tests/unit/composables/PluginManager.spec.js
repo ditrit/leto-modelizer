@@ -1,5 +1,5 @@
 import * as PluginManager from 'src/composables/PluginManager';
-import { deleteProjectFile, writeProjectFile } from 'src/composables/Project';
+import { deleteProjectFile, writeProjectFile, setFiles } from 'src/composables/Project';
 import { FileInformation } from 'leto-modelizer-plugin-core';
 
 jest.mock('src/plugins', () => ({
@@ -102,6 +102,7 @@ jest.mock('src/composables/Project', () => ({
   appendProjectFile: jest.fn(() => Promise.resolve()),
   readDir: jest.fn(() => Promise.resolve([])),
   isDirectory: jest.fn((path) => path === 'modelPath' || path === 'projectId/modelPath'),
+  setFiles: jest.fn(),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
@@ -402,6 +403,9 @@ describe('Test composable: PluginManager', () => {
       const plugin = {
         parse: jest.fn(),
         isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: false,
+        },
       };
 
       expect(plugin.parse).toHaveBeenCalledTimes(0);
@@ -409,6 +413,22 @@ describe('Test composable: PluginManager', () => {
       await PluginManager.initComponents('projectName', plugin, 'plugin/model');
 
       expect(plugin.parse).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call setFiles if isFolderTypeDiagram is true', async () => {
+      const plugin = {
+        parse: jest.fn(),
+        isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: true,
+        },
+      };
+
+      expect(setFiles).toHaveBeenCalledTimes(0);
+
+      await PluginManager.initComponents('projectName', plugin, 'plugin/model');
+
+      expect(setFiles).toHaveBeenCalledTimes(1);
     });
   });
 

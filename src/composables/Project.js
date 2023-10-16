@@ -10,7 +10,6 @@ import FileStatus from 'src/models/git/FileStatus';
 import {
   getFileInputs,
   getPlugins,
-  getPluginTags,
   getPluginByName,
 } from 'src/composables/PluginManager';
 import Project from 'src/models/Project';
@@ -677,7 +676,7 @@ export async function deleteProjectFile(projectId, filePath, deleteParentFolder)
 export async function deleteDiagramFile(pluginName, projectId, filePath) {
   const plugin = getPluginByName(pluginName);
   const folder = filePath === '' ? projectId : `${projectId}/${filePath}`;
-  const isFolder = filePath === '' ? true : await isDirectory(folder);
+  const isFolder = plugin.configuration.isFolderTypeDiagram;
   const listFiles = await gitListFiles(projectId);
 
   let rmFiles;
@@ -859,35 +858,6 @@ export async function initProject(project) {
 }
 
 /**
- * Get all models of the plugin.
- * @param {string} modelsdefaultFolder - Path of the models folder.
- * @param {string} pluginName - Name of the plugin.
- * @returns {Promise<Array>} Promise with an array of models on success otherwise an error.
- */
-export async function getPluginModels(modelsdefaultFolder, pluginName) {
-  const dirEntries = await readDir(`${modelsdefaultFolder}/${pluginName}`);
-
-  if (!dirEntries) {
-    return [];
-  }
-
-  return Promise.allSettled(dirEntries.map(
-    (entry) => (async () => {
-      const isDir = await isDirectory(`${modelsdefaultFolder}/${pluginName}/${entry}`);
-
-      return isDir ? {
-        name: entry,
-        plugin: pluginName,
-        tags: getPluginTags(pluginName),
-        path: `${modelsdefaultFolder}/${pluginName}/${entry}`,
-      } : null;
-    })(),
-  )).then((allResults) => allResults
-    .filter((result) => result.status === 'fulfilled' && result.value)
-    .map((result) => result.value));
-}
-
-/**
  * Get all models of the project.
  * @param {string} projectId - Id of project.
  * @returns {Promise<Array>} Promise with an array of models on success otherwise an error.
@@ -923,7 +893,7 @@ export async function getAllModels(projectId) {
 export async function getModelFiles(projectName, modelPath, plugin) {
   const rootPath = modelPath === '' ? projectName : `${projectName}/${modelPath}`;
   const filePath = modelPath === '' ? modelPath : `${modelPath}/`;
-  const isFolder = await isDirectory(rootPath);
+  const isFolder = plugin.configuration.isFolderTypeDiagram;
 
   let fileInformations;
 
