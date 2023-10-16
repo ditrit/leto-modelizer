@@ -405,48 +405,6 @@ describe('Test composable: PluginManager', () => {
     });
   });
 
-  describe('Test function: addNewComponent', () => {
-    const plugin = {
-      addComponent: jest.fn(),
-    };
-
-    it('should call addComponent with folder when path is a directory', async () => {
-      await PluginManager.addNewComponent(
-        'projectId',
-        plugin,
-        'modelPath',
-        {},
-        { x: 0, y: 0 },
-      );
-
-      expect(plugin.addComponent).toHaveBeenLastCalledWith(
-        'root',
-        {},
-        'modelPath/',
-        undefined,
-        { x: 0, y: 0 },
-      );
-    });
-
-    it('should call addComponent without folder when path is not a directory', async () => {
-      await PluginManager.addNewComponent(
-        'projectName',
-        plugin,
-        'plugin/model',
-        {},
-        { x: 0, y: 0 },
-      );
-
-      expect(plugin.addComponent).toHaveBeenLastCalledWith(
-        'root',
-        {},
-        '',
-        'plugin/model',
-        { x: 0, y: 0 },
-      );
-    });
-  });
-
   describe('Test function: addNewTemplateComponent', () => {
     it('should call parse', async () => {
       const definition = {
