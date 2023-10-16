@@ -281,41 +281,6 @@ export async function initComponents(projectName, plugin, path) {
 }
 
 /**
- * Add a new component.
- * @param {string} projectName - Name of the project.
- * @param {object} plugin - Plugin corresponding to the model.
- * @param {string} path - Model path (Plugin name & model name).
- * @param {object} definition - Definition of the component.
- * @param {DragEvent} event - The drag event.
- * @returns {Promise<void>} Promise with nothing on success otherwise an error.
- */
-export async function addNewComponent(
-  projectName,
-  plugin,
-  path,
-  definition,
-  event = null,
-) {
-  if (await isDirectory(`${projectName}/${path}`)) {
-    plugin.addComponent(
-      'root',
-      definition,
-      `${path}/`,
-      undefined,
-      event,
-    );
-  } else {
-    plugin.addComponent(
-      'root',
-      definition,
-      '',
-      path,
-      event,
-    );
-  }
-}
-
-/**
  * Add a new component from template.
  * Add the template files to the model folder
  * then parse all model files.
