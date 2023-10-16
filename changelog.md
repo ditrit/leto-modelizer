@@ -17,10 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Improve file explorer tree updating when file contents are updated.
 * Improve performance of the automatic functionnal tests about project & diagram templates and text editor.
 * Improve unit tests coverage.
+* Plugin management:
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.22.0) version 0.22.0.
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.7.1) version 0.7.1.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.3.0) version 0.3.0.
 
 ### Fixed
 
 * Fix bug on click on component definition from plugins with single file diagrams, see [this issue](https://github.com/ditrit/leto-modelizer/issues/407).
+* Fix bug on different behavior of the component between a click and a drag and drop, see [this issue](https://github.com/ditrit/leto-modelizer/issues/401) and [this issue](https://github.com/ditrit/leto-modelizer/issues/415).
 
 ## [1.3.0] - 2023/09/12
 
