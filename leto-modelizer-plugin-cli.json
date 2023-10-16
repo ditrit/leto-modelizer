@@ -8,5 +8,10 @@
     "name": "githubator-plugin",
     "url": "https://github.com/ditrit/githubator-plugin.git#0.2.5",
     "version": "0.2.5"
+  },
+  {
+    "name": "kubernator-plugin",
+    "url": "https://github.com/ditrit/kubernator-plugin.git#demo",
+    "version": "0.1.0"
   }
 ]

@@ -1,3 +1,9 @@
-// Currently empty but should be filled by CLI (cf. README)
+import terratorPlugin from 'terrator-plugin';
+import githubatorPlugin from 'githubator-plugin';
+import kubernatorPlugin from 'kubernator-plugin';
 
-export default {};
+export default {
+terratorPlugin,
+githubatorPlugin,
+kubernatorPlugin,
+};
