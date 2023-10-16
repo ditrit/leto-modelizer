@@ -8,7 +8,6 @@ import {
   deleteProjectFile,
   readDir,
   appendProjectFile,
-  isDirectory,
   setFiles,
 } from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
@@ -167,7 +166,7 @@ export function isParsableFile(file) {
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 export async function renderModel(projectId, modelPath, plugin) {
-  const isFolder = modelPath === '' || await isDirectory(`${projectId}/${modelPath}`);
+  const isFolder = plugin.configuration.isFolderTypeDiagram;
   const modelFolder = isFolder ? modelPath : modelPath.substring(0, modelPath.lastIndexOf('/'));
 
   const config = await readProjectFile(
@@ -272,9 +271,8 @@ export async function getFileInputs(plugin, fileInformations, projectName) {
  */
 export async function initComponents(projectName, plugin, path) {
   let filesInformation;
-  const dir = !path ? projectName : `${projectName}/${path}`;
 
-  if (await isDirectory(dir)) {
+  if (plugin.configuration.isFolderTypeDiagram) {
     filesInformation = [];
 
     await setFiles(filesInformation, projectName, path);

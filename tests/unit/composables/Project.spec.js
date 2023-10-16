@@ -33,7 +33,6 @@ import {
   gitGlobalUpload,
   importProject,
   PROJECT_STORAGE_KEY,
-  getPluginModels,
   getAllModels,
   getModelFiles,
   renameProject,
@@ -171,6 +170,9 @@ jest.mock('src/composables/PluginManager', () => ({
   isParsableFile: () => true,
   getPluginByName: jest.fn(() => ({
     isParsable: () => true,
+    configuration: {
+      isFolderTypeDiagram: true,
+    },
   })),
 }));
 
@@ -707,26 +709,6 @@ describe('Test composable: Project', () => {
     });
   });
 
-  describe('Test function: getPluginModels', () => {
-    it('should return an empty array', async () => {
-      expect(await getPluginModels('empty', 'pluginName')).toEqual([]);
-    });
-
-    it('should return an array with one entry', async () => {
-      expect(await getPluginModels('test', 'container')).toEqual([{
-        name: 'parent',
-        plugin: 'container',
-        path: 'test/container/parent',
-        tags: [],
-      }, {
-        name: 'emptyParent',
-        plugin: 'container',
-        path: 'test/container/emptyParent',
-        tags: [],
-      }]);
-    });
-  });
-
   describe('Test function: getAllModels', () => {
     it('should return an empty array', async () => {
       expect(await getAllModels('test')).toEqual([]);
@@ -735,7 +717,12 @@ describe('Test composable: Project', () => {
 
   describe('Test function: getModelFiles', () => {
     it('should an array', async () => {
-      const array = await getModelFiles();
+      const plugin = {
+        configuration: {
+          isFolderTypeDiagram: true,
+        },
+      };
+      const array = await getModelFiles('projectName', '', plugin);
 
       expect(Array.isArray(array)).toBeTruthy();
     });

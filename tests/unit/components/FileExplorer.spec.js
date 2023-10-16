@@ -511,6 +511,9 @@ describe('Test component: FileExplorer', () => {
     it('should do nothing without plugin', async () => {
       const mock = jest.fn(() => ({
         isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: false,
+        },
       }));
 
       PluginManager.getPluginByName.mockImplementation(mock);
@@ -531,6 +534,9 @@ describe('Test component: FileExplorer', () => {
     it('should call getPluginByName()', async () => {
       const mock = jest.fn(() => ({
         isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: true,
+        },
       }));
 
       PluginManager.getPluginByName.mockImplementation(mock);
