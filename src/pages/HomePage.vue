@@ -71,9 +71,9 @@ async function openCreateProjectTemplateDialog(template) {
 }
 
 onMounted(async () => {
-  templates.value = await getTemplatesByType('project');
   setProjects();
   updateProjectSubscription = ProjectEvent.UpdateProjectEvent.subscribe(setProjects);
+  templates.value = await getTemplatesByType('project');
 });
 
 onUnmounted(() => {
