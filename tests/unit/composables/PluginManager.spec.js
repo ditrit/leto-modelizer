@@ -296,59 +296,65 @@ describe('Test composable: PluginManager', () => {
   });
 
   describe('Test function: renderModel', () => {
-    it('should return an array with a file', async () => {
+    it('should return an array with a file type diagram and delete the file with "null" content', async () => {
       const plugin = {
-        render: () => [],
-        isParsable: () => false,
+        render: () => [
+          { content: 'file content' },
+          { content: null },
+        ],
+        isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: false,
+        },
       };
       const array = await PluginManager.renderModel(
         'projectId',
-        'file',
+        'fileTypeDiagramPath',
         plugin,
       );
 
-      expect(Array.isArray(array)).toBeTruthy();
-    });
-
-    it('should return an array with a folder', async () => {
-      const plugin = {
-        render: () => [],
-        isParsable: () => false,
-      };
-      const array = await PluginManager.renderModel(
-        'projectId',
-        'modelPath',
-        plugin,
-      );
-
-      expect(Array.isArray(array)).toBeTruthy();
-    });
-
-    it('should call writeProjectFile when render file content is not null', async () => {
-      const plugin = {
-        render: () => [{
-          path: 'test',
-          content: 'test',
-        }],
-        isParsable: () => false,
-      };
-      const array = await PluginManager.renderModel(
-        'projectId',
-        'modelPath',
-        plugin,
-      );
-
-      expect(Array.isArray(array)).toBeTruthy();
+      expect(array).toEqual([{ content: 'file content' }]);
       expect(writeProjectFile).toBeCalled();
+      expect(deleteProjectFile).toBeCalled();
     });
 
-    it('should call deleteProjectFile when render file content is null', async () => {
+    it('should return an array with a folder type diagram and delete the file with "null" content', async () => {
       const plugin = {
-        render: () => [{
-          path: 'test',
-          content: null,
-        }],
-        isParsable: () => false,
+        render: () => [
+          { content: 'notParsable' },
+          { content: '' },
+          { content: 'file content' },
+          { content: null },
+        ],
+        isParsable: jest.fn(({ content }) => content !== 'notParsable'),
+        configuration: {
+          isFolderTypeDiagram: true,
+        },
+      };
+      const array = await PluginManager.renderModel(
+        'projectId',
+        'folderTypeDiagramPath',
+        plugin,
+      );
+
+      expect(array).toEqual([
+        { content: '' },
+        { content: 'file content' },
+        { content: 'notParsable' },
+      ]);
+      expect(writeProjectFile).toBeCalled();
+      expect(deleteProjectFile).toBeCalled();
+    });
+
+    it('should return an array with a file if the only file present has "null" content', async () => {
+      const plugin = {
+        render: () => [
+          { content: null },
+        ],
+        isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: false,
+        },
       };
       const array = await PluginManager.renderModel(
         'projectId',
@@ -356,7 +362,8 @@ describe('Test composable: PluginManager', () => {
         plugin,
       );
 
-      expect(Array.isArray(array)).toBeTruthy();
+      expect(array).toEqual([{ content: null }]);
+      expect(writeProjectFile).toBeCalled();
       expect(deleteProjectFile).toBeCalled();
     });
   });

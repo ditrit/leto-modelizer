@@ -162,7 +162,7 @@ export function isParsableFile(file) {
  * Render the given model with the corresponding pugin.
  * Return rendered files.
  * @param {string} projectId - ID of the project.
- * @param {string} modelPath - Path of the model folder.
+ * @param {string} modelPath - Path of the model.
  * @param {object} plugin - Plugin to render.
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
@@ -186,21 +186,42 @@ export async function renderModel(projectId, modelPath, plugin) {
     diagramFile.path = '';
   }
 
-  const renderFiles = plugin.render(
+  const renderedFiles = plugin.render(
     diagramFile,
     config,
     files.filter((file) => plugin.isParsable(file)),
   );
 
-  return Promise.allSettled(
-    renderFiles.map((file) => {
-      if (file.content) {
-        return writeProjectFile(projectId, file);
-      }
+  const filesToUpdate = [];
+  const filesToDelete = [];
+  const unparsableFiles = [];
 
-      return deleteProjectFile(projectId, file.path);
-    }),
-  ).then(() => renderFiles);
+  renderedFiles.forEach((file) => {
+    if (plugin.isParsable(file)) {
+      if (file.content !== null) {
+        filesToUpdate.push(file);
+      } else {
+        filesToDelete.push(file);
+      }
+    } else {
+      unparsableFiles.push(file);
+    }
+  });
+
+  if (filesToUpdate.length === 0) {
+    if (isFolder) {
+      filesToUpdate.push(new FileInformation({ path: plugin.configuration.defaultFileName }));
+    } else {
+      filesToUpdate.push(filesToDelete.pop());
+    }
+  }
+
+  filesToUpdate.push(...unparsableFiles);
+
+  return Promise.allSettled([
+    ...filesToDelete.map(({ path }) => deleteProjectFile(projectId, path)),
+    ...filesToUpdate.map((file) => writeProjectFile(projectId, file)),
+  ]).then(() => filesToUpdate);
 }
 
 /**
