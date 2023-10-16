@@ -40,19 +40,26 @@ jest.mock('src/composables/PluginManager', () => ({
         ],
       },
     },
+    configuration: {
+      defaultFileName: 'defaultFileName',
+    },
     draw: jest.fn(),
     arrangeComponentsPosition: jest.fn(() => Promise.resolve()),
     resetDrawerActions: jest.fn(),
+    addComponent: jest.fn(),
   })),
   initComponents: jest.fn(() => Promise.resolve()),
   renderConfiguration: jest.fn(() => Promise.resolve()),
   renderModel: jest.fn(() => Promise.resolve()),
-  addNewComponent: jest.fn(() => Promise.resolve()),
   addNewTemplateComponent: jest.fn(() => Promise.resolve()),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
   getTemplatesByType: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock('src/composables/Project', () => ({
+  getModelFiles: jest.fn(() => Promise.resolve([])),
 }));
 
 jest.mock('src/composables/events/PluginEvent', () => ({
@@ -155,7 +162,7 @@ describe('Test page component: ModelizerDrawPage', () => {
   });
 
   describe('Test function: dropHandler', () => {
-    it('should call addNewComponent if component is not a template', async () => {
+    it('should call plugin.addComponent if component is not a template and call renderModel', async () => {
       const param = {
         dataTransfer: {
           getData: jest.fn(() => ('{"isTemplate":false,"definitionType":"testComponent"}')),
@@ -164,11 +171,11 @@ describe('Test page component: ModelizerDrawPage', () => {
 
       await wrapper.vm.dropHandler(param);
 
-      expect(PluginManager.addNewComponent).toBeCalled();
+      expect(wrapper.vm.data.plugin.addComponent).toBeCalled();
       expect(PluginManager.renderModel).toBeCalledWith('project-00000000', 'path', wrapper.vm.data.plugin);
     });
 
-    it('should call addNewTemplateComponent if component is a template', async () => {
+    it('should call addNewTemplateComponent if component is a template and call renderModel', async () => {
       const param = {
         dataTransfer: {
           getData: jest.fn(() => ('{"isTemplate":true,"definitionType":"testComponent"}')),
