@@ -413,7 +413,7 @@ describe('Test composable: PluginManager', () => {
   });
 
   describe('Test function: addNewTemplateComponent', () => {
-    it('should call parse', async () => {
+    it('should call parse when model is created at the root folder', async () => {
       const definition = {
         files: ['app.tf'],
         key: 'template key',
@@ -422,7 +422,21 @@ describe('Test composable: PluginManager', () => {
         parse: jest.fn(),
       };
 
-      await PluginManager.addNewTemplateComponent('projectName', plugin, 'plugin/model', definition);
+      await PluginManager.addNewTemplateComponent('projectName', plugin, '', definition);
+
+      expect(plugin.parse).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call parse when model is created inside folder', async () => {
+      const definition = {
+        files: ['app.tf'],
+        key: 'template key',
+      };
+      const plugin = {
+        parse: jest.fn(),
+      };
+
+      await PluginManager.addNewTemplateComponent('projectName', plugin, 'folder', definition);
 
       expect(plugin.parse).toHaveBeenCalledTimes(1);
     });
