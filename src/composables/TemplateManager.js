@@ -95,7 +95,7 @@ export async function getTemplateFiles(path, templateDefinition) {
     templateDefinition.files.map(
       (file) => getTemplateFileByPath(`templates/${templateDefinition.key}/${file}`)
         .then(({ data }) => new FileInput({
-          path: `${path}/${file}`,
+          path: path ? `${path}/${file}` : file,
           content: generateTemplate(data),
         })),
     ),
