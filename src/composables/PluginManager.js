@@ -307,7 +307,7 @@ export async function initComponents(projectName, plugin, path) {
  * then parse all model files.
  * @param {string} projectName - Name of the project.
  * @param {object} plugin - Plugin corresponding to the model.
- * @param {string} path - Model path (Plugin name & model name).
+ * @param {string} path - Model path.
  * @param {object} templateDefinition - Definition of the template.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
@@ -328,9 +328,10 @@ export async function addNewTemplateComponent(
     ),
   );
 
-  const files = await readDir(`${projectName}/${path}`);
+  const modelPath = path ? `${projectName}/${path}` : projectName;
+  const files = await readDir(modelPath);
   const fileInformations = files.map(
-    (file) => new FileInformation({ path: `${path}/${file}` }),
+    (file) => new FileInformation({ path: path ? `${path}/${file}` : file }),
   );
   const fileInputs = await getFileInputs(plugin, fileInformations, projectName);
   const config = await readProjectFile(
