@@ -295,6 +295,7 @@ Feature: Test roundtrip of the application: text editor
 
     ## 501 Check if the file updated content is still set after switching tab
     When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/main.tf"]'
+    And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'README.md'

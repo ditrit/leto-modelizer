@@ -14,6 +14,7 @@
 import {
   writeProjectFile,
   readProjectFile,
+  exists,
 } from 'src/composables/Project';
 import {
   onBeforeMount,
@@ -130,9 +131,13 @@ async function updateEditorLayout() {
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateEditorContent() {
-  const value = await getFileContent();
+  const isExisting = await exists(`${props.projectName}/${props.file.id}`);
 
-  editor.setValue(value);
+  if (isExisting) {
+    const value = await getFileContent();
+
+    editor.setValue(value);
+  }
 }
 
 onBeforeMount(async () => {

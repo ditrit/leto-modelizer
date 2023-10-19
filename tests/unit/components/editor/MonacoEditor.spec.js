@@ -23,6 +23,7 @@ jest.mock('monaco-editor', () => ({
 jest.mock('src/composables/Project', () => ({
   writeProjectFile: jest.fn(),
   readProjectFile: jest.fn(() => Promise.resolve('fileContent')),
+  exists: jest.fn((fileId) => Promise.resolve(fileId === 'project-00000000/file.js')),
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
@@ -209,10 +210,30 @@ describe('Tess component: MonacoEditor', () => {
   });
 
   describe('Test function: updateEditorContent', () => {
-    it('should call setValue', async () => {
+    it('should not call setValue when file does not exist', async () => {
+      await wrapper.setProps({
+        projectName: 'project-00000000',
+        file: {
+          id: 'notExistingFile.js',
+        },
+      });
+
       await wrapper.vm.updateEditorContent();
 
-      expect(setValue).toHaveBeenCalled();
+      expect(setValue).toHaveBeenCalledTimes(0);
+    });
+
+    it('should call setValue', async () => {
+      await wrapper.setProps({
+        projectName: 'project-00000000',
+        file: {
+          id: 'file.js',
+        },
+      });
+
+      await wrapper.vm.updateEditorContent();
+
+      expect(setValue).toHaveBeenCalledTimes(1);
     });
   });
 

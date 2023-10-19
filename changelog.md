@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Fix bug on click on component definition from plugins with single file diagrams, see [this issue](https://github.com/ditrit/leto-modelizer/issues/407).
+* Fix bug about rewritten file on checkout, see [this issue](https://github.com/ditrit/leto-modelizer/issues/422).
 
 ## [1.3.0] - 2023/09/12
 
