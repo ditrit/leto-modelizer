@@ -237,64 +237,67 @@ Feature: Test roundtrip of the application: draw editor
     Then I expect '[data-cy="object-details-panel"]' to be hidden
     And  I expect '[data-cy="draw-container"] [id^="aws_subnet_1"]' not exists
 
-    ## 701 Add variables inside component parsable files should display it on the variables tab inside modelizer draw left drawer
-    # Go to Text page
-    When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ diagramFolder }}"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFile }}"]' exists
+    # TODO: Uncomment when following bug will be fixed (https://github.com/ditrit/terrator-plugin/issues/98)
+    # ## 701 Add variables inside component parsable files should display it on the variables tab inside modelizer draw left drawer
+    # # Go to Text page
+    # When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    # And  I wait 1 second
+    # Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}'
+    # And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
+    # And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ diagramFolder }}"]' exists
+    # And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFile }}"]' exists
 
-    # Add two variables with same category to main_variable.tf
-    When I set active file content to 'variable "instance_class" {} variable "instance_var" { value = var }'
-    And  I wait 2 seconds
+    # # Add two variables with same category to main_variable.tf
+    # When I set active file content to 'variable "instance_class" {} variable "instance_var" { value = var }'
+    # And  I wait 2 seconds
 
-    # Create new file named variable.tf
-    And  I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ diagramFolder }}"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ diagramFolder }}"]'
-    And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
-    Then I expect '[data-cy="create-file-dialog"]' exists
+    # # Create new file named variable.tf
+    # And  I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ diagramFolder }}"]' to make it visible
+    # And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ diagramFolder }}"]'
+    # And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
+    # Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'variable.tf'
-    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
-    Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
-    And  I expect '[data-cy="create-file-form"]' is closed
+    # When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'variable.tf'
+    # And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
+    # Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
+    # And  I expect '[data-cy="create-file-form"]' is closed
 
-    When I wait 2 seconds
-    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'variable.tf'
+    # When I wait 2 seconds
+    # Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'variable.tf'
+    # And  I expect '[data-cy="file_{{ diagramFolder }}/variable.tf"].file-status-untracked' exists
 
-    # Add two variables with different category to infra/variable.tf file
-    When I set active file content to 'output "instance_ip" { value = aws_instance.server } variable "instance_test" { value = test }'
-    And  I wait 2 seconds
+    # # Add two variables with different category to infra/variable.tf file
+    # When I set active file content to 'output "instance_ip" { value = aws_instance.server } variable "instance_test" { value = test }'
+    # And  I wait 2 seconds
 
-    # Go to Draw page
-    And  I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    And  I wait 2 seconds
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ diagramFolder }}'
-    And  I expect '[data-cy="draw-page-left-drawer"]' exists
-    And  I expect '[data-cy="draw-page-variables-tab"]' exists
+    # # Go to Draw page
+    # And  I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    # And  I wait 2 seconds
+    # Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ diagramFolder }}'
+    # And  I expect '[data-cy="draw-page-left-drawer"]' exists
+    # And  I expect '[data-cy="draw-page-variables-tab"]' exists
 
-    # Check both variables inside main.tf
-    When I click on '[data-cy="draw-page-variables-tab"]'
-    Then I expect '[data-cy="variable-list"]' exists
-    And  I expect '[data-cy="variable-item_{{ diagramFile }}"]' exists
-    And  I expect '[data-cy="variable-item_{{ diagramFile }}_variable"]' exists
-    And  I expect '[data-cy="name_instance_class"]' exists
-    And  I expect '[data-cy="value_null"]' exists
-    And  I expect '[data-cy="name_instance_var"]' exists
-    And  I expect '[data-cy="value_var"]' exists
+    # # Check both variables inside main.tf
+    # When I click on '[data-cy="draw-page-variables-tab"]'
+    # Then I expect '[data-cy="variable-list"]' exists
+    # And  I expect '[data-cy="variable-item_{{ diagramFile }}"]' exists
+    # And  I expect '[data-cy="variable-item_{{ diagramFile }}_variable"]' exists
+    # And  I expect '[data-cy="name_instance_class"]' exists
+    # And  I expect '[data-cy="value_null"]' exists
+    # And  I expect '[data-cy="name_instance_var"]' exists
+    # And  I expect '[data-cy="value_var"]' exists
 
-    # Check both variables inside variable.tf
-    And  I expect '[data-cy="variable-item_{{ diagramFolder }}/variable.tf"]' exists
-    And  I expect '[data-cy="variable-item_{{ diagramFolder }}/variable.tf_output"]' exists
-    And  I expect '[data-cy="name_instance_ip"]' exists
-    And  I expect '[data-cy="value_aws_instance.server"]' exists
-    And  I expect '[data-cy="variable-item_{{ diagramFolder }}/variable.tf_variable"]' exists
-    And  I expect '[data-cy="name_instance_test"]' exists
-    And  I expect '[data-cy="value_test"]' exists
+    # # Check both variables inside variable.tf
+    # And  I expect '[data-cy="variable-item_{{ diagramFolder }}/variable.tf"]' exists
+    # And  I expect '[data-cy="variable-item_{{ diagramFolder }}/variable.tf_output"]' exists
+    # And  I expect '[data-cy="name_instance_ip"]' exists
+    # And  I expect '[data-cy="value_aws_instance.server"]' exists
+    # And  I expect '[data-cy="variable-item_{{ diagramFolder }}/variable.tf_variable"]' exists
+    # And  I expect '[data-cy="name_instance_test"]' exists
+    # And  I expect '[data-cy="value_test"]' exists
 
-    # Initial state
-    When I click on '[data-cy="draw-page-components-tab"]'
+    ### Setup for following tests
+    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (35)'
 
     ## 801 Template should appear in component definitions list
