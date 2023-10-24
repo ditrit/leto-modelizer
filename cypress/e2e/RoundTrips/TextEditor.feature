@@ -595,12 +595,12 @@ Feature: Test roundtrip of the application: text editor
     Then I expect '[data-cy="component-definition_aws"]' exists
 
     When I click on '[data-cy="component-definition_aws"]'
-    Then I expect '[data-cy="draw-container"] [id^="aws"]' exists
     And  I wait 1 second
+    Then I expect '[data-cy="draw-container"] [id^="aws"]' exists
 
     # Go back to the text view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    And  I wait 1 second
+    And  I wait 2 seconds
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect '[data-cy="file_infra/new_file.tf"]' exists
     And  I expect active file content to contain 'provider.*"aws".*{}'
