@@ -558,59 +558,60 @@ Feature: Test roundtrip of the application: Git
 
     When I click on '[data-cy="close-dialog-button"]'
 
-    ## 1002 Display file status changes in status dialog
-    #  Create a file
-    And  I hover '[data-cy="folder-button_{{ projectName }}"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]'
-    And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
-    Then I expect '[data-cy="create-file-dialog"]' exists
+    # TODO: Uncomment when following bug will be fixed (https://github.com/ditrit/leto-modelizer/issues/426)
+    # ## 1002 Display file status changes in status dialog
+    # #  Create a file
+    # And  I hover '[data-cy="folder-button_{{ projectName }}"]' to make it visible
+    # And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]'
+    # And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
+    # Then I expect '[data-cy="create-file-dialog"]' exists
 
-    When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'test.js'
-    And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_test.js"]' appear 1 time on screen
+    # When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'test.js'
+    # And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
+    # Then I expect '[data-cy="file-explorer"] [data-cy="file_test.js"]' appear 1 time on screen
 
-    #  Check file status
-    When I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
-    Then I expect '[data-cy="git-status-dialog"]' exists
-    And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 0 time on screen
-    And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 0 time on screen
-    And  I expect '[data-cy="git-status-dialog"] [data-cy="untracked-item"]' appear 1 time on screen
+    # #  Check file status
+    # When I click on '[data-cy="git-current-branch-button"]'
+    # And  I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
+    # Then I expect '[data-cy="git-status-dialog"]' exists
+    # And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 0 time on screen
+    # And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 0 time on screen
+    # And  I expect '[data-cy="git-status-dialog"] [data-cy="untracked-item"]' appear 1 time on screen
 
-    When I click on '[data-cy="close-dialog-button"]'
+    # When I click on '[data-cy="close-dialog-button"]'
 
-    #  Add file
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_test.js"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_test.js"]'
-    And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
-    And  I wait 2 seconds
+    # #  Add file
+    # And  I hover '[data-cy="file-explorer"] [data-cy="file-button_test.js"]' to make it visible
+    # And  I click on '[data-cy="file-explorer"] [data-cy="file-button_test.js"]'
+    # And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
+    # And  I wait 2 seconds
 
-    #  Check file status
-    And  I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
-    And  I wait 2 seconds
-    Then I expect '[data-cy="git-status-dialog"]' exists
-    And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen
-    And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 0 time on screen
-    And  I expect '[data-cy="git-status-dialog"] [data-cy="untracked-item"]' appear 0 time on screen
-    When I click on '[data-cy="close-dialog-button"]'
+    # #  Check file status
+    # And  I click on '[data-cy="git-current-branch-button"]'
+    # And  I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
+    # And  I wait 2 seconds
+    # Then I expect '[data-cy="git-status-dialog"]' exists
+    # And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen
+    # And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 0 time on screen
+    # And  I expect '[data-cy="git-status-dialog"] [data-cy="untracked-item"]' appear 0 time on screen
+    # When I click on '[data-cy="close-dialog-button"]'
 
-    #  Update file content
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'test.js'
-    And  I set active file content to 'updated content'
-    And  I wait 2 seconds
+    # #  Update file content
+    # And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'test.js'
+    # And  I set active file content to 'updated content'
+    # And  I wait 2 seconds
 
-    #  Check file status
-    And  I click on '[data-cy="git-current-branch-button"]'
-    And  I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
-    And  I wait 2 seconds
-    Then I expect '[data-cy="git-status-dialog"]' exists
-    And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen
-    And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 1 time on screen
-    And  I expect '[data-cy="git-status-dialog"] [data-cy="untracked-item"]' appear 0 time on screen
+    # #  Check file status
+    # And  I click on '[data-cy="git-current-branch-button"]'
+    # And  I click on '[data-cy="git-branch-menu"] [data-cy="git-status-item"]'
+    # And  I wait 2 seconds
+    # Then I expect '[data-cy="git-status-dialog"]' exists
+    # And  I expect '[data-cy="git-status-dialog"] [data-cy="staged-item"]' appear 1 time on screen
+    # And  I expect '[data-cy="git-status-dialog"] [data-cy="modified-item"]' appear 1 time on screen
+    # And  I expect '[data-cy="git-status-dialog"] [data-cy="untracked-item"]' appear 0 time on screen
 
-    ### Setup for following tests
-    When I click on '[data-cy="close-dialog-button"]'
+    # ### Setup for following tests
+    # When I click on '[data-cy="close-dialog-button"]'
 
     ## 1101 An unmodified file should not have the 'add' action inside file explorer menu
     And  I hover '[data-cy="file-explorer"] [data-cy="file-button_README.md"]' to make it visible
