@@ -37,10 +37,10 @@ When('I drag {string} onto {string}', (templateOriginSelector, templateDestinati
 When('I select {string} in {string}', (option, templateSelector) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   cy.get(selector)
-    .click();
+    .click({ force: true });
 
   cy.get(option)
-    .click();
+    .click({ force: true });
 
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(500);
