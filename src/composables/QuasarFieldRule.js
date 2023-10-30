@@ -77,12 +77,16 @@ export function isStringTooLong(t, value, max) {
  * Check if the value matches the RegExp.
  * @param {Function} t - I18n translate function.
  * @param {string} value - Value to check.
- * @param {boolean} regexp - Rules value.
+ * @param {boolean} regexp - RegExp to match with.
+ * @param {boolean} required - Is value required.
  * @returns {boolean | string} Return true if value is valid,
  * otherwise the translated error message.
  */
-export function isStringMatchingRegExp(t, value, regexp) {
-  return !regexp || (new RegExp(regexp)).test(value) || t('errors.rules.string.regexp', { regexp });
+export function isStringMatchingRegExp(t, value, regexp, required) {
+  return !regexp
+    || (!required && (!value || value.length === 0))
+    || (new RegExp(regexp)).test(value)
+    || t('errors.rules.string.regexp', { regexp });
 }
 
 /**

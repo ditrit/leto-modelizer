@@ -130,12 +130,15 @@ describe('Test composable: InputRule', () => {
   describe('Test function: isStringMatchingRegExp', () => {
     it('should return true', () => {
       expect(isStringMatchingRegExp(null, null, undefined)).toBe(true);
+      expect(isStringMatchingRegExp(null, '', undefined)).toBe(true);
+      expect(isStringMatchingRegExp(null, '', '^[a-z]{3,}$')).toBe(true);
       expect(isStringMatchingRegExp(null, 'abcd', '^[a-z]{3,}$')).toBe(true);
     });
 
     it('should return string error message', () => {
       const key = 'errors.rules.string.regexp';
 
+      expect(isStringMatchingRegExp(t, '', '^[a-z]{3,}$', true)).toBe(key);
       expect(isStringMatchingRegExp(t, 'a', '^[a-z]{3,}$')).toEqual(key);
     });
   });
