@@ -23,8 +23,8 @@
 
 <script setup>
 import DefaultNavigationBar from 'components/DefaultNavigationBar.vue';
-import HomeDrawer from 'src/components/drawer/HomeDrawer';
-import HomePage from 'src/pages/HomePage';
+import HomeDrawer from 'src/components/drawer/HomeDrawer.vue';
+import HomePage from 'src/pages/HomePage.vue';
 import {
   ref,
 } from 'vue';

@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay';
+import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay.vue';
 import {
   addNewComponent,
   addNewTemplateComponent,

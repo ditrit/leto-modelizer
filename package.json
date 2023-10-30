@@ -44,6 +44,7 @@
     "@babel/preset-env": "=7.23.2",
     "@badeball/cypress-cucumber-preprocessor": "=18.0.6",
     "@cypress/browserify-preprocessor": "=3.0.2",
+    "@quasar/app-vite": "^1.4.6",
     "@quasar/app-webpack": "=3.9.6",
     "@quasar/quasar-app-extension-testing": "=2.1.1",
     "@quasar/quasar-app-extension-testing-unit-jest": "=3.0.0-alpha.10",

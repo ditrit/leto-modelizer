@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import ComponentDefinitionCard from 'src/components/card/ComponentDefinitionCard';
+import ComponentDefinitionCard from 'src/components/card/ComponentDefinitionCard.vue';
 
 defineProps({
   definitions: {

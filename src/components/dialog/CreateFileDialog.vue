@@ -24,8 +24,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DefaultDialog from 'components/dialog/DefaultDialog';
-import CreateFileForm from 'components/form/CreateFileForm';
+import DefaultDialog from 'components/dialog/DefaultDialog.vue';
+import CreateFileForm from 'components/form/CreateFileForm.vue';
 
 defineProps({
   projectName: {

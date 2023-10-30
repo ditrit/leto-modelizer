@@ -21,8 +21,8 @@
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DefaultDialog from 'src/components/dialog/DefaultDialog';
-import DeleteProjectForm from 'src/components/form/DeleteProjectForm';
+import DefaultDialog from 'src/components/dialog/DefaultDialog.vue';
+import DeleteProjectForm from 'src/components/form/DeleteProjectForm.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const projectId = ref(null);

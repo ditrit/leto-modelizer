@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import DefaultDialog from 'components/dialog/DefaultDialog';
+import DefaultDialog from 'components/dialog/DefaultDialog.vue';
 import DeleteModelForm from 'components/form/DeleteModelForm.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import {

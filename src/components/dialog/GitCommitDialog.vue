@@ -66,7 +66,7 @@
 </template>
 
 <script setup>
-import DefaultDialog from 'components/dialog/DefaultDialog';
+import DefaultDialog from 'components/dialog/DefaultDialog.vue';
 import {
   onMounted,
   onUnmounted,
@@ -74,7 +74,7 @@ import {
 } from 'vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { getStatus } from 'src/composables/Project';
-import GitCommitForm from 'components/form/GitCommitForm';
+import GitCommitForm from 'components/form/GitCommitForm.vue';
 import GitEvent from 'src/composables/events/GitEvent';
 
 const props = defineProps({

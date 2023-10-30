@@ -58,7 +58,7 @@
 
 <script setup>
 import { reactive, toRef, watch } from 'vue';
-import InputWrapper from 'components/inputs/InputWrapper';
+import InputWrapper from 'components/inputs/InputWrapper.vue';
 import ObjectInput from 'src/components/inputs/ObjectInput.vue';
 
 const emit = defineEmits([

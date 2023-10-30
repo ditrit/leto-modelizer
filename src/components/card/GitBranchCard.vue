@@ -24,7 +24,7 @@ import { useRoute } from 'vue-router';
 import { onMounted, onUnmounted, ref } from 'vue';
 import GitEvent from 'src/composables/events/GitEvent';
 import FileEvent from 'src/composables/events/FileEvent';
-import GitBranchMenu from 'components/menu/GitBranchMenu';
+import GitBranchMenu from 'components/menu/GitBranchMenu.vue';
 
 let addRemoteSubscription;
 let checkoutSubscription;
