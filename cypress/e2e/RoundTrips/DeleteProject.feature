@@ -7,7 +7,6 @@ Feature: Test homepage: project deletion
     And   I visit the '/'
     And   I wait until the application is loaded
     And   I set context field 'projectName' with 'leto-modelizer-project-test'
-    And   I set context field 'modelFile' with 'model1/main.tf'
     And   I set context field 'modelFolder' with 'model1'
 
     # Import project
@@ -24,7 +23,7 @@ Feature: Test homepage: project deletion
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFile }}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelFolder }}'
 
@@ -71,7 +70,7 @@ Feature: Test homepage: project deletion
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFile }}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelFolder }}'
 

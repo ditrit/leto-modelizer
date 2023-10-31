@@ -65,9 +65,7 @@ Feature: Test roundtrip of the application: project creation
     And   I set context field 'remoteProjectName' with 'leto-modelizer-project-test'
     And   I set context field 'remoteProjectUrl' with 'https://github.com/ditrit/leto-modelizer-project-test'
     And   I set context field 'firstModelFolder' with 'model1'
-    And   I set context field 'firstModelFile' with 'model1/main.tf'
     And   I set context field 'secondModelFolder' with 'model2'
-    And   I set context field 'secondModelFile' with 'model2/main.tf'
     And   I set context field 'thirdModelName' with 'thirdModelTest3Githubator.yml'
     And   I set context field 'projectRenamed' with 'renamedProject'
     And   I set context field 'modelRenamed' with 'newModelTest'
@@ -256,7 +254,7 @@ Feature: Test roundtrip of the application: project creation
     And  I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ firstModelFile }}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ firstModelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ firstModelFolder }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
@@ -270,12 +268,12 @@ Feature: Test roundtrip of the application: project creation
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ secondModelFile }}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ secondModelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ secondModelFolder }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
-    And  I expect '[data-cy="file_model2/main.tf"]' not exists
+    And  I expect '[data-cy="file_model2/new_file.tf"]' not exists
     And  I expect '[data-cy="file_leto-modelizer.config.json"]' not exists
 
     # After clicking on a composent, it should be present
@@ -433,16 +431,16 @@ Feature: Test roundtrip of the application: project creation
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_model2/main.tf"]' appear 2 time on screen
+    And  I expect '[data-cy="file_model2/new_file.tf"]' appear 2 times on screen
 
-    When I double click on '[data-cy="file_model2/main.tf"]'
+    When I double click on '[data-cy="file_model2/new_file.tf"]'
     And  I wait 1 second
-    Then I expect '[data-cy="file_model2/main.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    Then I expect '[data-cy="file_model2/new_file.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
 
     ## 902 Update plugin file content with a new object (Text view) should display the corresponding plugin component (Draw view)
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
     When I set active file content to 'module "server" {}'
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -467,11 +465,11 @@ Feature: Test roundtrip of the application: project creation
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_model2/main.tf"]' appear 2 time on screen
+    And  I expect '[data-cy="file_model2/new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file_leto-modelizer.config.json"]' appear 1 time on screen
 
-    When I click on '[data-cy="file-tabs-container"] [data-cy="file_model2/main.tf"]'
-    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    When I click on '[data-cy="file-tabs-container"] [data-cy="file_model2/new_file.tf"]'
+    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{}'
     And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
     But  I expect active file content to not contain 'gateway_id.*=.*\["aws_internet_gateway_1"\]'

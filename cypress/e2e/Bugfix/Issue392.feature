@@ -17,7 +17,7 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'diag1/parsable1.tf'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'diag1'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=diag1'
 
@@ -27,7 +27,7 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'diag1/diag2/parsable2.tf'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'diag1/diag2'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=diag1/diag2'
 
@@ -37,9 +37,9 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=diag1/diag2'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_diag1"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/parsable1.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/new_file.tf"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_diag1/diag2"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/diag2/parsable2.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/diag2/new_file.tf"]' exists
 
     # Create non parsable file inside diag1 folder
     When I hover '[data-cy="file-explorer"] [data-cy="folder-button_diag1"]' to make it visible
@@ -47,6 +47,7 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     And  I click on '[data-cy="create-file-action-item"]'
     And  I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'file1.txt'
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
+    And  I wait 1 second
     Then I expect '[data-cy="file-explorer"] [data-cy="file_diag1/file1.txt"]' exists
 
     # Go to models pages and check diagrams are displayed
@@ -63,7 +64,7 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     Then I expect '[data-cy="diagram-path_diag1"]' not exists
     But  I expect '[data-cy="diagram-path_diag1/diag2"]' exists
 
-    ## Should delete parsable1.tf file but keep all non parsable files and sub-folder
+    ## Should delete new_file.tf file but keep all non parsable files and sub-folder
     When I click on '[data-cy="diagram-path_diag1/diag2"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=diag1/diag2'
 
@@ -71,7 +72,7 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     And  I wait 1 second
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=diag1/diag2'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_diag1"]' exists
-    But  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/parsable1.tf"]' not exists
+    But  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/new_file.tf"]' not exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/file1.txt"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_diag1/diag2"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/diag2/parsable2.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/diag2/new_file.tf"]' exists

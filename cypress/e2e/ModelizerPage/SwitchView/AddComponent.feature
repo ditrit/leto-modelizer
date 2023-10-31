@@ -15,7 +15,7 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infra'
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
@@ -32,7 +32,7 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_main.tf"]' not exists
+    And  I expect '[data-cy="file_new_file.tf"]' not exists
     And  I expect '[data-cy="file_leto-modelizer.config.json"]' not exists
 
   Scenario: Add a component (Draw view) should create project configuration file (Text view)
@@ -41,12 +41,12 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_infra/main.tf"]' appear 2 time on screen
+    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
 
-    When I double click on '[data-cy="file_infra/main.tf"]'
+    When I double click on '[data-cy="file_infra/new_file.tf"]'
     And  I wait 1 second
-    Then I expect '[data-cy="file_infra/main.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    Then I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
 
   Scenario: Update plugin file content with a new object (Text view) should display the corresponding plugin component (Draw view)
@@ -55,15 +55,15 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_infra/main.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
 
-    When I double click on '[data-cy="file_infra/main.tf"]'
+    When I double click on '[data-cy="file_infra/new_file.tf"]'
     And  I wait 1 second
-    Then I expect '[data-cy="file_infra/main.tf"]' appear 2 times on screen
+    Then I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
 
-    When I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/main.tf"]'
+    When I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
     And  I wait 1 second
-    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
     When I set active file content to 'module "server" {}'
     And  I wait 1 second
@@ -86,12 +86,12 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_infra/main.tf"]' appear 2 time on screen
+    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file_leto-modelizer.config.json"]' appear 1 time on screen
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/main.tf"]'
-    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to be equal to "cypress/resources/project-test/main.tf"
 
   Scenario: Add link attributes inside plugin file content (Text view) should display link between two components (Draw view)
@@ -101,11 +101,11 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_infra/main.tf"]' appear 2 time on screen
+    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/main.tf"]'
-    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{}'
     And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
     But  I expect active file content to not contain 'gateway_id.*=.*\["aws_internet_gateway_1"\]'

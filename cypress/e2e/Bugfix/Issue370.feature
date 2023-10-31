@@ -15,18 +15,18 @@ Feature: Fix issue #370: Wrong files opened when I switch to text view if multip
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infraFirst/main.tf'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infraFirst'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
-    And  I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infra'
+    And  I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infraFirst'
 
     # Create second model
     When I click on '[data-cy="models-page-link-button"]'
     And  I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
@@ -36,4 +36,4 @@ Feature: Fix issue #370: Wrong files opened when I switch to text view if multip
     And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' appear 0 time on screen
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="file_infra/main.tf"]' appear 1 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]' appear 1 time on screen
