@@ -42,7 +42,9 @@ Then('I set on {string} text {string}', (templateSelector, templateValue) => {
   const value = nunjucks.renderString(templateValue, cy.context);
 
   cy.get(selector).type('{selectall}{backspace}');
-  cy.get(selector).type(value);
+  if (value && value.length > 0) {
+    cy.get(selector).type(value);
+  }
 });
 
 Then('I expect {string} is closed', (selector) => {

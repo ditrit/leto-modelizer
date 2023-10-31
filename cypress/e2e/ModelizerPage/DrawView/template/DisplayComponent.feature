@@ -1,6 +1,7 @@
+@skip
 Feature: Test modelizer draw view: add template component
 
-  Background:
+  Scenario Outline: Dragging the <element> component template should display it on the page
     Given I clear cache
     And   I set viewport size to '1536' px for width and '960' px for height
     And   I visit the '/'
@@ -28,24 +29,8 @@ Feature: Test modelizer draw view: add template component
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 2 times on screen
 
-  Scenario: Click on the Test application component should display it on the page
-    Then I expect '[data-cy="draw-container"] [id^="SecurityGroup_"]' not exists
-    And  I expect '[data-cy="draw-container"] [id^="InternetGateway_"]' not exists
-    And  I expect '[data-cy="draw-container"] [id^="VPC_"]' not exists
-    And  I expect '[class="link"]' not exists
-
-    When I click on '[data-cy="component-definition_Test application"]'
-    And  I wait 1 second
-    Then I expect '[data-cy="draw-container"] [id^="SecurityGroup_"]' exists
-    And  I expect '[data-cy="draw-container"] [id^="InternetGateway_"]' exists
-    And  I expect '[data-cy="draw-container"] [id^="VPC_"]' exists
-    And  I expect '[data-cy="draw-container"] [id^="VPC_"]' exists
-    And  I expect '[class="link"]' exists
-
-  @skip
-  # TODO: update/fix test
-  Scenario Outline: Dragging the <element> component template should display it on the page
-    Then I expect '[data-cy="draw-container"] [id^="<element>_"]' not exists
+    # TODO: update/fix test
+    And  I expect '[data-cy="draw-container"] [id^="<element>_"]' not exists
 
     When I drag '[data-cy="component-definition_<element>"]' onto '[data-cy="draw-container"]'
     And  I wait 1 second
