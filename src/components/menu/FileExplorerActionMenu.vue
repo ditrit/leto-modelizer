@@ -87,7 +87,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { gitAdd } from 'src/composables/Project';
+import { getStatus, gitAdd } from 'src/composables/Project';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import DialogEvent from 'src/composables/events/DialogEvent';
@@ -147,16 +147,23 @@ function deleteFile() {
  * @param {object} file - Selected file.
  * @returns {Promise} Promise with nothing on success otherwise an error.
  */
-function addFile(file) {
+async function addFile(file) {
   loading.value.add = true;
   return gitAdd(props.projectName, file.id)
-    .then(() => {
+    .then(async () => {
       Notify.create({
         type: 'positive',
         message: t('actions.fileExplorer.file.add'),
         html: true,
       });
-      GitEvent.AddEvent.next(file.id);
+
+      const [fileStatus] = await getStatus(
+        props.projectName,
+        [file.id],
+        (path) => path === file.id,
+      );
+
+      GitEvent.AddEvent.next(fileStatus);
     })
     .catch(() => {
       Notify.create({

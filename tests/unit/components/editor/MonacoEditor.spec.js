@@ -24,6 +24,7 @@ jest.mock('src/composables/Project', () => ({
   writeProjectFile: jest.fn(),
   readProjectFile: jest.fn(() => Promise.resolve('fileContent')),
   exists: jest.fn((fileId) => Promise.resolve(fileId === 'project-00000000/file.js')),
+  getStatus: jest.fn(() => Promise.resolve([{ path: 'file.js' }])),
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
@@ -170,7 +171,7 @@ describe('Tess component: MonacoEditor', () => {
     it('should call writeProjectFile and emit UpdateEditorContentEvent', async () => {
       await wrapper.vm.updateFile();
       expect(writeProjectFileMock).toHaveBeenCalledTimes(1);
-      expect(FileEvent.UpdateEditorContentEvent.next).toBeCalledWith('file.js');
+      expect(FileEvent.UpdateEditorContentEvent.next).toBeCalledWith({ path: 'file.js' });
     });
   });
 

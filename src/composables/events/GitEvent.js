@@ -27,7 +27,7 @@ const NewBranchEvent = new Subject();
 
 /**
  * Represent a rxjs Event object to emit and to receive events when an add is done on git.
- * The event should contain the path (id) of the file to add.
+ * The event should contain the path and the status of the file to add.
  * @typedef {Subject} AddEvent
  */
 const AddEvent = new Subject();

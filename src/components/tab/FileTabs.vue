@@ -125,16 +125,15 @@ function onSelectFileNode(node) {
 
 /**
  * Update status of the fileTab corresponding to the given parameter.
- * @param {string} filePath - Path correponding to the fileTab id.
+ * @param {string} fileStatus - File status information.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-async function updateFileStatus(filePath) {
+async function updateFileStatus(fileStatus) {
   if (fileTabArray.value.length === 0) {
     return;
   }
 
-  const [fileStatus] = await getStatus(props.projectName, [filePath], (path) => path === filePath);
-  const index = fileTabArray.value.findIndex((fileTab) => fileTab.id === filePath);
+  const index = fileTabArray.value.findIndex((fileTab) => fileTab.id === fileStatus.path);
 
   if (index !== -1) {
     fileTabArray.value[index].information = fileStatus;

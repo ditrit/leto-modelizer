@@ -15,6 +15,7 @@ import {
   writeProjectFile,
   readProjectFile,
   exists,
+  getStatus,
 } from 'src/composables/Project';
 import {
   onBeforeMount,
@@ -58,7 +59,14 @@ async function updateFile() {
   };
 
   await writeProjectFile(props.projectName, file);
-  FileEvent.UpdateEditorContentEvent.next(file.id);
+
+  const [fileStatus] = await getStatus(
+    props.projectName,
+    [file.id],
+    (path) => path === file.id,
+  );
+
+  FileEvent.UpdateEditorContentEvent.next(fileStatus);
 }
 
 /**

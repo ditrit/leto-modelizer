@@ -43,7 +43,7 @@ const CreateFileNodeEvent = new Subject();
 
 /**
  * Represent a rxjs Event object to emit and to receive events about editor content update.
- * The event should contain the path (id) of the updated file.
+ * The event should contain the path and the status of the file to add.
  * @typedef {Subject} UpdateEditorContentEvent
  */
 const UpdateEditorContentEvent = new Subject();
