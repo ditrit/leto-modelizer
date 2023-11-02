@@ -47,6 +47,24 @@ export function createFile(fileInformation, parentFolder, name) {
 }
 
 /**
+ * Update information of the file node corresponding to the fileStatus.
+ * `parentNode` should be the node of the first folder mentionned in the fileStatus path.
+ * @param {object} parentNode - Node of the tree containing children.
+ * @param {object} fileStatus - File status information.
+ * @param {number} index - Index of the part to check in the path.
+ */
+export function updateFileInformation(parentNode, fileStatus, index = 0) {
+  const splitPath = fileStatus.path.split('/');
+  const item = parentNode.children.find((child) => child.label === splitPath[index]);
+
+  if (splitPath.length === index + 1) {
+    item.information = fileStatus;
+  } else {
+    updateFileInformation(item, fileStatus, index + 1);
+  }
+}
+
+/**
  * Sort elements by alphabetic order and sort to display folders before files.
  * @param {Array} elements - Tree folders.
  * @returns {Array} - Sorted Tree.

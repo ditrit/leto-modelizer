@@ -1,4 +1,4 @@
-import { getTree } from 'src/composables/FileExplorer';
+import { getTree, updateFileInformation } from 'src/composables/FileExplorer';
 import { isParsableFile } from 'src/composables/PluginManager';
 
 jest.mock('src/composables/PluginManager', () => ({
@@ -337,6 +337,50 @@ describe('Test composable: FileExplorer', () => {
         isRootFolder: true,
         children: [],
       }]);
+    });
+  });
+
+  describe('Test function: updateFileInformation', () => {
+    it('should update status on first level', () => {
+      const folder = {
+        children: [
+          { label: 'one.txt', information: null },
+          { label: 'two.txt', information: null },
+          { label: 'subFolder', children: [{ label: 'one.txt', information: null }] },
+        ],
+      };
+      const fileStatus = { path: 'one.txt' };
+
+      updateFileInformation(folder, fileStatus);
+
+      expect(folder).toEqual({
+        children: [
+          { label: 'one.txt', information: { path: 'one.txt' } },
+          { label: 'two.txt', information: null },
+          { label: 'subFolder', children: [{ label: 'one.txt', information: null }] },
+        ],
+      });
+    });
+
+    it('should update status on second level', () => {
+      const folder = {
+        children: [
+          { label: 'one.txt', information: null },
+          { label: 'two.txt', information: null },
+          { label: 'subFolder', children: [{ label: 'one.txt', information: null }] },
+        ],
+      };
+      const fileStatus = { path: 'subFolder/one.txt' };
+
+      updateFileInformation(folder, fileStatus);
+
+      expect(folder).toEqual({
+        children: [
+          { label: 'one.txt', information: null },
+          { label: 'two.txt', information: null },
+          { label: 'subFolder', children: [{ label: 'one.txt', information: { path: 'subFolder/one.txt' } }] },
+        ],
+      });
     });
   });
 });
