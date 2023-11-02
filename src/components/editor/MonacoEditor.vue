@@ -43,6 +43,7 @@ const props = defineProps({
 const container = ref(null);
 let monaco;
 let editor;
+let timer;
 let checkoutSubscription;
 let addRemoteSubscription;
 let pullSubscription;
@@ -102,6 +103,24 @@ function initMonacoLanguages(path) {
 }
 
 /**
+ * Delays the given function until after the stated delay has passed
+ * since the last time this `debounce` function was called.
+ * @param {Function} functionRef - A function to be called after the delay expires.
+ * @param {number} delay - Time in milliseconds for which the calls are to be delayed.
+ */
+function debounce(functionRef, delay) {
+  if (timer) {
+    clearTimeout(timer);
+  }
+
+  timer = setTimeout(() => {
+    functionRef();
+    clearTimeout(timer);
+    timer = null;
+  }, delay);
+}
+
+/**
  * Setup monaco editor.
  * Register plugin language syntax colorizer.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
@@ -112,7 +131,9 @@ async function createEditor() {
 
   editor = monaco.editor.create(container.value, { value, language });
 
-  editor.onDidChangeModelContent(updateFile);
+  editor.onDidChangeModelContent(() => {
+    debounce(updateFile, 1000);
+  });
 }
 
 /**
