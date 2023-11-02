@@ -77,7 +77,7 @@ function onSubmit() {
     ? createProjectFolder(props.projectName, `${parent}${fileName.value}`)
     : writeProjectFile(props.projectName, new FileInput({
       path: `${parent}${fileName.value}`,
-      content: ' ',
+      content: '',
     }));
   submitting.value = true;
   const type = props.isFolder ? 'folder' : 'file';
