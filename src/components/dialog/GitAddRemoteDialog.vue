@@ -21,8 +21,8 @@
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DefaultDialog from 'components/dialog/DefaultDialog';
-import GitAddRemoteForm from 'components/form/GitAddRemoteForm';
+import DefaultDialog from 'components/dialog/DefaultDialog.vue';
+import GitAddRemoteForm from 'components/form/GitAddRemoteForm.vue';
 
 defineProps({
   projectName: {

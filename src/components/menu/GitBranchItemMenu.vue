@@ -35,7 +35,7 @@
 
 <script setup>
 
-import GitBranchActionMenu from 'components/menu/GitBranchActionMenu';
+import GitBranchActionMenu from 'components/menu/GitBranchActionMenu.vue';
 
 const emit = defineEmits(['action:done']);
 

@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Improve file explorer tree updating when file contents are updated.
 * Improve performance of the automatic functionnal tests.
 * Improve unit tests coverage.
+* Technical content:
+  * Update import of vue components.
 
 ### Fixed
 

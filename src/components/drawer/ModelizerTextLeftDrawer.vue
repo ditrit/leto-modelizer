@@ -38,7 +38,7 @@
 
 <script setup>
 import FileExplorer from 'src/components/FileExplorer.vue';
-import GitBranchCard from 'src/components/card/GitBranchCard';
+import GitBranchCard from 'src/components/card/GitBranchCard.vue';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 

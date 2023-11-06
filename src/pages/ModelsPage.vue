@@ -14,11 +14,11 @@
 <script setup>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import ModelsView from 'src/components/ModelsView';
-import CreateModelDialog from 'components/dialog/CreateModelDialog';
-import DeleteModelDialog from 'components/dialog/DeleteModelDialog';
-import RenameModelDialog from 'components/dialog/RenameModelDialog';
-import ImportModelTemplateDialog from 'components/dialog/ImportModelTemplateDialog';
+import ModelsView from 'src/components/ModelsView.vue';
+import CreateModelDialog from 'components/dialog/CreateModelDialog.vue';
+import DeleteModelDialog from 'components/dialog/DeleteModelDialog.vue';
+import RenameModelDialog from 'components/dialog/RenameModelDialog.vue';
+import ImportModelTemplateDialog from 'components/dialog/ImportModelTemplateDialog.vue';
 
 const route = useRoute();
 const projectName = computed(() => route.params.projectName);

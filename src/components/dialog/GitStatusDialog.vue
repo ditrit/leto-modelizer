@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-import DefaultDialog from 'components/dialog/DefaultDialog';
+import DefaultDialog from 'components/dialog/DefaultDialog.vue';
 import {
   computed,
   onMounted,

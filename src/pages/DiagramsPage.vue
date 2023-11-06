@@ -97,7 +97,7 @@ import {
 } from 'vue';
 import { useRoute } from 'vue-router';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
-import CreateModelDialog from 'components/dialog/CreateModelDialog';
+import CreateModelDialog from 'components/dialog/CreateModelDialog.vue';
 
 const route = useRoute();
 const projectName = computed(() => route.params.projectName);
