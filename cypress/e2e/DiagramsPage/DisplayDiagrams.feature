@@ -47,6 +47,7 @@ Feature: Test diagrams page: display all diagrams
 
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
+    And  I wait 1 second
     Then I expect '[data-cy="draw-container"]' exists
     And  I expect '[id^="aws"]' exists
 

@@ -43,7 +43,7 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
 
     When I click on '[id^="aws"]'
-    And  I click on '[id="remove-component"]'
+    And  I force click on '[id="remove-component"]'
     Then I expect '[id^="aws"]' not exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -72,7 +72,7 @@ Feature: Test switch model to text view: delete component/link
 
     When I wait 1 second
     And  I click on '[id^="aws"]'
-    And  I click on '[id="remove-component"]'
+    And  I force click on '[id="remove-component"]'
     And  I wait 1 second
     Then I expect '[id^="server"]' exists
     And  I expect '[id^="aws"]' not exists
@@ -97,8 +97,11 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
-    When I set active file content to '[]'
+    When I clear active file
+    And  I set active file content to '[]'
+    And  I wait 1 second
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
     But  I expect '[id^="aws"]' not exists
 
@@ -114,7 +117,8 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
-    When I set active file content to 'provider "aws" {}'
+    When I clear active file
+    And  I set active file content to 'provider "aws" {}'
     And  I wait 1 second
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
@@ -156,7 +160,7 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
     And  I wait 1 second
     And  I click on '[id^="aws_subnet"]'
-    And  I click on '[id="create-link"]'
+    And  I force click on '[id="create-link"]'
     And  I click on '[id^="aws_internet_gateway"]'
     Then I expect '[class="link"]' exists
 
@@ -194,7 +198,7 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
     And  I wait 1 second
     And  I click on '[id^="aws_subnet"]'
-    And  I click on '[id="create-link"]'
+    And  I force click on '[id="create-link"]'
     And  I click on '[id^="aws_internet_gateway"]'
     Then I expect '[class="link"]' exists
 
@@ -207,7 +211,8 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to be equal to "cypress/resources/project-test/main.tf"
 
-    When I set active file content to 'resource "aws_subnet" "aws_subnet_1" {} resource "aws_internet_gateway" "aws_internet_gateway_1" {}'
+    When I clear active file
+    And  I set active file content to 'resource "aws_subnet" "aws_subnet_1" {} resource "aws_internet_gateway" "aws_internet_gateway_1" {}'
     And  I wait 1 second
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
