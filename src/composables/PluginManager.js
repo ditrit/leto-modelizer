@@ -8,7 +8,6 @@ import {
   deleteProjectFile,
   readDir,
   appendProjectFile,
-  isDirectory,
   setFiles,
 } from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
@@ -162,12 +161,12 @@ export function isParsableFile(file) {
  * Render the given model with the corresponding pugin.
  * Return rendered files.
  * @param {string} projectId - ID of the project.
- * @param {string} modelPath - Path of the model folder.
+ * @param {string} modelPath - Path of the model.
  * @param {object} plugin - Plugin to render.
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 export async function renderModel(projectId, modelPath, plugin) {
-  const isFolder = modelPath === '' || await isDirectory(`${projectId}/${modelPath}`);
+  const isFolder = plugin.configuration.isFolderTypeDiagram;
   const modelFolder = isFolder ? modelPath : modelPath.substring(0, modelPath.lastIndexOf('/'));
 
   const config = await readProjectFile(
@@ -186,21 +185,42 @@ export async function renderModel(projectId, modelPath, plugin) {
     diagramFile.path = '';
   }
 
-  const renderFiles = plugin.render(
+  const renderedFiles = plugin.render(
     diagramFile,
     config,
     files.filter((file) => plugin.isParsable(file)),
   );
 
-  return Promise.allSettled(
-    renderFiles.map((file) => {
-      if (file.content) {
-        return writeProjectFile(projectId, file);
-      }
+  const filesToUpdate = [];
+  const filesToDelete = [];
+  const unparsableFiles = [];
 
-      return deleteProjectFile(projectId, file.path);
-    }),
-  ).then(() => renderFiles);
+  renderedFiles.forEach((file) => {
+    if (plugin.isParsable(file)) {
+      if (file.content !== null) {
+        filesToUpdate.push(file);
+      } else {
+        filesToDelete.push(file);
+      }
+    } else {
+      unparsableFiles.push(file);
+    }
+  });
+
+  if (filesToUpdate.length === 0) {
+    if (isFolder) {
+      filesToUpdate.push(new FileInformation({ path: plugin.configuration.defaultFileName }));
+    } else {
+      filesToUpdate.push(filesToDelete.pop());
+    }
+  }
+
+  filesToUpdate.push(...unparsableFiles);
+
+  return Promise.allSettled([
+    ...filesToDelete.map(({ path }) => deleteProjectFile(projectId, path)),
+    ...filesToUpdate.map((file) => writeProjectFile(projectId, file)),
+  ]).then(() => filesToUpdate);
 }
 
 /**
@@ -251,9 +271,8 @@ export async function getFileInputs(plugin, fileInformations, projectName) {
  */
 export async function initComponents(projectName, plugin, path) {
   let filesInformation;
-  const dir = !path ? projectName : `${projectName}/${path}`;
 
-  if (await isDirectory(dir)) {
+  if (plugin.configuration.isFolderTypeDiagram) {
     filesInformation = [];
 
     await setFiles(filesInformation, projectName, path);
@@ -281,47 +300,12 @@ export async function initComponents(projectName, plugin, path) {
 }
 
 /**
- * Add a new component.
- * @param {string} projectName - Name of the project.
- * @param {object} plugin - Plugin corresponding to the model.
- * @param {string} path - Model path (Plugin name & model name).
- * @param {object} definition - Definition of the component.
- * @param {DragEvent} event - The drag event.
- * @returns {Promise<void>} Promise with nothing on success otherwise an error.
- */
-export async function addNewComponent(
-  projectName,
-  plugin,
-  path,
-  definition,
-  event = null,
-) {
-  if (await isDirectory(`${projectName}/${path}`)) {
-    plugin.addComponent(
-      'root',
-      definition,
-      `${path}/`,
-      undefined,
-      event,
-    );
-  } else {
-    plugin.addComponent(
-      'root',
-      definition,
-      '',
-      path,
-      event,
-    );
-  }
-}
-
-/**
  * Add a new component from template.
  * Add the template files to the model folder
  * then parse all model files.
  * @param {string} projectName - Name of the project.
  * @param {object} plugin - Plugin corresponding to the model.
- * @param {string} path - Model path (Plugin name & model name).
+ * @param {string} path - Model path.
  * @param {object} templateDefinition - Definition of the template.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
@@ -342,9 +326,10 @@ export async function addNewTemplateComponent(
     ),
   );
 
-  const files = await readDir(`${projectName}/${path}`);
+  const modelPath = path ? `${projectName}/${path}` : projectName;
+  const files = await readDir(modelPath);
   const fileInformations = files.map(
-    (file) => new FileInformation({ path: `${path}/${file}` }),
+    (file) => new FileInformation({ path: path ? `${path}/${file}` : file }),
   );
   const fileInputs = await getFileInputs(plugin, fileInformations, projectName);
   const config = await readProjectFile(

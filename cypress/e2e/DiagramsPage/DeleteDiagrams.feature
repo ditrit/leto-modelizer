@@ -5,7 +5,6 @@ Feature: Test diagrams page: delete diagram
     And   I visit the '/'
     And   I wait until the application is loaded
     And   I set context field 'projectName' with 'projectTest'
-    And   I set context field 'modelFile' with 'infra/main.tf'
     And   I set context field 'modelFolder' with 'infra'
 
     # Project creation
@@ -18,7 +17,7 @@ Feature: Test diagrams page: delete diagram
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFile }}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I wait 2 seconds
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelFolder }}'

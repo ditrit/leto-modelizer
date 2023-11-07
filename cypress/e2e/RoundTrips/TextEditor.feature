@@ -43,7 +43,6 @@ Feature: Test roundtrip of the application: text editor
     And   I set viewport size to '1920' px for width and '1080' px for height
     And   I set context field 'projectName' with 'projectTest'
     And   I set context field 'diagramFolder' with 'diagram'
-    And   I set context field 'diagramFile' with 'diagram/main.tf'
     And   I visit the '/'
     And   I wait until the application is loaded
 
@@ -56,7 +55,7 @@ Feature: Test roundtrip of the application: text editor
 
     # Create model
     When I click on '[data-cy="create-model-button"]'
-    And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ diagramFile }}'
+    And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ diagramFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ diagramFolder }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
@@ -67,9 +66,9 @@ Feature: Test roundtrip of the application: text editor
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ diagramFolder }}"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFile }}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/new_file.tf"]' exists
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
     ## 100 Create a file inside the root folder should open corresponding active tab
     When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}"]' to make it visible
@@ -84,7 +83,7 @@ Feature: Test roundtrip of the application: text editor
     # New active tab is open and become active
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'rootFile.tf'
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'new_file.tf'
     # Created file is added inside file explorer and file tabs
     And  I expect '[data-cy="file_rootFile.tf"]' appear 2 times on screen
 
@@ -102,7 +101,7 @@ Feature: Test roundtrip of the application: text editor
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 3 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'nestedFile.js'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'rootFile.tf'
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'new_file.tf'
     # Created file is added inside file explorer and file tabs
     And  I expect '[data-cy="file_{{ diagramFolder }}/nestedFile.js"]' appear 2 times on screen
 
@@ -170,7 +169,7 @@ Feature: Test roundtrip of the application: text editor
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_rootFolder"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_README.md"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_rootFile.tf"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/main.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/new_file.tf"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/nestedFile.js"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/nestedFolder/parsableFile.tf"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/nestedFolder/notParsable.txt"]' exists
@@ -185,7 +184,7 @@ Feature: Test roundtrip of the application: text editor
     But  I expect '[data-cy="file-explorer"] [data-cy="file-explorer-node_rootFolder"].text-grey.text-italic' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_README.md"]' not exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_rootFile.tf"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/main.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/new_file.tf"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/nestedFile.js"]' not exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/nestedFolder/parsableFile.tf"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/nestedFolder/notParsable.txt"]' not exists
@@ -200,16 +199,16 @@ Feature: Test roundtrip of the application: text editor
     But  I expect '[data-cy="file-explorer"] [data-cy="file-explorer-node_rootFolder"].text-grey.text-italic' not exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_README.md"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_rootFile.tf"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/main.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/new_file.tf"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/nestedFile.js"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/nestedFolder/parsableFile.tf"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/nestedFolder/notParsable.txt"]' exists
 
     ## 300 Select the file of another model should update url
     And  I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}/nestedFolder'
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/main.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/new_file.tf"]' exists
 
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/main.tf"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/new_file.tf"]'
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="file_rootFile.tf"]' exists
 
@@ -274,12 +273,12 @@ Feature: Test roundtrip of the application: text editor
 
     When I click on '[data-cy="active-tab"] [data-cy="close-button_rootFile.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="file_rootFile.tf"]' not exists
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 1 time on screen
-    And  I expect '[data-cy="active-tab"] [data-cy="close-button_main.tf"]' exists
+    And  I expect '[data-cy="active-tab"] [data-cy="close-button_new_file.tf"]' exists
 
-    When I click on '[data-cy="active-tab"] [data-cy="close-button_main.tf"]'
-    Then I expect '[data-cy="file-tabs-container"] [data-cy="file_{{ diagramFolder }}/main.tf"]' not exists
+    When I click on '[data-cy="active-tab"] [data-cy="close-button_new_file.tf"]'
+    Then I expect '[data-cy="file-tabs-container"] [data-cy="file_{{ diagramFolder }}/new_file.tf"]' not exists
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 0 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' not exists
     And  I expect '[data-cy="monaco-editor"]' not exists
@@ -294,10 +293,10 @@ Feature: Test roundtrip of the application: text editor
     Then I expect active file content to contain 'updated.*content'
 
     ## 501 Check if the file updated content is still set after switching tab
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/main.tf"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ diagramFolder }}/new_file.tf"]'
     And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'README.md'
     And  I expect active file content to contain ''
 
@@ -305,10 +304,10 @@ Feature: Test roundtrip of the application: text editor
     And  I wait 1 second
     And  I click on '[data-cy="file-tabs-container"] [data-cy="file_README.md"]'
     And  I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_{{ diagramFolder }}/main.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_{{ diagramFolder }}/new_file.tf"]'
     And  I wait 1 second
-    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
-    And  I expect '[data-cy="file-tab-panel_main.tf"]' exists
+    Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
+    And  I expect '[data-cy="file-tab-panel_new_file.tf"]' exists
     And  I expect active file content to contain 'new.*content'
 
     ### Setup for following tests
@@ -316,12 +315,12 @@ Feature: Test roundtrip of the application: text editor
 
     When I click on '[data-cy="inactive-tab"] [data-cy="close-button_README.md"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="file_README.md"]' not exists
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect '[data-cy="file-explorer"] [data-cy="file_rootFile.tf"]' exists
 
     When I double click on '[data-cy="file-explorer"] [data-cy="file_rootFile.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'rootFile.tf'
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'new_file.tf'
 
     ## 600 Delete a file of the root folder should remove it from file explorer
     And  I expect '[data-cy="file-tabs-container"] [data-cy="file_rootFile.tf"]' exists
@@ -338,7 +337,7 @@ Feature: Test roundtrip of the application: text editor
 
     ## 601 Deletion of the file should close corresponding active tab and select another active tab
     And  I expect '[data-cy="file-tabs-container"] [data-cy="file_rootFile.tf"]' not exists
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
     ## 602 Delete last file of a sub-folder should make it not expanded anymore
     # Create one file in rootFolder
@@ -355,7 +354,7 @@ Feature: Test roundtrip of the application: text editor
     And  I expect '[data-cy="folder-icon_rootFolder"].fa-folder-open' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_rootFolder/lastFile.md"]' exists
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'lastFile.md'
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'new_file.tf'
 
     # Delete file
     When I hover '[data-cy="file-explorer"] [data-cy="file-button_rootFolder/lastFile.md"]' to make it visible
@@ -372,7 +371,7 @@ Feature: Test roundtrip of the application: text editor
 
     ## 603 Delete last file of a sub-folder should close related active tab and select another active tab
     And  I expect '[data-cy="file-explorer"] [data-cy="file_rootFolder/lastFile.md"]' not exists
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
     ## 604 Create two files with similar names and delete the selected file should only close its active tab and select the other tab
     # Create 1st file
@@ -495,7 +494,7 @@ Feature: Test roundtrip of the application: text editor
     ## 608 Delete folder that contains opened files should remove all the corresponding tabs and select another active tab
     # Check diagramFolder and its content exists
     And  I expect '[data-cy="folder_{{ diagramFolder }}"]' exists
-    And  I expect '[data-cy="file_{{ diagramFolder }}/main.tf"]' exists
+    And  I expect '[data-cy="file_{{ diagramFolder }}/new_file.tf"]' exists
     And  I expect '[data-cy="file_{{ diagramFolder }}/nestedFile.js"]' exists
 
     # Create folder containing files
@@ -522,7 +521,7 @@ Feature: Test roundtrip of the application: text editor
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Folder is created &#129395;!'
     And  I expect '[data-cy="create-file-form"]' is closed
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="file_{{ diagramFolder }}/main.tf"]' exists
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="file_{{ diagramFolder }}/new_file.tf"]' exists
     And  I expect '[data-cy="file-tabs-container"] [data-cy="file_newFile"]' exists
     And  I expect '[data-cy="file-tabs-container"] [data-cy="file_{{ diagramFolder }}/folder/file.js"]' exists
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'file.js'
@@ -547,7 +546,7 @@ Feature: Test roundtrip of the application: text editor
     And  I expect '[data-cy="folder_{{ diagramFolder }}"]' not exists
     And  I expect '[data-cy="folder_{{ diagramFolder }}/folder"]' not exists
     And  I expect '[data-cy="file_{{ diagramFolder }}/folder"]' not exists
-    And  I expect '[data-cy="file_{{ diagramFolder }}/main.tf"]' not exists
+    And  I expect '[data-cy="file_{{ diagramFolder }}/new_file.tf"]' not exists
     And  I expect '[data-cy="file_{{ diagramFolder }}/nestedFile.js"]' not exists
     And  I expect '[data-cy="file_{{ diagramFolder }}/folder/file.js"]' not exists
     But  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'newFile'
@@ -558,11 +557,11 @@ Feature: Test roundtrip of the application: text editor
     Then I expect current url is '{{ projectName }}/models'
     And  I expect '[data-cy="diagram-table"]' exists
 
-    # Create diagram with main.tf file
+    # Create diagram with new_file.tf file
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
     And  I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
@@ -570,11 +569,11 @@ Feature: Test roundtrip of the application: text editor
     # Go to text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=infra'
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'main.tf'
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
-    # Delete main.tf
-    When I hover '[data-cy="file-explorer"] [data-cy="file-button_infra/main.tf"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_infra/main.tf"]'
+    # Delete new_file.tf
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_infra/new_file.tf"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_infra/new_file.tf"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
@@ -583,7 +582,7 @@ Feature: Test roundtrip of the application: text editor
     When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'File is deleted.'
     And  I expect '[data-cy="delete-file-form"]' is closed
-    And  I expect '[data-cy="file_infra/main.tf"]' not exists
+    And  I expect '[data-cy="file_infra/new_file.tf"]' not exists
     And  I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=infra'
 
     # Go back to the draw view

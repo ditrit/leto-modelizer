@@ -3,7 +3,6 @@ Feature: Test roundtrip of the application : import project files
   Scenario: Import project redirect to models page with correct plugin and import project files and folders
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
-    And   I set context field 'modelFile' with 'model1/main.tf'
     And   I set context field 'modelFolder' with 'model1'
     And   I set context field 'projectName' with 'leto-modelizer-project-test'
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
@@ -21,7 +20,7 @@ Feature: Test roundtrip of the application : import project files
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFile }}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
     And  I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelFolder }}'

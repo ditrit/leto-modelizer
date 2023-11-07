@@ -29,7 +29,6 @@
 <script setup>
 import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay.vue';
 import {
-  addNewComponent,
   addNewTemplateComponent,
   getPluginByName,
   initComponents,
@@ -137,11 +136,10 @@ async function dropHandler(event) {
     const componentDefinition = data.plugin.data.definitions.components
       .find(({ type }) => type === dropData.definitionType);
 
-    await addNewComponent(
-      route.params.projectName,
-      data.plugin,
-      query.value.path,
+    data.plugin.addComponent(
+      'root',
       componentDefinition,
+      query.value.path,
       event,
     );
     data.plugin.draw('root');

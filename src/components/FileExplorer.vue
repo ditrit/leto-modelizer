@@ -67,7 +67,7 @@ import GitEvent from 'src/composables/events/GitEvent';
 import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
 import FileName from 'src/components/FileName.vue';
 import { getTree } from 'src/composables/FileExplorer';
-import { getProjectFiles, getStatus, isDirectory } from 'src/composables/Project';
+import { getProjectFiles, getStatus } from 'src/composables/Project';
 import { FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
 import { useRoute } from 'vue-router';
@@ -298,13 +298,13 @@ async function openModelFiles() {
     return;
   }
 
-  const isFolder = modelPath === '' ? true : await isDirectory(`${props.projectName}/${modelPath}`);
+  const plugin = getPluginByName(pluginName);
+  const isFolder = plugin.configuration.isFolderTypeDiagram;
 
   if (isFolder && modelPath !== '') {
     modelPath += '/';
   }
 
-  const plugin = getPluginByName(pluginName);
   const regex = new RegExp(`^${modelPath}[^/]+$`);
   const allPaths = !isFolder ? [modelPath] : localFileInformations.value
     .filter(({ path }) => regex.test(path))

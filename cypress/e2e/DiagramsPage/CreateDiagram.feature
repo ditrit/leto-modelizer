@@ -6,7 +6,6 @@ Feature: Test diagrams page: diagram creation
     And   I visit the '/'
     And   I wait until the application is loaded
     And   I set context field 'projectName' with 'projectTest'
-    And   I set context field 'modelFile' with 'infra/main.tf'
     And   I set context field 'modelFolder' with 'infra'
 
     When I click on '[data-cy="create-project-button"]'
@@ -22,7 +21,7 @@ Feature: Test diagrams page: diagram creation
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFile }}'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelFolder }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
@@ -34,4 +33,4 @@ Feature: Test diagrams page: diagram creation
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ modelFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ modelFolder }}"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ modelFile }}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ modelFolder }}/new_file.tf"]' exists

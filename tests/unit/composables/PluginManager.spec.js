@@ -1,5 +1,5 @@
 import * as PluginManager from 'src/composables/PluginManager';
-import { deleteProjectFile, writeProjectFile } from 'src/composables/Project';
+import { deleteProjectFile, writeProjectFile, setFiles } from 'src/composables/Project';
 import { FileInformation } from 'leto-modelizer-plugin-core';
 
 jest.mock('src/plugins', () => ({
@@ -102,6 +102,7 @@ jest.mock('src/composables/Project', () => ({
   appendProjectFile: jest.fn(() => Promise.resolve()),
   readDir: jest.fn(() => Promise.resolve([])),
   isDirectory: jest.fn((path) => path === 'modelPath' || path === 'projectId/modelPath'),
+  setFiles: jest.fn(),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
@@ -296,59 +297,65 @@ describe('Test composable: PluginManager', () => {
   });
 
   describe('Test function: renderModel', () => {
-    it('should return an array with a file', async () => {
+    it('should return an array with a file type diagram and delete the file with "null" content', async () => {
       const plugin = {
-        render: () => [],
-        isParsable: () => false,
+        render: () => [
+          { content: 'file content' },
+          { content: null },
+        ],
+        isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: false,
+        },
       };
       const array = await PluginManager.renderModel(
         'projectId',
-        'file',
+        'fileTypeDiagramPath',
         plugin,
       );
 
-      expect(Array.isArray(array)).toBeTruthy();
-    });
-
-    it('should return an array with a folder', async () => {
-      const plugin = {
-        render: () => [],
-        isParsable: () => false,
-      };
-      const array = await PluginManager.renderModel(
-        'projectId',
-        'modelPath',
-        plugin,
-      );
-
-      expect(Array.isArray(array)).toBeTruthy();
-    });
-
-    it('should call writeProjectFile when render file content is not null', async () => {
-      const plugin = {
-        render: () => [{
-          path: 'test',
-          content: 'test',
-        }],
-        isParsable: () => false,
-      };
-      const array = await PluginManager.renderModel(
-        'projectId',
-        'modelPath',
-        plugin,
-      );
-
-      expect(Array.isArray(array)).toBeTruthy();
+      expect(array).toEqual([{ content: 'file content' }]);
       expect(writeProjectFile).toBeCalled();
+      expect(deleteProjectFile).toBeCalled();
     });
 
-    it('should call deleteProjectFile when render file content is null', async () => {
+    it('should return an array with a folder type diagram and delete the file with "null" content', async () => {
       const plugin = {
-        render: () => [{
-          path: 'test',
-          content: null,
-        }],
-        isParsable: () => false,
+        render: () => [
+          { content: 'notParsable' },
+          { content: '' },
+          { content: 'file content' },
+          { content: null },
+        ],
+        isParsable: jest.fn(({ content }) => content !== 'notParsable'),
+        configuration: {
+          isFolderTypeDiagram: true,
+        },
+      };
+      const array = await PluginManager.renderModel(
+        'projectId',
+        'folderTypeDiagramPath',
+        plugin,
+      );
+
+      expect(array).toEqual([
+        { content: '' },
+        { content: 'file content' },
+        { content: 'notParsable' },
+      ]);
+      expect(writeProjectFile).toBeCalled();
+      expect(deleteProjectFile).toBeCalled();
+    });
+
+    it('should return an array with a file if the only file present has "null" content', async () => {
+      const plugin = {
+        render: () => [
+          { content: null },
+        ],
+        isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: false,
+        },
       };
       const array = await PluginManager.renderModel(
         'projectId',
@@ -356,7 +363,8 @@ describe('Test composable: PluginManager', () => {
         plugin,
       );
 
-      expect(Array.isArray(array)).toBeTruthy();
+      expect(array).toEqual([{ content: null }]);
+      expect(writeProjectFile).toBeCalled();
       expect(deleteProjectFile).toBeCalled();
     });
   });
@@ -395,6 +403,9 @@ describe('Test composable: PluginManager', () => {
       const plugin = {
         parse: jest.fn(),
         isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: false,
+        },
       };
 
       expect(plugin.parse).toHaveBeenCalledTimes(0);
@@ -403,52 +414,26 @@ describe('Test composable: PluginManager', () => {
 
       expect(plugin.parse).toHaveBeenCalledTimes(1);
     });
-  });
 
-  describe('Test function: addNewComponent', () => {
-    const plugin = {
-      addComponent: jest.fn(),
-    };
+    it('should call setFiles if isFolderTypeDiagram is true', async () => {
+      const plugin = {
+        parse: jest.fn(),
+        isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: true,
+        },
+      };
 
-    it('should call addComponent with folder when path is a directory', async () => {
-      await PluginManager.addNewComponent(
-        'projectId',
-        plugin,
-        'modelPath',
-        {},
-        { x: 0, y: 0 },
-      );
+      expect(setFiles).toHaveBeenCalledTimes(0);
 
-      expect(plugin.addComponent).toHaveBeenLastCalledWith(
-        'root',
-        {},
-        'modelPath/',
-        undefined,
-        { x: 0, y: 0 },
-      );
-    });
+      await PluginManager.initComponents('projectName', plugin, 'plugin/model');
 
-    it('should call addComponent without folder when path is not a directory', async () => {
-      await PluginManager.addNewComponent(
-        'projectName',
-        plugin,
-        'plugin/model',
-        {},
-        { x: 0, y: 0 },
-      );
-
-      expect(plugin.addComponent).toHaveBeenLastCalledWith(
-        'root',
-        {},
-        '',
-        'plugin/model',
-        { x: 0, y: 0 },
-      );
+      expect(setFiles).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test function: addNewTemplateComponent', () => {
-    it('should call parse', async () => {
+    it('should call parse when model is created at the root folder', async () => {
       const definition = {
         files: ['app.tf'],
         key: 'template key',
@@ -457,7 +442,21 @@ describe('Test composable: PluginManager', () => {
         parse: jest.fn(),
       };
 
-      await PluginManager.addNewTemplateComponent('projectName', plugin, 'plugin/model', definition);
+      await PluginManager.addNewTemplateComponent('projectName', plugin, '', definition);
+
+      expect(plugin.parse).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call parse when model is created inside folder', async () => {
+      const definition = {
+        files: ['app.tf'],
+        key: 'template key',
+      };
+      const plugin = {
+        parse: jest.fn(),
+      };
+
+      await PluginManager.addNewTemplateComponent('projectName', plugin, 'folder', definition);
 
       expect(plugin.parse).toHaveBeenCalledTimes(1);
     });

@@ -91,7 +91,6 @@ Feature: Test roundtrip of the application: Git
     And   I set context field 'testRemoteProjectName' with 'leto-modelizer-project-test-remote'
     And   I set context field 'testAuthenticationProjectName' with 'leto-modelizer-project-test-authentication'
     And   I set context field 'repository_url' with 'https://github.com/ditrit/leto-modelizer-project-test'
-    And   I set context field 'modelFile' with 'infra/main.tf'
     And   I set context field 'modelFolder' with 'infra'
     And   I visit the '/'
     And   I wait until the application is loaded
@@ -144,7 +143,7 @@ Feature: Test roundtrip of the application: Git
     ## 108 Import project with same repository url with overwrite option should overwrite existing project and send positive toast
     # Modify project
     And  I click on '[data-cy="create-model-button"]'
-    And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFile }}'
+    And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I click on '[data-cy="models-page-link-button"]'
     Then I expect current url is '{{ importedProjectName }}/models'
@@ -343,7 +342,7 @@ Feature: Test roundtrip of the application: Git
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
-    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
+    When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
 
@@ -535,9 +534,9 @@ Feature: Test roundtrip of the application: Git
     When I click on '[data-cy="close-dialog-button"]'
 
     ## 1001 Display dialog containing an empty list
-    # Delete main.tf
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_infra/main.tf"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_infra/main.tf"]'
+    # Delete new_file.tf
+    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_infra/new_file.tf"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_infra/new_file.tf"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
@@ -547,7 +546,7 @@ Feature: Test roundtrip of the application: Git
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'File is deleted.'
     And  I expect '[data-cy="delete-file-form"]' is closed
-    And  I expect '[data-cy="file_infra/main.tf"]' not exists
+    And  I expect '[data-cy="file_infra/new_file.tf"]' not exists
 
     When I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="git-status-item"]' exists

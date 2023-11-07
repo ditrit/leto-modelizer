@@ -180,13 +180,22 @@ describe('Test composable: TemplateManager', () => {
   });
 
   describe(' Test Function: getTemplateFiles', () => {
-    it('should return an array containing 1 item', async () => {
-      const definition = {
-        files: ['filename'],
-      };
+    const definition = {
+      files: ['filename'],
+    };
+
+    it('should return an array containing 1 item with correct path when path parameter is not empty', async () => {
       const result = await TemplateManager.getTemplateFiles('path', definition);
 
       expect(result.length).toEqual(1);
+      expect(result[0]).toEqual(expect.objectContaining({ path: 'path/filename' }));
+    });
+
+    it('should return an array containing 1 item with correct path when path parameter is empty', async () => {
+      const result = await TemplateManager.getTemplateFiles('', definition);
+
+      expect(result.length).toEqual(1);
+      expect(result[0]).toEqual(expect.objectContaining({ path: 'filename' }));
     });
   });
 });
