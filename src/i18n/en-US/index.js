@@ -218,8 +218,6 @@ export default {
       },
     },
     authentication: {
-      completeLogin: 'An error occured while completing login',
-      completeSilentLogin: 'An error occured while completing silent login',
       login: 'An error occured while login. Please check your leto-modelizer-api.',
       fetchingData: 'An error occured while fetching data',
     },
@@ -268,12 +266,6 @@ export default {
       plugins: {
         title: 'Plugins',
       },
-    },
-    login: {
-      message: 'You must be logged in to use the application.',
-      provider: 'Login with {name}',
-      completeLogin: 'Login redirection...',
-      completeSilentLogin: 'Silent login redirection...',
     },
     diagrams: {
       actions: {
