@@ -88,7 +88,7 @@ module.exports = configure((ctx) => ({
 
   // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
   build: {
-    vueRouterMode: 'hash', // available values: 'hash', 'history'
+    vueRouterMode: 'history', // available values: 'hash', 'history'
 
     // transpile: false,
     // publicPath: '/',
@@ -108,9 +108,11 @@ module.exports = configure((ctx) => ({
     env: {
       TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL || configuration?.templateLibrary || '',
       VERSION: version,
-      AUTHENTICATION: configuration?.authentication?.OIDC
-        ? JSON.stringify(configuration.authentication.OIDC)
-        : '',
+      HAS_BACKEND: configuration?.backend
+        ? Object.prototype.hasOwnProperty.call(configuration?.backend, 'url')
+          && Object.prototype.hasOwnProperty.call(configuration?.backend, 'appId')
+        : false,
+      BACKEND_APP_ID: configuration?.backend?.appId,
     },
     // extractCSS: false,
 
@@ -155,6 +157,11 @@ module.exports = configure((ctx) => ({
         pathRewrite: { '^/cors-proxy/github\\.com': '' },
         target: 'https://github.com',
         secure: true,
+        changeOrigin: true,
+      },
+      '/backend': {
+        pathRewrite: { '^/backend': '' },
+        target: configuration?.backend?.url,
         changeOrigin: true,
       },
     },
