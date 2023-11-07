@@ -48,12 +48,6 @@ const CreateFileNodeEvent = new Subject();
  */
 const UpdateEditorContentEvent = new Subject();
 
-/**
- * Represent a rxjs Event object to emit and to receive events about file content update.
- * @typedef {Subject} UpdateFileContentEvent
- */
-const UpdateFileContentEvent = new Subject();
-
 export default {
   CreateFileEvent,
   DeleteFileEvent,
@@ -62,5 +56,4 @@ export default {
   SelectFileNodeEvent,
   CreateFileNodeEvent,
   UpdateEditorContentEvent,
-  UpdateFileContentEvent,
 };

@@ -47,7 +47,6 @@ let timer;
 let checkoutSubscription;
 let addRemoteSubscription;
 let pullSubscription;
-let updateFileContentSubscription;
 
 /**
  * Update file content on fs and emit UpdateEditorContentEvent.
@@ -185,9 +184,6 @@ onMounted(() => {
   pullSubscription = GitEvent.PullEvent.subscribe(() => {
     updateEditorContent();
   });
-  updateFileContentSubscription = FileEvent.UpdateFileContentEvent.subscribe(() => {
-    updateEditorContent();
-  });
 });
 
 onUpdated(async () => {
@@ -198,7 +194,6 @@ onUnmounted(() => {
   checkoutSubscription.unsubscribe();
   addRemoteSubscription.unsubscribe();
   pullSubscription.unsubscribe();
-  updateFileContentSubscription.unsubscribe();
 });
 </script>
 

@@ -44,13 +44,6 @@ describe('Test composable: FileEvent', () => {
     });
   });
 
-  describe('Test event: UpdateFileContentEvent', () => {
-    it('should export a Subject', () => {
-      expect(FileEvent.UpdateFileContentEvent).toBeDefined();
-      expect(FileEvent.UpdateFileContentEvent).toEqual(new Subject());
-    });
-  });
-
   describe('Test event: GlobalUploadFilesEvent', () => {
     it('should export a Subject', () => {
       expect(FileEvent.GlobalUploadFilesEvent).toBeDefined();

@@ -81,9 +81,6 @@ jest.mock('src/composables/events/GitEvent', () => ({
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
-  UpdateFileContentEvent: {
-    subscribe: jest.fn(),
-  },
   UpdateEditorContentEvent: {
     next: jest.fn(),
   },
@@ -97,8 +94,6 @@ describe('Tess component: MonacoEditor', () => {
   let addRemoteUnsubscribe;
   let pullSubscribe;
   let pullUnsubscribe;
-  let updateFileContentSubscribe;
-  let updateFileContentUnsubscribe;
 
   const dispose = jest.fn();
   const layout = jest.fn();
@@ -123,8 +118,6 @@ describe('Tess component: MonacoEditor', () => {
     addRemoteUnsubscribe = jest.fn();
     pullSubscribe = jest.fn();
     pullUnsubscribe = jest.fn();
-    updateFileContentSubscribe = jest.fn();
-    updateFileContentUnsubscribe = jest.fn();
 
     GitEvent.CheckoutEvent.subscribe.mockImplementation(() => {
       checkoutSubscribe();
@@ -137,10 +130,6 @@ describe('Tess component: MonacoEditor', () => {
     GitEvent.PullEvent.subscribe.mockImplementation(() => {
       pullSubscribe();
       return { unsubscribe: pullUnsubscribe };
-    });
-    FileEvent.UpdateFileContentEvent.subscribe.mockImplementation(() => {
-      updateFileContentSubscribe();
-      return { unsubscribe: updateFileContentUnsubscribe };
     });
 
     wrapper = shallowMount(MonacoEditor, {
@@ -250,10 +239,6 @@ describe('Tess component: MonacoEditor', () => {
     it('should subscribe to PullEvent', () => {
       expect(pullSubscribe).toHaveBeenCalledTimes(1);
     });
-
-    it('should subscribe to UpdateFileContentEvent', () => {
-      expect(updateFileContentSubscribe).toHaveBeenCalledTimes(1);
-    });
   });
 
   describe('Test hook function: onUnmounted', () => {
@@ -273,12 +258,6 @@ describe('Tess component: MonacoEditor', () => {
       expect(pullUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(pullUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('should unsubscribe to UpdateFileContentEvent', () => {
-      expect(updateFileContentUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(updateFileContentUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
