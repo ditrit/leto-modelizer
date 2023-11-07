@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.7.1) version 0.7.1.
   * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.3.0) version 0.3.0.
 * Improve performance on git add.
+* Replace OIDC authentication by Leto-Modelizer-Api, see [this issue](https://github.com/ditrit/leto-modelizer/issues/425).
 
 ### Fixed
 
