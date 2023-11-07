@@ -9,12 +9,12 @@
   >
     <template #label>
       <q-avatar
-        v-if="user?.firstname && user?.lastname"
+        v-if="!(userStore?.isEmpty)"
         color="primary"
         text-color="white"
         size="md"
         font-size="12px"
-        :title="`${user.firstname} ${user.lastname}`"
+        :title="`${userStore.firstname} ${userStore.username}`"
       >
         {{ userInitials }}
       </q-avatar>
@@ -65,7 +65,7 @@ import {
   onMounted,
   onUnmounted,
 } from 'vue';
-import { getUser } from 'src/composables/UserAuthentication';
+import { useUserStore } from 'src/stores/UserStore';
 
 const props = defineProps({
   projectName: {
@@ -76,7 +76,7 @@ const props = defineProps({
 
 let addRemoteSubscription;
 const project = ref({});
-const user = ref({});
+const userStore = ref({});
 const hasRepository = computed(() => !!project.value.git?.repository);
 const menuItems = computed(() => [
   {
@@ -93,7 +93,7 @@ const menuItems = computed(() => [
   },
 ]);
 const userInitials = computed(
-  () => `${user.value.firstname?.at(0)}${user.value.lastname?.at(0)}`.toUpperCase(),
+  () => `${userStore.value.firstname?.at(0)}${userStore.value.username?.at(0)}`.toUpperCase(),
 );
 
 /**
@@ -114,7 +114,7 @@ function setProject() {
 onMounted(async () => {
   setProject();
 
-  user.value = await getUser();
+  userStore.value = useUserStore();
 
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(setProject);
 });
