@@ -8,6 +8,7 @@
     :class="['tree-action-button', { 'inline-block' : isActionMenuOpen }]"
     color="primary"
     icon="fa-solid fa-ellipsis-vertical"
+    :data-cy="`${file.isFolder ? 'folder': 'file'}-button_${file.id}`"
     @click.stop="isActionMenuOpen = true"
   >
     <file-explorer-action-menu

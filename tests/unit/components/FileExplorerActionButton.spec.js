@@ -1,14 +1,14 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
+import FileExplorerActionButton from 'src/components/FileExplorerActionButton.vue';
 
 installQuasarPlugin();
 
-describe('Test component: FileExplorerActionCard', () => {
+describe('Test component: FileExplorerActionButton', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(FileExplorerActionCard, {
+    wrapper = shallowMount(FileExplorerActionButton, {
       props: {
         file: { id: 'test' },
         projectName: 'projectName',

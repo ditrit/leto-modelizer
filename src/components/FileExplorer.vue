@@ -42,11 +42,10 @@
         </div>
         <span class="col-grow" />
         <div class="row no-wrap">
-          <file-explorer-action-card
-            class="file-explorer-button"
+          <file-explorer-action-button
+            class="file-explorer-action-button"
             :file="node"
             :project-name="projectName"
-            :data-cy="`${node.isFolder ? 'folder': 'file'}-button_${node.id}`"
           />
         </div>
       </div>
@@ -64,7 +63,7 @@ import {
   toRef,
 } from 'vue';
 import GitEvent from 'src/composables/events/GitEvent';
-import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
+import FileExplorerActionButton from 'src/components/FileExplorerActionButton.vue';
 import FileName from 'src/components/FileName.vue';
 import { getTree, updateFileInformation } from 'src/composables/FileExplorer';
 import { getProjectFiles, getStatus } from 'src/composables/Project';
@@ -411,12 +410,12 @@ onUnmounted(() => {
     background: rgba($primary, 0.1);
     border-radius: 4px;
 
-    .file-explorer-button {
+    .file-explorer-action-button {
       display: inline-block
     }
   }
 }
-.file-explorer-button {
+.file-explorer-action-button {
   display: none
 }
 </style>
