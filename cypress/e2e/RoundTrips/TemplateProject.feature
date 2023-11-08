@@ -183,7 +183,7 @@ Feature: Test roundtrip of the application: project creation via template
     When I click on '[data-cy="import-model-template-dialog"] [data-cy="close-dialog-button"]'
 
     ## 403 After creation of template diagram, verify it is displayed in the multi-diagrams view
-    And  I visit the 'localhost:8080/#/projects/{{ projectName }}/diagrams'
+    And  I visit the '/projects/{{ projectName }}/diagrams'
     And  I wait until the application is loaded
     Then I expect '[data-cy="diagrams-page"] [data-cy="diagram-card_{{ diagramFolder }}"]' exists
     # Check project template diagrams are displayed too
