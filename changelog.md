@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Hide component detail panel when deleting corresponding component.
 * Autosave on component detail panel.
+* Debounce of 1 second on file auto-save.
 
 ### Changed
 
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.22.0) version 0.22.0.
   * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.7.1) version 0.7.1.
   * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.3.0) version 0.3.0.
+* Improve performance on git add.
 
 ### Fixed
 
@@ -30,6 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix bug about rewritten file on checkout, see [this issue](https://github.com/ditrit/leto-modelizer/issues/422).
 * Fix bug about required management for RegExp rule, see [this issue](https://github.com/ditrit/leto-modelizer/issues/387).
 * Fix bugs about component creation on a click or a drag&drop, see [this issue](https://github.com/ditrit/leto-modelizer/issues/401) and [this issue](https://github.com/ditrit/leto-modelizer/issues/415).
+
+### Removed
+
+* Default space character on file creation.
 
 ## [1.3.0] - 2023/09/12
 

@@ -66,7 +66,7 @@ import {
 import GitEvent from 'src/composables/events/GitEvent';
 import FileExplorerActionCard from 'src/components/card/FileExplorerActionCard.vue';
 import FileName from 'src/components/FileName.vue';
-import { getTree } from 'src/composables/FileExplorer';
+import { getTree, updateFileInformation } from 'src/composables/FileExplorer';
 import { getProjectFiles, getStatus } from 'src/composables/Project';
 import { FileInformation } from 'leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
@@ -214,17 +214,16 @@ function onDeleteFile(file) {
 
 /**
  * Update status of the node corresponding to the given parameter.
- * @param {string} filePath - Path of the file which status should be updated.
+ * @param {string} fileStatus - File status information.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-async function updateFileStatus(filePath) {
-  const [fileStatus] = await getStatus(props.projectName, [filePath], (path) => path === filePath);
+async function updateFileStatus(fileStatus) {
   const index = localFileInformations.value
-    .findIndex((fileInformation) => fileInformation.path === filePath);
+    .findIndex((fileInformation) => fileInformation.path === fileStatus.path);
 
   if (index !== -1 && localFileInformations.value[index].status !== fileStatus.status) {
     localFileInformations.value[index] = fileStatus;
-    nodes.value = getTree(props.projectName, localFileInformations.value);
+    updateFileInformation(nodes.value[0], fileStatus);
   }
 }
 

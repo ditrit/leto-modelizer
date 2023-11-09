@@ -262,29 +262,18 @@ describe('Test component: FileTabs', () => {
   describe('Test function: updateFileStatus', () => {
     it('should do nothing when fileTabArray is empty', async () => {
       wrapper.vm.fileTabArray = [];
-      const getStatus = jest.fn();
-
-      Project.getStatus.mockImplementation(getStatus);
-      expect(getStatus).toHaveBeenCalledTimes(0);
 
       await wrapper.vm.updateFileStatus();
 
-      expect(getStatus).toHaveBeenCalledTimes(0);
+      expect(wrapper.vm.fileTabArray).toEqual([]);
     });
 
     it('should update fileTab status when fileTabArray is not empty', async () => {
-      const information = { key: 'value' };
-      const getStatus = jest.fn(() => Promise.resolve([information]));
-
+      const information = { path: 'path', key: 'value' };
       wrapper.vm.fileTabArray = [{ id: 'path' }];
 
-      Project.getStatus.mockImplementation(getStatus);
+      await wrapper.vm.updateFileStatus(information);
 
-      expect(getStatus).toHaveBeenCalledTimes(0);
-
-      await wrapper.vm.updateFileStatus('path');
-
-      expect(getStatus).toHaveBeenCalledTimes(1);
       expect(wrapper.vm.fileTabArray[0].information).toEqual(information);
     });
   });

@@ -28,6 +28,7 @@ jest.mock('src/composables/Project', () => ({
     }
     return Promise.resolve();
   }),
+  getStatus: jest.fn(() => Promise.resolve([])),
 }));
 
 describe('Test component: FileExplorerActionMenu', () => {

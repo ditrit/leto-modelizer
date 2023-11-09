@@ -44,6 +44,7 @@ jest.mock('src/composables/FileExplorer', () => ({
       }],
     }]
   )),
+  updateFileInformation: jest.fn(),
 }));
 
 jest.mock('src/composables/events/FileEvent', () => ({
@@ -442,9 +443,8 @@ describe('Test component: FileExplorer', () => {
         path: 'fileName',
         status: 'status',
       }];
-      Project.getStatus.mockImplementation(() => [{ path: 'fileName', status: 'newStatus' }]);
 
-      await wrapper.vm.updateFileStatus('fileName');
+      await wrapper.vm.updateFileStatus({ path: 'fileName', status: 'newStatus' });
 
       expect(wrapper.vm.localFileInformations[0]).toEqual(expect.objectContaining({ path: 'fileName', status: 'newStatus' }));
     });
@@ -454,9 +454,8 @@ describe('Test component: FileExplorer', () => {
         path: 'fileName',
         status: 'status',
       }];
-      Project.getStatus.mockImplementation(() => [{ path: 'fileName', status: 'status' }]);
 
-      await wrapper.vm.updateFileStatus('fileName');
+      await wrapper.vm.updateFileStatus({ path: 'fileName', status: 'status' });
 
       expect(wrapper.vm.localFileInformations[0]).toEqual(expect.objectContaining({ path: 'fileName', status: 'status' }));
     });
