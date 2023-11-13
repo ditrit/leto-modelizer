@@ -14,6 +14,7 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     Then I expect current url is '{{ projectName }}/models'
 
     # Diagram 1 creation
+    And  I expect '[data-cy="create-model-button"]' exists
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
@@ -22,8 +23,8 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=diag1'
 
     # Diagram 2 creation
-    And  I visit the '/#/projects/{{ projectName }}/models'
-
+    When I click on '[data-cy="models-page-link-button"]'
+    Then I expect '[data-cy="create-model-button"]' exists
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 

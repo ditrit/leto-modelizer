@@ -26,15 +26,63 @@
 </template>
 
 <script setup>
+import { Notify } from 'quasar';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
 import { initPlugins } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import { getUserSessionToken, login, initUserInformation } from 'src/composables/UserAuthentication';
+import { useUserStore } from 'src/stores/UserStore';
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
+/**
+ * Initialize the user for the appplication, if needed.
+ * If the backend is activated in the configuration, it will check
+ * that the session token is present or not. If not, it will try to login the user.
+ * If already connected, it will just retrieve the user info.
+ */
+async function initUser() {
+  if (!process.env.HAS_BACKEND) {
+    return;
+  }
+  // TODO: Add another if to check if the session token is expired
+  if (!getUserSessionToken()) {
+    await login(route.query.authCode)
+      .then(() => {
+        Notify.create({
+          type: 'positive',
+          message: t('page.splash.login.success'),
+          html: true,
+        });
+      })
+      .catch(() => {
+        Notify.create({
+          type: 'negative',
+          message: t('errors.authentication.login'),
+          html: true,
+        });
+      });
+  } else if (getUserSessionToken() && useUserStore().isEmpty) {
+    // if the user refresh the page, the token is still valid and user is
+    // still connected but the store has been cleaned. So we need to
+    // get back its information.
+    await initUserInformation(getUserSessionToken())
+      .catch(() => {
+        Notify.create({
+          type: 'negative',
+          message: t('errors.authentication.fetchingData'),
+          html: true,
+        });
+      });
+  }
+}
+
 onMounted(async () => {
+  await initUser();
   await initPlugins();
   PluginEvent.InitEvent.next();
 

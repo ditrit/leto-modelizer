@@ -52,6 +52,6 @@ Feature: Test diagrams page: display all diagrams
     And  I expect '[id^="aws"]' exists
 
     # Back to the models page
-    When I visit the 'localhost:8080/#/projects/{{ projectName }}/diagrams'
+    When I visit the '/projects/{{ projectName }}/diagrams'
     Then I expect '[data-cy="diagram_{{ firstModelFolder }}"]' exists
     And  I expect '[data-cy="diagram_{{ secondModelFolder }}"]' exists

@@ -3,6 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import ModelizerSettingsMenu from 'src/components/menu/ModelizerSettingsMenu.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import GitEvent from 'src/composables/events/GitEvent';
+import { setActivePinia, createPinia } from 'pinia';
 
 installQuasarPlugin();
 
@@ -49,6 +50,8 @@ describe('Test component: ModelizerSettingsMenu', () => {
     subscribe = jest.fn();
     unsubscribe = jest.fn();
 
+    setActivePinia(createPinia());
+
     GitEvent.AddRemoteEvent.subscribe.mockImplementation(() => {
       subscribe();
       return { unsubscribe };
@@ -72,8 +75,10 @@ describe('Test component: ModelizerSettingsMenu', () => {
     });
 
     describe('Test ref: user', () => {
-      it('should match an empty object', () => {
-        expect(wrapper.vm.user).toEqual({});
+      it('should not match an empty object', () => {
+        // the pinia object is a big object so just checking that
+        // the userStore is not an empty object.
+        expect(wrapper.vm.userStore).not.toEqual({});
       });
     });
 

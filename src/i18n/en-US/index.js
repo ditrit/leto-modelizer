@@ -218,9 +218,8 @@ export default {
       },
     },
     authentication: {
-      login: 'An error occured while login. Please check your provider configuration.',
-      completeLogin: 'An error occured while completing login',
-      completeSilentLogin: 'An error occured while completing silent login',
+      login: 'An error occured while login. Please check your leto-modelizer-api.',
+      fetchingData: 'An error occured while fetching data',
     },
   },
   error404: {
@@ -231,6 +230,9 @@ export default {
     splash: {
       wait: 'Please wait before using our awesome application!',
       info: 'We are loading the project\'s needs!',
+      login: {
+        success: 'You have been successfully logged in 🥳!',
+      },
     },
     home: {
       drawer: {
@@ -264,12 +266,6 @@ export default {
       plugins: {
         title: 'Plugins',
       },
-    },
-    login: {
-      message: 'You must be logged in to use the application.',
-      provider: 'Login with {name}',
-      completeLogin: 'Login redirection...',
-      completeSilentLogin: 'Silent login redirection...',
     },
     diagrams: {
       actions: {
@@ -441,9 +437,6 @@ export default {
       sponsors: {
         title: 'Sponsors',
       },
-    },
-    redirect: {
-      login: 'You have been successfully logged in 🥳!',
     },
   },
   footer: {

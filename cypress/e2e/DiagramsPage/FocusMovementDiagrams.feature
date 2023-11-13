@@ -31,7 +31,8 @@ Feature: Test diagrams page: move all diagrams
     And  I expect '[id^="aws"]' exists
 
     # Back to the diagrams page
-    When I visit the 'localhost:8080/#/projects/{{ projectName }}/diagrams'
+    When I visit the '/projects/{{ projectName }}/diagrams'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="diagram-card_{{ modelFolder }}"]' exists
     And  I expect '[data-cy="diagram-card_{{ modelFolder }}"]' to be at position 16,16
 

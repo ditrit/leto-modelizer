@@ -13,11 +13,12 @@ Feature: Test diagrams page: diagram creation
     And  I click on '[data-cy="create-project-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/models'
 
-    # Go to the models page
-    And  I wait 1 second
-    And  I visit the '/#/projects/{{ projectName }}/diagrams'
+    # Go to the diagrams page
+    When I visit the '/projects/{{ projectName }}/diagrams'
+    And  I wait until the application is loaded
 
     # Model creation
+    Then I expect '[data-cy="create-model-button"]' exists
     When I click on '[data-cy="create-model-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 

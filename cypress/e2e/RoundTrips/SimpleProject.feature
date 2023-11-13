@@ -297,14 +297,14 @@ Feature: Test roundtrip of the application: project creation
     And  I expect '[data-cy="component-definitions-item_githubator-plugin"] [data-cy="title"]' is 'githubator-plugin'
 
     # All created diagrams should be displayed in the /diagrams view
-    When I visit the 'localhost:8080/#/projects/{{ projectName }}/diagrams'
+    When I visit the '/projects/{{ projectName }}/diagrams'
     And  I wait until the application is loaded
     Then I expect '[data-cy="diagram-card_{{ firstModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-card_{{ secondModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-card_\.github/workflows/{{thirdModelName}}"]' exists
 
     # Back to the models page
-    When I visit the 'localhost:8080/#/projects/{{ projectName }}/models'
+    When I visit the '/projects/{{ projectName }}/models'
     And  I wait until the application is loaded
     Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' exists
     And  I expect '[data-cy="diagram-path_{{ secondModelFolder }}"]' exists
