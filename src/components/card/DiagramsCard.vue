@@ -29,8 +29,11 @@
           color="primary"
           icon="fa-solid fa-plus"
           :label="$t('actions.models.create.button.name')"
-          :title="$t('actions.models.create.button.title')"
+          :title="$acl.role('create-diagram')
+            ? $t('actions.models.create.button.title')
+            : $t('errors.permissionsDenied')"
           data-cy="create-model-button"
+          :disable="!$acl.role('create-diagram')"
           @click="DialogEvent.next({
             type: 'open',
             key: 'CreateModel',
