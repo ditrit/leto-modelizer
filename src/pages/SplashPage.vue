@@ -32,12 +32,18 @@ import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
 import { initPlugins } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
-import { getUserSessionToken, login, initUserInformation } from 'src/composables/UserAuthentication';
+import {
+  getUserSessionToken,
+  login,
+  initUserInformation,
+  initUserRoles,
+} from 'src/composables/UserAuthentication';
 import { useUserStore } from 'src/stores/UserStore';
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const userStore = useUserStore();
 
 /**
  * Initialize the user for the appplication, if needed.
@@ -49,6 +55,7 @@ async function initUser() {
   if (!process.env.HAS_BACKEND) {
     return;
   }
+
   // TODO: Add another if to check if the session token is expired
   if (!getUserSessionToken()) {
     await login(route.query.authCode)
@@ -79,6 +86,8 @@ async function initUser() {
         });
       });
   }
+
+  await initUserRoles(userStore.id, getUserSessionToken());
 }
 
 onMounted(async () => {
