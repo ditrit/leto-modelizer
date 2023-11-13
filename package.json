@@ -35,7 +35,8 @@
     "vue": "=3.3.4",
     "vue-3-sanitize": "=0.1.4",
     "vue-i18n": "=9.6.5",
-    "vue-router": "=4.2.5"
+    "vue-router": "=4.2.5",
+    "vue-simple-acl": "^2.0.2"
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "=2.2.5",
