@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Hide component detail panel when deleting corresponding component.
 * Autosave on component detail panel.
 * Debounce of 1 second on file auto-save.
+* Setup conditional features:
+  * `CF_createDiagram`: allows or prevents user to create a diagram.
 
 ### Changed
 

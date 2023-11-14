@@ -2,7 +2,7 @@ import {
   setUserSessionToken,
   getUserSessionToken,
   login,
-  initUserInformation,
+  initUserInformation, initUserRoles,
 } from 'src/composables/UserAuthentication';
 import { setActivePinia, createPinia } from 'pinia';
 import { useUserStore } from 'src/stores/UserStore';
@@ -64,6 +64,15 @@ jest.mock('src/composables/LetoModelizerApi', () => ({
       },
     });
   },
+  getUserRoles() {
+    return Promise.resolve({
+      data: {
+        results: [{
+          name: 'admin',
+        }],
+      },
+    });
+  },
 }));
 
 describe('User Authentication', () => {
@@ -110,6 +119,17 @@ describe('User Authentication', () => {
       await initUserInformation('tempCode');
 
       expect(store.firstname).toEqual('Pradeep');
+    });
+  });
+
+  describe('Test function: initUserRoles', () => {
+    it('should retrieve user roles for storing its data', async () => {
+      setActivePinia(createPinia());
+      const store = useUserStore();
+
+      await initUserRoles('userId', 'tempCode');
+
+      expect(store.roles).toEqual(['admin']);
     });
   });
 });

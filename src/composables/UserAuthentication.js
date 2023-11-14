@@ -31,6 +31,7 @@ export async function login(temporaryCode) {
 
       setUserSessionToken(response.data.sessionToken);
 
+      userStore.id = response.data.objectId;
       userStore.username = response.data.username;
       userStore.firstname = response.data.firstname;
     });
@@ -47,7 +48,22 @@ export async function initUserInformation(sessionToken) {
     .then((response) => {
       const userStore = useUserStore();
 
+      userStore.id = response.data.objectId;
       userStore.username = response.data.username;
       userStore.firstname = response.data.firstname;
     });
+}
+
+/**
+ * Retrieve all roles of user and store them in the dedicated store.
+ * @param {string} userId - User id.
+ * @param {string} sessionToken - The current user's session token.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+export async function initUserRoles(userId, sessionToken) {
+  return api.getUserRoles(userId, sessionToken).then((response) => {
+    const userStore = useUserStore();
+
+    userStore.roles = response.data.results.map(({ name }) => name);
+  });
 }

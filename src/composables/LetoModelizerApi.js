@@ -57,3 +57,23 @@ export async function getUserInformation(sessionToken) {
 
   return axios.get('/backend/api/users/me', headers);
 }
+
+/**
+ * Get all roles of a user.
+ * @param {string} userId - User id.
+ * @param {string} sessionToken - The current user's session token.
+ * @returns {Promise<object[]>} Return an array of roles. Role is a parseObject server, so see
+ * documentation on api to have more information.
+ */
+export async function getUserRoles(userId, sessionToken) {
+  const headers = {
+    headers: {
+      Accept: 'application/json',
+      'X-Parse-Application-Id': process.env.BACKEND_APP_ID,
+      'X-Parse-Session-Token': sessionToken,
+    },
+  };
+  const queryParameters = `where={"users":{"__type":"Pointer","className":"_User","objectId":"${userId}"}}`;
+
+  return axios.get(`/backend/api/roles?${queryParameters}`, headers);
+}

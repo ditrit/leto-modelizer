@@ -148,13 +148,14 @@ export default {
     },
   },
   errors: {
-    empty: 'Please type something',
+    empty: 'Please type something.',
+    permissionsDenied: "You don't have the necessary role to perform this action.",
     invalid: {
       gitAddRemote: {
-        repository: 'Invalid repository url',
+        repository: 'Invalid repository url.',
       },
       fileExplorer: {
-        label: 'The name must not contain any \'/ \' characters',
+        label: "The name must not contain any '/' characters.",
       },
     },
     projects: {

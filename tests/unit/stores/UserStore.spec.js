@@ -13,25 +13,49 @@ describe('User Store', () => {
 
   describe('Test store variable: username', () => {
     it('should be initialized to an empty string', () => {
-      expect(store.username).toBe('');
+      expect(store.username).toEqual('');
     });
 
     it('should return the new value after being set', () => {
       store.username = 'username';
 
-      expect(store.username).toBe('username');
+      expect(store.username).toEqual('username');
     });
   });
 
   describe('Test store variable: firstname', () => {
     it('should be initialized to an empty string', () => {
-      expect(store.firstname).toBe('');
+      expect(store.firstname).toEqual('');
     });
 
     it('should return the new value after being set', () => {
       store.firstname = 'firstname';
 
-      expect(store.firstname).toBe('firstname');
+      expect(store.firstname).toEqual('firstname');
+    });
+  });
+
+  describe('Test store variable: id', () => {
+    it('should be initialized to an empty string', () => {
+      expect(store.id).toEqual('');
+    });
+
+    it('should return the new value after being set', () => {
+      store.id = 'id';
+
+      expect(store.id).toEqual('id');
+    });
+  });
+
+  describe('Test store variable: roles', () => {
+    it('should be initialized to an empty string', () => {
+      expect(store.roles).toEqual([]);
+    });
+
+    it('should return the new value after being set', () => {
+      store.roles = ['admin'];
+
+      expect(store.roles).toEqual(['admin']);
     });
   });
 

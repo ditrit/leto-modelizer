@@ -3,7 +3,11 @@ import { shallowMount } from '@vue/test-utils';
 import SplashPage from 'src/pages/SplashPage.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import PluginManager from 'src/composables/PluginManager';
-import { getUserSessionToken, login, initUserInformation } from 'src/composables/UserAuthentication';
+import {
+  getUserSessionToken,
+  login,
+  initUserInformation, initUserRoles,
+} from 'src/composables/UserAuthentication';
 import { setActivePinia, createPinia } from 'pinia';
 import { Notify } from 'quasar';
 
@@ -42,6 +46,7 @@ jest.mock('src/composables/UserAuthentication', () => ({
   login: jest.fn(),
   getUserSessionToken: jest.fn(),
   initUserInformation: jest.fn(),
+  initUserRoles: jest.fn(),
 }));
 
 jest.useFakeTimers();
@@ -54,6 +59,8 @@ describe('Test component: SplashPage', () => {
     PluginManager.getPlugins.mockImplementation(() => [
       { data: { deleteAllEventLogsBefore: jest.fn(() => {}) } },
     ]);
+
+    setActivePinia(createPinia());
 
     wrapper = shallowMount(SplashPage, {
       global: {
@@ -84,6 +91,8 @@ describe('Test component: SplashPage', () => {
       login.mockClear();
       getUserSessionToken.mockClear();
       initUserInformation.mockClear();
+      initUserRoles.mockClear();
+
       process.env.HAS_BACKEND = true;
     });
 
@@ -94,8 +103,9 @@ describe('Test component: SplashPage', () => {
 
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
+      expect(getUserSessionToken).toHaveBeenCalledTimes(2);
       expect(login).toHaveBeenCalledTimes(1);
+      expect(initUserRoles).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
     });
 
@@ -106,8 +116,9 @@ describe('Test component: SplashPage', () => {
 
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
+      expect(getUserSessionToken).toHaveBeenCalledTimes(2);
       expect(login).toHaveBeenCalledTimes(1);
+      expect(initUserRoles).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
     });
 
@@ -118,8 +129,9 @@ describe('Test component: SplashPage', () => {
 
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(3);
+      expect(getUserSessionToken).toHaveBeenCalledTimes(4);
       expect(initUserInformation).toHaveBeenCalledTimes(1);
+      expect(initUserRoles).toHaveBeenCalledTimes(1);
     });
 
     it('should call backend when it is activated and session token is already in storage but initUserInformation fails', async () => {
@@ -130,8 +142,9 @@ describe('Test component: SplashPage', () => {
 
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(3);
+      expect(getUserSessionToken).toHaveBeenCalledTimes(4);
       expect(initUserInformation).toHaveBeenCalledTimes(1);
+      expect(initUserRoles).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
     });
 
@@ -145,6 +158,7 @@ describe('Test component: SplashPage', () => {
 
       expect(getUserSessionToken).toHaveBeenCalledTimes(0);
       expect(initUserInformation).toHaveBeenCalledTimes(0);
+      expect(initUserRoles).toHaveBeenCalledTimes(0);
       expect(Notify.create).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
     });
   });
