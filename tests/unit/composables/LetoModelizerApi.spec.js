@@ -3,6 +3,7 @@ import {
   login,
   getUserInformation,
   getAuthenticationUrl,
+  getUserRoles,
 } from 'src/composables/LetoModelizerApi';
 
 jest.mock('axios');
@@ -100,10 +101,24 @@ describe('User Authentication', () => {
       };
       axios.get.mockResolvedValueOnce(resultPostUser);
 
-      const res = await getUserInformation();
+      const res = await getUserInformation('r:dead779dcda4970cc7f96c09a328d771');
       expect(res.sessionToken).toEqual('r:dead779dcda4970cc7f96c09a328d771');
       expect(res.username).toEqual('MySuperUsername');
       expect(res.firstname).toEqual('Pradeep');
+    });
+  });
+
+  describe('Test function: getUserRoles', () => {
+    it('should return the current user roles', async () => {
+      const resultPostUserRoles = {
+        results: [{
+          name: 'admin',
+        }],
+      };
+      axios.get.mockResolvedValueOnce(resultPostUserRoles);
+
+      const res = await getUserRoles('r:dead779dcda4970cc7f96c09a328d771');
+      expect(res.results).toEqual([{ name: 'admin' }]);
     });
   });
 });
