@@ -7,6 +7,7 @@ const userStore = useUserStore();
 const userRoles = computed(() => ({ roles: userStore.roles }));
 const rules = () => defineAclRules((setRule) => {
   setRule('create-diagram', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createDiagram'));
+  setRule('create-diagram-from-template', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createDiagramFromTemplate'));
 });
 
 export default boot(({ app }) => {

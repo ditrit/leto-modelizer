@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Debounce of 1 second on file auto-save.
 * Setup conditional features:
   * `CF_createDiagram`: allows or prevents user to create a diagram.
+  * `CF_createDiagramFromTemplate`: allows or prevents user to create a diagram from a template.
 
 ### Changed
 

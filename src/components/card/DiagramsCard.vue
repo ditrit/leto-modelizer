@@ -15,8 +15,11 @@
           color="primary"
           icon="fa-solid fa-layer-group"
           :label="$t('actions.models.add.button.name')"
-          :title="$t('actions.models.add.button.title')"
+          :title="$acl.role('create-diagram-from-template')
+            ? $t('actions.models.add.button.title')
+            : $t('errors.permissionsDenied')"
           data-cy="add-model-button"
+          :disable="!$acl.role('create-diagram-from-template')"
           @click="DrawerEvent.next({
             key: 'CreateDiagram',
             type: 'open',
