@@ -22,23 +22,32 @@
       :key="drawerItem.id"
     >
       <library-item
-        v-if="drawerItem.size > 0 && (selectedItemId === drawerItem.id || selectedItemId === null)"
+        v-if="drawerItem.size > 0
+          && (selectedItemId === drawerItem.id || selectedItemId === null)"
         :item="drawerItem"
         :is-selected="isSelected"
         @click="onItemClick(drawerItem.id)"
       />
     </template>
-    <q-item
-      v-if="selectedItemId && !isEmptyList"
-      style="overflow-y: auto !important;"
-      class="q-pa-none q-mb-sm"
-    >
-      <component-definition-grid
-        :definitions="selectedItemDefinitions"
-        :plugin-name="plugin.data.name"
-        class="q-mt-xs q-pr-sm"
-      />
-    </q-item>
+    <template v-if="selectedItemId">
+      <div
+        v-if="!hasRole"
+        class="q-px-md q-py-sm text-italic text-grey full-height"
+        data-cy="library-unauthorized-message"
+      >
+        {{ $t('errors.permissionsDenied') }}
+      </div>
+      <q-item
+        v-else-if="!isEmptyList"
+        class="q-pa-none q-mb-sm item-grid"
+      >
+        <component-definition-grid
+          :definitions="selectedItemDefinitions"
+          :plugin-name="plugin.data.name"
+          class="q-mt-xs q-pr-sm"
+        />
+      </q-item>
+    </template>
     <div
       v-if="isEmptyList"
       class="q-px-md q-py-sm text-italic text-grey full-height"
@@ -55,7 +64,9 @@ import ComponentDefinitionGrid from 'src/components/grid/ComponentDefinitionGrid
 import LibraryItem from 'src/components/item/LibraryItem.vue';
 import { useI18n } from 'vue-i18n';
 import { isMatching } from 'src/composables/Project';
+import { useAcl } from 'vue-simple-acl';
 
+const acl = useAcl();
 const { t } = useI18n();
 const props = defineProps({
   plugin: {
@@ -67,40 +78,38 @@ const props = defineProps({
     default: () => [],
   },
 });
-
 const definitionFilter = ref('');
 const selectedItemId = ref(null);
 const isSelected = ref(false);
 // TODO : remove this const
 // when @quasar/quasar-app-extension-testing-unit-jest@3.0.0 is officially released
 const inputLabel = computed(() => t('page.modelizer.drawer.components.filterLabel'));
-
 const pluginDefinitions = computed(() => props.plugin?.data.definitions.components
   .filter((def) => isMatching(definitionFilter.value, def.type)));
-
 const templateDefinitions = computed(() => props.templates
   .filter((def) => isMatching(definitionFilter.value, def.type)));
-
 const isEmptyList = computed(() => pluginDefinitions.value.length === 0
   && templateDefinitions.value.length === 0);
-
 const drawerItems = computed(() => [
   {
     id: props.plugin.data.name,
     title: props.plugin.data.name,
     definitions: pluginDefinitions.value,
     size: pluginDefinitions.value.length,
+    hasRole: acl.role('create-component'),
   },
   {
     id: t('page.modelizer.drawer.templates.title'),
     title: t('page.modelizer.drawer.templates.title'),
     definitions: templateDefinitions.value,
     size: templateDefinitions.value.length,
+    hasRole: acl.role('create-component-from-template'),
   },
 ]);
-
 const selectedItemDefinitions = computed(() => drawerItems.value
   .find(({ id }) => selectedItemId.value === id)?.definitions);
+const hasRole = computed(() => drawerItems.value
+  .find(({ id }) => selectedItemId.value === id)?.hasRole || false);
 
 /**
  * Toggle isSelected value and set selectedItemId on library item click.
@@ -116,3 +125,9 @@ function onItemClick(id) {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .item-grid {
+    overflow-y: auto !important;
+  }
+</style>
