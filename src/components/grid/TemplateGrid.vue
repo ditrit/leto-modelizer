@@ -26,23 +26,34 @@
     <q-card-section
       class="q-ma-md bg-grey-1 q-pb-none template-card-container row items-center wrap"
     >
-      <div
-        v-for="template in filteredTemplates"
-        :key="template.key"
-        class="template-card-item row q-mb-md justify-center items-center"
+      <template
+        v-if="$acl.role('create-project-from-template')"
       >
-        <template-card
-          :template="template"
-          class="template-card"
-          @click="$emit('add:template', template)"
-        />
-      </div>
+        <div
+          v-for="template in filteredTemplates"
+          :key="template.key"
+          class="template-card-item row q-mb-md justify-center items-center"
+        >
+          <template-card
+            :template="template"
+            class="template-card"
+            @click="$emit('add:template', template)"
+          />
+        </div>
+        <div
+          v-if="filteredTemplates.length === 0"
+          class="row text-center text-subtitle2 text-grey q-mb-md"
+          data-cy="template-project-grid-empty"
+        >
+          {{ $t('page.home.template.empty') }}
+        </div>
+      </template>
       <div
-        v-if="filteredTemplates.length === 0"
+        v-else
         class="row text-center text-subtitle2 text-grey q-mb-md"
-        data-cy="template-project-grid-empty"
+        data-cy="template-project-grid-unauthorized"
       >
-        {{ $t('page.home.template.empty') }}
+        {{ $t('errors.permissionsDenied') }}
       </div>
     </q-card-section>
   </q-card>
