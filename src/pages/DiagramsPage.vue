@@ -74,6 +74,10 @@
           no-caps
           color="white"
           text-color="black"
+          :title="$acl.role('create-diagram')
+            ? $t('actions.models.add.button.title')
+            : $t('errors.permissionsDenied')"
+          :disable="!$acl.role('create-diagram')"
           data-cy="create-model-button"
           @click="DialogEvent.next({
             type: 'open',
