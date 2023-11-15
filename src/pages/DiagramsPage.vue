@@ -34,6 +34,10 @@
               size="sm"
               icon="fa-solid fa-trash"
               :label="$t('page.diagrams.actions.delete')"
+              :title="$acl.role('delete-diagram')
+                ? $t('actions.models.delete.button.title')
+                : $t('errors.permissionsDenied')"
+              :disable="!$acl.role('delete-diagram')"
               data-cy="delete-button"
               @click="deleteDiagram(diagram)"
             />
