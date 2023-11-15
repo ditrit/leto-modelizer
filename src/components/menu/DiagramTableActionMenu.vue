@@ -23,6 +23,10 @@
       </q-item>
       <q-item
         clickable
+        :title="$acl.role('delete-diagram')
+          ? $t('actions.models.delete.button.title')
+          : $t('errors.permissionsDenied')"
+        :disable="!$acl.role('delete-diagram')"
         data-cy="delete-diagram-action-item"
         @click="deleteDiagram"
       >

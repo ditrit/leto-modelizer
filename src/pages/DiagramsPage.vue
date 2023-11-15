@@ -34,6 +34,10 @@
               size="sm"
               icon="fa-solid fa-trash"
               :label="$t('page.diagrams.actions.delete')"
+              :title="$acl.role('delete-diagram')
+                ? $t('actions.models.delete.button.title')
+                : $t('errors.permissionsDenied')"
+              :disable="!$acl.role('delete-diagram')"
               data-cy="delete-button"
               @click="deleteDiagram(diagram)"
             />
@@ -70,6 +74,10 @@
           no-caps
           color="white"
           text-color="black"
+          :title="$acl.role('create-diagram')
+            ? $t('actions.models.add.button.title')
+            : $t('errors.permissionsDenied')"
+          :disable="!$acl.role('create-diagram')"
           data-cy="create-model-button"
           @click="DialogEvent.next({
             type: 'open',
