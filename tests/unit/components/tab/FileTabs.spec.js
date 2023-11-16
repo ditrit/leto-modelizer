@@ -8,6 +8,9 @@ import * as Project from 'src/composables/Project';
 installQuasarPlugin();
 
 jest.mock('src/composables/events/FileEvent', () => ({
+  RenameFileEvent: {
+    subscribe: jest.fn(),
+  },
   DeleteFileEvent: {
     subscribe: jest.fn(),
   },
@@ -52,11 +55,13 @@ describe('Test component: FileTabs', () => {
   let wrapper;
 
   // FileEvent
+  let renameFileSubscribe;
   let deleteFileSubscribe;
   let globalUploadFilesEventSubscribe;
   let selectFileNodeSubscribe;
   let updateEditorContentSubscribe;
 
+  let renameFileUnsubscribe;
   let deleteFileUnsubscribe;
   let globalUploadFilesEventUnsubscribe;
   let selectFileNodeUnsubscribe;
@@ -79,11 +84,13 @@ describe('Test component: FileTabs', () => {
 
   beforeEach(() => {
     // FileEvent
+    renameFileSubscribe = jest.fn();
     deleteFileSubscribe = jest.fn();
     globalUploadFilesEventSubscribe = jest.fn();
     selectFileNodeSubscribe = jest.fn();
     updateEditorContentSubscribe = jest.fn();
 
+    renameFileUnsubscribe = jest.fn();
     deleteFileUnsubscribe = jest.fn();
     globalUploadFilesEventUnsubscribe = jest.fn();
     selectFileNodeUnsubscribe = jest.fn();
@@ -105,6 +112,10 @@ describe('Test component: FileTabs', () => {
     pullUnsubscribe = jest.fn();
 
     // FileEvent
+    FileEvent.RenameFileEvent.subscribe.mockImplementation(() => {
+      renameFileSubscribe();
+      return { unsubscribe: renameFileUnsubscribe };
+    });
     FileEvent.DeleteFileEvent.subscribe.mockImplementation(() => {
       deleteFileSubscribe();
       return { unsubscribe: deleteFileUnsubscribe };
@@ -190,6 +201,26 @@ describe('Test component: FileTabs', () => {
 
       expect(wrapper.vm.activeFileId).toEqual('README.md');
       expect(selectFileTabNext).toBeCalled();
+    });
+  });
+
+  describe('Test function: onRenameFile', () => {
+    it('should remove selected tab and select a new one', () => {
+      wrapper.vm.activeFileId = 'terraform/app.tf';
+      wrapper.vm.fileTabArray = [
+        { id: 'terraform/app.tf' },
+        { id: 'README.md' },
+      ];
+
+      wrapper.vm.onRenameFile({
+        file: {
+          id: 'terraform/app.tf',
+          isFolder: false,
+        },
+      });
+
+      expect(wrapper.vm.fileTabArray).toEqual([{ id: 'README.md' }]);
+      expect(wrapper.vm.activeFileId).toEqual('README.md');
     });
   });
 
@@ -342,6 +373,9 @@ describe('Test component: FileTabs', () => {
 
   describe('Test hook function: onMounted', () => {
     // FileEvent
+    it('should subscribe to RenameFileEvent', () => {
+      expect(renameFileSubscribe).toHaveBeenCalledTimes(1);
+    });
     it('should subscribe to DeleteFileEvent', () => {
       expect(deleteFileSubscribe).toHaveBeenCalledTimes(1);
     });
@@ -375,6 +409,11 @@ describe('Test component: FileTabs', () => {
 
   describe('Test hook function: onUnmounted', () => {
     // FileEvent
+    it('should unsubscribe to RenameFileEvent', () => {
+      expect(renameFileUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(renameFileUnsubscribe).toHaveBeenCalledTimes(1);
+    });
     it('should unsubscribe to DeleteFileEvent', () => {
       expect(deleteFileUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();

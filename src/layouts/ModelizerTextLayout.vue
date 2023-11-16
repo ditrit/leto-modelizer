@@ -10,12 +10,13 @@
 
     <console-footer :errors="parseErrors" />
 
+    <create-file-dialog :project-name="projectName" />
+    <rename-file-dialog :project-name="projectName" />
+    <delete-file-dialog :project-name="projectName" />
     <git-authentication-dialog :project-name="projectName" />
     <git-add-remote-dialog :project-name="projectName" />
     <git-new-branch-dialog :project-name="projectName" />
     <git-update-dialog :project-name="projectName" />
-    <create-file-dialog :project-name="projectName" />
-    <delete-file-dialog :project-name="projectName" />
     <git-status-dialog :project-name="projectName" />
     <git-push-dialog :project-name="projectName" />
     <git-commit-dialog :project-name="projectName" />
@@ -28,12 +29,13 @@ import NavigationBar from 'src/components/NavigationBar.vue';
 import ModelizerTextLeftDrawer from 'src/components/drawer/ModelizerTextLeftDrawer.vue';
 import ModelizerTextPage from 'src/pages/ModelizerTextPage.vue';
 import ConsoleFooter from 'src/components/drawer/ConsoleFooter.vue';
+import CreateFileDialog from 'src/components/dialog/CreateFileDialog.vue';
+import RenameFileDialog from 'src/components/dialog/RenameFileDialog.vue';
+import DeleteFileDialog from 'src/components/dialog/DeleteFileDialog.vue';
 import GitAuthenticationDialog from 'src/components/dialog/GitAuthenticationDialog.vue';
 import GitAddRemoteDialog from 'src/components/dialog/GitAddRemoteDialog.vue';
 import GitNewBranchDialog from 'src/components/dialog/GitNewBranchDialog.vue';
 import GitUpdateDialog from 'src/components/dialog/GitUpdateDialog.vue';
-import CreateFileDialog from 'src/components/dialog/CreateFileDialog.vue';
-import DeleteFileDialog from 'src/components/dialog/DeleteFileDialog.vue';
 import GitStatusDialog from 'src/components/dialog/GitStatusDialog.vue';
 import GitPushDialog from 'src/components/dialog/GitPushDialog.vue';
 import GitCommitDialog from 'src/components/dialog/GitCommitDialog.vue';

@@ -95,6 +95,7 @@ const filterTrigger = ref(toRef(props, 'showParsableFiles').value.toString());
 
 let selectFileTabSubscription;
 let createFileSubscription;
+let renameFileSubscription;
 let deleteFileSubscription;
 let updateEditorContentSubscription;
 let addRemoteSubscription;
@@ -327,9 +328,10 @@ async function openModelFiles() {
 /**
  * Update localFileInformations and nodes of the tree then update all status.
  * Also, expand model folders and open parsable files.
+ * @param {boolean} avoidOpening - Avoid automatic model file(s) opening.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-async function initTreeNodes() {
+async function initTreeNodes(avoidOpening = false) {
   localFileInformations.value = await getProjectFiles(props.projectName);
 
   nodes.value = getTree(props.projectName, localFileInformations.value);
@@ -337,7 +339,7 @@ async function initTreeNodes() {
   await updateAllFilesStatus();
 
   // TODO: Find a better way to stub it on shallowMount.
-  if (fileExplorerRef.value.getNodeByKey) {
+  if (fileExplorerRef.value.getNodeByKey && !avoidOpening) {
     openModelFiles();
   }
 }
@@ -348,6 +350,9 @@ onMounted(async () => {
   });
   createFileSubscription = FileEvent.CreateFileEvent.subscribe((event) => {
     onCreateFile(event);
+  });
+  renameFileSubscription = FileEvent.RenameFileEvent.subscribe(() => {
+    initTreeNodes(true);
   });
   deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(onDeleteFile);
   updateEditorContentSubscription = FileEvent.UpdateEditorContentEvent.subscribe((event) => {
@@ -378,6 +383,7 @@ onMounted(async () => {
 onUnmounted(() => {
   selectFileTabSubscription.unsubscribe();
   createFileSubscription.unsubscribe();
+  renameFileSubscription.unsubscribe();
   deleteFileSubscription.unsubscribe();
   updateEditorContentSubscription.unsubscribe();
   addRemoteSubscription.unsubscribe();

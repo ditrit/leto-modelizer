@@ -204,6 +204,23 @@ describe('Test component: FileExplorerActionMenu', () => {
       });
     });
 
+    describe('Test function: renameFile', () => {
+      it('should call dialog event', () => {
+        DialogEvent.next = jest.fn(() => Promise.resolve({
+          type: 'open',
+          key: 'RenameFile',
+          file: wrapper.vm.file,
+        }));
+        wrapper.vm.menu = {
+          hide: jest.fn(),
+        };
+
+        wrapper.vm.renameFile();
+        expect(DialogEvent.next).toBeCalled();
+        expect(wrapper.vm.menu.hide).toBeCalled();
+      });
+    });
+
     describe('Test function: deleteFile', () => {
       it('should call dialog event', () => {
         DialogEvent.next = jest.fn(() => Promise.resolve({

@@ -56,6 +56,7 @@ const fileTabArray = ref([]);
 const activeFileId = ref(null);
 
 let selectFileNodeSubscription;
+let renameFileSubscription;
 let deleteFileSubscription;
 let updateEditorContentSubscription;
 let addRemoteSubscription;
@@ -77,6 +78,25 @@ function setLastFileActive() {
   }
 
   FileEvent.SelectFileTabEvent.next(activeFileId.value);
+}
+
+/**
+ * Close all renamed tabs.
+ * @param {object} event - Object containing the original file and the new one.
+ * @param {object} event.file - Original file.
+ */
+function onRenameFile({ file }) {
+  const path = file.id.concat(
+    file.isFolder ? '/' : '',
+  );
+
+  fileTabArray.value = fileTabArray.value.filter(
+    (tab) => !tab.id.startsWith(path),
+  );
+
+  if (activeFileId.value?.startsWith(path)) {
+    setLastFileActive();
+  }
 }
 
 /**
@@ -195,6 +215,7 @@ watch(activeFileId, () => {
 
 onMounted(() => {
   selectFileNodeSubscription = FileEvent.SelectFileNodeEvent.subscribe(onSelectFileNode);
+  renameFileSubscription = FileEvent.RenameFileEvent.subscribe(onRenameFile);
   deleteFileSubscription = FileEvent.DeleteFileEvent.subscribe(onDeleteFile);
   updateEditorContentSubscription = FileEvent.UpdateEditorContentEvent.subscribe((event) => {
     updateFileStatus(event);
@@ -221,6 +242,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   selectFileNodeSubscription.unsubscribe();
+  renameFileSubscription.unsubscribe();
   deleteFileSubscription.unsubscribe();
   updateEditorContentSubscription.unsubscribe();
   addRemoteSubscription.unsubscribe();
