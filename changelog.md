@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Setup conditional features:
   * `CF_createDiagram`: allows or prevents user to create a diagram.
   * `CF_createDiagramFromTemplate`: allows or prevents user to create a diagram from a template.
+  * `CF_createComponent`: allows or prevents user to create a component.
   * `CF_deleteDiagram`: allows or prevents user to delete a diagram.
 
 ### Changed

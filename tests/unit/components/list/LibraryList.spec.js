@@ -10,6 +10,14 @@ jest.mock('vue-i18n', () => ({
   }),
 }));
 
+jest.mock('vue-simple-acl', () => ({
+  useAcl: () => ({
+    role(key) {
+      return key === 'create-component';
+    },
+  }),
+}));
+
 describe('Test component: LibraryList', () => {
   let wrapper;
 
@@ -104,14 +112,31 @@ describe('Test component: LibraryList', () => {
             title: 'pluginName',
             definitions: [{ type: 'componentType' }],
             size: 1,
+            hasRole: true,
           },
           {
             id: 'page.modelizer.drawer.templates.title',
             title: 'page.modelizer.drawer.templates.title',
             definitions: [{ type: 'templateType' }],
             size: 1,
+            hasRole: false,
           },
         ]);
+      });
+    });
+
+    describe('Test computed: hasRole', () => {
+      it('should be false without selected item', () => {
+        expect(wrapper.vm.selectedItemId).toBeNull();
+        expect(wrapper.vm.hasRole).toEqual(false);
+      });
+      it('should be false with selected item without role', () => {
+        wrapper.vm.selectedItemId = 'page.modelizer.drawer.templates.title';
+        expect(wrapper.vm.hasRole).toEqual(false);
+      });
+      it('should be true with selected item and role', () => {
+        wrapper.vm.selectedItemId = 'pluginName';
+        expect(wrapper.vm.hasRole).toEqual(true);
       });
     });
   });
