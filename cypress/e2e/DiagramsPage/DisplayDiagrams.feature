@@ -53,5 +53,6 @@ Feature: Test diagrams page: display all diagrams
 
     # Back to the models page
     When I visit the '/projects/{{ projectName }}/diagrams'
+    And  I wait until the application is loaded
     Then I expect '[data-cy="diagram_{{ firstModelFolder }}"]' exists
     And  I expect '[data-cy="diagram_{{ secondModelFolder }}"]' exists
