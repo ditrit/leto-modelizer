@@ -69,10 +69,8 @@ import { useI18n } from 'vue-i18n';
 import ModelizerSettingsMenu from 'components/menu/ModelizerSettingsMenu.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import { Notify } from 'quasar';
-import {
-  getProjectById,
-  gitGlobalUpload,
-} from 'src/composables/Project';
+import { getProjectById } from 'src/composables/Project';
+import { gitGlobalUpload } from 'src/composables/Git';
 import GitEvent from 'src/composables/events/GitEvent';
 import { useRoute, useRouter } from 'vue-router';
 

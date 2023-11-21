@@ -19,7 +19,7 @@
 
 <script setup>
 // TODO : Rename file
-import { getCurrentBranch } from 'src/composables/Project';
+import { getCurrentBranch } from 'src/composables/Git';
 import { useRoute } from 'vue-router';
 import { onMounted, onUnmounted, ref } from 'vue';
 import GitEvent from 'src/composables/events/GitEvent';

@@ -50,7 +50,7 @@ import {
   getBranches,
   createBranchFrom,
   gitCheckout,
-} from 'src/composables/Project';
+} from 'src/composables/Git';
 import { useI18n } from 'vue-i18n';
 import { Notify } from 'quasar';
 import GitEvent from 'src/composables/events/GitEvent';

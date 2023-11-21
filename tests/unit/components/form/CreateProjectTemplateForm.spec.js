@@ -2,7 +2,8 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import CreateProjectTemplateForm from 'src/components/form/CreateProjectTemplateForm.vue';
 import { Notify } from 'quasar';
-import Project from 'src/composables/Project';
+import * as Project from 'src/composables/Project';
+import * as Git from 'src/composables/Git';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -15,10 +16,13 @@ jest.mock('vue-i18n', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  importProject: jest.fn(() => Promise.resolve()),
   initProject: jest.fn(() => Promise.resolve()),
   appendProjectFile: jest.fn(() => Promise.resolve()),
   getProjects: jest.fn(() => ['project']),
+}));
+
+jest.mock('src/composables/Git', () => ({
+  importProject: jest.fn(() => Promise.resolve()),
 }));
 
 jest.mock('src/composables/Random', () => ({
@@ -83,7 +87,7 @@ describe('Test component: CreateProjectTemplateForm', () => {
 
       await wrapper.vm.onSubmit();
 
-      expect(Project.importProject).toBeCalled();
+      expect(Git.importProject).toBeCalled();
     });
 
     it('should emit an event and a positive notification on success', async () => {

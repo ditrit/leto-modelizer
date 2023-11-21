@@ -101,7 +101,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import DefaultDialog from 'components/dialog/DefaultDialog.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import { gitLog } from 'src/composables/Project';
+import { gitLog } from 'src/composables/Git';
 
 const props = defineProps({
   projectName: {

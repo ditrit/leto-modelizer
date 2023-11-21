@@ -43,7 +43,8 @@ import {
 import FileTabHeader from 'src/components/tab/FileTabHeader.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
-import { exists, getStatus } from 'src/composables/Project';
+import { exists } from 'src/composables/Project';
+import { getStatus } from 'src/composables/Git';
 
 const props = defineProps({
   projectName: {

@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
-import Project from 'src/composables/Project';
+import * as Git from 'src/composables/Git';
 
 installQuasarPlugin();
 
@@ -14,9 +14,12 @@ jest.mock('vue-router', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
+  getProjectById: jest.fn(),
+}));
+
+jest.mock('src/composables/Git', () => ({
   getBranches: jest.fn(() => Promise.resolve([])),
   gitFetch: jest.fn(() => Promise.resolve()),
-  getProjectById: jest.fn(),
 }));
 
 describe('Test component: GitBranchMenu', () => {
@@ -34,7 +37,7 @@ describe('Test component: GitBranchMenu', () => {
   beforeEach(() => {
     gitFetchMock = jest.fn();
 
-    Project.gitFetch.mockImplementation(() => Promise.resolve(gitFetchMock()));
+    Git.gitFetch.mockImplementation(() => Promise.resolve(gitFetchMock()));
 
     wrapper = shallowMount(GitBranchMenu, {
       props: {

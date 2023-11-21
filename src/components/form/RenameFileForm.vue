@@ -42,7 +42,8 @@
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref } from 'vue';
 import { notEmpty, isValidFileLabel, isUnique } from 'src/composables/QuasarFieldRule';
-import { gitRemove, readDir, rename } from 'src/composables/Project';
+import { readDir, rename } from 'src/composables/Project';
+import { gitRemove } from 'src/composables/Git';
 import { Notify } from 'quasar';
 import FileEvent from 'src/composables/events/FileEvent';
 

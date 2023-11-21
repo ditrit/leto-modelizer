@@ -24,6 +24,9 @@ jest.mock('src/composables/Project', () => ({
   writeProjectFile: jest.fn(),
   readProjectFile: jest.fn(() => Promise.resolve('fileContent')),
   exists: jest.fn((fileId) => Promise.resolve(fileId === 'project-00000000/file.js')),
+}));
+
+jest.mock('src/composables/Git', () => ({
   getStatus: jest.fn(() => Promise.resolve([{ path: 'file.js' }])),
 }));
 

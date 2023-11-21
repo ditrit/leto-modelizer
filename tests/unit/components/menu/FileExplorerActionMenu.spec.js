@@ -21,7 +21,7 @@ jest.mock('src/composables/events/GitEvent', () => ({
   },
 }));
 
-jest.mock('src/composables/Project', () => ({
+jest.mock('src/composables/Git', () => ({
   gitAdd: jest.fn((projectId) => {
     if (projectId === 'error') {
       return Promise.reject({ name: 'error' });

@@ -14,13 +14,6 @@ jest.mock('vue-i18n', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  importProject: jest.fn((project) => {
-    if (project.id === 'error') {
-      return Promise.reject({ name: 'error' });
-    }
-
-    return Promise.resolve();
-  }),
   getProjects: jest.fn(() => ({
     foo: {
       id: 'foo',
@@ -39,6 +32,16 @@ jest.mock('src/composables/Project', () => ({
     return Promise.resolve();
   }),
   extractProjectName: jest.fn((name) => name),
+}));
+
+jest.mock('src/composables/Git', () => ({
+  importProject: jest.fn((project) => {
+    if (project.id === 'error') {
+      return Promise.reject({ name: 'error' });
+    }
+
+    return Promise.resolve();
+  }),
 }));
 
 describe('Test component: ImportProjectForm', () => {

@@ -31,7 +31,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import { getProjectById, gitUpdate } from 'src/composables/Project';
+import { getProjectById } from 'src/composables/Project';
+import { gitUpdate } from 'src/composables/Git';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import GitEvent from 'src/composables/events/GitEvent';

@@ -4,7 +4,7 @@ import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import GitLogDialog from 'src/components/dialog/GitLogDialog.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import { gitLog } from 'src/composables/Project';
+import { gitLog } from 'src/composables/Git';
 
 installQuasarPlugin();
 
@@ -12,7 +12,7 @@ jest.mock('src/composables/events/DialogEvent', () => ({
   subscribe: jest.fn(),
 }));
 
-jest.mock('src/composables/Project', () => ({
+jest.mock('src/composables/Git', () => ({
   gitLog: jest.fn((projectId, commitRef, depth) => {
     const logs = [];
     if (depth === 26) {

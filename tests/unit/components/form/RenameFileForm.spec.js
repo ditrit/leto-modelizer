@@ -14,11 +14,14 @@ jest.mock('vue-i18n', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  gitRemove: jest.fn(() => Promise.resolve()),
   readDir: jest.fn(() => ['test']),
   rename: jest.fn(
     (old, rename) => (rename === 'projectName/rename' ? Promise.resolve() : Promise.reject()),
   ),
+}));
+
+jest.mock('src/composables/Git', () => ({
+  gitRemove: jest.fn(() => Promise.resolve()),
 }));
 
 describe('Test component: RenameFileForm', () => {

@@ -73,7 +73,7 @@ import {
   ref,
 } from 'vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import { getStatus } from 'src/composables/Project';
+import { getStatus } from 'src/composables/Git';
 import GitCommitForm from 'components/form/GitCommitForm.vue';
 import GitEvent from 'src/composables/events/GitEvent';
 

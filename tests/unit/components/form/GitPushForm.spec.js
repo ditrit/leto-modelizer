@@ -21,6 +21,9 @@ jest.mock('src/composables/Project', () => ({
       token: 'token',
     },
   })),
+}));
+
+jest.mock('src/composables/Git', () => ({
   gitPush: jest.fn((project) => {
     if (project.id === 'error') {
       return Promise.reject({ name: 'error' });

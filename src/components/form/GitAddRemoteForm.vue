@@ -51,8 +51,8 @@ import {
 import {
   getProjectById,
   saveProject,
-  gitAddRemote,
 } from 'src/composables/Project';
+import { gitAddRemote } from 'src/composables/Git';
 import GitEvent from 'src/composables/events/GitEvent';
 
 const emit = defineEmits(['project-git:save']);

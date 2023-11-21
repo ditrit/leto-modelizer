@@ -33,7 +33,7 @@
 <script setup>
 import { ref } from 'vue';
 import { notEmpty } from 'src/composables/QuasarFieldRule';
-import { gitCommit } from 'src/composables/Project';
+import { gitCommit } from 'src/composables/Git';
 import { useI18n } from 'vue-i18n';
 import { Notify } from 'quasar';
 

@@ -59,7 +59,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { gitCheckout } from 'src/composables/Project';
+import { gitCheckout } from 'src/composables/Git';
 import { useRoute } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import GitEvent from 'src/composables/events/GitEvent';
