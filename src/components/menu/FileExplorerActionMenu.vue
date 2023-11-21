@@ -6,6 +6,23 @@
     @hide="emit('hide:menu')"
   >
     <q-list style="min-width: 150px">
+      <q-item
+        v-if="!file.isRootFolder"
+        clickable
+        data-cy="rename-file-action-item"
+        @click="renameFile"
+      >
+        <q-item-section avatar>
+          <q-icon
+            color="primary"
+            size="xs"
+            name="fa-solid fa-pen"
+          />
+        </q-item-section>
+        <q-item-section>
+          {{ $t('actions.default.rename') }}
+        </q-item-section>
+      </q-item>
       <template v-if="file.isFolder">
         <q-item
           clickable
@@ -126,6 +143,18 @@ function createFile(isFolder) {
     key: 'CreateFile',
     file: props.file,
     isFolder,
+  });
+  menu.value.hide();
+}
+
+/**
+ * Send event to open the RenameFileDialog.
+ */
+function renameFile() {
+  DialogEvent.next({
+    type: 'open',
+    key: 'RenameFile',
+    file: props.file,
   });
   menu.value.hide();
 }

@@ -51,6 +51,9 @@ jest.mock('src/composables/events/FileEvent', () => ({
   CreateFileEvent: {
     subscribe: jest.fn(),
   },
+  RenameFileEvent: {
+    subscribe: jest.fn(),
+  },
   CreateFileNodeEvent: {
     subscribe: jest.fn(),
   },
@@ -95,6 +98,7 @@ describe('Test component: FileExplorer', () => {
 
   // FileEvent
   let createFileEventSubscribe;
+  let renameFileEventSubscribe;
   let createFileNodeEventSubscribe;
   let deleteFileSubscribe;
   let globalUploadFilesEventSubscribe;
@@ -102,6 +106,7 @@ describe('Test component: FileExplorer', () => {
   let updateEditorContentSubscribe;
 
   let createFileEventUnsubscribe;
+  let renameFileEventUnsubscribe;
   let createFileNodeEventUnsubscribe;
   let deleteFileUnsubscribe;
   let globalUploadFilesEventUnsubscribe;
@@ -127,6 +132,7 @@ describe('Test component: FileExplorer', () => {
   beforeEach(() => {
     // FileEvent
     createFileEventSubscribe = jest.fn();
+    renameFileEventSubscribe = jest.fn();
     createFileNodeEventSubscribe = jest.fn();
     deleteFileSubscribe = jest.fn();
     globalUploadFilesEventSubscribe = jest.fn();
@@ -134,6 +140,7 @@ describe('Test component: FileExplorer', () => {
     updateEditorContentSubscribe = jest.fn();
 
     createFileEventUnsubscribe = jest.fn();
+    renameFileEventUnsubscribe = jest.fn();
     createFileNodeEventUnsubscribe = jest.fn();
     deleteFileUnsubscribe = jest.fn();
     globalUploadFilesEventUnsubscribe = jest.fn();
@@ -160,6 +167,10 @@ describe('Test component: FileExplorer', () => {
     FileEvent.CreateFileEvent.subscribe.mockImplementation(() => {
       createFileEventSubscribe();
       return { unsubscribe: createFileEventUnsubscribe };
+    });
+    FileEvent.RenameFileEvent.subscribe.mockImplementation(() => {
+      renameFileEventSubscribe();
+      return { unsubscribe: renameFileEventUnsubscribe };
     });
     FileEvent.CreateFileNodeEvent.subscribe.mockImplementation(() => {
       createFileNodeEventSubscribe();
@@ -585,6 +596,9 @@ describe('Test component: FileExplorer', () => {
     it('should subscribe to CreateFileEvent', () => {
       expect(createFileEventSubscribe).toHaveBeenCalledTimes(1);
     });
+    it('should subscribe to RenameFileEvent', () => {
+      expect(renameFileEventSubscribe).toHaveBeenCalledTimes(1);
+    });
     it('should subscribe to DeleteFileEvent', () => {
       expect(deleteFileSubscribe).toHaveBeenCalledTimes(1);
     });
@@ -622,6 +636,11 @@ describe('Test component: FileExplorer', () => {
       expect(createFileEventUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(createFileEventUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should unsubscribe to RenameFileEvent', () => {
+      expect(renameFileEventUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(renameFileEventUnsubscribe).toHaveBeenCalledTimes(1);
     });
     it('should unsubscribe to DeleteFileEvent', () => {
       expect(deleteFileUnsubscribe).toHaveBeenCalledTimes(0);

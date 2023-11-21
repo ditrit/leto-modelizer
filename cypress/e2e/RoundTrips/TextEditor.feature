@@ -587,6 +587,7 @@ Feature: Test roundtrip of the application: text editor
 
     # Go back to the draw view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I wait 2 seconds
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
 
     # Add component
@@ -594,7 +595,7 @@ Feature: Test roundtrip of the application: text editor
     Then I expect '[data-cy="component-definition_aws"]' exists
 
     When I click on '[data-cy="component-definition_aws"]'
-    And  I wait 1 second
+    And  I wait 2 seconds
     Then I expect '[data-cy="draw-container"] [id^="aws"]' exists
 
     # Go back to the text view
@@ -603,3 +604,30 @@ Feature: Test roundtrip of the application: text editor
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect '[data-cy="file_infra/new_file.tf"]' exists
     And  I expect active file content to contain 'provider.*"aws".*{}'
+
+    ## Rename a folder
+    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_infra"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_infra"]'
+    Then I expect '[data-cy="file-explorer-action-menu"]' exists
+
+    When I click on '[data-cy="file-explorer-action-menu"] [data-cy="rename-file-action-item"]'
+    Then I expect '[data-cy="rename-file-dialog"]' exists
+
+    When I set on '[data-cy="rename-file-form"] [data-cy="name-input"]' text ''
+    And  I click on '[data-cy="rename-file-form"] [data-cy="submit-button"]'
+    Then I expect '[data-cy="rename-file-form"] [role="alert"]' is 'Please type something'
+
+    When I set on '[data-cy="rename-file-form"] [data-cy="name-input"]' text 'newFile'
+    And  I click on '[data-cy="rename-file-form"] [data-cy="submit-button"]'
+    Then I expect '[data-cy="rename-file-form"] [role="alert"]' is 'This name already exists.'
+
+    When I set on '[data-cy="rename-file-form"] [data-cy="name-input"]' text 'coucou/infra'
+    And  I click on '[data-cy="rename-file-form"] [data-cy="submit-button"]'
+    Then I expect '[data-cy="rename-file-form"] [role="alert"]' is 'The name must not contain any \'/\' characters.'
+
+    When I set on '[data-cy="rename-file-form"] [data-cy="name-input"]' text 'infra-rename'
+    And  I click on '[data-cy="rename-file-form"] [data-cy="submit-button"]'
+    Then I expect 'positive' toast to appear with text 'Folder is renamed.'
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_infra-rename"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_infra"]' not exists
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 0 time on screen

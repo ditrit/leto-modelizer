@@ -17,6 +17,7 @@ export default {
       cancel: 'Cancel',
       search: 'Search',
       modify: 'Modify',
+      rename: 'Rename',
       ok: 'Ok',
     },
     home: {
@@ -138,11 +139,13 @@ export default {
       addFile: 'Add',
       file: {
         create: 'File is created &#129395;!',
+        rename: 'File is renamed &#129395;!',
         delete: 'File is deleted.',
         add: 'File is added &#129395;!',
       },
       folder: {
         create: 'Folder is created &#129395;!',
+        rename: 'Folder is renamed &#129395;!',
         delete: 'Folder is deleted.',
       },
     },
@@ -192,10 +195,12 @@ export default {
       default: {
         folder: {
           create: 'An error occured while creating folder.',
+          rename: 'An error occured while renaming folder.',
           delete: 'An error occured while deleting folder.',
         },
         file: {
           create: 'An error occured while creating file.',
+          rename: 'An error occured while renaming file.',
           delete: 'An error occured while deleting file.',
           add: 'An error occured while adding file.',
         },
@@ -414,6 +419,16 @@ export default {
             title: 'Delete folder',
             description: 'Are you sure you want to delete <b>{name}</b> folder ?',
             confirmDelete: 'Confirm deletion of folder and all its content',
+          },
+        },
+        rename: {
+          file: {
+            title: 'Rename file',
+            input: 'New file name',
+          },
+          folder: {
+            title: 'Rename folder',
+            input: 'New folder name',
           },
         },
         filterParsableFiles: 'Show parsable files',

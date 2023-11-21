@@ -8,6 +8,12 @@ import { Subject } from 'rxjs';
 const CreateFileEvent = new Subject();
 
 /**
+ * Represent a rxjs Event object to emit and to receive events about file name modification.
+ * @typedef {Subject} RenameFileEvent
+ */
+const RenameFileEvent = new Subject();
+
+/**
  * Represent a rxjs Event object to emit and to receive events about node deletion.
  * The event should contain the deleted node Object from the tree.
  * @typedef {Subject} DeleteFileEvent
@@ -50,6 +56,7 @@ const UpdateEditorContentEvent = new Subject();
 
 export default {
   CreateFileEvent,
+  RenameFileEvent,
   DeleteFileEvent,
   GlobalUploadFilesEvent,
   SelectFileTabEvent,

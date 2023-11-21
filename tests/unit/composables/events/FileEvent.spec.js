@@ -23,6 +23,13 @@ describe('Test composable: FileEvent', () => {
     });
   });
 
+  describe('Test event: RenameFileEvent', () => {
+    it('should export a Subject', () => {
+      expect(FileEvent.RenameFileEvent).toBeDefined();
+      expect(FileEvent.RenameFileEvent).toEqual(new Subject());
+    });
+  });
+
   describe('Test event: DeleteFileEvent', () => {
     it('should export a Subject', () => {
       expect(FileEvent.DeleteFileEvent).toBeDefined();
