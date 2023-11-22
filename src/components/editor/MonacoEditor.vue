@@ -15,8 +15,8 @@ import {
   writeProjectFile,
   readProjectFile,
   exists,
-  getStatus,
 } from 'src/composables/Project';
+import { getStatus } from 'src/composables/Git';
 import {
   onBeforeMount,
   onMounted,

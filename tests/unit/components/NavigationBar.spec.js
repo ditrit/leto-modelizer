@@ -4,7 +4,7 @@ import NavigationBar from 'src/components/NavigationBar.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import { Notify } from 'quasar';
-import Project from 'src/composables/Project';
+import * as Git from 'src/composables/Git';
 import { useRouter } from 'vue-router';
 
 installQuasarPlugin({
@@ -40,13 +40,16 @@ jest.mock('src/composables/events/GitEvent', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  gitGlobalUpload: jest.fn(),
   getProjectById: jest.fn((projectName) => {
     if (projectName === 'projectTest') {
       return { git: { repository: {}, username: 'username', token: 'token' } };
     }
     return {};
   }),
+}));
+
+jest.mock('src/composables/Git', () => ({
+  gitGlobalUpload: jest.fn(),
 }));
 
 describe('Test component: NavigationBar', () => {
@@ -60,7 +63,7 @@ describe('Test component: NavigationBar', () => {
   const globalUploadFilesEvent = jest.fn();
 
   FileEvent.GlobalUploadFilesEvent.next.mockImplementation(globalUploadFilesEvent);
-  Project.gitGlobalUpload.mockImplementation(
+  Git.gitGlobalUpload.mockImplementation(
     (project) => (project.git ? Promise.resolve() : Promise.reject()),
   );
 

@@ -75,11 +75,11 @@ import {
   isUnique,
 } from 'src/composables/QuasarFieldRule';
 import {
-  importProject,
   getProjects,
   deleteProjectById,
   extractProjectName,
 } from 'src/composables/Project';
+import { importProject } from 'src/composables/Git';
 
 const emit = defineEmits(['project:import']);
 

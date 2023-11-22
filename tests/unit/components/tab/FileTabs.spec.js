@@ -4,6 +4,7 @@ import FileTabs from 'src/components/tab/FileTabs.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import * as Project from 'src/composables/Project';
+import * as Git from 'src/composables/Git';
 
 installQuasarPlugin();
 
@@ -47,8 +48,11 @@ jest.mock('src/composables/events/GitEvent', () => ({
 }));
 
 jest.mock('src/composables/Project', () => ({
-  getStatus: jest.fn(),
   exists: jest.fn(),
+}));
+
+jest.mock('src/composables/Git', () => ({
+  getStatus: jest.fn(),
 }));
 
 describe('Test component: FileTabs', () => {
@@ -314,7 +318,7 @@ describe('Test component: FileTabs', () => {
       wrapper.vm.fileTabArray = [];
       const getStatus = jest.fn();
 
-      Project.getStatus.mockImplementation(getStatus);
+      Git.getStatus.mockImplementation(getStatus);
 
       expect(getStatus).toHaveBeenCalledTimes(0);
 
@@ -329,7 +333,7 @@ describe('Test component: FileTabs', () => {
       wrapper.vm.fileTabArray = [{ id: 'path' }];
       const getStatus = jest.fn(() => Promise.resolve([information]));
 
-      Project.getStatus.mockImplementation(getStatus);
+      Git.getStatus.mockImplementation(getStatus);
 
       expect(getStatus).toHaveBeenCalledTimes(0);
 

@@ -13,7 +13,7 @@ jest.mock('src/composables/events/DialogEvent', () => ({
   subscribe: jest.fn(),
 }));
 
-jest.mock('src/composables/Project', () => ({
+jest.mock('src/composables/Git', () => ({
   getStatus: jest.fn(() => Promise.resolve([mockFileStatus])),
 }));
 

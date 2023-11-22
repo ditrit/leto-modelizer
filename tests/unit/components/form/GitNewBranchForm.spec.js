@@ -3,7 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import GitNewBranchForm from 'src/components/form/GitNewBranchForm.vue';
 import { Notify } from 'quasar';
 import GitEvent from 'src/composables/events/GitEvent';
-import Project from 'src/composables/Project';
+import * as Git from 'src/composables/Git';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -15,7 +15,7 @@ jest.mock('vue-i18n', () => ({
   }),
 }));
 
-jest.mock('src/composables/Project', () => ({
+jest.mock('src/composables/Git', () => ({
   getBranches: jest.fn(() => Promise.resolve([{ name: 'test' }])),
   createBranchFrom: jest.fn((id) => {
     if (id === 'error') {
@@ -45,7 +45,7 @@ describe('Test component: GitNewBranchForm', () => {
     gitCheckoutMock = jest.fn();
 
     GitEvent.CheckoutEvent.next.mockImplementation(checkoutNext);
-    Project.gitCheckout.mockImplementation(() => Promise.resolve(gitCheckoutMock()));
+    Git.gitCheckout.mockImplementation(() => Promise.resolve(gitCheckoutMock()));
 
     wrapper = shallowMount(GitNewBranchForm, {
       props: {

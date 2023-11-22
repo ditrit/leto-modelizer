@@ -20,7 +20,7 @@ jest.mock('vue-router', () => ({
   useRoute: jest.fn(),
 }));
 
-jest.mock('src/composables/Project', () => ({
+jest.mock('src/composables/Git', () => ({
   gitCheckout: jest.fn((_, id) => {
     if (id === 'error') {
       return Promise.reject(() => 'error');

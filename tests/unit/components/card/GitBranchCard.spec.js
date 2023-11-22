@@ -4,7 +4,7 @@ import GitBranchCard from 'src/components/card/GitBranchCard.vue';
 import { useRoute } from 'vue-router';
 import GitEvent from 'src/composables/events/GitEvent';
 import FileEvent from 'src/composables/events/FileEvent';
-import Project from 'src/composables/Project';
+import * as Git from 'src/composables/Git';
 
 installQuasarPlugin();
 
@@ -12,7 +12,7 @@ jest.mock('vue-router', () => ({
   useRoute: jest.fn(),
 }));
 
-jest.mock('src/composables/Project', () => ({
+jest.mock('src/composables/Git', () => ({
   getCurrentBranch: jest.fn(() => Promise.resolve('main')),
 }));
 
@@ -87,7 +87,7 @@ describe('Test component: GitBranchCard', () => {
       wrapper.vm.loading = true;
       expect(wrapper.vm.currentBranch).toEqual('main');
 
-      Project.getCurrentBranch.mockReturnValueOnce(Promise.resolve('test'));
+      Git.getCurrentBranch.mockReturnValueOnce(Promise.resolve('test'));
 
       await wrapper.vm.updateBranch();
       await flushPromises();

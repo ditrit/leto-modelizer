@@ -106,7 +106,7 @@ import {
   ref,
 } from 'vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import { getStatus } from 'src/composables/Project';
+import { getStatus } from 'src/composables/Git';
 
 const props = defineProps({
   projectName: {

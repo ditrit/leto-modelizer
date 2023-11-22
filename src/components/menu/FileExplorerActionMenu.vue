@@ -104,7 +104,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { getStatus, gitAdd } from 'src/composables/Project';
+import { getStatus, gitAdd } from 'src/composables/Git';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import DialogEvent from 'src/composables/events/DialogEvent';

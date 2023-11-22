@@ -5,15 +5,18 @@ import i18nConfiguration from 'src/i18n';
 import FileExplorer from 'src/components/FileExplorer.vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
-import * as Project from 'src/composables/Project';
+import * as Git from 'src/composables/Git';
 import * as PluginManager from 'src/composables/PluginManager';
 
 installQuasarPlugin();
 
 jest.mock('src/composables/Project', () => ({
   getProjectFiles: jest.fn(() => Promise.resolve([])),
-  getStatus: jest.fn(() => Promise.resolve([])),
   isDirectory: jest.fn((file) => Promise.resolve(file === 'folder')),
+}));
+
+jest.mock('src/composables/Git', () => ({
+  getStatus: jest.fn(() => Promise.resolve([])),
 }));
 
 jest.mock('vue-router', () => ({
@@ -424,7 +427,7 @@ describe('Test component: FileExplorer', () => {
         setExpanded: jest.fn(),
       };
       wrapper.vm.localFileInformations = [];
-      Project.getStatus.mockImplementation(() => [{ path: 'fileName' }]);
+      Git.getStatus.mockImplementation(() => [{ path: 'fileName' }]);
 
       await wrapper.vm.onCreateFile(file);
 

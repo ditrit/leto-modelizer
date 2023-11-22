@@ -152,11 +152,11 @@ import {
   ref,
 } from 'vue';
 import { useRoute } from 'vue-router';
+import { getProjectById } from 'src/composables/Project';
 import {
   getBranches,
   gitFetch,
-  getProjectById,
-} from 'src/composables/Project';
+} from 'src/composables/Git';
 import GitBranchExpandListMenu from 'components/menu/GitBranchExpandListMenu.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { searchText } from 'src/composables/Filter';

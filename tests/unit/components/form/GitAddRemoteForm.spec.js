@@ -4,8 +4,8 @@ import GitAddRemoteForm from 'src/components/form/GitAddRemoteForm.vue';
 import {
   getProjectById,
   saveProject,
-  gitAddRemote,
 } from 'src/composables/Project';
+import { gitAddRemote } from 'src/composables/Git';
 import { Notify } from 'quasar';
 import GitEvent from 'src/composables/events/GitEvent';
 
@@ -41,6 +41,9 @@ jest.mock('src/composables/Project', () => ({
     };
   }),
   saveProject: jest.fn(),
+}));
+
+jest.mock('src/composables/Git', () => ({
   gitAddRemote: jest.fn((project) => {
     if (project.id === 'error') {
       return Promise.reject({ name: 'HttpError' });
