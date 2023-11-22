@@ -627,6 +627,7 @@ Feature: Test roundtrip of the application: text editor
 
     When I set on '[data-cy="rename-file-form"] [data-cy="name-input"]' text 'infra-rename'
     And  I click on '[data-cy="rename-file-form"] [data-cy="submit-button"]'
+    And  I wait 2 seconds
     Then I expect 'positive' toast to appear with text 'Folder is renamed.'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_infra-rename"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_infra"]' not exists
