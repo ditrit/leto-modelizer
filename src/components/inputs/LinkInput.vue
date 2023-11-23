@@ -5,6 +5,8 @@
     multiple
     clearable
     :options="options"
+    emit-value
+    map-options
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
     ]"
@@ -46,7 +48,7 @@ const { attribute, plugin } = toRefs(props);
 const localValue = ref(attribute.value.value);
 const options = ref(plugin.value.data.getComponentsByType(
   attribute.value.definition.linkRef,
-).map(({ id }) => id));
+).map(({ externalId, id }) => ({ label: externalId, value: id })));
 const iconName = ref(plugin.value.data.definitions.components.find(
   ({ type }) => type === attribute.value.definition.linkRef,
 ).icon);
@@ -62,7 +64,7 @@ function updateOptions({ event }) {
   if (event.type === 'Drawer' && event.status === 'success' && !['move', 'resize'].includes(event.action)) {
     options.value = props.plugin.data.getComponentsByType(
       props.attribute.definition.linkRef,
-    ).map(({ id }) => id);
+    ).map(({ externalId, id }) => ({ label: externalId, value: id }));
   }
 }
 
@@ -72,6 +74,12 @@ watch(() => props.attribute, () => {
   if (linkInput.value) {
     linkInput.value.validate();
   }
+});
+
+watch(() => props.plugin.data.components, () => {
+  options.value = props.plugin.data.getComponentsByType(
+    props.attribute.definition.linkRef,
+  ).map(({ externalId, id }) => ({ label: externalId, value: id }));
 });
 
 onMounted(() => {
