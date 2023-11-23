@@ -4,6 +4,8 @@
     v-model="localValue"
     clearable
     :options="options"
+    emit-value
+    map-options
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
     ]"
@@ -45,7 +47,8 @@ const referenceInput = ref(null);
 const localValue = ref(attribute.value.value);
 const options = ref(plugin.value.data.getComponentsByType(
   attribute.value.definition.containerRef,
-).map(({ id }) => id));
+  plugin.value.data.components,
+).map(({ externalId, id }) => ({ label: externalId, value: id })));
 const iconName = ref(plugin.value.data.definitions.components.find(
   ({ type }) => type === attribute.value.definition.containerRef,
 ).icon);
@@ -71,6 +74,12 @@ watch(() => props.attribute, () => {
   if (referenceInput.value) {
     referenceInput.value.validate();
   }
+});
+
+watch(() => props.plugin.data.components, () => {
+  options.value = props.plugin.data.getComponentsByType(
+    props.attribute.definition.containerRef,
+  ).map(({ externalId, id }) => ({ label: externalId, value: id }));
 });
 
 onMounted(() => {
