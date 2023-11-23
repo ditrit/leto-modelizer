@@ -50,7 +50,7 @@ describe('test component: Plugin Component Detail Panel', () => {
     },
   }, {
     data: {
-      getComponentById: () => new Component({ id: 'componentId', definition: new ComponentDefinition() }),
+      getComponentById: () => new Component({ id: 'componentId', externalId: 'externalId', definition: new ComponentDefinition() }),
       components: [],
       name: 'test',
     },
@@ -76,7 +76,7 @@ describe('test component: Plugin Component Detail Panel', () => {
                 type: 'componentType',
               }],
             },
-            renameComponentId: jest.fn(),
+            renameComponentExternalId: jest.fn(),
           },
           draw: jest.fn(),
         },
@@ -138,9 +138,9 @@ describe('test component: Plugin Component Detail Panel', () => {
   });
 
   describe('Test function: submit', () => {
-    it('should update selectedComponent with selectedComponentId & selectedComponentAttributes', () => {
+    it('should update selectedComponent with selectedComponentExternalId & selectedComponentAttributes', () => {
       wrapper.vm.originalComponent = {};
-      wrapper.vm.selectedComponentId = 'selectedComponentId';
+      wrapper.vm.selectedComponentExternalId = 'selectedComponentExternalId';
       wrapper.vm.selectedComponentAttributes = [];
 
       wrapper.vm.submit();
@@ -199,6 +199,7 @@ describe('test component: Plugin Component Detail Panel', () => {
 
       const component = new Component({
         id: 'componentId',
+        externalId: 'externalId',
         attributes: [],
         definition: new ComponentDefinition(),
       });
@@ -208,7 +209,7 @@ describe('test component: Plugin Component Detail Panel', () => {
 
       expect(wrapper.vm.isVisible).toBeTruthy();
       expect(wrapper.vm.originalComponent).toEqual(component);
-      expect(wrapper.vm.selectedComponentId).toEqual('componentId');
+      expect(wrapper.vm.selectedComponentExternalId).toEqual('externalId');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
     });
 
@@ -219,7 +220,7 @@ describe('test component: Plugin Component Detail Panel', () => {
 
       expect(wrapper.vm.isVisible).toBeFalsy();
       expect(wrapper.vm.originalComponent).toEqual(null);
-      expect(wrapper.vm.selectedComponentId).toEqual('');
+      expect(wrapper.vm.selectedComponentExternalId).toEqual('');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
     });
 
@@ -230,7 +231,7 @@ describe('test component: Plugin Component Detail Panel', () => {
 
       expect(wrapper.vm.isVisible).toBeFalsy();
       expect(wrapper.vm.originalComponent).toEqual(null);
-      expect(wrapper.vm.selectedComponentId).toEqual('');
+      expect(wrapper.vm.selectedComponentExternalId).toEqual('');
       expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
     });
 
