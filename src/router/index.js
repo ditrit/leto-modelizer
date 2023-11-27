@@ -6,6 +6,7 @@ import routes from 'src/router/routes';
 import { getUserSessionToken } from 'src/composables/UserAuthentication';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getAuthenticationUrl } from 'src/composables/LetoModelizerApi';
+import { useAcl } from 'vue-simple-acl';
 
 let applicationReady = false;
 
@@ -38,6 +39,7 @@ export default route(async () => {
   });
 
   // No need to do this call each time, so doing it outside the beforeEach.
+  const acl = useAcl();
   let backendUrl;
   if (process.env.HAS_BACKEND) {
     backendUrl = await getAuthenticationUrl();
@@ -59,6 +61,8 @@ export default route(async () => {
       }
 
       next({ name: 'Splash', query: { from: to.fullPath, authCode: temporaryCode } });
+    } else if (to.name === 'Admin' && !acl.role('admin')) {
+      next('/');
     } else {
       next();
     }
