@@ -6,6 +6,7 @@ import { useUserStore } from 'stores/UserStore';
 const userStore = useUserStore();
 const userRoles = computed(() => ({ roles: userStore.roles }));
 const rules = () => defineAclRules((setRule) => {
+  setRule('admin', (user) => process.env.HAS_BACKEND && process.env.ADMIN_URL && user.roles.includes('admin'));
   setRule('create-diagram', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createDiagram'));
   setRule('create-diagram-from-template', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createDiagramFromTemplate'));
   setRule('create-component', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createComponent'));
