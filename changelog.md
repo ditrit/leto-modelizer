@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Autosave on component detail panel.
 * Debounce of 1 second on file auto-save.
 * Add 'Rename' action in FileExplorer file/folder menu.
+* Add administration view button.
 * Setup conditional features:
   * `CF_createDiagram`: allows or prevents user to create a diagram.
   * `CF_createDiagramFromTemplate`: allows or prevents user to create a diagram from a template.
