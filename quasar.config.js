@@ -113,6 +113,7 @@ module.exports = configure((ctx) => ({
         ? Object.prototype.hasOwnProperty.call(configuration?.backend, 'url')
           && Object.prototype.hasOwnProperty.call(configuration?.backend, 'appId')
         : false,
+      ADMIN_URL: configuration?.adminUrl || null,
       BACKEND_APP_ID: configuration?.backend?.appId,
     },
     // extractCSS: false,
