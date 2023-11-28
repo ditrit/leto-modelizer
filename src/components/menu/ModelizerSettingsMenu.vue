@@ -51,6 +51,23 @@
           </q-item-section>
         </q-item>
       </template>
+      <q-item
+        v-can:admin
+        clickable
+        class="settings-item"
+        data-cy="item_admin"
+        @click="$router.push('/admin')"
+      >
+        <q-item-section avatar>
+          <q-icon
+            color="primary"
+            name="fa-solid fa-users-gear"
+          />
+        </q-item-section>
+        <q-item-section no-wrap>
+          {{ $t('page.modelizer.settings.admin.title') }}
+        </q-item-section>
+      </q-item>
     </q-list>
   </q-btn-dropdown>
 </template>
