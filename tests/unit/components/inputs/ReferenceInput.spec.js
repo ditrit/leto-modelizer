@@ -3,13 +3,30 @@ import { shallowMount } from '@vue/test-utils';
 import ReferenceInput from 'src/components/inputs/ReferenceInput';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 installQuasarPlugin();
 
+jest.mock('src/composables/events/PluginEvent', () => ({
+  DefaultEvent: {
+    subscribe: jest.fn(),
+  },
+}));
+
 describe('Test component: ReferenceInput', () => {
   let wrapper;
+  let pluginDefaultSubscription;
+  let pluginDefaultUnsubscription;
 
   beforeEach(() => {
+    pluginDefaultSubscription = jest.fn();
+    pluginDefaultUnsubscription = jest.fn();
+
+    PluginEvent.DefaultEvent.subscribe.mockImplementation(() => {
+      pluginDefaultSubscription();
+      return { unsubscribe: pluginDefaultUnsubscription };
+    });
+
     wrapper = shallowMount(ReferenceInput, {
       props: {
         attribute: {
@@ -83,37 +100,31 @@ describe('Test component: ReferenceInput', () => {
     });
   });
 
-  // TODO: REF.value.validate is not a function
-  describe.skip('Test watcher: props.plugin.components', () => {
-    it('should update options', async () => {
-      await wrapper.setProps({
-        attribute: {
-          value: 'test',
-          name: 'attributeName',
-          definition: {
-            containerRef: 'reference',
-          },
-        },
-        plugin: {
-          data: {
-            getComponentsByType: jest.fn(() => [{ id: 'ref' }]),
-            name: 'pluginName',
-            components: [{
-              name: 'ref',
-              definition: {
-                type: 'reference',
-              },
-            }],
-            definitions: {
-              components: [{
-                type: 'reference',
-                icon: 'referenceIconName',
-              }],
-            },
-          },
-        },
-      });
+  describe('Test function: updateOptions', () => {
+    it('should update options array', () => {
+      const event = {
+        type: 'Drawer',
+        status: 'success',
+      };
+      wrapper.vm.options = ['coucou'];
+
+      wrapper.vm.updateOptions({ event });
+
       expect(wrapper.vm.options).toEqual(['ref']);
+    });
+  });
+
+  describe('Test hook function: onMounted', () => {
+    it('should subscribe to DefaultEvent', () => {
+      expect(pluginDefaultSubscription).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test hook function: onUnmounted', () => {
+    it('should unsubscribe to DefaultEvent', () => {
+      expect(pluginDefaultUnsubscription).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(pluginDefaultUnsubscription).toHaveBeenCalledTimes(1);
     });
   });
 });

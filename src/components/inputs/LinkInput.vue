@@ -8,6 +8,7 @@
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
     ]"
+    :data-cy="`link-input_${attribute.name}`"
   >
     <template #prepend>
       <q-icon
@@ -19,8 +20,15 @@
 </template>
 
 <script setup>
-import { ref, toRefs, watch } from 'vue';
+import {
+  onMounted,
+  onUnmounted,
+  ref,
+  toRefs,
+  watch,
+} from 'vue';
 import { isRequired } from 'src/composables/QuasarFieldRule';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 const props = defineProps({
   attribute: {
@@ -43,17 +51,20 @@ const iconName = ref(plugin.value.data.definitions.components.find(
   ({ type }) => type === attribute.value.definition.linkRef,
 ).icon);
 
-watch(() => props.plugin.data.components, () => {
-  options.value = props.plugin.data.getComponentsByType(
-    props.attribute.definition.linkRef,
-  ).map(({ id }) => id);
-});
+let pluginDefaultSubscription;
 
-watch(() => linkInput.value, () => {
-  if (linkInput.value) {
-    linkInput.value.validate();
+/**
+ * Update input options.
+ * @param {object} eventManager - Object containing event and plugin.
+ * @param {object} eventManager.event - The triggered event.
+ */
+function updateOptions({ event }) {
+  if (event.type === 'Drawer' && event.status === 'success' && !['move', 'resize'].includes(event.action)) {
+    options.value = props.plugin.data.getComponentsByType(
+      props.attribute.definition.linkRef,
+    ).map(({ id }) => id);
   }
-});
+}
 
 watch(() => props.attribute, () => {
   localValue.value = props.attribute.value;
@@ -61,5 +72,13 @@ watch(() => props.attribute, () => {
   if (linkInput.value) {
     linkInput.value.validate();
   }
+});
+
+onMounted(() => {
+  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(updateOptions);
+});
+
+onUnmounted(() => {
+  pluginDefaultSubscription.unsubscribe();
 });
 </script>
