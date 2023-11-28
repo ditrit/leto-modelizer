@@ -41,6 +41,7 @@ Feature: Test diagrams page: display all diagrams
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ secondModelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    And  I wait 2 seconds
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ secondModelFolder }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
