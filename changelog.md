@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix bug about rewritten file on checkout, see [this issue](https://github.com/ditrit/leto-modelizer/issues/422).
 * Fix bug about required management for RegExp rule, see [this issue](https://github.com/ditrit/leto-modelizer/issues/387).
 * Fix bugs about component creation on a click or a drag&drop, see [this issue](https://github.com/ditrit/leto-modelizer/issues/401) and [this issue](https://github.com/ditrit/leto-modelizer/issues/415).
+* Fix bug about (Link|Reference)Input options update, see [this issue](https://github.com/ditrit/leto-modelizer/issues/390).
 
 ### Removed
 
