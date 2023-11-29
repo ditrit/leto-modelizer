@@ -7,6 +7,7 @@
     :rules="[
       (value) => isRequired($t, value, attribute.definition?.required),
     ]"
+    :data-cy="`ref-input_${attribute.name}`"
   >
     <template #prepend>
       <q-icon
@@ -18,8 +19,15 @@
 </template>
 
 <script setup>
-import { ref, toRefs, watch } from 'vue';
+import {
+  onMounted,
+  onUnmounted,
+  ref,
+  toRefs,
+  watch,
+} from 'vue';
 import { isRequired } from 'src/composables/QuasarFieldRule';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 const props = defineProps({
   attribute: {
@@ -37,23 +45,25 @@ const referenceInput = ref(null);
 const localValue = ref(attribute.value.value);
 const options = ref(plugin.value.data.getComponentsByType(
   attribute.value.definition.containerRef,
-  plugin.value.data.components,
 ).map(({ id }) => id));
 const iconName = ref(plugin.value.data.definitions.components.find(
   ({ type }) => type === attribute.value.definition.containerRef,
 ).icon);
 
-watch(() => props.plugin.data.components, () => {
-  options.value = props.plugin.data.getComponentsByType(
-    props.attribute.definition.containerRef,
-  ).map(({ id }) => id);
-});
+let pluginDefaultSubscription;
 
-watch(() => referenceInput.value, () => {
-  if (referenceInput.value) {
-    referenceInput.value.validate();
+/**
+ * Update input options.
+ * @param {object} eventManager - Object containing event and plugin.
+ * @param {object} eventManager.event - The triggered event.
+ */
+function updateOptions({ event }) {
+  if (event.type === 'Drawer' && event.status === 'success' && !['move', 'resize'].includes(event.action)) {
+    options.value = props.plugin.data.getComponentsByType(
+      props.attribute.definition.containerRef,
+    ).map(({ id }) => id);
   }
-});
+}
 
 watch(() => props.attribute, () => {
   localValue.value = props.attribute.value;
@@ -61,5 +71,13 @@ watch(() => props.attribute, () => {
   if (referenceInput.value) {
     referenceInput.value.validate();
   }
+});
+
+onMounted(() => {
+  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(updateOptions);
+});
+
+onUnmounted(() => {
+  pluginDefaultSubscription.unsubscribe();
 });
 </script>
