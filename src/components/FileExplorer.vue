@@ -23,7 +23,10 @@
         :data-cy="`file-explorer-node_${node.label}`"
         @dblclick="onNodeDoubleClicked(node)"
       >
-        <div>
+        <div
+          class="file-name-container"
+          :title="node.label"
+        >
           <q-icon
             class="q-mx-sm"
             color="primary"
@@ -420,6 +423,13 @@ onUnmounted(() => {
     .file-explorer-action-button {
       display: inline-block
     }
+  }
+
+  .file-name-container {
+    width: 90%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 .file-explorer-action-button {
