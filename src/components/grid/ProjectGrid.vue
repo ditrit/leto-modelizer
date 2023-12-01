@@ -49,6 +49,10 @@
           color="primary"
           class="create-project-button"
           data-cy="create-project-button"
+          :title="$acl.role('create-project')
+            ? null
+            : $t('errors.permissionsDenied')"
+          :disable="!$acl.role('create-project')"
           @click="DialogEvent.next({ type: 'open', key: 'CreateProject' })"
         >
           <template #default>

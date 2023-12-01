@@ -4,6 +4,7 @@ import ProjectGrid from 'src/components/grid/ProjectGrid.vue';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
 import Project from 'src/models/Project';
+import { createAcl, defineAclRules } from 'vue-simple-acl';
 
 installQuasarPlugin();
 
@@ -20,6 +21,11 @@ describe('Test component: ProjectGrid', () => {
           createI18n({
             locale: 'en-US',
             messages: i18nConfiguration,
+          }),
+          createAcl({
+            rules() {
+              return defineAclRules(() => {});
+            },
           }),
         ],
         stubs: {

@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * `CF_createComponent`: allows or prevents user to create a component.
   * `CF_createProjectFromTemplate`: allows or prevents user to create a project from a template.
   * `CF_deleteDiagram`: allows or prevents user to delete a diagram.
+  * `CF_createProject`: allows or prevents user to create a project.
 
 ### Changed
 
