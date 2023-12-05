@@ -9,33 +9,45 @@
       </div>
       <div>
         <q-btn
-          outline
-          no-caps
-          class="q-ml-xl"
           color="primary"
-          icon="fa-solid fa-layer-group"
-          :label="$t('actions.models.add.button.name')"
-          :title="$t('actions.models.add.button.title')"
-          data-cy="add-model-button"
-          @click="DrawerEvent.next({
-            key: 'CreateDiagram',
-            type: 'open',
-          })"
-        />
-        <q-btn
-          outline
-          no-caps
-          class="q-ml-xl"
-          color="primary"
-          icon="fa-solid fa-plus"
-          :label="$t('actions.models.create.button.name')"
-          :title="$t('actions.models.create.button.title')"
-          data-cy="create-model-button"
-          @click="DialogEvent.next({
-            type: 'open',
-            key: 'CreateModel',
-          })"
-        />
+          label="Create diagram"
+        >
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable>
+                <q-item-section
+                  :label="$t('actions.models.create.button.name')"
+                  :title="$acl.role('create-diagram')
+                    ? $t('actions.models.create.button.title')
+                    : $t('errors.permissionsDenied')"
+                  data-cy="create-model-button"
+                  :disable="!$acl.role('create-diagram')"
+                  @click="DialogEvent.next({
+                    type: 'open',
+                    key: 'CreateModel',
+                  })"
+                >
+                  Create from scratch
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable>
+                <q-item-section
+                  :label="$t('actions.models.add.button.name')"
+                  :title="$acl.role('create-diagram-from-template')"
+                  data-cy="add-model-button"
+                  :disable="!$acl.role('create-diagram-from-template')"
+                  @click="DrawerEvent.next({
+                    key: 'CreateDiagram',
+                    type: 'open',
+                  })"
+                >
+                  Create from template
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </div>
     </q-card-section>
     <q-card-section class="row justify-end">
