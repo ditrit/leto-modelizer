@@ -11,37 +11,49 @@
         <q-btn
           outline
           no-caps
-          class="q-ml-xl"
+          :label="$t('actions.models.create.button.label')"
           color="primary"
           icon="fa-solid fa-layer-group"
-          :label="$t('actions.models.add.button.name')"
-          :title="$acl.role('create-diagram-from-template')
-            ? $t('actions.models.add.button.title')
-            : $t('errors.permissionsDenied')"
-          data-cy="add-model-button"
-          :disable="!$acl.role('create-diagram-from-template')"
-          @click="DrawerEvent.next({
-            key: 'CreateDiagram',
-            type: 'open',
-          })"
-        />
-        <q-btn
-          outline
-          no-caps
-          class="q-ml-xl"
-          color="primary"
-          icon="fa-solid fa-plus"
-          :label="$t('actions.models.create.button.name')"
-          :title="$acl.role('create-diagram')
-            ? $t('actions.models.create.button.title')
-            : $t('errors.permissionsDenied')"
-          data-cy="create-model-button"
-          :disable="!$acl.role('create-diagram')"
-          @click="DialogEvent.next({
-            type: 'open',
-            key: 'CreateModel',
-          })"
-        />
+          data-cy="create-diagram-button"
+        >
+          <q-menu auto-close>
+            <q-list
+              style="min-width: 100px"
+            >
+              <q-item
+                clickable
+                :label="$t('actions.models.create.button.scratch.label')"
+                :title="$acl.role('create-diagram')
+                  ? $t('actions.models.create.button.scratch.title')
+                  : $t('errors.permissionsDenied')"
+                data-cy="create-diagram-from-scratch-button"
+                :disable="!$acl.role('create-diagram')"
+                @click="DialogEvent.next({
+                  type: 'open',
+                  key: 'CreateModel',
+                })"
+              >
+                {{ $t('actions.models.create.button.scratch.name') }}
+              </q-item>
+              <q-separator />
+              <q-item
+                clickable
+                :label="$t('actions.models.create.button.template.label')"
+                :title="$acl.role('create-diagram-from-template')
+                  ? $t('actions.models.create.button.template.title')
+                  : $t('errors.permissionsDenied')"
+                data-cy="create-diagram-from-template-button"
+                :disable="!$acl.role('create-diagram-from-template')"
+                @click="DrawerEvent.next({
+                  key: 'CreateDiagram',
+                  type: 'open',
+                })"
+              >
+                {{ $t('actions.models.create.button.template.name') }}
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </div>
     </q-card-section>
     <q-card-section class="row justify-end">
