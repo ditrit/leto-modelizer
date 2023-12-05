@@ -9,40 +9,40 @@
       </div>
       <div>
         <q-btn
-          color="primary"
+          outline
+          no-caps
           label="Create diagram"
+          color="primary"
+          icon="fa-solid fa-layer-group"
         >
           <q-menu auto-close>
             <q-list style="min-width: 100px">
               <q-item clickable>
                 <q-item-section
                   :label="$t('actions.models.create.button.name')"
-                  :title="$acl.role('create-diagram')
-                    ? $t('actions.models.create.button.title')
-                    : $t('errors.permissionsDenied')"
+                  :title="$t('actions.models.create.button.title')"
                   data-cy="create-model-button"
-                  :disable="!$acl.role('create-diagram')"
+                  class="text-primary"
                   @click="DialogEvent.next({
                     type: 'open',
                     key: 'CreateModel',
                   })"
                 >
-                  Create from scratch
+                  From scratch
                 </q-item-section>
               </q-item>
               <q-separator />
               <q-item clickable>
                 <q-item-section
+                  class="text-primary"
                   :label="$t('actions.models.add.button.name')"
-                  :title="$acl.role('create-diagram-from-template')"
                   data-cy="add-model-button"
-                  :disable="!$acl.role('create-diagram-from-template')"
                   @click="DrawerEvent.next({
                     key: 'CreateDiagram',
                     type: 'open',
                   })"
                 >
-                  Create from template
+                  From template
                 </q-item-section>
               </q-item>
             </q-list>
