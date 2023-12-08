@@ -200,9 +200,16 @@ It will generate the built application in the `dist` folder.
 
 ### Docker build
 
-To build this app with docker, please use this command:
+To build this app with docker (the two main plugins for terraform & github are included), please use this command:
 ```bash
-docker build . --build-arg proxy_url=http://localhost:9999 -t leto-modelizer
+docker build . -t leto-modelizer
+```
+
+### Docker run
+
+Once your image is built, to run the associated container please use this command:
+```bash
+docker run -p 8080:80 leto-modelizer
 ```
 
 ### Proxy
