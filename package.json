@@ -40,9 +40,9 @@
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "=2.2.5",
-    "@babel/core": "=7.23.5",
+    "@babel/core": "=7.23.6",
     "@babel/eslint-parser": "=7.23.3",
-    "@babel/preset-env": "=7.23.5",
+    "@babel/preset-env": "=7.23.6",
     "@badeball/cypress-cucumber-preprocessor": "=19.2.0",
     "@cypress/browserify-preprocessor": "=3.0.2",
     "@pinia/testing": "=0.1.3",
