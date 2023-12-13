@@ -12,7 +12,8 @@ Feature: Fix issue #407: Click on component definition from palette causes error
     Then I expect current url is 'projectName/models'
 
     # Create model
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     And  I select '[data-cy="item_githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'Githubator.yml'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'

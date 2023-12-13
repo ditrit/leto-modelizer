@@ -113,7 +113,8 @@ Feature: Test roundtrip of the application: project creation via template
     ## 300 Filter diagram templates by plugins and search text
     # Open drawer and verify all templates are present
     When I click on '[data-cy="project-card_{{ projectName }}"]'
-    And  I click on '[data-cy="add-model-button"]'
+    And  I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-template-button"]'
     Then I expect '[data-cy="template-card_terraform_webapp"]' appear 1 time on screen
     And  I expect '[data-cy="template-card_terraform_java_webapp"]' appear 1 time on screen
     And  I expect '[data-cy="template-card_github_CI"]' appear 1 time on screen
@@ -167,7 +168,8 @@ Feature: Test roundtrip of the application: project creation via template
     Then I expect current url is '{{ projectName }}/models'
 
     ## 402 Add diagram template with an already existing name should display an error
-    When I click on '[data-cy="add-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-template-button"]'
     Then I expect '[data-cy="create-diagram-drawer"]' exists
     And  I expect '[data-cy="template-card_terraform_webapp"]' exists
 

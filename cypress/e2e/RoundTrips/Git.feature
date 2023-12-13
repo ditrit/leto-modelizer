@@ -142,7 +142,8 @@ Feature: Test roundtrip of the application: Git
 
     ## 108 Import project with same repository url with overwrite option should overwrite existing project and send positive toast
     # Modify project
-    And  I click on '[data-cy="create-model-button"]'
+    And  I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I click on '[data-cy="models-page-link-button"]'
@@ -339,7 +340,8 @@ Feature: Test roundtrip of the application: Git
     Then I expect current url is '{{ projectName }}/models'
 
     # Model creation
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'

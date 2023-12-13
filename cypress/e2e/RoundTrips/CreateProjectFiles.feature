@@ -15,7 +15,8 @@ Feature: Test roundtrip of the application : create project files
     And  I expect current url is '{{ projectName }}/models'
 
     # Create new model with correct plugin
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     And  I select '[data-cy="item_<plugin>"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '<modelFile>'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
