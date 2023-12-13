@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Improve performance on git add.
 * Replace OIDC authentication by Leto-Modelizer-Api, see [this issue](https://github.com/ditrit/leto-modelizer/issues/425).
 * Separating git-related functions into a dedicated composable.
+* Merge add/create diagram buttons into a drop down button, see [this issue](https://github.com/ditrit/leto-modelizer/issues/471).
 
 ### Fixed
 
