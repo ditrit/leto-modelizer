@@ -17,7 +17,8 @@ Feature: Test roundtrip of the application : import project files
     And  I expect current url is '{{ projectName }}/models'
 
     # Create model
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'

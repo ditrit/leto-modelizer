@@ -251,7 +251,8 @@ Feature: Test roundtrip of the application: project creation
     ## 500 After diagrams creation, they present in the multi-diagrams view
     # First model creation
     When I wait 1 seconds
-    And  I click on '[data-cy="create-model-button"]'
+    And  I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ firstModelFolder }}'
@@ -265,7 +266,8 @@ Feature: Test roundtrip of the application: project creation
     Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' exists
 
     # Second model creation (with component)
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ secondModelFolder }}'
@@ -288,7 +290,8 @@ Feature: Test roundtrip of the application: project creation
     And  I expect '[data-cy="diagram-path_{{ secondModelFolder }}"]' exists
 
     # Third model creation
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     And  I select '[data-cy="item_githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{thirdModelName}}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
@@ -311,7 +314,8 @@ Feature: Test roundtrip of the application: project creation
     And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
 
     ## 501 Try to create a model with an already existing name should fail
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     And  I select '[data-cy="item_githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{thirdModelName}}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'

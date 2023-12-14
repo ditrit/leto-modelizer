@@ -37,16 +37,19 @@ export default {
       },
     },
     models: {
-      add: {
-        button: {
-          name: 'Add a diagram',
-          title: 'Add a diagram from a template',
-        },
-      },
       create: {
         button: {
-          name: 'Create a diagram',
-          title: 'Open dialog to create new model',
+          label: 'Create Diagram',
+          scratch: {
+            name: 'From scratch',
+            label: 'Create a diagram from scratch',
+            title: 'Open a popup to create a diagram',
+          },
+          template: {
+            name: 'From template',
+            label: 'Create a diagram from a template',
+            title: 'Open a popup to create a diagram from a template',
+          },
         },
         dialog: {
           name: 'Create new model',

@@ -14,8 +14,8 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     Then I expect current url is '{{ projectName }}/models'
 
     # Diagram 1 creation
-    And  I expect '[data-cy="create-model-button"]' exists
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'diag1'
@@ -24,8 +24,8 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
 
     # Diagram 2 creation
     When I click on '[data-cy="models-page-link-button"]'
-    Then I expect '[data-cy="create-model-button"]' exists
-    When I click on '[data-cy="create-model-button"]'
+    And  I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'diag1/diag2'

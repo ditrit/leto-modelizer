@@ -54,7 +54,8 @@ Feature: Test roundtrip of the application: text editor
     And  I expect current url is '{{ projectName }}/models'
 
     # Create model
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ diagramFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ diagramFolder }}'
@@ -558,7 +559,8 @@ Feature: Test roundtrip of the application: text editor
     And  I expect '[data-cy="diagram-table"]' exists
 
     # Create diagram with new_file.tf file
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'

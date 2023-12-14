@@ -16,7 +16,8 @@ Feature: Test diagrams page: display all diagrams
     Then I expect current url is 'projects/{{ projectName }}/models'
 
     # First model creation
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ firstModelFolder }}'
@@ -36,7 +37,8 @@ Feature: Test diagrams page: display all diagrams
     Then I expect '[data-cy="diagram-path_{{ firstModelFolder }}"]' exists
 
     # Second model creation
-    When I click on '[data-cy="create-model-button"]'
+    When I click on '[data-cy="create-diagram-button"]'
+    And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ secondModelFolder }}'
