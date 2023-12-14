@@ -87,14 +87,14 @@ import { useUserStore } from 'src/stores/UserStore';
 const props = defineProps({
   projectName: {
     type: String,
-    required: true,
+    default: null,
   },
 });
 
 let addRemoteSubscription;
 const project = ref({});
 const userStore = ref({});
-const hasRepository = computed(() => !!project.value.git?.repository);
+const hasRepository = computed(() => !!project.value?.git?.repository);
 const menuItems = computed(() => [
   {
     key: 'GitAddRemote',
