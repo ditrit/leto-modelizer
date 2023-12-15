@@ -14,5 +14,10 @@
         {{ $t('application.name') }}
       </label>
     </div>
+    <modelizer-settings-menu />
   </q-header>
 </template>
+
+<script setup>
+import ModelizerSettingsMenu from 'components/menu/ModelizerSettingsMenu.vue';
+</script>
