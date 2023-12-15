@@ -29,6 +29,19 @@
       />
     </template>
     <q-list>
+      <q-item>
+        <q-item-section>
+          <q-item-label overline>
+            {{ userStore.firstname }}
+          </q-item-label>
+          <q-item-label caption>
+            {{ userStore.username }}
+          </q-item-label>
+          <q-item-label caption>
+            {{ userStore.email }}
+          </q-item-label>
+        </q-item-section>
+      </q-item>
       <template
         v-for="menuItem in menuItems"
         :key="menuItem.key"
@@ -100,17 +113,17 @@ const menuItems = computed(() => [
     key: 'GitAddRemote',
     icon: 'fa-solid fa-book-bookmark',
     title: 'page.modelizer.settings.gitAddRemote.title',
-    visible: !hasRepository.value,
+    visible: !hasRepository.value && !!props.projectName,
   },
   {
     key: 'GitAuthentication',
     icon: 'fa-brands fa-git-alt',
     title: 'page.modelizer.settings.gitAuthentication.title',
-    visible: true,
+    visible: !!props.projectName,
   },
 ]);
 const userInitials = computed(
-  () => `${userStore.value.firstname?.at(0)}${userStore.value.username?.at(0)}`.toUpperCase(),
+  () => userStore.value.firstname?.at(0).toUpperCase(),
 );
 
 /**
