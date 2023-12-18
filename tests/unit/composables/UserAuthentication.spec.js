@@ -1,6 +1,7 @@
 import {
   setUserSessionToken,
   getUserSessionToken,
+  removeUserSessionToken,
   login,
   initUserInformation, initUserRoles,
 } from 'src/composables/UserAuthentication';
@@ -93,6 +94,16 @@ describe('User Authentication', () => {
       getUserSessionToken();
 
       expect(getItem).toHaveBeenCalledWith('sessionToken');
+    });
+  });
+
+  describe('Test function: removeUserSessionToken', () => {
+    it('should remove the session token from the local storage', () => {
+      const removeItem = jest.spyOn(Storage.prototype, 'removeItem');
+
+      removeUserSessionToken();
+
+      expect(removeItem).toHaveBeenCalled();
     });
   });
 

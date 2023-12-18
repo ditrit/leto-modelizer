@@ -18,6 +18,13 @@ export function getUserSessionToken() {
 }
 
 /**
+ * Remove the current user's session token from the local storage.
+ */
+export function removeUserSessionToken() {
+  localStorage.removeItem('sessionToken');
+}
+
+/**
  * Log in the user using its temporaryCode. Once the user is logged, it saves
  * the user information in the dedicated store.
  * @param {string} temporaryCode - The temporary code obtained from the github provider.
