@@ -34,6 +34,7 @@ import { initPlugins } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import {
   getUserSessionToken,
+  removeUserSessionToken,
   login,
   initUserInformation,
   initUserRoles,
@@ -56,10 +57,12 @@ async function initUser() {
     return;
   }
 
-  // TODO: Add another if to check if the session token is expired
-  if (!getUserSessionToken()) {
+  let token = getUserSessionToken();
+
+  if (!token) {
     await login(route.query.authCode)
-      .then(() => {
+      .then((data) => {
+        token = data;
         Notify.create({
           type: 'positive',
           message: t('page.splash.login.success'),
@@ -73,21 +76,29 @@ async function initUser() {
           html: true,
         });
       });
-  } else if (getUserSessionToken() && useUserStore().isEmpty) {
+  } else if (token && useUserStore().isEmpty) {
     // if the user refresh the page, the token is still valid and user is
     // still connected but the store has been cleaned. So we need to
     // get back its information.
-    await initUserInformation(getUserSessionToken())
-      .catch(() => {
-        Notify.create({
-          type: 'negative',
-          message: t('errors.authentication.fetchingData'),
-          html: true,
-        });
+    await initUserInformation(token)
+      .catch((error) => {
+        const errorData = error.response?.data;
+
+        // Code 209 == Token Expired
+        if (errorData?.code === 209) {
+          removeUserSessionToken();
+          router.push({ name: 'Splash', query: { from: route.query.from } });
+        } else {
+          Notify.create({
+            type: 'negative',
+            message: t('errors.authentication.fetchingData'),
+            html: true,
+          });
+        }
       });
   }
 
-  await initUserRoles(userStore.id, getUserSessionToken());
+  await initUserRoles(userStore.id, token);
 }
 
 onMounted(async () => {
