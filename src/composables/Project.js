@@ -407,18 +407,18 @@ export async function deleteProjectDir(path) {
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function deleteProjectFile(projectId, filePath, deleteParentFolder) {
-  const isFolder = await isDirectory(`${projectId}/${filePath}`);
+  const isFolder = await isDirectory(filePath);
 
   if (isFolder) {
-    const dirFiles = await readDir(`${projectId}/${filePath}`);
+    const dirFiles = await readDir(filePath);
 
     if (dirFiles.length > 0) {
       await Promise.allSettled(dirFiles.map((fileName) => deleteProjectFile(projectId, `${filePath}/${fileName}`, true)));
     }
 
-    await rmDir(`${projectId}/${filePath}`);
+    await rmDir(filePath);
   } else {
-    await rm(`${projectId}/${filePath}`);
+    await rm(filePath);
   }
 
   const listFiles = await gitListFiles(projectId);
@@ -432,7 +432,7 @@ export async function deleteProjectFile(projectId, filePath, deleteParentFolder)
 
   if (index !== -1 && !deleteParentFolder) {
     const parentPath = filePath.slice(0, index);
-    const dirFiles = await readDir(`${projectId}/${parentPath}`);
+    const dirFiles = await readDir(parentPath);
 
     if (dirFiles.length > 0) {
       await writeProjectFile({ path: `${parentPath}/__empty__`, content: '' });
@@ -548,7 +548,8 @@ export async function getModelFiles(projectName, modelPath, plugin) {
  */
 export async function deleteProjectById(projectId) {
   const projects = getProjects();
-  const projectFiles = await readDir(`/${projectId}`);
+  const files = await readDir(projectId);
+  const projectFiles = files.map((file) => `${projectId}/${file}`);
 
   if (projects[projectId]) {
     await Promise.all(projectFiles.map((file) => deleteProjectFile(projectId, file, true)));

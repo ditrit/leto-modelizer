@@ -73,7 +73,7 @@ jest.mock('browserfs', () => ({
       return cb(null, files);
     }),
     readFile: jest.fn((path, format, cb) => cb(null, 'test')),
-    mkdir: jest.fn((path, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
+    mkdir: jest.fn((path, cb) => cb(path === 'error' ? 'error' : undefined)),
     writeFile: jest.fn((path, content, _, cb) => cb(path === 'error' ? 'error' : undefined)),
     appendFile: jest.fn((path, content, _, cb) => cb(path === '/error' ? 'error' : undefined)),
     rmdir: jest.fn((path, cb) => {
