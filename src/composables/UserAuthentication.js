@@ -28,7 +28,7 @@ export function removeUserSessionToken() {
  * Log in the user using its temporaryCode. Once the user is logged, it saves
  * the user information in the dedicated store.
  * @param {string} temporaryCode - The temporary code obtained from the github provider.
- * @returns {Promise<object>} Promise with the logged-in user information on success
+ * @returns {Promise<string>} Promise with the user's token on success
  * otherwise an error.
  */
 export async function login(temporaryCode) {
@@ -41,6 +41,8 @@ export async function login(temporaryCode) {
       userStore.id = response.data.objectId;
       userStore.username = response.data.username;
       userStore.firstname = response.data.firstname;
+
+      return response.data.sessionToken;
     });
 }
 

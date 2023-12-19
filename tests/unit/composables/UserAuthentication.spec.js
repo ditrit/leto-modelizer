@@ -114,9 +114,10 @@ describe('User Authentication', () => {
 
       jest.spyOn(Storage.prototype, 'setItem');
 
-      await login('tempCode');
+      const token = await login('tempCode');
 
       expect(store.firstname).toEqual('Pradeep');
+      expect(token).toEqual('r:dead779dcda4970cc7f96c09a328d771');
     });
   });
 
