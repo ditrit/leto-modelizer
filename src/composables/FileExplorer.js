@@ -5,15 +5,17 @@ import { isParsableFile } from 'src/composables/PluginManager';
  * @param {string} id - Absolute path of the new folder.
  * @param {object} parentFolder - Parent folder.
  * @param {string} name - Name of the new folder.
+ * @param {string} rootFolder - Name of the root folder.
  * @returns {object} The created folder.
  */
-export function createFolder(id, parentFolder, name) {
+export function createFolder(id, parentFolder, name, rootFolder) {
   const newFolder = {
     id,
     icon: 'fa-solid fa-folder',
     label: name,
     children: [],
     isFolder: true,
+    isRootFolder: rootFolder === id,
     hasParsableFiles: false,
   };
 
@@ -54,8 +56,12 @@ export function createFile(fileInformation, parentFolder, name) {
  * @param {number} index - Index of the part to check in the path.
  */
 export function updateFileInformation(parentNode, fileStatus, index = 0) {
-  const splitPath = fileStatus.path.split('/');
+  const splitPath = fileStatus.path.split('/').slice(1);
   const item = parentNode.children.find((child) => child.label === splitPath[index]);
+
+  if (!item) {
+    return;
+  }
 
   if (splitPath.length === index + 1) {
     item.information = fileStatus;
@@ -98,8 +104,9 @@ export function sortTreeElements(elements) {
  * @param {FileInformation} fileInformation - Absolute path of tree element.
  * @param {object} parentFolder - Parent folder of element to create.
  * @param {string} path - Path of the tree element.
+ * @param {string} rootFolder - Name of the root folder.
  */
-function createTreeElements(fileInformation, parentFolder, path) {
+function createTreeElements(fileInformation, parentFolder, path, rootFolder) {
   const splittedPath = path.split('/').filter(Boolean);
 
   if (splittedPath.length === 1) {
@@ -108,9 +115,9 @@ function createTreeElements(fileInformation, parentFolder, path) {
     const folderId = `${fileInformation.path
       .slice(0, (path.length * -1) + splittedPath[0].length)}`;
     const folder = parentFolder.children.find((child) => child.label === splittedPath[0])
-      || createFolder(folderId, parentFolder, splittedPath[0]);
+      || createFolder(folderId, parentFolder, splittedPath[0], rootFolder);
 
-    createTreeElements(fileInformation, folder, splittedPath.slice(1).join('/'));
+    createTreeElements(fileInformation, folder, splittedPath.slice(1).join('/'), rootFolder);
     folder.hasParsableFiles = folder.children
       .some((child) => child.hasParsableFiles || child.isParsable);
   }
@@ -131,15 +138,17 @@ export function getTree(projectId, fileInformationArray) {
     label: projectId,
     isFolder: true,
     isRootFolder: true,
+    hasParsableFiles: false,
     children: [],
   };
 
+  if (fileInformationArray.length === 0) {
+    return [rootFolder];
+  }
+
   fileInformationArray.forEach((fileInformation) => {
-    createTreeElements(fileInformation, rootFolder, fileInformation.path);
+    createTreeElements(fileInformation, rootFolder, fileInformation.path, projectId);
   });
 
-  return [{
-    ...rootFolder,
-    children: sortTreeElements(rootFolder.children),
-  }];
+  return [...sortTreeElements(rootFolder.children)];
 }

@@ -8,7 +8,7 @@ jest.mock('src/composables/PluginManager', () => ({
 describe('Test composable: FileExplorer', () => {
   describe('Test function: getTree', () => {
     it('should manage one root file', () => {
-      const input = [{ path: 'file.tf' }];
+      const input = [{ path: 'my-project/file.tf' }];
       const tree = getTree('my-project', input);
       const output = [
         {
@@ -17,13 +17,14 @@ describe('Test composable: FileExplorer', () => {
           label: 'my-project',
           isFolder: true,
           isRootFolder: true,
+          hasParsableFiles: false,
           children: [
             {
-              id: 'file.tf',
+              id: 'my-project/file.tf',
               label: 'file.tf',
               icon: 'fa-regular fa-file',
               isFolder: false,
-              information: { path: 'file.tf' },
+              information: { path: 'my-project/file.tf' },
               isParsable: false,
             },
           ],
@@ -33,7 +34,7 @@ describe('Test composable: FileExplorer', () => {
     });
 
     it('should manage two root files', () => {
-      const input = [{ path: 'file1.tf' }, { path: 'file2.tf' }];
+      const input = [{ path: 'my-project/file1.tf' }, { path: 'my-project/file2.tf' }];
       const tree = getTree('my-project', input);
       const output = [
         {
@@ -42,21 +43,22 @@ describe('Test composable: FileExplorer', () => {
           label: 'my-project',
           isFolder: true,
           isRootFolder: true,
+          hasParsableFiles: false,
           children: [
             {
-              id: 'file1.tf',
+              id: 'my-project/file1.tf',
               label: 'file1.tf',
               icon: 'fa-regular fa-file',
               isFolder: false,
-              information: { path: 'file1.tf' },
+              information: { path: 'my-project/file1.tf' },
               isParsable: false,
             },
             {
-              id: 'file2.tf',
+              id: 'my-project/file2.tf',
               label: 'file2.tf',
               icon: 'fa-regular fa-file',
               isFolder: false,
-              information: { path: 'file2.tf' },
+              information: { path: 'my-project/file2.tf' },
               isParsable: false,
             },
           ],
@@ -66,7 +68,7 @@ describe('Test composable: FileExplorer', () => {
     });
 
     it('should manage one file in one folder', () => {
-      const input = [{ path: 'home/file.tf' }];
+      const input = [{ path: 'my-project/home/file.tf' }];
       const tree = getTree('my-project', input);
       const output = [
         {
@@ -75,20 +77,22 @@ describe('Test composable: FileExplorer', () => {
           label: 'my-project',
           isFolder: true,
           isRootFolder: true,
+          hasParsableFiles: false,
           children: [
             {
-              id: 'home',
+              id: 'my-project/home',
               icon: 'fa-solid fa-folder',
               label: 'home',
               isFolder: true,
+              isRootFolder: false,
               hasParsableFiles: false,
               children: [
                 {
-                  id: 'home/file.tf',
+                  id: 'my-project/home/file.tf',
                   label: 'file.tf',
                   icon: 'fa-regular fa-file',
                   isFolder: false,
-                  information: { path: 'home/file.tf' },
+                  information: { path: 'my-project/home/file.tf' },
                   isParsable: false,
                 },
               ],
@@ -100,7 +104,7 @@ describe('Test composable: FileExplorer', () => {
     });
 
     it('should manage two files in one folder', () => {
-      const input = [{ path: 'home/file1.tf' }, { path: 'home/file2.tf' }];
+      const input = [{ path: 'my-project/home/file1.tf' }, { path: 'my-project/home/file2.tf' }];
       const tree = getTree('my-project', input);
       const output = [
         {
@@ -109,28 +113,30 @@ describe('Test composable: FileExplorer', () => {
           label: 'my-project',
           isFolder: true,
           isRootFolder: true,
+          hasParsableFiles: false,
           children: [
             {
-              id: 'home',
+              id: 'my-project/home',
               icon: 'fa-solid fa-folder',
               label: 'home',
               isFolder: true,
+              isRootFolder: false,
               hasParsableFiles: false,
               children: [
                 {
-                  id: 'home/file1.tf',
+                  id: 'my-project/home/file1.tf',
                   label: 'file1.tf',
                   icon: 'fa-regular fa-file',
                   isFolder: false,
-                  information: { path: 'home/file1.tf' },
+                  information: { path: 'my-project/home/file1.tf' },
                   isParsable: false,
                 },
                 {
-                  id: 'home/file2.tf',
+                  id: 'my-project/home/file2.tf',
                   label: 'file2.tf',
                   icon: 'fa-regular fa-file',
                   isFolder: false,
-                  information: { path: 'home/file2.tf' },
+                  information: { path: 'my-project/home/file2.tf' },
                   isParsable: false,
                 },
               ],
@@ -143,9 +149,9 @@ describe('Test composable: FileExplorer', () => {
 
     it('should manage multiple files in multiple folders', () => {
       const input = [
-        { path: 'user/plugin/file3.tf' },
-        { path: 'home/folderA/file2.tf' },
-        { path: 'home/folderA/subFolder/file1.tf' },
+        { path: 'my-project/user/plugin/file3.tf' },
+        { path: 'my-project/home/folderA/file2.tf' },
+        { path: 'my-project/home/folderA/subFolder/file1.tf' },
       ];
       const tree = getTree('my-project', input);
       const output = [
@@ -155,44 +161,48 @@ describe('Test composable: FileExplorer', () => {
           label: 'my-project',
           isFolder: true,
           isRootFolder: true,
+          hasParsableFiles: false,
           children: [
             {
-              id: 'home',
+              id: 'my-project/home',
               icon: 'fa-solid fa-folder',
               label: 'home',
               isFolder: true,
+              isRootFolder: false,
               hasParsableFiles: false,
               children: [
                 {
-                  id: 'home/folderA',
+                  id: 'my-project/home/folderA',
                   label: 'folderA',
                   icon: 'fa-solid fa-folder',
                   isFolder: true,
+                  isRootFolder: false,
                   hasParsableFiles: false,
                   children: [
                     {
-                      id: 'home/folderA/subFolder',
+                      id: 'my-project/home/folderA/subFolder',
                       label: 'subFolder',
                       icon: 'fa-solid fa-folder',
                       isFolder: true,
+                      isRootFolder: false,
                       hasParsableFiles: false,
                       children: [
                         {
-                          id: 'home/folderA/subFolder/file1.tf',
+                          id: 'my-project/home/folderA/subFolder/file1.tf',
                           label: 'file1.tf',
                           icon: 'fa-regular fa-file',
                           isFolder: false,
-                          information: { path: 'home/folderA/subFolder/file1.tf' },
+                          information: { path: 'my-project/home/folderA/subFolder/file1.tf' },
                           isParsable: false,
                         },
                       ],
                     },
                     {
-                      id: 'home/folderA/file2.tf',
+                      id: 'my-project/home/folderA/file2.tf',
                       label: 'file2.tf',
                       icon: 'fa-regular fa-file',
                       isFolder: false,
-                      information: { path: 'home/folderA/file2.tf' },
+                      information: { path: 'my-project/home/folderA/file2.tf' },
                       isParsable: false,
                     },
                   ],
@@ -200,25 +210,27 @@ describe('Test composable: FileExplorer', () => {
               ],
             },
             {
-              id: 'user',
+              id: 'my-project/user',
               icon: 'fa-solid fa-folder',
               label: 'user',
               isFolder: true,
+              isRootFolder: false,
               hasParsableFiles: false,
               children: [
                 {
-                  id: 'user/plugin',
+                  id: 'my-project/user/plugin',
                   label: 'plugin',
                   icon: 'fa-solid fa-folder',
                   isFolder: true,
+                  isRootFolder: false,
                   hasParsableFiles: false,
                   children: [
                     {
-                      id: 'user/plugin/file3.tf',
+                      id: 'my-project/user/plugin/file3.tf',
                       label: 'file3.tf',
                       icon: 'fa-regular fa-file',
                       isFolder: false,
-                      information: { path: 'user/plugin/file3.tf' },
+                      information: { path: 'my-project/user/plugin/file3.tf' },
                       isParsable: false,
                     },
                   ],
@@ -234,7 +246,7 @@ describe('Test composable: FileExplorer', () => {
     it('should manage one parsable file', () => {
       isParsableFile.mockImplementation(() => true);
 
-      const input = [{ path: 'home/file.tf' }];
+      const input = [{ path: 'my-project/home/file.tf' }];
       const tree = getTree('my-project', input);
       const output = [
         {
@@ -243,20 +255,22 @@ describe('Test composable: FileExplorer', () => {
           label: 'my-project',
           isFolder: true,
           isRootFolder: true,
+          hasParsableFiles: true,
           children: [
             {
-              id: 'home',
+              id: 'my-project/home',
               icon: 'fa-solid fa-folder',
               label: 'home',
               isFolder: true,
+              isRootFolder: false,
               hasParsableFiles: true,
               children: [
                 {
-                  id: 'home/file.tf',
+                  id: 'my-project/home/file.tf',
                   label: 'file.tf',
                   icon: 'fa-regular fa-file',
                   isFolder: false,
-                  information: { path: 'home/file.tf' },
+                  information: { path: 'my-project/home/file.tf' },
                   isParsable: true,
                 },
               ],
@@ -268,9 +282,9 @@ describe('Test composable: FileExplorer', () => {
     });
 
     it('should manage two parsable files', () => {
-      isParsableFile.mockImplementation(({ path }) => path === 'home/file.tf' || path === 'user/file.tf');
+      isParsableFile.mockImplementation(({ path }) => path === 'my-project/home/file.tf' || path === 'my-project/user/file.tf');
 
-      const input = [{ path: 'home/file.tf' }, { path: 'user/file.tf' }, { path: 'README.md' }];
+      const input = [{ path: 'my-project/home/file.tf' }, { path: 'my-project/user/file.tf' }, { path: 'my-project/README.md' }];
       const tree = getTree('my-project', input);
       const output = [
         {
@@ -279,47 +293,50 @@ describe('Test composable: FileExplorer', () => {
           label: 'my-project',
           isFolder: true,
           isRootFolder: true,
+          hasParsableFiles: true,
           children: [
             {
-              id: 'home',
+              id: 'my-project/home',
               icon: 'fa-solid fa-folder',
               label: 'home',
               isFolder: true,
+              isRootFolder: false,
               hasParsableFiles: true,
               children: [
                 {
-                  id: 'home/file.tf',
+                  id: 'my-project/home/file.tf',
                   label: 'file.tf',
                   icon: 'fa-regular fa-file',
                   isFolder: false,
-                  information: { path: 'home/file.tf' },
+                  information: { path: 'my-project/home/file.tf' },
                   isParsable: true,
                 },
               ],
             },
             {
-              id: 'user',
+              id: 'my-project/user',
               icon: 'fa-solid fa-folder',
               label: 'user',
               isFolder: true,
+              isRootFolder: false,
               hasParsableFiles: true,
               children: [
                 {
-                  id: 'user/file.tf',
+                  id: 'my-project/user/file.tf',
                   label: 'file.tf',
                   icon: 'fa-regular fa-file',
                   isFolder: false,
-                  information: { path: 'user/file.tf' },
+                  information: { path: 'my-project/user/file.tf' },
                   isParsable: true,
                 },
               ],
             },
             {
-              id: 'README.md',
+              id: 'my-project/README.md',
               label: 'README.md',
               icon: 'fa-regular fa-file',
               isFolder: false,
-              information: { path: 'README.md' },
+              information: { path: 'my-project/README.md' },
               isParsable: false,
             },
           ],
@@ -335,12 +352,13 @@ describe('Test composable: FileExplorer', () => {
         label: 'my-project',
         isFolder: true,
         isRootFolder: true,
+        hasParsableFiles: false,
         children: [],
       }]);
     });
   });
 
-  describe('Test function: updateFileInformation', () => {
+  describe.only('Test function: updateFileInformation', () => {
     it('should update status on first level', () => {
       const folder = {
         children: [
@@ -349,13 +367,13 @@ describe('Test composable: FileExplorer', () => {
           { label: 'subFolder', children: [{ label: 'one.txt', information: null }] },
         ],
       };
-      const fileStatus = { path: 'one.txt' };
+      const fileStatus = { path: 'rootFolder/one.txt' };
 
       updateFileInformation(folder, fileStatus);
 
       expect(folder).toEqual({
         children: [
-          { label: 'one.txt', information: { path: 'one.txt' } },
+          { label: 'one.txt', information: { path: 'rootFolder/one.txt' } },
           { label: 'two.txt', information: null },
           { label: 'subFolder', children: [{ label: 'one.txt', information: null }] },
         ],
@@ -370,7 +388,7 @@ describe('Test composable: FileExplorer', () => {
           { label: 'subFolder', children: [{ label: 'one.txt', information: null }] },
         ],
       };
-      const fileStatus = { path: 'subFolder/one.txt' };
+      const fileStatus = { path: 'rootFolder/subFolder/one.txt' };
 
       updateFileInformation(folder, fileStatus);
 
@@ -378,7 +396,28 @@ describe('Test composable: FileExplorer', () => {
         children: [
           { label: 'one.txt', information: null },
           { label: 'two.txt', information: null },
-          { label: 'subFolder', children: [{ label: 'one.txt', information: { path: 'subFolder/one.txt' } }] },
+          { label: 'subFolder', children: [{ label: 'one.txt', information: { path: 'rootFolder/subFolder/one.txt' } }] },
+        ],
+      });
+    });
+
+    it('should do nothing if new fileStatus is not found in folder', () => {
+      const folder = {
+        children: [
+          { label: 'one.txt', information: null },
+          { label: 'two.txt', information: null },
+          { label: 'subFolder', children: [{ label: 'one.txt', information: null }] },
+        ],
+      };
+      const fileStatus = { path: 'rootFolder/three.txt' };
+
+      updateFileInformation(folder, fileStatus);
+
+      expect(folder).toEqual({
+        children: [
+          { label: 'one.txt', information: null },
+          { label: 'two.txt', information: null },
+          { label: 'subFolder', children: [{ label: 'one.txt', information: null }] },
         ],
       });
     });
