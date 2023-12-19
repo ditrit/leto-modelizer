@@ -479,10 +479,10 @@ Feature: Test roundtrip of the application: Git
 
     When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'newFile.js'
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' appear 1 time on screen
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/newFile.js"]' appear 1 time on screen
     #  Add file
-    When I hover '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_newFile.js"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/newFile.js"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/newFile.js"]'
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     #  Commit
     And  I click on '[data-cy="git-current-branch-button"]'
@@ -537,8 +537,8 @@ Feature: Test roundtrip of the application: Git
 
     ## 1001 Display dialog containing an empty list
     # Delete new_file.tf
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_infra/new_file.tf"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_infra/new_file.tf"]'
+    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/infra/new_file.tf"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/infra/new_file.tf"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
@@ -548,7 +548,7 @@ Feature: Test roundtrip of the application: Git
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'File is deleted.'
     And  I expect '[data-cy="delete-file-form"]' is closed
-    And  I expect '[data-cy="file_infra/new_file.tf"]' not exists
+    And  I expect '[data-cy="file_{{ projectName }}/infra/new_file.tf"]' not exists
 
     When I click on '[data-cy="git-current-branch-button"]'
     Then I expect '[data-cy="git-branch-menu"] [data-cy="git-status-item"]' exists
@@ -569,7 +569,7 @@ Feature: Test roundtrip of the application: Git
 
     # When I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'test.js'
     # And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
-    # Then I expect '[data-cy="file-explorer"] [data-cy="file_test.js"]' appear 1 time on screen
+    # Then I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/test.js"]' appear 1 time on screen
 
     # #  Check file status
     # When I click on '[data-cy="git-current-branch-button"]'
@@ -582,8 +582,8 @@ Feature: Test roundtrip of the application: Git
     # When I click on '[data-cy="close-dialog-button"]'
 
     # #  Add file
-    # And  I hover '[data-cy="file-explorer"] [data-cy="file-button_test.js"]' to make it visible
-    # And  I click on '[data-cy="file-explorer"] [data-cy="file-button_test.js"]'
+    # And  I hover '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/test.js"]' to make it visible
+    # And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/test.js"]'
     # And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     # And  I wait 2 seconds
 
@@ -615,9 +615,9 @@ Feature: Test roundtrip of the application: Git
     # When I click on '[data-cy="close-dialog-button"]'
 
     ## 1101 An unmodified file should not have the 'add' action inside file explorer menu
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_README.md"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_README.md"]'
-    Then I expect '[data-cy="file_README.md"].file-status-unmodified' exists
+    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/README.md"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/README.md"]'
+    Then I expect '[data-cy="file_{{ projectName }}/README.md"].file-status-unmodified' exists
     And  I expect '[data-cy="file-explorer-action-menu"]' exists
     But  I expect '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]' not exists
 
@@ -634,19 +634,19 @@ Feature: Test roundtrip of the application: Git
     Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
     And  I expect '[data-cy="create-file-form"]' is closed
     And  I expect '.file-status-untracked' appear 2 times on screen
-    And  I expect '[data-cy="file_createdFileOne.js"].file-status-untracked' exists
+    And  I expect '[data-cy="file_{{ projectName }}/createdFileOne.js"].file-status-untracked' exists
 
-    When I hover '[data-cy="file-explorer"] [data-cy="file-button_createdFileOne.js"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_createdFileOne.js"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/createdFileOne.js"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/createdFileOne.js"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     Then I expect 'positive' toast to appear with text 'File is added &#129395;!'
-    And  I expect '[data-cy="file_createdFileOne.js"].file-status-staged' exists
+    And  I expect '[data-cy="file_{{ projectName }}/createdFileOne.js"].file-status-staged' exists
 
     ## 1103 Create a file inside sub-folder and add it on git should change the file's status
-    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ modelFolder }}"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ modelFolder }}"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}/{{ modelFolder }}"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}/{{ modelFolder }}"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
@@ -657,44 +657,44 @@ Feature: Test roundtrip of the application: Git
     Then I expect 'positive' toast to appear with text 'File is created &#129395;!'
     And  I expect '[data-cy="create-file-form"]' is closed
     And  I expect '.file-status-untracked' appear 2 times on screen
-    And  I expect '[data-cy="file_{{ modelFolder }}/createdFileTwo.js"].file-status-untracked' exists
+    And  I expect '[data-cy="file_{{ projectName }}/{{ modelFolder }}/createdFileTwo.js"].file-status-untracked' exists
 
-    When I hover '[data-cy="file-explorer"] [data-cy="file-button_{{ modelFolder }}/createdFileTwo.js"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ modelFolder }}/createdFileTwo.js"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/{{ modelFolder }}/createdFileTwo.js"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/{{ modelFolder }}/createdFileTwo.js"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     Then I expect 'positive' toast to appear with text 'File is added &#129395;!'
-    And  I expect '[data-cy="file_{{ modelFolder }}/createdFileTwo.js"].file-status-staged' exists
+    And  I expect '[data-cy="file_{{ projectName }}/{{ modelFolder }}/createdFileTwo.js"].file-status-staged' exists
 
     ## 1201 Open a file in root folder and update its content should change the file's class
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_createdFileOne.js"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/createdFileOne.js"]'
     And  I wait 2 seconds
-    Then I expect '[data-cy="file_createdFileOne.js"]' appear 2 times on screen
+    Then I expect '[data-cy="file_{{ projectName }}/createdFileOne.js"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'createdFileOne.js'
-    And  I expect '[data-cy="file_createdFileOne.js"].file-status-staged' exists
+    And  I expect '[data-cy="file_{{ projectName }}/createdFileOne.js"].file-status-staged' exists
     And  I expect active file content to contain ''
 
     When I set active file content to 'updated content'
     Then I expect active file content to contain 'updated.*content'
-    And  I expect '[data-cy="file_createdFileOne.js"].file-status-modified' exists
+    And  I expect '[data-cy="file_{{ projectName }}/createdFileOne.js"].file-status-modified' exists
 
     ## 1202 Open a file in sub-folder and update its content should change the file's class
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ modelFolder }}/createdFileTwo.js"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ modelFolder }}/createdFileTwo.js"]'
     And  I wait 2 seconds
-    Then I expect '[data-cy="file_{{ modelFolder }}/createdFileTwo.js"]' appear 2 times on screen
+    Then I expect '[data-cy="file_{{ projectName }}/{{ modelFolder }}/createdFileTwo.js"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'createdFileTwo.js'
-    And  I expect '[data-cy="file_{{ modelFolder }}/createdFileTwo.js"].file-status-staged' exists
+    And  I expect '[data-cy="file_{{ projectName }}/{{ modelFolder }}/createdFileTwo.js"].file-status-staged' exists
     And  I expect active file content to contain ''
 
     When I set active file content to 'updated content'
     And  I wait 1 second
-    Then I expect '[data-cy="file_{{ modelFolder }}/createdFileTwo.js"].file-status-modified' exists
+    Then I expect '[data-cy="file_{{ projectName }}/{{ modelFolder }}/createdFileTwo.js"].file-status-modified' exists
     And  I expect active file content to contain 'updated.*content'
 
     ## 1203 Update a file's content should make the 'add' action available inside file explorer menu
-    When I hover '[data-cy="file-explorer"] [data-cy="file_{{ modelFolder }}/createdFileTwo.js"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ modelFolder }}/createdFileTwo.js"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ modelFolder }}/createdFileTwo.js"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/{{ modelFolder }}/createdFileTwo.js"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
     And  I expect '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]' exists
 
@@ -706,7 +706,7 @@ Feature: Test roundtrip of the application: Git
     And  I wait 2 seconds
 
     ## 1301 Open a file and checkout branch, the file should reload if its panel has changed
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ importedProjectName }}/branch.txt"]'
     And  I wait 2 seconds
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'branch.txt'
@@ -718,7 +718,7 @@ Feature: Test roundtrip of the application: Git
     When I click on '[data-cy="git-branch-menu"] [data-cy="remote-branch_test/remote"]'
     And  I click on '[data-cy="git-branch-action-menu"] [data-cy="checkout_test/remote"]'
     And  I wait 5 seconds
-    And  I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    And  I double click on '[data-cy="file-explorer"] [data-cy="file_{{ importedProjectName }}/branch.txt"]'
     And  I wait 2 seconds
     Then I expect '[data-cy="git-current-branch-button"]' is 'test/remote'
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
@@ -735,9 +735,9 @@ Feature: Test roundtrip of the application: Git
     Then I expect '[data-cy="git-current-branch-button"]' is 'main'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'app.tf'
 
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ importedProjectName }}/README.md"]'
     And  I wait 2 seconds
-    And  I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    And  I double click on '[data-cy="file-explorer"] [data-cy="file_{{ importedProjectName }}/branch.txt"]'
     And  I wait 2 seconds
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 3 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'branch.txt'
@@ -751,11 +751,11 @@ Feature: Test roundtrip of the application: Git
     And  I wait 5 seconds
     Then I expect '[data-cy="git-current-branch-button"]' is 'test/remote'
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
-    And  I expect '[data-cy="file-tabs-container"] [role="tab"] [data-cy="file_README.md"]' appear 0 time on screen
-    And  I expect '[data-cy="file-tabs-container"] [role="tab"] [data-cy="file_branch.txt"]' appear 1 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"] [data-cy="file_{{ importedProjectName }}/README.md"]' appear 0 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [role="tab"] [data-cy="file_{{ importedProjectName }}/branch.txt"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' is 'branch.txt'
 
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ importedProjectName }}/branch.txt"]'
     And  I wait 2 seconds
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'branch.txt'
     And  I expect '[data-cy="file-tab-panel_branch.txt"]' is 'test/remote'
@@ -770,10 +770,10 @@ Feature: Test roundtrip of the application: Git
     Then I expect '[data-cy="git-current-branch-button"]' is 'main'
     And  I expect '[data-cy="file-tab-panel_app.tf"]' exists
 
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ importedProjectName }}/branch.txt"]'
     And  I wait 2 seconds
     Then I expect '[data-cy="file-tab-panel_branch.txt"]' is 'main'
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ importedProjectName }}/README.md"]'
     And  I wait 2 seconds
     Then I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 3 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'README.md'
@@ -787,7 +787,7 @@ Feature: Test roundtrip of the application: Git
     And  I click on '[data-cy="git-branch-action-menu"] [data-cy="checkout_test/remote"]'
     And  I wait 5 seconds
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'app.tf'
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ importedProjectName }}/branch.txt"]'
     And  I wait 2 seconds
     Then I expect '[data-cy="git-current-branch-button"]' is 'test/remote'
     And  I expect '[data-cy="file-tabs-container"] [role="tab"]' appear 2 times on screen
@@ -823,13 +823,13 @@ Feature: Test roundtrip of the application: Git
 
     ## 1402 Execute update action with fast forward should be a success
     And  I click on '[data-cy="git-current-branch-button"]'
-    And  I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
+    And  I double click on '[data-cy="file-explorer"] [data-cy="file_{{ importedProjectName }}/branch.txt"]'
     And  I wait 2 seconds
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'branch.txt'
     When I set active file content to 'new updated content'
     And  I wait 1 second
-    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]'
+    And  I hover '[data-cy="file-explorer"] [data-cy="file-button_{{ importedProjectName }}/branch.txt"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ importedProjectName }}/branch.txt"]'
     And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="git-add-file-action-item"]'
     And  I wait 2 seconds
 

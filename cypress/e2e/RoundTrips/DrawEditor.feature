@@ -244,16 +244,16 @@ Feature: Test roundtrip of the application: draw editor
     # And  I wait 1 second
     # Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}'
     # And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
-    # And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ diagramFolder }}"]' exists
-    # And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFile }}"]' exists
+    # And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ diagramFolder }}"]' exists
+    # And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ diagramFile }}"]' exists
 
     # # Add two variables with same category to main_variable.tf
     # When I set active file content to 'variable "instance_class" {} variable "instance_var" { value = var }'
     # And  I wait 2 seconds
 
     # # Create new file named variable.tf
-    # And  I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ diagramFolder }}"]' to make it visible
-    # And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ diagramFolder }}"]'
+    # And  I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}/{{ diagramFolder }}"]' to make it visible
+    # And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}/{{ diagramFolder }}"]'
     # And  I click on '[data-cy="file-explorer-action-menu"] [data-cy="create-file-action-item"]'
     # Then I expect '[data-cy="create-file-dialog"]' exists
 
@@ -264,7 +264,7 @@ Feature: Test roundtrip of the application: draw editor
 
     # When I wait 2 seconds
     # Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'variable.tf'
-    # And  I expect '[data-cy="file_{{ diagramFolder }}/variable.tf"].file-status-untracked' exists
+    # And  I expect '[data-cy="file_{{ projectName }}/{{ diagramFolder }}/variable.tf"].file-status-untracked' exists
 
     # # Add two variables with different category to infra/variable.tf file
     # When I set active file content to 'output "instance_ip" { value = aws_instance.server } variable "instance_test" { value = test }'

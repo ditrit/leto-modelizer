@@ -38,4 +38,4 @@ Feature: Fix issue #370: Wrong files opened when I switch to text view if multip
     And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' appear 1 time on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="inactive-tab"]' appear 0 time on screen
-    And  I expect '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]' appear 1 time on screen
+    And  I expect '[data-cy="file-tabs-container"] [data-cy="file_projectName/infra/new_file.tf"]' appear 1 time on screen

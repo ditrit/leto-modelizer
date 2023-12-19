@@ -28,7 +28,7 @@ Feature: Test roundtrip of the application : rename project
     And  I wait 1 second
     Then I expect current url is 'projectTest/modelizer/text\?plugin=terrator-plugin&path={{ modelFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_projectTest"]' is 'projectTest'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ modelFolder }}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_projectTest/{{ modelFolder }}"]' exists
 
     # Create file
     When I hover '[data-cy="file-explorer"] [data-cy="folder-button_projectTest"]' to make it visible
@@ -65,8 +65,8 @@ Feature: Test roundtrip of the application : rename project
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_renamedProject"]' is 'renamedProject'
 
     # Check model and files are still here
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_newFile.js"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ modelFolder }}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_renamedProject/newFile.js"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_renamedProject/{{ modelFolder }}"]' exists
 
     # Check project name is displayed in home page
     When I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'

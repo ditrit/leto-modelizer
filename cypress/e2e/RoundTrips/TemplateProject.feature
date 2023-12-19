@@ -62,15 +62,15 @@ Feature: Test roundtrip of the application: project creation via template
     When I click on '[data-cy="diagram-table"] [data-cy="diagram-path_infra/dev"]'
     And  I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=infra/dev'
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_infra/dev/main.tf"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_infra/dev/provider.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/infra/dev/main.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/infra/dev/provider.tf"]' exists
 
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_infra/prod"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_infra/prod/main.tf"]' exists
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/infra/prod"]'
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/infra/prod/main.tf"]' exists
 
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_.github"]'
-    And  I click on '[data-cy="file-explorer"] [data-cy="folder_.github/workflows"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_.github/workflows/CI.yml"]' exists
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/.github"]'
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/.github/workflows"]'
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/.github/workflows/CI.yml"]' exists
 
     # Back to models page
     When I click on '[data-cy="models-page-link-button"]'
@@ -158,9 +158,9 @@ Feature: Test roundtrip of the application: project creation via template
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ diagramFolder }}"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ diagramFile }}"]' exists
-    And  I expect '[data-cy="active-tab"] [data-cy="file_{{ diagramFile }}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ diagramFolder }}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ diagramFile }}"]' exists
+    And  I expect '[data-cy="active-tab"] [data-cy="file_{{ projectName }}/{{ diagramFile }}"]' exists
     And  I expect active file content to be equal to "cypress/resources/main.tf"
 
     # Back to models page

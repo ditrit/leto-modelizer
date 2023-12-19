@@ -35,8 +35,8 @@ Feature: Test homepage: project deletion
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
 
     # Delete file
-    When I hover '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_branch.txt"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/branch.txt"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_{{ projectName }}/branch.txt"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
@@ -45,7 +45,7 @@ Feature: Test homepage: project deletion
     When I click on '[data-cy="delete-file-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'File is deleted.'
     And  I expect '[data-cy="delete-file-form"]' is closed
-    And  I expect '[data-cy="file_branch.txt.js"]' not exists
+    And  I expect '[data-cy="file_{{ projectName }}/branch.txt.js"]' not exists
 
     # Delete project in Home page
     When I visit the '/'
@@ -81,4 +81,4 @@ Feature: Test homepage: project deletion
     Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
 
     # Check previously deleted file is created after project import
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_branch.txt"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/branch.txt"]' exists
