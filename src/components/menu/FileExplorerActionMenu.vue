@@ -174,11 +174,14 @@ function deleteFile() {
 /**
  * Add selected file and send AddEvent.
  * @param {object} file - Selected file.
+ * @param {string} file.id - Id of selected file (absolute path).
  * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 async function addFile(file) {
+  const filePath = file.id.split('/').slice(1).join('/');
+
   loading.value.add = true;
-  return gitAdd(props.projectName, file.id)
+  return gitAdd(props.projectName, filePath)
     .then(async () => {
       Notify.create({
         type: 'positive',
@@ -188,8 +191,8 @@ async function addFile(file) {
 
       const [fileStatus] = await getStatus(
         props.projectName,
-        [file.id],
-        (path) => path === file.id,
+        [filePath],
+        (path) => path === filePath,
       );
 
       GitEvent.AddEvent.next(fileStatus);
