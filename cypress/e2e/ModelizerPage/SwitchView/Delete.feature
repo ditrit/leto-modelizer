@@ -35,9 +35,9 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_infra/new_file.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_projectName/infra/new_file.tf"]' exists
 
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_infra/new_file.tf"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_projectName/infra/new_file.tf"]'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -63,7 +63,7 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_projectName/infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
     And  I expect active file content to contain 'provider.*"server".*{}'
@@ -82,7 +82,7 @@ Feature: Test switch model to text view: delete component/link
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
 
-    When I double click on '[data-cy="file_infra/new_file.tf"]'
+    When I double click on '[data-cy="file_projectName/infra/new_file.tf"]'
     And  I wait 1 second
     Then I expect active file content to contain 'module.*"server".*{}'
     But  I expect active file content to not contain 'provider.*"aws".*{}'
@@ -95,7 +95,7 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_projectName/infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
     When I clear active file
@@ -115,7 +115,7 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_projectName/infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
     When I clear active file
@@ -134,11 +134,11 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_projectName/infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
-    When I hover '[data-cy="file-explorer"] [data-cy="file-button_infra/new_file.tf"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_infra/new_file.tf"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="file-button_projectName/infra/new_file.tf"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="file-button_projectName/infra/new_file.tf"]'
     Then I expect '[data-cy="file-explorer-action-menu"]' exists
 
     When I click on '[data-cy="file-explorer-action-menu"] [data-cy="delete-file-action-item"]'
@@ -148,7 +148,7 @@ Feature: Test switch model to text view: delete component/link
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'File is deleted.'
     And  I expect '[data-cy="delete-file-form"]' is closed
-    And  I expect '[data-cy="file_infra/new_file.tf"]' not exists
+    And  I expect '[data-cy="file_projectName/infra/new_file.tf"]' not exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
@@ -170,7 +170,7 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_projectName/infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to be equal to "cypress/resources/project-test/main.tf"
 
@@ -186,7 +186,7 @@ Feature: Test switch model to text view: delete component/link
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    And  I double click on '[data-cy="file_infra/new_file.tf"]'
+    And  I double click on '[data-cy="file_projectName/infra/new_file.tf"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
     And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{}'
@@ -208,7 +208,7 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_projectName/infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to be equal to "cypress/resources/project-test/main.tf"
 

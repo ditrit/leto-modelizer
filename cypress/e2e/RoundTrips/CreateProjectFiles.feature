@@ -28,7 +28,7 @@ Feature: Test roundtrip of the application : create project files
     And  I wait 1 second
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=<plugin>&path=<model>'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_<modelFolder>"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/<modelFolder>"]' exists
 
     # Check project is displayed in home page
     When I visit the '/'

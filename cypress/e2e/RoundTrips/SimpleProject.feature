@@ -275,8 +275,8 @@ Feature: Test roundtrip of the application: project creation
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ secondModelFolder }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
     And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
-    And  I expect '[data-cy="file_model2/new_file.tf"]' not exists
-    And  I expect '[data-cy="file_leto-modelizer.config.json"]' not exists
+    And  I expect '[data-cy="file_{{ projectName }}/model2/new_file.tf"]' not exists
+    And  I expect '[data-cy="file_{{ projectName }}/leto-modelizer.config.json"]' not exists
 
     # After clicking on a composent, it should be present
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
@@ -348,7 +348,7 @@ Feature: Test roundtrip of the application: project creation
     And  I wait 2 seconds
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ modelRenamed }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ modelRenamed }}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ modelRenamed }}"]' exists
 
     # Back to the models page
     When I click on '[data-cy="models-page-link-button"]'
@@ -373,7 +373,7 @@ Feature: Test roundtrip of the application: project creation
     And  I wait 1 second
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ secondModelFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ secondModelFolder }}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ secondModelFolder }}"]' exists
 
     ## Back to the models page
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -435,11 +435,11 @@ Feature: Test roundtrip of the application: project creation
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_model2/new_file.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file_{{ projectName }}/model2/new_file.tf"]' appear 2 times on screen
 
-    When I double click on '[data-cy="file_model2/new_file.tf"]'
+    When I double click on '[data-cy="file_{{ projectName }}/model2/new_file.tf"]'
     And  I wait 1 second
-    Then I expect '[data-cy="file_model2/new_file.tf"]' appear 2 times on screen
+    Then I expect '[data-cy="file_{{ projectName }}/model2/new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
 
@@ -471,10 +471,10 @@ Feature: Test roundtrip of the application: project creation
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_model2/new_file.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file_leto-modelizer.config.json"]' appear 1 time on screen
+    And  I expect '[data-cy="file_{{ projectName }}/model2/new_file.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file_{{ projectName }}/leto-modelizer.config.json"]' appear 1 time on screen
 
-    When I click on '[data-cy="file-tabs-container"] [data-cy="file_model2/new_file.tf"]'
+    When I click on '[data-cy="file-tabs-container"] [data-cy="file_{{ projectName }}/model2/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{}'
     And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
@@ -491,7 +491,7 @@ Feature: Test roundtrip of the application: project creation
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
     And  I expect '[id^="aws_key_pair_1"]' exists
     And  I expect '[id^="aws_route_1"]' exists
-    # previous components should not exists anymore
+    # previous components should not exist anymore
     And  I expect '[id^="aws_subnet"]' not exists
     And  I expect '[id^="aws_internet_gateway"]' not exists
     But  I expect '[class="link"]' not exists

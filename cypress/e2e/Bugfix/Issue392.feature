@@ -37,19 +37,19 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     And  I wait 1 second
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=diag1/diag2'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_diag1"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/new_file.tf"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_diag1/diag2"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/diag2/new_file.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/diag1"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/diag1/new_file.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/diag1/diag2"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/diag1/diag2/new_file.tf"]' exists
 
     # Create non parsable file inside diag1 folder
-    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_diag1"]' to make it visible
-    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_diag1"]'
+    When I hover '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}/diag1"]' to make it visible
+    And  I click on '[data-cy="file-explorer"] [data-cy="folder-button_{{ projectName }}/diag1"]'
     And  I click on '[data-cy="create-file-action-item"]'
     And  I set on '[data-cy="create-file-form"] [data-cy="name-input"]' text 'file1.txt'
     And  I click on '[data-cy="create-file-form"] [data-cy="submit-button"]'
     And  I wait 1 second
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_diag1/file1.txt"]' exists
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/diag1/file1.txt"]' exists
 
     # Go to models pages and check diagrams are displayed
     When I click on '[data-cy="models-page-link-button"]'
@@ -72,8 +72,8 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=diag1/diag2'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_diag1"]' exists
-    But  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/new_file.tf"]' not exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/file1.txt"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_diag1/diag2"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_diag1/diag2/new_file.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/diag1"]' exists
+    But  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/diag1/new_file.tf"]' not exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/diag1/file1.txt"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/diag1/diag2"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/diag1/diag2/new_file.tf"]' exists

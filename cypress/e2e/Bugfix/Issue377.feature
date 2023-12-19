@@ -32,7 +32,7 @@ Feature: Fix issue #370: Unable to create and use diagram on root folder.
     And  I wait 2 seconds
     Then I expect current url is 'projectName/modelizer/text\?plugin=terrator-plugin&path='
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_projectName"]' is 'projectName'
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_new_file.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_projectName/new_file.tf"]' exists
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
 
@@ -57,5 +57,5 @@ Feature: Fix issue #370: Unable to create and use diagram on root folder.
     Then I expect current url is 'projectName/modelizer/text\?plugin=terrator-plugin&path=infra'
 
     # verify we can switch to root diagram
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_new_file.tf"]'
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_projectName/new_file.tf"]'
     Then I expect current url is 'projectName/modelizer/text\?plugin=terrator-plugin&path='
