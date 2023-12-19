@@ -23,7 +23,6 @@ import {
   isMatching,
   exists,
   extractProjectName,
-  getProjectFolders,
 } from 'src/composables/Project';
 import {
   gitInit,
@@ -324,21 +323,6 @@ describe('Test composable: Project', () => {
         new FileInformation({ path: 'test/file.txt' }),
         new FileInformation({ path: 'test/emptyParent/__empty__' }),
         new FileInformation({ path: 'test/parent/file.txt' }),
-      ]);
-    });
-  });
-
-  describe('Test function: getProjectFolders', () => {
-    it('should return file information array', async () => {
-      localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
-        test: { id: 'test', git: {} },
-      }));
-
-      const result = await getProjectFolders('test');
-
-      expect(result).toEqual([
-        new FileInformation({ path: 'parent' }),
-        new FileInformation({ path: 'emptyParent' }),
       ]);
     });
   });
