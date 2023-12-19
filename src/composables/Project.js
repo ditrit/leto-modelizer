@@ -159,7 +159,7 @@ export async function setFiles(files, projectId, filename) {
     if (dirFiles.length === 0) {
       // Make empty folder visible by the FileExplorer.
       // TODO: Refacto when FileInformation have isFolder property.
-      files.push(new FileInformation({ path: `${filename}/__empty__` }));
+      files.push(new FileInformation({ path: `${projectId}/${filename}/__empty__` }));
     }
 
     await Promise.allSettled(dirFiles.filter((file) => file !== '.git').map((file) => setFiles(
@@ -168,7 +168,7 @@ export async function setFiles(files, projectId, filename) {
       filename ? `${filename}/${file}` : file,
     )));
   } else {
-    files.push(new FileInformation({ path: filename }));
+    files.push(new FileInformation({ path: `${projectId}/${filename}` }));
   }
 }
 
@@ -507,7 +507,7 @@ export async function getAllModels(projectId) {
       models.push({
         id: `diagram_${index}`,
         plugin: plugin.data.name,
-        path,
+        path: path === projectId ? '' : path.replace(`${projectId}/`, ''),
         tags: plugin.configuration.tags.filter(({ type }) => type === 'category'),
       });
       index += 1;
@@ -525,17 +525,16 @@ export async function getAllModels(projectId) {
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 export async function getModelFiles(projectName, modelPath, plugin) {
-  const rootPath = modelPath === '' ? projectName : `${projectName}/${modelPath}`;
-  const filePath = modelPath === '' ? modelPath : `${modelPath}/`;
+  const rootPath = modelPath === '' ? projectName : modelPath;
   const isFolder = plugin.configuration.isFolderTypeDiagram;
 
   let fileInformations;
 
   if (isFolder) {
     fileInformations = await readDir(rootPath)
-      .then((files) => files.map((file) => new FileInformation({ path: `${filePath}${file}` })));
+      .then((files) => files.map((file) => new FileInformation({ path: `${rootPath}/${file}` })));
   } else {
-    fileInformations = [new FileInformation({ path: modelPath })];
+    fileInformations = [new FileInformation({ path: `${projectName}/${modelPath}` })];
   }
 
   return getFileInputs(plugin, fileInformations);

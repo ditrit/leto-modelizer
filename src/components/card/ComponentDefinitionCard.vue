@@ -114,17 +114,21 @@ const componentIcon = computed(() => {
  * On template definition click, get all related remote files and append them to existing files.
  */
 async function onClickItem() {
+  const componentPath = query.value.path
+    ? `${projectName.value}/${query.value.path}`
+    : projectName.value;
+
   if (!props.definition.isTemplate) {
     plugin.value.addComponent(
       'root',
       props.definition,
-      query.value.path,
+      componentPath,
     );
   } else {
     await addNewTemplateComponent(
       projectName.value,
       plugin.value,
-      query.value.path,
+      componentPath,
       props.definition,
     );
   }

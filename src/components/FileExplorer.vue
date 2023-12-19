@@ -294,7 +294,8 @@ function openFile(file) {
  */
 async function openModelFiles() {
   const pluginName = query.value.plugin || '';
-  let modelPath = query.value.path || '';
+
+  let modelPath = props.projectName + (query.value.path ? `/${query.value.path}` : '');
 
   expandFolder(props.projectName);
 

@@ -321,9 +321,9 @@ describe('Test composable: Project', () => {
       const result = await getProjectFiles('test');
 
       expect(result).toEqual([
-        new FileInformation({ path: 'file.txt' }),
-        new FileInformation({ path: 'emptyParent/__empty__' }),
-        new FileInformation({ path: 'parent/file.txt' }),
+        new FileInformation({ path: 'test/file.txt' }),
+        new FileInformation({ path: 'test/emptyParent/__empty__' }),
+        new FileInformation({ path: 'test/parent/file.txt' }),
       ]);
     });
   });

@@ -194,7 +194,7 @@ async function updateAllFilesStatus(allFilePaths) {
 async function updateAllFileTabs() {
   await Promise.allSettled(
     fileTabArray.value.map(
-      (fileTab) => exists(`${props.projectName}/${fileTab.id}`).then((exist) => ({ fileTab, exist })),
+      (fileTab) => exists(fileTab.id).then((exist) => ({ fileTab, exist })),
     ),
   ).then((results) => {
     fileTabArray.value = results

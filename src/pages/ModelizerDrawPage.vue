@@ -132,6 +132,10 @@ async function initView() {
 async function dropHandler(event) {
   const dropData = JSON.parse(event.dataTransfer.getData('text/plain'));
 
+  const componentPath = query.value.path
+    ? `${projectName.value}/${query.value.path}`
+    : projectName.value;
+
   if (!dropData.isTemplate) {
     const componentDefinition = data.plugin.data.definitions.components
       .find(({ type }) => type === dropData.definitionType);
@@ -139,7 +143,7 @@ async function dropHandler(event) {
     data.plugin.addComponent(
       'root',
       componentDefinition,
-      query.value.path,
+      componentPath,
       event,
     );
     data.plugin.draw('root');
@@ -149,9 +153,9 @@ async function dropHandler(event) {
     );
 
     await addNewTemplateComponent(
-      route.params.projectName,
+      projectName.value,
       data.plugin,
-      query.value.path,
+      componentPath,
       templateDefinition,
     ).then(() => {
       data.plugin.draw('root');

@@ -352,7 +352,7 @@ describe('Test component: FileTabs', () => {
       ];
 
       Project.exists.mockImplementation((path) => {
-        if (path === `${wrapper.vm.props.projectName}/path`) {
+        if (path === 'path') {
           return Promise.resolve(true);
         }
         return Promise.resolve(false);
