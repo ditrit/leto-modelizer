@@ -51,6 +51,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix bug about (Link|Reference)Input options update, see [this issue](https://github.com/ditrit/leto-modelizer/issues/390).
 * Fix bug about adding ellipsis on long file name in file explorer, see [this issue](https://github.com/ditrit/leto-modelizer/issues/383).
 * Fix Dockerfile by adding git in order to install plugins.
+* Fix bug on creating folder with same name as root folder, see [this issue](https://github.com/ditrit/leto-modelizer/issues/393).
+* Fix bug on missing file name in config file when using githubator-plugin, see [this issue](https://github.com/ditrit/leto-modelizer/issues/465).
+* Fix bug on deleting last component of model file, the file is deleted and model is no longer displayed in the list, see [this issue](https://github.com/ditrit/leto-modelizer/issues/474).
 
 ### Removed
 
