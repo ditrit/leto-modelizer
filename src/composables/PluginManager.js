@@ -158,34 +158,22 @@ export function isParsableFile(file) {
 }
 
 /**
- * Render the given model with the corresponding pugin.
- * Return rendered files.
+ * Update project files or delete them if their contents are empty.
+ * If there are no more files to update, we keep at least one empty file.
+ * @param {object} plugin - Plugin to render.
+ * @param {FileInput[]} renderedFiles - All rendered files from the plugin.
+ * @param {boolean} isFolder - True if diagram is type folder.
  * @param {string} projectId - ID of the project.
  * @param {string} modelPath - Path of the model.
- * @param {object} plugin - Plugin to render.
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
-export async function renderModel(projectId, modelPath, plugin) {
-  const isFolder = plugin.configuration.isFolderTypeDiagram;
-  const modelFolder = modelPath === '' ? projectId : `${projectId}/${modelPath}`;
-
-  const config = await readProjectFile(
-    new FileInformation({
-      path: `${projectId}/${configurationFileName}`,
-    }),
-  );
-  const files = isFolder
-    ? await getModelFiles(projectId, modelFolder, plugin)
-    : [new FileInput({ path: modelFolder })];
-
-  const diagramFile = new FileInformation({ path: modelFolder });
-
-  const renderedFiles = plugin.render(
-    diagramFile,
-    config,
-    files.filter((file) => plugin.isParsable(file)),
-  );
-
+function updateFilesInProject(
+  plugin,
+  renderedFiles,
+  isFolder,
+  projectId,
+  modelPath,
+) {
   const filesToUpdate = [];
   const unparsableFiles = [];
   let filesToDelete = [];
@@ -219,6 +207,38 @@ export async function renderModel(projectId, modelPath, plugin) {
     ...filesToDelete.map(({ path }) => deleteProjectFile(projectId, path)),
     ...filesToUpdate.map((file) => writeProjectFile(file)),
   ]).then(() => filesToUpdate);
+}
+
+/**
+ * Render the given model with the corresponding pugin.
+ * Return rendered files.
+ * @param {string} projectId - ID of the project.
+ * @param {string} modelPath - Path of the model.
+ * @param {object} plugin - Plugin to render.
+ * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
+ */
+export async function renderModel(projectId, modelPath, plugin) {
+  const isFolder = plugin.configuration.isFolderTypeDiagram;
+  const modelFolder = modelPath === '' ? projectId : `${projectId}/${modelPath}`;
+
+  const config = await readProjectFile(
+    new FileInformation({
+      path: `${projectId}/${configurationFileName}`,
+    }),
+  );
+  const files = isFolder
+    ? await getModelFiles(projectId, modelFolder, plugin)
+    : [new FileInput({ path: modelFolder })];
+
+  const diagramFile = new FileInformation({ path: modelFolder });
+
+  const renderedFiles = plugin.render(
+    diagramFile,
+    config,
+    files.filter((file) => plugin.isParsable(file)),
+  );
+
+  return updateFilesInProject(plugin, renderedFiles, isFolder, projectId, modelPath);
 }
 
 /**
