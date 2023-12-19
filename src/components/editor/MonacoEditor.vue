@@ -58,7 +58,7 @@ async function updateFile() {
     content: editor.getValue(),
   };
 
-  await writeProjectFile(props.projectName, file);
+  await writeProjectFile(file);
 
   const newFilePath = file.id.split('/').slice(1).join('/');
   const [fileStatus] = await getStatus(
@@ -75,7 +75,7 @@ async function updateFile() {
  * @returns {Promise<string>} Promise with file's content on success otherwise error.
  */
 async function getFileContent() {
-  return readProjectFile(props.projectName, { path: props.file.id })
+  return readProjectFile({ path: props.file.id })
     .then((fileInput) => fileInput.content || '');
 }
 

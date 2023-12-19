@@ -13,7 +13,7 @@ import {
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getTemplateFiles } from 'src/composables/TemplateManager';
 
-const configurationFilePath = './leto-modelizer.config.json';
+const configurationFileName = 'leto-modelizer.config.json';
 const intervalTime = 5 * 60 * 1000; // 5 min
 let instanciatePlugins = [];
 
@@ -170,9 +170,8 @@ export async function renderModel(projectId, modelPath, plugin) {
   const modelFolder = isFolder ? modelPath : modelPath.substring(0, modelPath.lastIndexOf('/'));
 
   const config = await readProjectFile(
-    projectId,
     new FileInformation({
-      path: configurationFilePath,
+      path: `${projectId}/${configurationFileName}`,
     }),
   );
   const files = isFolder
@@ -219,7 +218,7 @@ export async function renderModel(projectId, modelPath, plugin) {
 
   return Promise.allSettled([
     ...filesToDelete.map(({ path }) => deleteProjectFile(projectId, path)),
-    ...filesToUpdate.map((file) => writeProjectFile(projectId, file)),
+    ...filesToUpdate.map((file) => writeProjectFile(file)),
   ]).then(() => filesToUpdate);
 }
 
@@ -232,9 +231,8 @@ export async function renderModel(projectId, modelPath, plugin) {
  */
 export async function renderConfiguration(projectId, modelPath, plugin) {
   const config = await readProjectFile(
-    projectId,
     new FileInformation({
-      path: configurationFilePath,
+      path: `${projectId}/${configurationFileName}`,
     }),
   );
 
@@ -242,21 +240,20 @@ export async function renderConfiguration(projectId, modelPath, plugin) {
   // eslint-disable-next-line no-underscore-dangle
   plugin.__renderer.renderConfiguration(new FileInformation({ path: modelPath }), config);
 
-  await writeProjectFile(projectId, config);
+  await writeProjectFile(config);
 }
 
 /**
  * Get array of FileInput from array of FileInformation if parsable by plugin.
  * @param {object} plugin - Used to parse if possible.
  * @param {FileInformation[]} fileInformations - Array to parse.
- * @param {string} projectName - Project name.
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
-export async function getFileInputs(plugin, fileInformations, projectName) {
+export async function getFileInputs(plugin, fileInformations) {
   return Promise.allSettled(
     fileInformations
       .filter((fileInfo) => plugin.isParsable(fileInfo))
-      .map((fileInfo) => readProjectFile(projectName, fileInfo)),
+      .map((fileInfo) => readProjectFile(fileInfo)),
   ).then((allResults) => allResults
     .filter((result) => result.status === 'fulfilled')
     .map((result) => result.value));
@@ -282,12 +279,11 @@ export async function initComponents(projectName, plugin, path) {
     filesInformation = [new FileInformation({ path })];
   }
 
-  const fileInputs = await getFileInputs(plugin, filesInformation, projectName);
+  const fileInputs = await getFileInputs(plugin, filesInformation);
 
   const config = await readProjectFile(
-    projectName,
     new FileInformation({
-      path: configurationFilePath,
+      path: `${projectName}/${configurationFileName}`,
     }),
   );
 
@@ -318,12 +314,7 @@ export async function addNewTemplateComponent(
   const templateFiles = await getTemplateFiles(path, templateDefinition);
 
   await Promise.allSettled(
-    templateFiles.map(
-      (file) => appendProjectFile(
-        projectName,
-        file,
-      ),
-    ),
+    templateFiles.map((file) => appendProjectFile(file)),
   );
 
   const modelPath = path ? `${projectName}/${path}` : projectName;
@@ -331,11 +322,10 @@ export async function addNewTemplateComponent(
   const fileInformations = files.map(
     (file) => new FileInformation({ path: path ? `${path}/${file}` : file }),
   );
-  const fileInputs = await getFileInputs(plugin, fileInformations, projectName);
+  const fileInputs = await getFileInputs(plugin, fileInformations);
   const config = await readProjectFile(
-    projectName,
     new FileInformation({
-      path: configurationFilePath,
+      path: `${projectName}/${configurationFileName}`,
     }),
   );
 
