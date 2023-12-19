@@ -317,8 +317,7 @@ export async function addNewTemplateComponent(
     templateFiles.map((file) => appendProjectFile(file)),
   );
 
-  const modelPath = path ? `${projectName}/${path}` : projectName;
-  const files = await readDir(modelPath);
+  const files = await readDir(path);
   const fileInformations = files.map(
     (file) => new FileInformation({ path: path ? `${path}/${file}` : file }),
   );

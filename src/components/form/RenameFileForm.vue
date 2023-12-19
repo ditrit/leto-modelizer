@@ -80,7 +80,7 @@ async function onSubmit() {
     .slice(0, props.file.label.length * -1)
     .concat(fileName.value);
 
-  return rename(`${props.projectName}/${props.file.id}`, `${props.projectName}/${newPath}`)
+  return rename(`${props.file.id}`, `${newPath}`)
     .then(async () => {
       await gitRemove(props.projectName, props.file.id);
 
@@ -117,7 +117,7 @@ async function onSubmit() {
 async function initLabels() {
   const parentPath = props.file.id
     .slice(0, props.file.label.length * -1);
-  labels.value = (await readDir(`/${props.projectName}/${parentPath}`))
+  labels.value = (await readDir(`/${parentPath}`))
     .filter((lab) => lab !== props.file.label);
 }
 
