@@ -187,8 +187,8 @@ export async function renderModel(projectId, modelPath, plugin) {
   );
 
   const filesToUpdate = [];
-  const filesToDelete = [];
   const unparsableFiles = [];
+  let filesToDelete = [];
 
   renderedFiles.forEach((file) => {
     if (plugin.isParsable(file)) {
@@ -207,6 +207,7 @@ export async function renderModel(projectId, modelPath, plugin) {
       const originPath = modelPath ? `${projectId}/${modelPath}` : projectId;
 
       filesToUpdate.push(new FileInformation({ path: `${originPath}/${plugin.configuration.defaultFileName}`, content: '' }));
+      filesToDelete = filesToDelete.filter(({ path }) => path !== `${originPath}/${plugin.configuration.defaultFileName}`);
     } else {
       filesToUpdate.push(filesToDelete.pop());
     }
