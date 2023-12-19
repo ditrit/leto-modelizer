@@ -60,10 +60,11 @@ async function updateFile() {
 
   await writeProjectFile(props.projectName, file);
 
+  const newFilePath = file.id.split('/').slice(1).join('/');
   const [fileStatus] = await getStatus(
     props.projectName,
-    [file.id],
-    (path) => path === file.id,
+    [newFilePath],
+    (path) => path === newFilePath,
   );
 
   FileEvent.UpdateEditorContentEvent.next(fileStatus);

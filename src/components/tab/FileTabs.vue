@@ -171,10 +171,11 @@ async function updateAllFilesStatus(allFilePaths) {
     return;
   }
 
+  const relativePaths = allFilePaths.map((path) => path.split('/').slice(1).join('/'));
   const allFileStatus = await getStatus(
     props.projectName,
-    allFilePaths,
-    (path) => allFilePaths.includes(path),
+    relativePaths,
+    (path) => relativePaths.includes(path),
   );
 
   allFileStatus.forEach((fileStatus) => {
