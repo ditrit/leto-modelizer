@@ -153,6 +153,11 @@ describe('Test component: ComponentDefinitionCard', () => {
     });
 
     it('should call plugin.draw and renderModel', async () => {
+      useRoute.mockImplementation(() => ({
+        query: {
+          path: '',
+        },
+      }));
       expect(wrapper.vm.plugin.draw).not.toBeCalledWith('root');
 
       await wrapper.vm.onClickItem();

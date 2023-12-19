@@ -347,7 +347,35 @@ describe('Test composable: PluginManager', () => {
       expect(deleteProjectFile).toBeCalled();
     });
 
-    it('should return an array with a file if the only file present has "null" content', async () => {
+    it('should return an array with the default file name when diagram type is "Folder" '
+      + 'and the only file present has "null" content', async () => {
+      const plugin = {
+        render: () => [
+          { content: null },
+        ],
+        isParsable: () => true,
+        configuration: {
+          isFolderTypeDiagram: true,
+          defaultFileName: 'defaultFileName',
+        },
+      };
+      const array = await PluginManager.renderModel(
+        'projectId',
+        'modelPath',
+        plugin,
+      );
+
+      expect(array).toEqual([new FileInformation({
+        path: 'projectId/modelPath/defaultFileName',
+        content: '',
+      }),
+      ]);
+      expect(writeProjectFile).toBeCalled();
+      expect(deleteProjectFile).toBeCalled();
+    });
+
+    it('should return an array with a file when diagram type is "File" '
+      + 'and the only file present has "null" content', async () => {
       const plugin = {
         render: () => [
           { content: null },

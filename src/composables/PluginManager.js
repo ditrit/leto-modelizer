@@ -167,7 +167,7 @@ export function isParsableFile(file) {
  */
 export async function renderModel(projectId, modelPath, plugin) {
   const isFolder = plugin.configuration.isFolderTypeDiagram;
-  const modelFolder = isFolder ? modelPath : modelPath.substring(0, modelPath.lastIndexOf('/'));
+  const modelFolder = modelPath === '' ? projectId : `${projectId}/${modelPath}`;
 
   const config = await readProjectFile(
     new FileInformation({
@@ -176,13 +176,9 @@ export async function renderModel(projectId, modelPath, plugin) {
   );
   const files = isFolder
     ? await getModelFiles(projectId, modelFolder, plugin)
-    : [new FileInput({ path: modelPath })];
+    : [new FileInput({ path: modelFolder })];
 
   const diagramFile = new FileInformation({ path: modelFolder });
-
-  if (!diagramFile.path) {
-    diagramFile.path = '';
-  }
 
   const renderedFiles = plugin.render(
     diagramFile,
@@ -208,7 +204,9 @@ export async function renderModel(projectId, modelPath, plugin) {
 
   if (filesToUpdate.length === 0) {
     if (isFolder) {
-      filesToUpdate.push(new FileInformation({ path: plugin.configuration.defaultFileName }));
+      const originPath = modelPath ? `${projectId}/${modelPath}` : projectId;
+
+      filesToUpdate.push(new FileInformation({ path: `${originPath}/${plugin.configuration.defaultFileName}`, content: '' }));
     } else {
       filesToUpdate.push(filesToDelete.pop());
     }
@@ -238,7 +236,7 @@ export async function renderConfiguration(projectId, modelPath, plugin) {
 
   // TODO : replace by appropriate function when it's done in plugin-core
   // eslint-disable-next-line no-underscore-dangle
-  plugin.__renderer.renderConfiguration(new FileInformation({ path: modelPath }), config);
+  plugin.__renderer.renderConfiguration(new FileInformation({ path: modelPath ? `${projectId}/${modelPath}` : projectId }), config);
 
   await writeProjectFile(config);
 }
@@ -263,7 +261,7 @@ export async function getFileInputs(plugin, fileInformations) {
  * Init components.
  * @param {string} projectName - Name of the project.
  * @param {object} plugin - Plugin corresponding to the model.
- * @param {string} path - Model path (Plugin name & model name).
+ * @param {string} path - Model path.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function initComponents(projectName, plugin, path) {
@@ -276,7 +274,7 @@ export async function initComponents(projectName, plugin, path) {
 
     filesInformation = filesInformation.filter((file) => plugin.isParsable(file));
   } else {
-    filesInformation = [new FileInformation({ path })];
+    filesInformation = [new FileInformation({ path: `${projectName}/${path}` })];
   }
 
   const fileInputs = await getFileInputs(plugin, filesInformation);
@@ -287,11 +285,8 @@ export async function initComponents(projectName, plugin, path) {
     }),
   );
 
-  const diagram = new FileInformation({ path });
+  const diagram = new FileInformation({ path: path ? `${projectName}/${path}` : projectName });
 
-  if (!diagram.path) {
-    diagram.path = '';
-  }
   plugin.parse(diagram, config, fileInputs);
 }
 
@@ -319,7 +314,7 @@ export async function addNewTemplateComponent(
 
   const files = await readDir(path);
   const fileInformations = files.map(
-    (file) => new FileInformation({ path: path ? `${path}/${file}` : file }),
+    (file) => new FileInformation({ path: `${path}/${file}` }),
   );
   const fileInputs = await getFileInputs(plugin, fileInformations);
   const config = await readProjectFile(

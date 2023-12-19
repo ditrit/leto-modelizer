@@ -70,7 +70,8 @@ async function onSelectFileTab(event) {
   if (!regex.test(event)) {
     const plugin = getPlugins()
       .find((p) => p.isParsable({ path: event })) || getPluginByName(query.value.plugin);
-    const modelPath = plugin?.getModels([{ path: event }]).find(() => true);
+    const fullModelPath = plugin?.getModels([{ path: event }]).find(() => true);
+    const modelPath = fullModelPath === route.params.projectName ? '' : fullModelPath?.split('/').slice(1).join('/');
 
     await router.push({
       name: 'Text',
@@ -79,7 +80,7 @@ async function onSelectFileTab(event) {
       },
       query: {
         plugin: plugin?.data.name,
-        path: modelPath !== undefined ? modelPath : query.value.path,
+        path: modelPath ?? query.value.path,
       },
     });
   }
