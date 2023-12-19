@@ -224,14 +224,13 @@ export async function getProjectFolders(projectId) {
 
 /**
  * Get file content.
- * @param {string} projectId - Id of project.
  * @param {FileInformation} fileInformation - Object that contain file path.
  * @returns {Promise<FileInput>} Promise with file content on success otherwise error.
  */
-export async function readProjectFile(projectId, fileInformation) {
+export async function readProjectFile(fileInformation) {
   const content = await new Promise((resolve) => {
     fs.readFile(
-      `/${projectId}/${fileInformation.path}`,
+      `/${fileInformation.path}`,
       'utf8',
       (e, rv) => resolve(rv),
     );
@@ -259,11 +258,10 @@ export async function mkdir(path) {
 
 /**
  * Create a new directory and its parents if not existing. Ignore already existing error.
- * @param {string} projectId - Id of project.
  * @param {string} path - Path of the folder to create.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function createProjectFolder(projectId, path) {
+export async function createProjectFolder(path) {
   return Promise.allSettled(path.split('/').reduce((acc, item, index) => {
     if (index > 0) {
       acc.push(`${acc[index - 1]}/${item}`);
@@ -272,7 +270,7 @@ export async function createProjectFolder(projectId, path) {
     }
 
     return acc;
-  }, []).map((folder) => mkdir(`${projectId}/${folder}`))).then((allResults) => {
+  }, []).map((folder) => mkdir(folder))).then((allResults) => {
     const error = allResults.find(({ status, reason }) => status === 'rejected' && reason.name !== 'EEXIST');
 
     if (error) {
@@ -286,14 +284,13 @@ export async function createProjectFolder(projectId, path) {
 /**
  * Write new content inside given file.
  * Create the file if not existing.
- * @param {string} projectId - Id of project.
  * @param {FileInput} file - File input.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function writeProjectFile(projectId, file) {
+export async function writeProjectFile(file) {
   return new Promise((resolve, reject) => {
     fs.writeFile(
-      `${projectId}/${file.path}`,
+      file.path,
       file.content || '',
       'utf8',
       (error) => {
@@ -310,20 +307,19 @@ export async function writeProjectFile(projectId, file) {
 /**
  * Append the given content to a file.
  * Create the file and folder if not existing.
- * @param {string} projectId - Id of project.
  * @param {FileInput} file - File input to append.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function appendProjectFile(projectId, file) {
+export async function appendProjectFile(file) {
   if (file.path.indexOf('/') > 0) {
     const folder = file.path.substring(0, file.path.lastIndexOf('/'));
 
-    await createProjectFolder(projectId, folder);
+    await createProjectFolder(folder);
   }
 
   return new Promise((resolve, reject) => {
     fs.appendFile(
-      `${projectId}/${file.path}`,
+      `/${file.path}`,
       file.content || '',
       'utf8',
       (error) => {
@@ -439,7 +435,7 @@ export async function deleteProjectFile(projectId, filePath, deleteParentFolder)
     const dirFiles = await readDir(`${projectId}/${parentPath}`);
 
     if (dirFiles.length > 0) {
-      await writeProjectFile(projectId, { path: `${parentPath}/__empty__`, content: '' });
+      await writeProjectFile({ path: `${parentPath}/__empty__`, content: '' });
     }
   }
 }
@@ -487,8 +483,8 @@ export async function deleteDiagramFile(pluginName, projectId, filePath) {
 export async function initProject(project) {
   saveProject(project);
   await gitInit(project.id);
-  await writeProjectFile(project.id, new FileInput({
-    path: 'README.md',
+  await writeProjectFile(new FileInput({
+    path: `${project.id}/README.md`,
     content: `# ${project.id}\n`,
   }));
   await gitAdd(project.id, 'README.md');
@@ -542,7 +538,7 @@ export async function getModelFiles(projectName, modelPath, plugin) {
     fileInformations = [new FileInformation({ path: modelPath })];
   }
 
-  return getFileInputs(plugin, fileInformations, projectName);
+  return getFileInputs(plugin, fileInformations);
 }
 
 /**

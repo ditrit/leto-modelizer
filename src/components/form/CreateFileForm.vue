@@ -72,15 +72,16 @@ const submitting = ref(false);
  * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 function onSubmit() {
-  const parent = props.file.id === props.projectName ? '' : `${props.file.id}/`;
+  const filePath = `${props.file.id}/${fileName.value}`;
   const createFile = props.isFolder
-    ? createProjectFolder(props.projectName, `${parent}${fileName.value}`)
-    : writeProjectFile(props.projectName, new FileInput({
-      path: `${parent}${fileName.value}`,
+    ? createProjectFolder(filePath)
+    : writeProjectFile(new FileInput({
+      path: filePath,
       content: '',
     }));
-  submitting.value = true;
   const type = props.isFolder ? 'folder' : 'file';
+
+  submitting.value = true;
 
   return createFile.then(() => {
     emit('file:create', fileName.value);
@@ -93,7 +94,7 @@ function onSubmit() {
     FileEvent.CreateFileEvent.next({
       name: fileName.value.substring(fileName.value.lastIndexOf('/') + 1),
       isFolder: props.isFolder,
-      path: `${parent}${fileName.value}`,
+      path: filePath,
     });
   }).catch(() => {
     Notify.create({

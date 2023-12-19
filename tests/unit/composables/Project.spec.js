@@ -74,8 +74,8 @@ jest.mock('browserfs', () => ({
     }),
     readFile: jest.fn((path, format, cb) => cb(null, 'test')),
     mkdir: jest.fn((path, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
-    writeFile: jest.fn((path, content, _, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
-    appendFile: jest.fn((path, content, _, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
+    writeFile: jest.fn((path, content, _, cb) => cb(path === 'error' ? 'error' : undefined)),
+    appendFile: jest.fn((path, content, _, cb) => cb(path === '/error' ? 'error' : undefined)),
     rmdir: jest.fn((path, cb) => {
       if (path === 'error') {
         return cb(true);
@@ -260,19 +260,19 @@ describe('Test composable: Project', () => {
 
   describe('Test function: createProjectFolder', () => {
     it('should return undefined when dir is created', async () => {
-      const result = await createProjectFolder('projectId', 'goodPath');
+      const result = await createProjectFolder('goodPath');
 
       expect(result).toBeUndefined();
     });
 
     it('should return undefined when dir is created', async () => {
-      const result = await createProjectFolder('projectId', 'a/b/c');
+      const result = await createProjectFolder('a/b/c');
 
       expect(result).toBeUndefined();
     });
 
     it('should return an error when dir is not created', async () => {
-      const error = await createProjectFolder('projectId', 'error').catch((e) => e);
+      const error = await createProjectFolder('error').catch((e) => e);
 
       expect(error).toBeDefined();
     });
@@ -280,13 +280,13 @@ describe('Test composable: Project', () => {
 
   describe('Test function: writeProjectFile', () => {
     it('should succeed and return undefined', async () => {
-      const result = await writeProjectFile('projectId', { path: 'goodPath', content: 'content' });
+      const result = await writeProjectFile({ path: 'goodPath', content: 'content' });
 
       expect(result).toBeUndefined();
     });
 
     it('should fail and return error', async () => {
-      const error = await writeProjectFile('projectId', { path: 'error', content: 'content' }).catch((e) => e);
+      const error = await writeProjectFile({ path: 'error', content: 'content' }).catch((e) => e);
 
       expect(error).toBeDefined();
     });
@@ -294,19 +294,19 @@ describe('Test composable: Project', () => {
 
   describe('Test function: appendProjectFile', () => {
     it('should succeed and return undefined', async () => {
-      const result = await appendProjectFile('projectId', { path: 'goodPath', content: 'content' });
+      const result = await appendProjectFile({ path: 'goodPath', content: 'content' });
 
       expect(result).toBeUndefined();
     });
 
     it('should fail and return error', async () => {
-      const error = await appendProjectFile('projectId', { path: 'error', content: 'content' }).catch((e) => e);
+      const error = await appendProjectFile({ path: 'error', content: 'content' }).catch((e) => e);
 
       expect(error).toBeDefined();
     });
 
     it('should succeed with multiple folder and return undefined', async () => {
-      const result = await appendProjectFile('projectId', { path: 'test/goodPath', content: 'content' }).catch((e) => e);
+      const result = await appendProjectFile({ path: 'test/goodPath', content: 'content' }).catch((e) => e);
 
       expect(result).toBeUndefined();
     });
@@ -349,7 +349,7 @@ describe('Test composable: Project', () => {
         test: { id: 'test', git: {} },
       }));
 
-      const result = await readProjectFile('test', new FileInformation({ path: '/test/file.txt' }));
+      const result = await readProjectFile(new FileInformation({ path: '/test/file.txt' }));
 
       expect(result).toEqual(new FileInput({ path: '/test/file.txt', content: 'test' }));
     });

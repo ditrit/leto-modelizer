@@ -21,11 +21,11 @@ jest.mock('vue-i18n', () => ({
 
 jest.mock('src/composables/Project', () => ({
   createProjectFolder: jest.fn(() => Promise.resolve()),
-  appendProjectFile: jest.fn((id) => {
-    if (id === 'error') {
+  appendProjectFile: jest.fn(({ path }) => {
+    if (path.startsWith('error')) {
       return Promise.reject();
     }
-    if (id === 'eexist') {
+    if (path.startsWith('eexist')) {
       return Promise.reject({ name: 'EEXIST' });
     }
     return Promise.resolve();

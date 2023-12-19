@@ -98,9 +98,9 @@ async function initAllModels() {
  * @returns {Promise} Promise with nothing on success otherwise an error.
  */
 async function manageConfigFile(realModelName, content) {
+  const configPath = `${props.projectName}/leto-modelizer.config.json`;
   const originContent = await readProjectFile(
-    props.projectName,
-    { path: 'leto-modelizer.config.json' },
+    { path: configPath },
   ).then((fileInput) => fileInput.content || '');
 
   let config = {};
@@ -115,9 +115,8 @@ async function manageConfigFile(realModelName, content) {
   };
 
   return writeProjectFile(
-    props.projectName,
     new FileInput({
-      path: 'leto-modelizer.config.json',
+      path: configPath,
       content: JSON.stringify(config, null, 2),
     }),
   );
@@ -146,9 +145,8 @@ async function onSubmit() {
         }
 
         return appendProjectFile(
-          props.projectName,
           new FileInput({
-            path: `${baseFolder.value}${modelName.value || ''}${file}`,
+            path: `${props.projectName}/${baseFolder.value}${modelName.value || ''}${file}`,
             content: result.data,
           }),
         );
