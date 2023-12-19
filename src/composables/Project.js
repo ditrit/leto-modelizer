@@ -185,44 +185,6 @@ export async function getProjectFiles(projectId) {
 }
 
 /**
- * Get the list of directory found in path location.
- * @param {string[]} files - Array of file to fill.
- * @param {string} projectId - ID of the project.
- * @param {string} filename - Path of file or directory. Null for root location.
- * @returns {Promise<void>} Promise with nothing on success otherwise an error.
- */
-async function setFolders(files, projectId, filename) {
-  const path = filename ? `${projectId}/${filename}` : projectId;
-  const isDir = await isDirectory(path);
-
-  if (isDir) {
-    const dirFiles = await readDir(path);
-
-    if (filename) {
-      files.push(new FileInformation({ path: filename }));
-    }
-
-    await Promise.allSettled(dirFiles.filter((file) => file !== '.git').map((file) => setFolders(
-      files,
-      projectId,
-      filename ? `${filename}/${file}` : file,
-    )));
-  }
-}
-
-/**
- * Retrieve list of project folder names.
- * @param {string} projectId - Id of project.
- * @returns {Promise<FileInformation[]>} Promise with folder names array on success,
- * otherwise error.
- */
-export async function getProjectFolders(projectId) {
-  const files = [];
-  await setFolders(files, projectId);
-  return files;
-}
-
-/**
  * Get file content.
  * @param {FileInformation} fileInformation - Object that contain file path.
  * @returns {Promise<FileInput>} Promise with file content on success otherwise error.
