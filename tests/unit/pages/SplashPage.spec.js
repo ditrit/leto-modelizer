@@ -4,6 +4,7 @@ import SplashPage from 'src/pages/SplashPage.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import PluginManager from 'src/composables/PluginManager';
 import {
+  removeUserSessionToken,
   getUserSessionToken,
   login,
   initUserInformation, initUserRoles,
@@ -45,6 +46,7 @@ jest.mock('vue-router', () => ({
 jest.mock('src/composables/UserAuthentication', () => ({
   login: jest.fn(),
   getUserSessionToken: jest.fn(),
+  removeUserSessionToken: jest.fn(),
   initUserInformation: jest.fn(),
   initUserRoles: jest.fn(),
 }));
@@ -103,7 +105,7 @@ describe('Test component: SplashPage', () => {
 
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(2);
+      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
       expect(login).toHaveBeenCalledTimes(1);
       expect(initUserRoles).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
@@ -116,7 +118,7 @@ describe('Test component: SplashPage', () => {
 
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(2);
+      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
       expect(login).toHaveBeenCalledTimes(1);
       expect(initUserRoles).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
@@ -129,7 +131,7 @@ describe('Test component: SplashPage', () => {
 
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(4);
+      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
       expect(initUserInformation).toHaveBeenCalledTimes(1);
       expect(initUserRoles).toHaveBeenCalledTimes(1);
     });
@@ -142,7 +144,7 @@ describe('Test component: SplashPage', () => {
 
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(4);
+      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
       expect(initUserInformation).toHaveBeenCalledTimes(1);
       expect(initUserRoles).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
@@ -160,6 +162,24 @@ describe('Test component: SplashPage', () => {
       expect(initUserInformation).toHaveBeenCalledTimes(0);
       expect(initUserRoles).toHaveBeenCalledTimes(0);
       expect(Notify.create).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
+    });
+
+    it('should redo login if session token is expired', async () => {
+      getUserSessionToken.mockImplementation(() => true);
+      initUserInformation.mockImplementation(() => Promise.reject(
+        {
+          response: {
+            data: { code: 209 },
+          },
+        },
+      ));
+      setActivePinia(createPinia());
+      Notify.create = jest.fn();
+
+      await wrapper.vm.initUser();
+
+      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
+      expect(removeUserSessionToken).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -1,6 +1,7 @@
 import {
   setUserSessionToken,
   getUserSessionToken,
+  removeUserSessionToken,
   login,
   initUserInformation, initUserRoles,
 } from 'src/composables/UserAuthentication';
@@ -96,6 +97,16 @@ describe('User Authentication', () => {
     });
   });
 
+  describe('Test function: removeUserSessionToken', () => {
+    it('should remove the session token from the local storage', () => {
+      const removeItem = jest.spyOn(Storage.prototype, 'removeItem');
+
+      removeUserSessionToken();
+
+      expect(removeItem).toHaveBeenCalled();
+    });
+  });
+
   describe('Test function: login', () => {
     it('should login using the api and store the user info in pinia', async () => {
       setActivePinia(createPinia());
@@ -103,9 +114,10 @@ describe('User Authentication', () => {
 
       jest.spyOn(Storage.prototype, 'setItem');
 
-      await login('tempCode');
+      const token = await login('tempCode');
 
       expect(store.firstname).toEqual('Pradeep');
+      expect(token).toEqual('r:dead779dcda4970cc7f96c09a328d771');
     });
   });
 
