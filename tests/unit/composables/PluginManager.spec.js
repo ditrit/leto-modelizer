@@ -387,7 +387,7 @@ describe('Test composable: PluginManager', () => {
       };
       const array = await PluginManager.renderModel(
         'projectId',
-        'modelPath',
+        '',
         plugin,
       );
 
@@ -454,7 +454,7 @@ describe('Test composable: PluginManager', () => {
 
       expect(setFiles).toHaveBeenCalledTimes(0);
 
-      await PluginManager.initComponents('projectName', plugin, 'plugin/model');
+      await PluginManager.initComponents('projectName', plugin, '');
 
       expect(setFiles).toHaveBeenCalledTimes(1);
     });

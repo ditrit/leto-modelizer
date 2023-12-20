@@ -384,6 +384,10 @@ describe('Test composable: Project', () => {
       const result = await deleteProjectFile('test', 'container/parent').then(() => 'success');
 
       expect(result).toEqual('success');
+
+      const result2 = await deleteProjectFile('test', 'test/container/parent').then(() => 'success');
+
+      expect(result2).toEqual('success');
     });
   });
 
@@ -402,8 +406,8 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: getModelFiles', () => {
-    it('should an array', async () => {
-      const plugin = {
+    it('should return an array', async () => {
+      let plugin = {
         configuration: {
           isFolderTypeDiagram: true,
         },
@@ -411,6 +415,16 @@ describe('Test composable: Project', () => {
       const array = await getModelFiles('projectName', '', plugin);
 
       expect(Array.isArray(array)).toBeTruthy();
+
+      plugin = {
+        configuration: {
+          isFolderTypeDiagram: false,
+        },
+      };
+
+      const array2 = await getModelFiles('projectName', 'modelPath', plugin);
+
+      expect(Array.isArray(array2)).toBeTruthy();
     });
   });
 
