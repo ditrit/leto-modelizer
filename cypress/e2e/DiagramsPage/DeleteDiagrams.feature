@@ -28,7 +28,7 @@ Feature: Test diagrams page: delete diagram
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
     Then I expect '[data-cy="draw-container"]' exists
-    And  I expect '[id^="aws"]' exists
+    And  I expect '[id^="id_1"]' exists
 
     # Back to the diagrams page
     When I visit the '/projects/{{ projectName }}/diagrams'

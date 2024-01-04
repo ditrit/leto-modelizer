@@ -598,7 +598,7 @@ Feature: Test roundtrip of the application: text editor
 
     When I click on '[data-cy="component-definition_aws"]'
     And  I wait 2 seconds
-    Then I expect '[data-cy="draw-container"] [id^="aws"]' exists
+    Then I expect '[data-cy="draw-container"] [id^="id_1"]' exists
 
     # Go back to the text view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'

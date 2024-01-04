@@ -1,8 +1,8 @@
-resource "aws_subnet" "aws_subnet_1" {
+resource "aws_subnet" "id_1" {
     gateway_id = [
-        aws_internet_gateway.aws_internet_gateway_1.id,
+        aws_internet_gateway.id_2.id,
     ]
 }
 
-resource "aws_internet_gateway" "aws_internet_gateway_1" {
+resource "aws_internet_gateway" "id_2" {
 }

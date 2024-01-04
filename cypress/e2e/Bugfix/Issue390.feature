@@ -27,11 +27,11 @@ Feature: Fix issue #390: (Link|Reference)Input options are not updated
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws_route53_zone"]'
     And  I click on '[data-cy="component-definition_aws_route53_record"]'
-    Then I expect '[id^="aws_route53_zone"]' appear 1 time on screen
-    And  I expect '[id^="aws_route53_record"]' appear 1 time on screen
+    Then I expect '[id^="id_1"]' appear 1 time on screen
+    And  I expect '[id^="id_2"]' appear 1 time on screen
 
     # Check only one link option exists
-    When I click on '[id="svg-aws_route53_zone_1"]'
+    When I click on '[id="id_1"]'
     Then I expect '[data-cy="object-details-panel"]' exists
     And  I expect '[data-cy="link-input_records"]' exists
 
@@ -40,14 +40,14 @@ Feature: Fix issue #390: (Link|Reference)Input options are not updated
 
     # Create second link option
     When I click on '[data-cy="component-definition_aws_route53_record"]'
-    Then I expect '[id^="aws_route53_record"]' appear 2 times on screen
+    Then I expect '[id^="id_2"]' appear 1 times on screen
 
     # Check two link options exist
     When I click on '[data-cy="link-input_records"]'
     Then I expect '[class="q-item__label"]' appear 2 times on screen
 
     # Check only one ref option exists
-    When I click on '[id="svg-aws_route53_record_1"]'
+    When I click on '[id="id_2"]'
     Then I expect '[data-cy="object-details-panel"]' exists
     And  I expect '[data-cy="ref-input_zone_id"]' exists
 
@@ -56,7 +56,7 @@ Feature: Fix issue #390: (Link|Reference)Input options are not updated
 
     # Create second link option
     When I click on '[data-cy="component-definition_aws_route53_zone"]'
-    Then I expect '[id^="aws_route53_zone"]' appear 2 times on screen
+    Then I expect '[id^="id_1"]' appear 1 times on screen
 
     # Check two link options exist
     When I click on '[data-cy="ref-input_zone_id"]'

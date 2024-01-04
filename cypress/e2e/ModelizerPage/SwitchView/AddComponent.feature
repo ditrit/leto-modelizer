@@ -71,17 +71,17 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[id^="server"]' exists
-    But  I expect '[id^="aws"]' not exists
+    And  I expect '[id^="id_1"]' exists
+    But  I expect '[id^="id_2"]' not exists
 
   Scenario: Link two components (Draw view) should update plugin file content with new attributes properties (Text view)
     When I click on '[data-cy="component-definition_aws_subnet"]'
     And  I wait 1 second
     And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
     And  I wait 1 second
-    And  I click on '[id^="aws_subnet"]'
+    And  I click on '[id^="id_1"]'
     And  I click on '[id="create-link"]'
-    And  I click on '[id^="aws_internet_gateway"]'
+    And  I click on '[id^="id_2"]'
     Then I expect '[class="link"]' exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -107,8 +107,8 @@ Feature: Test switch model to text view: add component/link
     When I wait 1 second
     And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
-    And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{}'
-    And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
+    And  I expect active file content to contain 'resource.*"aws_subnet".*"id_1".*{}'
+    And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"id_2".*{}'
     But  I expect active file content to not contain 'gateway_id.*=.*\["aws_internet_gateway_1"\]'
 
     When I set active file content to 'resource "aws_subnet" "aws_subnet_1" { gateway_id = [aws_internet_gateway.aws_internet_gateway_1.id] } resource "aws_internet_gateway" "aws_internet_gateway_1" {}'
@@ -116,6 +116,6 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
     And  I wait 1 second
-    And  I expect '[id^="aws_subnet"]' exists
-    And  I expect '[id^="aws_internet_gateway"]' exists
+    And  I expect '[id^="id_1"]' exists
+    And  I expect '[id^="id_2"]' exists
     And  I expect '[class="link"]' exists
