@@ -63,6 +63,7 @@ async function initUser() {
     await login(route.query.authCode)
       .then((data) => {
         token = data;
+        router.replace(route.fullPath.replaceAll(/(authC|c)ode=[^&]+[&]{0,1}/g, ''));
         Notify.create({
           type: 'positive',
           message: t('page.splash.login.success'),

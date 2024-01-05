@@ -36,10 +36,12 @@ jest.mock('vue-router', () => ({
     query: {
       from: 'test',
     },
+    fullPath: 'test',
   }),
   useRouter: () => ({
     push: () => {},
     path: 'test',
+    replace: () => {},
   }),
 }));
 
