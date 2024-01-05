@@ -6,13 +6,16 @@ import AboutLayout from 'src/layouts/AboutLayout.vue';
 import HomeLayout from 'src/layouts/HomeLayout.vue';
 import { getProjectById } from 'src/composables/Project';
 import SplashLayout from 'layouts/SplashLayout.vue';
-import { getUserSessionToken } from 'src/composables/UserAuthentication';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: HomeLayout,
+  },
+  {
+    path: '/token/clear',
+    name: 'ClearToken',
   },
   {
     path: '/projects/:projectName',
@@ -56,9 +59,6 @@ const routes = [
   {
     path: '/admin',
     name: 'Admin',
-    redirect() {
-      window.location.href = `${process.env.ADMIN_URL}?token=${getUserSessionToken()}`;
-    },
   },
   {
     path: '/splash',

@@ -5,7 +5,7 @@ import {
   createWebHistory,
 } from 'vue-router';
 import routes from 'src/router/routes';
-import { getUserSessionToken } from 'src/composables/UserAuthentication';
+import { getUserSessionToken, removeUserSessionToken } from 'src/composables/UserAuthentication';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getAuthenticationUrl } from 'src/composables/LetoModelizerApi';
 import { useAcl } from 'vue-simple-acl';
@@ -52,6 +52,12 @@ export default route(async () => {
     const isUserReady = getUserSessionToken() || isComingFromGithub || !process.env.HAS_BACKEND;
     let temporaryCode;
 
+    if (to.name === 'ClearToken') {
+      removeUserSessionToken();
+      next('/');
+      return;
+    }
+
     if (isComingFromGithub) {
       temporaryCode = /\?code=([^&]*)/.exec(window.location.href)[1].substring(0, 20);
     }
@@ -64,6 +70,8 @@ export default route(async () => {
       next({ name: 'Splash', query: { from: to.fullPath, authCode: temporaryCode } });
     } else if (to.name === 'Admin' && !acl.role('admin')) {
       next('/');
+    } else if (to.name === 'Admin') {
+      window.location.href = `${process.env.ADMIN_URL}?token=${getUserSessionToken()}`;
     } else {
       next();
     }
