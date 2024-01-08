@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * `CF_deleteDiagram`: allows or prevents user to delete a diagram.
   * `CF_createProject`: allows or prevents user to create a project.
 * Add settings button/menu to homepage and update its content.
+* Add route to clear token.
 
 ### Changed
 
