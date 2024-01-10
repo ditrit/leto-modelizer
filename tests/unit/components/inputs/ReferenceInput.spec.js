@@ -46,7 +46,7 @@ describe('Test component: ReferenceInput', () => {
                 icon: 'referenceIconName',
               }],
             },
-            getComponentsByType: jest.fn(() => [{ id: 'ref' }]),
+            getComponentsByType: jest.fn(() => [{ id: 'ref', externalId: 'externalId' }]),
           },
         },
       },
@@ -89,7 +89,7 @@ describe('Test component: ReferenceInput', () => {
 
     describe('Test variables: options', () => {
       it('should be an array', () => {
-        expect(wrapper.vm.options).toEqual(['ref']);
+        expect(wrapper.vm.options).toEqual([{ label: 'externalId', value: 'ref' }]);
       });
     });
 
@@ -111,6 +111,23 @@ describe('Test component: ReferenceInput', () => {
       wrapper.vm.updateOptions({ event });
 
       expect(wrapper.vm.options).toEqual(['ref']);
+    });
+  });
+
+  describe('Test watcher: props.plugin.data.components', () => {
+    it('should be triggered when props.plugin.data.components is updated', async () => {
+      expect(wrapper.vm.options).toEqual([{ value: 'ref', label: 'externalId' }]);
+
+      await wrapper.setProps({
+        plugin: {
+          data: {
+            components: ['components'],
+            getComponentsByType: jest.fn(() => [{ id: 'newRef', externalId: 'newExternalId' }]),
+          },
+        },
+      });
+
+      expect(wrapper.vm.options).toEqual([{ value: 'newRef', label: 'newExternalId' }]);
     });
   });
 

@@ -25,7 +25,7 @@ Feature: Fix issue #370: Unable to create and use diagram on root folder.
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
     Then I expect '[data-cy="draw-container"]' exists
-    And  I expect '[id^="aws"]' exists
+    And  I expect '[id^="id_1"]' exists
 
     # Go to text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'

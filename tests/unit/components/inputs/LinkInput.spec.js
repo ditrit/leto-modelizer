@@ -46,7 +46,7 @@ describe('Test component: LinkInput', () => {
                 icon: 'iconName',
               }],
             },
-            getComponentsByType: jest.fn(() => [{ id: 'componentName' }]),
+            getComponentsByType: jest.fn(() => [{ id: 'componentName', externalId: 'externalId' }]),
           },
         },
       },
@@ -89,7 +89,7 @@ describe('Test component: LinkInput', () => {
 
     describe('Test variable: options', () => {
       it('should be an array', () => {
-        expect(wrapper.vm.options).toEqual(['componentName']);
+        expect(wrapper.vm.options).toEqual([{ value: 'componentName', label: 'externalId' }]);
       });
     });
 
@@ -110,7 +110,27 @@ describe('Test component: LinkInput', () => {
 
       wrapper.vm.updateOptions({ event });
 
-      expect(wrapper.vm.options).toEqual(['componentName']);
+      expect(wrapper.vm.options).toEqual([{
+        label: 'externalId',
+        value: 'componentName',
+      }]);
+    });
+  });
+
+  describe('Test watcher: props.plugin.data.components', () => {
+    it('should be triggered when props.plugin.data.components is updated', async () => {
+      expect(wrapper.vm.options).toEqual([{ value: 'componentName', label: 'externalId' }]);
+
+      await wrapper.setProps({
+        plugin: {
+          data: {
+            components: ['components'],
+            getComponentsByType: jest.fn(() => [{ id: 'newComponentName', externalId: 'newExternalId' }]),
+          },
+        },
+      });
+
+      expect(wrapper.vm.options).toEqual([{ value: 'newComponentName', label: 'newExternalId' }]);
     });
   });
 

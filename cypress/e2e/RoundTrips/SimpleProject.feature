@@ -282,7 +282,8 @@ Feature: Test roundtrip of the application: project creation
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
     Then I expect '[data-cy="draw-container"]' exists
-    And  I expect '[id^="aws"]' exists
+    # definition_aws
+    And  I expect '[id^="id_1"]' exists
 
     # Back to the models page
     When I click on '[data-cy="models-page-link-button"]'
@@ -452,9 +453,9 @@ Feature: Test roundtrip of the application: project creation
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
 
-    # components added in 901 should not exist anymore
-    And  I expect '[id^="server"]' exists
-    But  I expect '[id^="aws"]' not exists
+    # components added in 901 should not exist anymore, only the latest exist
+    # definition_aws
+    And  I expect '[id^="id_1"]' exists
 
     ## 903 Link two components (Draw view) should update plugin file content with new attributes properties (Text view)
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
@@ -463,9 +464,11 @@ Feature: Test roundtrip of the application: project creation
     And  I wait 1 second
     And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
     And  I wait 1 second
-    And  I click on '[id^="aws_subnet"]'
+    # aws_subnet
+    And  I click on '[id^="id_2"]'
     And  I force click on '[id="create-link"]'
-    And  I click on '[id^="aws_internet_gateway"]'
+    # aws_internet_gateway
+    And  I click on '[id^="id_3"]'
     Then I expect '[class="link"]' exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -476,9 +479,9 @@ Feature: Test roundtrip of the application: project creation
 
     When I click on '[data-cy="file-tabs-container"] [data-cy="file_model2/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
-    And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{}'
-    And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
-    But  I expect active file content to not contain 'gateway_id.*=.*\["aws_internet_gateway_1"\]'
+    And  I expect active file content to contain 'resource.*"aws_subnet".*"id_2".*{}'
+    And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"id_3".*{}'
+    But  I expect active file content to not contain 'gateway_id.*=.*\["id_3"\]'
 
     ## 904 Add link attributes inside plugin file content (Text view) should display link between two components (Draw view)
     When I clear active file
@@ -489,9 +492,9 @@ Feature: Test roundtrip of the application: project creation
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[id^="aws_key_pair_1"]' exists
-    And  I expect '[id^="aws_route_1"]' exists
+    # aws_key_pair_1
+    And  I expect '[id^="id_1"]' exists
+    # aws_route_1
+    And  I expect '[id^="id_2"]' exists
     # previous components should not exists anymore
-    And  I expect '[id^="aws_subnet"]' not exists
-    And  I expect '[id^="aws_internet_gateway"]' not exists
     But  I expect '[class="link"]' not exists

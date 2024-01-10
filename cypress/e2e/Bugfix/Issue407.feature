@@ -26,5 +26,5 @@ Feature: Fix issue #407: Click on component definition from palette causes error
     Then I expect '[data-cy="component-definition_workflow"]' exists
 
     When I click on '[data-cy="component-definition_workflow"]'
-    Then I expect '[data-cy="draw-container"] [id^="workflow"]' exists
-    And  I expect '[data-cy="draw-container"] [id^="workflow"]' appear 1 time on screen
+    Then I expect '[data-cy="draw-container"] [id^="id_1"]' exists
+    And  I expect '[data-cy="draw-container"] [id^="id_1"]' appear 1 time on screen

@@ -30,7 +30,7 @@ Feature: Test switch model to text view: delete component/link
 
   Scenario: Delete a component (Draw view) should remove plugin file (Text view)
     When I click on '[data-cy="component-definition_aws"]'
-    Then I expect '[id^="aws"]' exists
+    Then I expect '[id^="id_1"]' exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
@@ -43,9 +43,9 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
 
-    When I click on '[id^="aws"]'
+    When I click on '[id^="id_1"]'
     And  I force click on '[id="remove-component"]'
-    Then I expect '[id^="aws"]' not exists
+    Then I expect '[id^="id_1"]' not exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
@@ -55,8 +55,8 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="component-definition_aws"]'
     And  I wait 1 second
     And  I click on '[data-cy="component-definition_server"]'
-    Then I expect '[id^="aws"]' exists
-    And  I expect '[id^="server"]' exists
+    Then I expect '[id^="id_1"]' exists
+    And  I expect '[id^="id_2"]' exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
@@ -72,11 +72,11 @@ Feature: Test switch model to text view: delete component/link
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
 
     When I wait 1 second
-    And  I click on '[id^="aws"]'
+    And  I click on '[id^="id_1"]'
     And  I force click on '[id="remove-component"]'
     And  I wait 1 second
-    Then I expect '[id^="server"]' exists
-    And  I expect '[id^="aws"]' not exists
+    Then I expect '[id^="id_2"]' exists
+    And  I expect '[id^="id_1"]' not exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
@@ -104,7 +104,7 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    But  I expect '[id^="aws"]' not exists
+    But  I expect '[id^="id_1"]' not exists
 
   Scenario: Remove one of the two objects inside plugin file content (Text view) should only display the remaining component
     When I click on '[data-cy="component-definition_aws"]'
@@ -124,8 +124,8 @@ Feature: Test switch model to text view: delete component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[id^="aws"]' exists
-    But  I expect '[id^="server"]' not exists
+    And  I expect '[id^="id_1"]' exists
+    But  I expect '[id^="id_2"]' not exists
 
   Scenario: Delete plugin file (Text view) should remove related component (Draw view)
     When I click on '[data-cy="component-definition_aws"]'
@@ -153,16 +153,16 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '[id^="aws"]' not exists
+    And  I expect '[id^="id_1"]' not exists
 
   Scenario: Delete a link between two components (Draw view) should remove corresponding attribute in object inside plugin file content (Text view)
     When I click on '[data-cy="component-definition_aws_subnet"]'
     And  I wait 1 second
     And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
     And  I wait 1 second
-    And  I click on '[id^="aws_subnet"]'
+    And  I click on '[id^="id_1"]'
     And  I force click on '[id="create-link"]'
-    And  I click on '[id^="aws_internet_gateway"]'
+    And  I click on '[id^="id_2"]'
     Then I expect '[class="link"]' exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -189,8 +189,8 @@ Feature: Test switch model to text view: delete component/link
     And  I double click on '[data-cy="file_infra/new_file.tf"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect active file content to contain 'resource.*"aws_subnet".*"aws_subnet_1".*{}'
-    And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"aws_internet_gateway_1".*{}'
+    And  I expect active file content to contain 'resource.*"aws_subnet".*"id_1".*{}'
+    And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"id_2".*{}'
     But  I expect active file content to not contain 'gateway_id.*=.*\["aws_internet_gateway_1"\]'
 
   Scenario: Remove link attribute inside plugin file content (Text view) should remove the link between the two components (Draw view)
@@ -198,9 +198,9 @@ Feature: Test switch model to text view: delete component/link
     And  I wait 1 second
     And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
     And  I wait 1 second
-    And  I click on '[id^="aws_subnet"]'
+    And  I click on '[id^="id_1"]'
     And  I force click on '[id="create-link"]'
-    And  I click on '[id^="aws_internet_gateway"]'
+    And  I click on '[id^="id_2"]'
     Then I expect '[class="link"]' exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -219,5 +219,5 @@ Feature: Test switch model to text view: delete component/link
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
     And  I expect '[class="link"]' not exists
-    And  I expect '[id^="aws_subnet"]' exists
-    And  I expect '[id^="aws_internet_gateway"]' exists
+    And  I expect '[id^="id_1"]' exists
+    And  I expect '[id^="id_2"]' exists

@@ -54,8 +54,8 @@ To run all the e2e tests, you need to run the application with ALL official plug
 
 ```bash
 npm ci
-npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.7.1"
-npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.3.0"
+npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.8.0"
+npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.3.1"
 npm run plugin:init
 TEMPLATE_LIBRARY_BASE_URL="https://raw.githubusercontent.com/ditrit/leto-modelizer-templates-library/leto-modelizer/e2e_test" npm run dev
 ```
@@ -66,7 +66,7 @@ TEMPLATE_LIBRARY_BASE_URL="https://raw.githubusercontent.com/ditrit/leto-modeliz
 
 ```bash
 npm ci
-npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.7.1"
+npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.8.0"
 npm run plugin:init
 ```
 
@@ -124,7 +124,7 @@ We use [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as guideline f
 
 Steps to release:
 - Create a new branch labeled `release/vX.Y.Z` from the latest `main`.
-- Improve the version number in `package.json`, `package-lock.json` and `changelog.md`.
+- Increase the version number in `package.json`, `package-lock.json` and `changelog.md`.
 - Verify the content of the `changelog.md`.
 - Commit the modifications with the label `Release version X.Y.Z`.
 - Create a pull request on github for this branch into `main`.

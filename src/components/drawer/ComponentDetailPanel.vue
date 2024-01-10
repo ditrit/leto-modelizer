@@ -52,7 +52,7 @@
             <!-- Selected component name -->
             <q-item class="q-px-none">
               <q-input
-                v-model="selectedComponentId"
+                v-model="selectedComponentExternalId"
                 class="q-px-md q-pb-sm"
                 :label="$t('plugin.component.attribute.id')"
                 data-cy="component-id-input"
@@ -85,7 +85,7 @@ const props = defineProps({
   },
 });
 
-const selectedComponentId = ref('');
+const selectedComponentExternalId = ref('');
 const selectedComponentAttributes = ref([]);
 const isVisible = ref(false);
 const submitting = ref(false);
@@ -130,8 +130,9 @@ function sanitizeAttributes(attributes) {
 async function submit() {
   submitting.value = true;
 
-  if (originalComponent.value.id !== selectedComponentId.value) {
-    props.plugin.data.renameComponentId(originalComponent.value.id, selectedComponentId.value);
+  if (originalComponent.value.externalId !== selectedComponentExternalId.value) {
+    const { id } = originalComponent.value;
+    props.plugin.data.renameComponentExternalId(id, selectedComponentExternalId.value);
   }
 
   originalComponent.value.attributes = sanitizeAttributes(attributesUpdated.value);
@@ -213,7 +214,7 @@ function onDefaultEvent({ event }) {
 
       originalComponent.value = props.plugin.data.getComponentById(event.components[0]);
 
-      selectedComponentId.value = originalComponent.value.id;
+      selectedComponentExternalId.value = originalComponent.value.externalId;
       selectedComponentAttributes.value = JSON.parse(JSON.stringify(
         getReferencedAttributes(originalComponent.value)
           .concat(getUnreferencedAttributes(originalComponent.value)),

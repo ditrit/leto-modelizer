@@ -25,7 +25,7 @@
     "browserfs": "=1.4.3",
     "core-js": "=3.34.0",
     "isomorphic-git": "=1.25.1",
-    "leto-modelizer-plugin-core": "github:ditrit/leto-modelizer-plugin-core#0.22.0",
+    "leto-modelizer-plugin-core": "github:ditrit/leto-modelizer-plugin-core#0.23.0",
     "monaco-editor": "=0.45.0",
     "monaco-editor-webpack-plugin": "=7.1.0",
     "pinia": "=2.1.7",
