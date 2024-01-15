@@ -56,7 +56,7 @@ Plugin to manage terraform files, by default it comes with aws provider definiti
 
 Plugin to manage github action files.
 
-[GitHub url](https://github.com/ditrit/githubator-plugin#0.3.1)
+[GitHub url](https://github.com/ditrit/githubator-plugin#0.3.2)
 
 ## Compatibility versions table
 
@@ -101,7 +101,7 @@ Plugin to manage github action files.
       <td>next version</td>
       <td>= 0.23.0</td>
       <td>= 0.8.0</td>
-      <td>= 0.3.1</td>
+      <td>= 0.3.3</td>
     </tr>
   </tbody>
 </table>
@@ -137,7 +137,7 @@ Examples with official plugins:
   - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.8.0`
 - githubator-plugin: 
   - plugin name: `githubator-plugin`
-  - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.3.1`
+  - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.3.2`
 
 ### Install custom plugin in command line
 
@@ -148,7 +148,7 @@ Options `repository-name` and `repository-url` can be added with the `npm run pl
 npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.8.0"
 
 # Example with github action plugin
-npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.3.1"
+npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.3.2"
 ```
 
 Now that your plugin is installed, you can continue to install other plugins with the same command if you want.
