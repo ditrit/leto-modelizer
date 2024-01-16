@@ -221,8 +221,8 @@ describe('Test composable: Git', () => {
 
   describe('Test function: getStatus', () => {
     it('should be a success and return an array with one valid FileStatus', async () => {
-      expect(await getStatus()).toEqual([new FileStatus({
-        path: 'test',
+      expect(await getStatus('projectName')).toEqual([new FileStatus({
+        path: 'projectName/test',
         headStatus: 0,
         workdirStatus: 1,
         stageStatus: 2,
@@ -258,7 +258,6 @@ describe('Test composable: Git', () => {
     it('should call git add', async () => {
       await gitAdd('projectId', 'filepath');
 
-      // expect(gitAddMock).toBeCalled();
       expect(git.add).toBeCalled();
     });
   });
@@ -267,7 +266,6 @@ describe('Test composable: Git', () => {
     it('should call git remove', async () => {
       await gitRemove('projectId', 'filepath');
 
-      // expect(gitRemoveMock).toBeCalled();
       expect(git.remove).toBeCalled();
     });
   });

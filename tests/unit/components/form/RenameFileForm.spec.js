@@ -16,7 +16,7 @@ jest.mock('vue-i18n', () => ({
 jest.mock('src/composables/Project', () => ({
   readDir: jest.fn(() => ['test']),
   rename: jest.fn(
-    (old, rename) => (rename === 'projectName/rename' ? Promise.resolve() : Promise.reject()),
+    (old, rename) => (rename === 'rename' ? Promise.resolve() : Promise.reject()),
   ),
 }));
 

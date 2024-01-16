@@ -188,7 +188,7 @@ export async function createBranchFrom(projectId, newBranchName, branchName) {
 /**
  * Add untracked, unstaged or modified files.
  * @param {string} projectId - Id of project.
- * @param {string} filepath - Path of the file to add.
+ * @param {string} filepath - Path of the file to add. Filepath must exclude the root folder.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function gitAdd(projectId, filepath) {
@@ -246,6 +246,7 @@ export async function gitUpdate(project, branchName, fastForward) {
  * that strictly or partially match the given filePaths.
  * @param {string} projectId - Id of project.
  * @param {string[]} filepaths - Limit the query to the given files and directories.
+ * Filepaths must exclude the root folder.
  * @param {Function} filter - Filter to only return results whose filepath matches a given function.
  * @returns {Promise<FileStatus[]>} All files status.
  */
@@ -257,7 +258,7 @@ export async function getStatus(projectId, filepaths, filter) {
     filter,
   }).then((files) => files
     .map((file) => new FileStatus({
-      path: file[0],
+      path: `${projectId}/${file[0]}`,
       headStatus: file[1],
       workdirStatus: file[2],
       stageStatus: file[3],
@@ -323,7 +324,7 @@ export async function gitGlobalUpload(project) {
       || file.isUntracked
       || file.isUnstaged
       || file.isStaged)
-    .map((file) => file.path);
+    .map((file) => file.path.split('/').splice(1).join('/'));
 
   await gitAdd(project.id, modifiedFiles);
 

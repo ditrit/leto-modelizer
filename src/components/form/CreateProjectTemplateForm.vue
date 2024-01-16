@@ -168,8 +168,8 @@ async function onSubmit() {
       await Promise.allSettled(props.template.files
         .map((file) => getTemplateFileByPath(`templates/${props.template.key}/${file}`, 'text')
           .then(async (result) => {
-            appendProjectFile(project.id, new FileInput({
-              path: file,
+            appendProjectFile(new FileInput({
+              path: `${project.id}/${file}`,
               content: result.data,
             }));
           })

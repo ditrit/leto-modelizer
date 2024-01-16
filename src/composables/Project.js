@@ -159,7 +159,7 @@ export async function setFiles(files, projectId, filename) {
     if (dirFiles.length === 0) {
       // Make empty folder visible by the FileExplorer.
       // TODO: Refacto when FileInformation have isFolder property.
-      files.push(new FileInformation({ path: `${filename}/__empty__` }));
+      files.push(new FileInformation({ path: `${projectId}/${filename}/__empty__` }));
     }
 
     await Promise.allSettled(dirFiles.filter((file) => file !== '.git').map((file) => setFiles(
@@ -168,7 +168,7 @@ export async function setFiles(files, projectId, filename) {
       filename ? `${filename}/${file}` : file,
     )));
   } else {
-    files.push(new FileInformation({ path: filename }));
+    files.push(new FileInformation({ path: `${projectId}/${filename}` }));
   }
 }
 
@@ -185,53 +185,14 @@ export async function getProjectFiles(projectId) {
 }
 
 /**
- * Get the list of directory found in path location.
- * @param {string[]} files - Array of file to fill.
- * @param {string} projectId - ID of the project.
- * @param {string} filename - Path of file or directory. Null for root location.
- * @returns {Promise<void>} Promise with nothing on success otherwise an error.
- */
-async function setFolders(files, projectId, filename) {
-  const path = filename ? `${projectId}/${filename}` : projectId;
-  const isDir = await isDirectory(path);
-
-  if (isDir) {
-    const dirFiles = await readDir(path);
-
-    if (filename) {
-      files.push(new FileInformation({ path: filename }));
-    }
-
-    await Promise.allSettled(dirFiles.filter((file) => file !== '.git').map((file) => setFolders(
-      files,
-      projectId,
-      filename ? `${filename}/${file}` : file,
-    )));
-  }
-}
-
-/**
- * Retrieve list of project folder names.
- * @param {string} projectId - Id of project.
- * @returns {Promise<FileInformation[]>} Promise with folder names array on success,
- * otherwise error.
- */
-export async function getProjectFolders(projectId) {
-  const files = [];
-  await setFolders(files, projectId);
-  return files;
-}
-
-/**
  * Get file content.
- * @param {string} projectId - Id of project.
  * @param {FileInformation} fileInformation - Object that contain file path.
  * @returns {Promise<FileInput>} Promise with file content on success otherwise error.
  */
-export async function readProjectFile(projectId, fileInformation) {
+export async function readProjectFile(fileInformation) {
   const content = await new Promise((resolve) => {
     fs.readFile(
-      `/${projectId}/${fileInformation.path}`,
+      `/${fileInformation.path}`,
       'utf8',
       (e, rv) => resolve(rv),
     );
@@ -259,11 +220,10 @@ export async function mkdir(path) {
 
 /**
  * Create a new directory and its parents if not existing. Ignore already existing error.
- * @param {string} projectId - Id of project.
  * @param {string} path - Path of the folder to create.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function createProjectFolder(projectId, path) {
+export async function createProjectFolder(path) {
   return Promise.allSettled(path.split('/').reduce((acc, item, index) => {
     if (index > 0) {
       acc.push(`${acc[index - 1]}/${item}`);
@@ -272,7 +232,7 @@ export async function createProjectFolder(projectId, path) {
     }
 
     return acc;
-  }, []).map((folder) => mkdir(`${projectId}/${folder}`))).then((allResults) => {
+  }, []).map((folder) => mkdir(folder))).then((allResults) => {
     const error = allResults.find(({ status, reason }) => status === 'rejected' && reason.name !== 'EEXIST');
 
     if (error) {
@@ -286,14 +246,13 @@ export async function createProjectFolder(projectId, path) {
 /**
  * Write new content inside given file.
  * Create the file if not existing.
- * @param {string} projectId - Id of project.
  * @param {FileInput} file - File input.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function writeProjectFile(projectId, file) {
+export async function writeProjectFile(file) {
   return new Promise((resolve, reject) => {
     fs.writeFile(
-      `${projectId}/${file.path}`,
+      file.path,
       file.content || '',
       'utf8',
       (error) => {
@@ -310,20 +269,19 @@ export async function writeProjectFile(projectId, file) {
 /**
  * Append the given content to a file.
  * Create the file and folder if not existing.
- * @param {string} projectId - Id of project.
  * @param {FileInput} file - File input to append.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-export async function appendProjectFile(projectId, file) {
+export async function appendProjectFile(file) {
   if (file.path.indexOf('/') > 0) {
     const folder = file.path.substring(0, file.path.lastIndexOf('/'));
 
-    await createProjectFolder(projectId, folder);
+    await createProjectFolder(folder);
   }
 
   return new Promise((resolve, reject) => {
     fs.appendFile(
-      `${projectId}/${file.path}`,
+      `/${file.path}`,
       file.content || '',
       'utf8',
       (error) => {
@@ -411,18 +369,18 @@ export async function deleteProjectDir(path) {
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function deleteProjectFile(projectId, filePath, deleteParentFolder) {
-  const isFolder = await isDirectory(`${projectId}/${filePath}`);
+  const isFolder = await isDirectory(filePath);
 
   if (isFolder) {
-    const dirFiles = await readDir(`${projectId}/${filePath}`);
+    const dirFiles = await readDir(filePath);
 
     if (dirFiles.length > 0) {
       await Promise.allSettled(dirFiles.map((fileName) => deleteProjectFile(projectId, `${filePath}/${fileName}`, true)));
     }
 
-    await rmDir(`${projectId}/${filePath}`);
+    await rmDir(filePath);
   } else {
-    await rm(`${projectId}/${filePath}`);
+    await rm(filePath);
   }
 
   const listFiles = await gitListFiles(projectId);
@@ -436,10 +394,10 @@ export async function deleteProjectFile(projectId, filePath, deleteParentFolder)
 
   if (index !== -1 && !deleteParentFolder) {
     const parentPath = filePath.slice(0, index);
-    const dirFiles = await readDir(`${projectId}/${parentPath}`);
+    const dirFiles = await readDir(parentPath);
 
     if (dirFiles.length > 0) {
-      await writeProjectFile(projectId, { path: `${parentPath}/__empty__`, content: '' });
+      await writeProjectFile({ path: `${parentPath}/__empty__`, content: '' });
     }
   }
 }
@@ -487,8 +445,8 @@ export async function deleteDiagramFile(pluginName, projectId, filePath) {
 export async function initProject(project) {
   saveProject(project);
   await gitInit(project.id);
-  await writeProjectFile(project.id, new FileInput({
-    path: 'README.md',
+  await writeProjectFile(new FileInput({
+    path: `${project.id}/README.md`,
     content: `# ${project.id}\n`,
   }));
   await gitAdd(project.id, 'README.md');
@@ -511,7 +469,7 @@ export async function getAllModels(projectId) {
       models.push({
         id: `diagram_${index}`,
         plugin: plugin.data.name,
-        path,
+        path: path === projectId ? '' : path.replace(`${projectId}/`, ''),
         tags: plugin.configuration.tags.filter(({ type }) => type === 'category'),
       });
       index += 1;
@@ -529,20 +487,19 @@ export async function getAllModels(projectId) {
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
 export async function getModelFiles(projectName, modelPath, plugin) {
-  const rootPath = modelPath === '' ? projectName : `${projectName}/${modelPath}`;
-  const filePath = modelPath === '' ? modelPath : `${modelPath}/`;
+  const rootPath = modelPath === '' ? projectName : modelPath;
   const isFolder = plugin.configuration.isFolderTypeDiagram;
 
   let fileInformations;
 
   if (isFolder) {
     fileInformations = await readDir(rootPath)
-      .then((files) => files.map((file) => new FileInformation({ path: `${filePath}${file}` })));
+      .then((files) => files.map((file) => new FileInformation({ path: `${rootPath}/${file}` })));
   } else {
-    fileInformations = [new FileInformation({ path: modelPath })];
+    fileInformations = [new FileInformation({ path: `${projectName}/${modelPath}` })];
   }
 
-  return getFileInputs(plugin, fileInformations, projectName);
+  return getFileInputs(plugin, fileInformations);
 }
 
 /**
@@ -552,7 +509,8 @@ export async function getModelFiles(projectName, modelPath, plugin) {
  */
 export async function deleteProjectById(projectId) {
   const projects = getProjects();
-  const projectFiles = await readDir(`/${projectId}`);
+  const files = await readDir(projectId);
+  const projectFiles = files.map((file) => `${projectId}/${file}`);
 
   if (projects[projectId]) {
     await Promise.all(projectFiles.map((file) => deleteProjectFile(projectId, file, true)));

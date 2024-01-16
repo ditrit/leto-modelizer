@@ -40,7 +40,7 @@ Feature: Fix issue #390: (Link|Reference)Input options are not updated
 
     # Create second link option
     When I click on '[data-cy="component-definition_aws_route53_record"]'
-    Then I expect '[id^="id_2"]' appear 1 times on screen
+    Then I expect '[id^="id_2"]' appear 1 time on screen
 
     # Check two link options exist
     When I click on '[data-cy="link-input_records"]'
@@ -56,7 +56,7 @@ Feature: Fix issue #390: (Link|Reference)Input options are not updated
 
     # Create second link option
     When I click on '[data-cy="component-definition_aws_route53_zone"]'
-    Then I expect '[id^="id_1"]' appear 1 times on screen
+    Then I expect '[id^="id_1"]' appear 1 time on screen
 
     # Check two link options exist
     When I click on '[data-cy="ref-input_zone_id"]'

@@ -106,9 +106,8 @@ describe('Test component: ImportModelTemplateForm', () => {
       await wrapper.vm.manageConfigFile('modelName', JSON.stringify(templateConfigContent));
 
       expect(writeProjectFileMock).toHaveBeenCalledWith(
-        wrapper.vm.props.projectName,
         new FileInput({
-          path: 'leto-modelizer.config.json',
+          path: 'test/leto-modelizer.config.json',
           content: JSON.stringify(config, null, 2),
         }),
       );
@@ -151,9 +150,8 @@ describe('Test component: ImportModelTemplateForm', () => {
       await wrapper.vm.manageConfigFile('modelName', JSON.stringify(templateConfigContent));
 
       expect(writeProjectFileMock).toHaveBeenCalledWith(
-        wrapper.vm.props.projectName,
         new FileInput({
-          path: 'leto-modelizer.config.json',
+          path: 'test/leto-modelizer.config.json',
           content: JSON.stringify(config, null, 2),
         }),
       );

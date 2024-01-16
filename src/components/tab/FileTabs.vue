@@ -171,10 +171,11 @@ async function updateAllFilesStatus(allFilePaths) {
     return;
   }
 
+  const relativePaths = allFilePaths.map((path) => path.split('/').slice(1).join('/'));
   const allFileStatus = await getStatus(
     props.projectName,
-    allFilePaths,
-    (path) => allFilePaths.includes(path),
+    relativePaths,
+    (path) => relativePaths.includes(path),
   );
 
   allFileStatus.forEach((fileStatus) => {
@@ -193,7 +194,7 @@ async function updateAllFilesStatus(allFilePaths) {
 async function updateAllFileTabs() {
   await Promise.allSettled(
     fileTabArray.value.map(
-      (fileTab) => exists(`${props.projectName}/${fileTab.id}`).then((exist) => ({ fileTab, exist })),
+      (fileTab) => exists(fileTab.id).then((exist) => ({ fileTab, exist })),
     ),
   ).then((results) => {
     fileTabArray.value = results

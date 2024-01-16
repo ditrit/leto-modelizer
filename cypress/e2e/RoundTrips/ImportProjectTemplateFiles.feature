@@ -33,43 +33,43 @@ Feature: Test roundtrip of the application : import project with template files
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
 
     When I wait 2 seconds
-    Then I expect '[data-cy="file-explorer"] [data-cy="folder_terraform"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_branch.txt"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_README.md"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_infra/prod"]' exists
+    Then I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/terraform"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/branch.txt"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/README.md"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/infra/prod"]' exists
 
     # Check content of imported project files
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_README.md"]'
-    Then I expect '[data-cy="active-tab"] [data-cy="file_README.md"]' exists
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/README.md"]'
+    Then I expect '[data-cy="active-tab"] [data-cy="file_{{ projectName }}/README.md"]' exists
     And  I expect active file content to be equal to 'cypress/resources/project-test/README.md'
 
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_branch.txt"]'
-    Then I expect '[data-cy="active-tab"] [data-cy="file_branch.txt"]' exists
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/branch.txt"]'
+    Then I expect '[data-cy="active-tab"] [data-cy="file_{{ projectName }}/branch.txt"]' exists
     And  I expect active file content to contain 'main'
 
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_terraform"]'
-    Then I expect '[data-cy="file-explorer"] [data-cy="file_terraform/app.tf"]' exists
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/terraform"]'
+    Then I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/terraform/app.tf"]' exists
 
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_terraform/app.tf"]'
-    Then I expect '[data-cy="active-tab"] [data-cy="file_terraform/app.tf"]' exists
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/terraform/app.tf"]'
+    Then I expect '[data-cy="active-tab"] [data-cy="file_{{ projectName }}/terraform/app.tf"]' exists
     And  I expect active file content to be equal to 'cypress/resources/project-test/app.tf'
 
     # Check content of plugin and template files
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_infra/dev"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_infra/prod"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_infra/prod/main.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/infra/dev"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/infra/prod"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/infra/prod/main.tf"]' exists
 
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_infra/prod/main.tf"]'
-    Then I expect '[data-cy="active-tab"] [data-cy="file_infra/prod/main.tf"]' exists
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/infra/prod/main.tf"]'
+    Then I expect '[data-cy="active-tab"] [data-cy="file_{{ projectName }}/infra/prod/main.tf"]' exists
     And  I expect active file content to be equal to 'cypress/resources/infra/prod/main.tf'
 
-    When I click on '[data-cy="file-explorer"] [data-cy="folder_infra/dev"]'
-    And  I double click on '[data-cy="file-explorer"] [data-cy="file_infra/dev/main.tf"]'
-    Then I expect '[data-cy="active-tab"] [data-cy="file_infra/dev/main.tf"]' exists
+    When I click on '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/infra/dev"]'
+    And  I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/infra/dev/main.tf"]'
+    Then I expect '[data-cy="active-tab"] [data-cy="file_{{ projectName }}/infra/dev/main.tf"]' exists
     And  I expect active file content to be equal to 'cypress/resources/infra/dev/main.tf'
 
-    When I double click on '[data-cy="file-explorer"] [data-cy="file_infra/dev/provider.tf"]'
-    Then I expect '[data-cy="active-tab"] [data-cy="file_infra/dev/provider.tf"]' exists
+    When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/infra/dev/provider.tf"]'
+    Then I expect '[data-cy="active-tab"] [data-cy="file_{{ projectName }}/infra/dev/provider.tf"]' exists
     And  I expect active file content to be equal to 'cypress/resources/infra/dev/provider.tf'
 
     # Check project is displayed in home page

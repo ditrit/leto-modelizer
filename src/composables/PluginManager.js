@@ -13,7 +13,7 @@ import {
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getTemplateFiles } from 'src/composables/TemplateManager';
 
-const configurationFilePath = './leto-modelizer.config.json';
+const configurationFileName = 'leto-modelizer.config.json';
 const intervalTime = 5 * 60 * 1000; // 5 min
 let instanciatePlugins = [];
 
@@ -158,42 +158,25 @@ export function isParsableFile(file) {
 }
 
 /**
- * Render the given model with the corresponding pugin.
- * Return rendered files.
+ * Update project files or delete them if their contents are empty.
+ * If there are no more files to update, we keep at least one empty file.
+ * @param {object} plugin - Plugin to render.
+ * @param {FileInput[]} renderedFiles - All rendered files from the plugin.
+ * @param {boolean} isFolder - True if diagram is type folder.
  * @param {string} projectId - ID of the project.
  * @param {string} modelPath - Path of the model.
- * @param {object} plugin - Plugin to render.
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
-export async function renderModel(projectId, modelPath, plugin) {
-  const isFolder = plugin.configuration.isFolderTypeDiagram;
-  const modelFolder = isFolder ? modelPath : modelPath.substring(0, modelPath.lastIndexOf('/'));
-
-  const config = await readProjectFile(
-    projectId,
-    new FileInformation({
-      path: configurationFilePath,
-    }),
-  );
-  const files = isFolder
-    ? await getModelFiles(projectId, modelFolder, plugin)
-    : [new FileInput({ path: modelPath })];
-
-  const diagramFile = new FileInformation({ path: modelFolder });
-
-  if (!diagramFile.path) {
-    diagramFile.path = '';
-  }
-
-  const renderedFiles = plugin.render(
-    diagramFile,
-    config,
-    files.filter((file) => plugin.isParsable(file)),
-  );
-
+function updateFilesInProject(
+  plugin,
+  renderedFiles,
+  isFolder,
+  projectId,
+  modelPath,
+) {
   const filesToUpdate = [];
-  const filesToDelete = [];
   const unparsableFiles = [];
+  let filesToDelete = [];
 
   renderedFiles.forEach((file) => {
     if (plugin.isParsable(file)) {
@@ -209,7 +192,10 @@ export async function renderModel(projectId, modelPath, plugin) {
 
   if (filesToUpdate.length === 0) {
     if (isFolder) {
-      filesToUpdate.push(new FileInformation({ path: plugin.configuration.defaultFileName }));
+      const originPath = modelPath ? `${projectId}/${modelPath}` : projectId;
+
+      filesToUpdate.push(new FileInformation({ path: `${originPath}/${plugin.configuration.defaultFileName}`, content: '' }));
+      filesToDelete = filesToDelete.filter(({ path }) => path !== `${originPath}/${plugin.configuration.defaultFileName}`);
     } else {
       filesToUpdate.push(filesToDelete.pop());
     }
@@ -219,8 +205,40 @@ export async function renderModel(projectId, modelPath, plugin) {
 
   return Promise.allSettled([
     ...filesToDelete.map(({ path }) => deleteProjectFile(projectId, path)),
-    ...filesToUpdate.map((file) => writeProjectFile(projectId, file)),
+    ...filesToUpdate.map((file) => writeProjectFile(file)),
   ]).then(() => filesToUpdate);
+}
+
+/**
+ * Render the given model with the corresponding plugin.
+ * Return rendered files.
+ * @param {string} projectId - ID of the project.
+ * @param {string} modelPath - Path of the model.
+ * @param {object} plugin - Plugin to render.
+ * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
+ */
+export async function renderModel(projectId, modelPath, plugin) {
+  const isFolder = plugin.configuration.isFolderTypeDiagram;
+  const modelFolder = modelPath === '' ? projectId : `${projectId}/${modelPath}`;
+
+  const config = await readProjectFile(
+    new FileInformation({
+      path: `${projectId}/${configurationFileName}`,
+    }),
+  );
+  const files = isFolder
+    ? await getModelFiles(projectId, modelFolder, plugin)
+    : [new FileInput({ path: modelFolder })];
+
+  const diagramFile = new FileInformation({ path: modelFolder });
+
+  const renderedFiles = plugin.render(
+    diagramFile,
+    config,
+    files.filter((file) => plugin.isParsable(file)),
+  );
+
+  return updateFilesInProject(plugin, renderedFiles, isFolder, projectId, modelPath);
 }
 
 /**
@@ -232,31 +250,29 @@ export async function renderModel(projectId, modelPath, plugin) {
  */
 export async function renderConfiguration(projectId, modelPath, plugin) {
   const config = await readProjectFile(
-    projectId,
     new FileInformation({
-      path: configurationFilePath,
+      path: `${projectId}/${configurationFileName}`,
     }),
   );
 
   // TODO : replace by appropriate function when it's done in plugin-core
   // eslint-disable-next-line no-underscore-dangle
-  plugin.__renderer.renderConfiguration(new FileInformation({ path: modelPath }), config);
+  plugin.__renderer.renderConfiguration(new FileInformation({ path: modelPath ? `${projectId}/${modelPath}` : projectId }), config);
 
-  await writeProjectFile(projectId, config);
+  await writeProjectFile(config);
 }
 
 /**
  * Get array of FileInput from array of FileInformation if parsable by plugin.
  * @param {object} plugin - Used to parse if possible.
  * @param {FileInformation[]} fileInformations - Array to parse.
- * @param {string} projectName - Project name.
  * @returns {Promise<Array<FileInput>>} Promise with FileInputs array on success otherwise an error.
  */
-export async function getFileInputs(plugin, fileInformations, projectName) {
+export async function getFileInputs(plugin, fileInformations) {
   return Promise.allSettled(
     fileInformations
       .filter((fileInfo) => plugin.isParsable(fileInfo))
-      .map((fileInfo) => readProjectFile(projectName, fileInfo)),
+      .map((fileInfo) => readProjectFile(fileInfo)),
   ).then((allResults) => allResults
     .filter((result) => result.status === 'fulfilled')
     .map((result) => result.value));
@@ -266,7 +282,7 @@ export async function getFileInputs(plugin, fileInformations, projectName) {
  * Init components.
  * @param {string} projectName - Name of the project.
  * @param {object} plugin - Plugin corresponding to the model.
- * @param {string} path - Model path (Plugin name & model name).
+ * @param {string} path - Model path.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function initComponents(projectName, plugin, path) {
@@ -279,23 +295,19 @@ export async function initComponents(projectName, plugin, path) {
 
     filesInformation = filesInformation.filter((file) => plugin.isParsable(file));
   } else {
-    filesInformation = [new FileInformation({ path })];
+    filesInformation = [new FileInformation({ path: `${projectName}/${path}` })];
   }
 
-  const fileInputs = await getFileInputs(plugin, filesInformation, projectName);
+  const fileInputs = await getFileInputs(plugin, filesInformation);
 
   const config = await readProjectFile(
-    projectName,
     new FileInformation({
-      path: configurationFilePath,
+      path: `${projectName}/${configurationFileName}`,
     }),
   );
 
-  const diagram = new FileInformation({ path });
+  const diagram = new FileInformation({ path: path ? `${projectName}/${path}` : projectName });
 
-  if (!diagram.path) {
-    diagram.path = '';
-  }
   plugin.parse(diagram, config, fileInputs);
 }
 
@@ -318,24 +330,17 @@ export async function addNewTemplateComponent(
   const templateFiles = await getTemplateFiles(path, templateDefinition);
 
   await Promise.allSettled(
-    templateFiles.map(
-      (file) => appendProjectFile(
-        projectName,
-        file,
-      ),
-    ),
+    templateFiles.map((file) => appendProjectFile(file)),
   );
 
-  const modelPath = path ? `${projectName}/${path}` : projectName;
-  const files = await readDir(modelPath);
+  const files = await readDir(path);
   const fileInformations = files.map(
-    (file) => new FileInformation({ path: path ? `${path}/${file}` : file }),
+    (file) => new FileInformation({ path: `${path}/${file}` }),
   );
-  const fileInputs = await getFileInputs(plugin, fileInformations, projectName);
+  const fileInputs = await getFileInputs(plugin, fileInformations);
   const config = await readProjectFile(
-    projectName,
     new FileInformation({
-      path: configurationFilePath,
+      path: `${projectName}/${configurationFileName}`,
     }),
   );
 

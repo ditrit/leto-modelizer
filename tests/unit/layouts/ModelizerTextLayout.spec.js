@@ -109,7 +109,7 @@ describe('Test component: ModelizerTextLayout', () => {
           projectName: wrapper.vm.projectName,
         },
         query: {
-          path: 'plugin/fileName',
+          path: 'fileName',
           plugin: 'test',
         },
       });
@@ -123,7 +123,7 @@ describe('Test component: ModelizerTextLayout', () => {
           projectName: wrapper.vm.projectName,
         },
         query: {
-          path: 'plugin/fileName',
+          path: 'fileName',
           plugin: 'test',
         },
       });

@@ -178,10 +178,11 @@ async function onCreateFile({ name, isFolder, path }) {
 
     onCreateFileNode({ parentNodePath, node: null, isFolder });
   } else {
+    const newFilePath = path.split('/').slice(1).join('/');
     const [fileStatus] = await getStatus(
       props.projectName,
-      [path],
-      (filePath) => filePath === path,
+      [newFilePath],
+      (filePath) => filePath === newFilePath,
     );
 
     localFileInformations.value.push(fileStatus);
@@ -293,7 +294,8 @@ function openFile(file) {
  */
 async function openModelFiles() {
   const pluginName = query.value.plugin || '';
-  let modelPath = query.value.path || '';
+
+  let modelPath = props.projectName + (query.value.path ? `/${query.value.path}` : '');
 
   expandFolder(props.projectName);
 

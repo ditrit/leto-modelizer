@@ -23,7 +23,6 @@ import {
   isMatching,
   exists,
   extractProjectName,
-  getProjectFolders,
 } from 'src/composables/Project';
 import {
   gitInit,
@@ -73,9 +72,9 @@ jest.mock('browserfs', () => ({
       return cb(null, files);
     }),
     readFile: jest.fn((path, format, cb) => cb(null, 'test')),
-    mkdir: jest.fn((path, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
-    writeFile: jest.fn((path, content, _, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
-    appendFile: jest.fn((path, content, _, cb) => cb(path === 'projectId/error' ? 'error' : undefined)),
+    mkdir: jest.fn((path, cb) => cb(path === 'error' ? 'error' : undefined)),
+    writeFile: jest.fn((path, content, _, cb) => cb(path === 'error' ? 'error' : undefined)),
+    appendFile: jest.fn((path, content, _, cb) => cb(path === '/error' ? 'error' : undefined)),
     rmdir: jest.fn((path, cb) => {
       if (path === 'error') {
         return cb(true);
@@ -260,19 +259,19 @@ describe('Test composable: Project', () => {
 
   describe('Test function: createProjectFolder', () => {
     it('should return undefined when dir is created', async () => {
-      const result = await createProjectFolder('projectId', 'goodPath');
+      const result = await createProjectFolder('goodPath');
 
       expect(result).toBeUndefined();
     });
 
     it('should return undefined when dir is created', async () => {
-      const result = await createProjectFolder('projectId', 'a/b/c');
+      const result = await createProjectFolder('a/b/c');
 
       expect(result).toBeUndefined();
     });
 
     it('should return an error when dir is not created', async () => {
-      const error = await createProjectFolder('projectId', 'error').catch((e) => e);
+      const error = await createProjectFolder('error').catch((e) => e);
 
       expect(error).toBeDefined();
     });
@@ -280,13 +279,13 @@ describe('Test composable: Project', () => {
 
   describe('Test function: writeProjectFile', () => {
     it('should succeed and return undefined', async () => {
-      const result = await writeProjectFile('projectId', { path: 'goodPath', content: 'content' });
+      const result = await writeProjectFile({ path: 'goodPath', content: 'content' });
 
       expect(result).toBeUndefined();
     });
 
     it('should fail and return error', async () => {
-      const error = await writeProjectFile('projectId', { path: 'error', content: 'content' }).catch((e) => e);
+      const error = await writeProjectFile({ path: 'error', content: 'content' }).catch((e) => e);
 
       expect(error).toBeDefined();
     });
@@ -294,19 +293,19 @@ describe('Test composable: Project', () => {
 
   describe('Test function: appendProjectFile', () => {
     it('should succeed and return undefined', async () => {
-      const result = await appendProjectFile('projectId', { path: 'goodPath', content: 'content' });
+      const result = await appendProjectFile({ path: 'goodPath', content: 'content' });
 
       expect(result).toBeUndefined();
     });
 
     it('should fail and return error', async () => {
-      const error = await appendProjectFile('projectId', { path: 'error', content: 'content' }).catch((e) => e);
+      const error = await appendProjectFile({ path: 'error', content: 'content' }).catch((e) => e);
 
       expect(error).toBeDefined();
     });
 
     it('should succeed with multiple folder and return undefined', async () => {
-      const result = await appendProjectFile('projectId', { path: 'test/goodPath', content: 'content' }).catch((e) => e);
+      const result = await appendProjectFile({ path: 'test/goodPath', content: 'content' }).catch((e) => e);
 
       expect(result).toBeUndefined();
     });
@@ -321,24 +320,9 @@ describe('Test composable: Project', () => {
       const result = await getProjectFiles('test');
 
       expect(result).toEqual([
-        new FileInformation({ path: 'file.txt' }),
-        new FileInformation({ path: 'emptyParent/__empty__' }),
-        new FileInformation({ path: 'parent/file.txt' }),
-      ]);
-    });
-  });
-
-  describe('Test function: getProjectFolders', () => {
-    it('should return file information array', async () => {
-      localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify({
-        test: { id: 'test', git: {} },
-      }));
-
-      const result = await getProjectFolders('test');
-
-      expect(result).toEqual([
-        new FileInformation({ path: 'parent' }),
-        new FileInformation({ path: 'emptyParent' }),
+        new FileInformation({ path: 'test/file.txt' }),
+        new FileInformation({ path: 'test/emptyParent/__empty__' }),
+        new FileInformation({ path: 'test/parent/file.txt' }),
       ]);
     });
   });
@@ -349,7 +333,7 @@ describe('Test composable: Project', () => {
         test: { id: 'test', git: {} },
       }));
 
-      const result = await readProjectFile('test', new FileInformation({ path: '/test/file.txt' }));
+      const result = await readProjectFile(new FileInformation({ path: '/test/file.txt' }));
 
       expect(result).toEqual(new FileInput({ path: '/test/file.txt', content: 'test' }));
     });
@@ -400,6 +384,10 @@ describe('Test composable: Project', () => {
       const result = await deleteProjectFile('test', 'container/parent').then(() => 'success');
 
       expect(result).toEqual('success');
+
+      const result2 = await deleteProjectFile('test', 'test/container/parent').then(() => 'success');
+
+      expect(result2).toEqual('success');
     });
   });
 
@@ -418,8 +406,8 @@ describe('Test composable: Project', () => {
   });
 
   describe('Test function: getModelFiles', () => {
-    it('should an array', async () => {
-      const plugin = {
+    it('should return an array', async () => {
+      let plugin = {
         configuration: {
           isFolderTypeDiagram: true,
         },
@@ -427,6 +415,16 @@ describe('Test composable: Project', () => {
       const array = await getModelFiles('projectName', '', plugin);
 
       expect(Array.isArray(array)).toBeTruthy();
+
+      plugin = {
+        configuration: {
+          isFolderTypeDiagram: false,
+        },
+      };
+
+      const array2 = await getModelFiles('projectName', 'modelPath', plugin);
+
+      expect(Array.isArray(array2)).toBeTruthy();
     });
   });
 

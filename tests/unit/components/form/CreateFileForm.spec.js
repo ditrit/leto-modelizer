@@ -21,8 +21,8 @@ jest.mock('src/composables/Project', () => ({
     }
     return Promise.resolve();
   }),
-  writeProjectFile: jest.fn((id) => {
-    if (id === 'error') {
+  writeProjectFile: jest.fn(({ path }) => {
+    if (path === 'error/') {
       return Promise.reject();
     }
     return Promise.resolve();
@@ -73,7 +73,7 @@ describe('Test component: CreateFileForm', () => {
     });
 
     it('should emit a negative notification on error', async () => {
-      await wrapper.setProps({ projectName: 'error' });
+      await wrapper.setProps({ file: { id: 'error' } });
       Notify.create = jest.fn();
 
       await wrapper.vm.onSubmit();

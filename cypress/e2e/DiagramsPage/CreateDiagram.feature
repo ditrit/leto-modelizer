@@ -33,5 +33,5 @@ Feature: Test diagrams page: diagram creation
     And  I wait 1 second
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ modelFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
-    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ modelFolder }}"]' exists
-    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ modelFolder }}/new_file.tf"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ modelFolder }}"]' exists
+    And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ modelFolder }}/new_file.tf"]' exists

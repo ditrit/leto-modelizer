@@ -33,8 +33,8 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_new_file.tf"]' not exists
-    And  I expect '[data-cy="file_leto-modelizer.config.json"]' not exists
+    And  I expect '[data-cy="file_projectName/new_file.tf"]' not exists
+    And  I expect '[data-cy="file_projectName/leto-modelizer.config.json"]' not exists
 
   Scenario: Add a component (Draw view) should create project configuration file (Text view)
     When I click on '[data-cy="component-definition_aws"]'
@@ -42,11 +42,11 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file_projectName/infra/new_file.tf"]' appear 2 times on screen
 
-    When I double click on '[data-cy="file_infra/new_file.tf"]'
+    When I double click on '[data-cy="file_projectName/infra/new_file.tf"]'
     And  I wait 1 second
-    Then I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
+    Then I expect '[data-cy="file_projectName/infra/new_file.tf"]' appear 2 times on screen
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'provider.*"aws".*{}'
 
@@ -56,13 +56,13 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file_projectName/infra/new_file.tf"]' appear 2 times on screen
 
-    When I double click on '[data-cy="file_infra/new_file.tf"]'
+    When I double click on '[data-cy="file_projectName/infra/new_file.tf"]'
     And  I wait 1 second
-    Then I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
+    Then I expect '[data-cy="file_projectName/infra/new_file.tf"]' appear 2 times on screen
 
-    When I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    When I click on '[data-cy="file-tabs-container"] [data-cy="file_projectName/infra/new_file.tf"]'
     And  I wait 1 second
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
@@ -87,11 +87,11 @@ Feature: Test switch model to text view: add component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
-    And  I expect '[data-cy="file_leto-modelizer.config.json"]' appear 1 time on screen
+    And  I expect '[data-cy="file_projectName/infra/new_file.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file_projectName/leto-modelizer.config.json"]' appear 1 time on screen
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_projectName/infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to be equal to "cypress/resources/project-test/main.tf"
 
@@ -102,10 +102,10 @@ Feature: Test switch model to text view: add component/link
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
-    And  I expect '[data-cy="file_infra/new_file.tf"]' appear 2 times on screen
+    And  I expect '[data-cy="file_projectName/infra/new_file.tf"]' appear 2 times on screen
 
     When I wait 1 second
-    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_infra/new_file.tf"]'
+    And  I click on '[data-cy="file-tabs-container"] [data-cy="file_projectName/infra/new_file.tf"]'
     Then I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
     And  I expect active file content to contain 'resource.*"aws_subnet".*"id_1".*{}'
     And  I expect active file content to contain 'resource.*"aws_internet_gateway".*"id_2".*{}'

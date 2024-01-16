@@ -141,7 +141,7 @@ function isValidDiagramPath() {
 async function onSubmit() {
   const model = getModelPath(modelPlugin.value, modelLocation.value);
 
-  return appendProjectFile(props.projectName, new FileInput({ path: modelLocation.value, content: '' }))
+  return appendProjectFile(new FileInput({ path: `${props.projectName}/${modelLocation.value}`, content: '' }))
     .then(() => {
       Notify.create({
         type: 'positive',
