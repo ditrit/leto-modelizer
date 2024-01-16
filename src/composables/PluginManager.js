@@ -210,7 +210,7 @@ function updateFilesInProject(
 }
 
 /**
- * Render the given model with the corresponding pugin.
+ * Render the given model with the corresponding plugin.
  * Return rendered files.
  * @param {string} projectId - ID of the project.
  * @param {string} modelPath - Path of the model.
