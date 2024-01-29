@@ -30,4 +30,6 @@ module.exports = defineConfig({
     reporter: require.resolve('@badeball/cypress-cucumber-preprocessor/pretty-reporter'),
   },
   defaultCommandTimeout: 10000,
+  // TODO : Remove 'retries' when random failures are fixed (see https://github.com/ditrit/leto-modelizer/issues/433)
+  retries: 3,
 });
