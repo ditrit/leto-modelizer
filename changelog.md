@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Merge add/create diagram buttons into a drop down button, see [this issue](https://github.com/ditrit/leto-modelizer/issues/471).
 * Improve Authentication by re-doing login process if the token is expired, see [this issue](https://github.com/ditrit/leto-modelizer/issues/478).
 * Handle external id.
+* Replaced old authentication (Parse) by the new LetoModelizeApi (Java/Spring).
 
 ### Fixed
 
