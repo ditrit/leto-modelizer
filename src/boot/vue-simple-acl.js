@@ -4,21 +4,26 @@ import { computed } from 'vue';
 import { useUserStore } from 'stores/UserStore';
 
 const userStore = useUserStore();
-const userRoles = computed(() => ({ roles: userStore.roles }));
+const userPermissions = computed(() => ({ permissions: userStore.permissions }));
+
+const findPermission = (user, action, entity) => user.permissions.find(
+  ({ action: userAction, entity: userEntity }) => userAction === action && userEntity === entity,
+);
+
 const rules = () => defineAclRules((setRule) => {
-  setRule('admin', (user) => process.env.HAS_BACKEND && process.env.ADMIN_URL && user.roles.includes('admin'));
-  setRule('create-diagram', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createDiagram'));
-  setRule('create-diagram-from-template', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createDiagramFromTemplate'));
-  setRule('create-component', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createComponent'));
-  setRule('create-component-from-template', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createComponentFromTemplate'));
-  setRule('create-project', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createProject'));
-  setRule('create-project-from-template', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_createProjectFromTemplate'));
-  setRule('delete-diagram', (user) => !process.env.HAS_BACKEND || user.roles.includes('CF_deleteDiagram'));
+  setRule('admin', (user) => process.env.HAS_BACKEND && findPermission(user, 'ACCESS', 'ADMIN'));
+  setRule('create-diagram', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'DIAGRAM'));
+  setRule('create-diagram-from-template', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'DIAGRAM_TEMPLATE'));
+  setRule('create-component', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'COMPONENT'));
+  setRule('create-component-from-template', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'COMPONENT_TEMPLATE'));
+  setRule('create-project', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'COMPONENT'));
+  setRule('create-project-from-template', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'COMPONENT_TEMPLATE'));
+  setRule('delete-diagram', (user) => !process.env.HAS_BACKEND || findPermission(user, 'DELETE', 'DIAGRAM'));
 });
 
 export default boot(({ app }) => {
   app.use(createAcl({
-    user: userRoles,
+    user: userPermissions,
     rules,
     disabledAttrTitle: 'Custom Disabled Title',
   }));
