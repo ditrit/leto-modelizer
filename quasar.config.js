@@ -109,12 +109,8 @@ module.exports = configure((ctx) => ({
     env: {
       TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL || configuration?.templateLibrary || '',
       VERSION: version,
-      HAS_BACKEND: configuration?.backend
-        ? Object.prototype.hasOwnProperty.call(configuration?.backend, 'url')
-          && Object.prototype.hasOwnProperty.call(configuration?.backend, 'appId')
-        : false,
-      ADMIN_URL: configuration?.backend?.adminUrl || null,
-      BACKEND_APP_ID: configuration?.backend?.appId,
+      HAS_BACKEND: Object.prototype.hasOwnProperty.call(configuration, 'backendUrl'),
+      BACKEND_URL: configuration?.backendUrl || null,
     },
     // extractCSS: false,
 
@@ -161,9 +157,9 @@ module.exports = configure((ctx) => ({
         secure: true,
         changeOrigin: true,
       },
-      '/backend': {
-        pathRewrite: { '^/backend': '' },
-        target: configuration?.backend?.url,
+      '/api': {
+        target: configuration.backendUrl,
+        secure: false,
         changeOrigin: true,
       },
     },
