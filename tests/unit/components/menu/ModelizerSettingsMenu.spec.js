@@ -1,9 +1,11 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import ModelizerSettingsMenu from 'src/components/menu/ModelizerSettingsMenu.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import { setActivePinia, createPinia } from 'pinia';
+import { createI18n } from 'vue-i18n';
+import i18nConfiguration from 'src/i18n';
 
 installQuasarPlugin();
 
@@ -16,6 +18,23 @@ jest.mock('src/composables/events/GitEvent', () => ({
     subscribe: jest.fn(),
   },
 }));
+
+const vCanMock = {
+  inserted(el, binding) {
+    el.setAttribute('data-v-can-mock', binding.value);
+  },
+};
+const global = {
+  directives: {
+    can: vCanMock,
+  },
+  plugins: [
+    createI18n({
+      locale: 'en-US',
+      messages: i18nConfiguration,
+    }),
+  ],
+};
 
 jest.mock('src/composables/Project', () => ({
   getProjectById: jest.fn((id) => {
@@ -31,10 +50,6 @@ jest.mock('src/composables/Project', () => ({
       },
     };
   }),
-}));
-
-jest.mock('src/composables/UserAuthentication', () => ({
-  getUser: jest.fn(() => Promise.resolve({})),
 }));
 
 describe('Test component: ModelizerSettingsMenu', () => {
@@ -57,13 +72,11 @@ describe('Test component: ModelizerSettingsMenu', () => {
       return { unsubscribe };
     });
 
-    wrapper = shallowMount(ModelizerSettingsMenu, {
+    wrapper = mount(ModelizerSettingsMenu, {
       props: {
         projectName: 'test',
       },
-      mocks: {
-        DialogEvent,
-      },
+      global,
     });
   });
 
@@ -84,10 +97,11 @@ describe('Test component: ModelizerSettingsMenu', () => {
 
     describe('Test computed: hasRepository', () => {
       it('should be false when no git repository is defined', () => {
-        wrapper = shallowMount(ModelizerSettingsMenu, {
+        wrapper = mount(ModelizerSettingsMenu, {
           props: {
             projectName: 'noGit',
           },
+          global,
         });
         expect(wrapper.vm.hasRepository).toEqual(false);
       });
@@ -99,10 +113,11 @@ describe('Test component: ModelizerSettingsMenu', () => {
 
     describe('Test computed: menuItems', () => {
       it('should display "GitAddRemote" menu when no git repository is defined', () => {
-        wrapper = shallowMount(ModelizerSettingsMenu, {
+        wrapper = mount(ModelizerSettingsMenu, {
           props: {
             projectName: 'noGit',
           },
+          global,
         });
         expect(wrapper.vm.menuItems).toEqual([
           {

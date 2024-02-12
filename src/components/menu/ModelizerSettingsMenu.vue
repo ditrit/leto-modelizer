@@ -14,9 +14,9 @@
         text-color="white"
         size="md"
         font-size="12px"
-        :title="`${userStore.firstname} ${userStore.username}`"
+        :title="userStore.login"
       >
-        {{ userInitials }}
+        {{ userStore.name?.at(0) }}
       </q-avatar>
       <q-avatar
         v-else
@@ -29,16 +29,28 @@
       />
     </template>
     <q-list>
-      <q-item>
+      <q-item
+        v-if="!(userStore?.isEmpty)"
+      >
         <q-item-section>
           <q-item-label overline>
-            {{ userStore.firstname }}
+            {{ userStore.name }}
           </q-item-label>
           <q-item-label caption>
-            {{ userStore.username }}
+            {{ userStore.login }}
           </q-item-label>
-          <q-item-label caption>
+          <q-item-label
+            v-if="userStore.email"
+            caption
+          >
             {{ userStore.email }}
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+      <q-item v-else>
+        <q-item-section>
+          <q-item-label overline>
+            {{ $t('page.modelizer.settings.user.unknown') }}
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -122,9 +134,6 @@ const menuItems = computed(() => [
     visible: !!props.projectName,
   },
 ]);
-const userInitials = computed(
-  () => userStore.value.firstname?.at(0).toUpperCase(),
-);
 
 /**
  * Send event to open the dialog corresponding to the key.
