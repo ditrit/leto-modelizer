@@ -3,12 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import SplashPage from 'src/pages/SplashPage.vue';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import PluginManager from 'src/composables/PluginManager';
-import {
-  removeUserSessionToken,
-  getUserSessionToken,
-  login,
-  initUserInformation, initUserRoles,
-} from 'src/composables/UserAuthentication';
+import { initUserInformation, initUserPermissions } from 'src/services/UserService';
 import { setActivePinia, createPinia } from 'pinia';
 import { Notify } from 'quasar';
 
@@ -45,12 +40,9 @@ jest.mock('vue-router', () => ({
   }),
 }));
 
-jest.mock('src/composables/UserAuthentication', () => ({
-  login: jest.fn(),
-  getUserSessionToken: jest.fn(),
-  removeUserSessionToken: jest.fn(),
+jest.mock('src/services/UserService', () => ({
   initUserInformation: jest.fn(),
-  initUserRoles: jest.fn(),
+  initUserPermissions: jest.fn(),
 }));
 
 jest.useFakeTimers();
@@ -92,67 +84,44 @@ describe('Test component: SplashPage', () => {
 
   describe('Test function: initUser', () => {
     beforeEach(() => {
-      login.mockClear();
-      getUserSessionToken.mockClear();
       initUserInformation.mockClear();
-      initUserRoles.mockClear();
+      initUserPermissions.mockClear();
 
       process.env.HAS_BACKEND = true;
     });
 
-    it('should call backend when it is activated and session token is not in storage', async () => {
-      getUserSessionToken.mockImplementation(() => false);
-      login.mockImplementation(() => Promise.resolve({}));
-      Notify.create = jest.fn();
-
-      await wrapper.vm.initUser();
-
-      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
-      expect(login).toHaveBeenCalledTimes(1);
-      expect(initUserRoles).toHaveBeenCalledTimes(1);
-      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
-    });
-
-    it('should call backend when it is activated but login failed', async () => {
-      getUserSessionToken.mockImplementation(() => false);
-      login.mockImplementation(() => Promise.reject({}));
-      Notify.create = jest.fn();
-
-      await wrapper.vm.initUser();
-
-      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
-      expect(login).toHaveBeenCalledTimes(1);
-      expect(initUserRoles).toHaveBeenCalledTimes(1);
-      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
-    });
-
-    it('should call backend when it is activated and session token is already in storage', async () => {
-      getUserSessionToken.mockImplementation(() => true);
+    it('should call backend when it is activated', async () => {
       initUserInformation.mockImplementation(() => Promise.resolve({}));
-      setActivePinia(createPinia());
-
+      initUserPermissions.mockImplementation(() => Promise.resolve({}));
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
       expect(initUserInformation).toHaveBeenCalledTimes(1);
-      expect(initUserRoles).toHaveBeenCalledTimes(1);
+      expect(initUserPermissions).toHaveBeenCalledTimes(1);
     });
 
-    it('should call backend when it is activated and session token is already in storage but initUserInformation fails', async () => {
-      getUserSessionToken.mockImplementation(() => true);
+    it('should call backend when it is activated but initUserInformation failed', async () => {
       initUserInformation.mockImplementation(() => Promise.reject({}));
-      setActivePinia(createPinia());
       Notify.create = jest.fn();
 
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
       expect(initUserInformation).toHaveBeenCalledTimes(1);
-      expect(initUserRoles).toHaveBeenCalledTimes(1);
+      expect(initUserPermissions).toHaveBeenCalledTimes(1);
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
     });
 
-    it('should call not backend when it is not activated and session token is already in storage but initUserInformation fails', async () => {
+    it('should call backend when it is activated but initUserPermissions failed', async () => {
+      initUserPermissions.mockImplementation(() => Promise.reject({}));
+      Notify.create = jest.fn();
+
+      await wrapper.vm.initUser();
+
+      expect(initUserInformation).toHaveBeenCalledTimes(1);
+      expect(initUserPermissions).toHaveBeenCalledTimes(1);
+      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
+    });
+
+    it('should not call backend when it is not activated', async () => {
       // env variables are automatically converted to strings when set in unit tests.
       // So use `delete` to mock `process.env.HAS_BACKEND = false`.
       delete process.env.HAS_BACKEND;
@@ -160,28 +129,8 @@ describe('Test component: SplashPage', () => {
 
       await wrapper.vm.initUser();
 
-      expect(getUserSessionToken).toHaveBeenCalledTimes(0);
       expect(initUserInformation).toHaveBeenCalledTimes(0);
-      expect(initUserRoles).toHaveBeenCalledTimes(0);
-      expect(Notify.create).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
-    });
-
-    it('should redo login if session token is expired', async () => {
-      getUserSessionToken.mockImplementation(() => true);
-      initUserInformation.mockImplementation(() => Promise.reject(
-        {
-          response: {
-            data: { code: 209 },
-          },
-        },
-      ));
-      setActivePinia(createPinia());
-      Notify.create = jest.fn();
-
-      await wrapper.vm.initUser();
-
-      expect(getUserSessionToken).toHaveBeenCalledTimes(1);
-      expect(removeUserSessionToken).toHaveBeenCalledTimes(1);
+      expect(initUserPermissions).toHaveBeenCalledTimes(0);
     });
   });
 });

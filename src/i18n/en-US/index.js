@@ -227,8 +227,8 @@ export default {
       },
     },
     authentication: {
-      login: 'An error occured while login. Please check your leto-modelizer-api.',
-      fetchingData: 'An error occured while fetching data',
+      fetchingUserInformation: 'An error occured while fetching user data information',
+      fetchingUserPermissions: 'An error occured while fetching user data permissions',
     },
   },
   error404: {

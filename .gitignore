@@ -45,3 +45,4 @@ test-report.xml
 # Cypress
 /cypress/screenshots
 /cypress/videos
+/cypress/downloads

@@ -11,62 +11,61 @@ describe('User Store', () => {
     store = useUserStore();
   });
 
-  describe('Test store variable: username', () => {
+  describe('Test store variable: name', () => {
     it('should be initialized to an empty string', () => {
-      expect(store.username).toEqual('');
+      expect(store.name).toEqual('');
     });
 
     it('should return the new value after being set', () => {
-      store.username = 'username';
+      store.name = 'name';
 
-      expect(store.username).toEqual('username');
+      expect(store.name).toEqual('name');
     });
   });
 
-  describe('Test store variable: firstname', () => {
+  describe('Test store variable: login', () => {
     it('should be initialized to an empty string', () => {
-      expect(store.firstname).toEqual('');
+      expect(store.login).toEqual('');
     });
 
     it('should return the new value after being set', () => {
-      store.firstname = 'firstname';
+      store.login = 'login';
 
-      expect(store.firstname).toEqual('firstname');
+      expect(store.login).toEqual('login');
     });
   });
 
-  describe('Test store variable: id', () => {
+  describe('Test store variable: email', () => {
     it('should be initialized to an empty string', () => {
-      expect(store.id).toEqual('');
+      expect(store.email).toEqual('');
     });
 
     it('should return the new value after being set', () => {
-      store.id = 'id';
+      store.email = 'email';
 
-      expect(store.id).toEqual('id');
+      expect(store.email).toEqual('email');
     });
   });
 
-  describe('Test store variable: roles', () => {
-    it('should be initialized to an empty string', () => {
-      expect(store.roles).toEqual([]);
+  describe('Test store variable: permissions', () => {
+    it('should be initialized to an empty array', () => {
+      expect(store.permissions).toEqual([]);
     });
 
     it('should return the new value after being set', () => {
-      store.roles = ['admin'];
+      store.permissions = ['admin'];
 
-      expect(store.roles).toEqual(['admin']);
+      expect(store.permissions).toEqual(['admin']);
     });
   });
 
   describe('Test store actions: isEmpty', () => {
-    it('should return true if username and firstname are empty', () => {
+    it('should return true if login is empty', () => {
       expect(store.isEmpty).toBeTruthy();
     });
 
-    it('should return false if username and firstname are not empty', () => {
-      store.username = 'username';
-      store.firstname = 'firstname';
+    it('should return false if login is not empty', () => {
+      store.login = 'login';
       expect(store.isEmpty).toBeFalsy();
     });
   });

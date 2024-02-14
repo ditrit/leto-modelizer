@@ -32,74 +32,39 @@ import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
 import { initPlugins } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
-import {
-  getUserSessionToken,
-  removeUserSessionToken,
-  login,
-  initUserInformation,
-  initUserRoles,
-} from 'src/composables/UserAuthentication';
-import { useUserStore } from 'src/stores/UserStore';
+import * as UserService from 'src/services/UserService';
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
 
 /**
- * Initialize the user for the appplication, if needed.
- * If the backend is activated in the configuration, it will check
- * that the session token is present or not. If not, it will try to login the user.
- * If already connected, it will just retrieve the user info.
+ * Initialize the user by fetching user information and permissions.
+ * @returns {Promise<void>} A promise that resolves when the user is initialized.
  */
 async function initUser() {
   if (!process.env.HAS_BACKEND) {
     return;
   }
 
-  let token = getUserSessionToken();
-
-  if (!token) {
-    await login(route.query.authCode)
-      .then((data) => {
-        token = data;
-        router.replace(route.fullPath.replaceAll(/(authC|c)ode=[^&]+[&]{0,1}/g, ''));
-        Notify.create({
-          type: 'positive',
-          message: t('page.splash.login.success'),
-          html: true,
-        });
-      })
+  await Promise.allSettled([
+    UserService.initUserInformation()
       .catch(() => {
         Notify.create({
           type: 'negative',
-          message: t('errors.authentication.login'),
+          message: t('errors.authentication.fetchingUserInformation'),
           html: true,
         });
-      });
-  } else if (token && useUserStore().isEmpty) {
-    // if the user refresh the page, the token is still valid and user is
-    // still connected but the store has been cleaned. So we need to
-    // get back its information.
-    await initUserInformation(token)
-      .catch((error) => {
-        const errorData = error.response?.data;
-
-        // Code 209 == Token Expired
-        if (errorData?.code === 209) {
-          removeUserSessionToken();
-          router.push({ name: 'Splash', query: { from: route.query.from } });
-        } else {
-          Notify.create({
-            type: 'negative',
-            message: t('errors.authentication.fetchingData'),
-            html: true,
-          });
-        }
-      });
-  }
-
-  await initUserRoles(userStore.id, token);
+      }),
+    UserService.initUserPermissions()
+      .catch(() => {
+        Notify.create({
+          type: 'negative',
+          message: t('errors.authentication.fetchingUserPermissions'),
+          html: true,
+        });
+      }),
+  ]);
 }
 
 onMounted(async () => {

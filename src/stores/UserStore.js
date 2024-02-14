@@ -2,12 +2,12 @@ import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    id: '',
-    username: '',
-    firstname: '',
-    roles: [],
+    name: '',
+    login: '',
+    email: '',
+    permissions: [],
   }),
   getters: {
-    isEmpty: (state) => state.username.length === 0 && state.firstname.length === 0,
+    isEmpty: (state) => state.login.length === 0,
   },
 });

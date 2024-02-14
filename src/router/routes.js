@@ -14,10 +14,6 @@ const routes = [
     component: HomeLayout,
   },
   {
-    path: '/token/clear',
-    name: 'ClearToken',
-  },
-  {
     path: '/projects/:projectName',
     beforeEnter: (to, _from, next) => {
       const project = getProjectById(to.params.projectName);

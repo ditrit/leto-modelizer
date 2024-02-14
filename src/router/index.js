@@ -5,9 +5,7 @@ import {
   createWebHistory,
 } from 'vue-router';
 import routes from 'src/router/routes';
-import { getUserSessionToken, removeUserSessionToken } from 'src/composables/UserAuthentication';
 import PluginEvent from 'src/composables/events/PluginEvent';
-import { getAuthenticationUrl } from 'src/composables/LetoModelizerApi';
 import { useAcl } from 'vue-simple-acl';
 
 let applicationReady = false;
@@ -42,36 +40,14 @@ export default route(async () => {
 
   // No need to do this call each time, so doing it outside the beforeEach.
   const acl = useAcl();
-  let backendUrl;
-  if (process.env.HAS_BACKEND) {
-    backendUrl = await getAuthenticationUrl();
-  }
 
   Router.beforeEach(async (to, from, next) => {
-    const isComingFromGithub = window.location.href.search(/\?code=([^&]*)/) !== -1;
-    const isUserReady = getUserSessionToken() || isComingFromGithub || !process.env.HAS_BACKEND;
-    let temporaryCode;
-
-    if (to.name === 'ClearToken') {
-      removeUserSessionToken();
-      next('/');
-      return;
-    }
-
-    if (isComingFromGithub) {
-      temporaryCode = /\?code=([^&]*)/.exec(window.location.href)[1].substring(0, 20);
-    }
-
-    if (!isUserReady && process.env.HAS_BACKEND) {
-      window.location.href = backendUrl.data;
-    } else if (isUserReady
-      && !applicationReady
-      && to.name !== 'Splash') {
-      next({ name: 'Splash', query: { from: to.fullPath, authCode: temporaryCode } });
+    if (!applicationReady && to.name !== 'Splash') {
+      next({ name: 'Splash', query: { from: to.fullPath } });
     } else if (to.name === 'Admin' && !acl.role('admin')) {
       next('/');
     } else if (to.name === 'Admin') {
-      window.location.href = `${process.env.ADMIN_URL}?token=${getUserSessionToken()}`;
+      window.location.href = `${process.env.BACKEND_URL}/api/redirect?app=admin`;
     } else {
       next();
     }

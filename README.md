@@ -167,24 +167,14 @@ We have administration view [Leto-Modelizer-Admin](https://github.com/ditrit/let
 
 ```json
 {
-    "backend": {
-        "url": "http://localhost:1337",
-        "appId": "leto-modelizer-api-dev",
-        "adminUrl": "http://localhost:9000"
-    }
+  "backendUrl": "https://localhost:8443"
 }
 ```
 
-To get authentication setup, `backend.url` and `backend.appId` are mandatory.
-To get administration view, all the fields inside `backend` are mandatory.
+To get the authentication setup, `backendUrl`is mandatory.
 
-Here's a description of each key in the provided configuration:
-- `url`: the url of the backend.
-- `appId`: the application ID of the backend.
-- `adminUrl`: the url of the administration application.
-
-**_NOTE:_**: If the previous configuration is not present in the configuration file, Leto-Modelizer will be launched with the backend mode deactivated.
-**_NOTE:_**: For now, there is no UI associated to the backend, but the UI for the admin is coming soon !
+**_NOTE_**: If the previous configuration is not present in the configuration file, Leto-Modelizer will be launched with the backend mode deactivated.
+**_NOTE_**: For now, there is no UI associated to the backend, but the UI for the admin is coming soon !
 
 ## How to build this app
 
@@ -254,15 +244,12 @@ http {
 }
 ```
 
-**_NOTE:_**  You can use the global configuration file `global.config.json` to define environment variables like so :
+**_NOTE:_** You can use the global configuration file `global.config.json` to define environment variables like so :
 
 ```json
 {
   "templateLibrary": "YOUR_TEMPLATE_LIBRARY_BASE_URL",
-  "backend": {
-    "url": "YOUR_URL",
-    "appId": "YOUR_APP_ID",
-  }
+  "backendUrl": "YOUR_URL"
 }
 ```
 
