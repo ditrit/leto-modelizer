@@ -177,7 +177,9 @@ function getAttributeByDefinition(component, definition) {
       name: definition.name,
       type: getComponentValueType(definition),
       definition,
-      value: definition.type === 'Object' ? [] : null,
+      value: definition.type === 'Object'
+          || (definition.type === 'Array' && definition.itemType === 'Object')
+        ? [] : null,
     });
 }
 

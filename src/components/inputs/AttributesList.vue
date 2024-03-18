@@ -3,7 +3,8 @@
     <slot name="header" />
     <!-- Attributes not Object -->
     <q-item
-      v-for="attribute in data.localAttributes.filter(({ type }) => type !== 'Object')"
+      v-for="attribute in data.localAttributes.filter(({ type, definition }) => type !== 'Object'
+        && !(type === 'Array' && definition?.itemType === 'Object'))"
       :key="attribute.name"
       class="q-px-none"
     >
@@ -35,14 +36,26 @@
         @click="addAttribute"
       />
     </q-item>
-    <!-- Attributes Object -->
+    <!-- Attribute Object/ArrayOfObjects -->
     <q-item
-      v-for="attribute in data.localAttributes.filter(({ type }) => type === 'Object')"
+      v-for="attribute in data.localAttributes.filter(({ type, definition }) => type === 'Object'
+        || (type === 'Array' && definition?.itemType === 'Object') )"
       :key="attribute.name"
       class="q-pa-none"
       dense
     >
       <object-input
+        v-if="attribute.type === 'Object'"
+        :attribute="attribute"
+        :component="component"
+        :plugin="plugin"
+        :is-root="isRoot"
+        :full-name="`${fullName}.${attribute.name}`"
+        :current-error="currentError"
+        @update:attribute-value="updateAttributeValue"
+      />
+      <array-of-objects-input
+        v-else
         :attribute="attribute"
         :component="component"
         :plugin="plugin"
@@ -57,9 +70,12 @@
 </template>
 
 <script setup>
-import { reactive, toRef, watch } from 'vue';
+import {
+  reactive, toRef, watch,
+} from 'vue';
 import InputWrapper from 'components/inputs/InputWrapper.vue';
 import ObjectInput from 'src/components/inputs/ObjectInput.vue';
+import ArrayOfObjectsInput from 'src/components/inputs/ArrayOfObjectsInput.vue';
 
 const emit = defineEmits([
   'update:attributes',
