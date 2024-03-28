@@ -5,6 +5,7 @@
     />
 
     <create-model-dialog :project-name="projectName" />
+    <create-ia-model-dialog :project-name="projectName" />
     <delete-model-dialog :project-name="projectName" />
     <rename-model-dialog :project-name="projectName" />
     <import-model-template-dialog :project-name="projectName" />
@@ -16,6 +17,7 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import ModelsView from 'src/components/ModelsView.vue';
 import CreateModelDialog from 'components/dialog/CreateModelDialog.vue';
+import CreateIaModelDialog from 'components/dialog/CreateIAModelDialog.vue';
 import DeleteModelDialog from 'components/dialog/DeleteModelDialog.vue';
 import RenameModelDialog from 'components/dialog/RenameModelDialog.vue';
 import ImportModelTemplateDialog from 'components/dialog/ImportModelTemplateDialog.vue';
