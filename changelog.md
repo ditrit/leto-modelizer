@@ -32,9 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Technical content:
   * Update import of vue components.
 * Plugin management:
-  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.23.0) version 0.23.0.
-  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.8.0) version 0.8.0.
-  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.3.1) version 0.3.1.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.23.0) version 0.24.1.
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.8.0) version 0.8.1.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.3.1) version 0.3.3.
+  * Work with [kubernator-plugin](https://github.com/ditrit/kubernator-plugin/tree/0.1.0) version 0.1.0.
 * Improve performance on git add.
 * Replace OIDC authentication by Leto-Modelizer-Api, see [this issue](https://github.com/ditrit/leto-modelizer/issues/425).
 * Separating git-related functions into a dedicated composable.
