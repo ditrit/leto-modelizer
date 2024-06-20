@@ -12,7 +12,14 @@ const InitEvent = new Subject();
  */
 const DefaultEvent = new Subject();
 
+/**
+ * Represent a rxjs Event object to emit and to receive events about menu action.
+ * @typedef {Subject} RequestEvent
+ */
+const RequestEvent = new Subject();
+
 export default {
   InitEvent,
   DefaultEvent,
+  RequestEvent,
 };
