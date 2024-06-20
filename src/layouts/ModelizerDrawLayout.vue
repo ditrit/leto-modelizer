@@ -67,9 +67,7 @@ async function initView() {
       route.params.projectName,
       data.plugin,
       query.value.path,
-    ).then(() => {
-      data.plugin.draw('root');
-    }),
+    ).then(() => data.plugin.draw()),
     getTemplatesByType(
       'component',
       data.plugin.data.name,

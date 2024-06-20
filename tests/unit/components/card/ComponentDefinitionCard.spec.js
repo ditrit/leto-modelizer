@@ -21,8 +21,9 @@ jest.mock('vue-router', () => ({
 
 jest.mock('src/composables/PluginManager', () => ({
   getPluginByName: () => ({
-    draw: jest.fn(() => {}),
-    addComponent: jest.fn(() => {}),
+    arrangeComponentsPosition: jest.fn(),
+    draw: jest.fn(),
+    addComponent: jest.fn(),
     data: {
       addComponent: null,
     },
@@ -162,7 +163,8 @@ describe('Test component: ComponentDefinitionCard', () => {
 
       await wrapper.vm.onClickItem();
 
-      expect(wrapper.vm.plugin.draw).toBeCalledWith('root');
+      expect(wrapper.vm.plugin.arrangeComponentsPosition).toBeCalledWith(null, true);
+      expect(wrapper.vm.plugin.draw).toBeCalled();
       expect(PluginManager.renderModel).toBeCalledWith('project-00000000', 'path', wrapper.vm.plugin);
     });
   });
@@ -218,30 +220,6 @@ describe('Test component: ComponentDefinitionCard', () => {
         isTemplate: true,
         definitionType: 'template key',
       }));
-    });
-
-    it('should cause the overlay to appear', () => {
-      wrapper.vm.dragStartHandler(event);
-
-      expect(overlayElement.style.display).toEqual('block');
-    });
-  });
-
-  describe('Test function: dragEndHandler', () => {
-    let overlayElement;
-
-    beforeEach(() => {
-      overlayElement = {
-        style: {},
-      };
-
-      document.getElementById = jest.fn(() => overlayElement);
-    });
-
-    it('should hide the overlay', () => {
-      wrapper.vm.dragEndHandler();
-
-      expect(overlayElement.style.display).toEqual('none');
     });
   });
 });

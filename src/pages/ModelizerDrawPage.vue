@@ -96,18 +96,18 @@ async function initView() {
   data.plugin = getPluginByName(query.value.plugin);
 
   if (!data.plugin) {
-    return;
+    return Promise.resolve();
   }
 
-  data.plugin.resetDrawerActions();
-
-  await Promise.allSettled([
+  return Promise.allSettled([
     initComponents(
       route.params.projectName,
       data.plugin,
       query.value.path,
     ).then(() => {
-      data.plugin.draw('root');
+      data.plugin.initDrawer('root', false);
+      data.plugin.arrangeComponentsPosition(null, true);
+      data.plugin.draw();
     }),
     getTemplatesByType(
       'component',
@@ -141,12 +141,12 @@ async function dropHandler(event) {
       .find(({ type }) => type === dropData.definitionType);
 
     data.plugin.addComponent(
-      'root',
+      null,
       componentDefinition,
       componentPath,
       event,
     );
-    data.plugin.draw('root');
+    data.plugin.draw();
   } else {
     const templateDefinition = templates.value.find(
       ({ key }) => key === dropData.definitionType,
@@ -157,15 +157,18 @@ async function dropHandler(event) {
       data.plugin,
       componentPath,
       templateDefinition,
-    ).then(() => {
-      data.plugin.draw('root');
-    }).catch(() => {
-      Notify.create({
-        type: 'negative',
-        message: t('errors.templates.getData'),
-        html: true,
+    )
+      .then(() => {
+        data.plugin.arrangeComponentsPosition(null, true);
+        data.plugin.draw();
+      })
+      .catch(() => {
+        Notify.create({
+          type: 'negative',
+          message: t('errors.templates.getData'),
+          html: true,
+        });
       });
-    });
   }
   await renderModel(
     projectName.value,
@@ -178,8 +181,9 @@ async function dropHandler(event) {
  * Rearrange components and then redraw the whole view.
  */
 async function arrangeComponentsPosition() {
-  await data.plugin.arrangeComponentsPosition();
-  data.plugin.draw('root');
+  data.plugin.arrangeComponentsPosition(null, false);
+  data.plugin.draw();
+
   await renderConfiguration(
     projectName.value,
     query.value.path,

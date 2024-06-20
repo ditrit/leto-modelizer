@@ -137,7 +137,7 @@ async function submit() {
 
   originalComponent.value.attributes = sanitizeAttributes(attributesUpdated.value);
 
-  props.plugin.draw('root');
+  props.plugin.draw();
 
   await renderModel(
     route.params.projectName,

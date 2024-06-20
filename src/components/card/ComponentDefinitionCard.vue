@@ -108,7 +108,7 @@ async function onClickItem() {
 
   if (!props.definition.isTemplate) {
     plugin.value.addComponent(
-      'root',
+      null,
       props.definition,
       componentPath,
     );
@@ -121,7 +121,9 @@ async function onClickItem() {
     );
   }
 
-  plugin.value.draw('root');
+  plugin.value.arrangeComponentsPosition(null, true);
+
+  plugin.value.draw();
 
   await renderModel(
     projectName.value,
