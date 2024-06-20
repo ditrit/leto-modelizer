@@ -24,6 +24,7 @@ jest.mock('src/plugins', () => ({
           type: 'category',
           value: 'e',
         }],
+        extraResources: [],
       };
     }
 
@@ -71,6 +72,7 @@ jest.mock('src/plugins', () => ({
           type: 'category',
           value: 'e',
         }],
+        extraResources: [],
       };
     }
 
@@ -121,16 +123,24 @@ describe('Test composable: PluginManager', () => {
         data: {
           name: 'pluginName',
           definitions: {
-            defType: [{
-              model: 'model',
+            components: [{
+              model: null,
+              icon: null,
             }, {
+              model: 'model',
               icon: 'icon',
             }],
           },
         },
+        configuration: {
+          extraResources: [{
+            type: 'markers',
+            name: 'error',
+          }],
+        },
       };
-      const defType = 'defType';
-      expect(PluginManager.getFilesInfo(plugin, defType)).toEqual([{
+
+      expect(PluginManager.getFilesInfo(plugin)).toEqual([{
         name: 'model',
         type: 'models',
         path: '/plugins/pluginName/models/model.svg',
@@ -138,6 +148,10 @@ describe('Test composable: PluginManager', () => {
         name: 'icon',
         type: 'icons',
         path: '/plugins/pluginName/icons/icon.svg',
+      }, {
+        name: 'error',
+        type: 'markers',
+        path: '/plugins/pluginName/markers/error.svg',
       }]);
     });
   });
@@ -156,6 +170,15 @@ describe('Test composable: PluginManager', () => {
             }],
           },
         },
+        configuration: {
+          extraResources: [{
+            type: 'markers',
+            name: 'error',
+          }, {
+            type: 'links',
+            name: 'link',
+          }],
+        },
       };
       const resources = await PluginManager.createPluginResources(plugin);
       expect(resources).toEqual({
@@ -165,6 +188,12 @@ describe('Test composable: PluginManager', () => {
         icons: {
           icon: 'content',
         },
+        links: {
+          link: 'content',
+        },
+        markers: {
+          error: 'content',
+        },
       });
     });
   });
@@ -172,6 +201,7 @@ describe('Test composable: PluginManager', () => {
   describe('Test function: instantiatePlugin', () => {
     it('should return an instanciated plugin', async () => {
       const plugin = await PluginManager.instantiatePlugin('test');
+
       expect(plugin).not.toBeNull();
       expect(plugin.data.name).toEqual('test');
     });
@@ -206,6 +236,7 @@ describe('Test composable: PluginManager', () => {
             type: 'category',
             value: 'e',
           }],
+          extraResources: [],
         },
       }, {
         data: {
@@ -227,6 +258,7 @@ describe('Test composable: PluginManager', () => {
             type: 'category',
             value: 'e',
           }],
+          extraResources: [],
         },
       }]);
     });
@@ -254,6 +286,7 @@ describe('Test composable: PluginManager', () => {
             type: 'category',
             value: 'e',
           }],
+          extraResources: [],
         },
       });
     });
