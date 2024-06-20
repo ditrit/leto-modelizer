@@ -10,7 +10,6 @@
     :data-cy="`component-definition_${definition.type}`"
     @click="onClickItem"
     @dragstart="dragStartHandler"
-    @dragend="dragEndHandler"
   >
     <span class="q-focus-helper" />
     <q-item
@@ -85,20 +84,9 @@ function dragStartHandler(event) {
     isTemplate: props.definition.isTemplate,
     definitionType: props.definition.isTemplate ? props.definition.key : props.definition.type,
   };
-  const overlayElement = document.getElementById('overlay');
 
   event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
-  overlayElement.style.display = 'block';
   event.dataTransfer.dropEffect = 'copy';
-}
-
-/**
- * Hide overlay after dropping a component.
- */
-function dragEndHandler() {
-  const overlayElement = document.getElementById('overlay');
-
-  overlayElement.style.display = 'none';
 }
 
 const componentIcon = computed(() => {
