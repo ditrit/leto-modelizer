@@ -24,10 +24,8 @@ Feature: Fix issue #474: Delete last component of model file, the file is delete
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I wait 1 second
     And  I click on '[data-cy="component-definition_server"]'
-    And  I wait 2 seconds
-    Then I expect '[data-cy="draw-container"]' exists
     And  I wait 1 second
-    And  I expect '[id^="id_1"]' exists
+    Then I expect '.id_1.component' exists
 
     # Check project folders and files are created in Text view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -44,13 +42,13 @@ Feature: Fix issue #474: Delete last component of model file, the file is delete
     And  I wait 1 second
     Then I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path='
 
-    When I click on '[data-cy="draw-container"] [id^="id_1"]'
+    When I click on '.id_1.component .menu-button'
     And  I wait 1 second
-    Then I expect '[id^="remove-component"]' exists
+    Then I expect '[data-cy="delete-button"]' exists
 
-    When I force click on '[id^="remove-component"]'
+    When I click on '[data-cy="delete-button"]'
     And  I wait 1 second
-    Then I expect '[data-cy="draw-container"] [id^="id_1"]' not exists
+    Then I expect '.id_1.component' not exists
 
     # Go to Text view and check default file exists
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'

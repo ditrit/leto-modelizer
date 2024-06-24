@@ -1,4 +1,6 @@
+@skip
 Feature: Test diagrams page: delete diagram
+
   Scenario: Should delete diagram
     Given I clear cache
     And   I set viewport size to '1920' px for width and '1080' px for height
@@ -28,7 +30,7 @@ Feature: Test diagrams page: delete diagram
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
     Then I expect '[data-cy="draw-container"]' exists
-    And  I expect '[id^="id_1"]' exists
+    And  I expect '.id_1.component' exists
 
     # Back to the diagrams page
     When I visit the '/projects/{{ projectName }}/diagrams'

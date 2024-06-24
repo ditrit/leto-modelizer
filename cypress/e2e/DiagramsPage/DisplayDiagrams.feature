@@ -29,8 +29,7 @@ Feature: Test diagrams page: display all diagrams
 
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
-    Then I expect '[data-cy="draw-container"]' exists
-    And  I expect '[id^="id_1"]' exists
+    Then I expect '.id_1.component' exists
 
     # Back to the models page
     When I click on '[data-cy="models-page-link-button"]'
@@ -50,9 +49,7 @@ Feature: Test diagrams page: display all diagrams
 
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
-    And  I wait 2 seconds
-    Then I expect '[data-cy="draw-container"]' exists
-    And  I expect '[id^="id_1"]' exists
+    Then I expect '.id_1.component' exists
 
     # Back to the models page
     When I visit the '/projects/{{ projectName }}/diagrams'
