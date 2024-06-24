@@ -5,6 +5,7 @@ import ModelizerDrawPage from 'src/pages/ModelizerDrawPage.vue';
 import PluginManager from 'src/composables/PluginManager';
 import TemplateManager from 'src/composables/TemplateManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import DrawerEvent from 'src/composables/events/DrawerEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -34,6 +35,7 @@ jest.mock('src/composables/PluginManager', () => ({
     data: {
       name: 'pluginName',
       addComponent: jest.fn(),
+      removeComponentById: jest.fn(),
       definitions: {
         components: [
           { type: 'testComponent', isTemplate: false, icon: 'icon' },
@@ -44,9 +46,11 @@ jest.mock('src/composables/PluginManager', () => ({
       defaultFileName: 'defaultFileName',
     },
     draw: jest.fn(),
-    arrangeComponentsPosition: jest.fn(() => Promise.resolve()),
+    initDrawer: jest.fn(),
+    arrangeComponentsPosition: jest.fn(),
     resetDrawerActions: jest.fn(),
     addComponent: jest.fn(),
+    resize: jest.fn(),
   })),
   initComponents: jest.fn(() => Promise.resolve()),
   renderConfiguration: jest.fn(() => Promise.resolve()),
@@ -66,20 +70,36 @@ jest.mock('src/composables/events/PluginEvent', () => ({
   DefaultEvent: {
     subscribe: jest.fn(),
   },
+  RequestEvent: {
+    subscribe: jest.fn(),
+  },
+}));
+
+jest.mock('src/composables/events/DrawerEvent', () => ({
+  next: jest.fn(),
 }));
 
 describe('Test page component: ModelizerDrawPage', () => {
   let wrapper;
-  let subscribe;
-  let unsubscribe;
+  let pluginDefaultSubscribe;
+  let pluginDefaultUnsubscribe;
+  let pluginRequestSubscribe;
+  let pluginRequestUnsubscribe;
 
   beforeEach(() => {
-    subscribe = jest.fn();
-    unsubscribe = jest.fn();
+    pluginDefaultSubscribe = jest.fn();
+    pluginDefaultUnsubscribe = jest.fn();
+    pluginRequestSubscribe = jest.fn();
+    pluginRequestUnsubscribe = jest.fn();
 
     PluginEvent.DefaultEvent.subscribe.mockImplementation(() => {
-      subscribe();
-      return { unsubscribe };
+      pluginDefaultSubscribe();
+      return { unsubscribe: pluginDefaultUnsubscribe };
+    });
+
+    PluginEvent.RequestEvent.subscribe.mockImplementation(() => {
+      pluginRequestSubscribe();
+      return { unsubscribe: pluginRequestUnsubscribe };
     });
 
     wrapper = shallowMount(ModelizerDrawPage);
@@ -134,7 +154,7 @@ describe('Test page component: ModelizerDrawPage', () => {
       await wrapper.vm.arrangeComponentsPosition();
 
       expect(wrapper.vm.data.plugin.arrangeComponentsPosition).toHaveBeenCalled();
-      expect(wrapper.vm.data.plugin.draw).toHaveBeenCalledWith('root');
+      expect(wrapper.vm.data.plugin.draw).toHaveBeenCalled();
     });
   });
 
@@ -147,8 +167,9 @@ describe('Test page component: ModelizerDrawPage', () => {
 
       await wrapper.vm.initView();
 
-      expect(wrapper.vm.data.plugin.draw).toHaveBeenCalledWith('root');
-      expect(PluginManager.initComponents).toBeCalled();
+      expect(PluginManager.initComponents).toHaveBeenCalled();
+      expect(wrapper.vm.data.plugin.initDrawer).toHaveBeenCalledWith('root', false);
+      expect(wrapper.vm.data.plugin.draw).toHaveBeenCalled();
     });
 
     it('should emit a notification on error when updating component templates', async () => {
@@ -204,17 +225,158 @@ describe('Test page component: ModelizerDrawPage', () => {
     });
   });
 
+  describe('Test function: onRequestEvent', () => {
+    it('should resize and draw', async () => {
+      await wrapper.vm.initView();
+
+      wrapper.vm.data.plugin.resize.mockClear();
+      wrapper.vm.data.plugin.draw.mockClear();
+
+      wrapper.vm.onRequestEvent({ type: 'fitToContent', id: 1 });
+
+      expect(wrapper.vm.data.plugin.resize).toBeCalledWith(1);
+      expect(wrapper.vm.data.plugin.draw).toBeCalled();
+    });
+
+    it('should arrange components position and draw', async () => {
+      await wrapper.vm.initView();
+
+      wrapper.vm.data.plugin.arrangeComponentsPosition.mockClear();
+      wrapper.vm.data.plugin.draw.mockClear();
+
+      wrapper.vm.onRequestEvent({ type: 'arrangeContent', id: 1 });
+
+      expect(wrapper.vm.data.plugin.arrangeComponentsPosition).toBeCalledWith(1, false);
+      expect(wrapper.vm.data.plugin.draw).toBeCalled();
+    });
+
+    it('should remove component and draw', async () => {
+      await wrapper.vm.initView();
+
+      wrapper.vm.data.plugin.data.removeComponentById.mockClear();
+      wrapper.vm.data.plugin.draw.mockClear();
+
+      wrapper.vm.onRequestEvent({ type: 'delete', id: 1 });
+
+      expect(wrapper.vm.data.plugin.data.removeComponentById).toBeCalledWith(1);
+      expect(wrapper.vm.data.plugin.draw).toBeCalled();
+      expect(DrawerEvent.next).toBeCalledWith({ type: 'close', key: 'ComponentDetailPanel' });
+    });
+
+    it('should create component, setLink, arrange position and draw', async () => {
+      await wrapper.vm.initView();
+
+      const component = {
+        id: null,
+        setLinkAttribute: jest.fn(),
+      };
+
+      wrapper.vm.data.plugin.data.getComponentById = jest.fn((id) => {
+        component.id = id;
+        return component;
+      });
+      wrapper.vm.data.plugin.arrangeComponentsPosition.mockClear();
+      wrapper.vm.data.plugin.draw.mockClear();
+
+      wrapper.vm.onRequestEvent({
+        type: 'linkToDefinition',
+        id: 1,
+        data: {
+          componentDefinition: 'componentDefinition',
+          linkDefinition: 'linkDefinition',
+        },
+      });
+
+      expect(component.id).toEqual(1);
+      expect(component.setLinkAttribute).toBeCalled();
+      expect(wrapper.vm.data.plugin.arrangeComponentsPosition).toBeCalledWith(null, true);
+      expect(wrapper.vm.data.plugin.draw).toBeCalled();
+    });
+
+    it('should create component, setLink and draw', async () => {
+      await wrapper.vm.initView();
+
+      const component = {
+        id: null,
+        setLinkAttribute: jest.fn(),
+      };
+
+      wrapper.vm.data.plugin.data.getComponentById = jest.fn((id) => {
+        component.id = id;
+        return component;
+      });
+      wrapper.vm.data.plugin.draw.mockClear();
+
+      wrapper.vm.onRequestEvent({
+        type: 'linkToComponent',
+        id: 1,
+        data: {
+          target: 2,
+          linkDefinition: 'linkDefinition',
+        },
+      });
+
+      expect(component.id).toEqual(1);
+      expect(component.setLinkAttribute).toBeCalled();
+      expect(wrapper.vm.data.plugin.draw).toBeCalled();
+    });
+
+    it('should create component, arrange position and draw', async () => {
+      await wrapper.vm.initView();
+
+      wrapper.vm.data.plugin.addComponent.mockClear();
+      wrapper.vm.data.plugin.arrangeComponentsPosition.mockClear();
+      wrapper.vm.data.plugin.draw.mockClear();
+
+      wrapper.vm.onRequestEvent({
+        type: 'addComponentToContainer',
+        id: 1,
+        data: {
+          definition: 'definition',
+        },
+      });
+
+      expect(wrapper.vm.data.plugin.addComponent).toBeCalledWith(
+        1,
+        'definition',
+        'project-00000000/path',
+      );
+      expect(wrapper.vm.data.plugin.arrangeComponentsPosition).toBeCalledWith(1, true);
+      expect(wrapper.vm.data.plugin.draw).toBeCalled();
+    });
+
+    it('should create component, arrange position and draw', () => {
+      DrawerEvent.next.mockClear();
+
+      wrapper.vm.onRequestEvent({
+        type: 'edit',
+        id: 1,
+      });
+
+      expect(DrawerEvent.next).toBeCalledWith({
+        type: 'open',
+        key: 'ComponentDetailPanel',
+        id: 1,
+      });
+    });
+  });
+
   describe('Test hook function: onMounted', () => {
     it('should subscribe DefaultEvent', () => {
-      expect(subscribe).toHaveBeenCalledTimes(1);
+      expect(pluginDefaultSubscribe).toHaveBeenCalledTimes(1);
+    });
+    it('should subscribe DefaultEvent', () => {
+      expect(pluginRequestSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
     it('should unsubscribe DefaultEvent', () => {
-      expect(unsubscribe).toHaveBeenCalledTimes(0);
+      expect(pluginDefaultUnsubscribe).toHaveBeenCalledTimes(0);
+      expect(pluginRequestUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
-      expect(unsubscribe).toHaveBeenCalledTimes(1);
+      expect(pluginDefaultUnsubscribe).toHaveBeenCalledTimes(1);
+      expect(pluginRequestUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

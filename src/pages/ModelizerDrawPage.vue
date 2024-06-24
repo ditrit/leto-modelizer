@@ -117,6 +117,10 @@ async function onRequestEvent(event) {
     needRender = true;
     data.plugin.data.removeComponentById(event.id);
     data.plugin.draw();
+    DrawerEvent.next({
+      type: 'close',
+      key: 'ComponentDetailPanel',
+    });
   } else if (event.type === 'linkToDefinition') {
     needRender = true;
     const componentPath = query.value.path
