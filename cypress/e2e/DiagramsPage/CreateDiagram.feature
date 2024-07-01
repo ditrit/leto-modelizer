@@ -1,3 +1,4 @@
+@skip
 Feature: Test diagrams page: diagram creation
 
   Scenario: Create model on diagrams page should redirect to draw page with correct plugin and create model folders

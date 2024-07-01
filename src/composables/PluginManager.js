@@ -29,29 +29,36 @@ function deleteOldEvents() {
 /**
  * Retrieve files' information.
  * @param {object} plugin - Instantiate plugin.
- * @param {string} defType - Type of file to retrieve.
  * @returns {Array<object>} Promise with files' information on success otherwise an error.
  */
-export function getFilesInfo(plugin, defType) {
-  return [...new Set(plugin.data.definitions[defType].reduce((acc, def) => {
-    if (def.model) {
-      acc.push({
-        name: def.model,
+export function getFilesInfo(plugin) {
+  const files = plugin.data.definitions.components.reduce((acc, definition) => {
+    if (definition.model) {
+      acc[`models_${definition.model}`] = {
+        name: definition.model,
         type: 'models',
-        path: `/plugins/${plugin.data.name}/models/${def.model}.svg`,
-      });
+        path: `/plugins/${plugin.data.name}/models/${definition.model}.svg`,
+      };
     }
-
-    if (def.icon) {
-      acc.push({
-        name: def.icon,
+    if (definition.icon) {
+      acc[`icons_${definition.icon}`] = {
+        name: definition.icon,
         type: 'icons',
-        path: `/plugins/${plugin.data.name}/icons/${def.icon}.svg`,
-      });
+        path: `/plugins/${plugin.data.name}/icons/${definition.icon}.svg`,
+      };
     }
-
     return acc;
-  }, []))];
+  }, {});
+
+  plugin.configuration.extraResources.forEach((resource) => {
+    files[`${resource.type}_${resource.name}`] = {
+      name: resource.name,
+      type: resource.type,
+      path: `/plugins/${plugin.data.name}/${resource.type}/${resource.name}.svg`,
+    };
+  });
+
+  return Object.keys(files).map((key) => files[key]);
 }
 
 // TODO: Remove if svg import is possible
@@ -61,7 +68,7 @@ export function getFilesInfo(plugin, defType) {
  * @returns {Promise<object>} Promise with resources on success otherwise an error.
  */
 export async function createPluginResources(plugin) {
-  const files = getFilesInfo(plugin, 'components');
+  const files = getFilesInfo(plugin);
 
   return Promise.allSettled(
     files.map((file) => readTextFile(file.path).then((content) => ({ ...file, content }))),
@@ -71,7 +78,12 @@ export async function createPluginResources(plugin) {
     .reduce((acc, file) => {
       acc[file.type][file.name] = file.content;
       return acc;
-    }, { icons: {}, models: {} }));
+    }, {
+      icons: {},
+      models: {},
+      markers: {},
+      links: {},
+    }));
 }
 
 /**

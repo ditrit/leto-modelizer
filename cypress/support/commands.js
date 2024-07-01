@@ -23,6 +23,26 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-import 'cypress-real-events';
 import '@4tw/cypress-drag-drop';
+import 'cypress-real-events';
+
+Cypress.Commands.add('drag', (dragSelector, dropSelector) => {
+  const draggable = Cypress.$(dragSelector)[0];
+  const originCoords = draggable.getBoundingClientRect();
+
+  let targetCoords;
+
+  if (typeof dropSelector === 'string') {
+    const droppable = Cypress.$(dropSelector)[0];
+    targetCoords = droppable.getBoundingClientRect();
+    targetCoords.x -= originCoords.x;
+    targetCoords.y -= originCoords.y;
+  } else {
+    targetCoords = dropSelector;
+  }
+
+  cy.get(dragSelector)
+    .realMouseDown()
+    .realMouseMove(targetCoords.x, targetCoords.y, { position: 'center' })
+    .realMouseUp();
+});

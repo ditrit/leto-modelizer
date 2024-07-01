@@ -1,6 +1,5 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import PluginEvent from 'src/composables/events/PluginEvent';
 import { getPlugins, renderModel } from 'src/composables/PluginManager';
 import ComponentDetailPanel from 'src/components/drawer/ComponentDetailPanel.vue';
 import {
@@ -10,6 +9,7 @@ import {
   ComponentDefinition,
 } from 'leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
+import DrawerEvent from 'src/composables/events/DrawerEvent';
 
 installQuasarPlugin();
 
@@ -17,10 +17,8 @@ jest.mock('vue-router', () => ({
   useRoute: jest.fn(),
 }));
 
-jest.mock('src/composables/events/PluginEvent', () => ({
-  DefaultEvent: {
-    subscribe: jest.fn(),
-  },
+jest.mock('src/composables/events/DrawerEvent', () => ({
+  subscribe: jest.fn(),
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
@@ -31,8 +29,8 @@ jest.mock('src/composables/PluginManager', () => ({
 
 describe('test component: Plugin Component Detail Panel', () => {
   let wrapper;
-  let pluginDefaultSubscription;
-  let pluginDefaultUnsubscription;
+  let drawerEventSubscription;
+  let drawerEventUnsubscription;
 
   useRoute.mockImplementation(() => ({
     params: {
@@ -58,12 +56,12 @@ describe('test component: Plugin Component Detail Panel', () => {
   renderModel.mockImplementation(() => {});
 
   beforeEach(() => {
-    pluginDefaultSubscription = jest.fn();
-    pluginDefaultUnsubscription = jest.fn();
+    drawerEventSubscription = jest.fn();
+    drawerEventUnsubscription = jest.fn();
 
-    PluginEvent.DefaultEvent.subscribe.mockImplementation(() => {
-      pluginDefaultSubscription();
-      return { unsubscribe: pluginDefaultUnsubscription };
+    DrawerEvent.subscribe.mockImplementation(() => {
+      drawerEventSubscription();
+      return { unsubscribe: drawerEventUnsubscription };
     });
 
     wrapper = shallowMount(ComponentDetailPanel, {
@@ -193,57 +191,6 @@ describe('test component: Plugin Component Detail Panel', () => {
     });
   });
 
-  describe('Test function: onDefaultEvent', () => {
-    it('should set isVisible to true and set local values', () => {
-      expect(wrapper.vm.isVisible).toBeFalsy();
-
-      const component = new Component({
-        id: 'componentId',
-        externalId: 'externalId',
-        attributes: [],
-        definition: new ComponentDefinition(),
-      });
-
-      wrapper.vm.props.plugin.data.getComponentById = () => component;
-      wrapper.vm.onDefaultEvent({ event: { action: 'select', type: 'Drawer', components: ['id'] } });
-
-      expect(wrapper.vm.isVisible).toBeTruthy();
-      expect(wrapper.vm.originalComponent).toEqual(component);
-      expect(wrapper.vm.selectedComponentExternalId).toEqual('externalId');
-      expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
-    });
-
-    it('should not set local values if event.components is not defined', () => {
-      expect(wrapper.vm.isVisible).toBeFalsy();
-
-      wrapper.vm.onDefaultEvent({ event: { } });
-
-      expect(wrapper.vm.isVisible).toBeFalsy();
-      expect(wrapper.vm.originalComponent).toEqual(null);
-      expect(wrapper.vm.selectedComponentExternalId).toEqual('');
-      expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
-    });
-
-    it('should not set local values if event.components array is empty', () => {
-      expect(wrapper.vm.isVisible).toBeFalsy();
-
-      wrapper.vm.onDefaultEvent({ event: { components: [] } });
-
-      expect(wrapper.vm.isVisible).toBeFalsy();
-      expect(wrapper.vm.originalComponent).toEqual(null);
-      expect(wrapper.vm.selectedComponentExternalId).toEqual('');
-      expect(wrapper.vm.selectedComponentAttributes).toEqual([]);
-    });
-
-    it('should set isVisible to false if selected component is deleted', () => {
-      wrapper.vm.isVisible = true;
-      wrapper.vm.originalComponent = { id: 'id' };
-
-      wrapper.vm.onDefaultEvent({ event: { action: 'delete', type: 'Drawer', components: ['id'] } });
-      expect(wrapper.vm.isVisible).toBeFalsy();
-    });
-  });
-
   describe('Test function: updateAttributes', () => {
     it('should update attributesUpdated', () => {
       wrapper.vm.originalComponent = { id: 1 };
@@ -345,15 +292,15 @@ describe('test component: Plugin Component Detail Panel', () => {
 
   describe('Test hook function: onMounted', () => {
     it('should subscribe to DefaultEvent', () => {
-      expect(pluginDefaultSubscription).toHaveBeenCalledTimes(1);
+      expect(drawerEventSubscription).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
     it('should unsubscribe to DefaultEvent', () => {
-      expect(pluginDefaultUnsubscription).toHaveBeenCalledTimes(0);
+      expect(drawerEventUnsubscription).toHaveBeenCalledTimes(0);
       wrapper.unmount();
-      expect(pluginDefaultUnsubscription).toHaveBeenCalledTimes(1);
+      expect(drawerEventUnsubscription).toHaveBeenCalledTimes(1);
     });
   });
 });

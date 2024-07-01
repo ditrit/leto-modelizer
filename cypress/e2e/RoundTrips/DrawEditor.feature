@@ -187,55 +187,60 @@ Feature: Test roundtrip of the application: draw editor
     Then I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (35)'
 
     ## 301 Click on the 'aws_ami' component should display it on the page
-    And  I expect '[data-cy="draw-container"] [id^="id_1"]' not exists
+    And  I expect '.id_1.component' not exists
 
     When I click on '[data-cy="component-definition_aws_ami"]'
     And  I wait 1 second
-    Then I expect '[data-cy="draw-container"] [id^="id_1"]' exists
-    And  I expect '[data-cy="draw-container"] [id^="id_1"]' appear 1 time on screen
+    Then I expect '.id_1.component' exists
+    And  I expect '.id_1.component' appear 1 time on screen
 
     ## 401 Click on the "rearrange" icon button should reorganize components
     # Add 2 components
     When I click on '[data-cy="component-definition_server"]'
     And  I click on '[data-cy="component-definition_aws_subnet"]'
     And  I wait 1 second
-    Then I expect '[data-cy="draw-container"] [id^="id_1"]' exists
-    And  I expect '[data-cy="draw-container"] [id^="id_2"]' exists
-    And  I expect '[data-cy="draw-container"] [id^="id_3"]' exists
+    Then I expect '.id_1.component' exists
+    And  I expect '.id_2.component' exists
+    And  I expect '.id_3.component' exists
 
     # Check their positions before rearranging
-    And I expect component "#id_1" to be at position 30,30
-    And I expect component "#id_2" to be at position 170,30
-    And I expect component "#id_3" to be at position 310,30
+    And I expect component ".id_1.component .model" to be at position 30,30
+    And I expect component ".id_2.component .model" to be at position 30,130
+    And I expect component ".id_3.component .model" to be at position 130,30
+
+    When I drag ".id_3.component .model" of 100,100
+    Then I expect component ".id_3.component .model" to be at position 230,130
 
     # Rearrange
     When I click on '[data-cy="rearrange-button"]'
 
     # Check their positions after rearranging
-    Then I expect component "#id_1" to be at position 12,12
-    And  I expect component "#id_2" to be at position 12,142
-    And  I expect component "#id_3" to be at position 12,272
+    Then I expect component ".id_1.component .model" to be at position 30,30
+    And  I expect component ".id_2.component .model" to be at position 30,130
+    And  I expect component ".id_3.component .model" to be at position 130,30
 
     ## 501 When I rename a component (external) id, it is updated in the draw area
-    When I click on '[id="id_1"]'
+    When I click on '.id_1.component .menu-button'
+    And  I click on '[data-cy="edit-button"]'
     Then I expect '[data-cy="object-details-panel"]' exists
 
     When I set on '[data-cy="component-id-input"]' text 'aws_ami_2'
-    Then I expect '[class="component-name"]' is 'aws_ami_2'
-    And  I expect '[id^="id_1"]' exists
+    Then I expect '.id_1.component .model text' is 'aws_ami_2'
+    And  I expect '.id_1.component' exists
 
     ## 601 Delete component should hide detail panel
     # Open component detail panel
-    When I click on '[data-cy="draw-container"] [id^="id_3"]'
+    When I click on '.id_3.component .menu-button'
+    And  I click on '[data-cy="edit-button"]'
     And  I wait 1 second
     Then I expect '[data-cy="object-details-panel"]' exists
-    And  I expect '[id^="remove-component"]' exists
 
     # Remove component
-    When I force click on '[id^="remove-component"]'
+    When I force click on '.id_3.component .menu-button'
+    And  I click on '[data-cy="delete-button"]'
     And  I wait 1 second
     Then I expect '[data-cy="object-details-panel"]' to be hidden
-    And  I expect '[data-cy="draw-container"] [id^="id_3"]' not exists
+    And  I expect '.id_3.component' not exists
 
     # TODO: Uncomment when following bug will be fixed (https://github.com/ditrit/terrator-plugin/issues/98)
     # ## 701 Add variables inside component parsable files should display it on the variables tab inside modelizer draw left drawer
@@ -364,14 +369,14 @@ Feature: Test roundtrip of the application: draw editor
     Then I expect '[data-cy="component-definitions-item_Templates"].selected [data-cy="title"]' is 'Templates (2)'
 
     ## 1001 Click on the Test application component should display it on the page
-    And  I expect '[data-cy="draw-container"] [id^="id_3"]' not exists
-    And  I expect '[data-cy="draw-container"] [id^="id_4"]' not exists
-    And  I expect '[data-cy="draw-container"] [id^="id_5"]' not exists
-    And  I expect '[class="link"]' not exists
+    And  I expect '.id_3.component' not exists
+    And  I expect '.id_4.component' not exists
+    And  I expect '.id_5.component' not exists
+    And  I expect '.id_4_to_id_3.link' not exists
 
     When I click on '[data-cy="component-definition_Test application"]'
     And  I wait 1 second
-    Then I expect '[data-cy="draw-container"] [id^="id_3"]' exists
-    And  I expect '[data-cy="draw-container"] [id^="id_4"]' exists
-    And  I expect '[data-cy="draw-container"] [id^="id_5"]' exists
-    And  I expect '[class="link"]' exists
+    Then I expect '.id_3.component' exists
+    And  I expect '.id_4.component' exists
+    And  I expect '.id_5.component' exists
+    And  I expect '.id_4_to_id_3.link' exists

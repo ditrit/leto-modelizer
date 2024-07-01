@@ -18,6 +18,7 @@
     </q-page-container>
     <git-authentication-dialog :project-name="projectName" />
     <git-add-remote-dialog :project-name="projectName" />
+    <component-menu-dialog dialog-key="ComponentMenu" />
   </q-layout>
 </template>
 
@@ -39,6 +40,7 @@ import { useRoute } from 'vue-router';
 import { Notify } from 'quasar';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog.vue';
 import GitAddRemoteDialog from 'components/dialog/GitAddRemoteDialog.vue';
+import ComponentMenuDialog from 'components/dialog/ComponentMenuDialog.vue';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -67,9 +69,7 @@ async function initView() {
       route.params.projectName,
       data.plugin,
       query.value.path,
-    ).then(() => {
-      data.plugin.draw('root');
-    }),
+    ).then(() => data.plugin.draw()),
     getTemplatesByType(
       'component',
       data.plugin.data.name,

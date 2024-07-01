@@ -73,10 +73,10 @@ import {
   onMounted,
   onUnmounted,
 } from 'vue';
-import PluginEvent from 'src/composables/events/PluginEvent';
 import { renderModel } from 'src/composables/PluginManager';
 import { useRoute } from 'vue-router';
 import AttributesList from 'src/components/inputs/AttributesList.vue';
+import DrawerEvent from 'src/composables/events/DrawerEvent';
 
 const props = defineProps({
   plugin: {
@@ -96,7 +96,7 @@ const query = computed(() => route.query);
 const originalComponent = ref(null);
 const attributesUpdated = ref([]);
 
-let pluginDefaultSubscription;
+let drawerEventSubscription;
 
 /**
  * Return the array of attributes with only needed attributes.
@@ -137,7 +137,7 @@ async function submit() {
 
   originalComponent.value.attributes = sanitizeAttributes(attributesUpdated.value);
 
-  props.plugin.draw('root');
+  props.plugin.draw();
 
   await renderModel(
     route.params.projectName,
@@ -204,26 +204,33 @@ function getUnreferencedAttributes(component) {
 /**
  * On 'Drawer' event type and 'select' action, display panel and init local values.
  * On 'Drawer' event type and 'delete' action, hide panel if component is corresponding.
- * @param {object} eventManager - Object containing event and plugin.
- * @param {object} eventManager.event - The triggered event.
+ * @param {object} event - The triggered event.
+ * @param {string} event.key - The key of event.
+ * @param {string} event.type - The type of event, can be 'open' or 'close'.
+ * @param {string} event.id - The component id.
  */
-function onDefaultEvent({ event }) {
-  if (event.components?.[0] && event.type === 'Drawer') {
-    if (event.action === 'select') {
-      isVisible.value = true;
-
-      originalComponent.value = props.plugin.data.getComponentById(event.components[0]);
-
-      selectedComponentExternalId.value = originalComponent.value.externalId;
-      selectedComponentAttributes.value = JSON.parse(JSON.stringify(
-        getReferencedAttributes(originalComponent.value)
-          .concat(getUnreferencedAttributes(originalComponent.value)),
-      ));
-      attributesUpdated.value = [...selectedComponentAttributes.value];
-    } else if (event.action === 'delete' && event.components?.[0] === originalComponent.value.id) {
-      isVisible.value = false;
-    }
+function onDrawerEvent({ key, type, id }) {
+  if (key !== 'ComponentDetailPanel') {
+    return;
   }
+
+  const isOpen = type === 'open';
+
+  if (!isOpen) {
+    isVisible.value = false;
+    return;
+  }
+
+  isVisible.value = true;
+
+  originalComponent.value = props.plugin.data.getComponentById(id);
+
+  selectedComponentExternalId.value = originalComponent.value.externalId;
+  selectedComponentAttributes.value = JSON.parse(JSON.stringify(
+    getReferencedAttributes(originalComponent.value)
+      .concat(getUnreferencedAttributes(originalComponent.value)),
+  ));
+  attributesUpdated.value = [...selectedComponentAttributes.value];
 }
 
 /**
@@ -255,10 +262,10 @@ function clearError() {
 }
 
 onMounted(() => {
-  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(onDefaultEvent);
+  drawerEventSubscription = DrawerEvent.subscribe(onDrawerEvent);
 });
 
 onUnmounted(() => {
-  pluginDefaultSubscription.unsubscribe();
+  drawerEventSubscription.unsubscribe();
 });
 </script>

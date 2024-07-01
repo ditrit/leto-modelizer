@@ -27,37 +27,32 @@ Feature: Fix issue #390: (Link|Reference)Input options are not updated
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws_route53_zone"]'
     And  I click on '[data-cy="component-definition_aws_route53_record"]'
-    Then I expect '[id^="id_1"]' appear 1 time on screen
-    And  I expect '[id^="id_2"]' appear 1 time on screen
+    Then I expect '[class^="id_1 component"]' appear 1 time on screen
+    And  I expect '[class^="id_2 component"]' appear 1 time on screen
 
-    # Check only one link option exists
-    When I click on '[id="id_1"]'
-    Then I expect '[data-cy="object-details-panel"]' exists
-    And  I expect '[data-cy="link-input_records"]' exists
+    # Check only one link to component option exists
+    When I click on '.id_1.component .menu-button'
+    Then I expect '[data-cy="add-link-button"]' exists
 
-    When I click on '[data-cy="link-input_records"]'
-    Then I expect '[class="q-item__label"]' appear 1 time on screen
+    When I click on '[data-cy="add-link-button"]'
+    Then I expect '[data-cy="link-to-component-id_2-button"]' exists
+    And  I click on '[data-cy="link-to-component-id_2-button"]'
 
     # Create second link option
     When I click on '[data-cy="component-definition_aws_route53_record"]'
-    Then I expect '[id^="id_2"]' appear 1 time on screen
+    Then I expect '[class^="id_2 component"]' appear 1 time on screen
+    And  I expect '[class^="id_3 component"]' appear 1 time on screen
 
     # Check two link options exist
-    When I click on '[data-cy="link-input_records"]'
-    Then I expect '[class="q-item__label"]' appear 2 times on screen
+    When I click on '.id_1.component .menu-button'
+    Then I expect '[data-cy="add-link-button"]' exists
+
+    When I click on '[data-cy="add-link-button"]'
+    Then I expect '[data-cy="link-to-component-id_2-button"]' exists
+    And  I expect '[data-cy="link-to-component-id_3-button"]' exists
+    And  I click on '[data-cy="link-to-component-id_2-button"]'
 
     # Check only one ref option exists
-    When I click on '[id="id_2"]'
-    Then I expect '[data-cy="object-details-panel"]' exists
-    And  I expect '[data-cy="ref-input_zone_id"]' exists
-
-    When I click on '[data-cy="ref-input_zone_id"]'
-    Then I expect '[class="q-item__label"]' appear 1 time on screen
-
-    # Create second link option
-    When I click on '[data-cy="component-definition_aws_route53_zone"]'
-    Then I expect '[id^="id_1"]' appear 1 time on screen
-
-    # Check two link options exist
-    When I click on '[data-cy="ref-input_zone_id"]'
-    Then I expect '[class="q-item__label"]' appear 2 times on screen
+    When I click on '.id_1.component .menu-button'
+    And I click on '[data-cy="add-link-button"]'
+    Then I expect '[data-cy="link-to-definition-aws_route53_record-button"]' exists

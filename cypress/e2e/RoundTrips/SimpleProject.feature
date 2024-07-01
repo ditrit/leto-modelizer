@@ -283,7 +283,7 @@ Feature: Test roundtrip of the application: project creation
     And  I click on '[data-cy="component-definition_aws"]'
     Then I expect '[data-cy="draw-container"]' exists
     # definition_aws
-    And  I expect '[id^="id_1"]' exists
+    And  I expect '.id_1.component' exists
 
     # Back to the models page
     When I click on '[data-cy="models-page-link-button"]'
@@ -455,7 +455,7 @@ Feature: Test roundtrip of the application: project creation
 
     # components added in 901 should not exist anymore, only the latest exist
     # definition_aws
-    And  I expect '[id^="id_1"]' exists
+    And  I expect '.id_1.component' exists
 
     ## 903 Link two components (Draw view) should update plugin file content with new attributes properties (Text view)
     When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
@@ -465,11 +465,10 @@ Feature: Test roundtrip of the application: project creation
     And  I click on '[data-cy="component-definition_aws_internet_gateway"]'
     And  I wait 1 second
     # aws_subnet
-    And  I click on '[id^="id_2"]'
-    And  I force click on '[id="create-link"]'
-    # aws_internet_gateway
-    And  I click on '[id^="id_3"]'
-    Then I expect '[class="link"]' exists
+    And I click on '.id_2.component .menu-button'
+    And I click on '[data-cy="add-link-button"]'
+    And I click on '[data-cy="link-to-component-id_3-button"]'
+    Then I expect '.id_2_to_id_3.link' exists
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
@@ -493,8 +492,8 @@ Feature: Test roundtrip of the application: project creation
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
     # aws_key_pair_1
-    And  I expect '[id^="id_1"]' exists
+    And  I expect '.id_1.component' exists
     # aws_route_1
-    And  I expect '[id^="id_2"]' exists
+    And  I expect '.id_2.component' exists
     # previous components should not exist anymore
-    But  I expect '[class="link"]' not exists
+    But  I expect '.id_2_to_id_3.link' not exists
