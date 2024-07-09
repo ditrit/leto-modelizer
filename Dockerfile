@@ -14,10 +14,13 @@ RUN npm install
 # Build stage
 FROM develop-stage as build-stage
 ARG proxy_url
+ARG TERRATOR_PLUGIN_VERSION
+ARG GITHUBATOR_PLUGIN_VERSION
+ARG KUBERNATOR_PLUGIN_VERSION
 WORKDIR /app
-RUN npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.8.1"
-RUN npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.3.3"
-RUN npm run plugin:install -- repository-name="kubernator-plugin" repository-url="https://github.com/ditrit/kubernator-plugin.git#0.1.0"
+RUN npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#${TERRATOR_PLUGIN_VERSION}"
+RUN npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#${GITHUBATOR_PLUGIN_VERSION}"
+RUN npm run plugin:install -- repository-name="kubernator-plugin" repository-url="https://github.com/ditrit/kubernator-plugin.git#${KUBERNATOR_PLUGIN_VERSION}"
 RUN npm run plugin:init
 RUN npm run build
 

@@ -204,7 +204,7 @@ It will generate the built application in the `dist` folder.
 
 To build this app with docker (the two main plugins for terraform & github are included), please use this command:
 ```bash
-docker build . -t leto-modelizer
+docker build . -build-arg TERRATOR_PLUGIN_VERSION="0.8.1" -build-arg GITHUBATOR_PLUGIN_VERSION="0.3.3" -build-arg KUBERNATOR_PLUGIN_VERSION="0.1.0" -t leto-modelizer
 ```
 
 ### Docker run
