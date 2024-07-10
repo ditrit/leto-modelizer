@@ -152,6 +152,10 @@ describe('Test composable: PluginManager', () => {
         name: 'error',
         type: 'markers',
         path: '/plugins/pluginName/markers/error.svg',
+      }, {
+        name: 'style',
+        type: 'style',
+        path: '/plugins/pluginName/style.css',
       }]);
     });
   });
@@ -194,6 +198,7 @@ describe('Test composable: PluginManager', () => {
         markers: {
           error: 'content',
         },
+        style: 'content',
       });
     });
   });
