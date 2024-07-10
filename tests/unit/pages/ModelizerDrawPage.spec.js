@@ -51,6 +51,7 @@ jest.mock('src/composables/PluginManager', () => ({
     resetDrawerActions: jest.fn(),
     addComponent: jest.fn(),
     resize: jest.fn(),
+    exportSvg: jest.fn(() => 'content'),
   })),
   initComponents: jest.fn(() => Promise.resolve()),
   renderConfiguration: jest.fn(() => Promise.resolve()),
@@ -159,7 +160,7 @@ describe('Test page component: ModelizerDrawPage', () => {
   });
 
   describe('Test function: initView', () => {
-    it('should call draw with "root" parameter', async () => {
+    it('should call draw with "view-port" parameter', async () => {
       const initComponentsMock = jest.fn(() => Promise.resolve());
 
       PluginManager.initComponents.mockImplementation(initComponentsMock);
@@ -168,7 +169,7 @@ describe('Test page component: ModelizerDrawPage', () => {
       await wrapper.vm.initView();
 
       expect(PluginManager.initComponents).toHaveBeenCalled();
-      expect(wrapper.vm.data.plugin.initDrawer).toHaveBeenCalledWith('root', false);
+      expect(wrapper.vm.data.plugin.initDrawer).toHaveBeenCalledWith('view-port', false);
       expect(wrapper.vm.data.plugin.draw).toHaveBeenCalled();
     });
 
@@ -179,6 +180,18 @@ describe('Test page component: ModelizerDrawPage', () => {
       await wrapper.vm.initView();
 
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
+    });
+  });
+
+  describe('Test function: exportSvg', () => {
+    it('should call exportSvg with "view-port" parameter', () => {
+      global.URL.createObjectURL = jest.fn();
+      global.URL.revokeObjectURL = jest.fn();
+      expect(wrapper.vm.data.plugin.exportSvg).toHaveBeenCalledTimes(0);
+
+      wrapper.vm.exportSvg();
+
+      expect(wrapper.vm.data.plugin.exportSvg).toHaveBeenCalledWith('view-port');
     });
   });
 
