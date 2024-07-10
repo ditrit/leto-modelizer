@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add settings button/menu to homepage and update its content.
 * Add route to clear token.
 * Improve dockerfile with version of plugins as argument. 
+* Export diagram as svg.
 
 ### Changed
 
