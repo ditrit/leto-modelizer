@@ -278,6 +278,7 @@ export default {
     },
     diagrams: {
       actions: {
+        export: 'Export SVG',
         rearrange: 'Rearrange',
         zoomPlus: 'Zoom+',
         zoomMinus: 'Zoom-',

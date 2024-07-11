@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Add settings button/menu to homepage and update its content.
 * Add route to clear token.
 * Improve dockerfile with version of plugins as argument. 
+* Export diagram as svg.
 
 ### Changed
 
@@ -33,10 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Technical content:
   * Update import of vue components.
 * Plugin management:
-  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.24.1) version 0.24.1.
-  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.8.1) version 0.8.1.
-  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.3.3) version 0.3.3.
-  * Work with [kubernator-plugin](https://github.com/ditrit/kubernator-plugin/tree/0.1.0) version 0.1.0.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.25.0) version 0.25.0.
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.10.0) version 0.10.0.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.4.1) version 0.4.1.
+  * Work with [kubernator-plugin](https://github.com/ditrit/kubernator-plugin/tree/0.2.0) version 0.2.0.
 * Improve performance on git add.
 * Replace OIDC authentication by Leto-Modelizer-Api, see [this issue](https://github.com/ditrit/leto-modelizer/issues/425).
 * Separating git-related functions into a dedicated composable.

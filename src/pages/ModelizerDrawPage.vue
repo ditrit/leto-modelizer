@@ -1,7 +1,7 @@
 <template>
   <q-page class="bg-grey-3">
     <div
-      id="root"
+      id="view-port"
       data-cy="draw-container"
       @dragover.prevent
       @drop.prevent="dropHandler"
@@ -10,8 +10,9 @@
     </div>
 
     <q-page-sticky :offset="[20, 20]">
-      <q-btn-group>
+      <div class="row">
         <q-btn
+          class="q-mr-md"
           icon="fa-solid fa-sitemap"
           :label="$t('page.diagrams.actions.rearrange')"
           stack
@@ -21,7 +22,17 @@
           data-cy="rearrange-button"
           @click="arrangeComponentsPosition()"
         />
-      </q-btn-group>
+        <q-btn
+          icon="fa-solid fa-image"
+          :label="$t('page.diagrams.actions.export')"
+          stack
+          no-caps
+          color="white"
+          text-color="black"
+          data-cy="export-button"
+          @click="exportSvg()"
+        />
+      </div>
     </q-page-sticky>
   </q-page>
 </template>
@@ -184,6 +195,27 @@ async function onRequestEvent(event) {
 }
 
 /**
+ * Export diagram as svg.
+ */
+function exportSvg() {
+  const content = data.plugin.exportSvg('view-port');
+  const blob = new Blob([content], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+
+  a.href = url;
+  a.download = 'diagram.svg';
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  document.body.removeChild(a);
+
+  URL.revokeObjectURL(url);
+}
+
+/**
  * Update plugin, draw components and update component templates array.
  * @returns {Promise<void>} Promise with nothing on success.
  */
@@ -200,7 +232,7 @@ async function initView() {
       data.plugin,
       query.value.path,
     ).then(() => {
-      data.plugin.initDrawer('root', false);
+      data.plugin.initDrawer('view-port', false);
       data.plugin.arrangeComponentsPosition(null, true);
       data.plugin.draw();
     }),
@@ -303,7 +335,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-#root {
+#view-port {
   height: calc(100vh - 76px);
   width: 100%;
 }
@@ -312,7 +344,7 @@ onUnmounted(() => {
 <style lang="scss">
 // Quasar sets overflow to 'hidden' on all svg.
 // In our case, it needs to be set to 'visible' to manage position with % in plugin models.
-div#root svg {
+div#view-port svg {
   overflow: visible !important;
   display: unset;
   height: 100%;

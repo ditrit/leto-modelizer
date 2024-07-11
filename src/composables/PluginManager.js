@@ -58,6 +58,12 @@ export function getFilesInfo(plugin) {
     };
   });
 
+  files.style_style = {
+    name: 'style',
+    type: 'style',
+    path: `/plugins/${plugin.data.name}/style.css`,
+  };
+
   return Object.keys(files).map((key) => files[key]);
 }
 
@@ -76,7 +82,11 @@ export async function createPluginResources(plugin) {
     .filter((r) => r.status === 'fulfilled')
     .map((r) => r.value)
     .reduce((acc, file) => {
-      acc[file.type][file.name] = file.content;
+      if (file.type === 'style') {
+        acc.style = file.content;
+      } else {
+        acc[file.type][file.name] = file.content;
+      }
       return acc;
     }, {
       icons: {},
