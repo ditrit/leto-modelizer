@@ -16,7 +16,7 @@
       class="q-px-none q-py-sm text-caption ellipsis-2-lines"
       data-cy="title-container"
     >
-      {{ template.type }}
+      {{ template.name || template.type }}
     </q-card-section>
   </q-card>
 </template>
