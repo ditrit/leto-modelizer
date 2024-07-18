@@ -19,6 +19,7 @@ export default {
       modify: 'Modify',
       rename: 'Rename',
       ok: 'Ok',
+      ia: 'IA',
     },
     home: {
       newProject: 'New project',
@@ -50,6 +51,11 @@ export default {
             label: 'Create a diagram from a template',
             title: 'Open a popup to create a diagram from a template',
           },
+          ia: {
+            name: 'From ia',
+            label: 'Create a diagram from IA',
+            title: 'Open a popup to create a diagram from IA',
+          },
         },
         dialog: {
           name: 'Create new model',
@@ -58,6 +64,7 @@ export default {
           name: 'Model path',
           plugin: 'Model plugin',
           location: 'Model location',
+          description: 'Describe your model for IA here',
         },
         notify: {
           success: 'Model has been created &#129395;!',
