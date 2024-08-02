@@ -331,6 +331,33 @@ export async function initComponents(projectName, plugin, path) {
   const diagram = new FileInformation({ path: path ? `${projectName}/${path}` : projectName });
 
   plugin.parse(diagram, config, fileInputs);
+
+  return plugin.data.parseLogs;
+}
+
+/**
+ * Analyze file and return all generated parser logs.
+ * @param {FileInput} fileInput - File to analyze.
+ * @returns {ParserLog[]} Logs to return.
+ */
+export function analyzeFile(fileInput) {
+  const plugin = getPlugins().find((p) => p.isParsable(fileInput));
+
+  if (!plugin) {
+    return [];
+  }
+
+  const paths = fileInput.path.split('/');
+
+  plugin.parse(
+    new FileInformation({ path: paths.slice(0, -1).join('/') }),
+    new FileInformation({
+      path: `${paths[0]}/${configurationFileName}`,
+    }),
+    [fileInput],
+  );
+
+  return plugin.data.parseLogs;
 }
 
 /**

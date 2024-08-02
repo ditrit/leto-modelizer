@@ -1,6 +1,6 @@
 import * as PluginManager from 'src/composables/PluginManager';
 import { deleteProjectFile, writeProjectFile, setFiles } from 'src/composables/Project';
-import { FileInformation } from 'leto-modelizer-plugin-core';
+import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
 
 jest.mock('src/plugins', () => ({
   test: class {
@@ -12,6 +12,7 @@ jest.mock('src/plugins', () => ({
           links: [],
         },
         components: [],
+        parseLogs: [],
       };
       this.configuration = {
         tags: [{
@@ -26,6 +27,7 @@ jest.mock('src/plugins', () => ({
         }],
         extraResources: [],
       };
+      this.parse = jest.fn();
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -60,6 +62,7 @@ jest.mock('src/plugins', () => ({
           links: [],
         },
         components: [],
+        parseLogs: [],
       };
       this.configuration = {
         tags: [{
@@ -74,6 +77,7 @@ jest.mock('src/plugins', () => ({
         }],
         extraResources: [],
       };
+      this.parse = jest.fn();
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -221,79 +225,18 @@ describe('Test composable: PluginManager', () => {
   describe('Test function: initPlugins', () => {
     it('should instantiate all plugins', async () => {
       await PluginManager.initPlugins();
-      expect(PluginManager.getPlugins()).toEqual([{
-        data: {
-          name: 'test',
-          definitions: {
-            links: [],
-            components: [],
-          },
-          components: [],
-        },
-        configuration: {
-          tags: [{
-            type: 'category',
-            value: 'a',
-          }, {
-            type: 'category',
-            value: 'd',
-          }, {
-            type: 'category',
-            value: 'e',
-          }],
-          extraResources: [],
-        },
-      }, {
-        data: {
-          name: 'test2',
-          definitions: {
-            links: [],
-            components: [],
-          },
-          components: [],
-        },
-        configuration: {
-          tags: [{
-            type: 'category',
-            value: 'a',
-          }, {
-            type: 'category',
-            value: 'd',
-          }, {
-            type: 'category',
-            value: 'e',
-          }],
-          extraResources: [],
-        },
-      }]);
+
+      const plugins = PluginManager.getPlugins();
+
+      expect(plugins.length).toEqual(2);
+      expect(plugins[0].data.name).toEqual('test');
+      expect(plugins[1].data.name).toEqual('test2');
     });
   });
 
   describe('Test function: getPluginByName', () => {
     it('should return the plugin according to the given name', () => {
-      expect(PluginManager.getPluginByName('test')).toEqual({
-        data: {
-          name: 'test',
-          definitions: {
-            links: [],
-            components: [],
-          },
-          components: [],
-        },
-        configuration: {
-          tags: [{
-            type: 'category',
-            value: 'a',
-          }, {
-            type: 'category',
-            value: 'd',
-          }, {
-            type: 'category',
-            value: 'e',
-          }],
-          extraResources: [],
-        },
-      });
+      expect(PluginManager.getPluginByName('test').data.name).toEqual('test');
     });
   });
 
@@ -472,13 +415,17 @@ describe('Test composable: PluginManager', () => {
         configuration: {
           isFolderTypeDiagram: false,
         },
+        data: {
+          parseLogs: [],
+        },
       };
 
       expect(plugin.parse).toHaveBeenCalledTimes(0);
 
-      await PluginManager.initComponents('projectName', plugin, 'plugin/model');
+      const logs = await PluginManager.initComponents('projectName', plugin, 'plugin/model');
 
       expect(plugin.parse).toHaveBeenCalledTimes(1);
+      expect(logs).toEqual([]);
     });
 
     it('should call setFiles if isFolderTypeDiagram is true', async () => {
@@ -488,13 +435,36 @@ describe('Test composable: PluginManager', () => {
         configuration: {
           isFolderTypeDiagram: true,
         },
+        data: {
+          parseLogs: [],
+        },
       };
 
       expect(setFiles).toHaveBeenCalledTimes(0);
 
-      await PluginManager.initComponents('projectName', plugin, '');
+      const logs = await PluginManager.initComponents('projectName', plugin, '');
 
       expect(setFiles).toHaveBeenCalledTimes(1);
+      expect(logs).toEqual([]);
+    });
+  });
+
+  describe('Test function: analyzeFile', () => {
+    it('should return logs', async () => {
+      await PluginManager.initPlugins();
+
+      const plugin = PluginManager.getPlugins()[0];
+      const input = new FileInput({
+        path: 'test1/test2/test3.tf',
+        content: 'test',
+      });
+
+      expect(PluginManager.analyzeFile(input)).toEqual([]);
+      expect(plugin.parse).toBeCalledWith(
+        { path: 'test1/test2' },
+        { path: 'test1/leto-modelizer.config.json' },
+        [{ content: 'test', path: 'test1/test2/test3.tf' }],
+      );
     });
   });
 
