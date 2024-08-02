@@ -1,17 +1,17 @@
 [
   {
     "name": "terrator-plugin",
-    "url": "https://github.com/ditrit/terrator-plugin.git#0.10.0",
-    "version": "0.10.0"
+    "url": "https://github.com/ditrit/terrator-plugin.git#0.11.0",
+    "version": "0.11.0"
   },
   {
     "name": "githubator-plugin",
-    "url": "https://github.com/ditrit/githubator-plugin.git#0.4.1",
-    "version": "0.4.1"
+    "url": "https://github.com/ditrit/githubator-plugin.git#0.4.2",
+    "version": "0.4.2"
   },
   {
     "name": "kubernator-plugin",
-    "url": "https://github.com/ditrit/kubernator-plugin.git#0.2.0",
-    "version": "0.2.0"
+    "url": "https://github.com/ditrit/kubernator-plugin.git#0.2.1",
+    "version": "0.2.1"
   }
 ]
