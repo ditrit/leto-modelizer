@@ -26,9 +26,13 @@ import {
 } from 'vue';
 import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
-import { getPlugins } from 'src/composables/PluginManager';
+import { analyzeFile, getPlugins } from 'src/composables/PluginManager';
 import Languages from 'assets/editor/languages';
+import { FileInput } from 'leto-modelizer-plugin-core';
+import { useI18n } from 'vue-i18n';
+import LogEvent from 'src/composables/events/LogEvent';
 
+const { t } = useI18n();
 const props = defineProps({
   projectName: {
     type: String,
@@ -41,12 +45,33 @@ const props = defineProps({
 });
 
 const container = ref(null);
+
 let monaco;
 let editor;
 let timer;
 let checkoutSubscription;
 let addRemoteSubscription;
 let pullSubscription;
+
+/**
+ * Update markers of monaco editors to display error/warning.
+ * @param {string} path - File path.
+ * @param {string} content - File content.
+ */
+function updateMarkers(path, content) {
+  const logs = analyzeFile(new FileInput({ path, content }));
+
+  monaco.editor.setModelMarkers(editor.getModel(), path, logs.map((log) => ({
+    ...log,
+    message: t(log.message, {
+      initialErrorMessage: log.initialErrorMessage,
+      extraData: log.extraData,
+      attribute: log.attribute,
+    }),
+  })));
+
+  LogEvent.FileLogEvent.next(logs);
+}
 
 /**
  * Update file content on fs and emit UpdateEditorContentEvent.
@@ -59,6 +84,8 @@ async function updateFile() {
   };
 
   await writeProjectFile(file);
+
+  updateMarkers(props.file.id, editor.getValue());
 
   const newFilePath = file.id.split('/').slice(1).join('/');
   const [fileStatus] = await getStatus(
@@ -129,7 +156,15 @@ async function createEditor() {
   const value = await getFileContent();
   const language = initMonacoLanguages(props.file.id);
 
-  editor = monaco.editor.create(container.value, { value, language });
+  editor = monaco.editor.create(container.value, {
+    value,
+    language,
+    hover: {
+      enabled: true,
+    },
+  });
+
+  updateMarkers(props.file.id, value);
 
   editor.onDidChangeModelContent(() => {
     debounce(updateFile, 1000);
@@ -158,12 +193,15 @@ async function updateEditorLayout() {
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 async function updateEditorContent() {
-  const isExisting = await exists(`${props.projectName}/${props.file.id}`);
+  const path = `${props.projectName}/${props.file.id}`;
+  const isExisting = await exists(path);
 
   if (isExisting) {
-    const value = await getFileContent();
+    const content = await getFileContent();
 
-    editor.setValue(value);
+    editor.setValue(content);
+
+    updateMarkers(path, content);
   }
 }
 
@@ -203,9 +241,9 @@ onUnmounted(() => {
   display: flex;
   flex: 1;
   flex-direction: column;
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
   //132px is the combined navbar + file tabs height
-  height: calc(100vh - 132px - 1.5rem);
+  height: calc(100vh - 216px);
 
   #container {
     display: flex;
