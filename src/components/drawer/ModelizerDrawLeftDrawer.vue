@@ -6,11 +6,11 @@
     side="left"
     :width="400"
     data-cy="draw-page-left-drawer"
+    class="no-scroll"
   >
     <q-splitter
       v-model="splitterModel"
       :limits="[10, 15]"
-      style="height: calc(100vh - 64px);"
     >
       <template #before>
         <q-tabs

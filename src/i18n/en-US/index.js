@@ -466,6 +466,9 @@ export default {
     version: 'Version {version}',
     about: 'About',
     consoleFooter: {
+      tabs: {
+        errors: 'errors ({number})',
+      },
       errorsTable: {
         message: 'Message',
         line: 'Start/End Line',
