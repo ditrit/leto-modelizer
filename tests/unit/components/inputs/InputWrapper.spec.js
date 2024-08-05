@@ -29,7 +29,9 @@ describe('Test component: InputWrapper', () => {
           name: 'referenceTest',
           definition: {
             type: 'Reference',
-            rules: {},
+            rules: {
+              values: [],
+            },
           },
         },
         plugin: {},
@@ -47,7 +49,9 @@ describe('Test component: InputWrapper', () => {
           name: 'referenceTest',
           definition: {
             type: 'Reference',
-            rules: {},
+            rules: {
+              values: [],
+            },
           },
         });
       });
@@ -86,7 +90,7 @@ describe('Test component: InputWrapper', () => {
       const attribute = {
         definition: {
           rules: {
-            values: [],
+            values: ['test'],
           },
         },
       };
@@ -97,7 +101,9 @@ describe('Test component: InputWrapper', () => {
       const attribute = {
         definition: {
           type: 'typeInDefinition',
-          rules: {},
+          rules: {
+            values: [],
+          },
         },
       };
       expect(wrapper.vm.getAttributeType(attribute)).toEqual('typeInDefinition');
