@@ -238,17 +238,14 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .monaco-editor {
-  display: flex;
-  flex: 1;
+  overflow: hidden;
   flex-direction: column;
   margin-top: 2.5rem;
-  //132px is the combined navbar + file tabs height
-  height: calc(100vh - 216px);
+  //225px is the combined navbar + file tabs height + console footer min size
+  height: calc(100vh - 225px);
 
   #container {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
+    height: 100%;
   }
 }
 </style>
