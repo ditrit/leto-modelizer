@@ -466,6 +466,9 @@ export default {
     version: 'Version {version}',
     about: 'About',
     consoleFooter: {
+      tabs: {
+        errors: 'errors ({number})',
+      },
       errorsTable: {
         message: 'Message',
         line: 'Start/End Line',
@@ -509,5 +512,35 @@ export default {
   tag: {
     local: 'Local',
     remote: 'Remote',
+  },
+  parser: {
+    severity: {
+      1: 'Hint',
+      2: 'Info',
+      4: 'Warning',
+      8: 'Error',
+    },
+    error: {
+      parsing: 'Error during parsing.\nInitial error message: "{ initialErrorMessage }".',
+      invalidLinkType: 'Wrong type of link attribute, must be an Array.',
+      invalidReferenceType: 'Wrong type of reference attribute, must be a String.',
+      notBoolean: 'Wrong value type, must be a Boolean.',
+      notString: 'Wrong value type, must be a String.',
+      notNumber: 'Wrong value type, must be a Number.',
+      notObject: 'Wrong value type, must be an Array.',
+      notArray: 'Wrong value type, must be an Array.',
+      required: 'Attribute "{attribute}" is required',
+      minString: 'The string must have a minimum length of {extraData}.',
+      minNumber: 'The number must be at least {extraData}.',
+      minArray: 'The array must have at least {extraData} items.',
+      maxString: 'The string must have a maximum length of {extraData}.',
+      maxNumber: 'The number must be at most {extraData}.',
+      maxArray: 'The array must have at most {extraData} items.',
+      invalidValue: 'The value is not one of the default values.\nPossible default values are: {extraData}.',
+      regex: 'The format of this value is invalid',
+    },
+    warning: {
+      noComponentDefinition: 'Unreferenced component.',
+    },
   },
 };

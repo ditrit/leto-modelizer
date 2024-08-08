@@ -50,19 +50,19 @@ For now, we don't have many plugins to offer you, but follow us and in the next 
 
 Plugin to manage terraform files, by default it comes with aws provider definition.
 
-[GitHub url](https://github.com/ditrit/terrator-plugin#0.10.0)
+[GitHub url](https://github.com/ditrit/terrator-plugin#0.11.0)
 
 ### Github plugin
 
 Plugin to manage GitHub action files.
 
-[GitHub url](https://github.com/ditrit/githubator-plugin#0.4.1)
+[GitHub url](https://github.com/ditrit/githubator-plugin#0.4.2)
 
 ### Kubernetes plugin
 
 Plugin to manage Kubernetes files.
 
-[GitHub url](https://github.com/ditrit/kubernator-plugin#0.2.0)
+[GitHub url](https://github.com/ditrit/kubernator-plugin#0.2.1)
 
 ## Compatibility versions table
 
@@ -110,10 +110,10 @@ Plugin to manage Kubernetes files.
     </tr>
     <tr>
       <td>next version</td>
-      <td>= 0.25.0</td>
-      <td>= 0.10.0</td>
-      <td>= 0.4.1</td>
-      <td>= 0.2.0</td>
+      <td>= 0.26.2</td>
+      <td>= 0.11.0</td>
+      <td>= 0.4.2</td>
+      <td>= 0.2.1</td>
     </tr>
   </tbody>
 </table>
@@ -146,13 +146,13 @@ Choose __Custom plugin__ to install a specific plugin not referenced as an offic
 Examples with official plugins:
 - terrator-plugin:
   - plugin name: `terrator-plugin`
-  - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.10.0`
+  - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.11.0`
 - githubator-plugin:
   - plugin name: `githubator-plugin`
-  - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.4.1`
+  - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.4.2`
 - kubernator-plugin:
   - plugin name: `kubernator-plugin`
-  - git repository url: `https://github.com/ditrit/kubernator-plugin.git#0.2.0`
+  - git repository url: `https://github.com/ditrit/kubernator-plugin.git#0.2.1`
 
 ### Install custom plugin in command line
 
@@ -160,13 +160,13 @@ Options `repository-name` and `repository-url` can be added with the `npm run pl
 
 ```bash
 # Example with terraform plugin
-npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.10.0"
+npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.11.0"
 
 # Example with github action plugin
-npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.4.1"
+npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.4.2"
 
 # Example with kubernator plugin
-npm run plugin:install -- repository-name="kubernator-plugin" repository-url="https://github.com/ditrit/kubernator-plugin.git#0.2.0"
+npm run plugin:install -- repository-name="kubernator-plugin" repository-url="https://github.com/ditrit/kubernator-plugin.git#0.2.1"
 ```
 
 Now that your plugin is installed, you can continue to install other plugins with the same command if you want.
@@ -210,7 +210,7 @@ It will generate the built application in the `dist` folder.
 
 To build this app with docker (the two main plugins for terraform & github are included), please use this command:
 ```bash
-docker build . -build-arg TERRATOR_PLUGIN_VERSION="0.10.0" -build-arg GITHUBATOR_PLUGIN_VERSION="0.4.1" -build-arg KUBERNATOR_PLUGIN_VERSION="0.2.0" -t leto-modelizer
+docker build . -build-arg TERRATOR_PLUGIN_VERSION="0.11.0" -build-arg GITHUBATOR_PLUGIN_VERSION="0.4.2" -build-arg KUBERNATOR_PLUGIN_VERSION="0.2.1" -t leto-modelizer
 ```
 
 ### Docker run

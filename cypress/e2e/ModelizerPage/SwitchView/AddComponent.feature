@@ -118,4 +118,4 @@ Feature: Test switch model to text view: add component/link
     And  I wait 1 second
     And  I expect '.id_1.component' exists
     And  I expect '.id_2.component' exists
-    And  I expect '.id_2_to_id_1.link' exists
+    And  I expect '.id_1_to_id_2.link' exists

@@ -4,6 +4,7 @@ import { shallowMount } from '@vue/test-utils';
 import ModelizerDrawLayout from 'src/layouts/ModelizerDrawLayout.vue';
 import PluginManager from 'src/composables/PluginManager';
 import TemplateManager from 'src/composables/TemplateManager';
+import LogEvent from 'src/composables/events/LogEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -28,6 +29,12 @@ jest.mock('vue-router', () => ({
   }),
 }));
 
+jest.mock('src/composables/events/LogEvent', () => ({
+  FileLogEvent: {
+    next: jest.fn(),
+  },
+}));
+
 jest.mock('src/composables/PluginManager', () => ({
   getPluginByName: jest.fn(() => ({
     data: {
@@ -50,7 +57,7 @@ jest.mock('src/composables/PluginManager', () => ({
     parse: jest.fn(),
     draw: jest.fn(),
   })),
-  initComponents: jest.fn(() => Promise.resolve()),
+  initComponents: jest.fn(() => Promise.resolve([])),
 }));
 
 jest.mock('src/composables/TemplateManager', () => ({
@@ -117,6 +124,7 @@ describe('Test page component: ModelizerDrawLayout', () => {
         key: 'testTemplate',
         plugin: 'pluginName',
       }]);
+      expect(LogEvent.FileLogEvent.next).toBeCalledWith([]);
     });
 
     it('should emit a negative notification on error after failing to retrieve templates', async () => {

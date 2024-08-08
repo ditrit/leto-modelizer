@@ -80,12 +80,6 @@ describe('Test component: ModelizerTextLayout', () => {
         expect(wrapper.vm.projectName).toEqual('project-00000000');
       });
     });
-
-    describe('Test ref: parseErrors', () => {
-      it('should match []', () => {
-        expect(wrapper.vm.parseErrors).toEqual([]);
-      });
-    });
   });
 
   describe('Test function: onSelectFileTab', () => {

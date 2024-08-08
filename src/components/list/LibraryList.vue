@@ -14,8 +14,9 @@
     text-white
     :class="[
       'column no-wrap col-shrink',
-      !isSelected ? 'scroll' : '',
+      'scroll'
     ]"
+    style="max-height: calc(100vh - 260px);"
   >
     <template
       v-for="(drawerItem) in drawerItems"

@@ -8,7 +8,7 @@
       <modelizer-text-page />
     </q-page-container>
 
-    <console-footer :errors="parseErrors" />
+    <console-footer />
 
     <create-file-dialog :project-name="projectName" />
     <rename-file-dialog :project-name="projectName" />
@@ -44,7 +44,6 @@ import {
   computed,
   onMounted,
   onUnmounted,
-  ref,
 } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import FileEvent from 'src/composables/events/FileEvent';
@@ -55,7 +54,6 @@ const router = useRouter();
 
 const query = computed(() => route.query);
 const projectName = computed(() => route.params.projectName);
-const parseErrors = ref(getPluginByName(query.value.plugin).data.parseErrors);
 
 let selectFileTabSubscription;
 

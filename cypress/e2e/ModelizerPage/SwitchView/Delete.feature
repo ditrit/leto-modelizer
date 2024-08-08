@@ -179,7 +179,7 @@ Feature: Test switch model to text view: delete component/link
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Draw'
-    And  I expect '.id_2_to_id_1.link' appear 1 time on screen
+    And  I expect '.id_1_to_id_2.link' appear 1 time on screen
 
     #  NOTE: must force click because the following two elements are covered by an overflowing svg element
 #    When I force click on '[class="link"]'

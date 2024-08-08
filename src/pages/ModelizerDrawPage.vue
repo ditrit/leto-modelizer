@@ -1,13 +1,12 @@
 <template>
-  <q-page class="bg-grey-3">
+  <q-page class="bg-grey-3 column">
     <div
       id="view-port"
       data-cy="draw-container"
+      class="column"
       @dragover.prevent
       @drop.prevent="dropHandler"
-    >
-      <component-drop-overlay />
-    </div>
+    />
 
     <q-page-sticky :offset="[20, 20]">
       <div class="row">
@@ -38,7 +37,6 @@
 </template>
 
 <script setup>
-import ComponentDropOverlay from 'components/drawer/ComponentDropOverlay.vue';
 import {
   addNewTemplateComponent,
   getPluginByName,
@@ -334,33 +332,15 @@ onUnmounted(() => {
 });
 </script>
 
-<style scoped>
-#view-port {
-  height: calc(100vh - 76px);
-  width: 100%;
-}
-</style>
-
 <style lang="scss">
-// Quasar sets overflow to 'hidden' on all svg.
-// In our case, it needs to be set to 'visible' to manage position with % in plugin models.
-div#view-port svg {
-  overflow: visible !important;
-  display: unset;
-  height: 100%;
-  width: 100%;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#viewport {
+div#view-port, div#view-port svg.scene {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  flex: 1;
+  height: 100%;
+  width: 100%;
 }
 </style>

@@ -5,13 +5,24 @@ import MonacoEditor from 'components/editor/MonacoEditor.vue';
 import Project from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
 import FileEvent from 'src/composables/events/FileEvent';
+import LogEvent from 'src/composables/events/LogEvent';
 
 installQuasarPlugin();
+
+jest.mock('vue-i18n', () => ({
+  useI18n: () => ({
+    t: (t) => t,
+  }),
+}));
 
 jest.mock('monaco-editor', () => ({
   __esModule: true,
   editor: {
-    create: jest.fn(),
+    create: jest.fn(() => ({
+      getModel: jest.fn(() => 'model'),
+    })),
+    setModelMarkers: jest.fn(),
+    getModel: jest.fn(() => 'model'),
   },
   languages: {
     register: jest.fn(),
@@ -30,8 +41,15 @@ jest.mock('src/composables/Git', () => ({
   getStatus: jest.fn(() => Promise.resolve([{ path: 'file.js' }])),
 }));
 
+jest.mock('src/composables/events/LogEvent', () => ({
+  FileLogEvent: {
+    next: jest.fn(),
+  },
+}));
+
 jest.mock('src/composables/PluginManager', () => ({
   initMonacoLanguages: jest.fn(() => 'test'),
+  analyzeFile: jest.fn(() => []),
   getPlugins: jest.fn(() => [{
     data: {
       name: 'test1',
@@ -89,7 +107,7 @@ jest.mock('src/composables/events/FileEvent', () => ({
   },
 }));
 
-describe('Tess component: MonacoEditor', () => {
+describe('Test component: MonacoEditor', () => {
   let wrapper;
   let checkoutSubscribe;
   let checkoutUnsubscribe;
@@ -101,6 +119,7 @@ describe('Tess component: MonacoEditor', () => {
   const dispose = jest.fn();
   const layout = jest.fn();
   const setValue = jest.fn();
+  const getModel = jest.fn();
   const onDidChangeModelContent = jest.fn();
   const writeProjectFileMock = jest.fn(() => Promise.resolve());
 
@@ -110,6 +129,7 @@ describe('Tess component: MonacoEditor', () => {
     setValue,
     layout,
     onDidChangeModelContent,
+    getModel,
   }));
 
   Project.writeProjectFile.mockImplementation(writeProjectFileMock);
@@ -172,6 +192,14 @@ describe('Tess component: MonacoEditor', () => {
       wrapper.vm.createEditor();
       expect(wrapper.vm.editor).not.toBeNull();
       expect(onDidChangeModelContent).toHaveBeenCalled();
+    });
+  });
+
+  describe('Test function: updateMarkers', () => {
+    it('should emit event and set markers', () => {
+      wrapper.vm.updateMarkers('path', 'content');
+
+      expect(LogEvent.FileLogEvent.next).toBeCalledWith([]);
     });
   });
 
