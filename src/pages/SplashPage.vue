@@ -30,11 +30,11 @@ import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted } from 'vue';
-import { initPlugins } from 'src/composables/PluginManager';
+import { getPlugins, initPlugins } from 'src/composables/PluginManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import * as UserService from 'src/services/UserService';
 
-const { t } = useI18n();
+const i18n = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -52,7 +52,7 @@ async function initUser() {
       .catch(() => {
         Notify.create({
           type: 'negative',
-          message: t('errors.authentication.fetchingUserInformation'),
+          message: i18n.t('errors.authentication.fetchingUserInformation'),
           html: true,
         });
       }),
@@ -60,16 +60,33 @@ async function initUser() {
       .catch(() => {
         Notify.create({
           type: 'negative',
-          message: t('errors.authentication.fetchingUserPermissions'),
+          message: i18n.t('errors.authentication.fetchingUserPermissions'),
           html: true,
         });
       }),
   ]);
 }
 
+/**
+ * Initialize translation of plugins.
+ */
+function initPluginsI18n() {
+  i18n.availableLocales.forEach((local) => {
+    const newMessages = {};
+
+    getPlugins().forEach((plugin) => {
+      newMessages[plugin.data.name] = plugin.configuration.i18n[local];
+    });
+
+    i18n.mergeLocaleMessage(local, newMessages);
+  });
+}
+
 onMounted(async () => {
   await initUser();
   await initPlugins();
+  initPluginsI18n();
+
   PluginEvent.InitEvent.next();
 
   // Wait 2s to avoid blinking effect and let user admire our beautiful splash screen.

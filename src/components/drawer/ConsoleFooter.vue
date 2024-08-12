@@ -11,9 +11,9 @@
       <q-tab
         v-for="tab in tabs"
         :key="tab.name"
-        :label="tab.label"
+        :label="$t(`footer.consoleFooter.tabs.${tab.name}`, { number: logs.length })"
         :name="tab.name"
-        :data-cy="`console-tab_${tab.name}`"
+        :data-cy="tab.name"
         @click="toggleTab(tab.name)"
       />
     </q-tabs>
@@ -26,28 +26,38 @@
         name="errors"
         class="text-h6"
       >
-        <errors-table :errors="props.errors" />
+        <errors-table
+          :errors="logs"
+          :editor-type="props.editorType"
+        />
       </q-tab-panel>
     </q-tab-panels>
   </q-footer>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {
+  onMounted,
+  onUnmounted,
+  ref,
+} from 'vue';
 import ErrorsTable from 'components/table/ErrorsTable';
+import LogEvent from 'src/composables/events/LogEvent';
 
 const props = defineProps({
-  errors: {
-    type: Array,
-    required: true,
+  editorType: {
+    type: String,
+    default: 'text',
   },
 });
-
 const selectedTab = ref(null);
-const tabs = ref([
-  { name: 'errors', label: `errors (${props.errors.length})`, open: false },
-]);
+const logs = ref([]);
+const tabs = ref([{
+  name: 'errors',
+  open: false,
+}]);
 
+let fileLogEventSubscription;
 /**
  * Expand or reduce tab (console footer with it).
  * @param {string} tabName - Name of the clicked tab
@@ -60,6 +70,24 @@ function toggleTab(tabName) {
     selectedTab.value = null;
   }
 }
+
+/**
+ * Update current logs.
+ * @param {ParseLogs} fileLogs - Logs.
+ */
+function updateFileLogs(fileLogs) {
+  logs.value = fileLogs;
+}
+
+onMounted(() => {
+  fileLogEventSubscription = LogEvent.FileLogEvent.subscribe(
+    (e) => { updateFileLogs(e); },
+  );
+});
+
+onUnmounted(() => {
+  fileLogEventSubscription.unsubscribe();
+});
 </script>
 
 <style>

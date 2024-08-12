@@ -6,18 +6,32 @@ import PluginManager from 'src/composables/PluginManager';
 import { initUserInformation, initUserPermissions } from 'src/services/UserService';
 import { setActivePinia, createPinia } from 'pinia';
 import { Notify } from 'quasar';
+import { useI18n } from 'vue-i18n';
 
 installQuasarPlugin();
 
 jest.mock('vue-i18n', () => ({
-  useI18n: () => ({
+  useI18n: jest.fn(() => ({
     t: (t) => t,
-  }),
+    mergeLocaleMessage: jest.fn(),
+    availableLocales: ['en-US'],
+  })),
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
   initPlugins: () => Promise.resolve(),
-  getPlugins: jest.fn(),
+  getPlugins: jest.fn(() => [{
+    data: {
+      name: 'test',
+    },
+    configuration: {
+      i18n: {
+        'en-US': {
+          test: 'test',
+        },
+      },
+    },
+  }]),
 }));
 
 jest.mock('src/composables/events/PluginEvent', () => ({
@@ -53,7 +67,19 @@ describe('Test component: SplashPage', () => {
 
   beforeEach(() => {
     PluginManager.getPlugins.mockImplementation(() => [
-      { data: { deleteAllEventLogsBefore: jest.fn(() => {}) } },
+      {
+        data: {
+          deleteAllEventLogsBefore: jest.fn(() => {}),
+          name: 'plugin-test',
+        },
+        configuration: {
+          i18n: {
+            'en-US': {
+              test: 'test',
+            },
+          },
+        },
+      },
     ]);
 
     setActivePinia(createPinia());
@@ -79,6 +105,30 @@ describe('Test component: SplashPage', () => {
       await wrapper.vm.$nextTick();
       expect(setTimeout).toHaveBeenCalled();
       expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 2000);
+    });
+  });
+
+  describe('Test function: initPluginsI18n', () => {
+    it('should update translations', () => {
+      const mergeLocaleMessage = jest.fn();
+
+      useI18n.mockImplementation(() => ({
+        t: (t) => t,
+        mergeLocaleMessage,
+        availableLocales: ['en-US'],
+      }));
+
+      wrapper = shallowMount(SplashPage, {
+        global: {
+          stubs: {
+            qIcon: true,
+          },
+        },
+      });
+
+      wrapper.vm.initPluginsI18n();
+
+      expect(mergeLocaleMessage).toBeCalledWith('en-US', { 'plugin-test': { test: 'test' } });
     });
   });
 

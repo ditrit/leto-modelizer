@@ -39,39 +39,28 @@ describe('Test component: ErrorsTable', () => {
   });
 
   describe('Test computed: columns', () => {
-    it('should equals columnsComputed', () => {
-      const field = () => 'field';
-      const columnsComputed = [
-        {
-          name: 'severity',
-          align: 'left',
-          label: 'footer.consoleFooter.errorsTable.severity',
-          field: 'severity',
-          style: 'width: 2rem',
-        },
-        {
-          name: 'line',
-          align: 'center',
-          label: 'footer.consoleFooter.errorsTable.line',
-          field,
-          style: 'width: 2rem',
-        },
-        {
-          name: 'column',
-          align: 'center',
-          label: 'footer.consoleFooter.errorsTable.column',
-          field,
-          style: 'width: 2rem',
-        },
-        {
-          name: 'message',
-          align: 'left',
-          label: 'footer.consoleFooter.errorsTable.message',
-          field: 'message',
-        },
-      ];
+    it('should have valid columns for diagram page', async () => {
+      await wrapper.setProps({
+        editorType: 'diagram',
+      });
 
-      expect(JSON.stringify(wrapper.vm.columns)).toEqual(JSON.stringify(columnsComputed));
+      expect(wrapper.vm.columns.length).toEqual(4);
+      expect(wrapper.vm.columns[0].name).toEqual('severity');
+      expect(wrapper.vm.columns[1].name).toEqual('component');
+      expect(wrapper.vm.columns[2].name).toEqual('attribute');
+      expect(wrapper.vm.columns[3].name).toEqual('message');
+    });
+
+    it('should have valid columns for text page', async () => {
+      await wrapper.setProps({
+        editorType: 'text',
+      });
+
+      expect(wrapper.vm.columns.length).toEqual(4);
+      expect(wrapper.vm.columns[0].name).toEqual('severity');
+      expect(wrapper.vm.columns[1].name).toEqual('line');
+      expect(wrapper.vm.columns[2].name).toEqual('column');
+      expect(wrapper.vm.columns[3].name).toEqual('message');
     });
   });
 });
