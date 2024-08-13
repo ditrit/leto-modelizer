@@ -39,8 +39,8 @@ If you only want your own language component (maybe based on existing plugins), 
 
 ## Requirements
 
-* node - [v18.4](https://nodejs.org/en/blog/release/v18.4.0)
-* npm - [v8.19.3](https://www.npmjs.com/package/npm/v/8.19.3)
+* node - [v20.16.0](https://nodejs.org/en/blog/release/v20.16.0)
+* npm - [v10.8.1](https://www.npmjs.com/package/npm/v/10.8.1)
 
 ## Official plugins
 
@@ -50,19 +50,19 @@ For now, we don't have many plugins to offer you, but follow us and in the next 
 
 Plugin to manage terraform files, by default it comes with aws provider definition.
 
-[GitHub url](https://github.com/ditrit/terrator-plugin#0.11.0)
+[GitHub url](https://github.com/ditrit/terrator-plugin#0.12.2)
 
 ### Github plugin
 
 Plugin to manage GitHub action files.
 
-[GitHub url](https://github.com/ditrit/githubator-plugin#0.4.2)
+[GitHub url](https://github.com/ditrit/githubator-plugin#0.5.2)
 
 ### Kubernetes plugin
 
 Plugin to manage Kubernetes files.
 
-[GitHub url](https://github.com/ditrit/kubernator-plugin#0.2.1)
+[GitHub url](https://github.com/ditrit/kubernator-plugin#0.3.2)
 
 ## Compatibility versions table
 
@@ -110,10 +110,10 @@ Plugin to manage Kubernetes files.
     </tr>
     <tr>
       <td>next version</td>
-      <td>= 0.26.2</td>
-      <td>= 0.11.0</td>
-      <td>= 0.4.2</td>
-      <td>= 0.2.1</td>
+      <td>= 0.28.0</td>
+      <td>= 0.12.2</td>
+      <td>= 0.5.2</td>
+      <td>= 0.3.2</td>
     </tr>
   </tbody>
 </table>
@@ -123,59 +123,100 @@ Plugin to manage Kubernetes files.
 Run `npm install` to let npm retrieve all dependencies and especially our cli to easily install your plugins 😉.
 
 Then you just have to know two things about your plugins:
-- it's name
-- it's repository url
-
-To install plugin, run this command `npm run plugin:install`.
-You can choose between installing __official__ or __custom__ plugins.
+- its name
+- its version
 
 ### Install official plugins
 
-The `leto-modelizer-plugin-cli.json` file, at the root of Leto Modelizer, contains the list of official plugins provided by the team. Each plugin is represented by an object containing the name, repository URL and version of the plugin.
+The `leto-modelizer-plugin-cli.json` file, at the root of Leto Modelizer, contains the list of official plugins provided by the team.
+Each plugin is represented by an object containing the name, scope and version of the plugin.
 
-Choose __Official plugins__ to select from the list of official plugins, one or more plugin(s) to install.
+To install plugin, run this command `npm run plugin:install`.
 
 ![](docs/plugin-install-official.gif)
 
 ### Install custom plugin
 
-Choose __Custom plugin__ to install a specific plugin not referenced as an official plugin.
+If you want to add a custom plugin, you can modify `leto-modelizer-plugin-cli.json`:
+- if your plugin is referenced on npm:
+```js
+// leto-modelizer-plugin-cli.json
+[
+  // (...)
+  {
+    "displayName": "YOUR_PLUGIN_DISPLAY_NAME",
+    "name": "YOUR_PLUGIN_NAME",
+    "scope": "NPM_ORGANISATION",
+    "version": "X.X.X"
+  }
+]
+```
+- if your plugin only have a repository url on a git provider:
+```js
+// leto-modelizer-plugin-cli.json
+[
+  // (...)
+  {
+    "displayName": "YOUR_PLUGIN_DISPLAY_NAME",
+    "name": "YOUR_PLUGIN_NAME",
+    "scope": "YOUR_ORGANISATION",
+    "version": "X.X.X",
+    "url": "YOUR_REPOSITORY_URL" // like http(s)://github.com/repository.git#1.0.0
+  }
+]
+```
 
-![](docs/plugin-install-custom.gif)
+For more information about configuring plugin, you can read this [documentation](https://github.com/ditrit/leto-modelizer-plugin-cli).
 
-Examples with official plugins:
-- terrator-plugin:
-  - plugin name: `terrator-plugin`
-  - git repository url: `https://github.com/ditrit/terrator-plugin.git#0.11.0`
-- githubator-plugin:
-  - plugin name: `githubator-plugin`
-  - git repository url: `https://github.com/ditrit/githubator-plugin.git#0.4.2`
-- kubernator-plugin:
-  - plugin name: `kubernator-plugin`
-  - git repository url: `https://github.com/ditrit/kubernator-plugin.git#0.2.1`
+Then execute this command `npm run plugin:install` and choose your custom plugin in the list to install it.
 
-### Install custom plugin in command line
+### Install official/custom plugin in command line
 
-Options `repository-name` and `repository-url` can be added with the `npm run plugin:install` command to bypass cli prompts.
+Options `name` and `version` can be added with the `npm run plugin:install` command to bypass cli prompts.
 
 ```bash
 # Example with terraform plugin
-npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#0.11.0"
+npm run plugin:install -- name="terrator-plugin" version="0.12.2"
 
 # Example with github action plugin
-npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#0.4.2"
+npm run plugin:install -- name="githubator-plugin" version="0.5.2"
 
 # Example with kubernator plugin
-npm run plugin:install -- repository-name="kubernator-plugin" repository-url="https://github.com/ditrit/kubernator-plugin.git#0.2.1"
+npm run plugin:install -- name="kubernator-plugin" version="0.3.2"
 ```
 
 Now that your plugin is installed, you can continue to install other plugins with the same command if you want.
 
-### Initialize plugins
+## How to uninstall plugin
 
-When you have installed all the desired plugins, please run this commands `npm run plugin:init` to complete all plugins' installation.
+Run `npm install` to let npm retrieve all dependencies and especially our cli to easily uninstall your plugins 😉.
 
-![](docs/plugin-init.png)
+Then you just have to know two things about your plugins:
+- its name
+- its version
+
+### Uninstall plugins
+
+To uninstall plugin, run this command `npm run plugin:uninstall`.
+
+![](docs/plugin-uninstall.gif)
+- 
+### Uninstall plugin in command line
+
+Options `name` and `version` can be added with the `npm run plugin:uninstall` command to bypass cli prompts.
+
+```bash
+# Example with terraform plugin
+npm run plugin:uninstall -- name="terrator-plugin" version="0.12.2"
+
+# Example with github action plugin
+npm run plugin:uninstall -- name="githubator-plugin" version="0.5.2"
+
+# Example with kubernator plugin
+npm run plugin:uninstall -- name="kubernator-plugin" version="0.3.2"
+```
+
+Now that your plugin is uninstalled, you can continue to uninstall other plugins with the same command if you want.
 
 ## How to setup the authentication with Leto-Modelizer-Api
 
@@ -210,7 +251,7 @@ It will generate the built application in the `dist` folder.
 
 To build this app with docker (the two main plugins for terraform & github are included), please use this command:
 ```bash
-docker build . -build-arg TERRATOR_PLUGIN_VERSION="0.11.0" -build-arg GITHUBATOR_PLUGIN_VERSION="0.4.2" -build-arg KUBERNATOR_PLUGIN_VERSION="0.2.1" -t leto-modelizer
+docker build . -build-arg TERRATOR_PLUGIN_VERSION="0.12.2" -build-arg GITHUBATOR_PLUGIN_VERSION="0.5.2" -build-arg KUBERNATOR_PLUGIN_VERSION="0.3.2" -t leto-modelizer
 ```
 
 ### Docker run

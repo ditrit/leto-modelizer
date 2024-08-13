@@ -35,17 +35,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Technical content:
   * Update import of vue components.
 * Plugin management:
-  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.25.0) version 0.26.2.
-  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.11.0) version 0.11.0.
-  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.4.2) version 0.4.2.
-  * Work with [kubernator-plugin](https://github.com/ditrit/kubernator-plugin/tree/0.2.1) version 0.2.1.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.28.0) version `0.28.0`.
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.12.2) version `0.12.2`.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.5.2) version `0.5.2`.
+  * Work with [kubernator-plugin](https://github.com/ditrit/kubernator-plugin/tree/0.3.2) version `0.3.2`.
 * Improve performance on git add.
 * Replace OIDC authentication by Leto-Modelizer-Api, see [this issue](https://github.com/ditrit/leto-modelizer/issues/425).
 * Separating git-related functions into a dedicated composable.
 * Merge add/create diagram buttons into a drop-down button, see [this issue](https://github.com/ditrit/leto-modelizer/issues/471).
 * Improve Authentication by re-doing login process if the token is expired, see [this issue](https://github.com/ditrit/leto-modelizer/issues/478).
 * Handle external id.
-* Replaced old authentication (Parse) by the new LetoModelizeApi (Java/Spring).
+* Replaced old authentication (Parse) by the new Leto-Modelize-Api (Java/Spring).
 
 ### Fixed
 
@@ -100,27 +100,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Rework and clean all layouts and pages.
 * Have only one configuration file by project to save all diagrams positions.
 * Save diagram template position.
-* Rework on project documenation (replace esdoc by jsdoc).
+* Rework on project documentation (replace esdoc by jsdoc).
 * Models page:
   * Rework on tag display, use tag category for all diagrams in table.
   * Rework on tag display, use tag language for plugin selection on create diagram from template.
-  * Update naviguation bar to display user info.
+  * Update navigation bar to display user info.
 * Draw page:
   * Rework on left drawer.
   * Re-design attribute fields.
   * Re-design information icon on attribute fields.
 * Plugin management:
-  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.7.0) version 0.7.0.
-  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.21.0) version 0.21.0.
-  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.2.5) version 0.2.5.
-* Improve performance of the automatic functionnal tests.
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.7.0) version `0.7.0`.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.21.0) version `0.21.0`.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.2.5) version `0.2.5`.
+* Improve performance of the automatic functional tests.
 * User settings:
   * Save records by page in ModelsPage.
 
 ### Fixed
 
 * Fix bug on models default folder opening, see [this issue](https://github.com/ditrit/leto-modelizer/issues/303).
-* Fix Sonar new bugs/code smell due to quality profil change, see [this issue](https://github.com/ditrit/leto-modelizer/issues/322).
+* Fix Sonar new bugs/code smell due to quality profile change, see [this issue](https://github.com/ditrit/leto-modelizer/issues/322).
 * Fix bug on using default file name from plugin instead of the file name specified by the user, when adding a component after creating a diagram from scratch.
 * Fix bug on deleted files while pushing a branch or using "upload to git" button, see [this issue](https://github.com/ditrit/leto-modelizer/issues/358).
 * Fix bug on import repository with `.git` or `/` at the end, see [this issue](https://github.com/ditrit/leto-modelizer/issues/368).
@@ -162,9 +162,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Redesign template grid.
   * Redesign template card.
 * Plugin management:
-  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.3.0) version 0.3.0.
-  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.16.0) version 0.16.0.
-  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.2.0) version 0.2.0.
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.3.0) version `0.3.0`.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.16.0) version `0.16.0`.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.2.0) version `0.2.0`.
 
 ## [1.1.0] - 2023/05/04
 
@@ -192,10 +192,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Internal optimization of plugin usage.
 * New display for library list & component grid.
 * Plugin management:
-  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.2.0) version 0.2.0.
-  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.15.2) version 0.15.2.
-  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.1.1) version 0.1.1.
-* Update [plugin-cli](https://github.com/ditrit/leto-modelizer-plugin-cli/tree/1.0.0) version 1.0.0.
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.2.0) version `0.2.0`.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.15.2) version `0.15.2`.
+  * Work with [githubator-plugin](https://github.com/ditrit/githubator-plugin/tree/0.1.1) version `0.1.1`.
+* Update [plugin-cli](https://github.com/ditrit/leto-modelizer-plugin-cli/tree/1.0.0) version `1.0.0`.
 
 ### Fixed
 
@@ -254,8 +254,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * Push branch to git provider.
 * Plugin management:
   * Work with multi-plugin.
-  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.1.12) version 0.1.12.
-  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.13.0) version 0.13.0.
+  * Work with [terrator-plugin](https://github.com/ditrit/terrator-plugin/tree/0.1.12) version `0.1.12`.
+  * Work with [plugin-core](https://github.com/ditrit/leto-modelizer-plugin-core/tree/0.13.0) version `0.13.0`.
 
 [1.3.0]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#1.3.0
 [1.2.0]: https://github.com/ditrit/leto-modelizer/blob/main/changelog.md#1.2.0
