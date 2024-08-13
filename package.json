@@ -1,5 +1,5 @@
 {
-  "name": "leto-modelizer",
+  "name": "@ditrit/leto-modelizer",
   "version": "1.3.0",
   "description": "Technical topology low-code editing tools.",
   "productName": "Leto Modelizer",
@@ -16,8 +16,8 @@
     "test": "jest --coverageProvider=v8",
     "test:coverage": "jest --coverage --coverageProvider=v8",
     "test:e2e": "cypress run --browser electron --spec **/*.feature",
-    "plugin:install": "node node_modules/leto-modelizer-plugin-cli install",
-    "plugin:init": "node node_modules/leto-modelizer-plugin-cli init"
+    "plugin:install": "node node_modules/@ditrit/leto-modelizer-plugin-cli/src/index.js install",
+    "plugin:uninstall": "node node_modules/@ditrit/leto-modelizer-plugin-cli/src/index.js uninstall"
   },
   "dependencies": {
     "@quasar/extras": "=1.16.9",
@@ -25,7 +25,7 @@
     "browserfs": "=1.4.3",
     "core-js": "=3.34.0",
     "isomorphic-git": "=1.25.1",
-    "leto-modelizer-plugin-core": "github:ditrit/leto-modelizer-plugin-core#0.25.0",
+    "@ditrit/leto-modelizer-plugin-core": "=0.28.0",
     "monaco-editor": "=0.45.0",
     "monaco-editor-webpack-plugin": "=7.1.0",
     "pinia": "=2.1.7",
@@ -45,6 +45,7 @@
     "@babel/preset-env": "=7.23.6",
     "@badeball/cypress-cucumber-preprocessor": "=19.2.0",
     "@cypress/browserify-preprocessor": "=3.0.2",
+    "@ditrit/leto-modelizer-plugin-cli": "=2.0.1",
     "@pinia/testing": "=0.1.3",
     "@quasar/app-webpack": "=3.9.6",
     "@quasar/quasar-app-extension-testing": "=2.1.1",
@@ -71,7 +72,6 @@
     "jest-serializer-vue": "=3.1.0",
     "jest-sonar-reporter": "=2.0.0",
     "jsdoc": "=4.0.2",
-    "leto-modelizer-plugin-cli": "github:ditrit/leto-modelizer-plugin-cli#1.0.0",
     "nunjucks": "=3.2.4",
     "vue-loader": "=17.3.1"
   },
