@@ -71,7 +71,7 @@ import FileName from 'src/components/FileName.vue';
 import { getTree, updateFileInformation } from 'src/composables/FileExplorer';
 import { getProjectFiles } from 'src/composables/Project';
 import { getStatus } from 'src/composables/Git';
-import { FileInformation } from 'leto-modelizer-plugin-core';
+import { FileInformation } from '@ditrit/leto-modelizer-plugin-core';
 import FileStatus from 'src/models/git/FileStatus';
 import { useRoute } from 'vue-router';
 import { getPluginByName } from 'src/composables/PluginManager';

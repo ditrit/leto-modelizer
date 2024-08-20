@@ -57,7 +57,7 @@ import { useI18n } from 'vue-i18n';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import { getTemplatesByType } from 'src/composables/TemplateManager';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import { ComponentLink } from 'leto-modelizer-plugin-core';
+import { ComponentLink } from '@ditrit/leto-modelizer-plugin-core';
 import DrawerEvent from 'src/composables/events/DrawerEvent';
 
 const { t } = useI18n();

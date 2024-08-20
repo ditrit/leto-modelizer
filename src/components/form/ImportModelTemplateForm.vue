@@ -57,7 +57,7 @@ import {
   writeProjectFile,
 } from 'src/composables/Project';
 import { useRouter } from 'vue-router';
-import { FileInput } from 'leto-modelizer-plugin-core';
+import { FileInput } from '@ditrit/leto-modelizer-plugin-core';
 import { getTemplateFileByPath } from 'src/composables/TemplateManager';
 import { getModelPath, getPluginByName } from 'src/composables/PluginManager';
 

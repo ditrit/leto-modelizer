@@ -2,7 +2,7 @@ import { templateLibraryApiClient } from 'boot/axios';
 import {
   ComponentDefinition,
   FileInput,
-} from 'leto-modelizer-plugin-core';
+} from '@ditrit/leto-modelizer-plugin-core';
 import nunjucks from 'nunjucks';
 import { randomHexString } from 'src/composables/Random';
 

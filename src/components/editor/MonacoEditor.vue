@@ -28,7 +28,7 @@ import FileEvent from 'src/composables/events/FileEvent';
 import GitEvent from 'src/composables/events/GitEvent';
 import { analyzeFile, getPlugins } from 'src/composables/PluginManager';
 import Languages from 'assets/editor/languages';
-import { FileInput } from 'leto-modelizer-plugin-core';
+import { FileInput } from '@ditrit/leto-modelizer-plugin-core';
 import { useI18n } from 'vue-i18n';
 import LogEvent from 'src/composables/events/LogEvent';
 

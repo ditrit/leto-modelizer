@@ -1,5 +1,5 @@
 import * as TemplateManager from 'src/composables/TemplateManager';
-import { ComponentDefinition } from 'leto-modelizer-plugin-core';
+import { ComponentDefinition } from '@ditrit/leto-modelizer-plugin-core';
 import { templateLibraryApiClient } from 'src/boot/axios';
 import { generateTemplate } from 'src/composables/TemplateManager';
 

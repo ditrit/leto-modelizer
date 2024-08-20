@@ -120,7 +120,7 @@ import {
 } from 'src/composables/Project';
 import { importProject } from 'src/composables/Git';
 import { getTemplateFileByPath } from 'src/composables/TemplateManager';
-import { FileInput } from 'leto-modelizer-plugin-core';
+import { FileInput } from '@ditrit/leto-modelizer-plugin-core';
 import PluginsCard from 'src/components/card/PluginsCard.vue';
 
 const emit = defineEmits(['project:add', 'update:checked']);

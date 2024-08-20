@@ -89,7 +89,7 @@ import { useRouter } from 'vue-router';
 import {
   FileInput,
   FileInformation,
-} from 'leto-modelizer-plugin-core';
+} from '@ditrit/leto-modelizer-plugin-core';
 
 const { t } = useI18n();
 const router = useRouter();

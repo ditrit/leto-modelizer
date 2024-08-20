@@ -1,6 +1,6 @@
 import { readTextFile } from 'src/composables/Files';
 import plugins from 'src/plugins';
-import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
+import { FileInformation, FileInput } from '@ditrit/leto-modelizer-plugin-core';
 import {
   writeProjectFile,
   readProjectFile,

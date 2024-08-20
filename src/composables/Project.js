@@ -2,7 +2,7 @@ import * as BrowserFS from 'browserfs';
 import {
   FileInformation,
   FileInput,
-} from 'leto-modelizer-plugin-core';
+} from '@ditrit/leto-modelizer-plugin-core';
 import {
   getFileInputs,
   getPlugins,
