@@ -46,6 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Improve Authentication by re-doing login process if the token is expired, see [this issue](https://github.com/ditrit/leto-modelizer/issues/478).
 * Handle external id.
 * Replaced old authentication (Parse) by the new Leto-Modelize-Api (Java/Spring).
+* Use display name of plugin.
+* Use new logo of plugin.
 
 ### Fixed
 
