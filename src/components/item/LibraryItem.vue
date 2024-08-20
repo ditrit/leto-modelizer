@@ -3,7 +3,7 @@
     v-ripple
     clickable
     :class="isSelected ? 'border-bottom selected' : ''"
-    :data-cy="`component-definitions-item_${item.title}`"
+    :data-cy="`component-definitions-item_${item.id}`"
   >
     <q-item-section avatar>
       <q-icon
