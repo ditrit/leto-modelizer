@@ -15,11 +15,12 @@ Feature: Test modelizer draw view: add template component
     # Model creation
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infra'
+    Then I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'
     And  I expect '[data-cy="component-definitions-item_Templates"]' appear 1 time on screen
     And  I expect '[data-cy="component-definitions-item_Templates"] [data-cy="title"]' is 'Templates'
 

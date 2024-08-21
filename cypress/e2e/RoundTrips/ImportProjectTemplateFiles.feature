@@ -24,12 +24,12 @@ Feature: Test roundtrip of the application : import project with template files
     And  I expect '[data-cy="diagram-path_infra/prod"]' appear 1 time on screen
 
     When I click on '[data-cy="diagram-path_infra/prod"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra/prod'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra/prod'
 
     # Check project files and folders are created in Text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=infra/prod'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path=infra/prod'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
 
     When I wait 2 seconds

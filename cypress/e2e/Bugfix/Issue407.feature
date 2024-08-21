@@ -14,15 +14,15 @@ Feature: Fix issue #407: Click on component definition from palette causes error
     # Create model
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    And  I select '[data-cy="item_githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    And  I select '[data-cy="item_@ditrit/githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'Githubator.yml'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=githubator-plugin&path=\.github/workflows/Githubator.yml'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/githubator-plugin&path=\.github/workflows/Githubator.yml'
     And  I expect '[data-cy="component-definitions-list"]' exists
-    And  I expect '[data-cy="component-definitions-item_githubator-plugin"] [data-cy="title"]' is 'githubator-plugin'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/githubator-plugin"] [data-cy="title"]' is 'GitHub Action'
 
     # Click on component
-    When I click on '[data-cy="component-definitions-item_githubator-plugin"]'
+    When I click on '[data-cy="component-definitions-item_@ditrit/githubator-plugin"]'
     Then I expect '[data-cy="component-definition_workflow"]' exists
 
     When I click on '[data-cy="component-definition_workflow"]'

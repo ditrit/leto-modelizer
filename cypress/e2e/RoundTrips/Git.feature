@@ -144,6 +144,7 @@ Feature: Test roundtrip of the application: Git
     # Modify project
     And  I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I click on '[data-cy="models-page-link-button"]'
@@ -342,11 +343,12 @@ Feature: Test roundtrip of the application: Git
     # Model creation
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'
 
     # Go to Text page
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'

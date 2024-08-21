@@ -38,5 +38,5 @@ Feature: Test roundtrip of the application : create project files
 
     Examples:
       | plugin            | modelFile      | modelFolder       | model                    |
-      | terrator-plugin   | model1/main.tf | model1            | model1                   |
-      | githubator-plugin | CI.yml         | .github/workflows | .github/workflows/CI.yml |
+      | @ditrit/terrator-plugin   | model1/main.tf | model1            | model1                   |
+      | @ditrit/githubator-plugin | CI.yml         | .github/workflows | .github/workflows/CI.yml |

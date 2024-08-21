@@ -14,15 +14,16 @@ Feature: Fix issue #370: Unable to create and use diagram on root folder.
     # Create first model on root folder
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
-    And  I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path='
+    And  I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path='
 
     # Add component to verify, file is created.
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
     Then I expect '[data-cy="draw-container"]' exists
     And  I expect '[class^="id_1 component"]' exists
@@ -30,7 +31,7 @@ Feature: Fix issue #370: Unable to create and use diagram on root folder.
     # Go to text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 2 seconds
-    Then I expect current url is 'projectName/modelizer/text\?plugin=terrator-plugin&path='
+    Then I expect current url is 'projectName/modelizer/text\?plugin=@ditrit/terrator-plugin&path='
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_projectName"]' is 'projectName'
     And  I expect '[data-cy="file-explorer"] [data-cy="file_projectName/new_file.tf"]' exists
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
@@ -43,19 +44,20 @@ Feature: Fix issue #370: Unable to create and use diagram on root folder.
     # Create another model
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
-    And  I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infra'
+    And  I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'
 
     # Go to text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 2 seconds
-    Then I expect current url is 'projectName/modelizer/text\?plugin=terrator-plugin&path=infra'
+    Then I expect current url is 'projectName/modelizer/text\?plugin=@ditrit/terrator-plugin&path=infra'
 
     # verify we can switch to root diagram
     When I double click on '[data-cy="file-explorer"] [data-cy="file_projectName/new_file.tf"]'
-    Then I expect current url is 'projectName/modelizer/text\?plugin=terrator-plugin&path='
+    Then I expect current url is 'projectName/modelizer/text\?plugin=@ditrit/terrator-plugin&path='

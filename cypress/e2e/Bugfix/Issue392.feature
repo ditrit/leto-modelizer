@@ -16,26 +16,28 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     # Diagram 1 creation
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'diag1'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=diag1'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=diag1'
 
     # Diagram 2 creation
     When I click on '[data-cy="models-page-link-button"]'
     And  I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'diag1/diag2'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=diag1/diag2'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=diag1/diag2'
 
     # Check project folders and files are created in Text view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=diag1/diag2'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path=diag1/diag2'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/diag1"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/diag1/new_file.tf"]' exists
@@ -67,11 +69,11 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
 
     ## Should delete new_file.tf file but keep all non parsable files and sub-folder
     When I click on '[data-cy="diagram-path_diag1/diag2"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=diag1/diag2'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=diag1/diag2'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=diag1/diag2'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path=diag1/diag2'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/diag1"]' exists
     But  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/diag1/new_file.tf"]' not exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/diag1/file1.txt"]' exists
