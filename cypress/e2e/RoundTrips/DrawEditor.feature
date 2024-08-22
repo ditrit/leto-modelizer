@@ -61,19 +61,20 @@ Feature: Test roundtrip of the application: draw editor
     # Create model
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ diagramFile }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ diagramFolder }}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}'
 
     ## 101 Terrator plugin should appear in component definitions list
     And  I expect '[data-cy="component-definitions-list"]' exists
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"]' exists
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' exists
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform'
 
     ## 102 Should have only one plugin installed with all these definitions
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected [data-cy="title"]' is 'terrator-plugin (35)'
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' exists
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected [data-cy="title"]' is 'Terraform (35)'
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
     And  I expect '[data-cy="component-definition_aws"]' exists
     And  I expect '[data-cy="component-definition_aws_ami"]' exists
@@ -112,46 +113,46 @@ Feature: Test roundtrip of the application: draw editor
     And  I expect '[data-cy="component-definition_image_id"]' exists
 
     # Initial state
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' not exists
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' not exists
 
     ## 201 Set text as 'aws_ami' should display only one element inside plugin title
     When I set on '[data-cy="definitions-filter-input"]' text 'aws_ami'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (1)'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (1)'
 
     ## 202 Set text as 'ami server' should display two elements inside plugin title
     When I set on '[data-cy="definitions-filter-input"]' text 'ami server'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (2)'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (2)'
 
     ## 203 Set text as 'bad' should not display plugin
     When I set on '[data-cy="definitions-filter-input"]' text 'bad'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 0 time on screen
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' appear 0 time on screen
     But  I expect '[data-cy="library-empty-message"]' exists
     And  I expect '[data-cy="library-empty-message"]' is 'Nothing to display'
 
     # Initial state
     When I set on '[data-cy="definitions-filter-input"]' text ''
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (35)'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (35)'
 
-    # Select 'terrator-plugin' library
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    # Select '@ditrit/terrator-plugin' library
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
 
     ## 204 Select plugin and set text as 'aws_ami' should display only one element
     When I set on '[data-cy="definitions-filter-input"]' text 'aws_ami'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (1)'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (1)'
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 1 time on screen
     And  I expect '[data-cy="component-definition_aws_ami"]' exists
 
     ## 205 Select plugin and set text as 'ami server' should display only two elements
     When I set on '[data-cy="definitions-filter-input"]' text 'ami server'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (2)'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (2)'
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 2 times on screen
     And  I expect '[data-cy="component-definition_aws_ami"]' exists
     And  I expect '[data-cy="component-definition_server"]' exists
@@ -164,27 +165,27 @@ Feature: Test roundtrip of the application: draw editor
 
     # Initial state
     When I set on '[data-cy="definitions-filter-input"]' text ''
-    And  I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (35)'
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' not exists
+    And  I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (35)'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' not exists
 
     ## 207 Set text as 'aws_ami' then select plugin should display only one element
     When I set on '[data-cy="definitions-filter-input"]' text 'aws_ami'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (1)'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (1)'
 
-    # Select 'terrator-plugin' library
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    # Select '@ditrit/terrator-plugin' library
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
     And  I wait 1 second
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"].selected [data-cy="title"]' is 'terrator-plugin (1)'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' exists
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected [data-cy="title"]' is 'Terraform (1)'
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 1 time on screen
     And  I expect '[data-cy="component-definition_aws_ami"]' exists
 
     # Initial state
     When I set on '[data-cy="definitions-filter-input"]' text ''
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (35)'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (35)'
 
     ## 301 Click on the 'aws_ami' component should display it on the page
     And  I expect '.id_1.component' not exists
@@ -243,12 +244,12 @@ Feature: Test roundtrip of the application: draw editor
     Then I expect '[data-cy="object-details-panel"]' to be hidden
     And  I expect '.id_3.component' not exists
 
-    # TODO: Uncomment when following bug will be fixed (https://github.com/ditrit/terrator-plugin/issues/98)
+    # TODO: Uncomment when following bug will be fixed (https://github.com/ditrit/@ditrit/terrator-plugin/issues/98)
     # ## 701 Add variables inside component parsable files should display it on the variables tab inside modelizer draw left drawer
     # # Go to Text page
     # When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     # And  I wait 1 second
-    # Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}'
+    # Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}'
     # And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
     # And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ diagramFolder }}"]' exists
     # And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ diagramFile }}"]' exists
@@ -279,7 +280,7 @@ Feature: Test roundtrip of the application: draw editor
     # # Go to Draw page
     # And  I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     # And  I wait 2 seconds
-    # Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ diagramFolder }}'
+    # Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}'
     # And  I expect '[data-cy="draw-page-left-drawer"]' exists
     # And  I expect '[data-cy="draw-page-variables-tab"]' exists
 
@@ -303,8 +304,8 @@ Feature: Test roundtrip of the application: draw editor
     # And  I expect '[data-cy="value_test"]' exists
 
     ### Setup for following tests
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin (35)'
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (35)'
 
     ## 801 Template should appear in component definitions list
     And  I expect '[data-cy="component-definitions-item_Templates"]' exists

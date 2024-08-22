@@ -1,5 +1,5 @@
 import { getPluginByName } from 'src/composables/PluginManager';
-import { FileInformation } from 'leto-modelizer-plugin-core';
+import { FileInformation } from '@ditrit/leto-modelizer-plugin-core';
 
 /**
  * Check if value is not empty.

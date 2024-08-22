@@ -14,25 +14,27 @@ Feature: Fix issue #370: Wrong files opened when I switch to text view if multip
     # Create first model
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infraFirst'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
-    And  I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infraFirst'
+    And  I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infraFirst'
 
     # Create second model
     When I click on '[data-cy="models-page-link-button"]'
     And  I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
-    And  I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infra'
+    And  I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'
 
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second

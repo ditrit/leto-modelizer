@@ -253,13 +253,14 @@ Feature: Test roundtrip of the application: project creation
     When I wait 1 seconds
     And  I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ firstModelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ firstModelFolder }}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ firstModelFolder }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform'
 
     # Back to the models page
     When I click on '[data-cy="models-page-link-button"]'
@@ -268,18 +269,19 @@ Feature: Test roundtrip of the application: project creation
     # Second model creation (with component)
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ secondModelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ secondModelFolder }}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ secondModelFolder }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform'
     And  I expect '[data-cy="file_{{ projectName }}/model2/new_file.tf"]' not exists
     And  I expect '[data-cy="file_{{ projectName }}/leto-modelizer.config.json"]' not exists
 
     # After clicking on a composent, it should be present
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
     Then I expect '[data-cy="draw-container"]' exists
     # definition_aws
@@ -293,12 +295,12 @@ Feature: Test roundtrip of the application: project creation
     # Third model creation
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    And  I select '[data-cy="item_githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    And  I select '[data-cy="item_@ditrit/githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{thirdModelName}}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=githubator-plugin&path=\.github/workflows/{{thirdModelName}}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/githubator-plugin&path=\.github/workflows/{{thirdModelName}}'
     And  I expect '[data-cy="component-definitions-list"]' exists
-    And  I expect '[data-cy="component-definitions-item_githubator-plugin"] [data-cy="title"]' is 'githubator-plugin'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/githubator-plugin"] [data-cy="title"]' is 'GitHub Action'
 
     # All created diagrams should be displayed in the /diagrams view
     When I visit the '/projects/{{ projectName }}/diagrams'
@@ -317,7 +319,7 @@ Feature: Test roundtrip of the application: project creation
     ## 501 Try to create a model with an already existing name should fail
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    And  I select '[data-cy="item_githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    And  I select '[data-cy="item_@ditrit/githubator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{thirdModelName}}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="create-model-form"] [role="alert"]' is 'Model name already exists for this plugin.'
@@ -341,13 +343,13 @@ Feature: Test roundtrip of the application: project creation
 
     # Click on model and go to text view and check files
     When I click on '[data-cy="diagram-path_{{ modelRenamed }}"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ modelRenamed }}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ modelRenamed }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform'
 
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 2 seconds
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ modelRenamed }}'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path={{ modelRenamed }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ modelRenamed }}"]' exists
 
@@ -367,12 +369,12 @@ Feature: Test roundtrip of the application: project creation
     Then I expect '[data-cy="diagram-path_{{modelRenamed}}"]' not exists
 
     When I click on '[data-cy="diagram-path_{{secondModelFolder}}"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ secondModelFolder }}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ secondModelFolder }}'
 
     # Go to text view and check files of first model doesn't exist but second one does
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ secondModelFolder }}'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path={{ secondModelFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ secondModelFolder }}"]' exists
 
@@ -415,9 +417,9 @@ Feature: Test roundtrip of the application: project creation
 
     When I click on '[data-cy="diagram-path_{{secondModelFolder}}"]'
 
-    ## Select 'terrator-plugin' library
-    And  I click on '[data-cy="component-definitions-item_terrator-plugin"]'
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    ## Select '@ditrit/terrator-plugin' library
+    And  I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
 
@@ -427,10 +429,10 @@ Feature: Test roundtrip of the application: project creation
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"]' exists
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' exists
 
     ## 901 Add a component (Draw view) should create project configuration file (Text view)
-    And  I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    And  I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
     And  I click on '[data-cy="component-definition_aws"]'
     And  I wait 1 second
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -458,7 +460,7 @@ Feature: Test roundtrip of the application: project creation
     And  I expect '.id_1.component' exists
 
     ## 903 Link two components (Draw view) should update plugin file content with new attributes properties (Text view)
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
     And  I wait 1 second
     And  I click on '[data-cy="component-definition_aws_subnet"]'
     And  I wait 1 second

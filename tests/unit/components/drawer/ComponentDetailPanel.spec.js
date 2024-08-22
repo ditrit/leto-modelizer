@@ -7,7 +7,7 @@ import {
   ComponentAttribute,
   ComponentAttributeDefinition,
   ComponentDefinition,
-} from 'leto-modelizer-plugin-core';
+} from '@ditrit/leto-modelizer-plugin-core';
 import { useRoute } from 'vue-router';
 import DrawerEvent from 'src/composables/events/DrawerEvent';
 

@@ -94,7 +94,7 @@ const isEmptyList = computed(() => pluginDefinitions.value.length === 0
 const drawerItems = computed(() => [
   {
     id: props.plugin.data.name,
-    title: props.plugin.data.name,
+    title: t(`${props.plugin.data.name}.displayName`),
     definitions: pluginDefinitions.value,
     size: pluginDefinitions.value.length,
     hasRole: acl.role('create-component'),

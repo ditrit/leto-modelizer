@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import { ComponentAttribute } from 'leto-modelizer-plugin-core';
+import { ComponentAttribute } from '@ditrit/leto-modelizer-plugin-core';
 import ObjectInput from 'src/components/inputs/ObjectInput';
 
 installQuasarPlugin();

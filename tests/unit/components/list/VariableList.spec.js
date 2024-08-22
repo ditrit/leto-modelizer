@@ -1,7 +1,7 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import VariableList from 'src/components/list/VariableList.vue';
-import { Variable } from 'leto-modelizer-plugin-core';
+import { Variable } from '@ditrit/leto-modelizer-plugin-core';
 
 installQuasarPlugin();
 

@@ -18,10 +18,9 @@ ARG TERRATOR_PLUGIN_VERSION
 ARG GITHUBATOR_PLUGIN_VERSION
 ARG KUBERNATOR_PLUGIN_VERSION
 WORKDIR /app
-RUN npm run plugin:install -- repository-name="terrator-plugin" repository-url="https://github.com/ditrit/terrator-plugin.git#${TERRATOR_PLUGIN_VERSION}"
-RUN npm run plugin:install -- repository-name="githubator-plugin" repository-url="https://github.com/ditrit/githubator-plugin.git#${GITHUBATOR_PLUGIN_VERSION}"
-RUN npm run plugin:install -- repository-name="kubernator-plugin" repository-url="https://github.com/ditrit/kubernator-plugin.git#${KUBERNATOR_PLUGIN_VERSION}"
-RUN npm run plugin:init
+RUN npm run plugin:install -- name="terrator-plugin" version="${TERRATOR_PLUGIN_VERSION}"
+RUN npm run plugin:install -- name="githubator-plugin" version="${GITHUBATOR_PLUGIN_VERSION}"
+RUN npm run plugin:install -- name="kubernator-plugin" version="${KUBERNATOR_PLUGIN_VERSION}"
 RUN npm run build
 
 # Production stage

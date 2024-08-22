@@ -3,7 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import ArrayInput from 'src/components/inputs/ArrayInput';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
-import { ComponentAttributeDefinition } from 'leto-modelizer-plugin-core';
+import { ComponentAttributeDefinition } from '@ditrit/leto-modelizer-plugin-core';
 
 installQuasarPlugin();
 

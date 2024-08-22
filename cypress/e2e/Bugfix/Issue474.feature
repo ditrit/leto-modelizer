@@ -15,13 +15,14 @@ Feature: Fix issue #474: Delete last component of model file, the file is delete
     # Model creation
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path='
+    Then I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path='
 
     # Click on component
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
     And  I wait 1 second
     And  I click on '[data-cy="component-definition_server"]'
     And  I wait 1 second
@@ -30,7 +31,7 @@ Feature: Fix issue #474: Delete last component of model file, the file is delete
     # Check project folders and files are created in Text view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    Then I expect current url is 'projectName/modelizer/text\?plugin=terrator-plugin&path='
+    Then I expect current url is 'projectName/modelizer/text\?plugin=@ditrit/terrator-plugin&path='
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_projectName"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_projectName/new_file.tf"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_projectName/README.md"]' exists
@@ -40,7 +41,7 @@ Feature: Fix issue #474: Delete last component of model file, the file is delete
     # Go to Draw view and delete component
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    Then I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path='
+    Then I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path='
 
     When I click on '.id_1.component .menu-button'
     And  I wait 1 second
@@ -53,7 +54,7 @@ Feature: Fix issue #474: Delete last component of model file, the file is delete
     # Go to Text view and check default file exists
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
-    Then I expect current url is 'projectName/modelizer/text\?plugin=terrator-plugin&path='
+    Then I expect current url is 'projectName/modelizer/text\?plugin=@ditrit/terrator-plugin&path='
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_projectName"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_projectName/new_file.tf"]' exists
 

@@ -29,7 +29,7 @@ import {
   gitAdd,
   gitCommit,
 } from 'src/composables/Git';
-import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
+import { FileInformation, FileInput } from '@ditrit/leto-modelizer-plugin-core';
 import Project from 'src/models/Project';
 
 jest.mock('browserfs', () => ({

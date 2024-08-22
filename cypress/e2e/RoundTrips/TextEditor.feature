@@ -56,15 +56,16 @@ Feature: Test roundtrip of the application: text editor
     # Create model
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ diagramFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ diagramFolder }}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform'
 
     # Go to text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ diagramFolder }}"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ diagramFolder }}/new_file.tf"]' exists
@@ -206,20 +207,20 @@ Feature: Test roundtrip of the application: text editor
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ diagramFolder }}/nestedFolder/notParsable.txt"]' exists
 
     ## 300 Select the file of another model should update url
-    And  I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}/nestedFolder'
+    And  I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}/nestedFolder'
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ diagramFolder }}/new_file.tf"]' exists
 
     When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ diagramFolder }}/new_file.tf"]'
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/rootFile.tf"]' exists
 
     When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/rootFile.tf"]'
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path='
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path='
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ diagramFolder }}/nestedFolder/notParsable.txt"]' exists
 
     ## 301 Select not parsable file should not update url
     When I double click on '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ diagramFolder }}/nestedFolder/notParsable.txt"]'
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path='
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path='
     And  I wait 1 second
 
     ## 400 Double click on a file should open a tab
@@ -563,16 +564,17 @@ Feature: Test roundtrip of the application: text editor
     # Create diagram with new_file.tf file
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
-    And  I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
+    And  I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'
 
     # Go to text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=infra'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path=infra'
     And  I expect '[data-cy="file-tabs-container"] [data-cy="active-tab"]' is 'new_file.tf'
 
     # Delete new_file.tf
@@ -587,15 +589,15 @@ Feature: Test roundtrip of the application: text editor
     Then I expect 'positive' toast to appear with text 'File is deleted.'
     And  I expect '[data-cy="delete-file-form"]' is closed
     And  I expect '[data-cy="file_{{ projectName }}/infra/new_file.tf"]' not exists
-    And  I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=infra'
+    And  I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path=infra'
 
     # Go back to the draw view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 2 seconds
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path=infra'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'
 
     # Add component
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
     Then I expect '[data-cy="component-definition_aws"]' exists
 
     When I click on '[data-cy="component-definition_aws"]'

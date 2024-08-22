@@ -4,7 +4,7 @@ import ImportModelTemplateForm from 'src/components/form/ImportModelTemplateForm
 import { Notify } from 'quasar';
 import { useRouter } from 'vue-router';
 import * as Project from 'src/composables/Project';
-import { FileInput } from 'leto-modelizer-plugin-core';
+import { FileInput } from '@ditrit/leto-modelizer-plugin-core';
 
 installQuasarPlugin({
   plugins: [Notify],

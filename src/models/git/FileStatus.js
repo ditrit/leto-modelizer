@@ -1,7 +1,7 @@
 /**
  * Represent a file with its git status.
  */
-import { FileInformation } from 'leto-modelizer-plugin-core';
+import { FileInformation } from '@ditrit/leto-modelizer-plugin-core';
 
 class FileStatus extends FileInformation {
   /**

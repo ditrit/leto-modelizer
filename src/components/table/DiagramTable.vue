@@ -33,7 +33,7 @@
     <template #body-cell-pluginIcon="{ row: { plugin } }">
       <q-td>
         <q-img
-          :src="`/plugins/${plugin}/icons/${plugin}.svg`"
+          :src="`/plugins/${plugin}/icons/logo.svg`"
           :alt="plugin"
           width="45px"
           height="45px"

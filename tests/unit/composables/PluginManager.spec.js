@@ -1,6 +1,6 @@
 import * as PluginManager from 'src/composables/PluginManager';
 import { deleteProjectFile, writeProjectFile, setFiles } from 'src/composables/Project';
-import { FileInformation, FileInput } from 'leto-modelizer-plugin-core';
+import { FileInformation, FileInput } from '@ditrit/leto-modelizer-plugin-core';
 
 jest.mock('src/plugins', () => ({
   test: class {

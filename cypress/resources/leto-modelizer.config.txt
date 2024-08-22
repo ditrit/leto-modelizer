@@ -1,6 +1,6 @@
 {
   "model": {
-    "terrator-plugin": {
+    "@ditrit/terrator-plugin": {
       "aws_1": {
         "x": 30,
         "y": 30,

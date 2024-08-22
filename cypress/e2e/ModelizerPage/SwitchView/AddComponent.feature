@@ -14,18 +14,19 @@ Feature: Test switch model to text view: add component/link
     # Model creation
     When I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
-    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is 'terrator-plugin'
+    And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
+    Then I expect '[data-cy="create-model-form"] [data-cy="plugin-select"]' is '@ditrit/terrator-plugin'
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
-    Then I expect current url is 'projectName/modelizer/draw\?plugin=terrator-plugin&path=infra'
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    Then I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform'
 
-    # Select 'terrator-plugin' library
-    When I click on '[data-cy="component-definitions-item_terrator-plugin"]'
+    # Select '@ditrit/terrator-plugin' library
+    When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
     And  I wait 1 second
-    Then I expect '[data-cy="component-definitions-item_terrator-plugin"].selected' exists
+    Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
 

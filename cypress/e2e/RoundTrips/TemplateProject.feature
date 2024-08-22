@@ -61,7 +61,7 @@ Feature: Test roundtrip of the application: project creation via template
 
     When I click on '[data-cy="diagram-table"] [data-cy="diagram-path_infra/dev"]'
     And  I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path=infra/dev'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path=infra/dev'
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/infra/dev/main.tf"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/infra/dev/provider.tf"]' exists
 
@@ -150,13 +150,13 @@ Feature: Test roundtrip of the application: project creation via template
 
     When I set on '[data-cy="import-model-template-form"] [data-cy="name-input"]' text '{{ diagramFolder }}/'
     And  I click on '[data-cy="import-model-template-form"] [data-cy="submit-button"]'
-    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=terrator-plugin&path={{ diagramFolder }}'
+    Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}'
     And  I expect '[data-cy="component-definitions-list"]' exists
-    And  I expect '[data-cy="component-definitions-item_terrator-plugin"] [data-cy="title"]' is 'terrator-plugin'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform'
 
     ## 401 Add diagram template should create diagram folders
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=terrator-plugin&path={{ diagramFolder }}'
+    Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ diagramFolder }}"]' exists
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/{{ diagramFile }}"]' exists

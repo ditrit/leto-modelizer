@@ -109,7 +109,7 @@ describe('Test component: LibraryList', () => {
         expect(wrapper.vm.drawerItems).toEqual([
           {
             id: 'pluginName',
-            title: 'pluginName',
+            title: 'pluginName.displayName',
             definitions: [{ type: 'componentType' }],
             size: 1,
             hasRole: true,

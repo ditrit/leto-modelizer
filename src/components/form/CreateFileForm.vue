@@ -44,7 +44,7 @@ import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
 import { notEmpty, isValidFileLabel, isUnique } from 'src/composables/QuasarFieldRule';
 import { createProjectFolder, writeProjectFile } from 'src/composables/Project';
-import { FileInput } from 'leto-modelizer-plugin-core';
+import { FileInput } from '@ditrit/leto-modelizer-plugin-core';
 import FileEvent from 'src/composables/events/FileEvent';
 
 const props = defineProps({
