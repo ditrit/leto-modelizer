@@ -481,6 +481,8 @@ export default {
         line: 'Start/End Line',
         column: 'Start/End Column',
         severity: 'Severity',
+        component: 'Component',
+        attribute: 'Attribute',
       },
     },
   },

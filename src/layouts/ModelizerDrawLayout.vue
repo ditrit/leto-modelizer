@@ -17,7 +17,7 @@
       <modelizer-draw-page />
     </q-page-container>
 
-    <console-footer is-diagram-error />
+    <console-footer editor-type="diagram" />
 
     <git-authentication-dialog :project-name="projectName" />
     <git-add-remote-dialog :project-name="projectName" />
