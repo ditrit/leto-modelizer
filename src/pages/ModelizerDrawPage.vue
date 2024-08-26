@@ -8,31 +8,30 @@
       @drop.prevent="dropHandler"
     />
 
-    <q-page-sticky :offset="[20, 20]">
-      <div class="row">
-        <q-btn
-          class="q-mr-md"
-          icon="fa-solid fa-sitemap"
-          :label="$t('page.diagrams.actions.rearrange')"
-          stack
-          no-caps
-          color="white"
-          text-color="black"
-          data-cy="rearrange-button"
-          @click="arrangeComponentsPosition()"
-        />
-        <q-btn
-          icon="fa-solid fa-image"
-          :label="$t('page.diagrams.actions.export')"
-          stack
-          no-caps
-          color="white"
-          text-color="black"
-          data-cy="export-button"
-          @click="exportSvg()"
-        />
-      </div>
-    </q-page-sticky>
+    <div class="row sticky-actions">
+      <q-btn
+        class="q-mr-md"
+        icon="fa-solid fa-sitemap"
+        :label="$t('page.diagrams.actions.rearrange')"
+        stack
+        no-caps
+        color="white"
+        text-color="primary"
+        data-cy="rearrange-button"
+        @click="arrangeComponentsPosition()"
+      />
+      <q-btn
+        class="q-mr-md"
+        icon="fa-solid fa-image"
+        :label="$t('page.diagrams.actions.export')"
+        stack
+        no-caps
+        color="white"
+        text-color="primary"
+        data-cy="export-button"
+        @click="exportSvg()"
+      />
+    </div>
   </q-page>
 </template>
 
@@ -331,6 +330,14 @@ onUnmounted(() => {
   pluginRequestSubscription.unsubscribe();
 });
 </script>
+
+<style lang="scss" scoped>
+.sticky-actions {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+</style>
 
 <style lang="scss">
 div#view-port, div#view-port svg.scene {
