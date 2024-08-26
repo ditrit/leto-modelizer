@@ -1,12 +1,5 @@
 <template>
-  <q-drawer
-    v-model="isVisible"
-    no-swipe-close
-    bordered
-    side="right"
-    :width="350"
-    data-cy="object-details-panel"
-  >
+  <div data-cy="object-details-panel">
     <q-list>
       <q-item>
         <q-item-section>
@@ -23,14 +16,14 @@
             flat
             icon="fa-solid fa-xmark"
             data-cy="close-button"
-            @click="isVisible = false"
+            @click="DrawerEvent.next({ type: 'close', key: 'ComponentDetailPanel'})"
           />
         </q-item-section>
       </q-item>
     </q-list>
 
     <div
-      v-if="originalComponent && isVisible"
+      v-if="originalComponent"
       class="col"
     >
       <q-form
@@ -63,7 +56,7 @@
         </attributes-list>
       </q-form>
     </div>
-  </q-drawer>
+  </div>
 </template>
 
 <script setup>
@@ -71,7 +64,7 @@ import {
   computed,
   ref,
   onMounted,
-  onUnmounted,
+  watch,
 } from 'vue';
 import { renderModel } from 'src/composables/PluginManager';
 import { useRoute } from 'vue-router';
@@ -83,11 +76,14 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  id: {
+    type: String,
+    default: '',
+  },
 });
 
 const selectedComponentExternalId = ref('');
 const selectedComponentAttributes = ref([]);
-const isVisible = ref(false);
 const submitting = ref(false);
 const currentError = ref(null);
 const form = ref(null);
@@ -95,8 +91,6 @@ const route = useRoute();
 const query = computed(() => route.query);
 const originalComponent = ref(null);
 const attributesUpdated = ref([]);
-
-let drawerEventSubscription;
 
 /**
  * Return the array of attributes with only needed attributes.
@@ -202,26 +196,13 @@ function getUnreferencedAttributes(component) {
 }
 
 /**
- * On 'Drawer' event type and 'select' action, display panel and init local values.
- * On 'Drawer' event type and 'delete' action, hide panel if component is corresponding.
- * @param {object} event - The triggered event.
- * @param {string} event.key - The key of event.
- * @param {string} event.type - The type of event, can be 'open' or 'close'.
- * @param {string} event.id - The component id.
+ * Initialize originalComponent and its attributes to be displayed.
+ * @param {string} id - Component Id.
  */
-function onDrawerEvent({ key, type, id }) {
-  if (key !== 'ComponentDetailPanel') {
+function initComponent(id) {
+  if (!id || id === '') {
     return;
   }
-
-  const isOpen = type === 'open';
-
-  if (!isOpen) {
-    isVisible.value = false;
-    return;
-  }
-
-  isVisible.value = true;
 
   originalComponent.value = props.plugin.data.getComponentById(id);
 
@@ -232,6 +213,10 @@ function onDrawerEvent({ key, type, id }) {
   ));
   attributesUpdated.value = [...selectedComponentAttributes.value];
 }
+
+watch(() => props.id, (id) => {
+  initComponent(id);
+});
 
 /**
  * Update attribute.
@@ -262,10 +247,6 @@ function clearError() {
 }
 
 onMounted(() => {
-  drawerEventSubscription = DrawerEvent.subscribe(onDrawerEvent);
-});
-
-onUnmounted(() => {
-  drawerEventSubscription.unsubscribe();
+  initComponent(props.id);
 });
 </script>
