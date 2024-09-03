@@ -234,6 +234,7 @@ To get the authentication setup, `backendUrl`is mandatory.
 
 **_NOTE_**: If the previous configuration is not present in the configuration file, Leto-Modelizer will be launched with the backend mode deactivated.
 **_NOTE_**: For now, there is no UI associated to the backend, but the UI for the admin is coming soon !
+**_NOTE_**: The AI tools are only available with the backend mode and it needs to be authenticated with Leto-Modelizer-Api.
 
 ## How to build this app
 
