@@ -51,6 +51,21 @@
               >
                 {{ $t('actions.models.create.button.template.name') }}
               </q-item>
+              <template v-if="HAS_BACKEND">
+                <q-separator />
+                <q-item
+                  clickable
+                  :label="$t('actions.models.create.button.ai.label')"
+                  :title="$t('actions.models.create.button.ai.title')"
+                  data-cy="create-diagram-from-ia-button"
+                  @click="DialogEvent.next({
+                    type: 'open',
+                    key: 'CreateAIModel',
+                  })"
+                >
+                  {{ $t('actions.models.create.button.ai.name') }}
+                </q-item>
+              </template>
             </q-list>
           </q-menu>
         </q-btn>
@@ -141,6 +156,7 @@ const selectedTags = ref([]);
 const categoryTags = ref(getAllTagsByType('category'));
 const isDiagramGrid = ref(getUserSetting('displayType') === 'grid');
 const viewType = computed(() => route.params.viewType);
+const HAS_BACKEND = computed(() => process.env.HAS_BACKEND);
 
 let updateModelSubscription;
 

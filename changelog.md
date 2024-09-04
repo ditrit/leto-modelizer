@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Improve dockerfile with version of plugins as argument. 
 * Export diagram as svg.
 * Error management on monaco editor and error footer.
+* Generate diagrams from AI proxy.
 
 ### Changed
 
