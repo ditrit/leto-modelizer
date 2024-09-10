@@ -301,6 +301,29 @@ export async function getFileInputs(plugin, fileInformations) {
 }
 
 /**
+ * Get all files of a diagram.
+ * @param {string} projectName - Project name.
+ * @param {object} plugin - Plugin to get configuration and select files.
+ * @param {string} diagramPath - Diagram path.
+ * @returns {Promise<FileInput[]>} Promise that contains all diagram files.
+ */
+export async function getDiagramFiles(projectName, plugin, diagramPath) {
+  let filesInformation;
+
+  if (plugin.configuration.isFolderTypeDiagram) {
+    filesInformation = [];
+
+    await setFiles(filesInformation, projectName, diagramPath);
+
+    filesInformation = filesInformation.filter((file) => plugin.isParsable(file));
+  } else {
+    filesInformation = [new FileInformation({ path: `${projectName}/${diagramPath}` })];
+  }
+
+  return getFileInputs(plugin, filesInformation);
+}
+
+/**
  * Init components.
  * @param {string} projectName - Name of the project.
  * @param {object} plugin - Plugin corresponding to the model.
@@ -308,19 +331,7 @@ export async function getFileInputs(plugin, fileInformations) {
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
 export async function initComponents(projectName, plugin, path) {
-  let filesInformation;
-
-  if (plugin.configuration.isFolderTypeDiagram) {
-    filesInformation = [];
-
-    await setFiles(filesInformation, projectName, path);
-
-    filesInformation = filesInformation.filter((file) => plugin.isParsable(file));
-  } else {
-    filesInformation = [new FileInformation({ path: `${projectName}/${path}` })];
-  }
-
-  const fileInputs = await getFileInputs(plugin, filesInformation);
+  const fileInputs = await getDiagramFiles(projectName, plugin, path);
 
   const config = await readProjectFile(
     new FileInformation({
