@@ -6,6 +6,7 @@ import Project from 'src/composables/Project';
 import GitEvent from 'src/composables/events/GitEvent';
 import FileEvent from 'src/composables/events/FileEvent';
 import LogEvent from 'src/composables/events/LogEvent';
+import DrawerEvent from 'src/composables/events/DrawerEvent';
 
 installQuasarPlugin();
 
@@ -107,6 +108,10 @@ jest.mock('src/composables/events/FileEvent', () => ({
   },
 }));
 
+jest.mock('src/composables/events/DrawerEvent', () => ({
+  subscribe: jest.fn(),
+}));
+
 describe('Test component: MonacoEditor', () => {
   let wrapper;
   let checkoutSubscribe;
@@ -115,6 +120,8 @@ describe('Test component: MonacoEditor', () => {
   let addRemoteUnsubscribe;
   let pullSubscribe;
   let pullUnsubscribe;
+  let drawerEventSubscribe;
+  let drawerEventUnsubscribe;
 
   const dispose = jest.fn();
   const layout = jest.fn();
@@ -141,6 +148,8 @@ describe('Test component: MonacoEditor', () => {
     addRemoteUnsubscribe = jest.fn();
     pullSubscribe = jest.fn();
     pullUnsubscribe = jest.fn();
+    drawerEventSubscribe = jest.fn();
+    drawerEventUnsubscribe = jest.fn();
 
     GitEvent.CheckoutEvent.subscribe.mockImplementation(() => {
       checkoutSubscribe();
@@ -153,6 +162,10 @@ describe('Test component: MonacoEditor', () => {
     GitEvent.PullEvent.subscribe.mockImplementation(() => {
       pullSubscribe();
       return { unsubscribe: pullUnsubscribe };
+    });
+    DrawerEvent.subscribe.mockImplementation(() => {
+      drawerEventSubscribe();
+      return { unsubscribe: drawerEventUnsubscribe };
     });
 
     wrapper = shallowMount(MonacoEditor, {
@@ -195,6 +208,21 @@ describe('Test component: MonacoEditor', () => {
     });
   });
 
+  describe('Test function: onDrawerEvent', () => {
+    it('should set wanted height depend on called type', () => {
+      expect(wrapper.vm.reservedHeight).toEqual(37);
+
+      wrapper.vm.onDrawerEvent({ key: 'bad' });
+      expect(wrapper.vm.reservedHeight).toEqual(37);
+
+      wrapper.vm.onDrawerEvent({ key: 'ConsoleFooter', type: 'open' });
+      expect(wrapper.vm.reservedHeight).toEqual(413);
+
+      wrapper.vm.onDrawerEvent({ key: 'ConsoleFooter', type: 'close' });
+      expect(wrapper.vm.reservedHeight).toEqual(37);
+    });
+  });
+
   describe('Test function: updateMarkers', () => {
     it('should emit event and set markers', () => {
       wrapper.vm.updateMarkers('path', 'content');
@@ -205,7 +233,7 @@ describe('Test component: MonacoEditor', () => {
 
   describe('Test function: updateEditorLayout', () => {
     it('should be called', () => {
-      expect(layout).toHaveBeenCalledTimes(0);
+      layout.mockClear();
       wrapper.vm.container = {
         offsetHeight: 10,
         offsetWidth: 11,
@@ -270,6 +298,10 @@ describe('Test component: MonacoEditor', () => {
     it('should subscribe to PullEvent', () => {
       expect(pullSubscribe).toHaveBeenCalledTimes(1);
     });
+
+    it('should subscribe to DrawerEvent', () => {
+      expect(drawerEventSubscribe).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('Test hook function: onUnmounted', () => {
@@ -289,6 +321,12 @@ describe('Test component: MonacoEditor', () => {
       expect(pullUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(pullUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to DrawerEvent', () => {
+      expect(drawerEventUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(drawerEventUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
