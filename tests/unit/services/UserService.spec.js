@@ -1,4 +1,4 @@
-import { api } from 'src/boot/axios';
+import { api, makeFilterRequest, prepareQueryParameters } from 'src/boot/axios';
 import * as UserService from 'src/services/UserService';
 import { setActivePinia, createPinia } from 'pinia';
 import { useUserStore } from 'src/stores/UserStore';
@@ -7,6 +7,8 @@ jest.mock('src/boot/axios', () => ({
   api: {
     get: jest.fn(),
   },
+  prepareQueryParameters: jest.fn(() => '?test=test'),
+  makeFilterRequest: jest.fn(() => Promise.resolve()),
 }));
 
 describe('User Authentication', () => {
@@ -93,6 +95,17 @@ describe('User Authentication', () => {
           action: 'CREATE',
         },
       ]);
+    });
+  });
+
+  describe('Test function getUserAIConversations', () => {
+    it('should call valid functions', async () => {
+      prepareQueryParameters.mockClear();
+      makeFilterRequest.mockClear();
+      await UserService.getUserAIConversations({});
+
+      expect(prepareQueryParameters).toBeCalled();
+      expect(makeFilterRequest).toBeCalledWith(api, '/users/me/ai/conversations?test=test');
     });
   });
 });
