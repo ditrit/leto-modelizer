@@ -285,6 +285,7 @@ export default {
     },
     diagrams: {
       actions: {
+        askAI: 'Ask AI',
         export: 'Export SVG',
         rearrange: 'Rearrange',
         zoomPlus: 'Zoom+',
@@ -342,6 +343,21 @@ export default {
         },
       },
       drawer: {
+        aichat: {
+          title: 'Ask AI',
+          settings: {
+            title: 'Settings',
+            delete: 'Delete conversation',
+            typingEffect: 'Progressive Typing:',
+          },
+          sendMessage: 'Message to AI',
+          moreMessages: 'Load more messages',
+          dialog: {
+            title: 'Confirm delete conversation',
+            description: 'Are you sure you want to delete this conversation with the AI?<br/>This action is irreversible and the conversation history will be permanently removed.',
+            confirmDelete: '',
+          },
+        },
         components: {
           header: 'Components definitions',
           filterLabel: 'Component filter',
