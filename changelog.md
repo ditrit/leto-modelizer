@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Export diagram as svg.
 * Error management on monaco editor and error footer.
 * Generate diagrams from AI proxy.
+* Add chat to discuss with AI.
 
 ### Changed
 
@@ -49,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Replaced old authentication (Parse) by the new Leto-Modelize-Api (Java/Spring).
 * Use display name of plugin.
 * Use new logo of plugin.
+* Improve drawer to modify Component details, permit to resize it.
 
 ### Fixed
 
@@ -62,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix bug on creating folder with same name as root folder, see [this issue](https://github.com/ditrit/leto-modelizer/issues/393).
 * Fix bug on missing file name in config file when using githubator-plugin, see [this issue](https://github.com/ditrit/leto-modelizer/issues/465).
 * Fix bug on deleting last component of model file, the file is deleted and model is no longer displayed in the list, see [this issue](https://github.com/ditrit/leto-modelizer/issues/474).
+* Fix some unwanted scroll appear. 
 
 ### Removed
 
