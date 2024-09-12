@@ -5,7 +5,17 @@
     />
     <modelizer-text-left-drawer />
     <q-page-container>
-      <modelizer-text-page />
+      <q-splitter
+        v-model="splitter"
+        :limits="[50, 100]"
+        separator-class="separator-class"
+        :class="isVisible ? '' : 'splitter-invisible'"
+        :style="{ height: `calc(100vh - ${reservedHeight + 70}px)` }"
+      >
+        <template #before>
+          <modelizer-text-page />
+        </template>
+      </q-splitter>
     </q-page-container>
 
     <console-footer />
@@ -43,19 +53,23 @@ import GitLogDialog from 'src/components/dialog/GitLogDialog.vue';
 import {
   computed,
   onMounted,
-  onUnmounted,
+  onUnmounted, ref,
 } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import FileEvent from 'src/composables/events/FileEvent';
 import { getPluginByName, getPlugins } from 'src/composables/PluginManager';
+import DrawerEvent from 'src/composables/events/DrawerEvent';
 
 const route = useRoute();
 const router = useRouter();
 
 const query = computed(() => route.query);
 const projectName = computed(() => route.params.projectName);
+const splitter = ref(100);
+const reservedHeight = ref(37);
 
 let selectFileTabSubscription;
+let drawerEventSubscription;
 
 /**
  * Update the path of the query if necessary.
@@ -84,13 +98,27 @@ async function onSelectFileTab(event) {
   }
 }
 
+/**
+ * Manage reserved height for footer.
+ * @param {object} event - The triggered event.
+ * @param {string} event.key - The key of event.
+ * @param {string} event.type - The type of event, can be 'open' or 'close'.
+ */
+function onDrawerEvent({ key, type }) {
+  if (key === 'ConsoleFooter') {
+    reservedHeight.value = type === 'open' ? 413 : 37;
+  }
+}
+
 onMounted(() => {
   selectFileTabSubscription = FileEvent.SelectFileTabEvent.subscribe(
     (e) => { onSelectFileTab(e); },
   );
+  drawerEventSubscription = DrawerEvent.subscribe(onDrawerEvent);
 });
 
 onUnmounted(() => {
   selectFileTabSubscription.unsubscribe();
+  drawerEventSubscription.unsubscribe();
 });
 </script>

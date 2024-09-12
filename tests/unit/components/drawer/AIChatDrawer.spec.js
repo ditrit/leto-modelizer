@@ -165,10 +165,10 @@ describe('Test component: AIChatDrawer', () => {
     });
   });
 
-  describe('Test function clearConversation', () => {
+  describe('Test function deleteConversation', () => {
     it('should open dialog', () => {
       DialogEvent.next.mockClear();
-      wrapper.vm.clearConversation();
+      wrapper.vm.deleteConversation();
       expect(DialogEvent.next).toBeCalledWith({
         key: 'DeleteAIConversation',
         type: 'open',
@@ -179,11 +179,11 @@ describe('Test component: AIChatDrawer', () => {
     });
   });
 
-  describe('Test function: clean', () => {
+  describe('Test function: cleanVariables', () => {
     it('should not reset on bad key or type', () => {
       wrapper.vm.haveMoreMessages = true;
-      wrapper.vm.clean({ key: 'bad', type: 'open' });
-      wrapper.vm.clean({ key: 'bad', type: 'close' });
+      wrapper.vm.cleanVariables({ key: 'bad', type: 'open' });
+      wrapper.vm.cleanVariables({ key: 'bad', type: 'close' });
 
       expect(wrapper.vm.haveMoreMessages).toEqual(true);
     });
@@ -192,7 +192,7 @@ describe('Test component: AIChatDrawer', () => {
       wrapper.vm.messages = ['test'];
       wrapper.vm.haveMoreMessages = true;
       wrapper.vm.lastAIMessage = {};
-      wrapper.vm.clean({ key: 'DeleteAIConversation', type: 'close' });
+      wrapper.vm.cleanVariables({ key: 'DeleteAIConversation', type: 'close' });
 
       expect(wrapper.vm.messages).toEqual([]);
       expect(wrapper.vm.haveMoreMessages).toEqual(false);

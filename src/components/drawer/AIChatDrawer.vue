@@ -108,8 +108,8 @@
                   no-caps
                   icon="fa-solid fa-trash"
                   :loading="submitting"
-                  :label="$t('page.modelizer.drawer.aichat.settings.clear')"
-                  @click="clearConversation"
+                  :label="$t('page.modelizer.drawer.aichat.settings.delete')"
+                  @click="deleteConversation"
                 >
                   <template #loading>
                     <q-spinner-bars />
@@ -310,7 +310,7 @@ async function loadMoreMessage() {
  * Clear conversation and delete all messages.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-async function clearConversation() {
+async function deleteConversation() {
   DialogEvent.next({
     key: 'DeleteAIConversation',
     type: 'open',
@@ -321,12 +321,12 @@ async function clearConversation() {
 }
 
 /**
- * Clean variable after deleting conversation.
+ * Clean variables after deleting conversation.
  * @param {object} event - Dialog event.
  * @param {string} event.key - Event key.
  * @param {string} event.type - Open or close.
  */
-function clean({ key, type }) {
+function cleanVariables({ key, type }) {
   if (type === 'close' && key === 'DeleteAIConversation') {
     messages.value = [];
     oldestDate = null;
@@ -338,7 +338,7 @@ function clean({ key, type }) {
 onMounted(() => {
   progressiveTyping.value = localStorage.getItem('ai-typing-speed') === 'progressive';
   loadMoreMessage().then(scrollToBottom);
-  dialogEventSubscription = DialogEvent.subscribe(clean);
+  dialogEventSubscription = DialogEvent.subscribe(cleanVariables);
 });
 
 onUnmounted(() => {
