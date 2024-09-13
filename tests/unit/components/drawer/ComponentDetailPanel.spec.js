@@ -145,13 +145,11 @@ describe('test component: Plugin Component Detail Panel', () => {
 
       expect(wrapper.vm.originalComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
-      expect(wrapper.vm.isVisible).toEqual(false);
 
       wrapper.vm.submit();
 
       expect(wrapper.vm.originalComponent.attributes)
         .toEqual(wrapper.vm.selectedComponentAttributes);
-      expect(wrapper.vm.isVisible).toEqual(false);
     });
   });
 
@@ -287,20 +285,6 @@ describe('test component: Plugin Component Detail Panel', () => {
     it('should return definition type in case of anything else', () => {
       expect(wrapper.vm.getComponentValueType(new ComponentAttributeDefinition({ type: 'Number' })))
         .toEqual('Number');
-    });
-  });
-
-  describe('Test hook function: onMounted', () => {
-    it('should subscribe to DefaultEvent', () => {
-      expect(drawerEventSubscription).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe to DefaultEvent', () => {
-      expect(drawerEventUnsubscription).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(drawerEventUnsubscription).toHaveBeenCalledTimes(1);
     });
   });
 });

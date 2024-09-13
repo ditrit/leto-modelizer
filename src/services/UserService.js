@@ -1,4 +1,4 @@
-import { api } from 'boot/axios';
+import { api, makeFilterRequest, prepareQueryParameters } from 'boot/axios';
 import { useUserStore } from 'src/stores/UserStore';
 
 /**
@@ -16,6 +16,17 @@ export async function getCurrent() {
  */
 export async function getUserPermissions() {
   return api.get('/users/me/permissions');
+}
+
+/**
+ * Retrieve (GET request) all conversations of a user.
+ * @param {object} filters - Query parameters filters.
+ * @returns {Promise<object>} Return response data.
+ */
+export async function getUserAIConversations(filters) {
+  const queryParameters = prepareQueryParameters(filters);
+
+  return makeFilterRequest(api, `/users/me/ai/conversations${queryParameters}`);
 }
 
 /**

@@ -24,7 +24,8 @@
     >
       <q-tab-panel
         name="errors"
-        class="text-h6"
+        class="text-h6 q-pa-none"
+        style="max-height: 379px; height: 379px; overflow-y: auto;"
       >
         <errors-table
           :errors="logs"
@@ -43,6 +44,7 @@ import {
 } from 'vue';
 import ErrorsTable from 'components/table/ErrorsTable';
 import LogEvent from 'src/composables/events/LogEvent';
+import DrawerEvent from 'src/composables/events/DrawerEvent';
 
 const props = defineProps({
   editorType: {
@@ -69,6 +71,11 @@ function toggleTab(tabName) {
   if (!openedTab.open) {
     selectedTab.value = null;
   }
+
+  DrawerEvent.next({
+    type: openedTab.open ? 'open' : 'close',
+    key: 'ConsoleFooter',
+  });
 }
 
 /**
@@ -94,5 +101,6 @@ onUnmounted(() => {
 .console-footer {
   background-color: white;
   color: black;
+  max-height: 413px;
 }
 </style>

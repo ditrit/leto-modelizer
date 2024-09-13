@@ -2,6 +2,7 @@
   <div
     class="monaco-editor"
     data-cy="monaco-editor"
+    :style="{ height: `calc(100vh - ${reservedHeight + 188}px)` }"
   >
     <div
       id="container"
@@ -31,6 +32,7 @@ import Languages from 'assets/editor/languages';
 import { FileInput } from '@ditrit/leto-modelizer-plugin-core';
 import { useI18n } from 'vue-i18n';
 import LogEvent from 'src/composables/events/LogEvent';
+import DrawerEvent from 'src/composables/events/DrawerEvent';
 
 const { t } = useI18n();
 const props = defineProps({
@@ -45,6 +47,7 @@ const props = defineProps({
 });
 
 const container = ref(null);
+const reservedHeight = ref(37);
 
 let monaco;
 let editor;
@@ -52,6 +55,7 @@ let timer;
 let checkoutSubscription;
 let addRemoteSubscription;
 let pullSubscription;
+let drawerEventSubscription;
 
 /**
  * Update markers of monaco editors to display error/warning.
@@ -213,16 +217,23 @@ onBeforeMount(async () => {
   }
 });
 
+/**
+ * Manage reserved height of footer.
+ * @param {object} event - The triggered event.
+ * @param {string} event.key - The key of event.
+ * @param {string} event.type - The type of event, can be 'open' or 'close'.
+ */
+function onDrawerEvent({ key, type }) {
+  if (key === 'ConsoleFooter') {
+    reservedHeight.value = type === 'open' ? 413 : 37;
+  }
+}
+
 onMounted(() => {
-  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(() => {
-    updateEditorContent();
-  });
-  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(() => {
-    updateEditorContent();
-  });
-  pullSubscription = GitEvent.PullEvent.subscribe(() => {
-    updateEditorContent();
-  });
+  checkoutSubscription = GitEvent.CheckoutEvent.subscribe(updateEditorContent);
+  addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(updateEditorContent);
+  pullSubscription = GitEvent.PullEvent.subscribe(updateEditorContent);
+  drawerEventSubscription = DrawerEvent.subscribe(onDrawerEvent);
 });
 
 onUpdated(async () => {
@@ -233,6 +244,7 @@ onUnmounted(() => {
   checkoutSubscription.unsubscribe();
   addRemoteSubscription.unsubscribe();
   pullSubscription.unsubscribe();
+  drawerEventSubscription.unsubscribe();
 });
 </script>
 
@@ -241,8 +253,6 @@ onUnmounted(() => {
   overflow: hidden;
   flex-direction: column;
   margin-top: 2.5rem;
-  //225px is the combined navbar + file tabs height + console footer min size
-  height: calc(100vh - 225px);
 
   #container {
     height: 100%;

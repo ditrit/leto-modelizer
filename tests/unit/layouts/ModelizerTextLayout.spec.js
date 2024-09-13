@@ -4,6 +4,7 @@ import FileEvent from 'src/composables/events/FileEvent';
 import ModelizerTextLayout from 'src/layouts/ModelizerTextLayout.vue';
 import { useRouter } from 'vue-router';
 import { getPluginByName, getPlugins } from 'src/composables/PluginManager';
+import DrawerEvent from 'src/composables/events/DrawerEvent';
 
 installQuasarPlugin();
 
@@ -24,6 +25,10 @@ jest.mock('src/composables/events/FileEvent', () => ({
   SelectFileTabEvent: {
     subscribe: jest.fn(),
   },
+}));
+
+jest.mock('src/composables/events/DrawerEvent', () => ({
+  subscribe: jest.fn(),
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -55,11 +60,15 @@ describe('Test component: ModelizerTextLayout', () => {
   let wrapper;
   let selectFileTabEventSubscribe;
   let selectFileTabEventUnsubscribe;
+  let drawerEventSubscribe;
+  let drawerEventUnsubscribe;
   let useRouterPush;
 
   beforeEach(() => {
     selectFileTabEventSubscribe = jest.fn();
     selectFileTabEventUnsubscribe = jest.fn();
+    drawerEventSubscribe = jest.fn();
+    drawerEventUnsubscribe = jest.fn();
     useRouterPush = jest.fn();
 
     useRouter.mockImplementation(() => ({
@@ -71,6 +80,11 @@ describe('Test component: ModelizerTextLayout', () => {
       return { unsubscribe: selectFileTabEventUnsubscribe };
     });
 
+    DrawerEvent.subscribe.mockImplementation(() => {
+      drawerEventSubscribe();
+      return { unsubscribe: drawerEventUnsubscribe };
+    });
+
     wrapper = shallowMount(ModelizerTextLayout, {});
   });
 
@@ -79,6 +93,22 @@ describe('Test component: ModelizerTextLayout', () => {
       it('should match "project-00000000"', () => {
         expect(wrapper.vm.projectName).toEqual('project-00000000');
       });
+    });
+  });
+
+  describe('Test function: onDrawerEvent', () => {
+    it('should set reservedHeight on consoleFooter event', () => {
+      wrapper.vm.onDrawerEvent({ key: 'ConsoleFooter', type: 'open' });
+      expect(wrapper.vm.reservedHeight).toEqual(413);
+
+      wrapper.vm.onDrawerEvent({ key: 'other', type: 'close' });
+      expect(wrapper.vm.reservedHeight).toEqual(413);
+
+      wrapper.vm.onDrawerEvent({ key: 'ConsoleFooter', type: 'close' });
+      expect(wrapper.vm.reservedHeight).toEqual(37);
+
+      wrapper.vm.onDrawerEvent({ key: 'other', type: 'open' });
+      expect(wrapper.vm.reservedHeight).toEqual(37);
     });
   });
 
@@ -183,6 +213,10 @@ describe('Test component: ModelizerTextLayout', () => {
     it('should subscribe to SelectFileTabEvent', () => {
       expect(selectFileTabEventSubscribe).toHaveBeenCalledTimes(1);
     });
+
+    it('should subscribe to DrawerEvent', () => {
+      expect(drawerEventSubscribe).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('Test hook function: onUnmounted', () => {
@@ -190,6 +224,12 @@ describe('Test component: ModelizerTextLayout', () => {
       expect(selectFileTabEventUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(selectFileTabEventUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe to DrawerEvent', () => {
+      expect(drawerEventUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(drawerEventUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

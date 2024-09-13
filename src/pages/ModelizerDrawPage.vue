@@ -8,31 +8,41 @@
       @drop.prevent="dropHandler"
     />
 
-    <q-page-sticky :offset="[20, 20]">
-      <div class="row">
-        <q-btn
-          class="q-mr-md"
-          icon="fa-solid fa-sitemap"
-          :label="$t('page.diagrams.actions.rearrange')"
-          stack
-          no-caps
-          color="white"
-          text-color="black"
-          data-cy="rearrange-button"
-          @click="arrangeComponentsPosition()"
-        />
-        <q-btn
-          icon="fa-solid fa-image"
-          :label="$t('page.diagrams.actions.export')"
-          stack
-          no-caps
-          color="white"
-          text-color="black"
-          data-cy="export-button"
-          @click="exportSvg()"
-        />
-      </div>
-    </q-page-sticky>
+    <div class="row sticky-actions">
+      <q-btn
+        class="q-mr-md"
+        icon="fa-solid fa-sitemap"
+        :label="$t('page.diagrams.actions.rearrange')"
+        stack
+        no-caps
+        color="white"
+        text-color="primary"
+        data-cy="rearrange-button"
+        @click="arrangeComponentsPosition()"
+      />
+      <q-btn
+        class="q-mr-md"
+        icon="fa-solid fa-image"
+        :label="$t('page.diagrams.actions.export')"
+        stack
+        no-caps
+        color="white"
+        text-color="primary"
+        data-cy="export-button"
+        @click="exportSvg()"
+      />
+      <q-btn
+        v-if="HAS_BACKEND"
+        icon="fa-solid fa-brain"
+        :label="$t('page.diagrams.actions.askAI')"
+        stack
+        no-caps
+        color="white"
+        text-color="primary"
+        data-cy="askAI-button"
+        @click="askAI()"
+      />
+    </div>
   </q-page>
 </template>
 
@@ -63,6 +73,7 @@ import DrawerEvent from 'src/composables/events/DrawerEvent';
 const { t } = useI18n();
 const route = useRoute();
 
+const HAS_BACKEND = computed(() => process.env.HAS_BACKEND);
 const projectName = computed(() => route.params.projectName);
 const query = computed(() => route.query);
 
@@ -73,6 +84,8 @@ const templates = ref([]);
 
 let pluginDefaultSubscription;
 let pluginRequestSubscription;
+let drawerEventSubscription;
+let aiDrawerNextState = 'open';
 
 /**
  * On 'Drawer' event type, call renderConfiguration if action is 'move',
@@ -316,21 +329,53 @@ async function arrangeComponentsPosition() {
   );
 }
 
+/**
+ * Open AI drawer.
+ */
+function askAI() {
+  DrawerEvent.next({
+    type: 'close',
+    key: 'ComponentDetailPanel',
+  });
+  DrawerEvent.next({
+    type: aiDrawerNextState,
+    key: 'AIChatDrawer',
+  });
+}
+
+/**
+ * Set the state of AI chat Drawer.
+ * @param {object} event - The triggered event.
+ * @param {string} event.key - The key of event.
+ * @param {string} event.type - The type of event, can be 'open' or 'close'.
+ */
+function setAIDrawerNextState({ key, type }) {
+  if (key === 'AIChatDrawer') {
+    aiDrawerNextState = type === 'close' ? 'open' : 'close';
+  }
+}
+
 onMounted(async () => {
-  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe((event) => {
-    onDefaultEvent(event);
-  });
-  pluginRequestSubscription = PluginEvent.RequestEvent.subscribe((event) => {
-    onRequestEvent(event);
-  });
+  pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(onDefaultEvent);
+  pluginRequestSubscription = PluginEvent.RequestEvent.subscribe(onRequestEvent);
+  drawerEventSubscription = DrawerEvent.subscribe(setAIDrawerNextState);
   await initView();
 });
 
 onUnmounted(() => {
   pluginDefaultSubscription.unsubscribe();
   pluginRequestSubscription.unsubscribe();
+  drawerEventSubscription.unsubscribe();
 });
 </script>
+
+<style lang="scss" scoped>
+.sticky-actions {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+</style>
 
 <style lang="scss">
 div#view-port, div#view-port svg.scene {

@@ -241,7 +241,7 @@ Feature: Test roundtrip of the application: draw editor
     When I force click on '.id_3.component .menu-button'
     And  I click on '[data-cy="delete-button"]'
     And  I wait 1 second
-    Then I expect '[data-cy="object-details-panel"]' to be hidden
+    Then I expect '[data-cy="object-details-panel"]' not exists
     And  I expect '.id_3.component' not exists
 
     # TODO: Uncomment when following bug will be fixed (https://github.com/ditrit/@ditrit/terrator-plugin/issues/98)

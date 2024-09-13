@@ -78,6 +78,7 @@ jest.mock('src/composables/events/PluginEvent', () => ({
 
 jest.mock('src/composables/events/DrawerEvent', () => ({
   next: jest.fn(),
+  subscribe: jest.fn(),
 }));
 
 describe('Test page component: ModelizerDrawPage', () => {
@@ -86,12 +87,16 @@ describe('Test page component: ModelizerDrawPage', () => {
   let pluginDefaultUnsubscribe;
   let pluginRequestSubscribe;
   let pluginRequestUnsubscribe;
+  let drawerEventSubscribe;
+  let drawerEventUnsubscribe;
 
   beforeEach(() => {
     pluginDefaultSubscribe = jest.fn();
     pluginDefaultUnsubscribe = jest.fn();
     pluginRequestSubscribe = jest.fn();
     pluginRequestUnsubscribe = jest.fn();
+    drawerEventSubscribe = jest.fn();
+    drawerEventUnsubscribe = jest.fn();
 
     PluginEvent.DefaultEvent.subscribe.mockImplementation(() => {
       pluginDefaultSubscribe();
@@ -101,6 +106,11 @@ describe('Test page component: ModelizerDrawPage', () => {
     PluginEvent.RequestEvent.subscribe.mockImplementation(() => {
       pluginRequestSubscribe();
       return { unsubscribe: pluginRequestUnsubscribe };
+    });
+
+    DrawerEvent.subscribe.mockImplementation(() => {
+      drawerEventSubscribe();
+      return { unsubscribe: drawerEventUnsubscribe };
     });
 
     wrapper = shallowMount(ModelizerDrawPage);
@@ -374,12 +384,65 @@ describe('Test page component: ModelizerDrawPage', () => {
     });
   });
 
+  describe('Test function: askAI', () => {
+    it('should call DrawerEvent twice', () => {
+      DrawerEvent.next.mockClear();
+      wrapper.vm.askAI();
+
+      expect(DrawerEvent.next).toHaveBeenCalledTimes(2);
+      expect(DrawerEvent.next.mock.calls).toEqual([
+        [{ key: 'ComponentDetailPanel', type: 'close' }],
+        [{ key: 'AIChatDrawer', type: 'open' }],
+      ]);
+    });
+  });
+
+  describe('Test function: setAIDrawerNextState', () => {
+    it('should not change set state on invalid key', () => {
+      DrawerEvent.next.mockClear();
+      wrapper.vm.setAIDrawerNextState({ key: 'invalid', type: 'open' });
+      wrapper.vm.askAI();
+      expect(DrawerEvent.next.mock.calls).toEqual([
+        [{ key: 'ComponentDetailPanel', type: 'close' }],
+        [{ key: 'AIChatDrawer', type: 'open' }],
+      ]);
+
+      DrawerEvent.next.mockClear();
+      wrapper.vm.setAIDrawerNextState({ key: 'invalid', type: 'close' });
+      wrapper.vm.askAI();
+      expect(DrawerEvent.next.mock.calls).toEqual([
+        [{ key: 'ComponentDetailPanel', type: 'close' }],
+        [{ key: 'AIChatDrawer', type: 'open' }],
+      ]);
+    });
+
+    it('should set state', () => {
+      DrawerEvent.next.mockClear();
+      wrapper.vm.setAIDrawerNextState({ key: 'AIChatDrawer', type: 'open' });
+      wrapper.vm.askAI();
+      expect(DrawerEvent.next.mock.calls).toEqual([
+        [{ key: 'ComponentDetailPanel', type: 'close' }],
+        [{ key: 'AIChatDrawer', type: 'close' }],
+      ]);
+
+      DrawerEvent.next.mockClear();
+      wrapper.vm.setAIDrawerNextState({ key: 'AIChatDrawer', type: 'close' });
+      wrapper.vm.askAI();
+      expect(DrawerEvent.next.mock.calls).toEqual([
+        [{ key: 'ComponentDetailPanel', type: 'close' }],
+        [{ key: 'AIChatDrawer', type: 'open' }],
+      ]);
+    });
+  });
+
   describe('Test hook function: onMounted', () => {
     it('should subscribe DefaultEvent', () => {
       expect(pluginDefaultSubscribe).toHaveBeenCalledTimes(1);
-    });
-    it('should subscribe DefaultEvent', () => {
       expect(pluginRequestSubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should subscribe DrawerEvent', () => {
+      expect(drawerEventSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -390,6 +453,12 @@ describe('Test page component: ModelizerDrawPage', () => {
       wrapper.unmount();
       expect(pluginDefaultUnsubscribe).toHaveBeenCalledTimes(1);
       expect(pluginRequestUnsubscribe).toHaveBeenCalledTimes(1);
+    });
+
+    it('should unsubscribe DrawerEvent', () => {
+      expect(drawerEventUnsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(drawerEventUnsubscribe).toHaveBeenCalledTimes(1);
     });
   });
 });

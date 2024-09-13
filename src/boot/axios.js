@@ -43,6 +43,43 @@ api.interceptors.response.use(
 );
 
 /**
+ * Make a filter request (GET) to the specified URL using the provided API.
+ * @param {object} apiInstance - The API object used to make the request.
+ * @param {string} url - The URL to make the filter request to.
+ * @returns {Promise<object>} The response data of the filter request.
+ */
+async function makeFilterRequest(apiInstance, url) {
+  return apiInstance.get(url).then((data) => {
+    if (data.totalPages > 0 && data.pageable.pageNumber + 1 > data.totalPages) {
+      // TODO : for now we don't have any entity attribute name that ends with 'page'.
+      // Be careful if this case arises, you'll need to adjust the regex.
+      const newUrl = url.replace(/page=\d+/, `page=${data.totalPages - 1}`);
+      return makeFilterRequest(apiInstance, newUrl);
+    }
+
+    return data;
+  });
+}
+
+/**
+ * Transform filters into query parameters string.
+ * @param {object} filters - API Filters.
+ * @returns {string} Formatted string to put in url, works even if there are no filters.
+ */
+function prepareQueryParameters(filters = {}) {
+  const queryParameters = Object.keys(filters)
+    .map((key) => ({ key, value: `${filters[key]}` }))
+    .filter(({ value }) => value?.length > 0)
+    .map(({ key, value }) => `${key}=${encodeURIComponent(value)}`);
+
+  if (queryParameters.length === 0) {
+    return '';
+  }
+
+  return `?${queryParameters.join('&')}`;
+}
+
+/**
  * Asynchronously prepares a request by ensuring the availability of a valid CSRF token.
  *
  * This function uses a CSRF token to check if token is valid.
@@ -65,4 +102,10 @@ async function prepareApiRequest() {
   return api;
 }
 
-export { api, prepareApiRequest, templateLibraryApiClient };
+export {
+  api,
+  prepareApiRequest,
+  templateLibraryApiClient,
+  prepareQueryParameters,
+  makeFilterRequest,
+};
