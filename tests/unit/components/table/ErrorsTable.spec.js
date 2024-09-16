@@ -51,11 +51,14 @@ describe('Test component: ErrorsTable', () => {
         editorType: 'diagram',
       });
 
-      expect(wrapper.vm.columns.length).toEqual(4);
+      expect(wrapper.vm.columns.length).toEqual(7);
       expect(wrapper.vm.columns[0].name).toEqual('severity');
       expect(wrapper.vm.columns[1].name).toEqual('component');
       expect(wrapper.vm.columns[2].name).toEqual('attribute');
-      expect(wrapper.vm.columns[3].name).toEqual('message');
+      expect(wrapper.vm.columns[3].name).toEqual('file');
+      expect(wrapper.vm.columns[4].name).toEqual('line');
+      expect(wrapper.vm.columns[5].name).toEqual('column');
+      expect(wrapper.vm.columns[6].name).toEqual('message');
     });
 
     it('should have valid columns for text page', async () => {

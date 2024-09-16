@@ -39,14 +39,55 @@ const props = defineProps({
 });
 
 const columns = computed(() => {
-  const severityColumn = {
+  const array = [{
     name: 'severity',
     align: 'left',
     label: t('footer.consoleFooter.errorsTable.severity'),
     field: (row) => t(`parser.severity.${row.severity}`),
     style: 'width: 2rem',
-  };
-  const messageColumn = {
+  }];
+
+  if (props.editorType === 'diagram') {
+    array.push({
+      name: 'component',
+      align: 'center',
+      label: t('footer.consoleFooter.errorsTable.component'),
+      field: (row) => row.componentName,
+      style: 'width: 2rem',
+    });
+    array.push({
+      name: 'attribute',
+      align: 'center',
+      label: t('footer.consoleFooter.errorsTable.attribute'),
+      field: (row) => row.attribute,
+      style: 'width: 2rem',
+    });
+    array.push({
+      name: 'file',
+      align: 'center',
+      label: t('footer.consoleFooter.errorsTable.file'),
+      field: (row) => row.path,
+      style: 'width: 2rem',
+    });
+  }
+
+  array.push({
+    name: 'line',
+    align: 'center',
+    label: t('footer.consoleFooter.errorsTable.line'),
+    field: (row) => `${row.startLineNumber}-${row.endLineNumber}`,
+    style: 'width: 2rem',
+  });
+
+  array.push({
+    name: 'column',
+    align: 'center',
+    label: t('footer.consoleFooter.errorsTable.column'),
+    field: (row) => `${row.startColumn}-${row.endColumn}`,
+    style: 'width: 2rem',
+  });
+
+  array.push({
     name: 'message',
     align: 'left',
     label: t('footer.consoleFooter.errorsTable.message'),
@@ -55,47 +96,9 @@ const columns = computed(() => {
       extraData: row.extraData,
       attribute: row.attribute,
     }),
-  };
+  });
 
-  if (props.editorType === 'text') {
-    return [
-      severityColumn,
-      {
-        name: 'line',
-        align: 'center',
-        label: t('footer.consoleFooter.errorsTable.line'),
-        field: (row) => `${row.startLineNumber}-${row.endLineNumber}`,
-        style: 'width: 2rem',
-      },
-      {
-        name: 'column',
-        align: 'center',
-        label: t('footer.consoleFooter.errorsTable.column'),
-        field: (row) => `${row.startColumn}-${row.endColumn}`,
-        style: 'width: 2rem',
-      },
-      messageColumn,
-    ];
-  }
-
-  return [
-    severityColumn,
-    {
-      name: 'component',
-      align: 'center',
-      label: t('footer.consoleFooter.errorsTable.component'),
-      field: (row) => row.componentName,
-      style: 'width: 2rem',
-    },
-    {
-      name: 'attribute',
-      align: 'center',
-      label: t('footer.consoleFooter.errorsTable.attribute'),
-      field: (row) => row.attribute,
-      style: 'width: 2rem',
-    },
-    messageColumn,
-  ];
+  return array;
 });
 
 /**
