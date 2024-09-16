@@ -118,7 +118,7 @@ async function initView() {
     ).then((logs) => {
       LogEvent.FileLogEvent.next(logs.map((log) => ({
         ...log,
-        componentId: log.componentId ? data.plugin.data.getComponentById(log.componentId).externalId : '',
+        componentName: log.componentId ? data.plugin.data.getComponentById(log.componentId).externalId : '',
       })));
       data.plugin.draw();
     }),

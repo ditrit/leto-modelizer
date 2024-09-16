@@ -193,6 +193,11 @@ async function onRequestEvent(event) {
       key: 'ComponentDetailPanel',
       id: event.id,
     });
+  } else if (event.type === 'select') {
+    const parent = data.plugin.data.getComponentById(event.ids[0]);
+    data.plugin.data.scene.selection = event.ids;
+    data.plugin.data.scene.selectionRef = parent.id;
+    data.plugin.draw();
   }
 
   if (needRender) {

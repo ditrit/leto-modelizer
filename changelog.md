@@ -89,6 +89,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Display buttons for each OIDC provider and perform user authentication if the global configuration file is declared.
 * Draw page:
   * Add variables panel in left drawer.
+  * Add panel to display all errors.
+  * Select component in error and open its details from the error's console.
   * Rename component id.
 * Text editor page:
   * Add panel to display all errors.

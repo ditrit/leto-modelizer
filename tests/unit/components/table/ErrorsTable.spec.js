@@ -2,6 +2,7 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-j
 import { shallowMount } from '@vue/test-utils';
 import i18nConfiguration from 'src/i18n';
 import ErrorsTable from 'src/components/table/ErrorsTable.vue';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 installQuasarPlugin();
 
@@ -9,6 +10,12 @@ jest.mock('vue-i18n', () => ({
   useI18n: () => ({
     t: (t) => t,
   }),
+}));
+
+jest.mock('src/composables/events/PluginEvent', () => ({
+  RequestEvent: {
+    next: jest.fn(),
+  },
 }));
 
 describe('Test component: ErrorsTable', () => {
@@ -61,6 +68,20 @@ describe('Test component: ErrorsTable', () => {
       expect(wrapper.vm.columns[1].name).toEqual('line');
       expect(wrapper.vm.columns[2].name).toEqual('column');
       expect(wrapper.vm.columns[3].name).toEqual('message');
+    });
+  });
+
+  describe('Test function: selectComponent', () => {
+    it('should emit events', () => {
+      PluginEvent.RequestEvent.next.mockClear();
+
+      wrapper.vm.selectComponent('id_1');
+
+      expect(PluginEvent.RequestEvent.next).toHaveBeenCalledTimes(2);
+      expect(PluginEvent.RequestEvent.next.mock.calls).toEqual([
+        [{ type: 'select', ids: ['id_1'] }],
+        [{ type: 'edit', id: 'id_1' }],
+      ]);
     });
   });
 });

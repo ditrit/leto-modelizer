@@ -34,12 +34,17 @@ jest.mock('src/composables/PluginManager', () => ({
   getPluginByName: jest.fn(() => ({
     data: {
       name: 'pluginName',
+      getComponentById: jest.fn(() => ({ id: 2 })),
       addComponent: jest.fn(),
       removeComponentById: jest.fn(),
       definitions: {
         components: [
           { type: 'testComponent', isTemplate: false, icon: 'icon' },
         ],
+      },
+      scene: {
+        selection: [],
+        selectionRef: null,
       },
     },
     configuration: {
@@ -381,6 +386,16 @@ describe('Test page component: ModelizerDrawPage', () => {
         key: 'ComponentDetailPanel',
         id: 1,
       });
+    });
+
+    it('should select component and draw', () => {
+      DrawerEvent.next.mockClear();
+
+      wrapper.vm.onRequestEvent({
+        type: 'select',
+        ids: [1],
+      });
+      expect(wrapper.vm.data.plugin.draw).toBeCalled();
     });
   });
 

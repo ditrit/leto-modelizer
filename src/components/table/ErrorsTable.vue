@@ -6,12 +6,24 @@
     :columns="columns"
     row-key="message"
     data-cy="errors-table"
-  />
+  >
+    <template #body-cell-component="data">
+      <q-td :props="data">
+        <span
+          class="body-link"
+          @click="selectComponent(data.row.componentId)"
+        >
+          {{ data.value }}
+        </span>
+      </q-td>
+    </template>
+  </q-table>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 const { t } = useI18n();
 
@@ -72,7 +84,7 @@ const columns = computed(() => {
       name: 'component',
       align: 'center',
       label: t('footer.consoleFooter.errorsTable.component'),
-      field: (row) => row.componentId,
+      field: (row) => row.componentName,
       style: 'width: 2rem',
     },
     {
@@ -85,4 +97,27 @@ const columns = computed(() => {
     messageColumn,
   ];
 });
+
+/**
+ * Send event to select component and open its detail panel.
+ * @param {string} id - Component id.
+ */
+function selectComponent(id) {
+  PluginEvent.RequestEvent.next({
+    type: 'select',
+    ids: [id],
+  });
+  PluginEvent.RequestEvent.next({
+    type: 'edit',
+    id,
+  });
+}
 </script>
+
+<style lang="scss">
+.body-link {
+  color: $info;
+  text-decoration: underline;
+  cursor: pointer;
+}
+</style>
