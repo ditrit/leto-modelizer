@@ -61,7 +61,7 @@ import {
   reactive,
   ref,
 } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import PluginEvent from 'src/composables/events/PluginEvent';
@@ -69,9 +69,11 @@ import { getTemplatesByType } from 'src/composables/TemplateManager';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { ComponentLink } from '@ditrit/leto-modelizer-plugin-core';
 import DrawerEvent from 'src/composables/events/DrawerEvent';
+import FileEvent from 'src/composables/events/FileEvent';
 
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 
 const HAS_BACKEND = computed(() => process.env.HAS_BACKEND);
 const projectName = computed(() => route.params.projectName);
@@ -198,6 +200,15 @@ async function onRequestEvent(event) {
     data.plugin.data.scene.selection = event.ids;
     data.plugin.data.scene.selectionRef = parent.id;
     data.plugin.draw();
+  } else if (event.type === 'openFile') {
+    await router.push({
+      name: 'Text',
+      params: {
+        projectName: projectName.value,
+      },
+      query: query.value,
+    });
+    FileEvent.SelectFileTabEvent.next(event.path);
   }
 
   if (needRender) {

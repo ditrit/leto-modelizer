@@ -17,6 +17,16 @@
         </span>
       </q-td>
     </template>
+    <template #body-cell-file="data">
+      <q-td :props="data">
+        <span
+          class="body-link"
+          @click="selectFile(data.row.path)"
+        >
+          {{ data.value }}
+        </span>
+      </q-td>
+    </template>
   </q-table>
 </template>
 
@@ -113,6 +123,17 @@ function selectComponent(id) {
   PluginEvent.RequestEvent.next({
     type: 'edit',
     id,
+  });
+}
+
+/**
+ * Send event to select file and open it in text editor.
+ * @param {string} path - File path.
+ */
+function selectFile(path) {
+  PluginEvent.RequestEvent.next({
+    type: 'openFile',
+    path,
   });
 }
 </script>

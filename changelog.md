@@ -91,6 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Add variables panel in left drawer.
   * Add panel to display all errors.
   * Select component in error and open its details from the error's console.
+  * Select file in error and open text editor and selected file open.
   * Rename component id.
 * Text editor page:
   * Add panel to display all errors.

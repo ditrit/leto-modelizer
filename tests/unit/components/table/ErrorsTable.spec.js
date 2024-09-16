@@ -87,4 +87,17 @@ describe('Test component: ErrorsTable', () => {
       ]);
     });
   });
+
+  describe('Test function: selectFile', () => {
+    it('should emit event', () => {
+      PluginEvent.RequestEvent.next.mockClear();
+
+      wrapper.vm.selectFile('path');
+
+      expect(PluginEvent.RequestEvent.next).toHaveBeenCalledTimes(1);
+      expect(PluginEvent.RequestEvent.next.mock.calls).toEqual([
+        [{ type: 'openFile', path: 'path' }],
+      ]);
+    });
+  });
 });
