@@ -9,7 +9,6 @@
         v-model="splitter"
         :limits="[50, 100]"
         separator-class="separator-class"
-        :class="isVisible ? '' : 'splitter-invisible'"
         :style="{ height: `calc(100vh - ${reservedHeight + 70}px)` }"
       >
         <template #before>

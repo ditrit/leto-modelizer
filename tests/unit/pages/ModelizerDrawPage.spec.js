@@ -6,6 +6,8 @@ import PluginManager from 'src/composables/PluginManager';
 import TemplateManager from 'src/composables/TemplateManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import DrawerEvent from 'src/composables/events/DrawerEvent';
+import FileEvent from 'src/composables/events/FileEvent';
+import { useRouter } from 'vue-router';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -28,18 +30,26 @@ jest.mock('vue-router', () => ({
       plugin: 'plugin',
     },
   }),
+  useRouter: jest.fn(() => ({
+    push: () => Promise.resolve(),
+  })),
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
   getPluginByName: jest.fn(() => ({
     data: {
       name: 'pluginName',
+      getComponentById: jest.fn(() => ({ id: 2 })),
       addComponent: jest.fn(),
       removeComponentById: jest.fn(),
       definitions: {
         components: [
           { type: 'testComponent', isTemplate: false, icon: 'icon' },
         ],
+      },
+      scene: {
+        selection: [],
+        selectionRef: null,
       },
     },
     configuration: {
@@ -81,6 +91,12 @@ jest.mock('src/composables/events/DrawerEvent', () => ({
   subscribe: jest.fn(),
 }));
 
+jest.mock('src/composables/events/FileEvent', () => ({
+  SelectFileTabEvent: {
+    next: jest.fn(),
+  },
+}));
+
 describe('Test page component: ModelizerDrawPage', () => {
   let wrapper;
   let pluginDefaultSubscribe;
@@ -89,6 +105,7 @@ describe('Test page component: ModelizerDrawPage', () => {
   let pluginRequestUnsubscribe;
   let drawerEventSubscribe;
   let drawerEventUnsubscribe;
+  let push;
 
   beforeEach(() => {
     pluginDefaultSubscribe = jest.fn();
@@ -97,6 +114,11 @@ describe('Test page component: ModelizerDrawPage', () => {
     pluginRequestUnsubscribe = jest.fn();
     drawerEventSubscribe = jest.fn();
     drawerEventUnsubscribe = jest.fn();
+    push = jest.fn(() => Promise.resolve());
+
+    useRouter.mockImplementation(() => ({
+      push,
+    }));
 
     PluginEvent.DefaultEvent.subscribe.mockImplementation(() => {
       pluginDefaultSubscribe();
@@ -381,6 +403,39 @@ describe('Test page component: ModelizerDrawPage', () => {
         key: 'ComponentDetailPanel',
         id: 1,
       });
+    });
+
+    it('should select component and draw', () => {
+      DrawerEvent.next.mockClear();
+
+      wrapper.vm.onRequestEvent({
+        type: 'select',
+        ids: [1],
+      });
+      expect(wrapper.vm.data.plugin.draw).toBeCalled();
+    });
+
+    it('should go to editor page and send event to set active file', async () => {
+      FileEvent.SelectFileTabEvent.next.mockClear();
+      const router = useRouter();
+      router.push.mockClear();
+
+      await wrapper.vm.onRequestEvent({
+        type: 'openFile',
+        path: 'main.tf',
+      });
+
+      expect(router.push).toBeCalledWith({
+        name: 'Text',
+        params: {
+          projectName: 'project-00000000',
+        },
+        query: {
+          path: 'path',
+          plugin: 'plugin',
+        },
+      });
+      expect(FileEvent.SelectFileTabEvent.next).toBeCalledWith('main.tf');
     });
   });
 

@@ -6,12 +6,34 @@
     :columns="columns"
     row-key="message"
     data-cy="errors-table"
-  />
+  >
+    <template #body-cell-component="data">
+      <q-td :props="data">
+        <span
+          class="body-link"
+          @click="selectComponent(data.row.componentId)"
+        >
+          {{ data.value }}
+        </span>
+      </q-td>
+    </template>
+    <template #body-cell-file="data">
+      <q-td :props="data">
+        <span
+          class="body-link"
+          @click="selectFile(data.row.path)"
+        >
+          {{ data.value }}
+        </span>
+      </q-td>
+    </template>
+  </q-table>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import PluginEvent from 'src/composables/events/PluginEvent';
 
 const { t } = useI18n();
 
@@ -27,14 +49,55 @@ const props = defineProps({
 });
 
 const columns = computed(() => {
-  const severityColumn = {
+  const array = [{
     name: 'severity',
     align: 'left',
     label: t('footer.consoleFooter.errorsTable.severity'),
     field: (row) => t(`parser.severity.${row.severity}`),
     style: 'width: 2rem',
-  };
-  const messageColumn = {
+  }];
+
+  if (props.editorType === 'diagram') {
+    array.push({
+      name: 'component',
+      align: 'center',
+      label: t('footer.consoleFooter.errorsTable.component'),
+      field: (row) => row.componentName,
+      style: 'width: 2rem',
+    });
+    array.push({
+      name: 'attribute',
+      align: 'center',
+      label: t('footer.consoleFooter.errorsTable.attribute'),
+      field: (row) => row.attribute,
+      style: 'width: 2rem',
+    });
+    array.push({
+      name: 'file',
+      align: 'center',
+      label: t('footer.consoleFooter.errorsTable.file'),
+      field: (row) => row.path,
+      style: 'width: 2rem',
+    });
+  }
+
+  array.push({
+    name: 'line',
+    align: 'center',
+    label: t('footer.consoleFooter.errorsTable.line'),
+    field: (row) => `${row.startLineNumber}-${row.endLineNumber}`,
+    style: 'width: 2rem',
+  });
+
+  array.push({
+    name: 'column',
+    align: 'center',
+    label: t('footer.consoleFooter.errorsTable.column'),
+    field: (row) => `${row.startColumn}-${row.endColumn}`,
+    style: 'width: 2rem',
+  });
+
+  array.push({
     name: 'message',
     align: 'left',
     label: t('footer.consoleFooter.errorsTable.message'),
@@ -43,46 +106,42 @@ const columns = computed(() => {
       extraData: row.extraData,
       attribute: row.attribute,
     }),
-  };
+  });
 
-  if (props.editorType === 'text') {
-    return [
-      severityColumn,
-      {
-        name: 'line',
-        align: 'center',
-        label: t('footer.consoleFooter.errorsTable.line'),
-        field: (row) => `${row.startLineNumber}-${row.endLineNumber}`,
-        style: 'width: 2rem',
-      },
-      {
-        name: 'column',
-        align: 'center',
-        label: t('footer.consoleFooter.errorsTable.column'),
-        field: (row) => `${row.startColumn}-${row.endColumn}`,
-        style: 'width: 2rem',
-      },
-      messageColumn,
-    ];
-  }
-
-  return [
-    severityColumn,
-    {
-      name: 'component',
-      align: 'center',
-      label: t('footer.consoleFooter.errorsTable.component'),
-      field: (row) => row.componentId,
-      style: 'width: 2rem',
-    },
-    {
-      name: 'attribute',
-      align: 'center',
-      label: t('footer.consoleFooter.errorsTable.attribute'),
-      field: (row) => row.attribute,
-      style: 'width: 2rem',
-    },
-    messageColumn,
-  ];
+  return array;
 });
+
+/**
+ * Send event to select component and open its detail panel.
+ * @param {string} id - Component id.
+ */
+function selectComponent(id) {
+  PluginEvent.RequestEvent.next({
+    type: 'select',
+    ids: [id],
+  });
+  PluginEvent.RequestEvent.next({
+    type: 'edit',
+    id,
+  });
+}
+
+/**
+ * Send event to select file and open it in text editor.
+ * @param {string} path - File path.
+ */
+function selectFile(path) {
+  PluginEvent.RequestEvent.next({
+    type: 'openFile',
+    path,
+  });
+}
 </script>
+
+<style lang="scss">
+.body-link {
+  color: $info;
+  text-decoration: underline;
+  cursor: pointer;
+}
+</style>

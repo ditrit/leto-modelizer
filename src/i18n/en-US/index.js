@@ -495,6 +495,7 @@ export default {
       errorsTable: {
         message: 'Message',
         line: 'Start/End Line',
+        file: 'File',
         column: 'Start/End Column',
         severity: 'Severity',
         component: 'Component',
