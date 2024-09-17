@@ -31,7 +31,7 @@
 import ProjectGrid from 'src/components/grid/ProjectGrid.vue';
 import TemplateGrid from 'src/components/grid/TemplateGrid.vue';
 import { getProjects } from 'src/composables/Project';
-import { getTemplatesByType } from 'src/composables/TemplateManager';
+import { getProjectTemplates } from 'src/services/TemplatesService';
 import ImportProjectDialog from 'components/dialog/ImportProjectDialog.vue';
 import CreateProjectTemplateDialog from 'components/dialog/CreateProjectTemplateDialog.vue';
 import CreateProjectDialog from 'components/dialog/CreateProjectDialog.vue';
@@ -73,7 +73,7 @@ async function openCreateProjectTemplateDialog(template) {
 onMounted(async () => {
   setProjects();
   updateProjectSubscription = ProjectEvent.UpdateProjectEvent.subscribe(setProjects);
-  templates.value = await getTemplatesByType('project');
+  templates.value = await getProjectTemplates();
 });
 
 onUnmounted(() => {
