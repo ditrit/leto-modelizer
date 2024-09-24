@@ -111,9 +111,3 @@ onUnmounted(() => {
   height: 100px;
 }
 </style>
-
-<style>
-.viewer-move {
-  background-color: white;
-}
-</style>
