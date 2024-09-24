@@ -14,7 +14,7 @@ jest.mock('src/boot/axios', () => ({
 describe('User Authentication', () => {
   describe('Test function: getCurrent', () => {
     it('should return the current user information', async () => {
-      const resultGetUser = { email: null, login: 'PowerRangerGreen', name: 'Seb' };
+      const resultGetUser = { data: { email: null, login: 'PowerRangerGreen', name: 'Seb' } };
       api.get.mockImplementation(() => Promise.resolve(resultGetUser));
 
       const res = await UserService.getCurrent();
@@ -43,7 +43,7 @@ describe('User Authentication', () => {
 
       const res = await UserService.getUserPermissions();
 
-      expect(res.data[0]).toEqual({
+      expect(res[0]).toEqual({
         entity: 'COMPONENT_TEMPLATE',
         action: 'CREATE',
       });
@@ -55,7 +55,7 @@ describe('User Authentication', () => {
       setActivePinia(createPinia());
       const store = useUserStore();
 
-      const resultGetUser = { login: 'PowerRangerGreen', name: 'Seb', email: 'seb@example.com' };
+      const resultGetUser = { data: { login: 'PowerRangerGreen', name: 'Seb', email: 'seb@example.com' } };
       api.get.mockImplementation(() => Promise.resolve(resultGetUser));
 
       await UserService.initUserInformation();
@@ -71,16 +71,18 @@ describe('User Authentication', () => {
       setActivePinia(createPinia());
       const store = useUserStore();
 
-      const resultGetUserPerm = [
-        {
-          entity: 'COMPONENT_TEMPLATE',
-          action: 'CREATE',
-        },
-        {
-          entity: 'PROJECT_TEMPLATE',
-          action: 'CREATE',
-        },
-      ];
+      const resultGetUserPerm = {
+        data: [
+          {
+            entity: 'COMPONENT_TEMPLATE',
+            action: 'CREATE',
+          },
+          {
+            entity: 'PROJECT_TEMPLATE',
+            action: 'CREATE',
+          },
+        ],
+      };
       api.get.mockImplementation(() => Promise.resolve(resultGetUserPerm));
 
       await UserService.initUserPermissions();
@@ -102,6 +104,7 @@ describe('User Authentication', () => {
     it('should call valid functions', async () => {
       prepareQueryParameters.mockClear();
       makeFilterRequest.mockClear();
+      makeFilterRequest.mockImplementation(() => Promise.resolve({ data: null }));
       await UserService.getUserAIConversations({});
 
       expect(prepareQueryParameters).toBeCalled();

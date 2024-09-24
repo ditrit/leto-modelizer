@@ -7,7 +7,7 @@ import { useUserStore } from 'src/stores/UserStore';
  * otherwise an error.
  */
 export async function getCurrent() {
-  return api.get('/users/me');
+  return api.get('/users/me').then(({ data }) => data);
 }
 
 /**
@@ -15,7 +15,7 @@ export async function getCurrent() {
  * @returns {Promise<object[]>} Return an array of permissions.
  */
 export async function getUserPermissions() {
-  return api.get('/users/me/permissions');
+  return api.get('/users/me/permissions').then(({ data }) => data);
 }
 
 /**
@@ -26,7 +26,7 @@ export async function getUserPermissions() {
 export async function getUserAIConversations(filters) {
   const queryParameters = prepareQueryParameters(filters);
 
-  return makeFilterRequest(api, `/users/me/ai/conversations${queryParameters}`);
+  return makeFilterRequest(api, `/users/me/ai/conversations${queryParameters}`).then(({ data }) => data);
 }
 
 /**

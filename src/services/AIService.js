@@ -21,7 +21,7 @@ export async function generateDiagram(plugin, description) {
     plugin,
     description,
     type: 'diagram',
-  }, options);
+  }, options).then(({ data }) => data);
 }
 
 /**
@@ -73,7 +73,7 @@ export async function manageConversation(project, diagram, plugin, files) {
       plugin,
       checksum,
       files,
-    }, options);
+    }, options).then(({ data }) => data);
   }
 
   const aiConversation = content[0];
@@ -85,7 +85,7 @@ export async function manageConversation(project, diagram, plugin, files) {
       plugin,
       checksum,
       files,
-    }, options);
+    }, options).then(({ data }) => data);
   }
 
   return aiConversation;
@@ -102,7 +102,7 @@ export async function sendMessage(conversationId, pluginName, message) {
   const api = await prepareApiRequest();
 
   return api.post(`/ai/conversations/${conversationId}/messages`, { plugin: pluginName, message }, options)
-    .then((data) => ({
+    .then(({ data }) => ({
       ...data,
       message: uncompress(data.message),
     }));
@@ -156,7 +156,7 @@ export async function retrieveMessages(project, diagram, plugin, date = null) {
   });
 
   return makeFilterRequest(api, `/ai/conversations/${aiConversation.id}/messages${queryParameters}`)
-    .then((data) => ({
+    .then(({ data }) => ({
       ...data,
       content: data.content.map((c) => ({
         ...c,
@@ -181,5 +181,5 @@ export async function deleteConversation(project, diagram, plugin) {
 
   const api = await prepareApiRequest();
 
-  return api.delete(`/ai/conversations/${content[0].id}`);
+  return api.delete(`/ai/conversations/${content[0].id}`).then(({ data }) => data);
 }

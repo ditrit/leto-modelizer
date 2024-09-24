@@ -33,7 +33,7 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  ({ data }) => Promise.resolve(data),
+  (response) => Promise.resolve(response),
   (error) => {
     if (error.response.status === 401) {
       window.location.href = `${process.env.BACKEND_URL}/api/login`;
@@ -92,7 +92,7 @@ async function prepareApiRequest() {
   const currentTime = new Date().getTime();
 
   if (!csrfStore.expirationDate || csrfStore.expirationDate < currentTime) {
-    const csrf = await api.get('/csrf');
+    const { data: csrf } = await api.get('/csrf');
 
     csrfStore.headerName = csrf.headerName;
     csrfStore.token = csrf.token;
