@@ -4,12 +4,7 @@
     data-cy="create-project-template-dialog"
   >
     <template #title>
-      {{
-        $t(
-          `page.home.template.${isChecked ? 'import': 'create'}Project`,
-          { name: templateName },
-        )
-      }}
+      {{ $t(`page.home.template.${isChecked ? 'import': 'create'}Project`) }}
     </template>
     <template #default>
       <div v-if="projectTemplate?.schemas.length">
@@ -26,15 +21,15 @@
           class="text-primary rounded-borders carousel"
         >
           <q-carousel-slide
-            v-for="(schema, index) in projectTemplate?.schemas"
-            :key="index"
+            v-for="(schema, index) in projectTemplate.schemas"
+            :key="`${schema}-${index}`"
             :name="index+1"
             class="column no-wrap flex-center"
           >
             <div v-viewer>
               <img
-                :src="`template-library/templates/${projectTemplate.key}/${schema}`"
-                :alt="`${projectTemplate.key}/${schema}`"
+                :src="schemas[index]"
+                :alt="`${projectTemplate.key}/${projectTemplate.schemas[index]}`"
                 class="carousel-img"
               >
             </div>
@@ -61,14 +56,14 @@ import {
   onMounted,
   onUnmounted,
   ref,
-  computed,
 } from 'vue';
+import { getTemplateSchema } from 'src/services/ImageDownloadService';
 
 const router = useRouter();
 const projectTemplate = ref(null);
 const isChecked = ref(false);
 const slide = ref(1);
-const templateName = computed(() => projectTemplate.value.type);
+const schemas = ref([]);
 let dialogEventSubscription;
 
 /**
@@ -82,20 +77,46 @@ async function addProject(projectId) {
 }
 
 /**
+ * Load schema of template.
+ * @param {object} template - Template object.
+ * @param {number} index - Index of schemas in template.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function loadTemplateSchema(template, index) {
+  return getTemplateSchema({
+    HAS_BACKEND: process.env.HAS_BACKEND,
+    TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL,
+  }, template, index)
+    .then((icon) => {
+      schemas.value[index] = icon;
+    })
+    .catch(() => {
+      schemas.value[index] = null;
+    });
+}
+
+/**
  * Set project template on valid event.
  * @param {object} event - Dialog event.
- * @param {string} event.key - Event type.
+ * @param {string} event.key - Event key.
+ * @param {string} event.type - Event type.
  * @param {object} event.template - Selected template.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
  */
-function setProjectTemplate({ key, template }) {
-  if (key === 'CreateProjectTemplate') {
+async function setProjectTemplate({ key, type, template }) {
+  if (key === 'CreateProjectTemplate' && type === 'open') {
     projectTemplate.value = template;
+    schemas.value = Array(template.schemas.length);
+    return Promise.allSettled(template.schemas
+      .map((_, index) => loadTemplateSchema(template, index)));
   }
+  return Promise.resolve();
 }
 
 onMounted(() => {
   dialogEventSubscription = DialogEvent.subscribe(setProjectTemplate);
 });
+
 onUnmounted(() => {
   dialogEventSubscription.unsubscribe();
 });
