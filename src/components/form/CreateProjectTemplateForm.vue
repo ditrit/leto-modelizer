@@ -119,9 +119,8 @@ import {
   getProjects,
 } from 'src/composables/Project';
 import { importProject } from 'src/composables/Git';
-import { getTemplateFileByPath } from 'src/composables/TemplateManager';
-import { FileInput } from '@ditrit/leto-modelizer-plugin-core';
 import PluginsCard from 'src/components/card/PluginsCard.vue';
+import { getTemplateFiles } from 'src/services/TemplateService';
 
 const emit = defineEmits(['project:add', 'update:checked']);
 const props = defineProps({
@@ -165,21 +164,17 @@ async function onSubmit() {
 
   return addProject
     .then(async () => {
-      await Promise.allSettled(props.template.files
-        .map((file) => getTemplateFileByPath(`templates/${props.template.key}/${file}`, 'text')
-          .then(async (result) => {
-            appendProjectFile(new FileInput({
-              path: `${project.id}/${file}`,
-              content: result.data,
-            }));
-          })
-          .catch(() => {
-            Notify.create({
-              type: 'negative',
-              message: t('errors.templates.getData'),
-              html: true,
-            });
-          })));
+      const files = await getTemplateFiles({
+        HAS_BACKEND: process.env.HAS_BACKEND,
+        TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL,
+      }, props.template);
+
+      await Promise.allSettled(files.map((file) => {
+        file.path = `${project.id}/${file.path}`
+          .replace(/\/+/g, '/');
+
+        return appendProjectFile(file);
+      }));
 
       emit('project:add', project.id);
       Notify.create({

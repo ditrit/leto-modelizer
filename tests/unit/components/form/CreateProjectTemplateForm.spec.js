@@ -29,8 +29,8 @@ jest.mock('src/composables/Random', () => ({
   randomHexString: () => '00000000',
 }));
 
-jest.mock('src/composables/TemplateManager', () => ({
-  getTemplateFileByPath: jest.fn(() => Promise.resolve()),
+jest.mock('src/services/TemplateService', () => ({
+  getTemplateFiles: jest.fn(() => Promise.resolve([{ path: 'file.md' }])),
 }));
 
 describe('Test component: CreateProjectTemplateForm', () => {
@@ -40,6 +40,7 @@ describe('Test component: CreateProjectTemplateForm', () => {
     wrapper = shallowMount(CreateProjectTemplateForm, {
       props: {
         template: {
+          basePath: 'test/',
           files: ['test.js'],
           key: 'key',
         },
@@ -52,6 +53,7 @@ describe('Test component: CreateProjectTemplateForm', () => {
     describe('Test prop: template', () => {
       it('should be an object with files and key', () => {
         expect(wrapper.vm.template).toEqual({
+          basePath: 'test/',
           files: ['test.js'],
           key: 'key',
         });
@@ -72,6 +74,14 @@ describe('Test component: CreateProjectTemplateForm', () => {
       await wrapper.vm.onSubmit();
 
       expect(Project.initProject).toBeCalled();
+    });
+
+    it('should append files', async () => {
+      Notify.create = jest.fn();
+
+      await wrapper.vm.onSubmit();
+
+      expect(Project.appendProjectFile).toBeCalledWith({ path: '/file.md' });
     });
 
     it('should call importProject when localIsChecked is true', async () => {
