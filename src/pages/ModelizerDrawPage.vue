@@ -59,13 +59,11 @@ import {
   onMounted,
   onUnmounted,
   reactive,
-  ref,
 } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import PluginEvent from 'src/composables/events/PluginEvent';
-import { getTemplatesByType } from 'src/composables/TemplateManager';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { ComponentLink } from '@ditrit/leto-modelizer-plugin-core';
 import DrawerEvent from 'src/composables/events/DrawerEvent';
@@ -82,7 +80,6 @@ const query = computed(() => route.query);
 const data = reactive({
   plugin: null,
 });
-const templates = ref([]);
 
 let pluginDefaultSubscription;
 let pluginRequestSubscription;
@@ -263,18 +260,6 @@ async function initView() {
       data.plugin.arrangeComponentsPosition(null, true);
       data.plugin.draw();
     }),
-    getTemplatesByType(
-      'component',
-      data.plugin.data.name,
-    ).then((response) => {
-      templates.value = response;
-    }).catch(() => {
-      Notify.create({
-        type: 'negative',
-        message: t('errors.templates.getData'),
-        html: true,
-      });
-    }),
   ]);
 }
 
@@ -290,27 +275,20 @@ async function dropHandler(event) {
     ? `${projectName.value}/${query.value.path}`
     : projectName.value;
 
-  if (!dropData.isTemplate) {
-    const componentDefinition = data.plugin.data.definitions.components
-      .find(({ type }) => type === dropData.definitionType);
-
+  if (!dropData.definition.isTemplate) {
     data.plugin.addComponent(
       null,
-      componentDefinition,
+      dropData.definition,
       componentPath,
       event,
     );
     data.plugin.draw();
   } else {
-    const templateDefinition = templates.value.find(
-      ({ key }) => key === dropData.definitionType,
-    );
-
     await addNewTemplateComponent(
       projectName.value,
       data.plugin,
       componentPath,
-      templateDefinition,
+      dropData.definition,
     )
       .then(() => {
         data.plugin.arrangeComponentsPosition(null, true);

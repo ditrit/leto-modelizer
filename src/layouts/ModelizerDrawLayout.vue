@@ -7,7 +7,6 @@
     <modelizer-draw-left-drawer
       v-if="data.plugin"
       :plugin="data.plugin"
-      :templates="templates"
       :project-name="projectName"
     />
 
@@ -59,7 +58,6 @@ import ModelizerDrawLeftDrawer from 'src/components/drawer/ModelizerDrawLeftDraw
 import ComponentDetailPanel from 'src/components/drawer/ComponentDetailPanel.vue';
 import ModelizerDrawPage from 'src/pages/ModelizerDrawPage.vue';
 import { getPluginByName, initComponents } from 'src/composables/PluginManager';
-import { getTemplatesByType } from 'src/composables/TemplateManager';
 import {
   computed,
   onMounted,
@@ -67,9 +65,7 @@ import {
   reactive,
   ref,
 } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
-import { Notify } from 'quasar';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog.vue';
 import GitAddRemoteDialog from 'components/dialog/GitAddRemoteDialog.vue';
 import ComponentMenuDialog from 'components/dialog/ComponentMenuDialog.vue';
@@ -79,7 +75,6 @@ import DrawerEvent from 'src/composables/events/DrawerEvent';
 import AIChatDrawer from 'components/drawer/AIChatDrawer.vue';
 import DeleteAIConversationDialog from 'components/dialog/DeleteAIConversationDialog.vue';
 
-const { t } = useI18n();
 const route = useRoute();
 
 const query = computed(() => route.query);
@@ -89,7 +84,6 @@ const pluginName = computed(() => query.value.plugin);
 const splitter = ref(100);
 const splitterKey = ref('');
 const isVisible = ref(false);
-const templates = ref([]);
 const componentId = ref('');
 const reservedHeight = ref(37);
 
@@ -121,18 +115,6 @@ async function initView() {
         componentName: log.componentId ? data.plugin.data.getComponentById(log.componentId).externalId : '',
       })));
       data.plugin.draw();
-    }),
-    getTemplatesByType(
-      'component',
-      data.plugin.data.name,
-    ).then((response) => {
-      templates.value = response;
-    }).catch(() => {
-      Notify.create({
-        type: 'negative',
-        message: t('errors.templates.getData'),
-        html: true,
-      });
     }),
   ]);
 }

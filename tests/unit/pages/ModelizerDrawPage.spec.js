@@ -3,7 +3,6 @@ import { shallowMount } from '@vue/test-utils';
 import { Notify } from 'quasar';
 import ModelizerDrawPage from 'src/pages/ModelizerDrawPage.vue';
 import PluginManager from 'src/composables/PluginManager';
-import TemplateManager from 'src/composables/TemplateManager';
 import PluginEvent from 'src/composables/events/PluginEvent';
 import DrawerEvent from 'src/composables/events/DrawerEvent';
 import FileEvent from 'src/composables/events/FileEvent';
@@ -67,10 +66,6 @@ jest.mock('src/composables/PluginManager', () => ({
   renderConfiguration: jest.fn(() => Promise.resolve()),
   renderModel: jest.fn(() => Promise.resolve()),
   addNewTemplateComponent: jest.fn(() => Promise.resolve()),
-}));
-
-jest.mock('src/composables/TemplateManager', () => ({
-  getTemplatesByType: jest.fn(() => Promise.resolve()),
 }));
 
 jest.mock('src/composables/Project', () => ({
@@ -204,15 +199,6 @@ describe('Test page component: ModelizerDrawPage', () => {
       expect(wrapper.vm.data.plugin.initDrawer).toHaveBeenCalledWith('view-port', false);
       expect(wrapper.vm.data.plugin.draw).toHaveBeenCalled();
     });
-
-    it('should emit a notification on error when updating component templates', async () => {
-      Notify.create = jest.fn();
-      TemplateManager.getTemplatesByType.mockImplementation(() => Promise.reject());
-
-      await wrapper.vm.initView();
-
-      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
-    });
   });
 
   describe('Test function: exportSvg', () => {
@@ -231,7 +217,11 @@ describe('Test page component: ModelizerDrawPage', () => {
     it('should call plugin.addComponent if component is not a template and call renderModel', async () => {
       const param = {
         dataTransfer: {
-          getData: jest.fn(() => ('{"isTemplate":false,"definitionType":"testComponent"}')),
+          getData: jest.fn(() => (JSON.stringify({
+            definition: {
+              isTemplate: false,
+            },
+          }))),
         },
       };
 
@@ -244,7 +234,11 @@ describe('Test page component: ModelizerDrawPage', () => {
     it('should call addNewTemplateComponent if component is a template and call renderModel', async () => {
       const param = {
         dataTransfer: {
-          getData: jest.fn(() => ('{"isTemplate":true,"definitionType":"testComponent"}')),
+          getData: jest.fn(() => (JSON.stringify({
+            definition: {
+              isTemplate: true,
+            },
+          }))),
         },
       };
 
@@ -260,7 +254,11 @@ describe('Test page component: ModelizerDrawPage', () => {
 
       const param = {
         dataTransfer: {
-          getData: jest.fn(() => ('{"isTemplate":true,"definitionType":"testComponent"}')),
+          getData: jest.fn(() => (JSON.stringify({
+            definition: {
+              isTemplate: true,
+            },
+          }))),
         },
       };
 

@@ -6,33 +6,21 @@
     >
       <models-page />
     </q-page-container>
-    <create-diagram-drawer
-      v-model="isVisible"
-      side="right"
-      :overlay="true"
-    />
-    <div
-      v-if="isVisible"
-      class="overlay"
-      @click="isVisible = false"
-    />
     <git-authentication-dialog :project-name="projectName" />
     <git-add-remote-dialog :project-name="projectName" />
   </q-layout>
 </template>
 
 <script setup>
-import CreateDiagramDrawer from 'components/drawer/CreateDiagramDrawer.vue';
 import NavigationBar from 'components/NavigationBar.vue';
 import ModelsPage from 'src/pages/ModelsPage.vue';
 import { useRoute } from 'vue-router';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import GitAuthenticationDialog from 'components/dialog/GitAuthenticationDialog.vue';
 import GitAddRemoteDialog from 'components/dialog/GitAddRemoteDialog.vue';
 
 const route = useRoute();
 const projectName = computed(() => route.params.projectName);
-const isVisible = ref(false);
 </script>
 
 <style scoped lang="scss">

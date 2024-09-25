@@ -3,7 +3,6 @@ import { Notify } from 'quasar';
 import { shallowMount } from '@vue/test-utils';
 import ModelizerDrawLayout from 'src/layouts/ModelizerDrawLayout.vue';
 import PluginManager from 'src/composables/PluginManager';
-import TemplateManager from 'src/composables/TemplateManager';
 import LogEvent from 'src/composables/events/LogEvent';
 import DrawerEvent from 'src/composables/events/DrawerEvent';
 
@@ -65,16 +64,6 @@ jest.mock('src/composables/PluginManager', () => ({
   initComponents: jest.fn(() => Promise.resolve([])),
 }));
 
-jest.mock('src/composables/TemplateManager', () => ({
-  getTemplatesByType: jest.fn(() => Promise.resolve([{ plugin: 'plugin', isTemplate: true }, {
-    type: 'component one',
-    isTemplate: true,
-    files: ['app.tf'],
-    key: 'testTemplate',
-    plugin: 'pluginName',
-  }])),
-}));
-
 describe('Test page component: ModelizerDrawLayout', () => {
   let wrapper;
   let subscribe;
@@ -125,18 +114,6 @@ describe('Test page component: ModelizerDrawLayout', () => {
         expect(wrapper.vm.data.plugin).toEqual(expect.objectContaining({ data: expect.objectContaining({ name: 'pluginName' }) }));
       });
     });
-
-    describe('Test ref: templates', () => {
-      it('should be an object', () => {
-        expect(wrapper.vm.templates).toEqual([{ plugin: 'plugin', isTemplate: true }, {
-          type: 'component one',
-          isTemplate: true,
-          files: ['app.tf'],
-          key: 'testTemplate',
-          plugin: 'pluginName',
-        }]);
-      });
-    });
   });
 
   describe('Test function: onDrawerEvent', () => {
@@ -171,32 +148,11 @@ describe('Test page component: ModelizerDrawLayout', () => {
   });
 
   describe('Test function: initView', () => {
-    it('should update data.plugin and update component templates on success', async () => {
+    it('should update data.plugin on success', async () => {
       await wrapper.vm.initView();
 
       expect(wrapper.vm.data.plugin).toEqual(expect.objectContaining({ data: expect.objectContaining({ name: 'pluginName' }) }));
-      expect(wrapper.vm.templates).toEqual([{ plugin: 'plugin', isTemplate: true }, {
-        type: 'component one',
-        isTemplate: true,
-        files: ['app.tf'],
-        key: 'testTemplate',
-        plugin: 'pluginName',
-      }]);
       expect(LogEvent.FileLogEvent.next).toBeCalledWith([]);
-    });
-
-    it('should emit a negative notification on error after failing to retrieve templates', async () => {
-      TemplateManager.getTemplatesByType.mockReturnValueOnce(Promise.reject());
-
-      Notify.create = jest.fn();
-
-      await wrapper.vm.initView();
-
-      expect(Notify.create).toHaveBeenCalledWith({
-        message: 'errors.templates.getData',
-        html: true,
-        type: 'negative',
-      });
     });
 
     it('should do nothing when there is no plugin', async () => {

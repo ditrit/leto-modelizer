@@ -11,7 +11,6 @@ describe('Test component: ModelizerDrawLeftDrawer', () => {
     wrapper = shallowMount(ModelizerDrawLeftDrawer, {
       props: {
         projectName: 'projectName',
-        templates: [],
         plugin: {
           name: 'pluginName',
         },
@@ -23,12 +22,6 @@ describe('Test component: ModelizerDrawLeftDrawer', () => {
     describe('Test prop: projectName', () => {
       it('should match "projectName"', () => {
         expect(wrapper.vm.projectName).toEqual('projectName');
-      });
-    });
-
-    describe('Test prop: templates', () => {
-      it('should be equal to an empty array', () => {
-        expect(wrapper.vm.templates).toEqual([]);
       });
     });
 
