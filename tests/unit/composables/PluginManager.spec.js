@@ -111,9 +111,8 @@ jest.mock('src/composables/Project', () => ({
   setFiles: jest.fn(),
 }));
 
-jest.mock('src/composables/TemplateManager', () => ({
-  getTemplateFileByPath: jest.fn(() => Promise.resolve({ data: 'template file content' })),
-  getTemplateFiles: jest.fn(() => []),
+jest.mock('src/services/TemplateService', () => ({
+  getTemplateFiles: jest.fn(() => Promise.resolve([])),
 }));
 
 jest.mock('src/composables/Files', () => ({
