@@ -35,6 +35,10 @@ jest.mock('src/composables/PluginManager', () => ({
   addNewTemplateComponent: jest.fn(),
 }));
 
+jest.mock('src/services/ImageDownloadService', () => ({
+  getTemplateIcon: jest.fn(() => Promise.resolve('icon from API')),
+}));
+
 describe('Test component: ComponentDefinitionCard', () => {
   let wrapper;
 
@@ -108,12 +112,21 @@ describe('Test component: ComponentDefinitionCard', () => {
       });
     });
 
-    describe('Test computed: componentIcon', () => {
-      it('should return string based on pluginName and definition.icon if definition.template is false', () => {
-        expect(wrapper.vm.componentIcon).toStrictEqual('img:/plugins/plugin/icons/icon.svg');
+    describe('Test function: loadTemplateIcon', () => {
+      it('should return string based on definition.icon', async () => {
+        await wrapper.setProps({
+          definition: {
+            type: 'component one',
+            isTemplate: false,
+            icon: 'templateIcon',
+          },
+          pluginName: 'plugin',
+        });
+        await wrapper.vm.loadTemplateIcon();
+        expect(wrapper.vm.componentIcon).toEqual('img:/plugins/plugin/icons/templateIcon.svg');
       });
 
-      it('should return string based on definition.icon if definition.template is true', async () => {
+      it('should return icon from API', async () => {
         await wrapper.setProps({
           definition: {
             type: 'component one',
@@ -122,7 +135,8 @@ describe('Test component: ComponentDefinitionCard', () => {
           },
           pluginName: 'plugin',
         });
-        expect(wrapper.vm.componentIcon).toStrictEqual('img:templateIcon');
+        await wrapper.vm.loadTemplateIcon();
+        expect(wrapper.vm.componentIcon).toEqual('icon from API');
       });
     });
   });
@@ -195,8 +209,11 @@ describe('Test component: ComponentDefinitionCard', () => {
       expect(event.dataTransfer.dropEffect).toEqual('copy');
       expect(event.dataTransfer.setData).toHaveBeenCalledWith('text/plain', JSON.stringify({
         pluginName: 'plugin',
-        isTemplate: false,
-        definitionType: 'component one',
+        definition: {
+          type: 'component one',
+          isTemplate: false,
+          icon: 'icon',
+        },
       }));
     });
 
@@ -217,8 +234,13 @@ describe('Test component: ComponentDefinitionCard', () => {
       expect(event.dataTransfer.dropEffect).toEqual('copy');
       expect(event.dataTransfer.setData).toHaveBeenCalledWith('text/plain', JSON.stringify({
         pluginName: 'pluginName',
-        isTemplate: true,
-        definitionType: 'template key',
+        definition: {
+          type: 'component one',
+          isTemplate: true,
+          files: ['app.tf'],
+          key: 'template key',
+          plugin: 'pluginName',
+        },
       }));
     });
   });

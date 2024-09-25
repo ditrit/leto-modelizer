@@ -1,10 +1,9 @@
 <template>
   <q-card
-    flat
     class="bg-white q-pa-lg"
   >
     <q-card-section class="row items-center justify-between">
-      <div class="text-h6">
+      <div class="text-h6 text-secondary">
         {{ $t('page.models.name') }}
       </div>
       <div>
@@ -36,21 +35,6 @@
                 {{ $t('actions.models.create.button.scratch.name') }}
               </q-item>
               <q-separator />
-              <q-item
-                clickable
-                :label="$t('actions.models.create.button.template.label')"
-                :title="$acl.role('create-diagram-from-template')
-                  ? $t('actions.models.create.button.template.title')
-                  : $t('errors.permissionsDenied')"
-                data-cy="create-diagram-from-template-button"
-                :disable="!$acl.role('create-diagram-from-template')"
-                @click="DrawerEvent.next({
-                  key: 'CreateDiagram',
-                  type: 'open',
-                })"
-              >
-                {{ $t('actions.models.create.button.template.name') }}
-              </q-item>
               <template v-if="HAS_BACKEND">
                 <q-separator />
                 <q-item
@@ -136,7 +120,6 @@ import DiagramGrid from 'src/components/grid/DiagramGrid.vue';
 import DiagramFilterCard from 'components/card/DiagramFilterCard.vue';
 
 import DialogEvent from 'src/composables/events/DialogEvent';
-import DrawerEvent from 'src/composables/events/DrawerEvent';
 import UpdateModelEvent from 'src/composables/events/ModelEvent';
 import { getUserSetting, setUserSetting } from 'src/composables/Settings';
 
