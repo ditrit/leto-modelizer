@@ -86,7 +86,7 @@ describe('AI Service tests', () => {
       }));
       prepareApiRequest.mockImplementation(() => Promise.resolve(api));
 
-      const result = await sendMessage('1', 'test');
+      const result = await sendMessage('1', 'plugin', 'test');
 
       expect(result.message).toEqual('OK');
     });

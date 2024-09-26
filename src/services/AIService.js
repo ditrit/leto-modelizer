@@ -94,13 +94,14 @@ export async function manageConversation(project, diagram, plugin, files) {
 /**
  * Send Message to AI and get its answers.
  * @param {string} conversationId - Id of conversation.
+ * @param {string} pluginName - Plugin name.
  * @param {string} message - Message to send.
  * @returns {Promise<object>} Answer of AI.
  */
-export async function sendMessage(conversationId, message) {
+export async function sendMessage(conversationId, pluginName, message) {
   const api = await prepareApiRequest();
 
-  return api.post(`/ai/conversations/${conversationId}/messages`, message, options)
+  return api.post(`/ai/conversations/${conversationId}/messages`, { plugin: pluginName, message }, options)
     .then((data) => ({
       ...data,
       message: uncompress(data.message),

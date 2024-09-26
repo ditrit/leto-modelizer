@@ -257,7 +257,7 @@ async function submit(event) {
     props.pluginName,
     files,
   );
-  const aiMessage = await sendMessage(aiConversation.id, formattedText);
+  const aiMessage = await sendMessage(aiConversation.id, props.pluginName, formattedText);
 
   lastAIMessage.value = {
     isMine: false,
