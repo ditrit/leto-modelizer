@@ -177,7 +177,7 @@ Feature: Test roundtrip of the application: Git
     And  I expect '[data-cy="project-card_{{ importedProjectName }}"] [data-cy="title-container"]' is '{{ importedProjectName }}'
 
     ## 109 Import project with a template should redirect to models page and send positive toast
-    When I click on '[data-cy="template-card_project_template"]'
+    When I click on '[data-cy="template-card_Project template"]'
     Then I expect checkbox '[data-cy="create-project-template-form"] [data-cy="import-project-checkbox"]' is not checked
 
     When I click on '[data-cy="create-project-template-form"] [data-cy="import-project-checkbox"]'
@@ -199,7 +199,7 @@ Feature: Test roundtrip of the application: Git
 
     ## 112 Import project with a template with an already existing project name should display an error
     # Import another project with the same name
-    When I click on '[data-cy="template-card_project_template"]'
+    When I click on '[data-cy="template-card_Project template"]'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="import-project-checkbox"]'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{ templateProjectName }}'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="repository-input"]' text '{{ repository_url }}'

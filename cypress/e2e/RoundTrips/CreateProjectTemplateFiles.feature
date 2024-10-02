@@ -9,9 +9,9 @@ Feature: Test roundtrip of the application : create project with template files
 
     # Create project from a template and check template models are displayed
     When I wait 1 second
-    Then I expect '[data-cy="template-card_project_template"]' exists
+    Then I expect '[data-cy="template-card_Project template"]' exists
 
-    When I click on '[data-cy="template-card_project_template"]'
+    When I click on '[data-cy="template-card_Project template"]'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{ projectName }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     And  I wait 1 second
