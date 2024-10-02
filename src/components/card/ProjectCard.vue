@@ -56,6 +56,7 @@
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
+import jdenticon from 'jdenticon/standalone';
 
 const props = defineProps({
   project: {
@@ -66,14 +67,14 @@ const props = defineProps({
 
 /**
  * Get image of project.
- * Transform project name to a number between 0 and 4 and return associate image.
- * @returns {string} Image path.
+ * Use JIdenticon to generate the project image.
+ * @returns {string} Image value.
  */
 function getProjectImage() {
-  const number = props.project.id.split('')
-    .map((char) => char.charCodeAt(0))
-    .reduce((acc, value) => acc + value) % 5;
-  return `images/project${number}.png`;
+  const image = jdenticon.toSvg(props.project.id, 200);
+  const base64Data = btoa(image);
+
+  return `data:image/svg+xml;base64,${base64Data}`;
 }
 </script>
 
