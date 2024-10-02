@@ -16,7 +16,16 @@
         font-size="12px"
         :title="userStore.login"
       >
-        {{ userStore.name?.at(0) }}
+        <template v-if="HAS_BACKEND">
+          <q-img
+            v-if="userPicture"
+            :src="userPicture"
+            :alt="userStore.login"
+          />
+        </template>
+        <template v-else>
+          {{ userStore.name?.at(0) }}
+        </template>
       </q-avatar>
       <q-avatar
         v-else
@@ -108,6 +117,7 @@ import {
   onUnmounted,
 } from 'vue';
 import { useUserStore } from 'src/stores/UserStore';
+import { getUserPicture } from 'src/services/ImageDownloadService';
 
 const props = defineProps({
   projectName: {
@@ -119,7 +129,9 @@ const props = defineProps({
 let addRemoteSubscription;
 const project = ref({});
 const userStore = ref({});
+const userPicture = ref(null);
 const hasRepository = computed(() => !!project.value?.git?.repository);
+const HAS_BACKEND = computed(() => process.env.HAS_BACKEND);
 const menuItems = computed(() => [
   {
     key: 'GitAddRemote',
@@ -149,6 +161,19 @@ function onClick(key) {
 function setProject() {
   project.value = getProjectById(props.projectName);
 }
+/**
+ * Load user picture by its login.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadUserPicture() {
+  return getUserPicture({ HAS_BACKEND: process.env.HAS_BACKEND }, userStore.value.login)
+    .then((picture) => {
+      userPicture.value = picture;
+    })
+    .catch(() => {
+      userPicture.value = null;
+    });
+}
 
 onMounted(async () => {
   setProject();
@@ -156,6 +181,8 @@ onMounted(async () => {
   userStore.value = useUserStore();
 
   addRemoteSubscription = GitEvent.AddRemoteEvent.subscribe(setProject);
+
+  await loadUserPicture();
 });
 
 onUnmounted(() => {

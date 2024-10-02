@@ -50,3 +50,17 @@ export async function getTemplateSchema(env, template, index) {
 
   return downloadImage(`/libraries/templates/${template.id}/schemas/${index}`);
 }
+
+/**
+ * Get user picture by login.
+ * @param {object} env - Environment variables.
+ * @param {string} env.HAS_BACKEND - Indicate if backend is setup.
+ * @param {string} login - User login.
+ * @returns {Promise<string>} Return a user picture on success, otherwise an error.
+ */
+export async function getUserPicture(env, login) {
+  if (!env.HAS_BACKEND) {
+    return null;
+  }
+  return downloadImage(`/users/${login}/picture`);
+}
