@@ -16,6 +16,7 @@
     "test": "jest --coverageProvider=v8",
     "test:coverage": "jest --coverage --coverageProvider=v8",
     "test:e2e": "cypress run --browser electron --spec **/*.feature",
+    "ui:e2e": "cypress open",
     "plugin:install": "node node_modules/@ditrit/leto-modelizer-plugin-cli/src/index.js install",
     "plugin:uninstall": "node node_modules/@ditrit/leto-modelizer-plugin-cli/src/index.js uninstall"
   },
