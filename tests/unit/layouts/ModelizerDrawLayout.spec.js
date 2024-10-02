@@ -137,7 +137,7 @@ describe('Test page component: ModelizerDrawLayout', () => {
       expect(wrapper.vm.componentId).toEqual('id_1');
       expect(wrapper.vm.splitterKey).toEqual('test');
       expect(wrapper.vm.isVisible).toEqual(true);
-      expect(wrapper.vm.splitter).toEqual(75);
+      expect(wrapper.vm.splitter).toEqual(60);
 
       wrapper.vm.onDrawerEvent({ key: 'test2', type: 'close' });
       expect(wrapper.vm.componentId).toEqual(null);

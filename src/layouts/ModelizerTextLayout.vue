@@ -7,7 +7,7 @@
     <q-page-container>
       <q-splitter
         v-model="splitter"
-        :limits="[50, 100]"
+        :limits="[30, 100]"
         separator-class="separator-class"
         :style="{ height: `calc(100vh - ${reservedHeight + 70}px)` }"
       >

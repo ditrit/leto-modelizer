@@ -13,7 +13,7 @@
     <q-page-container>
       <q-splitter
         v-model="splitter"
-        :limits="[50, 100]"
+        :limits="[25, 100]"
         separator-class="separator-class"
         :class="isVisible ? '' : 'splitter-invisible'"
         :style="{ height: `calc(100vh - ${reservedHeight + 70}px)` }"
@@ -134,7 +134,7 @@ function onDrawerEvent({ key, type, id }) {
   componentId.value = id || null;
   splitterKey.value = key;
   isVisible.value = type === 'open';
-  splitter.value = type === 'open' ? 75 : 100;
+  splitter.value = type === 'open' ? 60 : 100;
 }
 
 onMounted(() => {
