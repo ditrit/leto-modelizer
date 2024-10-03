@@ -24,8 +24,11 @@ export default {
       newProject: 'New project',
       importProject: 'Import project',
       createProject: 'Create project',
+      searchProject: 'Search a project',
       importedProject: 'Project has been imported &#129395;!',
       createdProject: 'Project has been created &#129395;!',
+      setFavorite: 'Add to preferred projects!',
+      unsetFavorite: 'Remove from preferred projects!',
       deleteProject: {
         title: 'Delete project',
         confirmDelete: 'Are you sure you want to delete {name} ?',
@@ -251,16 +254,9 @@ export default {
       },
     },
     home: {
-      drawer: {
-        empty: 'Nothing to display',
-        projects: {
-          title: 'Projects',
-          recent: 'Recent projects',
-        },
-      },
       project: {
         recent: 'Recent projects',
-        title: 'Choose your project',
+        title: 'My projects',
         import: 'Import new project',
         create: 'Create a project',
         rename: 'Rename project',
@@ -268,6 +264,23 @@ export default {
         empty: 'No projects, please create a new project to have one here 😉',
         delete: 'Delete project',
         overwrite: 'Overwrite existing project',
+        local: 'Local repository',
+        remote: 'Remote repository',
+        favorite: 'Preferred repository',
+        filter: {
+          title: 'Filter by',
+          all: 'All repositories',
+          local: 'Only Local repositories',
+          remote: 'Only remote repositories',
+          favorite: 'Only preferred repositories',
+        },
+        sort: {
+          title: 'Sort by',
+          dateAsc: 'Creation date, ascending',
+          dateDesc: 'Creation date, descending',
+          nameAsc: 'Project name, ascending',
+          nameDesc: 'Project name, descending',
+        },
       },
       template: {
         createProject: 'Create a project from a template',

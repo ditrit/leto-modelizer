@@ -108,8 +108,11 @@ export function getProjectName(projectId) {
  */
 export function saveProject(project) {
   const projects = getProjects();
+
   projects[project.id] = project;
-  projects[project.id].creationDate = Date.now();
+  projects[project.id].creationDate = project.creationDate;
+  projects[project.id].isFavorite = project.isFavorite;
+
   localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(projects));
 }
 

@@ -1,15 +1,13 @@
 <template>
   <q-page class="home-page bg-grey-2">
-    <div class="column items-start home-content q-mx-md">
+    <div class="column items-center home-content">
       <div class="row grid-container">
         <project-grid
-          class="col-md-8"
           :projects="projects"
         />
       </div>
-      <div class="row q-my-md grid-container">
+      <div class="row grid-container">
         <template-grid
-          class="q-mr-md"
           type="PROJECT"
           @add:template="openCreateProjectTemplateDialog"
         >
@@ -81,7 +79,8 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .grid-container {
   width: 100%;
-  max-width: 1275px;
+  padding-left: 10%;
+  padding-right: 10%;
 
   .project-grid, .template-grid {
     width: 100%;
