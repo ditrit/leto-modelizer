@@ -64,9 +64,10 @@ describe('Test component: AIChatDrawer', () => {
 
   describe('Test function: startTypingEffect', () => {
     it('should stop without message', () => {
+      wrapper.vm.lastAIMessage = { text: 'test' };
       wrapper.vm.submitting = true;
       wrapper.vm.startTypingEffect('');
-      expect(wrapper.vm.submitting).toEqual(false);
+      expect(wrapper.vm.lastAIMessage.text).toEqual('test');
     });
 
     it('should set all message without progressive typing', () => {

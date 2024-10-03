@@ -53,19 +53,22 @@
         <q-chat-message
           v-else
           text-html
+          :text="[message.text]"
           bg-color="grey-3"
           text-color="black"
-        >
-          <div v-html="message.text" />
-        </q-chat-message>
+        />
       </template>
       <q-chat-message
         v-if="lastAIMessage"
-        :text="[lastAIMessage.text]"
         text-html
+        :text="[lastAIMessage.text]"
         bg-color="grey-3"
         text-color="black"
-      />
+      >
+        <template #stamp>
+          <q-spinner-bars v-if="submitting" />
+        </template>
+      </q-chat-message>
     </div>
     <div class="row full-width q-pa-sm justify-center items-center">
       <q-btn
@@ -202,14 +205,12 @@ function scrollToBottom() {
  */
 function startTypingEffect(message) {
   if (message.length === 0) {
-    submitting.value = false;
     return;
   }
 
   if (!progressiveTyping.value) {
     lastAIMessage.value.text += message;
     scrollToBottom();
-    submitting.value = false;
     return;
   }
 
@@ -251,8 +252,16 @@ async function submit(event) {
 
   text.value = '';
 
+  scrollToBottom();
+
   const plugin = getPluginByName(props.pluginName);
   const files = await getDiagramFiles(props.projectName, plugin, props.diagramPath);
+
+  lastAIMessage.value = {
+    isMine: false,
+    text: '',
+  };
+
   const aiConversation = await manageConversation(
     props.projectName,
     props.diagramPath,
@@ -261,10 +270,7 @@ async function submit(event) {
   );
   const aiMessage = await sendMessage(aiConversation.id, props.pluginName, formattedText);
 
-  lastAIMessage.value = {
-    isMine: false,
-    text: '',
-  };
+  submitting.value = false;
 
   startTypingEffect(aiMessage.message);
 }
