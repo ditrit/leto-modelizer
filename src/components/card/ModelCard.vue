@@ -1,25 +1,37 @@
 <template>
-  <q-card
-    v-ripple
-    class="model-card cursor-pointer"
-    :data-cy="`model-card_${model.plugin}-${model.path}`"
-  >
-    <q-img
-      :src="getModelImage()"
-      height="100%"
-    >
-      <div
-        class="absolute-bottom text-subtitle2 text-center"
-        data-cy="title-container"
-      >
-        <div class="text-bold">
-          {{ model.path }}
-        </div>
-        <div class="text-italic">
-          {{ model.plugin }}
-        </div>
+  <q-card class="row">
+    <q-item>
+      <q-item-section avatar>
+        <q-img
+          :src="`/plugins/${model.plugin}/icons/logo.svg`"
+          width="40px"
+        />
+      </q-item-section>
+
+      <q-item-section>
+        <q-item-label>
+          {{ model.path || '/' }}
+        </q-item-label>
+        <q-item-label caption>
+          {{ $t(`${model.plugin}.displayName`) }}
+        </q-item-label>
+        <q-item-label caption>
+          <q-chip
+            v-for="(tag, index) in model.tags"
+            :key="index"
+            dense
+            :outline="false"
+            color="accent"
+            text-color="white"
+            :label="tag.value"
+          />
+        </q-item-label>
+      </q-item-section>
+    </q-item>
+    <q-item>
+      <q-item-section class="column items-center justify-center">
         <q-btn
-          class="q-mr-md"
+          class="q-mb-md"
           :title="$t('actions.models.delete.button.title')"
           size="xs"
           round
@@ -46,37 +58,18 @@
             model,
           })"
         />
-      </div>
-    </q-img>
+      </q-item-section>
+    </q-item>
   </q-card>
 </template>
 
 <script setup>
 import DialogEvent from 'src/composables/events/DialogEvent';
 
-const props = defineProps({
+defineProps({
   model: {
     type: Object,
     required: true,
   },
 });
-
-/**
- * Get image of model.
- * Transform model name to a number between 0 and 4 and return associated image.
- * @returns {string} Image path.
- */
-function getModelImage() {
-  const number = props.model.path.split('')
-    .map((char) => char.charCodeAt(0))
-    .reduce((acc, value) => acc + value) % 5;
-  return `images/project${number}.png`;
-}
 </script>
-
-<style scoped>
-.model-card {
-  width: 150px;
-  height: 150px;
-}
-</style>
