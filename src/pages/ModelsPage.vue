@@ -1,6 +1,9 @@
 <template>
   <q-page>
-    <div class="column items-center">
+    <q-card class="q-mt-md q-mx-md project-details">
+      <project-details-list level="1" />
+    </q-card>
+    <div class="column items-center full-width diagrams-content">
       <diagrams-card
         class="grid-container q-mt-md"
         :project-name="projectName"
@@ -36,6 +39,7 @@ import ImportModelTemplateDialog from 'components/dialog/ImportModelTemplateDial
 import TemplateGrid from 'components/grid/TemplateGrid.vue';
 import DiagramsCard from 'components/card/DiagramsCard.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
+import ProjectDetailsList from 'components/list/ProjectDetailsList.vue';
 
 const route = useRoute();
 const projectName = computed(() => route.params.projectName);
@@ -54,9 +58,18 @@ function openImportModelTemplateDialog(template) {
 </script>
 
 <style lang="scss" scoped>
+.project-details {
+  position:absolute;
+  left: 0;
+}
+
+.diagrams-content {
+  padding-left: 366px;
+  padding-right: 366px
+}
+
 .grid-container {
   width: 100%;
-  max-width: 1275px;
 
   .project-grid, .template-grid {
     width: 100%;

@@ -8,9 +8,11 @@
     data-cy="draw-page-left-drawer"
     class="no-scroll"
   >
+    <project-details-list level="2" />
     <q-splitter
       v-model="splitterModel"
       :limits="[10, 15]"
+      class="bordered-splitter"
     >
       <template #before>
         <q-tabs
@@ -50,11 +52,7 @@
             name="components"
             class="q-pa-none"
           >
-            <component-definitions-list
-              v-if="plugin"
-              :plugin="plugin"
-              :project-name="projectName"
-            />
+            <library-list :plugin="plugin" />
           </q-tab-panel>
 
           <q-tab-panel
@@ -74,8 +72,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import ComponentDefinitionsList from 'src/components/list/ComponentDefinitionsList.vue';
 import VariableList from 'src/components/list/VariableList.vue';
+import ProjectDetailsList from 'components/list/ProjectDetailsList.vue';
+import LibraryList from 'components/list/LibraryList.vue';
 
 defineProps({
   plugin: {
@@ -92,6 +91,11 @@ const isVisible = ref(true);
 const active = ref('components');
 const splitterModel = ref(15);
 </script>
+<style lang="scss" scoped>
+.bordered-splitter {
+  border-top: 1px solid rgba(0, 0, 0, 0.12)
+}
+</style>
 
 <style lang="scss">
 .left-drawer-tab .q-tab__label {

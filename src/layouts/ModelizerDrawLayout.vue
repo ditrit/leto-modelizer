@@ -4,13 +4,12 @@
       :project-name="projectName"
     />
 
-    <modelizer-draw-left-drawer
-      v-if="data.plugin"
-      :plugin="data.plugin"
-      :project-name="projectName"
-    />
-
     <q-page-container>
+      <modelizer-draw-left-drawer
+        v-if="data.plugin"
+        :plugin="data.plugin"
+        :project-name="projectName"
+      />
       <q-splitter
         v-model="splitter"
         :limits="[25, 100]"

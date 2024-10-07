@@ -1,26 +1,5 @@
 <template>
   <q-list data-cy="variable-list">
-    <q-item>
-      <q-item-section>
-        <q-item-label
-          overline
-          header
-        >
-          {{ $t('page.modelizer.drawer.variables.header') }}
-        </q-item-label>
-      </q-item-section>
-    </q-item>
-    <div class="row justify-center">
-      <q-btn
-        :label="$t('page.modelizer.button.back.label')"
-        :title="$t('page.modelizer.button.back.title')"
-        color="positive"
-        class="q-mr-md"
-        no-caps
-        data-cy="models-page-link-button"
-        @click="router.push(`/projects/${projectName}/models`)"
-      />
-    </div>
     <q-expansion-item
       v-for="file in Object.keys(variableData)"
       :key="file"
@@ -100,9 +79,7 @@ import {
   onMounted,
 } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
 
-const router = useRouter();
 const { t } = useI18n();
 const props = defineProps({
   variables: {

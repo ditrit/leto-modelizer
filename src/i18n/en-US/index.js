@@ -350,12 +350,6 @@ export default {
           },
         },
       },
-      button: {
-        back: {
-          label: 'Back to project page',
-          title: 'Open project page',
-        },
-      },
       drawer: {
         aichat: {
           title: 'Ask AI',
@@ -380,7 +374,6 @@ export default {
         },
         variables: {
           empty: 'No variables to display.',
-          header: 'Variables',
           name: 'Name',
           value: 'Value',
         },
