@@ -10,7 +10,7 @@
       <div class="row q-my-md grid-container">
         <template-grid
           class="q-mr-md"
-          :templates="templates"
+          type="PROJECT"
           @add:template="openCreateProjectTemplateDialog"
         >
           <template #header>
@@ -31,7 +31,6 @@
 import ProjectGrid from 'src/components/grid/ProjectGrid.vue';
 import TemplateGrid from 'src/components/grid/TemplateGrid.vue';
 import { getProjects } from 'src/composables/Project';
-import { getTemplatesByType } from 'src/composables/TemplateManager';
 import ImportProjectDialog from 'components/dialog/ImportProjectDialog.vue';
 import CreateProjectTemplateDialog from 'components/dialog/CreateProjectTemplateDialog.vue';
 import CreateProjectDialog from 'components/dialog/CreateProjectDialog.vue';
@@ -45,7 +44,6 @@ import {
 import RenameProjectDialog from 'components/dialog/RenameProjectDialog.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
-const templates = ref([]);
 const projects = ref([]);
 let updateProjectSubscription;
 
@@ -73,7 +71,6 @@ async function openCreateProjectTemplateDialog(template) {
 onMounted(async () => {
   setProjects();
   updateProjectSubscription = ProjectEvent.UpdateProjectEvent.subscribe(setProjects);
-  templates.value = await getTemplatesByType('project');
 });
 
 onUnmounted(() => {

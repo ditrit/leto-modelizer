@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Error management on monaco editor and error footer.
 * Generate diagrams from AI proxy.
 * Add chat to discuss with AI.
+* Load template from api
 
 ### Changed
 
@@ -69,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 * Default space character on file creation.
+* Drawer for diagram from template creation.
 
 ## [1.3.0] - 2023/09/12
 

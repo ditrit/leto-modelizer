@@ -34,7 +34,7 @@
       lazy-rules
       :rules="[
         (value) => canCreateRootModel ? null : notEmpty($t, value),
-        (value) => isUniqueModel(
+        () => isUniqueModel(
           $t,
           modelPlugin,
           models.filter(({ plugin }) => plugin === modelPlugin).map(({ path }) => path),
@@ -102,11 +102,11 @@ const props = defineProps({
 });
 
 const plugins = reactive(getPlugins());
-const modelPath = ref();
 const modelPlugin = ref(plugins[0]?.data.name);
+const pluginConfiguration = computed(() => getPluginByName(modelPlugin.value).configuration);
+const modelPath = ref(pluginConfiguration.value.defaultFileName || '');
 const submitting = ref(false);
 const models = ref([]);
-const pluginConfiguration = computed(() => getPluginByName(modelPlugin.value).configuration);
 const fileName = computed(() => pluginConfiguration.value.defaultFileName || '');
 const baseFolder = computed(() => pluginConfiguration.value.restrictiveFolder || '');
 const canCreateRootModel = computed(() => pluginConfiguration.value.restrictiveFolder === null);

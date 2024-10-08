@@ -16,10 +16,6 @@ jest.mock('src/composables/events/ProjectEvent', () => ({
   },
 }));
 
-jest.mock('src/composables/TemplateManager', () => ({
-  getTemplatesByType: jest.fn(() => Promise.resolve([{ template: 'template' }])),
-}));
-
 jest.mock('src/composables/Project', () => ({
   getProjects: jest.fn(() => ({
     foobar: { id: 'foobar', creationDate: 1684168529274 },
@@ -75,10 +71,6 @@ describe('Test page component: HomePage', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should assign templates with return value of getTemplatesByType', () => {
-      expect(wrapper.vm.templates).toEqual([{ template: 'template' }]);
-    });
-
     it('should subscribe UpdateProjectEvent', () => {
       expect(updateProjectSubscribe).toHaveBeenCalledTimes(1);
     });

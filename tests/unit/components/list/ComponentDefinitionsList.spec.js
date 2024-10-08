@@ -20,7 +20,6 @@ describe('Test component: ComponentDefinitionsList', () => {
         plugin: {
           name: 'pluginName',
         },
-        templates: [],
       },
       global: {
         plugins: [
@@ -34,12 +33,6 @@ describe('Test component: ComponentDefinitionsList', () => {
     describe('Test prop: projectName', () => {
       it('should match "projectName"', () => {
         expect(wrapper.vm.projectName).toEqual('projectName');
-      });
-    });
-
-    describe('Test prop: templates', () => {
-      it('should be equal to an empty array', () => {
-        expect(wrapper.vm.templates).toEqual([]);
       });
     });
 

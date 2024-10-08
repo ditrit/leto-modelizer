@@ -2,31 +2,66 @@
   <q-card
     tabindex="0"
     class="cursor-pointer template-card transparent"
-    :data-cy="`template-card_${template.key}`"
+    :data-cy="`template-card_${template.name}`"
     flat
   >
     <q-card-section class="q-pa-none">
       <q-img
+        v-if="templateIcon"
         class="rounded-borders template-img bg-white"
-        :src="`/template-library/templates/${template.key}/icon.svg`"
-        fit="fill"
+        :src="templateIcon"
+        :alt="template.name"
+        fit="contain"
+      />
+      <q-img
+        v-if="template.type === 'DIAGRAM'"
+        class="rounded-borders template-plugin-img bg-white"
+        :src="`/plugins/${template.plugins[0]}/icons/logo.svg`"
+        :alt="template.plugins[0]"
+        :title="template.plugins[0]"
       />
     </q-card-section>
     <q-card-section
-      class="q-px-none q-py-sm text-caption ellipsis-2-lines"
+      class="q-px-none q-py-sm text-caption ellipsis-2-lines text-center"
       data-cy="title-container"
     >
-      {{ template.type }}
+      {{ template.name }}
     </q-card-section>
   </q-card>
 </template>
 
 <script setup>
-defineProps({
+import { onMounted, ref } from 'vue';
+import { getTemplateIcon } from 'src/services/ImageDownloadService';
+
+const props = defineProps({
   template: {
     type: Object,
     required: true,
   },
+});
+
+const templateIcon = ref(null);
+
+/**
+ * Load template icon by its id.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadTemplateIcon() {
+  return getTemplateIcon({
+    HAS_BACKEND: process.env.HAS_BACKEND,
+    TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL,
+  }, props.template)
+    .then((icon) => {
+      templateIcon.value = icon;
+    })
+    .catch(() => {
+      templateIcon.value = null;
+    });
+}
+
+onMounted(async () => {
+  await loadTemplateIcon();
 });
 </script>
 
@@ -34,11 +69,33 @@ defineProps({
 .template-card {
   width: 100px;
   height: 150px;
-  overflow: hidden;
 }
 .template-img {
   width: 100px;
   height: 100px;
-  border: 1px solid $grey-3;
+  border: 1px solid black;
+  position: initial;
+  overflow: hidden;
+
+  img {
+    margin: 1px;
+    width: 85%;
+  }
+}
+</style>
+
+<style lang="scss">
+.template-img .q-img__container {
+  padding: 5px;
+}
+.template-plugin-img {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 25px;
+  border: 1px solid black;
+  .q-img__container {
+    padding: 2px;
+  }
 }
 </style>

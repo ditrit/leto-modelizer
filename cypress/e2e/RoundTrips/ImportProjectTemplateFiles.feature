@@ -11,9 +11,9 @@ Feature: Test roundtrip of the application : import project with template files
     And   I wait until the application is loaded
 
     # Import project with a template and check template models are displayed
-    Then I expect '[data-cy="template-card_project_template"]' exists
+    Then I expect '[data-cy="template-card_Project template"]' exists
 
-    When I click on '[data-cy="template-card_project_template"]'
+    When I click on '[data-cy="template-card_Project template"]'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="import-project-checkbox"]'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{ projectName }}'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="repository-input"]' text '{{ repository_url }}'

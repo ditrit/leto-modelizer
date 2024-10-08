@@ -22,8 +22,9 @@
         class="row justify-center q-mb-sm"
       >
         <img
-          :src="`template-library/templates/${modelTemplate.key}/schema.svg`"
-          :alt="`${modelTemplate.key}/schema.svg`"
+          v-if="schema"
+          :src="schema"
+          alt="schema.svg"
           class="carousel-img"
         >
       </div>
@@ -31,7 +32,7 @@
         {{ modelTemplate.description }}
       </div>
       <div class="q-pb-md text-subtitle2">
-        {{ $t('page.models.template.selectedPlugin', { plugin: modelTemplate.plugin }) }}
+        {{ $t('page.models.template.selectedPlugin', { plugin: modelTemplate.plugins[0] }) }}
       </div>
       <import-model-template-form
         :project-name="projectName"
@@ -52,6 +53,7 @@ import {
 } from 'vue';
 import { getPluginByName } from 'src/composables/PluginManager';
 import { getProjectFiles } from 'src/composables/Project';
+import { getTemplateSchema } from 'src/services/ImageDownloadService';
 
 const props = defineProps({
   projectName: {
@@ -63,16 +65,38 @@ const props = defineProps({
 const modelTemplate = ref(null);
 const allProjectFiles = ref([]);
 const allProjectDiagrams = ref([]);
+const schema = ref(null);
 
 let dialogEventSubscription;
+
+/**
+ * Load schema of template.
+ * @param {object} template - Template object.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function loadTemplateSchema(template) {
+  return getTemplateSchema({
+    HAS_BACKEND: process.env.HAS_BACKEND,
+    TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL,
+  }, template, 0)
+    .then((image) => {
+      schema.value = image;
+    })
+    .catch(() => {
+      schema.value = null;
+    });
+}
 
 /**
  * Initialize all project files, plugin and diagrams.
  */
 async function init() {
+  const plugin = getPluginByName(modelTemplate.value.plugins[0]);
+
   allProjectFiles.value = await getProjectFiles(props.projectName);
-  const plugin = getPluginByName(modelTemplate.value.plugin);
   allProjectDiagrams.value = plugin.getModels(allProjectFiles.value);
+
+  await loadTemplateSchema(modelTemplate.value);
 }
 
 /**
@@ -99,10 +123,5 @@ onUnmounted(() => {
 .carousel-img {
   cursor: zoom-in;
   height: 100px;
-}
-</style>
-<style>
-.viewer-move {
-  background-color: white;
 }
 </style>

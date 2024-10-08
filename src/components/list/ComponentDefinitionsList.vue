@@ -24,7 +24,6 @@
   </div>
   <library-list
     :plugin="plugin"
-    :templates="templates"
   />
 </template>
 
@@ -38,10 +37,6 @@ defineProps({
   plugin: {
     type: Object,
     required: true,
-  },
-  templates: {
-    type: Array,
-    default: () => [],
   },
   projectName: {
     type: String,

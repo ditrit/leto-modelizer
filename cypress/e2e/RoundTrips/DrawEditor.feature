@@ -5,13 +5,13 @@ Feature: Test roundtrip of the application: draw editor
   ## 102 Should have only one plugin installed with all these definitions
 
   ################## plugin/FilterPlugin.feature ##################
-  ## 201 Set text as 'aws_ami' should display only one element inside plugin title
+  ## 201 Set text as 'Amazon Machine Image' should display only one element inside plugin title
   ## 202 Set text as 'ami server' should display two elements inside plugin title
   ## 203 Set text as 'bad' should not display plugin
-  ## 204 Select plugin and set text as 'aws_ami' should display only one element
+  ## 204 Select plugin and set text as 'Amazon Machine Image' should display only one element
   ## 205 Select plugin and set text as 'ami server' should display only two elements
   ## 206 Select plugin and set text as 'bad' should not display any elements.
-  ## 207 Set text as 'aws_ami' then select plugin should display only one element
+  ## 207 Set text as 'Amazon Machine Image' then select plugin should display only one element
 
   ################## plugin/DisplayComponent.feature ##################
   ## 301 Click on the 'aws_ami' component should display it on the page
@@ -116,10 +116,10 @@ Feature: Test roundtrip of the application: draw editor
     When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
     Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' not exists
 
-    ## 201 Set text as 'aws_ami' should display only one element inside plugin title
-    When I set on '[data-cy="definitions-filter-input"]' text 'aws_ami'
+    ## 201 Set text as 'Amazon Machine Image' should display only one element inside plugin title
+    When I set on '[data-cy="definitions-filter-input"]' text 'Amazon Machine Image'
     Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (1)'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (2)'
 
     ## 202 Set text as 'ami server' should display two elements inside plugin title
     When I set on '[data-cy="definitions-filter-input"]' text 'ami server'
@@ -142,11 +142,11 @@ Feature: Test roundtrip of the application: draw editor
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
 
-    ## 204 Select plugin and set text as 'aws_ami' should display only one element
-    When I set on '[data-cy="definitions-filter-input"]' text 'aws_ami'
+    ## 204 Select plugin and set text as 'Amazon Machine Image' should display only one element
+    When I set on '[data-cy="definitions-filter-input"]' text 'Amazon Machine Image'
     Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (1)'
-    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (2)'
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 2 time on screen
     And  I expect '[data-cy="component-definition_aws_ami"]' exists
 
     ## 205 Select plugin and set text as 'ami server' should display only two elements
@@ -169,18 +169,19 @@ Feature: Test roundtrip of the application: draw editor
     Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (35)'
     And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' not exists
 
-    ## 207 Set text as 'aws_ami' then select plugin should display only one element
-    When I set on '[data-cy="definitions-filter-input"]' text 'aws_ami'
+    ## 207 Set text as 'Amazon Machine Image' then select plugin should display only one element
+    When I set on '[data-cy="definitions-filter-input"]' text 'Amazon Machine Image'
+    And  I wait 2 seconds
     Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]' appear 1 time on screen
-    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (1)'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform (2)'
 
     # Select '@ditrit/terrator-plugin' library
     When I click on '[data-cy="component-definitions-item_@ditrit/terrator-plugin"]'
     And  I wait 1 second
     Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' exists
-    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected [data-cy="title"]' is 'Terraform (1)'
+    And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected [data-cy="title"]' is 'Terraform (2)'
     And  I expect '[data-cy="component-definition-grid"]' exists
-    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 1 time on screen
+    And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 2 time on screen
     And  I expect '[data-cy="component-definition_aws_ami"]' exists
 
     # Initial state

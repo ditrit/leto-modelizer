@@ -36,17 +36,17 @@ Feature: Test roundtrip of the application: project creation via template
     And   I wait until the application is loaded
 
     ## 100 Home page should display one template project card
-    And  I expect '[data-cy="template-card_project_template"]' exists
-    And  I expect '[data-cy="template-card_project_template"] [data-cy="title-container"]' is 'Project template'
+    And  I expect '[data-cy="template-card_Project template"]' exists
+    And  I expect '[data-cy="template-card_Project template"] [data-cy="title-container"]' is 'Project template'
 
     ## 101 Creating a project from a template with an empty name should display an error
-    When I click on '[data-cy="template-card_project_template"]'
+    When I click on '[data-cy="template-card_Project template"]'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="create-project-template-form"] [role="alert"]' is 'Please type something'
     When I click on '[data-cy="close-dialog-button"]'
 
     ## 102 Create initial project from a template
-    And  I click on '[data-cy="template-card_project_template"]'
+    And  I click on '[data-cy="template-card_Project template"]'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{ projectName }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
 
@@ -87,7 +87,7 @@ Feature: Test roundtrip of the application: project creation via template
     And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' is '{{ projectName }}'
 
     ## 107 Create template project with an already existing project name should display an error
-    When I click on '[data-cy="template-card_project_template"]'
+    When I click on '[data-cy="template-card_Project template"]'
     And  I set on '[data-cy="create-project-template-form"] [data-cy="name-input"]' text '{{ projectName }}'
     And  I click on '[data-cy="create-project-template-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="create-project-template-form"] [role="alert"]' is 'Project name already exists.'
@@ -97,55 +97,22 @@ Feature: Test roundtrip of the application: project creation via template
 
     ## 200 Set 'template' as searched text and expect only templates that contains 'template' to be displayed
     And  I set on '[data-cy="search-template-project-input"]' text 'template'
-    Then I expect '[data-cy="template-card_project_template"]' appear 1 time on screen
+    Then I expect '[data-cy="template-card_Project template"]' appear 1 time on screen
 
     ## 201 Set 'none' as searched text and expect no template is displayed and empty message appears
     When I set on '[data-cy="search-template-project-input"]' text 'none'
-    Then I expect '[data-cy="template-card_project_template"]' not exists
-    And  I expect '[data-cy="template-project-grid-empty"]' exists
-    And  I expect '[data-cy="template-project-grid-empty"]' is 'No template available'
+    Then I expect '[data-cy="template-card_Project template"]' not exists
+    And  I expect '[data-cy="template-grid-empty"]' exists
+    And  I expect '[data-cy="template-grid-empty"]' is 'No template available'
 
     ## 202 Unset searched text and expect all templates are displayed
     # For now, only one project template exists
     When I set on '[data-cy="search-template-project-input"]' text ' '
-    Then I expect '[data-cy="template-card_project_template"]' exists
-
-    ## 300 Filter diagram templates by plugins and search text
-    # Open drawer and verify all templates are present
-    When I click on '[data-cy="project-card_{{ projectName }}"]'
-    And  I click on '[data-cy="create-diagram-button"]'
-    And  I click on '[data-cy="create-diagram-from-template-button"]'
-    Then I expect '[data-cy="template-card_terraform_webapp"]' appear 1 time on screen
-    And  I expect '[data-cy="template-card_terraform_java_webapp"]' appear 1 time on screen
-    And  I expect '[data-cy="template-card_github_CI"]' appear 1 time on screen
-
-    # Set 'java' as searched text and expect only templates that contains 'java' to be displayed
-    When I set on '[data-cy="search-template-input"]' text 'java'
-    Then I expect '[data-cy="template-card_terraform_webapp"]' not exists
-    And  I expect '[data-cy="template-card_terraform_java_webapp"]' appear 1 time on screen
-    And  I expect '[data-cy="template-card_github_CI"]' not exists
-
-    # Clear filter text and verify all templates are present
-    When I set on '[data-cy="search-template-input"]' text ' '
-    Then I expect '[data-cy="template-card_terraform_webapp"]' appear 1 time on screen
-    And  I expect '[data-cy="template-card_terraform_java_webapp"]' appear 1 time on screen
-    And  I expect '[data-cy="template-card_github_CI"]' appear 1 time on screen
-
-    # Select Githubator-plugin plugin and verify only GitHub-action templates are present
-    When I select '[data-cy="item_Github"]' in '[data-cy="language-select"]'
-    Then I expect '[data-cy="template-card_terraform_webapp"]' not exists
-    And  I expect '[data-cy="template-card_terraform_java_webapp"]' not exists
-    And  I expect '[data-cy="template-card_github_CI"]' appear 1 time on screen
-
-    # Select Terrator-plugin plugin and verify only terraform templates are present
-    When I select '[data-cy="item_Terraform"]' in '[data-cy="language-select"]'
-    Then I expect '[data-cy="template-card_terraform_webapp"]' appear 1 time on screen
-    And  I expect '[data-cy="template-card_terraform_java_webapp"]' appear 1 time on screen
-    And  I expect '[data-cy="template-card_github_CI"]' not exists
+    Then I expect '[data-cy="template-card_Project template"]' exists
 
     ## 400 Add diagram template should redirect to draw page with correct plugin
-    When I click on '[data-cy="template-card_terraform_webapp"]'
-    And  I click on '[data-cy="submit-button"]'
+    When I click on '[data-cy="project-card_{{ projectName }}"]'
+    And  I click on '[data-cy="template-card_Web application"]'
     Then I expect '[data-cy="import-model-template-dialog"]' exists
 
     When I set on '[data-cy="import-model-template-form"] [data-cy="name-input"]' text '{{ diagramFolder }}/'
@@ -168,13 +135,7 @@ Feature: Test roundtrip of the application: project creation via template
     Then I expect current url is '{{ projectName }}/models'
 
     ## 402 Add diagram template with an already existing name should display an error
-    When I click on '[data-cy="create-diagram-button"]'
-    And  I click on '[data-cy="create-diagram-from-template-button"]'
-    Then I expect '[data-cy="create-diagram-drawer"]' exists
-    And  I expect '[data-cy="template-card_terraform_webapp"]' exists
-
-    When I click on '[data-cy="template-card_terraform_webapp"]'
-    And  I click on '[data-cy="submit-button"]'
+    When I click on '[data-cy="template-card_Web application"]'
     Then I expect '[data-cy="import-model-template-dialog"]' exists
 
     When I set on '[data-cy="import-model-template-form"] [data-cy="name-input"]' text '{{ diagramFolder }}/'

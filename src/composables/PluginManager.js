@@ -11,7 +11,7 @@ import {
   setFiles,
 } from 'src/composables/Project';
 import PluginEvent from 'src/composables/events/PluginEvent';
-import { getTemplateFiles } from 'src/composables/TemplateManager';
+import { getTemplateFiles } from 'src/services/TemplateService';
 
 const configurationFileName = 'leto-modelizer.config.json';
 const intervalTime = 5 * 60 * 1000; // 5 min
@@ -387,10 +387,17 @@ export async function addNewTemplateComponent(
   path,
   templateDefinition,
 ) {
-  const templateFiles = await getTemplateFiles(path, templateDefinition);
+  const templateFiles = await getTemplateFiles({
+    HAS_BACKEND: process.env.HAS_BACKEND,
+    TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL,
+  }, templateDefinition);
 
   await Promise.allSettled(
-    templateFiles.map((file) => appendProjectFile(file)),
+    templateFiles.map((file) => {
+      file.path = `${path}/${file.path}`;
+
+      return appendProjectFile(file);
+    }),
   );
 
   const files = await readDir(path);
@@ -409,10 +416,10 @@ export async function addNewTemplateComponent(
 
 /**
  * Get path of model corresponding to the file path.
- * @param {object} plugin - Plugin corresponding to the model.
+ * @param {string} pluginName - Plugin name.
  * @param {string} path - File path.
  * @returns {string} Model path.
  */
-export function getModelPath(plugin, path) {
-  return getPluginByName(plugin).getModels([new FileInformation({ path })])[0];
+export function getModelPath(pluginName, path) {
+  return getPluginByName(pluginName).getModels([new FileInformation({ path })])[0];
 }

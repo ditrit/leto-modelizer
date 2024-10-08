@@ -53,7 +53,6 @@
             <component-definitions-list
               v-if="plugin"
               :plugin="plugin"
-              :templates="templates"
               :project-name="projectName"
             />
           </q-tab-panel>
@@ -82,10 +81,6 @@ defineProps({
   plugin: {
     type: Object,
     required: true,
-  },
-  templates: {
-    type: Array,
-    default: () => [],
   },
   projectName: {
     type: String,

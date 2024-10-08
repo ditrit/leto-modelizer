@@ -11,11 +11,13 @@
         :name="`fa-solid fa-chevron-${isSelected ? 'left' : 'right'}`"
       />
     </q-item-section>
-    <q-item-section data-cy="title">
-      {{
-        $t('page.modelizer.drawer.components.title',
-           { name: item.title, length: item.size })
-      }}
+    <q-item-section>
+      <span data-cy="title">
+        {{
+          $t('page.modelizer.drawer.components.title',
+             { name: item.title, length: item.size })
+        }}
+      </span>
     </q-item-section>
   </q-item>
 </template>

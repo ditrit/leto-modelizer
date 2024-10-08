@@ -30,20 +30,20 @@ jest.mock('src/services/UserService', () => ({
 describe('AI Service tests', () => {
   describe('Test function: generateDiagram', () => {
     it('should return a diagram based on the description', async () => {
-      const resultPostDiagram = '[{"name": "deployment.yaml", "content": "apiVersion: apps/v1\\nkind: Deployment"}]';
+      const resultPostDiagram = { data: '[{"name": "deployment.yaml", "content": "apiVersion: apps/v1\\nkind: Deployment"}]' };
       api.post.mockImplementation(() => Promise.resolve(resultPostDiagram));
       prepareApiRequest.mockImplementation(() => Promise.resolve(api));
 
       const res = await AIService.generateDiagram('@ditrit/kubernator-plugin', 'give me a sample of code');
 
-      expect(res).toEqual(resultPostDiagram);
+      expect(res).toEqual(resultPostDiagram.data);
     });
   });
 
   describe('Test function: manageConversation', () => {
     it('should create new conversation', async () => {
       api.post.mockClear();
-      api.post.mockImplementation(() => Promise.resolve('ok'));
+      api.post.mockImplementation(() => Promise.resolve({ data: 'ok' }));
       prepareApiRequest.mockImplementation(() => Promise.resolve(api));
       const result = await manageConversation('', '', '', [{ path: 'test', content: 'test' }]);
 
@@ -53,7 +53,7 @@ describe('AI Service tests', () => {
 
     it('should update conversation on different checksum', async () => {
       api.put.mockClear();
-      api.put.mockImplementation(() => Promise.resolve('ok'));
+      api.put.mockImplementation(() => Promise.resolve({ data: 'ok' }));
       prepareApiRequest.mockImplementation(() => Promise.resolve(api));
       const result = await manageConversation('test', 'test', 'test', [{ path: 'test', content: 'test2' }]);
 
@@ -82,7 +82,9 @@ describe('AI Service tests', () => {
     it('should send and return a message', async () => {
       api.post.mockClear();
       api.post.mockImplementation(() => Promise.resolve({
-        message: 'H4sIAAAAAAAA//P3BgAt2TbXAgAAAA==',
+        data: {
+          message: 'H4sIAAAAAAAA//P3BgAt2TbXAgAAAA==',
+        },
       }));
       prepareApiRequest.mockImplementation(() => Promise.resolve(api));
 
@@ -102,9 +104,11 @@ describe('AI Service tests', () => {
     it('should return messages of conversation', async () => {
       prepareApiRequest.mockImplementation(() => Promise.resolve(api));
       makeFilterRequest.mockImplementation(() => Promise.resolve({
-        content: [{
-          message: 'H4sIAAAAAAAA//P3BgAt2TbXAgAAAA==',
-        }],
+        data: {
+          content: [{
+            message: 'H4sIAAAAAAAA//P3BgAt2TbXAgAAAA==',
+          }],
+        },
       }));
       const result = await retrieveMessages('test', 'test', 'test');
 
@@ -128,7 +132,7 @@ describe('AI Service tests', () => {
 
     it('should return messages of conversation', async () => {
       prepareApiRequest.mockImplementation(() => Promise.resolve(api));
-      api.delete.mockImplementation(() => Promise.resolve('OK'));
+      api.delete.mockImplementation(() => Promise.resolve({ data: 'OK' }));
       const result = await deleteConversation('test', 'test', 'test');
 
       expect(result).toEqual('OK');

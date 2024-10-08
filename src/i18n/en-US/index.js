@@ -295,10 +295,11 @@ export default {
       },
     },
     models: {
-      name: 'Detail - List of diagrams from the project',
+      name: 'List of diagrams in the project',
       empty: 'No models available',
       template: {
-        create: 'Create a model from a template',
+        create: 'Create a diagram from a template',
+        pluginsFilter: 'Filter by plugin',
         selectedPlugin: 'Selected plugin: {plugin}',
         selectedTemplate: 'Selected template: {template}',
       },

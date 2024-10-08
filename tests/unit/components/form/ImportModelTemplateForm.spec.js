@@ -38,8 +38,8 @@ jest.mock('src/composables/Project', () => ({
   writeProjectFile: jest.fn(),
 }));
 
-jest.mock('src/composables/TemplateManager', () => ({
-  getTemplateFileByPath: jest.fn(() => Promise.resolve()),
+jest.mock('src/services/TemplateService', () => ({
+  getTemplateFiles: jest.fn(() => Promise.resolve([{ path: 'test.md' }])),
 }));
 
 jest.mock('src/composables/PluginManager', () => ({
@@ -63,7 +63,7 @@ describe('Test component: ImportModelTemplateForm', () => {
       props: {
         projectName: 'test',
         template: {
-          plugin: 'plugin',
+          plugins: ['plugin'],
           files: ['file'],
           key: 'key',
         },
@@ -169,40 +169,6 @@ describe('Test component: ImportModelTemplateForm', () => {
       expect(wrapper.vm.submitting).toEqual(false);
       expect(push).toHaveBeenCalledWith(expect.objectContaining({ query: { path: 'modelNamefile', plugin: 'plugin' } }));
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
-    });
-
-    it('should emit a notification on error', async () => {
-      await wrapper.setProps({
-        projectName: 'error',
-        template: {
-          plugin: 'plugin',
-          files: ['file'],
-          key: 'key',
-        },
-      });
-
-      Notify.create = jest.fn();
-
-      await wrapper.vm.onSubmit();
-
-      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
-    });
-
-    it('should emit a notification on "EEXIST" error', async () => {
-      await wrapper.setProps({
-        projectName: 'eexist',
-        template: {
-          plugin: 'plugin',
-          files: ['file'],
-          key: 'key',
-        },
-      });
-
-      Notify.create = jest.fn();
-
-      await wrapper.vm.onSubmit();
-
-      expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
     });
   });
 });

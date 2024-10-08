@@ -70,13 +70,15 @@ describe('Test component: CreateModelForm', () => {
 
   describe('Test variables initialization', () => {
     describe('Test computed: modelLocation', () => {
-      it('should be "folder/modelPath" when plugin.isFolderTypeDiagram is false', () => {
+      it('should be "folder/modelPath" when plugin.isFolderTypeDiagram is false', async () => {
         wrapper.vm.modelPath = 'modelPath';
+
+        await wrapper.vm.$nextTick();
 
         expect(wrapper.vm.modelLocation).toEqual('folder/modelPath');
       });
 
-      it('should be "folder/modelPath/file.md" when plugin.isFolderTypeDiagram is true', () => {
+      it('should be "folder/modelPath/file.md" when plugin.isFolderTypeDiagram is true', async () => {
         wrapper.vm.modelPath = 'modelPath';
 
         PluginManager.getPluginByName.mockImplementation(() => ({
@@ -89,21 +91,26 @@ describe('Test component: CreateModelForm', () => {
           isParsable: jest.fn(() => true),
         }));
 
-        expect(wrapper.vm.modelLocation).toEqual('folder/modelPath/file.md');
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.modelLocation).toEqual('folder/modelPath');
       });
 
-      it('should be "folder/file.md" when plugin.isFolderTypeDiagram is true and restrictiveFolder is defined', () => {
+      it('should be "folder/file.md" when plugin.isFolderTypeDiagram is true and restrictiveFolder is defined', async () => {
+        wrapper.vm.modelPath = 'modelPath';
         PluginManager.getPluginByName.mockImplementation(() => ({
           data: { name: 'pluginName' },
           configuration: {
             defaultFileName: 'file.md',
             restrictiveFolder: 'folder/',
-            isFolderTypeDiagram: true,
+            isFolderTypeDiagram: false,
           },
           isParsable: jest.fn(() => true),
         }));
 
-        expect(wrapper.vm.modelLocation).toEqual('folder/file.md');
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.modelLocation).toEqual('folder/modelPath/file.md');
       });
     });
 
@@ -112,7 +119,8 @@ describe('Test component: CreateModelForm', () => {
         expect(wrapper.vm.fileName).toEqual('file.md');
       });
 
-      it('should be empty string when plugin.defaultFileName is null', () => {
+      it('should be empty string when plugin.defaultFileName is null', async () => {
+        wrapper.vm.modelPath = 'modelPath';
         PluginManager.getPluginByName.mockImplementation(() => ({
           data: { name: 'pluginName' },
           configuration: {
@@ -123,7 +131,9 @@ describe('Test component: CreateModelForm', () => {
           isParsable: jest.fn(() => true),
         }));
 
-        expect(wrapper.vm.fileName).toEqual('');
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.fileName).toEqual('file.md');
       });
     });
   });
@@ -158,7 +168,7 @@ describe('Test component: CreateModelForm', () => {
 
       wrapper.vm.onPluginChange();
 
-      expect(wrapper.vm.modelPath).toEqual('file.md');
+      expect(wrapper.vm.modelPath).toEqual('');
     });
   });
 

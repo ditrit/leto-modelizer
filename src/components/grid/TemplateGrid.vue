@@ -6,6 +6,30 @@
       <div class="text-h6 text-secondary">
         <slot name="header" />
       </div>
+      <q-select
+        v-if="type === 'DIAGRAM'"
+        v-model="selectedPlugin"
+        outlined
+        dense
+        clearable
+        class="search-bar"
+        :label="$t('page.models.template.pluginsFilter')"
+        :options="plugins.map(({ data }) => data.name)"
+        data-cy="plugin-select"
+        @update:model-value="loadTemplates({ pagination })"
+      >
+        <template #option="{ selected, opt, toggleOption }">
+          <q-item
+            :active="selected"
+            clickable
+            @click="toggleOption(opt)"
+          >
+            <q-item-section :data-cy="`item_${opt}`">
+              {{ opt }}
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
       <q-input
         v-model="searchTemplateText"
         outlined
@@ -14,6 +38,8 @@
         class="search-bar"
         :label="$t('page.home.template.search')"
         data-cy="search-template-project-input"
+        debounce="1000"
+        @update:model-value="loadTemplates({ pagination })"
       >
         <template #prepend>
           <q-icon
@@ -24,71 +50,118 @@
       </q-input>
     </q-card-section>
     <q-card-section
-      class="q-ma-md bg-grey-1 q-pb-none template-card-container row items-center wrap"
+      class="q-ma-md q-pb-none bg-grey-1 template-card-container"
     >
-      <template
-        v-if="$acl.role('create-project-from-template')"
+      <q-table
+        v-model:pagination="pagination"
+        flat
+        bordered
+        grid
+        :rows="templates"
+        :loading="loading"
+        @request="loadTemplates"
       >
-        <div
-          v-for="template in filteredTemplates"
-          :key="template.key"
-          class="template-card-item row q-mb-md justify-center items-center"
-        >
+        <template #item="data">
           <template-card
-            :template="template"
-            class="template-card"
-            @click="$emit('add:template', template)"
+            :template="data.row"
+            class="template-card q-ma-md"
+            @click="$emit('add:template', data.row)"
           />
-        </div>
-        <div
-          v-if="filteredTemplates.length === 0"
-          class="row text-center text-subtitle2 text-grey q-mb-md"
-          data-cy="template-project-grid-empty"
-        >
-          {{ $t('page.home.template.empty') }}
-        </div>
-      </template>
-      <div
-        v-else
-        class="row text-center text-subtitle2 text-grey q-mb-md"
-        data-cy="template-project-grid-unauthorized"
-      >
-        {{ $t('errors.permissionsDenied') }}
-      </div>
+        </template>
+        <template #no-data>
+          <div
+            v-if="hasRole"
+            class="row text-center text-subtitle2 text-grey q-mb-md"
+            data-cy="template-grid-empty"
+          >
+            {{ $t('page.home.template.empty') }}
+          </div>
+          <div
+            v-else
+            class="row text-center text-subtitle2 text-grey q-mb-md"
+            data-cy="template-grid-unauthorized"
+          >
+            {{ $t('errors.permissionsDenied') }}
+          </div>
+        </template>
+      </q-table>
     </q-card-section>
   </q-card>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { searchText } from 'src/composables/Filter';
+import { ref, onMounted, reactive } from 'vue';
 import TemplateCard from 'src/components/card/TemplateCard.vue';
+import { getTemplatesByType } from 'src/services/TemplateService';
+import { getPlugins } from 'src/composables/PluginManager';
+import { useAcl } from 'vue-simple-acl';
 
 defineEmits(['add:template']);
 
 const props = defineProps({
-  templates: {
-    type: Array,
+  type: {
+    type: String,
     required: true,
   },
 });
 
+const acl = useAcl();
+const hasRole = ref(true);
+const plugins = reactive(getPlugins());
+const selectedPlugin = ref(null);
+const templates = ref([]);
+const loading = ref(false);
 const searchTemplateText = ref('');
-const filteredTemplates = computed(() => props.templates
-  .filter(({ type }) => searchText(type, searchTemplateText.value))
-  .slice(0, 32));
+const pagination = ref({
+  page: 0,
+  rowsPerPage: 5,
+});
+
+/**
+ * load templates.
+ * @param {object} event - Event that contains pagination.
+ * @param {object} event.pagination - New pagination value.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function loadTemplates({ pagination: newPagination }) {
+  hasRole.value = acl.role(`create-${props.type.toLowerCase()}-from-template`);
+  if (!hasRole.value) {
+    templates.value = [];
+    return Promise.resolve();
+  }
+
+  const { page, rowsPerPage } = newPagination;
+  const name = searchTemplateText.value ? searchTemplateText.value.trim() : '';
+
+  loading.value = true;
+
+  return getTemplatesByType({
+    HAS_BACKEND: process.env.HAS_BACKEND,
+    TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL,
+  }, props.type, {
+    page: page - 1,
+    count: rowsPerPage,
+    name,
+    plugin: !selectedPlugin.value ? '' : selectedPlugin.value,
+  }).then((data) => {
+    templates.value = data.content;
+    pagination.value.page = data.pageable.pageNumber + 1;
+    pagination.value.rowsPerPage = data.pageable.pageSize;
+    pagination.value.rowsNumber = data.totalElements;
+  }).finally(() => {
+    loading.value = false;
+  });
+}
+
+onMounted(() => {
+  loadTemplates({ pagination: pagination.value });
+});
 </script>
 
 <style scoped>
 .template-card-container {
-  overflow-y: auto;
-  max-height: 350px;
-  box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-}
-.template-card-item {
-  flex-basis: calc(100% / 8);
-  min-width: 125px;
 }
 .search-bar {
   min-width: 300px;

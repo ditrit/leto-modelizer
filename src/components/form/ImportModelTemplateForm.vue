@@ -12,7 +12,7 @@
       :rules="[
         (value) => isUniqueModel(
           $t,
-          template.plugin,
+          template.plugins[0],
           models,
           `${baseFolder}${value || ''}${template.files[0]}`,
           'errors.models.duplicate',
@@ -58,8 +58,8 @@ import {
 } from 'src/composables/Project';
 import { useRouter } from 'vue-router';
 import { FileInput } from '@ditrit/leto-modelizer-plugin-core';
-import { getTemplateFileByPath } from 'src/composables/TemplateManager';
 import { getModelPath, getPluginByName } from 'src/composables/PluginManager';
+import { getTemplateFiles } from 'src/services/TemplateService';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -74,8 +74,8 @@ const props = defineProps({
   },
 });
 const template = toRef(props, 'template');
-const plugin = ref(getPluginByName(template.value.plugin));
-const baseFolder = ref(getPluginByName(template.value.plugin).configuration.restrictiveFolder || '');
+const plugin = ref(getPluginByName(template.value.plugins[0]));
+const baseFolder = ref(getPluginByName(template.value.plugins[0]).configuration.restrictiveFolder || '');
 const modelName = ref(plugin.value.getModels(
   template.value.files.map((file) => `${baseFolder.value || ''}${file}`),
 )[0]);
@@ -130,35 +130,22 @@ async function manageConfigFile(realModelName, content) {
  */
 async function onSubmit() {
   const model = getModelPath(
-    props.template.plugin,
+    props.template.plugins[0],
     `${baseFolder.value}${modelName.value || ''}${props.template.files[0]}`,
   );
+  const files = await getTemplateFiles({
+    HAS_BACKEND: process.env.HAS_BACKEND,
+    TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL,
+  }, props.template);
 
-  return Promise.allSettled(props.template.files.map(
-    (file) => getTemplateFileByPath(
-      `templates/${props.template.key}/${file}`,
-      'text',
-    )
-      .then((result) => {
-        if (file === 'leto-modelizer.config.json') {
-          return manageConfigFile(model, result.data);
-        }
+  return Promise.allSettled(files.map((file) => {
+    if (file.path.indexOf('leto-modelizer.config.json') !== -1) {
+      return manageConfigFile(model, file.content);
+    }
+    file.path = `${props.projectName}/${baseFolder.value}${modelName.value || ''}${file.path}`;
 
-        return appendProjectFile(
-          new FileInput({
-            path: `${props.projectName}/${baseFolder.value}${modelName.value || ''}${file}`,
-            content: result.data,
-          }),
-        );
-      })
-      .catch(() => {
-        Notify.create({
-          type: 'negative',
-          message: t('errors.templates.getData'),
-          html: true,
-        });
-      }),
-  ))
+    return appendProjectFile(file);
+  }))
     .then(() => {
       submitting.value = false;
       Notify.create({
@@ -173,7 +160,7 @@ async function onSubmit() {
           projectName: props.projectName,
         },
         query: {
-          plugin: props.template.plugin,
+          plugin: props.template.plugins[0],
           path: model,
         },
       });

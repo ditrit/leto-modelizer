@@ -7,7 +7,9 @@
     class="component-definition-card cursor-pointer q-hoverable"
     draggable="true"
     :title="definition.description"
-    :data-cy="`component-definition_${definition.type}`"
+    :data-cy="!definition.isTemplate
+      ? `component-definition_${definition.type}`
+      : `component-definition_${definition.name}`"
     @click="onClickItem"
     @dragstart="dragStartHandler"
   >
@@ -21,9 +23,18 @@
         class="items-center q-pr-none"
       >
         <q-icon
+          v-if="!definition.isTemplate"
           color="primary"
           size="xl"
           :name="componentIcon"
+        />
+        <q-img
+          v-else-if="componentIcon"
+          class="rounded-borders template-img bg-white"
+          :src="componentIcon"
+          :alt="definition.name"
+          fit="contain"
+          width="48px"
         />
         <q-icon
           v-if="definition.url"
@@ -41,7 +52,12 @@
 
       <q-item-section>
         <q-item-label class="component-definition-type">
-          {{ definition.displayName || definition.type.replaceAll('_', ' ') }}
+          <template v-if="definition.isTemplate">
+            {{ definition.name }}
+          </template>
+          <template v-else>
+            {{ definition.displayName || definition.type.replaceAll('_', ' ') }}
+          </template>
         </q-item-label>
       </q-item-section>
     </q-item>
@@ -49,7 +65,12 @@
 </template>
 
 <script setup>
-import { computed, ref, toRef } from 'vue';
+import {
+  computed,
+  onMounted,
+  ref,
+  toRef,
+} from 'vue';
 import {
   addNewTemplateComponent,
   getPluginByName,
@@ -57,6 +78,7 @@ import {
 } from 'src/composables/PluginManager';
 import { useRoute } from 'vue-router';
 import DefinitionMenu from 'components/menu/DefinitionMenu.vue';
+import { getTemplateIcon } from 'src/services/ImageDownloadService';
 
 const route = useRoute();
 const props = defineProps({
@@ -81,21 +103,30 @@ const query = computed(() => route.query);
 function dragStartHandler(event) {
   const dragData = {
     pluginName: props.pluginName,
-    isTemplate: props.definition.isTemplate,
-    definitionType: props.definition.isTemplate ? props.definition.key : props.definition.type,
+    definition: props.definition,
   };
 
   event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
   event.dataTransfer.dropEffect = 'copy';
 }
 
-const componentIcon = computed(() => {
+const componentIcon = ref(null);
+
+/**
+ * Load icon of the template
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function loadTemplateIcon() {
   if (props.definition.isTemplate) {
-    return `img:${props.definition.icon}`;
+    componentIcon.value = await getTemplateIcon({
+      HAS_BACKEND: process.env.HAS_BACKEND,
+      TEMPLATE_LIBRARY_BASE_URL: process.env.TEMPLATE_LIBRARY_BASE_URL,
+    }, props.definition);
+    return;
   }
 
-  return `img:/plugins/${props.pluginName}/icons/${props.definition.icon}.svg`;
-});
+  componentIcon.value = `img:/plugins/${props.pluginName}/icons/${props.definition.icon}.svg`;
+}
 
 /**
  * On plugin definition click, add a new component to the plugin components.
@@ -131,6 +162,10 @@ async function onClickItem() {
     plugin.value,
   );
 }
+
+onMounted(() => {
+  loadTemplateIcon();
+});
 </script>
 
 <style scoped>

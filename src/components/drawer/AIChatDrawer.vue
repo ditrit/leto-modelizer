@@ -2,6 +2,7 @@
   <div
     data-cy="ai-chat-panel"
     class="column full-height full-width"
+    style="overflow-x: hidden"
   >
     <div class="row q-px-md justify-between items-center">
       <span class="text-overline q-item__label--header">
@@ -19,6 +20,7 @@
     <div
       ref="scrollContainer"
       class="flex-1 q-pa-sm scroll-y"
+      style="word-break: break-all;"
     >
       <div class="flex justify-center q-mb-md">
         <q-btn
