@@ -28,6 +28,7 @@
     "core-js": "=3.34.0",
     "crypto-js": "^4.2.0",
     "isomorphic-git": "=1.25.1",
+    "jdenticon": "^3.3.0",
     "monaco-editor": "=0.45.0",
     "monaco-editor-webpack-plugin": "=7.1.0",
     "pako": "^2.1.0",
