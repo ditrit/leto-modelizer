@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import LibraryList from 'src/components/list/LibraryList.vue';
+import ComponentsTabPanel from 'src/components/tab-panel/ComponentsTabPanel.vue';
 
 installQuasarPlugin();
 
@@ -31,11 +31,11 @@ jest.mock('src/services/TemplateService', () => ({
   })),
 }));
 
-describe('Test component: LibraryList', () => {
+describe('Test component: ComponentsTabPanel', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(LibraryList, {
+    wrapper = shallowMount(ComponentsTabPanel, {
       global: {
         stubs: {
           qInput: true,
@@ -83,8 +83,9 @@ describe('Test component: LibraryList', () => {
 
     it('should be false when pluginDefinitions is not empty', async () => {
       wrapper.vm.templates = [];
+      wrapper.vm.selectedItemId = wrapper.vm.drawerItems[0].id;
 
-      expect(wrapper.vm.pluginDefinitions).not.toEqual([]);
+      expect(wrapper.vm.selectedItemDefinitions).not.toEqual([]);
       expect(wrapper.vm.isEmptyList).toBeFalsy();
     });
 
@@ -100,7 +101,9 @@ describe('Test component: LibraryList', () => {
         },
       });
 
-      expect(wrapper.vm.templates).not.toEqual([]);
+      wrapper.vm.selectedItemId = wrapper.vm.drawerItems[1].id;
+
+      expect(wrapper.vm.selectedItemDefinitions).not.toEqual([]);
       expect(wrapper.vm.isEmptyList).toBeFalsy();
     });
   });

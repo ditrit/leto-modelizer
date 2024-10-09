@@ -2,9 +2,7 @@
   <q-page class="home-page bg-grey-2">
     <div class="column items-center home-content">
       <div class="row grid-container">
-        <project-grid
-          :projects="projects"
-        />
+        <project-grid />
       </div>
       <div class="row grid-container">
         <template-grid
@@ -28,31 +26,12 @@
 <script setup>
 import ProjectGrid from 'src/components/grid/ProjectGrid.vue';
 import TemplateGrid from 'src/components/grid/TemplateGrid.vue';
-import { getProjects } from 'src/composables/Project';
 import ImportProjectDialog from 'components/dialog/ImportProjectDialog.vue';
 import CreateProjectTemplateDialog from 'components/dialog/CreateProjectTemplateDialog.vue';
 import CreateProjectDialog from 'components/dialog/CreateProjectDialog.vue';
 import DeleteProjectDialog from 'components/dialog/DeleteProjectDialog.vue';
-import ProjectEvent from 'src/composables/events/ProjectEvent';
-import {
-  ref,
-  onMounted,
-  onUnmounted,
-} from 'vue';
 import RenameProjectDialog from 'components/dialog/RenameProjectDialog.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
-
-const projects = ref([]);
-let updateProjectSubscription;
-
-/**
- * Update project list, sorted by creation date from newest to oldest.
- */
-function setProjects() {
-  projects.value = Object.entries(getProjects())
-    .map(([, project]) => project)
-    .sort((projectA, projectB) => projectB.creationDate - projectA.creationDate);
-}
 
 /**
  * Open CreateProjectTemplate dialog.
@@ -65,15 +44,6 @@ async function openCreateProjectTemplateDialog(template) {
     template,
   });
 }
-
-onMounted(async () => {
-  setProjects();
-  updateProjectSubscription = ProjectEvent.UpdateProjectEvent.subscribe(setProjects);
-});
-
-onUnmounted(() => {
-  updateProjectSubscription.unsubscribe();
-});
 </script>
 
 <style lang="scss" scoped>

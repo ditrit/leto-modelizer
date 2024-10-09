@@ -1,16 +1,18 @@
 <template>
-  <q-list style="max-width: 350px">
+  <q-list class="project-details-list">
     <q-item>
       <q-item-section>
         <q-breadcrumbs active-color="accent">
           <q-breadcrumbs-el
-            label="Projects"
+            :label="$t('actions.default.back.projects')"
             to="/"
+            data-cy="projects-page-link-button"
           />
           <q-breadcrumbs-el
             v-if="level >= 1"
-            label="Diagrams"
+            :label="$t('actions.default.back.models')"
             :to="`/projects/${projectName}/models`"
+            data-cy="models-page-link-button"
           />
           <q-breadcrumbs-el
             v-if="level >= 2"
@@ -33,7 +35,12 @@
           {{ projectName }}
         </q-item-label>
         <q-item-label v-if="project.git.repository !== null">
-          <a :href="project.git.repository" target="_blank">View on git provider</a>
+          <a
+            :href="project.git.repository"
+            target="_blank"
+          >
+            View on git provider
+          </a>
         </q-item-label>
       </q-item-section>
     </q-item>
@@ -81,5 +88,12 @@ function getProjectImage() {
 </script>
 
 <style scoped lang="scss">
-
+.project-details-list {
+  min-width: 350px;
+  width: 350px;
+  max-width: 350px;
+  min-height: 200px;
+  height: 200px;
+  max-height: 200px;
+}
 </style>

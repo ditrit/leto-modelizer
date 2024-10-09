@@ -1,52 +1,101 @@
 <template>
-  <q-page class="bg-grey-3 column">
-    <div
-      id="view-port"
-      data-cy="draw-container"
-      class="column"
-      @dragover.prevent
-      @drop.prevent="dropHandler"
-    />
-
-    <div class="row sticky-actions">
-      <q-btn
-        class="q-mr-md"
-        icon="fa-solid fa-sitemap"
-        :label="$t('page.diagrams.actions.rearrange')"
-        stack
-        no-caps
-        color="white"
-        text-color="primary"
-        data-cy="rearrange-button"
-        @click="arrangeComponentsPosition()"
-      />
-      <q-btn
-        class="q-mr-md"
-        icon="fa-solid fa-image"
-        :label="$t('page.diagrams.actions.export')"
-        stack
-        no-caps
-        color="white"
-        text-color="primary"
-        data-cy="export-button"
-        @click="exportSvg()"
-      />
-      <q-btn
-        v-if="HAS_BACKEND"
-        icon="fa-solid fa-brain"
-        :label="$t('page.diagrams.actions.askAI')"
-        stack
-        no-caps
-        color="white"
-        text-color="primary"
-        data-cy="askAI-button"
-        @click="askAI()"
-      />
+  <q-page
+    class="row"
+    :style-fn="getStyle"
+  >
+    <div class="column components-details-menu">
+      <project-details-list :level="2" />
+      <q-separator />
+      <modelizer-draw-tab :offset="offset + 200" />
     </div>
+    <q-separator vertical />
+    <q-splitter
+      v-model="splitter"
+      :limits="[25, 100]"
+      separator-class="separator-class"
+      :class="['flex-1', isVisible ? '' : 'splitter-invisible']"
+      :style="`height: calc(100vh - ${offset}px); max-height: calc(100vh - ${offset}px);`"
+    >
+      <template #before>
+        <div
+          id="view-port"
+          data-cy="draw-container"
+          class="column"
+          @dragover.prevent
+          @drop.prevent="dropHandler"
+        />
+
+        <div class="row sticky-actions">
+          <q-btn
+            class="q-mr-md"
+            icon="fa-solid fa-sitemap"
+            :label="$t('page.diagrams.actions.rearrange')"
+            stack
+            no-caps
+            color="white"
+            text-color="primary"
+            data-cy="rearrange-button"
+            @click="arrangeComponentsPosition()"
+          />
+          <q-btn
+            class="q-mr-md"
+            icon="fa-solid fa-image"
+            :label="$t('page.diagrams.actions.export')"
+            stack
+            no-caps
+            color="white"
+            text-color="primary"
+            data-cy="export-button"
+            @click="exportSvg()"
+          />
+          <q-btn
+            v-if="HAS_BACKEND"
+            icon="fa-solid fa-brain"
+            :label="$t('page.diagrams.actions.askAI')"
+            stack
+            no-caps
+            color="white"
+            text-color="primary"
+            data-cy="askAI-button"
+            @click="askAI()"
+          />
+        </div>
+      </template>
+      <template #after>
+        <div
+          v-if="isVisible"
+          class="flex full-height scroll-y"
+        >
+          <a-i-chat-drawer
+            v-if="splitterKey === 'AIChatDrawer'"
+            :project-name="projectName"
+            :diagram-path="diagramPath"
+            :plugin-name="pluginName"
+          />
+          <component-detail-panel
+            v-if="plugin && splitterKey === 'ComponentDetailPanel'"
+            :id="componentId"
+            :plugin="plugin"
+            style="flex-grow: 1; overflow-y: auto;"
+          />
+        </div>
+      </template>
+    </q-splitter>
   </q-page>
 </template>
 
 <script setup>
+import ProjectDetailsList from 'components/list/ProjectDetailsList.vue';
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  ref,
+} from 'vue';
+import ModelizerDrawTab from 'components/tab/ModelizerDrawTab.vue';
+import AIChatDrawer from 'components/drawer/AIChatDrawer.vue';
+import ComponentDetailPanel from 'components/drawer/ComponentDetailPanel.vue';
+import { useRoute, useRouter } from 'vue-router';
 import {
   addNewTemplateComponent,
   getPluginByName,
@@ -54,37 +103,73 @@ import {
   renderConfiguration,
   renderModel,
 } from 'src/composables/PluginManager';
-import {
-  computed,
-  onMounted,
-  onUnmounted,
-  reactive,
-} from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { Notify } from 'quasar';
-import { useI18n } from 'vue-i18n';
+import LogEvent from 'src/composables/events/LogEvent';
+import DrawerEvent from 'src/composables/events/DrawerEvent';
 import PluginEvent from 'src/composables/events/PluginEvent';
+import { useI18n } from 'vue-i18n';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { ComponentLink } from '@ditrit/leto-modelizer-plugin-core';
-import DrawerEvent from 'src/composables/events/DrawerEvent';
 import FileEvent from 'src/composables/events/FileEvent';
+import { Notify } from 'quasar';
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
-const HAS_BACKEND = computed(() => process.env.HAS_BACKEND);
-const projectName = computed(() => route.params.projectName);
 const query = computed(() => route.query);
-
-const data = reactive({
-  plugin: null,
-});
+const projectName = computed(() => route.params.projectName);
+const diagramPath = computed(() => query.value.path);
+const pluginName = computed(() => query.value.plugin);
+const HAS_BACKEND = computed(() => process.env.HAS_BACKEND);
+const splitter = ref(100);
+const splitterKey = ref('');
+const isVisible = ref(false);
+const componentId = ref('');
+const offset = ref(0);
+const plugin = ref(null);
 
 let pluginDefaultSubscription;
 let pluginRequestSubscription;
 let drawerEventSubscription;
 let aiDrawerNextState = 'open';
+
+/**
+ * Store offset from page and return appropriate style.
+ * @param {number} value - Offset value.
+ * @returns {object} Calculated height in css style.
+ */
+function getStyle(value) {
+  offset.value = value;
+
+  return {
+    'min-height': `calc(100vh - ${value}px)`,
+    'max-height': `calc(100vh - ${value}px)`,
+  };
+}
+
+/**
+ * Update plugin, draw components and update component templates array.
+ * @returns {Promise<void>} Promise with nothing on success otherwise an error.
+ */
+async function initView() {
+  if (!plugin.value) {
+    return Promise.resolve();
+  }
+
+  return initComponents(
+    route.params.projectName,
+    plugin.value,
+    query.value.path,
+  ).then((logs) => {
+    LogEvent.FileLogEvent.next(logs.map((log) => ({
+      ...log,
+      componentName: log.componentId ? plugin.value.data.getComponentById(log.componentId).externalId : '',
+    })));
+    plugin.value.initDrawer('view-port', false);
+    plugin.value.arrangeComponentsPosition(null, true);
+    plugin.value.draw();
+  });
+}
 
 /**
  * On 'Drawer' event type, call renderConfiguration if action is 'move',
@@ -102,13 +187,13 @@ async function onDefaultEvent({ event }) {
       await renderConfiguration(
         projectName.value,
         query.value.path,
-        data.plugin,
+        plugin.value,
       );
     } else if (renderModelActions.includes(event.action)) {
       await renderModel(
         projectName.value,
         query.value.path,
-        data.plugin,
+        plugin.value,
       );
     } else if (event.action === 'openMenu') {
       DialogEvent.next({
@@ -129,15 +214,15 @@ async function onDefaultEvent({ event }) {
 async function onRequestEvent(event) {
   let needRender = false;
   if (event.type === 'fitToContent') {
-    data.plugin.resize(event.id);
-    data.plugin.draw();
+    plugin.value.resize(event.id);
+    plugin.value.draw();
   } else if (event.type === 'arrangeContent') {
-    data.plugin.arrangeComponentsPosition(event.id, false);
-    data.plugin.draw();
+    plugin.value.arrangeComponentsPosition(event.id, false);
+    plugin.value.draw();
   } else if (event.type === 'delete') {
     needRender = true;
-    data.plugin.data.removeComponentById(event.id);
-    data.plugin.draw();
+    plugin.value.data.removeComponentById(event.id);
+    plugin.value.draw();
     DrawerEvent.next({
       type: 'close',
       key: 'ComponentDetailPanel',
@@ -147,12 +232,12 @@ async function onRequestEvent(event) {
     const componentPath = query.value.path
       ? `${projectName.value}/${query.value.path}`
       : projectName.value;
-    const id = data.plugin.addComponent(
+    const id = plugin.value.addComponent(
       null,
       event.data.componentDefinition,
       componentPath,
     );
-    const component = data.plugin.data.getComponentById(event.id);
+    const component = plugin.value.data.getComponentById(event.id);
 
     component.setLinkAttribute(new ComponentLink({
       source: event.id,
@@ -160,11 +245,11 @@ async function onRequestEvent(event) {
       definition: event.data.linkDefinition,
     }));
 
-    data.plugin.arrangeComponentsPosition(null, true);
-    data.plugin.draw();
+    plugin.value.arrangeComponentsPosition(null, true);
+    plugin.value.draw();
   } else if (event.type === 'linkToComponent') {
     needRender = true;
-    const component = data.plugin.data.getComponentById(event.id);
+    const component = plugin.value.data.getComponentById(event.id);
 
     component.setLinkAttribute(new ComponentLink({
       source: event.id,
@@ -172,20 +257,20 @@ async function onRequestEvent(event) {
       definition: event.data.linkDefinition,
     }));
 
-    data.plugin.draw();
+    plugin.value.draw();
   } else if (event.type === 'addComponentToContainer') {
     needRender = true;
     const componentPath = query.value.path
       ? `${projectName.value}/${query.value.path}`
       : projectName.value;
-    data.plugin.addComponent(
+    plugin.value.addComponent(
       event.id,
       event.data.definition,
       componentPath,
     );
 
-    data.plugin.arrangeComponentsPosition(event.id, true);
-    data.plugin.draw();
+    plugin.value.arrangeComponentsPosition(event.id, true);
+    plugin.value.draw();
   } else if (event.type === 'edit') {
     DrawerEvent.next({
       type: 'open',
@@ -193,10 +278,10 @@ async function onRequestEvent(event) {
       id: event.id,
     });
   } else if (event.type === 'select') {
-    const parent = data.plugin.data.getComponentById(event.ids[0]);
-    data.plugin.data.scene.selection = event.ids;
-    data.plugin.data.scene.selectionRef = parent.id;
-    data.plugin.draw();
+    const parent = plugin.value.data.getComponentById(event.ids[0]);
+    plugin.value.data.scene.selection = event.ids;
+    plugin.value.data.scene.selectionRef = parent.id;
+    plugin.value.draw();
   } else if (event.type === 'openFile') {
     await router.push({
       name: 'Text',
@@ -222,7 +307,7 @@ async function onRequestEvent(event) {
  * Export diagram as svg.
  */
 function exportSvg() {
-  const content = data.plugin.exportSvg('view-port');
+  const content = plugin.value.exportSvg('view-port');
   const blob = new Blob([content], { type: 'image/svg+xml' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -240,27 +325,24 @@ function exportSvg() {
 }
 
 /**
- * Update plugin, draw components and update component templates array.
- * @returns {Promise<void>} Promise with nothing on success.
+ * Open Drawer and manage reserved height for footer.
+ * @param {object} event - The triggered event.
+ * @param {string} event.key - The key of event.
+ * @param {string} event.type - The type of event, can be 'open' or 'close'.
+ * @param {string} event.id - Id of component.
  */
-async function initView() {
-  data.plugin = getPluginByName(query.value.plugin);
-
-  if (!data.plugin) {
-    return Promise.resolve();
+function onDrawerEvent({ key, type, id }) {
+  if (key !== 'ComponentDetailPanel' && key !== 'AIChatDrawer') {
+    return;
   }
 
-  return Promise.allSettled([
-    initComponents(
-      route.params.projectName,
-      data.plugin,
-      query.value.path,
-    ).then(() => {
-      data.plugin.initDrawer('view-port', false);
-      data.plugin.arrangeComponentsPosition(null, true);
-      data.plugin.draw();
-    }),
-  ]);
+  if (key === 'AIChatDrawer') {
+    aiDrawerNextState = type === 'close' ? 'open' : 'close';
+  }
+  componentId.value = id || null;
+  splitterKey.value = key;
+  isVisible.value = type === 'open';
+  splitter.value = type === 'open' ? 60 : 100;
 }
 
 /**
@@ -276,23 +358,23 @@ async function dropHandler(event) {
     : projectName.value;
 
   if (!dropData.definition.isTemplate) {
-    data.plugin.addComponent(
+    plugin.value.addComponent(
       null,
       dropData.definition,
       componentPath,
       event,
     );
-    data.plugin.draw();
+    plugin.value.draw();
   } else {
     await addNewTemplateComponent(
       projectName.value,
-      data.plugin,
+      plugin.value,
       componentPath,
       dropData.definition,
     )
       .then(() => {
-        data.plugin.arrangeComponentsPosition(null, true);
-        data.plugin.draw();
+        plugin.value.arrangeComponentsPosition(null, true);
+        plugin.value.draw();
       })
       .catch(() => {
         Notify.create({
@@ -305,7 +387,7 @@ async function dropHandler(event) {
   await renderModel(
     projectName.value,
     query.value.path,
-    data.plugin,
+    plugin.value,
   );
 }
 
@@ -313,13 +395,13 @@ async function dropHandler(event) {
  * Rearrange components and then redraw the whole view.
  */
 async function arrangeComponentsPosition() {
-  data.plugin.arrangeComponentsPosition(null, false);
-  data.plugin.draw();
+  plugin.value.arrangeComponentsPosition(null, false);
+  plugin.value.draw();
 
   await renderConfiguration(
     projectName.value,
     query.value.path,
-    data.plugin,
+    plugin.value,
   );
 }
 
@@ -337,23 +419,12 @@ function askAI() {
   });
 }
 
-/**
- * Set the state of AI chat Drawer.
- * @param {object} event - The triggered event.
- * @param {string} event.key - The key of event.
- * @param {string} event.type - The type of event, can be 'open' or 'close'.
- */
-function setAIDrawerNextState({ key, type }) {
-  if (key === 'AIChatDrawer') {
-    aiDrawerNextState = type === 'close' ? 'open' : 'close';
-  }
-}
-
-onMounted(async () => {
+onMounted(() => {
+  plugin.value = getPluginByName(query.value.plugin);
   pluginDefaultSubscription = PluginEvent.DefaultEvent.subscribe(onDefaultEvent);
   pluginRequestSubscription = PluginEvent.RequestEvent.subscribe(onRequestEvent);
-  drawerEventSubscription = DrawerEvent.subscribe(setAIDrawerNextState);
-  await initView();
+  drawerEventSubscription = DrawerEvent.subscribe(onDrawerEvent);
+  initView();
 });
 
 onUnmounted(() => {
@@ -366,12 +437,23 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .sticky-actions {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 16px;
+  right: 16px;
+}
+.components-details-menu {
+  min-width: 350px;
+  width: 350px;
+  max-width: 350px;
 }
 </style>
 
 <style lang="scss">
+.left-drawer-tab .q-tab__label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+
 div#view-port, div#view-port svg.scene {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -381,5 +463,10 @@ div#view-port, div#view-port svg.scene {
   flex: 1;
   height: 100%;
   width: 100%;
+}
+
+.splitter-invisible .separator-class div {
+  left: 0 !important;
+  right: 0 !important;
 }
 </style>

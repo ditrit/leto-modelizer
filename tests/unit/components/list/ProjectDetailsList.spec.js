@@ -1,7 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import ProjectDetailsList from 'src/components/list/ProjectDetailsList.vue';
-import { getProjectById } from 'src/composables/Project';
 import { useRoute } from 'vue-router';
 
 installQuasarPlugin();

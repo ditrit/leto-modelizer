@@ -19,6 +19,10 @@ export default {
       modify: 'Modify',
       rename: 'Rename',
       ok: 'Ok',
+      back: {
+        projects: 'Projects',
+        models: 'Diagrams',
+      },
     },
     home: {
       newProject: 'New project',
