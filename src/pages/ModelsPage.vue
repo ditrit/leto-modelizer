@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <q-card class="q-mt-md q-mx-md project-details">
-      <project-details-list level="1" />
+      <project-details-list :level="1" />
     </q-card>
     <div class="column items-center full-width diagrams-content">
       <diagrams-card
@@ -64,12 +64,14 @@ function openImportModelTemplateDialog(template) {
 }
 
 .diagrams-content {
-  padding-left: 366px;
-  padding-right: 366px
+  padding-left: 350px;
+  padding-right: 350px;
 }
 
 .grid-container {
   width: 100%;
+  margin-left: 32px;
+  margin-right: 32px;
 
   .project-grid, .template-grid {
     width: 100%;

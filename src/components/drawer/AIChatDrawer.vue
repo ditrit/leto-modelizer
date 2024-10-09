@@ -154,7 +154,8 @@
 import {
   ref,
   nextTick,
-  onMounted, onUnmounted,
+  onMounted,
+  onUnmounted,
 } from 'vue';
 import DrawerEvent from 'src/composables/events/DrawerEvent';
 import {

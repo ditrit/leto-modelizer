@@ -8,7 +8,7 @@
     data-cy="modelizer-text-left-drawer"
   >
     <div class="col-md-2 bg-grey-2 file-explorer-container">
-      <project-details-list level="2" />
+      <project-details-list :level="2" />
       <git-branch-card />
       <q-checkbox
         v-model="showParsableFiles"
