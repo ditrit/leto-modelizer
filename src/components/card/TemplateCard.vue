@@ -1,9 +1,8 @@
 <template>
   <q-card
     tabindex="0"
-    class="cursor-pointer template-card transparent"
+    class="cursor-pointer template-card"
     :data-cy="`template-card_${template.name}`"
-    flat
   >
     <q-card-section class="q-pa-none">
       <q-img
@@ -21,12 +20,12 @@
         :title="template.plugins[0]"
       />
     </q-card-section>
-    <q-card-section
-      class="q-px-none q-py-sm text-caption ellipsis-2-lines text-center"
+    <div
+      class="text-caption ellipsis-2-lines text-center"
       data-cy="title-container"
     >
       {{ template.name }}
-    </q-card-section>
+    </div>
   </q-card>
 </template>
 
@@ -68,12 +67,17 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .template-card {
   width: 100px;
-  height: 150px;
+  max-width: 100px;
+  height: 100px;
+  max-height: 100px;
+  transition: filter 0.3s ease;
+}
+.template-card:hover {
+  filter: brightness(85%);
 }
 .template-img {
   width: 100px;
   height: 100px;
-  border: 1px solid black;
   position: initial;
   overflow: hidden;
 
@@ -94,6 +98,7 @@ onMounted(async () => {
   right: 0;
   width: 25px;
   border: 1px solid black;
+
   .q-img__container {
     padding: 2px;
   }

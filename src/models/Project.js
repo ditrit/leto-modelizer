@@ -20,6 +20,7 @@ class Project {
       repository: null,
       username: null,
     },
+    isFavorite: false,
   }) {
     /**
      * The id of this project.
@@ -41,6 +42,11 @@ class Project {
       username: null,
       ...props.git,
     };
+    /**
+     * The id of this project.
+     * @type {string}
+     */
+    this.isFavorite = props.isFavorite;
   }
 
   /**

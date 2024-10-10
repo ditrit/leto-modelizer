@@ -22,6 +22,7 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'diag1'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=diag1'
+    And  I wait 1 seconds
 
     # Diagram 2 creation
     When I click on '[data-cy="models-page-link-button"]'
@@ -33,6 +34,7 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'diag1/diag2'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=diag1/diag2'
+    And  I wait 1 second
 
     # Check project folders and files are created in Text view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -70,6 +72,7 @@ Feature: Fix issue #392: Delete diagram should only remove parsable files of dia
     ## Should delete new_file.tf file but keep all non parsable files and sub-folder
     When I click on '[data-cy="diagram-path_diag1/diag2"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=diag1/diag2'
+    And  I wait 1 second
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second

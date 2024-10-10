@@ -16,7 +16,8 @@ const rules = () => defineAclRules((setRule) => {
   setRule('create-diagram-from-template', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'DIAGRAM_TEMPLATE'));
   setRule('create-component', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'COMPONENT'));
   setRule('create-component-from-template', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'COMPONENT_TEMPLATE'));
-  setRule('create-project', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'COMPONENT'));
+  setRule('create-project', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'PROJECT'));
+  setRule('import-project', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'PROJECT_GIT'));
   setRule('create-project-from-template', (user) => !process.env.HAS_BACKEND || findPermission(user, 'CREATE', 'COMPONENT_TEMPLATE'));
   setRule('delete-diagram', (user) => !process.env.HAS_BACKEND || findPermission(user, 'DELETE', 'DIAGRAM'));
 });

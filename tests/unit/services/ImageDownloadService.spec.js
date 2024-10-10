@@ -78,4 +78,28 @@ describe('Test: ImageDownloadService', () => {
       expect(templateSchema).toEqual('/template-library/basePath/test');
     });
   });
+
+  describe('Test function: getUserPicture', () => {
+    it('should return the user avatar from API', async () => {
+      const mockAvatar = 'data:image/png;base64,';
+
+      prepareApiRequest.mockImplementation(() => ({
+        get: jest.fn(() => Promise
+          .resolve({ data: 'picture', headers: { 'content-type': 'image/png' } })),
+      }));
+
+      const templateSchema = await ImageDownloadService.getUserPicture({
+        HAS_BACKEND: 'true',
+      }, 'login');
+      expect(templateSchema).toEqual(mockAvatar);
+    });
+
+    it('should return null without API', async () => {
+      const mockAvatar = await ImageDownloadService.getUserPicture({
+        HAS_BACKEND: null,
+      }, 'login');
+
+      expect(mockAvatar).toEqual(null);
+    });
+  });
 });

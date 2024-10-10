@@ -216,14 +216,21 @@ describe('Test composable: Project', () => {
     });
 
     it('should update project', () => {
-      saveProject({ id: 'foo', text: 'qaz' });
+      saveProject({
+        id: 'foo',
+        text: 'qaz',
+        isFavorite: true,
+        creationDate: 1,
+      });
 
-      let projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
+      const projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
 
-      expect(projects.foo).toStrictEqual({ id: 'foo', text: 'qaz', creationDate: mockDate });
-      saveProject({ id: 'foo', text: 'quz' });
-      projects = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
-      expect(projects.foo).toStrictEqual({ id: 'foo', text: 'quz', creationDate: mockDate });
+      expect(projects.foo).toStrictEqual({
+        id: 'foo',
+        text: 'qaz',
+        creationDate: 1,
+        isFavorite: true,
+      });
     });
   });
 

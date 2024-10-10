@@ -8,7 +8,7 @@
   </div>
   <div
     v-else
-    class="row items-start q-gutter-md"
+    class="row items-center justify-center q-gutter-md"
     data-cy="diagram-grid"
   >
     <model-card

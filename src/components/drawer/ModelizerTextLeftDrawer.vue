@@ -8,17 +8,7 @@
     data-cy="modelizer-text-left-drawer"
   >
     <div class="col-md-2 bg-grey-2 file-explorer-container">
-      <div class="row justify-center q-my-sm">
-        <q-btn
-          :label="$t('page.modelizer.button.back.label')"
-          :title="$t('page.modelizer.button.back.title')"
-          color="positive"
-          class="q-mr-md"
-          no-caps
-          data-cy="models-page-link-button"
-          @click="router.push(`/projects/${projectName}/models`)"
-        />
-      </div>
+      <project-details-list :level="2" />
       <git-branch-card />
       <q-checkbox
         v-model="showParsableFiles"
@@ -40,9 +30,9 @@
 import FileExplorer from 'src/components/FileExplorer.vue';
 import GitBranchCard from 'src/components/card/GitBranchCard.vue';
 import { computed, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
+import ProjectDetailsList from 'components/list/ProjectDetailsList.vue';
 
-const router = useRouter();
 const route = useRoute();
 
 const projectName = computed(() => route.params.projectName);

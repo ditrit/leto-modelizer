@@ -60,6 +60,7 @@ Feature: Test roundtrip of the application: text editor
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ diagramFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}'
+    And  I wait 1 second
     And  I expect '[data-cy="component-definitions-list"]' exists
     And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform'
 
@@ -571,6 +572,7 @@ Feature: Test roundtrip of the application: text editor
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
     And  I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'
+    And  I wait 1 second
 
     # Go to text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'

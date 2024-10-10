@@ -20,6 +20,7 @@ Feature: Fix issue #393: File explorer is broken when creating a folder with the
 
     When I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path='
+    And  I wait 1 second
 
     # Check project folders and files are created in Text view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
