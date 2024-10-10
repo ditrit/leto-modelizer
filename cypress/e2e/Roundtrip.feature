@@ -22,12 +22,14 @@ Feature: Test roundtrip of the application
     And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
     And  I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'
+    And  I wait 1 second
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second
     Then I expect '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="true"] [class="block"]' is 'Text'
     And  I expect '[data-cy="file-explorer"]' exists
     And  I expect current url is 'projectName/modelizer/text\?plugin=@ditrit/terrator-plugin&path=infra'
+    And  I wait 1 second
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second

@@ -25,6 +25,7 @@ Feature: Test roundtrip of the application : import project with template files
 
     When I click on '[data-cy="diagram-path_infra/prod"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra/prod'
+    And  I wait 1 second
 
     # Check project files and folders are created in Text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
