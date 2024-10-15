@@ -109,7 +109,7 @@ Plugin to manage Kubernetes files.
       <td>🚫</td>
     </tr>
     <tr>
-      <td>next version</td>
+      <td>1.4.0</td>
       <td>= 0.28.0</td>
       <td>= 0.12.2</td>
       <td>= 0.5.2</td>
