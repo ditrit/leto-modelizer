@@ -28,6 +28,7 @@ Feature: Test homepage: project deletion
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ modelFolder }}'
+    And  I wait 1 second
 
     # Check project root folder is created in Text view
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -77,6 +78,7 @@ Feature: Test homepage: project deletion
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ modelFolder }}'
+    And  I wait 1 second
 
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 1 second

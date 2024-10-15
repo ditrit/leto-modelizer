@@ -19,6 +19,7 @@ Feature: Test modelizer page: switch view (text/model)
 
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra/main.tf'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    And  I wait 1 second
 
   Scenario: Default modelizer page mode should be 'draw'
     Then I expect current url is 'projectName/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'

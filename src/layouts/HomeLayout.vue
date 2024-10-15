@@ -1,7 +1,6 @@
 <template>
   <q-layout view="HHh Lpr Fff">
     <default-navigation-bar />
-    <home-drawer />
     <q-page-container>
       <home-page />
     </q-page-container>
@@ -23,7 +22,6 @@
 
 <script setup>
 import DefaultNavigationBar from 'components/DefaultNavigationBar.vue';
-import HomeDrawer from 'src/components/drawer/HomeDrawer.vue';
 import HomePage from 'src/pages/HomePage.vue';
 import {
   ref,

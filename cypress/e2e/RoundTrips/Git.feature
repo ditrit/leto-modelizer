@@ -3,7 +3,6 @@ Feature: Test roundtrip of the application: Git
   ################## ImportProject.feature ##################
   ## 101 Import project should redirect to models page and send positive toast
   ## 102 Import project should add it in the projects list
-  ## 103 Import project should add it in the left drawer
   ## 104 Import project with empty repository should display an error
   ## 105 Import project with non valid repository should display an error
   ## 106 Import project with non existant repository should display an error
@@ -11,7 +10,6 @@ Feature: Test roundtrip of the application: Git
   ## 108 Import project with same repository url with overwrite option should overwrite existing project and send positive toast
   ## 109 Import project with a template should redirect to models page and send positive toast
   ## 110 Import project with a template should add it in the projects list
-  ## 111 Import project with a template should add it in the left drawer
   ## 112 Import project with a template with an already existing project name should display an error
   ## 113 Import project with a template with empty repository should display an error
   ## 114 Import project with a template with non valid repository should display an error
@@ -109,10 +107,6 @@ Feature: Test roundtrip of the application: Git
     Then I expect '[data-cy="project-card_{{ importedProjectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ importedProjectName }}"] [data-cy="title-container"]' is '{{ importedProjectName }}'
 
-    ## 103 Import project should add it in the left drawer
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ importedProjectName }}"]' appear 1 time on screen
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ importedProjectName }}"]' is '{{ importedProjectName }}'
-
     ## 104 Import project with empty repository should display an error
     When I click on '[data-cy="import-project-button"]'
     And  I click on '[data-cy="import-project-form"] [data-cy="submit-button"]'
@@ -147,6 +141,7 @@ Feature: Test roundtrip of the application: Git
     And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
     And  I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text '{{ modelFolder }}'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
+    And  I wait 1 seconds
     And  I click on '[data-cy="models-page-link-button"]'
     Then I expect current url is '{{ importedProjectName }}/models'
     And  I expect '[data-cy="diagram-table"]' exists
@@ -192,10 +187,6 @@ Feature: Test roundtrip of the application: Git
     And  I click on '[data-cy="home-page-link"]'
     Then I expect '[data-cy="project-card_{{ templateProjectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ templateProjectName }}"] [data-cy="title-container"]' is '{{ templateProjectName }}'
-
-    ## 111 Import project with a template should add it in the left drawer
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ templateProjectName }}"]' appear 1 time on screen
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ templateProjectName }}"]' is '{{ templateProjectName }}'
 
     ## 112 Import project with a template with an already existing project name should display an error
     # Import another project with the same name
@@ -349,6 +340,7 @@ Feature: Test roundtrip of the application: Git
     When I set on '[data-cy="create-model-form"] [data-cy="name-input"]' text 'infra'
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path=infra'
+    And  I wait 1 second
 
     # Go to Text page
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -704,6 +696,7 @@ Feature: Test roundtrip of the application: Git
     And  I click on '[data-cy="home-page-link"]'
     And  I click on '[data-cy="project-card_{{ importedProjectName }}"]'
     And  I click on '[data-cy="diagram-path_terraform"]'
+    And  I wait 1 second
     And  I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     And  I wait 2 seconds
 

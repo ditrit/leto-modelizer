@@ -170,7 +170,7 @@ onMounted(() => {
 
 <style scoped>
   .component-definition-type {
-    word-break: normal;
+    word-break: break-all;
     text-align: center;
   }
 </style>

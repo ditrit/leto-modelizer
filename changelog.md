@@ -28,7 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Error management on monaco editor and error footer.
 * Generate diagrams from AI proxy.
 * Add chat to discuss with AI.
-* Load template from api
+* Load template from api.
+* Management of Preferred project.
 
 ### Changed
 
@@ -52,6 +53,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Use display name of plugin.
 * Use new logo of plugin.
 * Improve drawer to modify Component details, permit to resize it.
+* Navigation between pages.
+* Rework on Components list on draw page
+* Style of project/template card.
 
 ### Fixed
 
@@ -71,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Default space character on file creation.
 * Drawer for diagram from template creation.
+* Left drawer on home page.
 
 ## [1.3.0] - 2023/09/12
 

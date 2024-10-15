@@ -6,6 +6,7 @@ import GitEvent from 'src/composables/events/GitEvent';
 import { setActivePinia, createPinia } from 'pinia';
 import { createI18n } from 'vue-i18n';
 import i18nConfiguration from 'src/i18n';
+import { getUserPicture } from 'src/services/ImageDownloadService';
 
 installQuasarPlugin();
 
@@ -17,6 +18,10 @@ jest.mock('src/composables/events/GitEvent', () => ({
   AddRemoteEvent: {
     subscribe: jest.fn(),
   },
+}));
+
+jest.mock('src/services/ImageDownloadService', () => ({
+  getUserPicture: jest.fn(() => Promise.resolve('avatar')),
 }));
 
 const vCanMock = {
@@ -174,6 +179,26 @@ describe('Test component: ModelizerSettingsMenu', () => {
           token: 'testToken',
         },
       });
+    });
+  });
+
+  describe('Test function: loadUserPicture', () => {
+    it('Should set avatar on success', async () => {
+      wrapper.vm.userPicture = null;
+      getUserPicture.mockImplementation(() => Promise.resolve('avatar'));
+
+      await wrapper.vm.loadUserPicture();
+
+      expect(wrapper.vm.userPicture).toEqual('avatar');
+    });
+
+    it('Should set null on error', async () => {
+      wrapper.vm.userPicture = 'test';
+      getUserPicture.mockImplementation(() => Promise.reject());
+
+      await wrapper.vm.loadUserPicture();
+
+      expect(wrapper.vm.userPicture).toEqual(null);
     });
   });
 

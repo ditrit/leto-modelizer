@@ -1,12 +1,16 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
-import VariableList from 'src/components/list/VariableList.vue';
-import { Variable } from '@ditrit/leto-modelizer-plugin-core';
+import VariablesTabPanel from 'src/components/tab-panel/VariablesTabPanel.vue';
 
 installQuasarPlugin();
 
 jest.mock('vue-router', () => ({
   useRouter: jest.fn(),
+  useRoute: jest.fn(() => ({
+    query: {
+      plugin: 'test',
+    },
+  })),
 }));
 
 jest.mock('vue-i18n', () => ({
@@ -15,30 +19,41 @@ jest.mock('vue-i18n', () => ({
   }),
 }));
 
+jest.mock('src/composables/PluginManager', () => ({
+  getPluginByName: jest.fn(() => ({
+    data: {
+      variables: [
+        {
+          path: 'infra/new_file.tf',
+          category: 'variable',
+          name: 'instance_class',
+          value: null,
+        },
+        {
+          path: 'infra/new_file.tf',
+          category: 'output',
+          name: 'instance_ip_addr',
+          value: 'aws_instance.server.private_ip',
+        },
+        {
+          path: 'test/variable.tf',
+          category: 'variable',
+          name: 'image.id',
+          value: 'var.image_id',
+        },
+      ],
+    },
+  })),
+}));
+
 describe('Test component: VariableList', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(VariableList, {
-      props: {
-        variables: [
-          new Variable({ name: 'variable1' }),
-          new Variable({ name: 'variable2' }),
-        ],
-      },
-    });
+    wrapper = shallowMount(VariablesTabPanel);
   });
 
   describe('Test variables initialization', () => {
-    describe('Test prop: variables', () => {
-      it('should match an array containing 2 variables', () => {
-        expect(wrapper.vm.variables).toEqual([
-          new Variable({ name: 'variable1' }),
-          new Variable({ name: 'variable2' }),
-        ]);
-      });
-    });
-
     describe('Test computed: columns', () => {
       it('should be a list of objects with "name", "label" and "field" as keys and corresponding data as values', () => {
         expect(wrapper.vm.columns).toEqual([
@@ -59,27 +74,6 @@ describe('Test component: VariableList', () => {
 
   describe('Test function: getFormattedVariables', () => {
     it('should transform variables into the desired formatted object', () => {
-      const variables = [
-        {
-          path: 'infra/new_file.tf',
-          category: 'variable',
-          name: 'instance_class',
-          value: null,
-        },
-        {
-          path: 'infra/new_file.tf',
-          category: 'output',
-          name: 'instance_ip_addr',
-          value: 'aws_instance.server.private_ip',
-        },
-        {
-          path: 'test/variable.tf',
-          category: 'variable',
-          name: 'image.id',
-          value: 'var.image_id',
-        },
-      ];
-
       const expectedOutput = {
         'infra/new_file.tf': {
           variable: [
@@ -111,7 +105,7 @@ describe('Test component: VariableList', () => {
         },
       };
 
-      const result = wrapper.vm.getFormattedVariables(variables);
+      const result = wrapper.vm.getFormattedVariables();
 
       expect(result).toEqual(expectedOutput);
     });

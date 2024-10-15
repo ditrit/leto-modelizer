@@ -22,6 +22,7 @@ Feature: Test roundtrip of the application : create project files
     And  I click on '[data-cy="create-model-form"] [data-cy="submit-button"]'
     Then I expect 'positive' toast to appear with text 'Model has been created 🥳!'
     And  I expect current url is '{{ projectName }}/modelizer/draw\?plugin=<plugin>&path=<model>'
+    And  I wait 1 second
 
     # Check project files and folders are created in Text view
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'

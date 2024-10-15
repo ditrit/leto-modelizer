@@ -1,7 +1,6 @@
 import ModelizerDrawLayout from 'src/layouts/ModelizerDrawLayout.vue';
 import ModelizerTextLayout from 'src/layouts/ModelizerTextLayout.vue';
 import ProjectLayout from 'src/layouts/ProjectLayout.vue';
-import DiagramsLayout from 'src/layouts/DiagramsLayout.vue';
 import AboutLayout from 'src/layouts/AboutLayout.vue';
 import HomeLayout from 'src/layouts/HomeLayout.vue';
 import { getProjectById } from 'src/composables/Project';
@@ -39,11 +38,6 @@ const routes = [
         path: 'models',
         name: 'Models',
         component: ProjectLayout,
-      },
-      {
-        path: 'diagrams',
-        name: 'Diagrams',
-        component: DiagramsLayout,
       },
     ],
   },

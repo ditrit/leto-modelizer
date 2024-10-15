@@ -1,8 +1,13 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-jest';
 import { shallowMount } from '@vue/test-utils';
 import ProjectCard from 'src/components/card/ProjectCard.vue';
+import { saveProject } from 'src/composables/Project';
 
 installQuasarPlugin();
+
+jest.mock('src/composables/Project', () => ({
+  saveProject: jest.fn(),
+}));
 
 describe('Test component: ProjectCard', () => {
   let wrapper;
@@ -26,27 +31,22 @@ describe('Test component: ProjectCard', () => {
     });
   });
 
-  describe('Test functions', () => {
-    describe('Test function: getProjectImage', () => {
-      it('should return corresponding image name', async () => {
-        await wrapper.setProps({ project: { id: 'A' } });
-        expect(wrapper.vm.getProjectImage()).toEqual('images/project0.png');
+  describe('Test function: getProjectImage', () => {
+    it('should return valid image value', async () => {
+      await wrapper.setProps({ project: { id: 'A' } });
+      expect(wrapper.vm.getProjectImage().indexOf('data:image/svg+xml;base64,')).toEqual(0);
+    });
+  });
 
-        await wrapper.setProps({ project: { id: 'B' } });
-        expect(wrapper.vm.getProjectImage()).toEqual('images/project1.png');
-
-        await wrapper.setProps({ project: { id: 'C' } });
-        expect(wrapper.vm.getProjectImage()).toEqual('images/project2.png');
-
-        await wrapper.setProps({ project: { id: 'D' } });
-        expect(wrapper.vm.getProjectImage()).toEqual('images/project3.png');
-
-        await wrapper.setProps({ project: { id: 'E' } });
-        expect(wrapper.vm.getProjectImage()).toEqual('images/project4.png');
-
-        await wrapper.setProps({ project: { id: 'F' } });
-        expect(wrapper.vm.getProjectImage()).toEqual('images/project0.png');
+  describe('Test function: setFavorite', () => {
+    it('should set favorite project and emit event', () => {
+      saveProject.mockClear();
+      wrapper.vm.setFavorite(true);
+      expect(saveProject).toBeCalledWith({
+        id: 'project-0000',
+        isFavorite: true,
       });
+      expect(wrapper.emitted()).toHaveProperty('reloadProjects');
     });
   });
 });

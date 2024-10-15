@@ -1,26 +1,24 @@
 <template>
-  <q-input
-    v-model="definitionFilter"
-    clearable
-    class="q-px-md"
-    debounce="1000"
-    :label="inputLabel"
-    data-cy="definitions-filter-input"
-    @update:model-value="initTemplates"
+  <q-tab-panel
+    name="components"
+    class="q-pa-none column no-wrap no-scroll"
+    data-cy="component-definitions-list"
   >
-    <template #prepend>
-      <q-icon name="fa-solid fa-magnifying-glass" />
-    </template>
-  </q-input>
-  <q-list
-    text-white
-    :class="[
-      'column no-wrap col-shrink',
-      'scroll'
-    ]"
-    style="max-height: calc(100vh - 260px);"
-  >
-    <template
+    <q-input
+      v-model="searchText"
+      clearable
+      class="q-px-md"
+      debounce="1000"
+      :label="inputLabel"
+      data-cy="definitions-filter-input"
+      @update:model-value="initTemplates"
+    >
+      <template #prepend>
+        <q-icon name="fa-solid fa-magnifying-glass" />
+      </template>
+    </q-input>
+
+    <div
       v-for="(drawerItem) in drawerItems"
       :key="drawerItem.id"
     >
@@ -31,59 +29,66 @@
         :is-selected="isSelected"
         @click="onItemClick(drawerItem.id)"
       />
-    </template>
-    <template v-if="selectedItemId">
-      <div
-        v-if="!hasRole"
-        class="q-px-md q-py-sm text-italic text-grey full-height"
-        data-cy="library-unauthorized-message"
-      >
-        {{ $t('errors.permissionsDenied') }}
-      </div>
-      <q-item
-        v-else-if="!isEmptyList"
-        class="q-pa-none q-mb-sm item-grid column"
-      >
-        <component-definition-grid
-          :definitions="selectedItemDefinitions"
-          :plugin-name="plugin.data.name"
-          class="q-mt-xs q-pr-sm"
-        />
-        <q-btn
-          v-if="haveMoreTemplates"
-          outline
-          no-caps
-          icon="fa-solid fa-ellipsis"
-          color="primary"
-          class="q-ma-sm"
-          label="load more"
-          :loading="loading"
-          @click="loadMoreTemplates"
-        >
-          <template #loading>
-            <q-spinner-dots />
-          </template>
-        </q-btn>
-      </q-item>
-    </template>
+    </div>
     <div
-      v-if="isEmptyList"
+      v-if="searchText && isEmptyList"
       class="q-px-md q-py-sm text-italic text-grey full-height"
       data-cy="library-empty-message"
     >
       {{ $t('page.modelizer.drawer.components.empty') }}
     </div>
-  </q-list>
+
+    <template v-if="selectedItemId">
+      <div
+        v-if="!hasRole"
+        class="q-px-md q-py-sm text-italic text-grey"
+        data-cy="library-unauthorized-message"
+      >
+        {{ $t('errors.permissionsDenied') }}
+      </div>
+      <div
+        v-else
+        class="row q-col-gutter-sm q-pa-md q-mt-none scroll-y"
+        data-cy="component-definition-grid"
+      >
+        <div
+          v-for="(definition, index) in selectedItemDefinitions"
+          :key="`definition-card_${index}`"
+          class="col-4"
+        >
+          <component-definition-card
+            :definition="definition"
+            :plugin-name="plugin.data.name"
+            class="full-height"
+          />
+        </div>
+      </div>
+      <q-btn
+        v-if="haveMoreTemplates"
+        outline
+        no-caps
+        icon="fa-solid fa-ellipsis"
+        color="primary"
+        label="load more"
+        :loading="loading"
+        @click="loadMoreTemplates"
+      >
+        <template #loading>
+          <q-spinner-dots />
+        </template>
+      </q-btn>
+    </template>
+  </q-tab-panel>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import ComponentDefinitionGrid from 'src/components/grid/ComponentDefinitionGrid.vue';
-import LibraryItem from 'src/components/item/LibraryItem.vue';
-import { useI18n } from 'vue-i18n';
-import { isMatching } from 'src/composables/Project';
 import { useAcl } from 'vue-simple-acl';
+import { useI18n } from 'vue-i18n';
+import { computed, onMounted, ref } from 'vue';
+import { isMatching } from 'src/composables/Project';
 import { getTemplatesByType } from 'src/services/TemplateService';
+import LibraryItem from 'components/item/LibraryItem.vue';
+import ComponentDefinitionCard from 'components/card/ComponentDefinitionCard.vue';
 
 const acl = useAcl();
 const { t } = useI18n();
@@ -95,7 +100,7 @@ const props = defineProps({
 });
 const templates = ref([]);
 const totalTemplates = ref(0);
-const definitionFilter = ref('');
+const searchText = ref('');
 const selectedItemId = ref(null);
 const isSelected = ref(false);
 const loading = ref(false);
@@ -104,10 +109,8 @@ const currentPage = ref(0);
 // TODO : remove this const
 // when @quasar/quasar-app-extension-testing-unit-jest@3.0.0 is officially released
 const inputLabel = computed(() => t('page.modelizer.drawer.components.filterLabel'));
-const pluginDefinitions = computed(() => props.plugin?.data.definitions.components
-  .filter((def) => isMatching(definitionFilter.value, def.displayName || def.type)));
-const isEmptyList = computed(() => pluginDefinitions.value.length === 0
-  && templates.value.length === 0);
+const pluginDefinitions = computed(() => props.plugin.data.definitions.components
+  .filter((def) => isMatching(searchText.value, def.displayName || def.type)));
 const drawerItems = computed(() => [
   {
     id: props.plugin.data.name,
@@ -125,9 +128,10 @@ const drawerItems = computed(() => [
   },
 ]);
 const selectedItemDefinitions = computed(() => drawerItems.value
-  .find(({ id }) => selectedItemId.value === id)?.definitions);
+  .find(({ id }) => selectedItemId.value === id)?.definitions || []);
 const hasRole = computed(() => drawerItems.value
   .find(({ id }) => selectedItemId.value === id)?.hasRole || false);
+const isEmptyList = computed(() => selectedItemDefinitions.value.length === 0);
 
 /**
  * Toggle isSelected value and set selectedItemId on library item click.
@@ -151,7 +155,7 @@ function onItemClick(id) {
 async function loadTemplates(page) {
   loading.value = true;
   currentPage.value = page;
-  const name = definitionFilter.value ? definitionFilter.value.trim() : '';
+  const name = searchText.value ? searchText.value.trim() : '';
 
   return getTemplatesByType({
     HAS_BACKEND: process.env.HAS_BACKEND,
@@ -201,9 +205,3 @@ onMounted(() => {
   initTemplates();
 });
 </script>
-
-<style lang="scss" scoped>
-  .item-grid {
-    overflow-y: auto !important;
-  }
-</style>

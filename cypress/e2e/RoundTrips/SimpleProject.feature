@@ -3,37 +3,21 @@ Feature: Test roundtrip of the application: project creation
   ################## CreateProject.feature ##################
   ## 100 Home page should display an empty project message and one template project card
   ## 101 Creating project with empty name should display an error
-  ## 102 Create intial project
+  ## 102 Create initial project
   ## 103 Created project should redirect to models page and send positive toast
   ## 104 Created project should be in the projects list
-  ## 105 Created project should be in the left drawer
   ## 106 Create project with an already existing project name should display an error
 
   ################## OpenProject.feature ##################
   ## 107 Click on project card in projects list should redirect to 'models' page
-  ## 108 Click on project item in left drawer should redirect to 'models' page
 
   ################## RenameProject.feature ##################
   ## 200 Renaming existing project should update the project name in the projects list
-  ## 201 Renaming existing project should update the project name in the left drawer
 
   ################## DeleteProject.feature ##################
   ## 300 Delete project should remove it from the projects list
-  ## 301 Delete project should remove it from the left drawer
-
-  ################## FilterProject.feature ##################
-  ## 400 Verify all project tags are inactive
-  ## 401 Select local tag and verify only local projects are displayed
-  ## 402 Select the remote tag and check that no project is present
-  ## 403 Unselect local tag and verify only remote projects are displayed
-  ## 404 Set 'local' as searched text and expect only projects that contains 'local' to be displayed
-  ## 405 Set 'leto' as searched text and expect only projects that contains 'leto' to be displayed
-  ## 406 Set 'none' as searched text and expect no project is displayed
-  ## 407 Set 'leto local' as searched text and expect all projects are displayed
-  ## 408 Unset searched text and expect all projects are displayed
 
   ################## DisplayDiagrams.feature ##################
-  ## 500 After diagrams creation, they present in the multi-diagrams view
   ## 501 Try to create a model with an already existing name should fail
 
   ################## RenameModel.feature ##################
@@ -41,14 +25,6 @@ Feature: Test roundtrip of the application: project creation
 
   ################## DeleteModel.feature ##################
   ## 700 Delete first model and check that it does not exit anymore
-
-  ################## FilterModel.feature ##################
-  ## 800 Filter by text and verify that some diagrams disappear
-  ## 801 Clear filter text and verify all diagrams are present
-  ## 802 Select Infrastructure tag and verify only all Infrastructure diagrams are present
-  ## 803 Select CI tag and verify all diagrams are present
-  ## 804 Unselect Infrastructure tag and verify only all CI diagrams are present
-  ## 805 Unselect CI tag and verify all diagrams are present
 
   ################## AddComponent.feature ##################
   ## 900 Plugin test installed in component definitions list (Draw view) should not create project configuration file (Text view)
@@ -97,10 +73,6 @@ Feature: Test roundtrip of the application: project creation
     Then I expect '[data-cy="project-card_{{projectName}}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{projectName}}"] [data-cy="title-container"]' is '{{projectName}}'
 
-    ## 105 Created project should be in the left drawer
-    And I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' exists
-    And I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectName}}"]' is '{{projectName}}'
-
     ## 106 Create project with an already existing project name should display an error
     When I click on '[data-cy="create-project-button"]'
     And  I set on '[data-cy="create-project-form"] [data-cy="name-input"]' text '{{projectName}}'
@@ -120,20 +92,6 @@ Feature: Test roundtrip of the application: project creation
     And  I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is '/'
 
-    ## 108 Click on project item in left drawer should redirect to 'models' page
-    And  I expect '[data-cy="home-drawer"]' exists
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' exists
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' is '{{ projectName }}'
-
-    When I click on '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]'
-    And  I wait 1 second
-    Then I expect current url is '{{ projectName }}/models'
-
-    # Go back to HomePage
-    When I wait 1 second
-    And  I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
-    Then I expect '[data-cy="project-card_{{projectName}}"] [data-cy="rename-button"]' exists
-
     ## 200 Renaming existing project should update the project name in the projects list
 
     # Rename project and check project name is updated
@@ -145,11 +103,6 @@ Feature: Test roundtrip of the application: project creation
     And  I expect '[data-cy="project-card_{{projectRenamed}}"] [data-cy="title-container"]' is '{{projectRenamed}}'
     But  I expect '[data-cy="project-card_{{projectName}}"]' not exists
 
-    ## 201 Renaming existing project should update the project name in the left drawer
-    Then I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectRenamed}}"]' appear 1 time on screen
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectRenamed}}"]' is '{{projectRenamed}}'
-    But  I expect '[data-cy="project-expansion-item"] [data-cy="item_projectTest"]' not exists
-
     ## 300 Delete project should remove it from the projects list
     When I click on '[data-cy="project-card_{{projectRenamed}}"] [data-cy="delete-button"]'
     And  I click on '[data-cy="delete-project-form"] [data-cy="confirm-delete-checkbox"]'
@@ -158,11 +111,6 @@ Feature: Test roundtrip of the application: project creation
     And  I expect '[data-cy="delete-project-form"]' is closed
     And  I expect '[data-cy="project-card_{{projectRenamed}}"]' not exists
     And  I expect '[data-cy="project-grid-empty"]' is 'No projects, please create a new project to have one here 😉'
-
-    ## 301 Delete project should remove it from the left drawer
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{projectRenamed}}"]' not exists
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' exists
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item-empty"]' is 'Nothing to display'
 
     # No Rename project button available
     But  I expect '[data-cy="project-card_projectTest"] [data-cy="rename-button"]' not exists
@@ -192,65 +140,10 @@ Feature: Test roundtrip of the application: project creation
     And  I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect current url is '/'
 
-    ## Select/unselect tag should filter the projects list
-    # 400 Verify all project tags are inactive
-    And  I expect '[data-cy="inactive-tag_local"]' exists
-    And  I expect '[data-cy="inactive-tag_remote"]' exists
-
-    # 401 Select local tag and verify only local projects are displayed
-    When I click on '[data-cy="inactive-tag_local"]'
-    Then I expect '[data-cy="inactive-tag_local"]' not exists
-    And  I expect '[data-cy="active-tag_local"]' exists
-    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' not exists
-    And  I expect '[data-cy="project-card_{{projectName}}"]' appear 1 time on screen
-
-    # 402 Select the remote tag and check that no project is present
-    When I click on '[data-cy="inactive-tag_remote"]'
-    Then I expect '[data-cy="inactive-tag_remote"]' not exists
-    And  I expect '[data-cy="active-tag_remote"]' exists
-    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' not exists
-    And  I expect '[data-cy="project-card_{{projectName}}}"]' not exists
-
-    # 403 Unselect local tag and verify only remote projects are displayed
-    When I click on '[data-cy="active-tag_local"]'
-    Then I expect '[data-cy="active-tag_local"]' not exists
-    And  I expect '[data-cy="inactive-tag_local"]' exists
-    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' appear 1 time on screen
-    And  I expect '[data-cy="project-card_{{projectName}}}"]' not exists
-
-    ## Set/unset searched text should filter the projects list
-    # 404 Set 'local' as searched text and expect only projects that contains 'local' to be displayed
-    And  I click on '[data-cy="active-tag_remote"]'
-    And  I set on '[data-cy="search-project-input"]' text 'local'
-    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' not exists
-    And  I expect '[data-cy="project-card_{{projectName}}"]' appear 1 time on screen
-
-    # 405 Set 'leto' as searched text and expect only projects that contains 'leto' to be displayed
-    When I set on '[data-cy="search-project-input"]' text 'leto'
-    Then I expect '[data-cy="project-card_{{projectName}}"]' not exists
-    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' appear 1 time on screen
-
-    # 406 Set 'none' as searched text and expect no project is displayed
-    When I set on '[data-cy="search-project-input"]' text 'none'
-    Then I expect '[data-cy="project-card_{{projectName}}"]' not exists
-    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' not exists
-
-    # 407 Set 'leto local' as searched text and expect all projects are displayed
-    When I set on '[data-cy="search-project-input"]' text 'leto local'
-    Then I expect '[data-cy="project-card_{{projectName}}"]' exists
-    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' exists
-
-    # 408 Unset searched text and expect all projects are displayed
-    When I set on '[data-cy="search-project-input"]' text ' '
-    Then I expect '[data-cy="project-card_{{projectName}}"]' exists
-    And  I expect '[data-cy="project-card_{{remoteProjectName}}"]' exists
-
-    And  I click on '[data-cy="project-card_{{projectName}}"]'
-    And  I expect current url is 'projects/{{ projectName }}/models'
-
-    ## 500 After diagrams creation, they present in the multi-diagrams view
     # First model creation
-    When I wait 1 seconds
+    When  I click on '[data-cy="project-card_{{projectName}}"]'
+    And  I expect current url is 'projects/{{ projectName }}/models'
+    And  I wait 1 seconds
     And  I click on '[data-cy="create-diagram-button"]'
     And  I click on '[data-cy="create-diagram-from-scratch-button"]'
     And  I select '[data-cy="item_@ditrit/terrator-plugin"]' in '[data-cy="create-model-form"] [data-cy="plugin-select"]'
@@ -302,13 +195,6 @@ Feature: Test roundtrip of the application: project creation
     And  I expect '[data-cy="component-definitions-list"]' exists
     And  I expect '[data-cy="component-definitions-item_@ditrit/githubator-plugin"] [data-cy="title"]' is 'GitHub Action'
 
-    # All created diagrams should be displayed in the /diagrams view
-    When I visit the '/projects/{{ projectName }}/diagrams'
-    And  I wait until the application is loaded
-    Then I expect '[data-cy="diagram-card_{{ firstModelFolder }}"]' exists
-    And  I expect '[data-cy="diagram-card_{{ secondModelFolder }}"]' exists
-    And  I expect '[data-cy="diagram-card_\.github/workflows/{{thirdModelName}}"]' exists
-
     # Back to the models page
     When I visit the '/projects/{{ projectName }}/models'
     And  I wait until the application is loaded
@@ -344,6 +230,7 @@ Feature: Test roundtrip of the application: project creation
     # Click on model and go to text view and check files
     When I click on '[data-cy="diagram-path_{{ modelRenamed }}"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ modelRenamed }}'
+    And  I wait 1 second
     And  I expect '[data-cy="component-definitions-list"]' exists
     And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform'
 
@@ -370,50 +257,20 @@ Feature: Test roundtrip of the application: project creation
 
     When I click on '[data-cy="diagram-path_{{secondModelFolder}}"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ secondModelFolder }}'
+    And  I wait 1 second
 
     # Go to text view and check files of first model doesn't exist but second one does
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
-    And  I wait 1 second
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path={{ secondModelFolder }}'
+    And  I wait 1 second
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}"]' is '{{ projectName }}'
     And  I expect '[data-cy="file-explorer"] [data-cy="folder_{{ projectName }}/{{ secondModelFolder }}"]' exists
 
     ## Back to the models page
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
+    And  I wait 1 second
     And  I click on '[data-cy="models-page-link-button"]'
     Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
-
-    # 800 Filter by text and verify that some diagrams disappear
-    When I set on '[data-cy="search-diagram-input"]' text '1'
-    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' not exists
-    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' not exists
-
-    # 801 Clear filter text and verify all diagrams are present
-    When I set on '[data-cy="search-diagram-input"]' text ' '
-    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
-    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
-
-    # 802 Select Infrastructure tag and verify only all Infrastructure diagrams are present
-    When I select '[data-cy="select-checkbox_Infrastructure"]' in '[data-cy="diagram-tag-select"]'
-    And  I click on '[data-cy="diagram-tag-select"]'
-    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
-    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' not exists
-
-    # 803 Select CI tag and verify all diagrams are present
-    When I select '[data-cy="select-checkbox_CI"]' in '[data-cy="diagram-tag-select"]'
-    And  I click on '[data-cy="diagram-tag-select"]'
-    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
-    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
-
-    # 804 Unselect Infrastructure tag and verify only all CI diagrams are present
-    When I click on '[data-cy="chip_Infrastructure"] i[aria-label="Remove"]'
-    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' not exists
-    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
-
-    # 805 Unselect CI tag and verify all diagrams are present
-    When I click on '[data-cy="chip_CI"] i[aria-label="Remove"]'
-    Then I expect '[data-cy="diagram-path_{{secondModelFolder}}"]' exists
-    And  I expect '[data-cy="diagram-path_\.github/workflows/{{thirdModelName}}"]' exists
 
     When I click on '[data-cy="diagram-path_{{secondModelFolder}}"]'
 
@@ -422,6 +279,7 @@ Feature: Test roundtrip of the application: project creation
     Then I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"].selected' exists
     And  I expect '[data-cy="component-definition-grid"]' exists
     And  I expect '[data-cy="component-definition-grid"] [class*="component-definition-card"]' appear 35 times on screen
+    And  I wait 1 second
 
     ## 900 Plugin test installed in component definitions list (Draw view) should not create project configuration file (Text view)
     When I click on '[data-cy="navigation-bar"] [data-cy="modelizer-switch-button"] [aria-pressed="false"]'

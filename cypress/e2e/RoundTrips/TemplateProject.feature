@@ -7,7 +7,6 @@ Feature: Test roundtrip of the application: project creation via template
   ## 103 Created template project should redirect to models page and send positive toast
   ## 104 After creation of template project, verify its diagrams exist
   ## 105 Created template project should be in the projects list
-  ## 106 Created template project should be in the left drawer
   ## 107 Create template project with an already existing project name should display an error
 
   ################## Filter project templates ##################
@@ -23,7 +22,6 @@ Feature: Test roundtrip of the application: project creation via template
   ## 400 Add diagram template should redirect to draw page with correct plugin
   ## 401 Add diagram template should create diagram folders
   ## 402 Add diagram template with an already existing name should display an error
-  ## 403 After creation of template diagrams, verify they are displayed in the multi-diagrams view
 
   Scenario: Roundtrip about project & diagram templates
 
@@ -60,6 +58,7 @@ Feature: Test roundtrip of the application: project creation via template
     And  I expect '[data-cy="diagram-table"] [data-cy="diagram-path_.github/workflows/CI.yml"]' exists
 
     When I click on '[data-cy="diagram-table"] [data-cy="diagram-path_infra/dev"]'
+    And  I wait 1 second
     And  I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
     Then I expect current url is '{{ projectName }}/modelizer/text\?plugin=@ditrit/terrator-plugin&path=infra/dev'
     And  I expect '[data-cy="file-explorer"] [data-cy="file_{{ projectName }}/infra/dev/main.tf"]' exists
@@ -81,10 +80,6 @@ Feature: Test roundtrip of the application: project creation via template
     And  I click on '[data-cy="navigation-bar"] [data-cy="home-page-link"]'
     Then I expect '[data-cy="project-card_{{ projectName }}"]' appear 1 time on screen
     And  I expect '[data-cy="project-card_{{ projectName }}"] [data-cy="title-container"]' is '{{ projectName }}'
-
-    ## 106 Created template project should be in the left drawer
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' exists
-    And  I expect '[data-cy="project-expansion-item"] [data-cy="item_{{ projectName }}"]' is '{{ projectName }}'
 
     ## 107 Create template project with an already existing project name should display an error
     When I click on '[data-cy="template-card_Project template"]'
@@ -118,8 +113,10 @@ Feature: Test roundtrip of the application: project creation via template
     When I set on '[data-cy="import-model-template-form"] [data-cy="name-input"]' text '{{ diagramFolder }}/'
     And  I click on '[data-cy="import-model-template-form"] [data-cy="submit-button"]'
     Then I expect current url is '{{ projectName }}/modelizer/draw\?plugin=@ditrit/terrator-plugin&path={{ diagramFolder }}'
+    And  I wait 1 second
     And  I expect '[data-cy="component-definitions-list"]' exists
     And  I expect '[data-cy="component-definitions-item_@ditrit/terrator-plugin"] [data-cy="title"]' is 'Terraform'
+    And  I wait 1 second
 
     ## 401 Add diagram template should create diagram folders
     When I click on '[data-cy="modelizer-switch-button"] [aria-pressed="false"]'
@@ -141,15 +138,3 @@ Feature: Test roundtrip of the application: project creation via template
     When I set on '[data-cy="import-model-template-form"] [data-cy="name-input"]' text '{{ diagramFolder }}/'
     And  I click on '[data-cy="import-model-template-form"] [data-cy="submit-button"]'
     Then I expect '[data-cy="import-model-template-form"] [role="alert"]' is "Model name already exists for this plugin."
-
-    # Close dialog
-    When I click on '[data-cy="import-model-template-dialog"] [data-cy="close-dialog-button"]'
-
-    ## 403 After creation of template diagram, verify it is displayed in the multi-diagrams view
-    And  I visit the '/projects/{{ projectName }}/diagrams'
-    And  I wait until the application is loaded
-    Then I expect '[data-cy="diagrams-page"] [data-cy="diagram-card_{{ diagramFolder }}"]' exists
-    # Check project template diagrams are displayed too
-    And  I expect '[data-cy="diagrams-page"] [data-cy="diagram-card_infra/dev"]' exists
-    And  I expect '[data-cy="diagrams-page"] [data-cy="diagram-card_infra/prod"]' exists
-    And  I expect '[data-cy="diagrams-page"] [data-cy="diagram-card_.github/workflows/CI.yml"]' exists
