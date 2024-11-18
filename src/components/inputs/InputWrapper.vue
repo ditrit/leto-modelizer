@@ -7,6 +7,7 @@
         v-model="name"
         :label="$t('plugin.component.attribute.name')"
         class="col-4 q-px-md"
+        debounce="1000"
         @update:model-value="(event) => emit('update:attribute-name', {
           attributeName: attribute.name,
           newName: event,
